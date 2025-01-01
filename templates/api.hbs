@@ -1,0 +1,32 @@
+import RequestService from '../helpers/request/request-service';
+import * as {{{className}}}Specs from '../generated/{{{fileName}}}';
+
+export default class {{{className}}} {
+    private readonly request: RequestService;
+
+    constructor(request: RequestService) {
+        this.request = request;
+    }
+    {{#each properties}}
+
+    /**
+     * {{{summary}}}
+     *
+     * {{{description}}}
+     */
+    {{{name}}}(
+        {{#each parameters}}
+        {{{normalizedName}}}: {{{../requestTypeName}}}['path']['{{{name}}}'],
+        {{/each}}
+        {{#if requestBody}}requestBody: {{{requestTypeName}}}['body'],{{/if}}
+        {{#if (gt query.length 0)}}query?: {{{requestTypeName}}}['query'],{{/if}}
+    ) {
+        return this.request.{{{method}}}{{#if responseTypes.length}}<{{#each responseTypes}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}>{{/if}}({
+            path: {{{path}}},
+            {{#if requestBody.contentType}}contentType: '{{{requestBody.contentType}}}',{{/if}}
+            {{#if requestBody}}body: requestBody,{{/if}}
+            {{#if query}}query,{{/if}}
+        });
+    }
+    {{/each}}
+}

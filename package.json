@@ -1,0 +1,53 @@
+{
+  "name": "bigcommerce-store-api",
+  "version": "0.0.0",
+  "description": "BigCommerce Store API Client",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "rimraf lib && tsc",
+    "generate:models": "cat ./scripts/generate.js | node --input-type=module",
+    "clean": "rimraf lib",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iceleo-com/bigcommerce-store-api.git"
+  },
+  "keywords": [
+    "bigcommerce",
+    "api",
+    "client",
+    "store",
+    "remote",
+    "management",
+    "catalog"
+  ],
+  "author": "Brat Vu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iceleo-com/bigcommerce-store-api/issues"
+  },
+  "homepage": "https://github.com/iceleo-com/bigcommerce-store-api#readme",
+  "devDependencies": {
+    "@hey-api/openapi-ts": "^0.60.1",
+    "@types/handlebars-helpers": "^0.5.6",
+    "@types/node": "^22.10.2",
+    "handlebars": "^4.7.8",
+    "handlebars-helpers": "^0.10.0",
+    "openapi-typescript": "^7.4.4",
+    "openapi-typescript-codegen": "^0.29.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.2",
+    "yaml": "^2.7.0"
+  },
+  "dependencies": {
+    "@hey-api/client-fetch": "^0.5.7"
+  }
+}

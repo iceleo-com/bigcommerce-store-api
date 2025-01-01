@@ -1,0 +1,33 @@
+import RequestService from './helpers/request/request-service';
+import { BigCommerceStoreApiConfig } from './index.type';
+
+{{#each apis}}
+import {{{className}}} from './apis/{{{fileName}}}.api';
+{{/each}}
+
+const defaultConfig: BigCommerceStoreApiConfig = {
+    storeHash: '',
+    accessToken: '',
+};
+
+Object.seal(defaultConfig);
+
+class BigCommerceStoreApi {
+    readonly config: BigCommerceStoreApiConfig;
+    readonly request: RequestService;
+
+    {{#each apis}}
+    readonly {{{propertyName}}}: {{{className}}};
+    {{/each}}
+
+    constructor(config: BigCommerceStoreApiConfig) {
+        this.config = Object.assign({}, defaultConfig, config);
+        this.request = new RequestService(this.config);
+
+        {{#each apis}}
+        this.{{{propertyName}}} = new {{{className}}}(this.request);
+        {{/each}}
+    }
+}
+
+export default BigCommerceStoreApi;
