@@ -1,6 +1,6 @@
 {
   "name": "bigcommerce-store-api",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "BigCommerce Store API Client",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -9,12 +9,16 @@
   ],
   "scripts": {
     "build": "rimraf lib && tsc",
-    "generate:models": "cat ./scripts/generate.js | node --input-type=module",
+    "generate:apis:back": "cat ./scripts/generate.js | node --input-type=module",
+    "generate:apis": "node ./scripts/generate.js",
     "clean": "rimraf lib",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "engines": {
     "node": ">=20"
+  },
+  "jest": {
+    "globalSetup": "<rootDir>/jest/global-setup.js"
   },
   "repository": {
     "type": "git",
@@ -37,12 +41,13 @@
   "homepage": "https://github.com/iceleo-com/bigcommerce-store-api#readme",
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.60.1",
+    "@jest/globals": "^29.7.0",
     "@types/handlebars-helpers": "^0.5.6",
     "@types/node": "^22.10.2",
     "handlebars": "^4.7.8",
     "handlebars-helpers": "^0.10.0",
-    "openapi-typescript": "^7.4.4",
-    "openapi-typescript-codegen": "^0.29.0",
+    "jest": "^29.7.0",
+    "minimist": "^1.2.8",
     "rimraf": "^6.0.1",
     "typescript": "^5.7.2",
     "yaml": "^2.7.0"

@@ -1,11 +1,9 @@
-import fs from 'fs';
-import path, { normalize } from 'path';
-import { exec } from 'child_process';
-import yaml from 'yaml';
-import openapiTS, { astToString } from 'openapi-typescript';
-import Handlebars from 'handlebars';
-import handlebarsHelper from 'handlebars-helpers';
-import { createClient } from '@hey-api/openapi-ts';
+const fs = require('fs');
+const path = require('path');
+const yaml = require('yaml');
+const Handlebars = require('handlebars');
+const handlebarsHelper = require('handlebars-helpers');
+const { createClient } = require('@hey-api/openapi-ts');
 
 const defaultEndpoint = 'https://api.bigcommerce.com/stores/{store_hash}/v3';
 
@@ -81,7 +79,8 @@ async function main() {
     const generatedPath = path.join(basePath, 'src/generated');
     const apisPath = path.join(basePath, 'src/apis');
 
-    const apis = [];
+    const v2Apis = [];
+    const v3Apis = [];
 
     const files = getFilesRecursive(referencePath);
 
@@ -109,11 +108,22 @@ async function main() {
             .map((word) => uppercaseFirstChar(word))
             .join('');
 
-        apis.push({
-            className: `${namespace}Api`,
-            fileName,
-            propertyName: lowercaseFirstChar(namespace),
-        });
+        const propertyName = camelCase(fileName.replace(/-v(2|3)$/i, ''));
+
+        if (/\-v2/i.test(fileName)) {
+            v2Apis.push({
+                className: `${namespace}Api`,
+                fileName,
+                propertyName,
+            });
+        } else {
+            v3Apis.push({
+                className: `${namespace}Api`,
+                fileName,
+                propertyName,
+            });
+        }
+
         // generate model types / interfaces
         const generatedOutput = path.join(generatedPath, fileName);
 
@@ -368,7 +378,8 @@ async function main() {
     fs.writeFileSync(
         path.join(basePath, 'src/index.ts'),
         Handlebars.compile(indexTemplate)({
-            apis,
+            v2Apis,
+            v3Apis,
         }),
     );
 }

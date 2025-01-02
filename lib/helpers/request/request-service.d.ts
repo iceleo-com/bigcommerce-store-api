@@ -1,5 +1,5 @@
 import { BigCommerceStoreApiConfig } from '../../index.types';
-import { RequestOptions, RequestResponse } from './request-service.type';
+import { RequestOptions, RequestResponse } from './request-service.types';
 declare class RequestService {
     config: BigCommerceStoreApiConfig;
     constructor(config: BigCommerceStoreApiConfig);

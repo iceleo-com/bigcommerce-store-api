@@ -3,8 +3,8 @@ import {
     RequestMethod,
     RequestOptions,
     RequestResponse,
-} from './request-service.type';
-import { buildPath, parseBody } from './request-service.helper';
+} from './request-service.types';
+import { buildPath, parseBody } from './request-service.helpers';
 
 const apiEndpoint = 'https://api.bigcommerce.com/stores';
 
@@ -76,20 +76,28 @@ class RequestService {
         }
 
         // parse the response
-        const result: any = response.body === null || (await response.text()).trim() === ''
-            ? {}
-            : await response
-                .json()
-                .catch((error) => {
-                    // ignore the error
-                });
+        const responseBodyContents = await response.text();
+
+        let result: any = {};
+
+        if (responseBodyContents.trim() !== '') {
+            try {
+                result = JSON.parse(responseBodyContents);
+            } catch (error) {
+                console.error(error);
+            }
+        }
 
         if (response.status >= 400) {
             // handle the 4xx - 5xx error
             return {
                 status: 'error',
                 http_status: response.status,
-                errors: typeof result === 'object' ? result.errors : {},
+                errors: typeof result === 'object' && result !== null ? result : {
+                    status: response.status,
+                    title: responseBodyContents,
+                    type: 'internal_server_error',
+                },
             };
         }
 

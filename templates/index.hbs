@@ -1,7 +1,10 @@
 import RequestService from './helpers/request/request-service';
-import { BigCommerceStoreApiConfig } from './index.type';
+import { BigCommerceStoreApiConfig } from './index.types';
 
-{{#each apis}}
+{{#each v2Apis}}
+import {{{className}}} from './apis/{{{fileName}}}.api';
+{{/each}}
+{{#each v3Apis}}
 import {{{className}}} from './apis/{{{fileName}}}.api';
 {{/each}}
 
@@ -16,17 +19,33 @@ class BigCommerceStoreApi {
     readonly config: BigCommerceStoreApiConfig;
     readonly request: RequestService;
 
-    {{#each apis}}
-    readonly {{{propertyName}}}: {{{className}}};
-    {{/each}}
+    readonly v2: {
+        {{#each v2Apis}}
+        readonly {{{propertyName}}}: {{{className}}};
+        {{/each}}
+    };
+
+    readonly v3: {
+        {{#each v3Apis}}
+        readonly {{{propertyName}}}: {{{className}}};
+        {{/each}}
+    };
 
     constructor(config: BigCommerceStoreApiConfig) {
         this.config = Object.assign({}, defaultConfig, config);
         this.request = new RequestService(this.config);
 
-        {{#each apis}}
-        this.{{{propertyName}}} = new {{{className}}}(this.request);
-        {{/each}}
+        this.v2 = {
+            {{#each v2Apis}}
+            {{{propertyName}}}: new {{{className}}}(this.request),
+            {{/each}}
+        };
+
+        this.v3 = {
+            {{#each v3Apis}}
+            {{{propertyName}}}: new {{{className}}}(this.request),
+            {{/each}}
+        };
     }
 }
 

@@ -1,4 +1,4 @@
-import { RequestBody, RequestContentType } from './request-service.type';
+import { RequestBody, RequestContentType } from './request-service.types';
 
 export function parseBody(body: RequestBody, contentType: RequestContentType): FormData | URLSearchParams | string | undefined {
     if (body instanceof FormData) {
