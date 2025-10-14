@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as SubscribersV3ApiSpecs from '../generated/subscribers-v3';
+export * as SubscribersV3ApiSpecs from '../generated/subscribers-v3';
 
-export default class SubscribersV3Api {
+export class SubscribersV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

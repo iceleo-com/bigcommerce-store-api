@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as AccessTokensV3ApiSpecs from '../generated/access-tokens-v3';
+export * as AccessTokensV3ApiSpecs from '../generated/access-tokens-v3';
 
-export default class AccessTokensV3Api {
+export class AccessTokensV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

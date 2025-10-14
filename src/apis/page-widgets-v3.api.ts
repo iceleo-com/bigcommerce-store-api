@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as PageWidgetsV3ApiSpecs from '../generated/page-widgets-v3';
+export * as PageWidgetsV3ApiSpecs from '../generated/page-widgets-v3';
 
-export default class PageWidgetsV3Api {
+export class PageWidgetsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

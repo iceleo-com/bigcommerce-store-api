@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as PriceListsV3ApiSpecs from '../generated/price-lists-v3';
+export * as PriceListsV3ApiSpecs from '../generated/price-lists-v3';
 
-export default class PriceListsV3Api {
+export class PriceListsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

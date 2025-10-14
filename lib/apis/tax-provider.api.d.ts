@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as TaxProviderApiSpecs from '../generated/tax-provider';
-export default class TaxProviderApi {
+export * as TaxProviderApiSpecs from '../generated/tax-provider';
+export declare class TaxProviderApi {
     private readonly request;
     constructor(request: RequestService);
     estimateTaxes(requestBody: TaxProviderApiSpecs.EstimateTaxesData['body']): Promise<import("../helpers/request/request-service.types").RequestResponse<TaxProviderApiSpecs.response_quote, unknown>>;

@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as EmailTemplatesV3ApiSpecs from '../generated/email-templates-v3';
+export * as EmailTemplatesV3ApiSpecs from '../generated/email-templates-v3';
 
-export default class EmailTemplatesV3Api {
+export class EmailTemplatesV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

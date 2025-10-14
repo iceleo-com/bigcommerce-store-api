@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as TaxRatesZonesV3ApiSpecs from '../generated/tax-rates-zones-v3';
-export default class TaxRatesZonesV3Api {
+export * as TaxRatesZonesV3ApiSpecs from '../generated/tax-rates-zones-v3';
+export declare class TaxRatesZonesV3Api {
     private readonly request;
     constructor(request: RequestService);
     getTaxZones(query?: TaxRatesZonesV3ApiSpecs.GetTaxZonesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<TaxRatesZonesV3ApiSpecs.GetTaxZonesResponse, any>>;

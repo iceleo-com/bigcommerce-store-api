@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as PromotionsV3ApiSpecs from '../generated/promotions-v3';
+export * as PromotionsV3ApiSpecs from '../generated/promotions-v3';
 
-export default class PromotionsV3Api {
+export class PromotionsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

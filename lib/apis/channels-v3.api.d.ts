@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as ChannelsV3ApiSpecs from '../generated/channels-v3';
-export default class ChannelsV3Api {
+export * as ChannelsV3ApiSpecs from '../generated/channels-v3';
+export declare class ChannelsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getChannels(query?: ChannelsV3ApiSpecs.GetChannelsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, ChannelsV3ApiSpecs.Error>>;

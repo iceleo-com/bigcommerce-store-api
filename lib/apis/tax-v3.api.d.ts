@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as TaxV3ApiSpecs from '../generated/tax-v3';
-export default class TaxV3Api {
+export * as TaxV3ApiSpecs from '../generated/tax-v3';
+export declare class TaxV3Api {
     private readonly request;
     constructor(request: RequestService);
     getTaxProviderConnection(providerId: TaxV3ApiSpecs.GetTaxProviderConnectionData['path']['provider_id']): Promise<import("../helpers/request/request-service.types").RequestResponse<TaxV3ApiSpecs.response_connection, unknown>>;

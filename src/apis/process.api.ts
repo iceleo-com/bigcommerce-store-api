@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as ProcessApiSpecs from '../generated/process';
+export * as ProcessApiSpecs from '../generated/process';
 
-export default class ProcessApi {
+export class ProcessApi {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

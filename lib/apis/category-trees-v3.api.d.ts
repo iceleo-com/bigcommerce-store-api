@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as CategoryTreesV3ApiSpecs from '../generated/category-trees-v3';
-export default class CategoryTreesV3Api {
+export * as CategoryTreesV3ApiSpecs from '../generated/category-trees-v3';
+export declare class CategoryTreesV3Api {
     private readonly request;
     constructor(request: RequestService);
     getAllCategories(query?: CategoryTreesV3ApiSpecs.GetAllCategoriesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<CategoryTreesV3ApiSpecs.CategoryList, CategoryTreesV3ApiSpecs.GetAllCategoriesError>>;

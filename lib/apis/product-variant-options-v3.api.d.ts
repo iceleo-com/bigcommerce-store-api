@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as ProductVariantOptionsV3ApiSpecs from '../generated/product-variant-options-v3';
-export default class ProductVariantOptionsV3Api {
+export * as ProductVariantOptionsV3ApiSpecs from '../generated/product-variant-options-v3';
+export declare class ProductVariantOptionsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getProductVariantOptions(productId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsData['path']['product_id'], query?: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsResponse, ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsError>>;

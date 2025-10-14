@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as MarketingV2ApiSpecs from '../generated/marketing-v2';
-export default class MarketingV2Api {
+export * as MarketingV2ApiSpecs from '../generated/marketing-v2';
+export declare class MarketingV2Api {
     private readonly request;
     constructor(request: RequestService);
     getCoupons(query?: MarketingV2ApiSpecs.GetCouponsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<MarketingV2ApiSpecs.GetCouponsResponse, any>>;

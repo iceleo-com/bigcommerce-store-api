@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as ShippingProviderApiSpecs from '../generated/shipping-provider';
+export * as ShippingProviderApiSpecs from '../generated/shipping-provider';
 
-export default class ShippingProviderApi {
+export class ShippingProviderApi {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

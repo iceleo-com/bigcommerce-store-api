@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as SubscribersV3ApiSpecs from '../generated/subscribers-v3';
-export default class SubscribersV3Api {
+export * as SubscribersV3ApiSpecs from '../generated/subscribers-v3';
+export declare class SubscribersV3Api {
     private readonly request;
     constructor(request: RequestService);
     getSubscribers(query?: SubscribersV3ApiSpecs.GetSubscribersData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SubscribersV3ApiSpecs.GetSubscribersResponse, any>>;

@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as PagesV3ApiSpecs from '../generated/pages-v3';
-export default class PagesV3Api {
+export * as PagesV3ApiSpecs from '../generated/pages-v3';
+export declare class PagesV3Api {
     private readonly request;
     constructor(request: RequestService);
     getPages(query?: PagesV3ApiSpecs.GetPagesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<PagesV3ApiSpecs.PagesCollectionResponse, PagesV3ApiSpecs.GetPagesError>>;

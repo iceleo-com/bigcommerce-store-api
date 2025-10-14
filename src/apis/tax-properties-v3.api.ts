@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as TaxPropertiesV3ApiSpecs from '../generated/tax-properties-v3';
+export * as TaxPropertiesV3ApiSpecs from '../generated/tax-properties-v3';
 
-export default class TaxPropertiesV3Api {
+export class TaxPropertiesV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

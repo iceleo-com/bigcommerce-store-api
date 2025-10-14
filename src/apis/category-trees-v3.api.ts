@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as CategoryTreesV3ApiSpecs from '../generated/category-trees-v3';
+export * as CategoryTreesV3ApiSpecs from '../generated/category-trees-v3';
 
-export default class CategoryTreesV3Api {
+export class CategoryTreesV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as OrdersV2Oas2ApiSpecs from '../generated/orders-v2-oas2';
+export * as OrdersV2Oas2ApiSpecs from '../generated/orders-v2-oas2';
 
-export default class OrdersV2Oas2Api {
+export class OrdersV2Oas2Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

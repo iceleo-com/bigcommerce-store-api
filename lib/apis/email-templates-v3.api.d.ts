@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as EmailTemplatesV3ApiSpecs from '../generated/email-templates-v3';
-export default class EmailTemplatesV3Api {
+export * as EmailTemplatesV3ApiSpecs from '../generated/email-templates-v3';
+export declare class EmailTemplatesV3Api {
     private readonly request;
     constructor(request: RequestService);
     getEmailTemplates(query?: EmailTemplatesV3ApiSpecs.GetEmailTemplatesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<EmailTemplatesV3ApiSpecs.GetEmailTemplatesResponse, any>>;

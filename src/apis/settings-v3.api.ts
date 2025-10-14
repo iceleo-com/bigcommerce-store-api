@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as SettingsV3ApiSpecs from '../generated/settings-v3';
+export * as SettingsV3ApiSpecs from '../generated/settings-v3';
 
-export default class SettingsV3Api {
+export class SettingsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

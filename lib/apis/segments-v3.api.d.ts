@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as SegmentsV3ApiSpecs from '../generated/segments-v3';
-export default class SegmentsV3Api {
+export * as SegmentsV3ApiSpecs from '../generated/segments-v3';
+export declare class SegmentsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getPaginatedSegmentsList(query?: SegmentsV3ApiSpecs.GetPaginatedSegmentsListData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SegmentsV3ApiSpecs.SegmentCollectionResponse, any>>;

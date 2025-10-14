@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as ProductModifiersV3ApiSpecs from '../generated/product-modifiers-v3';
-export default class ProductModifiersV3Api {
+export * as ProductModifiersV3ApiSpecs from '../generated/product-modifiers-v3';
+export declare class ProductModifiersV3Api {
     private readonly request;
     constructor(request: RequestService);
     getProductModifiers(productId: ProductModifiersV3ApiSpecs.GetProductModifiersData['path']['product_id'], query?: ProductModifiersV3ApiSpecs.GetProductModifiersData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<ProductModifiersV3ApiSpecs.GetProductModifiersResponse, any>>;

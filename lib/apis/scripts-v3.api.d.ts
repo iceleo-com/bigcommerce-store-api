@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as ScriptsV3ApiSpecs from '../generated/scripts-v3';
-export default class ScriptsV3Api {
+export * as ScriptsV3ApiSpecs from '../generated/scripts-v3';
+export declare class ScriptsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getScripts(query?: ScriptsV3ApiSpecs.GetScriptsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<ScriptsV3ApiSpecs.GetScriptsResponse, ScriptsV3ApiSpecs.GetScriptsError>>;

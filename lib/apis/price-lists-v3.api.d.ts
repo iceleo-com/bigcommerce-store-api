@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as PriceListsV3ApiSpecs from '../generated/price-lists-v3';
-export default class PriceListsV3Api {
+export * as PriceListsV3ApiSpecs from '../generated/price-lists-v3';
+export declare class PriceListsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getPriceLists(query?: PriceListsV3ApiSpecs.GetPriceListsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<PriceListsV3ApiSpecs.GetPriceListsResponse, any>>;

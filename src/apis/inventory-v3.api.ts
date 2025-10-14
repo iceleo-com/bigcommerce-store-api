@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as InventoryV3ApiSpecs from '../generated/inventory-v3';
+export * as InventoryV3ApiSpecs from '../generated/inventory-v3';
 
-export default class InventoryV3Api {
+export class InventoryV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

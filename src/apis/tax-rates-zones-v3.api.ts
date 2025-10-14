@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as TaxRatesZonesV3ApiSpecs from '../generated/tax-rates-zones-v3';
+export * as TaxRatesZonesV3ApiSpecs from '../generated/tax-rates-zones-v3';
 
-export default class TaxRatesZonesV3Api {
+export class TaxRatesZonesV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as WidgetsV3ApiSpecs from '../generated/widgets-v3';
+export * as WidgetsV3ApiSpecs from '../generated/widgets-v3';
 
-export default class WidgetsV3Api {
+export class WidgetsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

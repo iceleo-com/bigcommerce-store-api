@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as ShippingV3ApiSpecs from '../generated/shipping-v3';
+export * as ShippingV3ApiSpecs from '../generated/shipping-v3';
 
-export default class ShippingV3Api {
+export class ShippingV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

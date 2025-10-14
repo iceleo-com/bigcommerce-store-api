@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as TaxSettingsV3ApiSpecs from '../generated/tax-settings-v3';
-export default class TaxSettingsV3Api {
+export * as TaxSettingsV3ApiSpecs from '../generated/tax-settings-v3';
+export declare class TaxSettingsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getTaxSettings(): Promise<import("../helpers/request/request-service.types").RequestResponse<TaxSettingsV3ApiSpecs.GetTaxSettingsResponse, any>>;

@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as PickupV3ApiSpecs from '../generated/pickup-v3';
-export default class PickupV3Api {
+export * as PickupV3ApiSpecs from '../generated/pickup-v3';
+export declare class PickupV3Api {
     private readonly request;
     constructor(request: RequestService);
     getPickup(query?: PickupV3ApiSpecs.GetPickupData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<PickupV3ApiSpecs.GetPickupResponse, any>>;

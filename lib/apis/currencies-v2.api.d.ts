@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as CurrenciesV2ApiSpecs from '../generated/currencies-v2';
-export default class CurrenciesV2Api {
+export * as CurrenciesV2ApiSpecs from '../generated/currencies-v2';
+export declare class CurrenciesV2Api {
     private readonly request;
     constructor(request: RequestService);
     getCurrencies(query?: CurrenciesV2ApiSpecs.GetCurrenciesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<CurrenciesV2ApiSpecs.GetCurrenciesResponse, any>>;

@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as TaxClassesV2ApiSpecs from '../generated/tax-classes-v2';
+export * as TaxClassesV2ApiSpecs from '../generated/tax-classes-v2';
 
-export default class TaxClassesV2Api {
+export class TaxClassesV2Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as WishlistsV3ApiSpecs from '../generated/wishlists-v3';
+export * as WishlistsV3ApiSpecs from '../generated/wishlists-v3';
 
-export default class WishlistsV3Api {
+export class WishlistsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as StorefrontTokensV3ApiSpecs from '../generated/storefront-tokens-v3';
+export * as StorefrontTokensV3ApiSpecs from '../generated/storefront-tokens-v3';
 
-export default class StorefrontTokensV3Api {
+export class StorefrontTokensV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as OrdersV3ApiSpecs from '../generated/orders-v3';
-export default class OrdersV3Api {
+export * as OrdersV3ApiSpecs from '../generated/orders-v3';
+export declare class OrdersV3Api {
     private readonly request;
     constructor(request: RequestService);
     captureOrderPayment(orderId: OrdersV3ApiSpecs.CaptureOrderPaymentData['path']['order_id']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, OrdersV3ApiSpecs.CaptureOrderPaymentError>>;

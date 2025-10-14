@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as LocationsV3ApiSpecs from '../generated/locations-v3';
+export * as LocationsV3ApiSpecs from '../generated/locations-v3';
 
-export default class LocationsV3Api {
+export class LocationsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

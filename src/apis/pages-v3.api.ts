@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as PagesV3ApiSpecs from '../generated/pages-v3';
+export * as PagesV3ApiSpecs from '../generated/pages-v3';
 
-export default class PagesV3Api {
+export class PagesV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

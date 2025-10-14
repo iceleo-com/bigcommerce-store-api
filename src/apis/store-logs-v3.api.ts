@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as StoreLogsV3ApiSpecs from '../generated/store-logs-v3';
+export * as StoreLogsV3ApiSpecs from '../generated/store-logs-v3';
 
-export default class StoreLogsV3Api {
+export class StoreLogsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

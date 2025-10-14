@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as CurrenciesV2ApiSpecs from '../generated/currencies-v2';
+export * as CurrenciesV2ApiSpecs from '../generated/currencies-v2';
 
-export default class CurrenciesV2Api {
+export class CurrenciesV2Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

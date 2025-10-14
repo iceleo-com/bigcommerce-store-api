@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as SitesV3ApiSpecs from '../generated/sites-v3';
+export * as SitesV3ApiSpecs from '../generated/sites-v3';
 
-export default class SitesV3Api {
+export class SitesV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

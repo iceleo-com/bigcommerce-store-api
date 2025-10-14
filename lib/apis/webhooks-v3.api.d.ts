@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as WebhooksV3ApiSpecs from '../generated/webhooks-v3';
-export default class WebhooksV3Api {
+export * as WebhooksV3ApiSpecs from '../generated/webhooks-v3';
+export declare class WebhooksV3Api {
     private readonly request;
     constructor(request: RequestService);
     getWebhooks(query?: WebhooksV3ApiSpecs.GetWebhooksData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, WebhooksV3ApiSpecs.error_Full>>;

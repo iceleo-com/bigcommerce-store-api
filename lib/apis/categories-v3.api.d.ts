@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as CategoriesV3ApiSpecs from '../generated/categories-v3';
-export default class CategoriesV3Api {
+export * as CategoriesV3ApiSpecs from '../generated/categories-v3';
+export declare class CategoriesV3Api {
     private readonly request;
     constructor(request: RequestService);
     getCategories(query?: CategoriesV3ApiSpecs.GetCategoriesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<CategoriesV3ApiSpecs.GetCategoriesResponse, any>>;

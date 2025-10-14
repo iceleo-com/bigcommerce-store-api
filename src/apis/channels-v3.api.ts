@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as ChannelsV3ApiSpecs from '../generated/channels-v3';
+export * as ChannelsV3ApiSpecs from '../generated/channels-v3';
 
-export default class ChannelsV3Api {
+export class ChannelsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

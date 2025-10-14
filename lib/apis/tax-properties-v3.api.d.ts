@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as TaxPropertiesV3ApiSpecs from '../generated/tax-properties-v3';
-export default class TaxPropertiesV3Api {
+export * as TaxPropertiesV3ApiSpecs from '../generated/tax-properties-v3';
+export declare class TaxPropertiesV3Api {
     private readonly request;
     constructor(request: RequestService);
     getTaxProperties(query?: TaxPropertiesV3ApiSpecs.GetTaxPropertiesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<TaxPropertiesV3ApiSpecs.GetTaxPropertiesResponse, unknown>>;

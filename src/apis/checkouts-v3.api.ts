@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as CheckoutsV3ApiSpecs from '../generated/checkouts-v3';
+export * as CheckoutsV3ApiSpecs from '../generated/checkouts-v3';
 
-export default class CheckoutsV3Api {
+export class CheckoutsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

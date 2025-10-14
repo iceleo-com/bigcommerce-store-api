@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as CartsV3ApiSpecs from '../generated/carts-v3';
+export * as CartsV3ApiSpecs from '../generated/carts-v3';
 
-export default class CartsV3Api {
+export class CartsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

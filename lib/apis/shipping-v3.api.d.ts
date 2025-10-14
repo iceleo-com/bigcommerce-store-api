@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as ShippingV3ApiSpecs from '../generated/shipping-v3';
-export default class ShippingV3Api {
+export * as ShippingV3ApiSpecs from '../generated/shipping-v3';
+export declare class ShippingV3Api {
     private readonly request;
     constructor(request: RequestService);
     getCustomsInformation(query?: ShippingV3ApiSpecs.GetCustomsInformationData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<ShippingV3ApiSpecs.GetCustomsInformationResponse, any>>;

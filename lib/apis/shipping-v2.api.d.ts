@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as ShippingV2ApiSpecs from '../generated/shipping-v2';
-export default class ShippingV2Api {
+export * as ShippingV2ApiSpecs from '../generated/shipping-v2';
+export declare class ShippingV2Api {
     private readonly request;
     constructor(request: RequestService);
     getShippingZones(): Promise<import("../helpers/request/request-service.types").RequestResponse<ShippingV2ApiSpecs.GetShippingZonesResponse, any>>;

@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as StoreInformationV2ApiSpecs from '../generated/store-information-v2';
+export * as StoreInformationV2ApiSpecs from '../generated/store-information-v2';
 
-export default class StoreInformationV2Api {
+export class StoreInformationV2Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

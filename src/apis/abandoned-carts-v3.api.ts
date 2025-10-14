@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as AbandonedCartsV3ApiSpecs from '../generated/abandoned-carts-v3';
+export * as AbandonedCartsV3ApiSpecs from '../generated/abandoned-carts-v3';
 
-export default class AbandonedCartsV3Api {
+export class AbandonedCartsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

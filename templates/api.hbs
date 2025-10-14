@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as {{{className}}}Specs from '../generated/{{{fileName}}}';
+export * as {{{className}}}Specs from '../generated/{{{fileName}}}';
 
-export default class {{{className}}} {
+export class {{{className}}} {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

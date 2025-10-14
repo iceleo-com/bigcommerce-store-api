@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as StoreContentV2ApiSpecs from '../generated/store-content-v2';
-export default class StoreContentV2Api {
+export * as StoreContentV2ApiSpecs from '../generated/store-content-v2';
+export declare class StoreContentV2Api {
     private readonly request;
     constructor(request: RequestService);
     getBlogTags(): Promise<import("../helpers/request/request-service.types").RequestResponse<StoreContentV2ApiSpecs.GetBlogTagsResponse, any>>;

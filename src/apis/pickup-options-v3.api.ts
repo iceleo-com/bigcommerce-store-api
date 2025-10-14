@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as PickupOptionsV3ApiSpecs from '../generated/pickup-options-v3';
+export * as PickupOptionsV3ApiSpecs from '../generated/pickup-options-v3';
 
-export default class PickupOptionsV3Api {
+export class PickupOptionsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

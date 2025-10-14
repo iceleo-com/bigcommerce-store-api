@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as PromotionsV3ApiSpecs from '../generated/promotions-v3';
-export default class PromotionsV3Api {
+export * as PromotionsV3ApiSpecs from '../generated/promotions-v3';
+export declare class PromotionsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getPromotions(query?: PromotionsV3ApiSpecs.GetPromotionsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, PromotionsV3ApiSpecs.ErrorResponse>>;

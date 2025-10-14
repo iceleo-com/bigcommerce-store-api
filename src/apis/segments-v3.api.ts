@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as SegmentsV3ApiSpecs from '../generated/segments-v3';
+export * as SegmentsV3ApiSpecs from '../generated/segments-v3';
 
-export default class SegmentsV3Api {
+export class SegmentsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

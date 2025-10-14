@@ -2,10 +2,18 @@ import RequestService from './helpers/request/request-service';
 import { BigCommerceStoreApiConfig } from './index.types';
 
 {{#each v2Apis}}
-import {{{className}}} from './apis/{{{fileName}}}.api';
+import { {{{className}}} } from './apis/{{{fileName}}}.api';
 {{/each}}
 {{#each v3Apis}}
-import {{{className}}} from './apis/{{{fileName}}}.api';
+import { {{{className}}} } from './apis/{{{fileName}}}.api';
+{{/each}}
+
+export * from './index.types';
+{{#each v2Apis}}
+export * from './apis/{{{fileName}}}.api';
+{{/each}}
+{{#each v3Apis}}
+export * from './apis/{{{fileName}}}.api';
 {{/each}}
 
 const defaultConfig: BigCommerceStoreApiConfig = {

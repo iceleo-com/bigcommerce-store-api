@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as MarketingV2ApiSpecs from '../generated/marketing-v2';
+export * as MarketingV2ApiSpecs from '../generated/marketing-v2';
 
-export default class MarketingV2Api {
+export class MarketingV2Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

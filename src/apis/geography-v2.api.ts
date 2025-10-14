@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as GeographyV2ApiSpecs from '../generated/geography-v2';
+export * as GeographyV2ApiSpecs from '../generated/geography-v2';
 
-export default class GeographyV2Api {
+export class GeographyV2Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

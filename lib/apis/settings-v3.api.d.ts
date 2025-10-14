@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as SettingsV3ApiSpecs from '../generated/settings-v3';
-export default class SettingsV3Api {
+export * as SettingsV3ApiSpecs from '../generated/settings-v3';
+export declare class SettingsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getAnalyticsProviders(query?: SettingsV3ApiSpecs.GetAnalyticsProvidersData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetAnalyticsProvidersResponse, any>>;

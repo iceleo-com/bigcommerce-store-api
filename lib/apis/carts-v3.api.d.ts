@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as CartsV3ApiSpecs from '../generated/carts-v3';
-export default class CartsV3Api {
+export * as CartsV3ApiSpecs from '../generated/carts-v3';
+export declare class CartsV3Api {
     private readonly request;
     constructor(request: RequestService);
     createCart(requestBody: CartsV3ApiSpecs.CreateCartData['body'], query?: CartsV3ApiSpecs.CreateCartData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, any>>;

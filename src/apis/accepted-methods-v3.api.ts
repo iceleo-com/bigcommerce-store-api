@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as AcceptedMethodsV3ApiSpecs from '../generated/accepted-methods-v3';
+export * as AcceptedMethodsV3ApiSpecs from '../generated/accepted-methods-v3';
 
-export default class AcceptedMethodsV3Api {
+export class AcceptedMethodsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

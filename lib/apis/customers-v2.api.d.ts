@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as CustomersV2ApiSpecs from '../generated/customers-v2';
-export default class CustomersV2Api {
+export * as CustomersV2ApiSpecs from '../generated/customers-v2';
+export declare class CustomersV2Api {
     private readonly request;
     constructor(request: RequestService);
     getCustomers(query?: CustomersV2ApiSpecs.GetCustomersData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.GetCustomersResponse, any>>;

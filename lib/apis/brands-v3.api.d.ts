@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as BrandsV3ApiSpecs from '../generated/brands-v3';
-export default class BrandsV3Api {
+export * as BrandsV3ApiSpecs from '../generated/brands-v3';
+export declare class BrandsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getBrands(query?: BrandsV3ApiSpecs.GetBrandsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<BrandsV3ApiSpecs.GetBrandsResponse, BrandsV3ApiSpecs.GetBrandsError>>;

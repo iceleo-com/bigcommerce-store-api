@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as CheckoutsV3ApiSpecs from '../generated/checkouts-v3';
-export default class CheckoutsV3Api {
+export * as CheckoutsV3ApiSpecs from '../generated/checkouts-v3';
+export declare class CheckoutsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getCheckout(checkoutId: CheckoutsV3ApiSpecs.GetCheckoutData['path']['checkoutId'], query?: CheckoutsV3ApiSpecs.GetCheckoutData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<CheckoutsV3ApiSpecs.GetCheckoutResponse, CheckoutsV3ApiSpecs.GetCheckoutError>>;

@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as ThemesV3ApiSpecs from '../generated/themes-v3';
+export * as ThemesV3ApiSpecs from '../generated/themes-v3';
 
-export default class ThemesV3Api {
+export class ThemesV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

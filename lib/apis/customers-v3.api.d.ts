@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as CustomersV3ApiSpecs from '../generated/customers-v3';
-export default class CustomersV3Api {
+export * as CustomersV3ApiSpecs from '../generated/customers-v3';
+export declare class CustomersV3Api {
     private readonly request;
     constructor(request: RequestService);
     getCustomers(query?: CustomersV3ApiSpecs.GetCustomersData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, CustomersV3ApiSpecs.Error>>;

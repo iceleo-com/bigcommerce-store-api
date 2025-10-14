@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as WidgetsV3ApiSpecs from '../generated/widgets-v3';
-export default class WidgetsV3Api {
+export * as WidgetsV3ApiSpecs from '../generated/widgets-v3';
+export declare class WidgetsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getWidgetTemplates(query?: WidgetsV3ApiSpecs.GetWidgetTemplatesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, WidgetsV3ApiSpecs.error_Base>>;

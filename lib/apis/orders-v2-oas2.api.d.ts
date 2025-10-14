@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as OrdersV2Oas2ApiSpecs from '../generated/orders-v2-oas2';
-export default class OrdersV2Oas2Api {
+export * as OrdersV2Oas2ApiSpecs from '../generated/orders-v2-oas2';
+export declare class OrdersV2Oas2Api {
     private readonly request;
     constructor(request: RequestService);
     getOrder(orderId: OrdersV2Oas2ApiSpecs.GetOrderData['path']['order_id'], query?: OrdersV2Oas2ApiSpecs.GetOrderData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, unknown>>;

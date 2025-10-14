@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as ScriptsV3ApiSpecs from '../generated/scripts-v3';
+export * as ScriptsV3ApiSpecs from '../generated/scripts-v3';
 
-export default class ScriptsV3Api {
+export class ScriptsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

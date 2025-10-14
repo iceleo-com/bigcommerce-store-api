@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as CustomTemplateAssociationsV3ApiSpecs from '../generated/custom-template-associations-v3';
+export * as CustomTemplateAssociationsV3ApiSpecs from '../generated/custom-template-associations-v3';
 
-export default class CustomTemplateAssociationsV3Api {
+export class CustomTemplateAssociationsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

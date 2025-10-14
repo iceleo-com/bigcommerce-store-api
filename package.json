@@ -1,6 +1,6 @@
 {
   "name": "bigcommerce-store-api",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "BigCommerce Store API Client",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -9,7 +9,6 @@
   ],
   "scripts": {
     "build": "rimraf lib && tsc",
-    "generate:apis:back": "cat ./scripts/generate.js | node --input-type=module",
     "generate:apis": "node ./scripts/generate.js",
     "clean": "rimraf lib",
     "test": "jest"
@@ -51,8 +50,5 @@
     "rimraf": "^6.0.1",
     "typescript": "^5.7.2",
     "yaml": "^2.7.0"
-  },
-  "dependencies": {
-    "@hey-api/client-fetch": "^0.5.7"
   }
 }

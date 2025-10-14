@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as RedirectsV3ApiSpecs from '../generated/redirects-v3';
-export default class RedirectsV3Api {
+export * as RedirectsV3ApiSpecs from '../generated/redirects-v3';
+export declare class RedirectsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getRedirects(query?: RedirectsV3ApiSpecs.GetRedirectsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<RedirectsV3ApiSpecs.GetRedirectsResponse, any>>;

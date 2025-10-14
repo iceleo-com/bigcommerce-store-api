@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as LocationsV3ApiSpecs from '../generated/locations-v3';
-export default class LocationsV3Api {
+export * as LocationsV3ApiSpecs from '../generated/locations-v3';
+export declare class LocationsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getLocations(query?: LocationsV3ApiSpecs.GetLocationsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<LocationsV3ApiSpecs.GetLocationsResponse, any>>;

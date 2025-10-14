@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as ProductModifiersV3ApiSpecs from '../generated/product-modifiers-v3';
+export * as ProductModifiersV3ApiSpecs from '../generated/product-modifiers-v3';
 
-export default class ProductModifiersV3Api {
+export class ProductModifiersV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as CategoriesV3ApiSpecs from '../generated/categories-v3';
+export * as CategoriesV3ApiSpecs from '../generated/categories-v3';
 
-export default class CategoriesV3Api {
+export class CategoriesV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {

@@ -1,6 +1,7 @@
 import RequestService from '../helpers/request/request-service';
 import * as ThemesV3ApiSpecs from '../generated/themes-v3';
-export default class ThemesV3Api {
+export * as ThemesV3ApiSpecs from '../generated/themes-v3';
+export declare class ThemesV3Api {
     private readonly request;
     constructor(request: RequestService);
     getStoreThemes(): Promise<import("../helpers/request/request-service.types").RequestResponse<ThemesV3ApiSpecs.ThemesCollectionResponse, any>>;

@@ -1,7 +1,8 @@
 import RequestService from '../helpers/request/request-service';
 import * as ProductVariantOptionsV3ApiSpecs from '../generated/product-variant-options-v3';
+export * as ProductVariantOptionsV3ApiSpecs from '../generated/product-variant-options-v3';
 
-export default class ProductVariantOptionsV3Api {
+export class ProductVariantOptionsV3Api {
     private readonly request: RequestService;
 
     constructor(request: RequestService) {
