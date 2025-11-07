@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as PickupV3ApiSpecs from '../generated/pickup-v3';
 export * as PickupV3ApiSpecs from '../generated/pickup-v3';
 
@@ -31,7 +32,7 @@ export class PickupV3Api {
     getPickup(
         query?: PickupV3ApiSpecs.GetPickupData['query'],
     ) {
-        return this.request.get<PickupV3ApiSpecs.GetPickupResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<PickupV3ApiSpecs.GetPickupResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/orders/pickups',
             query,
         });
@@ -50,7 +51,7 @@ export class PickupV3Api {
     postPickup(
         requestBody: PickupV3ApiSpecs.PostPickupData['body'],
     ) {
-        return this.request.post<PickupV3ApiSpecs.PostPickupResponse, PickupV3ApiSpecs.PostPickupError>({
+        return this.request.post<RequestSuccessResponse<200, Required<PickupV3ApiSpecs.PostPickupResponses[200]>>,RequestErrorResponse<422, Required<PickupV3ApiSpecs.PostPickupErrors[422]>>>({
             path: 'v3/orders/pickups',
             contentType: 'application/json',
             body: requestBody,
@@ -65,7 +66,7 @@ export class PickupV3Api {
     putPickup(
         requestBody: PickupV3ApiSpecs.PutPickupData['body'],
     ) {
-        return this.request.put<PickupV3ApiSpecs.PutPickupResponse, PickupV3ApiSpecs.PutPickupError>({
+        return this.request.put<RequestSuccessResponse<200, Required<PickupV3ApiSpecs.PutPickupResponses[200]>>,RequestErrorResponse<422, Required<PickupV3ApiSpecs.PutPickupErrors[422]>>>({
             path: 'v3/orders/pickups',
             contentType: 'application/json',
             body: requestBody,
@@ -87,7 +88,7 @@ export class PickupV3Api {
     deletePickup(
         query?: PickupV3ApiSpecs.DeletePickupData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<PickupV3ApiSpecs.DeletePickupResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/orders/pickups',
             query,
         });

@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as WebhooksV3ApiSpecs from '../generated/webhooks-v3';
 export * as WebhooksV3ApiSpecs from '../generated/webhooks-v3';
 
@@ -19,7 +20,7 @@ export class WebhooksV3Api {
     getWebhooks(
         query?: WebhooksV3ApiSpecs.GetWebhooksData['query'],
     ) {
-        return this.request.get<any, WebhooksV3ApiSpecs.GetWebhooksError>({
+        return this.request.get<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.GetWebhooksResponses[200]>>,RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.GetWebhooksErrors[401]>>>({
             path: 'v3/hooks',
             query,
         });
@@ -33,7 +34,7 @@ export class WebhooksV3Api {
     createWebhooks(
         requestBody: WebhooksV3ApiSpecs.CreateWebhooksData['body'],
     ) {
-        return this.request.post<WebhooksV3ApiSpecs.CreateWebhooksResponse, WebhooksV3ApiSpecs.CreateWebhooksError>({
+        return this.request.post<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.CreateWebhooksResponses[200]>>,(RequestErrorResponse<400, Required<WebhooksV3ApiSpecs.CreateWebhooksErrors[400]>> | RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.CreateWebhooksErrors[401]>> | RequestErrorResponse<422, Required<WebhooksV3ApiSpecs.CreateWebhooksErrors[422]>>)>({
             path: 'v3/hooks',
             contentType: 'application/json',
             body: requestBody,
@@ -48,7 +49,7 @@ export class WebhooksV3Api {
     getWebhook(
         webhookId: WebhooksV3ApiSpecs.GetWebhookData['path']['webhook_id'],
     ) {
-        return this.request.get<any, WebhooksV3ApiSpecs.GetWebhookError>({
+        return this.request.get<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.GetWebhookResponses[200]>>,(RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.GetWebhookErrors[401]>> | RequestErrorResponse<404, Required<WebhooksV3ApiSpecs.GetWebhookErrors[404]>>)>({
             path: `v3/hooks/${webhookId}`,
         });
     }
@@ -62,7 +63,7 @@ export class WebhooksV3Api {
         webhookId: WebhooksV3ApiSpecs.UpdateWebhookData['path']['webhook_id'],
         requestBody: WebhooksV3ApiSpecs.UpdateWebhookData['body'],
     ) {
-        return this.request.put<any, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.UpdateWebhookResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/hooks/${webhookId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -77,7 +78,7 @@ export class WebhooksV3Api {
     deleteWebhook(
         webhookId: WebhooksV3ApiSpecs.DeleteWebhookData['path']['webhook_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.DeleteWebhookResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/hooks/${webhookId}`,
         });
     }
@@ -90,7 +91,7 @@ export class WebhooksV3Api {
     getHooksAdmin(
         query?: WebhooksV3ApiSpecs.GetHooksAdminData['query'],
     ) {
-        return this.request.get<WebhooksV3ApiSpecs.GetHooksAdminResponse, WebhooksV3ApiSpecs.GetHooksAdminError>({
+        return this.request.get<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.GetHooksAdminResponses[200]>>,RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.GetHooksAdminErrors[401]>>>({
             path: 'v3/hooks/admin',
             query,
         });
@@ -105,7 +106,7 @@ export class WebhooksV3Api {
     updateHooksAdmin(
         requestBody: WebhooksV3ApiSpecs.UpdateHooksAdminData['body'],
     ) {
-        return this.request.put<any, WebhooksV3ApiSpecs.UpdateHooksAdminError>({
+        return this.request.put<RequestSuccessResponse<204, Required<WebhooksV3ApiSpecs.UpdateHooksAdminResponses[204]>>,(RequestErrorResponse<400, Required<WebhooksV3ApiSpecs.UpdateHooksAdminErrors[400]>> | RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.UpdateHooksAdminErrors[401]>> | RequestErrorResponse<422, Required<WebhooksV3ApiSpecs.UpdateHooksAdminErrors[422]>>)>({
             path: 'v3/hooks/admin',
             contentType: 'application/json',
             body: requestBody,

@@ -2,7 +2,11 @@ openapi: '3.0.3'
 info:
   title: Tax Provider API
   version: '1.0'
-  description: 'Use BigCommerce’s platform-to-platform Tax Provider API to integrate a tax calculation engine into the BigCommerce storefront and control panel. Supports [estimate](/docs/rest-contracts/tax#estimate-taxes), [adjust](/docs/rest-contracts/tax#adjust-tax-quote), [commit](/docs/rest-contracts/tax#commit-tax-quote), and [void](/docs/rest-contracts/tax#void-tax-quote) operations. For more information, see [Tax Provider API Overview](/docs/integrations/tax).'
+  description: |-
+    Use BigCommerce’s platform-to-platform Tax Provider API to integrate a tax calculation engine into the BigCommerce storefront and control panel. Supports [estimate](/docs/rest-contracts/tax#estimate-taxes), [adjust](/docs/rest-contracts/tax#adjust-tax-quote), [commit](/docs/rest-contracts/tax#commit-tax-quote), and [void](/docs/rest-contracts/tax#void-tax-quote) operations. For more information, see [Tax Provider API Overview](/docs/integrations/tax).
+    
+    > #### Note
+    > * [Document submission](/docs/integrations/tax#document-submission) operations are only triggered when the **Submit Order Data** provider setting is enabled.
   termsOfService: 'https://www.bigcommerce.com/terms'
   contact:
     name: BigCommerce
@@ -65,6 +69,9 @@ paths:
                     customer_id: '0'
                     customer_group_id: '0'
                     taxability_code: ''
+                    tax_properties:
+                      - code: 'property123'
+                        value: 'property-value'
                   transaction_date: '2019-08-13T03:17:37+00:00'
                   documents:
                     - id: 5d522b889d3d9
@@ -336,6 +343,8 @@ paths:
       summary: Commit Tax Quote
       description: |-
         Submit the quote request to be persisted by the enabled third-party tax provider. A commit operation is intended to be submitted once only, when the Order has been confirmed and paid.
+        
+        Merchants may adjust when commit operations occur by adjusting the document submission strategy in their store tax settings. The selected document submission strategy will adjust whether order status or payment status is used to determine if the order is paid. For more information, see the [Tax Settings API Reference](/docs/rest-management/tax-settings).
 
         > Server URL
         > - For supporting tax providers, the server URL contains the tax providerʼs profile field; for example, `your_profile.example.com`.
@@ -358,6 +367,9 @@ paths:
                     customer_id: '0'
                     customer_group_id: '0'
                     taxability_code: ''
+                    tax_properties:
+                      - code: 'property123'
+                        value: 'property-value'
                   transaction_date: '2019-08-13T03:40:15+00:00'
                   documents:
                     - id: shipping_14
@@ -886,7 +898,6 @@ components:
       type: object
       description: An **ItemRequest** represents required information relating to completing tax calculations for a specific line item.
       title: ItemRequest
-      x-internal: false
       properties:
         id:
           type: string
@@ -927,7 +938,7 @@ components:
           default: false
         tax_properties:
           type: array
-          description: Merchants may opt to include additional properties that a tax provider can choose to support, factoring these values into tax calculation.
+          description: Merchants may opt to include additional properties that a tax provider can choose to support, factoring these values into tax calculation. See [Tax Properties API](/docs/rest-management/tax-properties) for more information on configuring tax properties.
           items:
             $ref: '#/components/schemas/request-item-tax-property'
       required:
@@ -950,7 +961,6 @@ components:
       required:
         - code
         - value
-      x-internal: false
     request-document:
       type: object
       description: 'Each **DocumentRequest** represents an order or part of an order of items fulfilled from a single origin address to a single destination address. In addition to shipping and billing details, a document request includes the collection of items in the shipment, with tax-relevant information for each item. Multi-address orders, in which items ship to or from multiple addresses, require at least one **DocumentRequest** per combination of sender-recipient addresses. These are similar to "consignments" or "shipments" in other BigCommerce APIs.'
@@ -1015,7 +1025,6 @@ components:
         - shipping
         - handling
         - items
-      x-internal: false
     request-quote:
       type: object
       description: 'Each **QuoteRequest** represents an order. In addition to transaction details, it contains a `documents` array of one or more **DocumentRequest** objects, which represent distinct combinations of origin and fulfillment addresses and the tax-relevant contents of those consignments. This is similar to an "order" in other BigCommerce APIs.'
@@ -1044,10 +1053,15 @@ components:
             taxability_code:
               type: string
               description: 'If applicable, the tax exemption code of the shopper’s customer account. A taxability code is intended to apply to multiple customers. This code should match the exemption codes provided by the third-party integration.'
+            tax_properties:
+              type: array
+              description: Any tax property values that have been associated with this customer. See [Tax Properties API](/docs/rest-management/tax-properties) for more information on configuring tax properties.
+              items:
+                $ref: '#/components/schemas/request-item-tax-property'
         transaction_date:
           type: string
           format: date-time
-          description: ISO 8601 formatted date the shopper placed this order. Dates will be provided in UTC.
+          description: ISO 8601 formatted date the shopper placed this order. Tax quotes are expected to reflect taxes applicable on this date. Dates will be provided in UTC.
         documents:
           type: array
           description: 'One or more consignments containing items being purchased by the shopper, including shipping and handling fees that are charged for each consignment. Most orders will contain a single consignment (to a single shipping address), however the BigCommerce platform also supports "Multi-address orders" which allow shoppers to place a single order with items shipped to different addresses.'
@@ -1059,7 +1073,6 @@ components:
         - customer
         - transaction_date
         - documents
-      x-internal: false
     request-adjust:
       description: An **AdjustRequest** contains the same data as a standard **QuoteRequest** with added detail of the adjustment operation.
       allOf:
@@ -1070,7 +1083,6 @@ components:
               description: 'Specifies the reason for the adjustment operation, for auditing purposes. May be a custom, user-entered description.'
         - $ref: '#/components/schemas/request-quote'
       title: AdjustRequest
-      x-internal: false
     Address:
       type: object
       description: 'Requests may have partial Address data. For example, the BigCommerce Cart page has the "Estimate Shipping & Tax" feature which is only expected to supply Country, Region and Postal Code.'
@@ -1114,7 +1126,6 @@ components:
           enum:
             - RESIDENTIAL
             - COMMERCIAL
-      x-internal: false
     TaxClass:
       type: object
       properties:
@@ -1131,7 +1142,6 @@ components:
         - code
         - class_id
         - name
-      x-internal: false
     response-quote:
       type: object
       properties:
@@ -1147,7 +1157,6 @@ components:
         - id
         - documents
       title: Quote
-      x-internal: false
     response-document:
       type: object
       title: Document
@@ -1206,7 +1215,6 @@ components:
         - items
         - shipping
         - handling
-      x-internal: false
     response-item:
       type: object
       description: |-
@@ -1223,7 +1231,6 @@ components:
       required:
         - id
         - price
-      x-internal: false
     response-taxprice:
       type: object
       properties:
@@ -1252,7 +1259,6 @@ components:
         - tax_rate
         - sales_tax_summary
       title: TaxPrice
-      x-internal: false
     SalesTax:
       type: object
       properties:
@@ -1283,7 +1289,6 @@ components:
         - name
         - rate
         - amount
-      x-internal: false
     item_type:
       type: string
       description: |-

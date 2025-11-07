@@ -1,14 +1,5 @@
-export type BaseError = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-};
-export type DetailedErrors = {
-    [key: string]: (string);
-};
-export type ErrorResponse = BaseError & {
-    errors?: DetailedErrors;
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
 export type IndexMeta = {
     pagination?: {
@@ -24,6 +15,18 @@ export type IndexMeta = {
         };
     };
 };
+export type ErrorResponse = BaseError & {
+    errors?: DetailedErrors;
+};
+export type BaseError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+};
+export type DetailedErrors = {
+    [key: string]: string;
+};
 export type SystemLog = {
     id?: number;
     type?: string;
@@ -34,21 +37,28 @@ export type SystemLog = {
     date_created?: string;
 };
 export type GetStoreSystemLogsData = {
+    body?: never;
+    path?: never;
     query?: {
-        'id:in'?: Array<(number)>;
         limit?: number;
-        module?: 'export+only' | 'email+message' | 'theme+download' | 'order+status' | 'optimized+checkout';
-        'module:not'?: string;
         page?: number;
-        severity?: 1 | 2 | 3 | 4;
-        'severity:max'?: number;
-        'severity:min'?: number;
         type?: 'general' | 'payment' | 'shipping' | 'tax' | 'notification' | 'emailintegration' | 'ordersettings' | 'design';
         'type:not'?: string;
+        module?: 'export+only' | 'email+message' | 'theme+download' | 'order+status' | 'optimized+checkout';
+        'module:not'?: string;
+        severity?: 1 | 2 | 3 | 4;
+        'severity:min'?: number;
+        'severity:max'?: number;
+        'id:in'?: Array<number>;
+        sort?: 'date_created' | 'type';
+        direction?: 'asc' | 'desc';
+    };
+    url: '/store/systemlogs';
+};
+export type GetStoreSystemLogsResponses = {
+    200: {
+        data?: Array<SystemLog>;
+        meta?: IndexMeta;
     };
 };
-export type GetStoreSystemLogsResponse = ({
-    data?: Array<SystemLog>;
-    meta?: IndexMeta;
-});
-export type GetStoreSystemLogsError = unknown;
+export type GetStoreSystemLogsResponse = GetStoreSystemLogsResponses[keyof GetStoreSystemLogsResponses];

@@ -1,20 +1,381 @@
-export type callback_category_data = {
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
+};
+export type StoreCartWildcard = unknown;
+export type StoreCartCreated = WebhookCallbackBase & {
+    data?: {
+        type?: 'cart' | 'cart_line_item';
+        id?: string;
+    };
+};
+export type StoreCartUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: string;
+    };
+};
+export type StoreCartDeleted = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: string;
+    };
+};
+export type StoreCartCouponApplied = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: string;
+        couponId?: number;
+    };
+};
+export type StoreCartAbandoned = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: string;
+        token?: string;
+    };
+};
+export type StoreCartConverted = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: string;
+        orderId?: number;
+    };
+};
+export type StoreCartLineItemWildcard = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: string;
+        cartId?: string;
+    };
+};
+export type StoreCartLineItemCreated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: string;
+        cartId?: string;
+    };
+};
+export type StoreCartLineItemUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: string;
+        cartId?: string;
+    };
+};
+export type StoreCartLineItemDeleted = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: string;
+        cartId?: string;
+    };
+};
+export type StoreCategoryWildcard = unknown;
+export type StoreCategoryCreated = WebhookCallbackBase & CallbackCategoryData;
+export type StoreCategoryUpdated = WebhookCallbackBase & {
     data?: {
         type?: string;
         id?: number;
     };
 };
-export type error_Full = {
+export type StoreCategoryDeleted = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+    };
+};
+export type StoreChannelWildcard = unknown;
+export type StoreChannelCreated = WebhookCallbackBase & {
+    data?: {
+        readonly type?: string;
+        id?: number;
+    };
+};
+export type StoreChannelUpdated = WebhookCallbackBase & {
+    data?: {
+        readonly type?: string;
+        id?: number;
+    };
+};
+export type StoreCustomerWildcard = unknown;
+export type StoreCustomerCreated = WebhookCallbackBase & {
+    data?: {
+        readonly type?: string;
+        id?: number;
+    };
+};
+export type StoreCustomerUpdated = WebhookCallbackBase & {
+    data?: {
+        readonly type?: string;
+        id?: number;
+    };
+};
+export type StoreCustomerDeleted = WebhookCallbackBase & {
+    data?: {
+        readonly type?: string;
+        id?: number;
+    };
+};
+export type StoreCustomerAddressUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        address?: {
+            customer_id?: number;
+        };
+    };
+};
+export type StoreCustomerAddressCreated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        address?: {
+            customer_id?: number;
+        };
+    };
+};
+export type StoreCustomerAddressDeleted = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        address?: {
+            customer_id?: number;
+        };
+    };
+};
+export type StoreCustomerPaymentInstrumentDefaultUpdated = WebhookCallbackBase & {
+    data?: {
+        readonly type?: string;
+        id?: number;
+    };
+};
+export type StoreOrderWildcard = unknown;
+export type StoreOrderCreated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+    };
+};
+export type StoreOrderUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+    };
+};
+export type StoreOrderArchived = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+    };
+};
+export type StoreOrderStatusUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        status?: {
+            previous_status_id?: number;
+            new_status_id?: number;
+        };
+    };
+};
+export type StoreOrderMessageCreated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        message?: {
+            order_message_id?: number;
+        };
+    };
+};
+export type StoreOrderRefundCreated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        refund?: {
+            refund_id?: number;
+        };
+    };
+};
+export type StoreProductWildcard = unknown;
+export type StoreProductDeleted = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+    };
+};
+export type StoreProductCreated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+    };
+};
+export type StoreProductUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+    };
+};
+export type StoreProductInventoryUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        inventory?: {
+            product_id?: number;
+            method?: 'absolute' | 'relative';
+            value?: number;
+        };
+    };
+};
+export type StoreProductInventoryOrderUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        inventory?: {
+            product_id?: number;
+            method?: 'absolute' | 'relative';
+            value?: number;
+        };
+    };
+};
+export type StoreShipmentWildcard = unknown;
+export type StoreShipmentCreated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        orderId?: number;
+    };
+};
+export type StoreShipmentUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        orderId?: number;
+    };
+};
+export type StoreShipmentDeleted = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        orderId?: number;
+    };
+};
+export type StoreSkuWildcard = unknown;
+export type StoreSkuCreated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        sku?: {
+            product_id?: number;
+            variant_id?: number;
+        };
+    };
+};
+export type StoreSkuUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        sku?: {
+            product_id?: number;
+            variant_id?: number;
+        };
+    };
+};
+export type StoreSkuDeleted = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        sku?: {
+            product_id?: number;
+            variant_id?: number;
+        };
+    };
+};
+export type StoreSkuInventoryUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        inventory?: {
+            product_id?: number;
+            method?: 'absolute' | 'relative';
+            value?: number;
+            variant_id?: number;
+        };
+    };
+};
+export type StoreSkuInventoryOrderUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+        inventory?: {
+            product_id?: number;
+            method?: 'absolute' | 'relative';
+            value?: number;
+            variant_id?: number;
+        };
+    };
+};
+export type StoreAppUninstalled = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+    };
+};
+export type StoreInformationUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+    };
+};
+export type StoreSubscriberWildcard = unknown;
+export type StoreSubscriberCreated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+    };
+};
+export type StoreSubscriberUpdated = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+    };
+};
+export type StoreSubscriberDeleted = WebhookCallbackBase & {
+    data?: {
+        type?: string;
+        id?: number;
+    };
+};
+export type ErrorFull = {
     status?: number;
     title?: string;
     type?: string;
 };
-export type errorDetailed_Full = {
+export type ErrorDetailedFull = {
     status?: number;
     title?: string;
     type?: string;
     errors?: unknown;
 };
+export type WebhookPut = {
+    scope?: string;
+    destination?: string;
+    is_active?: boolean;
+    headers?: {
+        [key: string]: string;
+    } | null;
+};
+export type WebhookBase = {
+    scope: string;
+    destination: string;
+    is_active?: boolean;
+    headers?: {
+        [key: string]: string;
+    } | null;
+};
+export type WebhookFull = {
+    id?: number;
+    client_id?: string;
+    store_hash?: string;
+    created_at?: number;
+    updated_at?: number;
+} & WebhookBase;
 export type Pagination = {
     total?: number;
     count?: number;
@@ -27,559 +388,286 @@ export type Pagination = {
         next?: string;
     };
 };
-export type ParameterAccept = string;
-export type ParameterContent_Type = string;
-export type ParameterFilterByDestination = string;
-export type ParameterFilterByScope = string;
-export type ParameterFilterLimitParam = number;
-export type ParameterFilterPageParam = number;
-export type ParameterIsActive = boolean;
-export type ParameterWebhookId = number;
-export type store_app_uninstalled = webhook_callback_base & {
-    data?: {
-        type?: string;
-    };
-};
-export type store_cart_abandoned = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: string;
-        token?: string;
-    };
-};
-export type store_cart_converted = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: string;
-        orderId?: number;
-    };
-};
-export type store_cart_couponApplied = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: string;
-        couponId?: number;
-    };
-};
-export type store_cart_created = webhook_callback_base & {
-    data?: {
-        type?: 'cart' | 'cart_line_item';
-        id?: string;
-    };
-};
-export type type = 'cart' | 'cart_line_item';
-export type store_cart_deleted = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: string;
-    };
-};
-export type store_cart_lineItem_created = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: string;
-        cartId?: string;
-    };
-};
-export type store_cart_lineItem_deleted = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: string;
-        cartId?: string;
-    };
-};
-export type store_cart_lineItem_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: string;
-        cartId?: string;
-    };
-};
-export type store_cart_lineItem_wildcard = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: string;
-        cartId?: string;
-    };
-};
-export type store_cart_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: string;
-    };
-};
-export type store_cart_wildcard = unknown;
-export type store_category_created = webhook_callback_base & callback_category_data;
-export type store_category_deleted = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-    };
-};
-export type store_category_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-    };
-};
-export type store_category_wildcard = unknown;
-export type store_channel_created = webhook_callback_base & {
-    data?: {
-        readonly type?: string;
-        id?: number;
-    };
-};
-export type store_channel_updated = webhook_callback_base & {
-    data?: {
-        readonly type?: string;
-        id?: number;
-    };
-};
-export type store_channel_wildcard = unknown;
-export type store_customer_address_created = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        address?: {
-            customer_id?: number;
-        };
-    };
-};
-export type store_customer_address_deleted = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        address?: {
-            customer_id?: number;
-        };
-    };
-};
-export type store_customer_address_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        address?: {
-            customer_id?: number;
-        };
-    };
-};
-export type store_customer_created = webhook_callback_base & {
-    data?: {
-        readonly type?: string;
-        id?: number;
-    };
-};
-export type store_customer_deleted = webhook_callback_base & {
-    data?: {
-        readonly type?: string;
-        id?: number;
-    };
-};
-export type store_customer_payment_instrument_default_updated = webhook_callback_base & {
-    data?: {
-        readonly type?: string;
-        id?: number;
-    };
-};
-export type store_customer_updated = webhook_callback_base & {
-    data?: {
-        readonly type?: string;
-        id?: number;
-    };
-};
-export type store_customer_wildcard = unknown;
-export type store_information_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-    };
-};
-export type store_order_archived = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-    };
-};
-export type store_order_created = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-    };
-};
-export type store_order_message_created = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        message?: {
-            order_message_id?: number;
-        };
-    };
-};
-export type store_order_refund_created = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        refund?: {
-            refund_id?: number;
-        };
-    };
-};
-export type store_order_statusUpdated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        status?: {
-            previous_status_id?: number;
-            new_status_id?: number;
-        };
-    };
-};
-export type store_order_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-    };
-};
-export type store_order_wildcard = unknown;
-export type store_product_created = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-    };
-};
-export type store_product_deleted = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-    };
-};
-export type store_product_inventory_order_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        inventory?: {
-            product_id?: number;
-            method?: 'absolute' | 'relative';
-            value?: number;
-        };
-    };
-};
-export type method = 'absolute' | 'relative';
-export type store_product_inventory_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        inventory?: {
-            product_id?: number;
-            method?: 'absolute' | 'relative';
-            value?: number;
-        };
-    };
-};
-export type store_product_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-    };
-};
-export type store_product_wildcard = unknown;
-export type store_shipment_created = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        orderId?: number;
-    };
-};
-export type store_shipment_deleted = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        orderId?: number;
-    };
-};
-export type store_shipment_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        orderId?: number;
-    };
-};
-export type store_shipment_wildcard = unknown;
-export type store_sku_created = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        sku?: {
-            product_id?: number;
-            variant_id?: number;
-        };
-    };
-};
-export type store_sku_deleted = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        sku?: {
-            product_id?: number;
-            variant_id?: number;
-        };
-    };
-};
-export type store_sku_inventory_order_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        inventory?: {
-            product_id?: number;
-            method?: 'absolute' | 'relative';
-            value?: number;
-            variant_id?: number;
-        };
-    };
-};
-export type store_sku_inventory_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        inventory?: {
-            product_id?: number;
-            method?: 'absolute' | 'relative';
-            value?: number;
-            variant_id?: number;
-        };
-    };
-};
-export type store_sku_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-        sku?: {
-            product_id?: number;
-            variant_id?: number;
-        };
-    };
-};
-export type store_sku_wildcard = unknown;
-export type store_subscriber_created = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-    };
-};
-export type store_subscriber_deleted = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-    };
-};
-export type store_subscriber_updated = webhook_callback_base & {
-    data?: {
-        type?: string;
-        id?: number;
-    };
-};
-export type store_subscriber_wildcard = unknown;
-export type webhook_Base = {
-    scope: string;
-    destination: string;
-    is_active?: boolean;
-    headers?: {
-        [key: string]: (string);
-    } | null;
-};
-export type webhook_callback_base = {
+export type WebhookCallbackBase = {
     readonly created_at?: number;
     store_id?: string;
     producer?: string;
     scope?: string;
     hash?: string;
 };
-export type webhook_Full = webhook_Base & {
-    id?: number;
-    client_id?: string;
-    store_hash?: string;
-    created_at?: number;
-    updated_at?: number;
+export type CallbackCategoryData = {
+    data?: {
+        type?: string;
+        id?: number;
+    };
 };
-export type webhook_Put = {
+export type StoreChannelCreatedWritable = WebhookCallbackBaseWritable & {
+    data?: {
+        id?: number;
+    };
+};
+export type StoreChannelUpdatedWritable = WebhookCallbackBaseWritable & {
+    data?: {
+        id?: number;
+    };
+};
+export type StoreCustomerCreatedWritable = WebhookCallbackBaseWritable & {
+    data?: {
+        id?: number;
+    };
+};
+export type StoreCustomerUpdatedWritable = WebhookCallbackBaseWritable & {
+    data?: {
+        id?: number;
+    };
+};
+export type StoreCustomerDeletedWritable = WebhookCallbackBaseWritable & {
+    data?: {
+        id?: number;
+    };
+};
+export type StoreCustomerPaymentInstrumentDefaultUpdatedWritable = WebhookCallbackBaseWritable & {
+    data?: {
+        id?: number;
+    };
+};
+export type WebhookCallbackBaseWritable = {
+    store_id?: string;
+    producer?: string;
     scope?: string;
-    destination?: string;
-    is_active?: boolean;
-    headers?: {
-        [key: string]: (string);
-    } | null;
+    hash?: string;
 };
-export type CreateWebhooksData = {
-    body?: webhook_Base;
-    headers?: {
-        Accept?: string;
-        'Content-Type'?: string;
-    };
-};
-export type CreateWebhooksResponse = ({
-    data?: webhook_Full;
-    meta?: {
-        pagination?: Pagination;
-    };
-});
-export type CreateWebhooksError = (error_Full | errorDetailed_Full);
+export type WebhookId = number;
+export type IsActive = boolean;
+export type FilterByScope = string;
+export type FilterByDestination = string;
+export type FilterPageParam = number;
+export type FilterLimitParam = number;
+export type Accept = string;
+export type ContentType = string;
 export type GetWebhooksData = {
+    body?: never;
     headers?: {
         Accept?: string;
         'Content-Type'?: string;
     };
+    path?: never;
     query?: {
-        destination?: string;
-        is_active?: boolean;
-        limit?: number;
         page?: number;
-        scope?: string;
-    };
-};
-export type GetWebhooksResponse = ({
-    data?: Array<{
-        id?: number;
-        client_id?: string;
-        store_hash?: string;
+        limit?: number;
+        is_active?: boolean;
         scope?: string;
         destination?: string;
-        headers?: {
-            [key: string]: (string);
-        } | null;
-        is_active?: boolean;
-        created_at?: number;
-        updated_at?: number;
-    }>;
-    meta?: {
-        pagination?: Pagination;
     };
-});
-export type GetWebhooksError = (error_Full);
-export type GetWebhookData = {
-    headers?: {
-        Accept?: string;
-        'Content-Type'?: string;
-    };
-    path: {
-        webhook_id: number;
-    };
+    url: '/hooks';
 };
-export type GetWebhookResponse = ({
-    data?: {
-        id?: number;
-        client_id?: string;
-        store_hash?: string;
-        scope?: string;
-        destination?: string;
-        headers?: {
-            [key: string]: (string);
-        } | null;
-        is_active?: boolean;
-        created_at?: number;
-        updated_at?: number;
-    };
-    meta?: {
-        pagination?: Pagination;
-    };
-});
-export type GetWebhookError = (error_Full);
-export type UpdateWebhookData = {
-    body?: webhook_Put;
-    headers?: {
-        Accept?: string;
-        'Content-Type'?: string;
-    };
-    path: {
-        webhook_id: number;
-    };
+export type GetWebhooksErrors = {
+    401: ErrorFull;
 };
-export type UpdateWebhookResponse = ({
-    data?: {
-        id?: number;
-        client_id?: string;
-        store_hash?: string;
-        scope?: string;
-        destination?: string;
-        headers?: {
-            [key: string]: (string);
-        } | null;
-        is_active?: boolean;
-        created_at?: number;
-        updated_at?: number;
-    };
-    meta?: {
-        pagination?: Pagination;
-    };
-});
-export type UpdateWebhookError = unknown;
-export type DeleteWebhookData = {
-    headers?: {
-        Accept?: string;
-        'Content-Type'?: string;
-    };
-    path: {
-        webhook_id: number;
-    };
-};
-export type DeleteWebhookResponse = ({
-    data?: {
-        id?: number;
-        client_id?: string;
-        store_hash?: string;
-        scope?: string;
-        destination?: string;
-        headers?: {
-            [key: string]: (string);
-        } | null;
-        is_active?: boolean;
-        created_at?: number;
-        updated_at?: number;
-    };
-    meta?: {
-        pagination?: Pagination;
-    };
-});
-export type DeleteWebhookError = unknown;
-export type GetHooksAdminData = {
-    query?: {
-        is_active?: boolean;
-    };
-};
-export type GetHooksAdminResponse = ({
-    data?: {
-        emails?: Array<(string)>;
-        hooks_list?: Array<{
+export type GetWebhooksError = GetWebhooksErrors[keyof GetWebhooksErrors];
+export type GetWebhooksResponses = {
+    200: {
+        data?: Array<{
             id?: number;
             client_id?: string;
             store_hash?: string;
             scope?: string;
             destination?: string;
             headers?: {
-                [key: string]: (string);
+                [key: string]: string;
             } | null;
             is_active?: boolean;
             created_at?: number;
             updated_at?: number;
-            status?: 'inactive' | 'active' | 'deactivated';
         }>;
-        blocked_domains?: Array<{
-            destination?: string;
-            time_left?: number;
-            reasons?: Array<{
-                failure_description?: string;
-                count?: number;
-                timestamp?: number;
-            }>;
-        }>;
-    };
-    meta?: {
-        pagination?: Pagination;
-    };
-});
-export type GetHooksAdminError = (error_Full);
-export type UpdateHooksAdminData = {
-    body: {
-        emails?: Array<(string)>;
+        meta?: {
+            pagination?: Pagination;
+        };
     };
 };
-export type UpdateHooksAdminResponse = (void);
-export type UpdateHooksAdminError = (error_Full | errorDetailed_Full);
+export type GetWebhooksResponse = GetWebhooksResponses[keyof GetWebhooksResponses];
+export type CreateWebhooksData = {
+    body?: WebhookBase;
+    headers?: {
+        Accept?: string;
+        'Content-Type'?: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/hooks';
+};
+export type CreateWebhooksErrors = {
+    400: ErrorFull;
+    401: ErrorFull;
+    422: ErrorDetailedFull;
+};
+export type CreateWebhooksError = CreateWebhooksErrors[keyof CreateWebhooksErrors];
+export type CreateWebhooksResponses = {
+    200: {
+        data?: WebhookFull;
+        meta?: unknown;
+    };
+};
+export type CreateWebhooksResponse = CreateWebhooksResponses[keyof CreateWebhooksResponses];
+export type DeleteWebhookData = {
+    body?: never;
+    headers?: {
+        Accept?: string;
+        'Content-Type'?: string;
+    };
+    path: {
+        webhook_id: number;
+    };
+    query?: never;
+    url: '/hooks/{webhook_id}';
+};
+export type DeleteWebhookResponses = {
+    200: {
+        data?: {
+            id?: number;
+            client_id?: string;
+            store_hash?: string;
+            scope?: string;
+            destination?: string;
+            headers?: {
+                [key: string]: string;
+            } | null;
+            is_active?: boolean;
+            created_at?: number;
+            updated_at?: number;
+        };
+        meta?: unknown;
+    };
+};
+export type DeleteWebhookResponse = DeleteWebhookResponses[keyof DeleteWebhookResponses];
+export type GetWebhookData = {
+    body?: never;
+    headers?: {
+        Accept?: string;
+        'Content-Type'?: string;
+    };
+    path: {
+        webhook_id: number;
+    };
+    query?: never;
+    url: '/hooks/{webhook_id}';
+};
+export type GetWebhookErrors = {
+    401: ErrorFull;
+    404: ErrorFull;
+};
+export type GetWebhookError = GetWebhookErrors[keyof GetWebhookErrors];
+export type GetWebhookResponses = {
+    200: {
+        data?: {
+            id?: number;
+            client_id?: string;
+            store_hash?: string;
+            scope?: string;
+            destination?: string;
+            headers?: {
+                [key: string]: string;
+            } | null;
+            is_active?: boolean;
+            created_at?: number;
+            updated_at?: number;
+        };
+        meta?: unknown;
+    };
+};
+export type GetWebhookResponse = GetWebhookResponses[keyof GetWebhookResponses];
+export type UpdateWebhookData = {
+    body?: WebhookPut;
+    headers?: {
+        Accept?: string;
+        'Content-Type'?: string;
+    };
+    path: {
+        webhook_id: number;
+    };
+    query?: never;
+    url: '/hooks/{webhook_id}';
+};
+export type UpdateWebhookResponses = {
+    200: {
+        data?: {
+            id?: number;
+            client_id?: string;
+            store_hash?: string;
+            scope?: string;
+            destination?: string;
+            headers?: {
+                [key: string]: string;
+            } | null;
+            is_active?: boolean;
+            created_at?: number;
+            updated_at?: number;
+        };
+        meta?: unknown;
+    };
+};
+export type UpdateWebhookResponse = UpdateWebhookResponses[keyof UpdateWebhookResponses];
+export type GetHooksAdminData = {
+    body?: never;
+    path?: never;
+    query?: {
+        is_active?: boolean;
+    };
+    url: '/hooks/admin';
+};
+export type GetHooksAdminErrors = {
+    401: ErrorFull;
+};
+export type GetHooksAdminError = GetHooksAdminErrors[keyof GetHooksAdminErrors];
+export type GetHooksAdminResponses = {
+    200: {
+        data?: {
+            emails?: Array<string>;
+            hooks_list?: Array<{
+                id?: number;
+                client_id?: string;
+                store_hash?: string;
+                scope?: string;
+                destination?: string;
+                headers?: {
+                    [key: string]: string;
+                } | null;
+                is_active?: boolean;
+                created_at?: number;
+                updated_at?: number;
+                status?: 'inactive' | 'active' | 'deactivated';
+            }>;
+            blocked_domains?: Array<{
+                destination?: string;
+                time_left?: number;
+                reasons?: Array<{
+                    failure_description?: string;
+                    count?: number;
+                    timestamp?: number;
+                }>;
+            }>;
+        };
+        meta?: {
+            pagination?: Pagination;
+        };
+    };
+};
+export type GetHooksAdminResponse = GetHooksAdminResponses[keyof GetHooksAdminResponses];
+export type UpdateHooksAdminData = {
+    body: {
+        emails?: Array<string>;
+    };
+    path?: never;
+    query?: never;
+    url: '/hooks/admin';
+};
+export type UpdateHooksAdminErrors = {
+    400: ErrorFull;
+    401: ErrorFull;
+    422: ErrorDetailedFull;
+};
+export type UpdateHooksAdminError = UpdateHooksAdminErrors[keyof UpdateHooksAdminErrors];
+export type UpdateHooksAdminResponses = {
+    204: void;
+};
+export type UpdateHooksAdminResponse = UpdateHooksAdminResponses[keyof UpdateHooksAdminResponses];

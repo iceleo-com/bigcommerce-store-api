@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as ScriptsV3ApiSpecs from '../generated/scripts-v3';
 export * as ScriptsV3ApiSpecs from '../generated/scripts-v3';
 
@@ -19,7 +20,7 @@ export class ScriptsV3Api {
     getScripts(
         query?: ScriptsV3ApiSpecs.GetScriptsData['query'],
     ) {
-        return this.request.get<ScriptsV3ApiSpecs.GetScriptsResponse, ScriptsV3ApiSpecs.GetScriptsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ScriptsV3ApiSpecs.GetScriptsResponses[200]>>,RequestErrorResponse<422, Required<ScriptsV3ApiSpecs.GetScriptsErrors[422]>>>({
             path: 'v3/content/scripts',
             query,
         });
@@ -53,7 +54,7 @@ export class ScriptsV3Api {
     createScript(
         requestBody: ScriptsV3ApiSpecs.CreateScriptData['body'],
     ) {
-        return this.request.post<ScriptsV3ApiSpecs.CreateScriptResponse, ScriptsV3ApiSpecs.CreateScriptError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ScriptsV3ApiSpecs.CreateScriptResponses[200]>>,RequestErrorResponse<422, Required<ScriptsV3ApiSpecs.CreateScriptErrors[422]>>>({
             path: 'v3/content/scripts',
             contentType: 'application/json',
             body: requestBody,
@@ -68,7 +69,7 @@ export class ScriptsV3Api {
     getScript(
         uuid: ScriptsV3ApiSpecs.GetScriptData['path']['uuid'],
     ) {
-        return this.request.get<ScriptsV3ApiSpecs.GetScriptResponse, ScriptsV3ApiSpecs.GetScriptError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ScriptsV3ApiSpecs.GetScriptResponses[200]>>,(RequestErrorResponse<404, Required<ScriptsV3ApiSpecs.GetScriptErrors[404]>> | RequestErrorResponse<422, Required<ScriptsV3ApiSpecs.GetScriptErrors[422]>>)>({
             path: `v3/content/scripts/${uuid}`,
         });
     }
@@ -82,7 +83,7 @@ export class ScriptsV3Api {
         uuid: ScriptsV3ApiSpecs.UpdateScriptData['path']['uuid'],
         requestBody: ScriptsV3ApiSpecs.UpdateScriptData['body'],
     ) {
-        return this.request.put<ScriptsV3ApiSpecs.UpdateScriptResponse, ScriptsV3ApiSpecs.UpdateScriptError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ScriptsV3ApiSpecs.UpdateScriptResponses[200]>>,(RequestErrorResponse<404, Required<ScriptsV3ApiSpecs.UpdateScriptErrors[404]>> | RequestErrorResponse<422, Required<ScriptsV3ApiSpecs.UpdateScriptErrors[422]>>)>({
             path: `v3/content/scripts/${uuid}`,
             contentType: 'application/json',
             body: requestBody,
@@ -97,7 +98,7 @@ export class ScriptsV3Api {
     deleteScript(
         uuid: ScriptsV3ApiSpecs.DeleteScriptData['path']['uuid'],
     ) {
-        return this.request.delete<any, ScriptsV3ApiSpecs.DeleteScriptError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ScriptsV3ApiSpecs.DeleteScriptResponses[204]>>,(RequestErrorResponse<404, Required<ScriptsV3ApiSpecs.DeleteScriptErrors[404]>> | RequestErrorResponse<422, Required<ScriptsV3ApiSpecs.DeleteScriptErrors[422]>>)>({
             path: `v3/content/scripts/${uuid}`,
         });
     }

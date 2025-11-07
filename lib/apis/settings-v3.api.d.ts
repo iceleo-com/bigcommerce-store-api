@@ -1,47 +1,178 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as SettingsV3ApiSpecs from '../generated/settings-v3';
 export * as SettingsV3ApiSpecs from '../generated/settings-v3';
 export declare class SettingsV3Api {
     private readonly request;
     constructor(request: RequestService);
-    getAnalyticsProviders(query?: SettingsV3ApiSpecs.GetAnalyticsProvidersData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetAnalyticsProvidersResponse, any>>;
-    getAnalyticsProvider(id: SettingsV3ApiSpecs.GetAnalyticsProviderData['path']['id'], query?: SettingsV3ApiSpecs.GetAnalyticsProviderData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.AnalyticsProvider, SettingsV3ApiSpecs.GetAnalyticsProviderError>>;
-    updateAnalyticsProvider(id: SettingsV3ApiSpecs.UpdateAnalyticsProviderData['path']['id'], requestBody: SettingsV3ApiSpecs.UpdateAnalyticsProviderData['body'], query?: SettingsV3ApiSpecs.UpdateAnalyticsProviderData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.AnalyticsProvider, SettingsV3ApiSpecs.UpdateAnalyticsProviderError>>;
-    getSettingsCatalog(query?: SettingsV3ApiSpecs.GetSettingsCatalogData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsCatalogResponse, any>>;
-    updateSettingsCatalog(requestBody: SettingsV3ApiSpecs.UpdateSettingsCatalogData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsCatalogData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsCatalogResponse, any>>;
-    getSettingsEmailStatuses(query?: SettingsV3ApiSpecs.GetSettingsEmailStatusesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsEmailStatusesResponse, any>>;
-    updateSettingsEmailStatuses(requestBody: SettingsV3ApiSpecs.UpdateSettingsEmailStatusesData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsEmailStatusesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsEmailStatusesResponse, any>>;
-    createSettingsFaviconImage(requestBody: SettingsV3ApiSpecs.CreateSettingsFaviconImageData['body'], query?: SettingsV3ApiSpecs.CreateSettingsFaviconImageData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, any>>;
-    getSettingsInventoryNotifications(query?: SettingsV3ApiSpecs.GetSettingsInventoryNotificationsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsInventoryNotificationsResponse, any>>;
-    updateSettingsInventoryNotifications(requestBody: SettingsV3ApiSpecs.UpdateSettingsInventoryNotificationsData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsInventoryNotificationsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, any>>;
-    getSettingsLogo(query?: SettingsV3ApiSpecs.GetSettingsLogoData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsLogoResponse, any>>;
-    updateSettingsLogo(requestBody: SettingsV3ApiSpecs.UpdateSettingsLogoData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsLogoData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsLogoResponse, any>>;
-    createSettingsLogoImage(requestBody: SettingsV3ApiSpecs.CreateSettingsLogoImageData['body'], query?: SettingsV3ApiSpecs.CreateSettingsLogoImageData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, any>>;
-    getSettingsEnabledSearchFilters(): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsEnabledSearchFiltersResponse, any>>;
-    updateSettingsEnabledSearchFilters(requestBody: SettingsV3ApiSpecs.UpdateSettingsEnabledSearchFiltersData['body']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsEnabledSearchFiltersResponse, any>>;
-    getSettingsAvailableFilters(query?: SettingsV3ApiSpecs.GetSettingsAvailableFiltersData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsAvailableFiltersResponse, any>>;
-    getSettingsFiltersContexts(query?: SettingsV3ApiSpecs.GetSettingsFiltersContextsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsFiltersContextsResponse, any>>;
-    upsertSettingsFiltersContexts(requestBody: SettingsV3ApiSpecs.UpsertSettingsFiltersContextsData['body']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpsertSettingsFiltersContextsResponse, any>>;
-    getSettingsLocale(): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsLocaleResponse, any>>;
-    updateSettingsLocale(requestBody: SettingsV3ApiSpecs.UpdateSettingsLocaleData['body']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsLocaleResponse, SettingsV3ApiSpecs.ErrorResponse>>;
-    getSettingsStoreProfile(query?: SettingsV3ApiSpecs.GetSettingsStoreProfileData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsStoreProfileResponse, any>>;
-    updateSettingsStoreProfile(requestBody: SettingsV3ApiSpecs.UpdateSettingsStoreProfileData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStoreProfileData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsStoreProfileResponse, SettingsV3ApiSpecs.ErrorResponse>>;
-    getSettingsStorefrontCategory(query?: SettingsV3ApiSpecs.GetSettingsStorefrontCategoryData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsStorefrontCategoryResponse, any>>;
-    updateSettingsStorefrontCategory(requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryResponse, SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryError>>;
-    getSettingsStorefrontProduct(query?: SettingsV3ApiSpecs.GetSettingsStorefrontProductData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, any>>;
-    updateSettingsStorefrontProduct(requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontProductData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontProductData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, SettingsV3ApiSpecs.UpdateSettingsStorefrontProductError>>;
-    getSettingsRobotsTxt(query?: SettingsV3ApiSpecs.GetSettingsRobotsTxtData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsRobotsTxtResponse, any>>;
-    updateSettingsRobotsTxt(requestBody: SettingsV3ApiSpecs.UpdateSettingsRobotsTxtData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsRobotsTxtData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsRobotsTxtResponse, any>>;
-    getSettingsStorefrontSearch(query?: SettingsV3ApiSpecs.GetSettingsStorefrontSearchData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsStorefrontSearchResponse, any>>;
-    updateSettingsStorefrontSearch(requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontSearchData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontSearchData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsStorefrontSearchResponse, any>>;
-    getSettingsStorefrontSecurity(query?: SettingsV3ApiSpecs.GetSettingsStorefrontSecurityData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsStorefrontSecurityResponse, any>>;
-    updateSettingsStorefrontSecurity(requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontSecurityData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontSecurityData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsStorefrontSecurityResponse, any>>;
-    getSettingsStorefrontSeo(query?: SettingsV3ApiSpecs.GetSettingsStorefrontSeoData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsStorefrontSeoResponse, any>>;
-    updateSettingsStorefrontSeo(requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoResponse, SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoError>>;
-    getSettingsStorefrontStatus(query?: SettingsV3ApiSpecs.GetSettingsStorefrontStatusData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsStorefrontStatusResponse, any>>;
-    updateSettingsStorefrontStatus(requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontStatusData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontStatusData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsStorefrontStatusResponse, any>>;
-    getSettingsInventory(query?: SettingsV3ApiSpecs.GetSettingsInventoryData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsInventoryResponse, SettingsV3ApiSpecs.ErrorResponse>>;
-    updateSettingsInventory(requestBody: SettingsV3ApiSpecs.UpdateSettingsInventoryData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsInventoryData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsInventoryResponse, any>>;
-    getSettingsMeasurementUnits(query?: SettingsV3ApiSpecs.GetSettingsMeasurementUnitsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.GetSettingsMeasurementUnitsResponse, SettingsV3ApiSpecs.ErrorResponse>>;
-    updateSettingsMeasurementUnits(requestBody: SettingsV3ApiSpecs.UpdateSettingsMeasurementUnitsData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsMeasurementUnitsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<SettingsV3ApiSpecs.UpdateSettingsMeasurementUnitsResponse, any>>;
+    getAnalyticsProviders(query?: SettingsV3ApiSpecs.GetAnalyticsProvidersData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.AnalyticsProviders;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    getAnalyticsProvider(id: SettingsV3ApiSpecs.GetAnalyticsProviderData['path']['id'], query?: SettingsV3ApiSpecs.GetAnalyticsProviderData['query']): Promise<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.AnalyticsProvider>> | RequestErrorResponse<400, Required<SettingsV3ApiSpecs.ErrorResponse400>> | RequestErrorResponse<404, Required<SettingsV3ApiSpecs.ErrorResponse404>>>;
+    updateAnalyticsProvider(id: SettingsV3ApiSpecs.UpdateAnalyticsProviderData['path']['id'], requestBody: SettingsV3ApiSpecs.UpdateAnalyticsProviderData['body'], query?: SettingsV3ApiSpecs.UpdateAnalyticsProviderData['query']): Promise<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.AnalyticsProvider>> | RequestErrorResponse<400, Required<SettingsV3ApiSpecs.ErrorResponse400>> | RequestErrorResponse<404, Required<SettingsV3ApiSpecs.ErrorResponse404>> | RequestErrorResponse<409, Required<SettingsV3ApiSpecs.ErrorResponse409>> | RequestErrorResponse<422, Required<SettingsV3ApiSpecs.ErrorResponse422>>>;
+    getSettingsCatalog(query?: SettingsV3ApiSpecs.GetSettingsCatalogData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.CatalogSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsCatalog(requestBody: SettingsV3ApiSpecs.UpdateSettingsCatalogData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsCatalogData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.CatalogSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    getSettingsEmailStatuses(query?: SettingsV3ApiSpecs.GetSettingsEmailStatusesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.EnabledTransactionalEmails;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsEmailStatuses(requestBody: SettingsV3ApiSpecs.UpdateSettingsEmailStatusesData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsEmailStatusesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.EnabledTransactionalEmails;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    createSettingsFaviconImage(requestBody: SettingsV3ApiSpecs.CreateSettingsFaviconImageData['body'], query?: SettingsV3ApiSpecs.CreateSettingsFaviconImageData['query']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<422, Required<unknown>>>;
+    getSettingsInventoryNotifications(query?: SettingsV3ApiSpecs.GetSettingsInventoryNotificationsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.InventoryNotificationsSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsInventoryNotifications(requestBody: SettingsV3ApiSpecs.UpdateSettingsInventoryNotificationsData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsInventoryNotificationsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<unknown>>>;
+    getSettingsLogo(query?: SettingsV3ApiSpecs.GetSettingsLogoData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.LogoSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsLogo(requestBody: SettingsV3ApiSpecs.UpdateSettingsLogoData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsLogoData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.LogoSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    createSettingsLogoImage(requestBody: SettingsV3ApiSpecs.CreateSettingsLogoImageData['body'], query?: SettingsV3ApiSpecs.CreateSettingsLogoImageData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    getSettingsEnabledSearchFilters(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.ConfiguredFilters;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsEnabledSearchFilters(requestBody: SettingsV3ApiSpecs.UpdateSettingsEnabledSearchFiltersData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.ConfiguredFilters;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    getSettingsAvailableFilters(query?: SettingsV3ApiSpecs.GetSettingsAvailableFiltersData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: Array<SettingsV3ApiSpecs.AvailableFilter>;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    getSettingsFiltersContexts(query?: SettingsV3ApiSpecs.GetSettingsFiltersContextsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: Array<SettingsV3ApiSpecs.ConfiguredFiltersOverride>;
+        meta?: SettingsV3ApiSpecs.MetaPaginationObject;
+    }>>>;
+    upsertSettingsFiltersContexts(requestBody: SettingsV3ApiSpecs.UpsertSettingsFiltersContextsData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: Array<SettingsV3ApiSpecs.ConfiguredFiltersOverride>;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    getSettingsLocale(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.Locale;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsLocale(requestBody: SettingsV3ApiSpecs.UpdateSettingsLocaleData['body']): Promise<RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.Locale;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>> | RequestErrorResponse<422, Required<SettingsV3ApiSpecs.ErrorResponse>>>;
+    getSettingsStoreProfile(query?: SettingsV3ApiSpecs.GetSettingsStoreProfileData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.StoreProfile;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsStoreProfile(requestBody: SettingsV3ApiSpecs.UpdateSettingsStoreProfileData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStoreProfileData['query']): Promise<RequestErrorResponse<422, Required<SettingsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.StoreProfile;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    getSettingsStorefrontCategory(query?: SettingsV3ApiSpecs.GetSettingsStorefrontCategoryData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.StorefrontCategorySettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsStorefrontCategory(requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryData['query']): Promise<RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.StorefrontCategorySettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>> | RequestErrorResponse<422, Required<{
+        errors?: {
+            ""?: string;
+        };
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    getSettingsStorefrontProduct(query?: SettingsV3ApiSpecs.GetSettingsStorefrontProductData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.StorefrontProductSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsStorefrontProduct(requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontProductData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontProductData['query']): Promise<RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.StorefrontProductSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>> | RequestErrorResponse<422, Required<{
+        errors?: {
+            ""?: string;
+        };
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    getSettingsRobotsTxt(query?: SettingsV3ApiSpecs.GetSettingsRobotsTxtData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.RobotsTxtSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsRobotsTxt(requestBody: SettingsV3ApiSpecs.UpdateSettingsRobotsTxtData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsRobotsTxtData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.RobotsTxtSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    getSettingsStorefrontSearch(query?: SettingsV3ApiSpecs.GetSettingsStorefrontSearchData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.StorefrontSearchSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsStorefrontSearch(requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontSearchData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontSearchData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.StorefrontSearchSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    getSettingsStorefrontSecurity(query?: SettingsV3ApiSpecs.GetSettingsStorefrontSecurityData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.StorefrontSecuritySettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsStorefrontSecurity(requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontSecurityData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontSecurityData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.StorefrontSecuritySettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    getSettingsStorefrontSeo(query?: SettingsV3ApiSpecs.GetSettingsStorefrontSeoData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.SeoSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsStorefrontSeo(requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoData['query']): Promise<RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.SeoSettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>> | RequestErrorResponse<422, Required<{
+        errors?: {
+            ""?: string;
+        };
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    getSettingsStorefrontStatus(query?: SettingsV3ApiSpecs.GetSettingsStorefrontStatusData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.StorefrontStatus;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsStorefrontStatus(requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontStatusData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontStatusData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.StorefrontStatus;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    getSettingsInventory(query?: SettingsV3ApiSpecs.GetSettingsInventoryData['query']): Promise<RequestErrorResponse<422, Required<SettingsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.InventorySettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateSettingsInventory(requestBody: SettingsV3ApiSpecs.UpdateSettingsInventoryData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsInventoryData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.InventorySettings;
+        meta?: SettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    getSettingsMeasurementUnits(query?: SettingsV3ApiSpecs.GetSettingsMeasurementUnitsData['query']): Promise<RequestErrorResponse<422, Required<SettingsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.MeasurementUnitsSettings;
+        meta?: {
+            [key: string]: unknown;
+        };
+    }>>>;
+    updateSettingsMeasurementUnits(requestBody: SettingsV3ApiSpecs.UpdateSettingsMeasurementUnitsData['body'], query?: SettingsV3ApiSpecs.UpdateSettingsMeasurementUnitsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: SettingsV3ApiSpecs.MeasurementUnitsSettings;
+        meta?: {
+            [key: string]: unknown;
+        };
+    }>>>;
 }

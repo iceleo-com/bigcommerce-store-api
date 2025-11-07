@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as MarketingV2ApiSpecs from '../generated/marketing-v2';
 export * as MarketingV2ApiSpecs from '../generated/marketing-v2';
 
@@ -42,7 +43,7 @@ export class MarketingV2Api {
     getCoupons(
         query?: MarketingV2ApiSpecs.GetCouponsData['query'],
     ) {
-        return this.request.get<MarketingV2ApiSpecs.GetCouponsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetCouponsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/coupons',
             query,
         });
@@ -79,7 +80,7 @@ export class MarketingV2Api {
     createCoupon(
         requestBody: MarketingV2ApiSpecs.CreateCouponData['body'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<201, Required<MarketingV2ApiSpecs.CreateCouponResponses[201]>>,RequestErrorResponse<400, void>>({
             path: 'v2/coupons',
             contentType: 'application/json',
             body: requestBody,
@@ -96,7 +97,7 @@ export class MarketingV2Api {
     deleteCoupons(
         query?: MarketingV2ApiSpecs.DeleteCouponsData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteCouponsResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/coupons',
             query,
         });
@@ -109,7 +110,7 @@ export class MarketingV2Api {
      */
     getCouponsCount(
     ) {
-        return this.request.get<MarketingV2ApiSpecs.GetCouponsCountResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetCouponsCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/coupons/count',
         });
     }
@@ -133,7 +134,7 @@ export class MarketingV2Api {
         id: MarketingV2ApiSpecs.UpdateCouponData['path']['id'],
         requestBody: MarketingV2ApiSpecs.UpdateCouponData['body'],
     ) {
-        return this.request.put<MarketingV2ApiSpecs.UpdateCouponResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.UpdateCouponResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/coupons/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -148,7 +149,7 @@ export class MarketingV2Api {
     deleteCoupon(
         id: MarketingV2ApiSpecs.DeleteCouponData['path']['id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteCouponResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/coupons/${id}`,
         });
     }
@@ -161,7 +162,7 @@ export class MarketingV2Api {
     getBanners(
         query?: MarketingV2ApiSpecs.GetBannersData['query'],
     ) {
-        return this.request.get<MarketingV2ApiSpecs.GetBannersResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetBannersResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/banners',
             query,
         });
@@ -186,7 +187,7 @@ export class MarketingV2Api {
     createBanner(
         requestBody: MarketingV2ApiSpecs.CreateBannerData['body'],
     ) {
-        return this.request.post<MarketingV2ApiSpecs.CreateBannerResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.CreateBannerResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/banners',
             contentType: 'application/json',
             body: requestBody,
@@ -200,7 +201,7 @@ export class MarketingV2Api {
      */
     deleteBanners(
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteBannersResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/banners',
         });
     }
@@ -213,7 +214,7 @@ export class MarketingV2Api {
     getBanner(
         id: MarketingV2ApiSpecs.GetBannerData['path']['id'],
     ) {
-        return this.request.get<MarketingV2ApiSpecs.GetBannerResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetBannerResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/banners/${id}`,
         });
     }
@@ -231,7 +232,7 @@ export class MarketingV2Api {
         id: MarketingV2ApiSpecs.UpdateBannerData['path']['id'],
         requestBody: MarketingV2ApiSpecs.UpdateBannerData['body'],
     ) {
-        return this.request.put<MarketingV2ApiSpecs.UpdateBannerResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.UpdateBannerResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/banners/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -246,7 +247,7 @@ export class MarketingV2Api {
     deleteBanner(
         id: MarketingV2ApiSpecs.DeleteBannerData['path']['id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteBannerResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/banners/${id}`,
         });
     }
@@ -258,7 +259,7 @@ export class MarketingV2Api {
      */
     getBannersCount(
     ) {
-        return this.request.get<MarketingV2ApiSpecs.GetBannersCountResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetBannersCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/banners/count',
         });
     }
@@ -271,7 +272,7 @@ export class MarketingV2Api {
     getGiftCertificate(
         id: MarketingV2ApiSpecs.GetGiftCertificateData['path']['id'],
     ) {
-        return this.request.get<MarketingV2ApiSpecs.GetGiftCertificateResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetGiftCertificateResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/gift_certificates/${id}`,
         });
     }
@@ -289,7 +290,7 @@ export class MarketingV2Api {
         id: MarketingV2ApiSpecs.UpdateGiftCertificateData['path']['id'],
         requestBody: MarketingV2ApiSpecs.UpdateGiftCertificateData['body'],
     ) {
-        return this.request.put<MarketingV2ApiSpecs.UpdateGiftCertificateResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.UpdateGiftCertificateResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/gift_certificates/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -304,7 +305,7 @@ export class MarketingV2Api {
     deleteGiftCertificate(
         id: MarketingV2ApiSpecs.DeleteGiftCertificateData['path']['id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteGiftCertificateResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/gift_certificates/${id}`,
         });
     }
@@ -321,7 +322,7 @@ export class MarketingV2Api {
     getGiftCertificates(
         query?: MarketingV2ApiSpecs.GetGiftCertificatesData['query'],
     ) {
-        return this.request.get<MarketingV2ApiSpecs.GetGiftCertificatesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetGiftCertificatesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/gift_certificates',
             query,
         });
@@ -350,7 +351,7 @@ export class MarketingV2Api {
     createGiftCertificate(
         requestBody: MarketingV2ApiSpecs.CreateGiftCertificateData['body'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<201, Required<MarketingV2ApiSpecs.CreateGiftCertificateResponses[201]>>,RequestErrorResponse<400, void>>({
             path: 'v2/gift_certificates',
             contentType: 'application/json',
             body: requestBody,
@@ -364,7 +365,7 @@ export class MarketingV2Api {
      */
     deleteGiftCertificates(
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteGiftCertificatesResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/gift_certificates',
         });
     }

@@ -1,9 +1,34 @@
-export type BaseError = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
+export type SubscriberFull = SubscriberBase & {
+    id?: number;
+    date_modified?: string;
+    date_created?: string;
+    consents?: Array<'marketing_newsletter' | 'abandoned_cart'>;
+};
+export type SubscriberBase = {
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+    source?: string;
+    order_id?: number | null;
+    channel_id?: number;
+    consents?: Array<'marketing_newsletter' | 'abandoned_cart'>;
+};
+export type Subscriber = {
+    id?: number;
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+    source?: string;
+    order_id?: number | null;
+} & {
+    date_modified?: string;
+    date_created?: string;
+};
+export type SubscriberPost = SubscriberBase;
+export type SubscriberPut = SubscriberBase;
 export type CollectionMeta = {
     pagination?: {
         total?: number;
@@ -18,28 +43,6 @@ export type CollectionMeta = {
         };
     };
 };
-export type DetailedErrors = {
-    [key: string]: unknown;
-};
-export type ErrorResponse = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-} & {
-    errors?: {
-        [key: string]: unknown;
-    };
-};
-export type NotFound = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-};
-export type OpenMeta = {
-    [key: string]: unknown;
-};
 export type Pagination = {
     total?: number;
     count?: number;
@@ -52,136 +55,189 @@ export type Pagination = {
         next?: string;
     };
 };
-export type ParameterAccept = string;
-export type ParameterContentType = string;
-export type ParameterDirectionParam = 'asc' | 'desc';
-export type ParameterFilterDateCreatedMaxParam = string;
-export type ParameterFilterDateCreatedMinParam = string;
-export type ParameterFilterDateCreatedParam = string;
-export type ParameterFilterDateModifiedMaxParam = string;
-export type ParameterFilterDateModifiedMinParam = string;
-export type ParameterFilterDateModifiedParam = string;
-export type ParameterFilterEmailParam = string;
-export type ParameterFilterFirstNameParam = string;
-export type ParameterFilterLastNameParam = string;
-export type ParameterFilterOrderIdParam = number;
-export type ParameterFilterSourceParam = string;
-export type ParameterIdInParam = Array<(number)>;
-export type ParameterIdParam = number;
-export type ParameterLimitParam = number;
-export type ParameterPageParam = number;
-export type ParameterScriptsSortKeyParam = 'name' | 'description' | 'date_created' | 'date_modified';
-export type ParameterSubscriberIdParam = number;
-export type Subscriber = {
-    id?: number;
-    email?: string;
-    first_name?: string;
-    last_name?: string;
-    source?: string;
-    order_id?: (number) | null;
+export type OpenMeta = {
+    [key: string]: unknown;
+};
+export type ErrorResponse = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
 } & {
-    date_modified?: string;
-    date_created?: string;
-};
-export type subscriber_Base = {
-    email?: string;
-    first_name?: string;
-    last_name?: string;
-    source?: string;
-    order_id?: (number) | null;
-    channel_id?: number;
-};
-export type subscriber_Full = subscriber_Base & {
-    id?: number;
-    date_modified?: string;
-    date_created?: string;
-    consents?: Array<(string)>;
-};
-export type subscriber_Post = subscriber_Base;
-export type subscriber_Put = subscriber_Base;
-export type GetSubscribersData = {
-    headers: {
-        Accept: string;
-    };
-    query: {
-        date_created?: string;
-        'date_created:max'?: string;
-        'date_created:min'?: string;
-        date_modified?: string;
-        'date_modified:max'?: string;
-        'date_modified:min'?: string;
-        email?: string;
-        first_name?: string;
-        id: number;
-        'id:in'?: Array<(number)>;
-        last_name?: string;
-        limit?: number;
-        order_id?: number;
-        page?: number;
-        source?: string;
-    };
-};
-export type GetSubscribersResponse = ({
-    data?: Array<subscriber_Full>;
-    meta?: CollectionMeta;
-});
-export type GetSubscribersError = unknown;
-export type CreateSubscriberData = {
-    body: subscriber_Post;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-};
-export type CreateSubscriberResponse = ({
-    data?: subscriber_Full;
-    meta?: OpenMeta;
-});
-export type CreateSubscriberError = ({
     errors?: {
         [key: string]: unknown;
     };
-    instance?: string;
+};
+export type BaseError = {
     status?: number;
     title?: string;
     type?: string;
-});
+    instance?: string;
+};
+export type NotFound = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+};
+export type DetailedErrors = {
+    [key: string]: unknown;
+};
+export type FilterEmailParam = string;
+export type FilterFirstNameParam = string;
+export type FilterLastNameParam = string;
+export type FilterSourceParam = string;
+export type FilterOrderIdParam = number;
+export type FilterDateModifiedParam = string;
+export type FilterDateModifiedMinParam = string;
+export type FilterDateModifiedMaxParam = string;
+export type FilterDateCreatedParam = string;
+export type FilterDateCreatedMinParam = string;
+export type FilterDateCreatedMaxParam = string;
+export type PageParam = number;
+export type LimitParam = number;
+export type ScriptsSortKeyParam = 'name' | 'description' | 'date_created' | 'date_modified';
+export type DirectionParam = 'asc' | 'desc';
+export type IdParam = number;
+export type IdInParam = Array<number>;
+export type SubscriberIdParam = number;
+export type Accept = string;
+export type ContentType = string;
 export type DeleteSubscribersData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
     query?: {
-        date_created?: string;
-        date_modified?: string;
         email?: string;
         first_name?: string;
         last_name?: string;
-        order_id?: number;
         source?: string;
+        order_id?: number;
+        date_created?: string;
+        date_modified?: string;
+    };
+    url: '/customers/subscribers';
+};
+export type DeleteSubscribersResponses = {
+    204: void;
+};
+export type DeleteSubscribersResponse = DeleteSubscribersResponses[keyof DeleteSubscribersResponses];
+export type GetSubscribersData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query: {
+        email?: string;
+        first_name?: string;
+        last_name?: string;
+        source?: string;
+        order_id?: number;
+        date_created?: string;
+        'date_created:min'?: string;
+        'date_created:max'?: string;
+        date_modified?: string;
+        'date_modified:min'?: string;
+        'date_modified:max'?: string;
+        page?: number;
+        limit?: number;
+        id: number;
+        'id:in'?: Array<number>;
+    };
+    url: '/customers/subscribers';
+};
+export type GetSubscribersResponses = {
+    200: {
+        data?: Array<SubscriberFull>;
+        meta?: CollectionMeta;
     };
 };
-export type DeleteSubscribersResponse = (void);
-export type DeleteSubscribersError = unknown;
-export type GetSubscriberData = {
+export type GetSubscribersResponse = GetSubscribersResponses[keyof GetSubscribersResponses];
+export type CreateSubscriberData = {
+    body: SubscriberPost;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/customers/subscribers';
+};
+export type CreateSubscriberErrors = {
+    409: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type CreateSubscriberError = CreateSubscriberErrors[keyof CreateSubscriberErrors];
+export type CreateSubscriberResponses = {
+    200: {
+        data?: SubscriberFull;
+        meta?: OpenMeta;
+    };
+};
+export type CreateSubscriberResponse = CreateSubscriberResponses[keyof CreateSubscriberResponses];
+export type DeleteSubscriberData = {
+    body?: never;
     headers: {
         Accept: string;
     };
     path: {
         subscriber_id: number;
     };
+    query?: never;
+    url: '/customers/subscribers/{subscriber_id}';
 };
-export type GetSubscriberResponse = ({
-    data?: subscriber_Full;
-    meta?: OpenMeta;
-});
-export type GetSubscriberError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-});
+export type DeleteSubscriberResponses = {
+    204: void;
+};
+export type DeleteSubscriberResponse = DeleteSubscriberResponses[keyof DeleteSubscriberResponses];
+export type GetSubscriberData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        subscriber_id: number;
+    };
+    query?: never;
+    url: '/customers/subscribers/{subscriber_id}';
+};
+export type GetSubscriberErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+export type GetSubscriberError = GetSubscriberErrors[keyof GetSubscriberErrors];
+export type GetSubscriberResponses = {
+    200: {
+        data?: SubscriberFull;
+        meta?: OpenMeta;
+    };
+};
+export type GetSubscriberResponse = GetSubscriberResponses[keyof GetSubscriberResponses];
 export type UpdateSubscriberData = {
-    body: subscriber_Put;
+    body: SubscriberPut;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -189,40 +245,40 @@ export type UpdateSubscriberData = {
     path: {
         subscriber_id: number;
     };
+    query?: never;
+    url: '/customers/subscribers/{subscriber_id}';
 };
-export type UpdateSubscriberResponse = ({
-    data?: subscriber_Full;
-    meta?: OpenMeta;
-});
-export type UpdateSubscriberError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-} | {
-    errors?: {
-        [key: string]: unknown;
+export type UpdateSubscriberErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
     };
-    instance?: string;
-    status?: number;
-    title?: string;
-    type?: string;
-} | {
-    errors?: {
-        additionalProperties?: string;
+    409: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
     };
-    instance?: string;
-    status?: number;
-    title?: string;
-    type?: string;
-});
-export type DeleteSubscriberData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        subscriber_id: number;
+    422: {
+        errors?: {
+            additionalProperties?: string;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
     };
 };
-export type DeleteSubscriberResponse = (void);
-export type DeleteSubscriberError = unknown;
+export type UpdateSubscriberError = UpdateSubscriberErrors[keyof UpdateSubscriberErrors];
+export type UpdateSubscriberResponses = {
+    200: {
+        data?: SubscriberFull;
+        meta?: OpenMeta;
+    };
+};
+export type UpdateSubscriberResponse = UpdateSubscriberResponses[keyof UpdateSubscriberResponses];

@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as WidgetsV3ApiSpecs from '../generated/widgets-v3';
 export * as WidgetsV3ApiSpecs from '../generated/widgets-v3';
 
@@ -17,7 +18,7 @@ export class WidgetsV3Api {
     getWidgetTemplates(
         query?: WidgetsV3ApiSpecs.GetWidgetTemplatesData['query'],
     ) {
-        return this.request.get<any, WidgetsV3ApiSpecs.GetWidgetTemplatesError>({
+        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetWidgetTemplatesResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetWidgetTemplatesErrors[422]>>>({
             path: 'v3/content/widget-templates',
             query,
         });
@@ -28,7 +29,7 @@ export class WidgetsV3Api {
      *
      * Creates a **Widget Template**.
 
-     ***Note:*** *There is a limit of 1000 custom widget templates per store.*
+     ***Note:*** *There is a limit of 1000 custom widget templates per channel, and a limit of 5000 across all channels.*
 
      **Required Fields**
      * name
@@ -37,7 +38,7 @@ export class WidgetsV3Api {
     createWidgetTemplate(
         requestBody: WidgetsV3ApiSpecs.CreateWidgetTemplateData['body'],
     ) {
-        return this.request.post<any, WidgetsV3ApiSpecs.CreateWidgetTemplateError>({
+        return this.request.post<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.CreateWidgetTemplateResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.CreateWidgetTemplateErrors[422]>>>({
             path: 'v3/content/widget-templates',
             contentType: 'application/json',
             body: requestBody,
@@ -50,10 +51,11 @@ export class WidgetsV3Api {
      * Render a widget template and return the widget html.
      */
     previewWidget(
+        uuid: WidgetsV3ApiSpecs.PreviewWidgetData['path']['uuid'],
         requestBody: WidgetsV3ApiSpecs.PreviewWidgetData['body'],
     ) {
-        return this.request.post<WidgetsV3ApiSpecs.PreviewWidgetResponse, WidgetsV3ApiSpecs.PreviewWidgetError>({
-            path: 'v3/content/widget-templates/{uuid}/preview',
+        return this.request.post<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.PreviewWidgetResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.PreviewWidgetErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.PreviewWidgetErrors[422]>>)>({
+            path: `v3/content/widget-templates/${uuid}/preview`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -68,7 +70,7 @@ export class WidgetsV3Api {
         uuid: WidgetsV3ApiSpecs.GetWidgetTemplateData['path']['uuid'],
         query?: WidgetsV3ApiSpecs.GetWidgetTemplateData['query'],
     ) {
-        return this.request.get<any, WidgetsV3ApiSpecs.GetWidgetTemplateError>({
+        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetWidgetTemplateResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.GetWidgetTemplateErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetWidgetTemplateErrors[422]>>)>({
             path: `v3/content/widget-templates/${uuid}`,
             query,
         });
@@ -83,7 +85,7 @@ export class WidgetsV3Api {
         uuid: WidgetsV3ApiSpecs.UpdateWidgetTemplateData['path']['uuid'],
         requestBody: WidgetsV3ApiSpecs.UpdateWidgetTemplateData['body'],
     ) {
-        return this.request.put<any, WidgetsV3ApiSpecs.UpdateWidgetTemplateError>({
+        return this.request.put<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.UpdateWidgetTemplateResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.UpdateWidgetTemplateErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.UpdateWidgetTemplateErrors[422]>>)>({
             path: `v3/content/widget-templates/${uuid}`,
             contentType: 'application/json',
             body: requestBody,
@@ -98,7 +100,7 @@ export class WidgetsV3Api {
     deleteWidgetTemplate(
         uuid: WidgetsV3ApiSpecs.DeleteWidgetTemplateData['path']['uuid'],
     ) {
-        return this.request.delete<any, WidgetsV3ApiSpecs.DeleteWidgetTemplateError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<WidgetsV3ApiSpecs.DeleteWidgetTemplateResponses[204]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.DeleteWidgetTemplateErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.DeleteWidgetTemplateErrors[422]>>)>({
             path: `v3/content/widget-templates/${uuid}`,
         });
     }
@@ -111,7 +113,7 @@ export class WidgetsV3Api {
     getWidgets(
         query?: WidgetsV3ApiSpecs.GetWidgetsData['query'],
     ) {
-        return this.request.get<any, WidgetsV3ApiSpecs.GetWidgetsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetWidgetsResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetWidgetsErrors[422]>>>({
             path: 'v3/content/widgets',
             query,
         });
@@ -127,7 +129,7 @@ export class WidgetsV3Api {
     createWidget(
         requestBody: WidgetsV3ApiSpecs.CreateWidgetData['body'],
     ) {
-        return this.request.post<any, WidgetsV3ApiSpecs.CreateWidgetError>({
+        return this.request.post<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.CreateWidgetResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.CreateWidgetErrors[422]>>>({
             path: 'v3/content/widgets',
             contentType: 'application/json',
             body: requestBody,
@@ -142,7 +144,7 @@ export class WidgetsV3Api {
     getWidget(
         uuid: WidgetsV3ApiSpecs.GetWidgetData['path']['uuid'],
     ) {
-        return this.request.get<any, WidgetsV3ApiSpecs.GetWidgetError>({
+        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetWidgetResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.GetWidgetErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetWidgetErrors[422]>>)>({
             path: `v3/content/widgets/${uuid}`,
         });
     }
@@ -156,7 +158,7 @@ export class WidgetsV3Api {
         uuid: WidgetsV3ApiSpecs.UpdateWidgetData['path']['uuid'],
         requestBody: WidgetsV3ApiSpecs.UpdateWidgetData['body'],
     ) {
-        return this.request.put<any, WidgetsV3ApiSpecs.UpdateWidgetError>({
+        return this.request.put<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.UpdateWidgetResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.UpdateWidgetErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.UpdateWidgetErrors[422]>>)>({
             path: `v3/content/widgets/${uuid}`,
             contentType: 'application/json',
             body: requestBody,
@@ -171,7 +173,7 @@ export class WidgetsV3Api {
     deleteWidget(
         uuid: WidgetsV3ApiSpecs.DeleteWidgetData['path']['uuid'],
     ) {
-        return this.request.delete<any, WidgetsV3ApiSpecs.DeleteWidgetError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<WidgetsV3ApiSpecs.DeleteWidgetResponses[204]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.DeleteWidgetErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.DeleteWidgetErrors[422]>>)>({
             path: `v3/content/widgets/${uuid}`,
         });
     }
@@ -184,7 +186,7 @@ export class WidgetsV3Api {
     getPlacements(
         query?: WidgetsV3ApiSpecs.GetPlacementsData['query'],
     ) {
-        return this.request.get<any, WidgetsV3ApiSpecs.GetPlacementsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetPlacementsResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetPlacementsErrors[422]>>>({
             path: 'v3/content/placements',
             query,
         });
@@ -202,7 +204,7 @@ export class WidgetsV3Api {
     createPlacement(
         requestBody: WidgetsV3ApiSpecs.CreatePlacementData['body'],
     ) {
-        return this.request.post<any, WidgetsV3ApiSpecs.CreatePlacementError>({
+        return this.request.post<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.CreatePlacementResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.CreatePlacementErrors[422]>>>({
             path: 'v3/content/placements',
             contentType: 'application/json',
             body: requestBody,
@@ -217,7 +219,7 @@ export class WidgetsV3Api {
     getPlacement(
         uuid: WidgetsV3ApiSpecs.GetPlacementData['path']['uuid'],
     ) {
-        return this.request.get<any, WidgetsV3ApiSpecs.GetPlacementError>({
+        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetPlacementResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.GetPlacementErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetPlacementErrors[422]>>)>({
             path: `v3/content/placements/${uuid}`,
         });
     }
@@ -231,7 +233,7 @@ export class WidgetsV3Api {
         uuid: WidgetsV3ApiSpecs.UpdatePlacementData['path']['uuid'],
         requestBody: WidgetsV3ApiSpecs.UpdatePlacementData['body'],
     ) {
-        return this.request.put<any, WidgetsV3ApiSpecs.UpdatePlacementError>({
+        return this.request.put<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.UpdatePlacementResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.UpdatePlacementErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.UpdatePlacementErrors[422]>>)>({
             path: `v3/content/placements/${uuid}`,
             contentType: 'application/json',
             body: requestBody,
@@ -246,7 +248,7 @@ export class WidgetsV3Api {
     deletePlacement(
         uuid: WidgetsV3ApiSpecs.DeletePlacementData['path']['uuid'],
     ) {
-        return this.request.delete<any, WidgetsV3ApiSpecs.DeletePlacementError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<WidgetsV3ApiSpecs.DeletePlacementResponses[204]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.DeletePlacementErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.DeletePlacementErrors[422]>>)>({
             path: `v3/content/placements/${uuid}`,
         });
     }
@@ -259,7 +261,7 @@ export class WidgetsV3Api {
     getContentRegions(
         query?: WidgetsV3ApiSpecs.GetContentRegionsData['query'],
     ) {
-        return this.request.get<any, WidgetsV3ApiSpecs.GetContentRegionsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetContentRegionsResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.GetContentRegionsErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetContentRegionsErrors[422]>>)>({
             path: 'v3/content/regions',
             query,
         });

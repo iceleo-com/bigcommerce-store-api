@@ -1,13 +1,15 @@
-export type BlackoutHours = Array<{
-    label: string;
-    date: string;
-    open: boolean;
-    opening?: string;
-    closing?: string;
-    all_day?: boolean;
-    annual?: boolean;
-}>;
-export type CollectionMeta = {
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
+};
+export type ErrorResponse = {
+    status?: number;
+    title?: string;
+    type?: string;
+    errors?: {
+        [key: string]: unknown;
+    };
+};
+export type Meta = {
     pagination?: {
         total?: number;
         count?: number;
@@ -20,26 +22,30 @@ export type CollectionMeta = {
             next?: string;
         };
     };
-    [key: string]: unknown;
 };
-export type Error = {
-    status?: number;
-    title?: string;
-    type?: string;
-    errors?: ErrorDetail;
+export type OperatingHoursForDay = {
+    open?: boolean;
+    opening?: string;
+    closing?: string;
 };
-export type ErrorDetail = {
-    [key: string]: unknown;
+export type OperatingHours = {
+    sunday?: OperatingHoursForDay;
+    monday?: OperatingHoursForDay;
+    tuesday?: OperatingHoursForDay;
+    wednesday?: OperatingHoursForDay;
+    thursday?: OperatingHoursForDay;
+    friday?: OperatingHoursForDay;
+    saturday?: OperatingHoursForDay;
 };
-export type ErrorResponse = {
-    status?: number;
-    title?: string;
-    type?: string;
-    errors?: {
-        [key: string]: unknown;
-    };
-};
-export type Failed = number;
+export type BlackoutHours = Array<{
+    label: string;
+    date: string;
+    open: boolean;
+    opening?: string;
+    closing?: string;
+    all_day?: boolean;
+    annual?: boolean;
+}>;
 export type LocationResponse = {
     id?: number;
     code?: string;
@@ -77,33 +83,6 @@ export type LocationResponse = {
         annual?: boolean;
     }>;
 };
-export type type_id = 'PHYSICAL' | 'VIRTUAL';
-export type LocationsCreateRequest = Array<{
-    code?: string;
-    label?: string;
-    description?: string;
-    managed_by_external_source?: boolean;
-    type_id?: 'PHYSICAL' | 'VIRTUAL';
-    enabled?: boolean;
-    operating_hours?: OperatingHours;
-    time_zone?: string;
-    address?: {
-        address1: string;
-        address2?: string;
-        city: string;
-        state: string;
-        zip: string;
-        email: string;
-        phone?: string;
-        geo_coordinates: {
-            latitude: number;
-            longitude: number;
-        };
-        country_code: string;
-    };
-    storefront_visibility?: boolean;
-    special_hours?: BlackoutHours;
-}>;
 export type LocationsUpdateRequest = Array<{
     id: number;
     code?: string;
@@ -131,7 +110,99 @@ export type LocationsUpdateRequest = Array<{
     storefront_visibility?: boolean;
     special_hours?: BlackoutHours;
 }>;
-export type Meta = {
+export type LocationsCreateRequest = Array<{
+    code?: string;
+    label?: string;
+    description?: string;
+    managed_by_external_source?: boolean;
+    type_id?: 'PHYSICAL' | 'VIRTUAL';
+    enabled?: boolean;
+    operating_hours?: OperatingHours;
+    time_zone?: string;
+    address?: {
+        address1: string;
+        address2?: string;
+        city: string;
+        state: string;
+        zip: string;
+        email: string;
+        phone?: string;
+        geo_coordinates: {
+            latitude: number;
+            longitude: number;
+        };
+        country_code: string;
+    };
+    storefront_visibility?: boolean;
+    special_hours?: BlackoutHours;
+}>;
+export type SimpleTransactionResponse = {
+    transaction_id?: string;
+};
+export type MetafieldBase = {
+    key?: string;
+    value?: string;
+    namespace?: string;
+    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    description?: string;
+};
+export type Metafield = {
+    id?: number;
+} & MetafieldBase & {
+    resource_type?: 'location';
+    readonly resource_id?: number;
+} & {
+    date_created?: string;
+    date_modified?: string;
+    readonly owner_client_id?: string;
+};
+export type MetaFieldCollectionResponse = {
+    data?: Array<Metafield>;
+    meta?: CollectionMeta;
+};
+export type MetaFieldCollectionResponsePostPut = {
+    data?: Array<Metafield>;
+    errors?: Array<unknown>;
+    meta?: CollectionMeta;
+};
+export type MetaFieldCollectionResponsePartialSuccessPostPut = {
+    data?: Array<Metafield>;
+    errors?: Array<_Error>;
+    meta?: WriteCollectionPartialSuccessMeta;
+};
+export type MetaFieldCollectionResponsePartialSuccessDelete = {
+    data?: Array<number>;
+    errors?: Array<_Error>;
+    meta?: WriteCollectionPartialSuccessMeta;
+};
+export type MetaFieldCollectionDeleteResponseSuccess = {
+    data?: Array<number>;
+    errors?: Array<unknown>;
+    meta?: WriteCollectionSuccessMeta;
+};
+export type WriteCollectionPartialSuccessMeta = {
+    total?: number;
+    success?: number;
+    failed?: number;
+};
+export type WriteCollectionSuccessMeta = {
+    total?: number;
+    success?: number;
+    failed?: number;
+};
+export type Total = number;
+export type Success = number;
+export type Failed = number;
+export type _Error = {
+    status?: number;
+    title?: string;
+    type?: string;
+    errors?: ErrorDetail;
+};
+export type ErrorDetail = {
+    [key: string]: unknown;
+};
+export type CollectionMeta = {
     pagination?: {
         total?: number;
         count?: number;
@@ -144,188 +215,177 @@ export type Meta = {
             next?: string;
         };
     };
+    [key: string]: unknown | {
+        total?: number;
+        count?: number;
+        per_page?: number;
+        current_page?: number;
+        total_pages?: number;
+        links?: {
+            previous?: string;
+            current?: string;
+            next?: string;
+        };
+    } | undefined;
 };
-export type Metafield = {
-    id?: number;
-} & MetafieldBase & {
-    resource_type?: 'location';
-    readonly resource_id?: number;
-} & {
-    date_created?: string;
-    date_modified?: string;
-    readonly owner_client_id?: string;
-};
-export type resource_type = 'location';
-export type MetafieldBase = {
-    key?: string;
-    value?: string;
-    namespace?: string;
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    description?: string;
-};
-export type permission_set = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-export type MetafieldBase_Post = {
+export type MetafieldBasePost = {
     permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
     namespace: string;
     key: string;
     value: string;
     description?: string;
 };
-export type MetafieldBase_Put = {
+export type MetafieldBasePut = {
     permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
     namespace?: string;
     key?: string;
     value?: string;
     description?: string;
 };
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<(number)>;
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
+export type MetafieldWritable = {
+    id?: number;
+} & MetafieldBase & {
+    resource_type?: 'location';
+} & {
+    date_created?: string;
+    date_modified?: string;
 };
-export type MetaFieldCollectionResponse = {
-    data?: Array<Metafield>;
-    meta?: CollectionMeta;
+export type ErrorDetailWritable = {
+    [key: string]: unknown;
 };
-export type MetaFieldCollectionResponse_POST_PUT = {
-    data?: Array<Metafield>;
-    errors?: Array<unknown>;
-    meta?: CollectionMeta;
+export type Accept = string;
+export type ContentType = string;
+export type LocationIdParam = number;
+export type LocationIdsParam = number;
+export type LocationCodeFilterParam = string;
+export type LocationIsDefaultParam = boolean;
+export type LocationTypeIdParam = string;
+export type LocationManagedByExternalSourceParam = boolean;
+export type LocationIsActiveParam = boolean;
+export type LocationStorefrontVisibilityParam = boolean;
+export type MetafieldIdParam = number;
+export type PageParam = number;
+export type MetafieldKeyParam = string;
+export type MetafieldKeyInParam = Array<string>;
+export type MetafieldNamespaceParam = string;
+export type MetafieldNamespaceInParam = Array<string>;
+export type LimitParam = number;
+export type DirectionParam = 'asc' | 'desc';
+export type DateCreatedMin = string;
+export type DateCreatedMax = string;
+export type DateModifiedMax = string;
+export type DateModifiedMin = string;
+export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date modified'>;
+export type DeleteLocationsData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query: {
+        'location_id:in': number;
+    };
+    url: '/inventory/locations';
 };
-export type MetaFieldCollectionResponsePartialSuccess_DELETE = {
-    data?: Array<(number)>;
-    errors?: Array<Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
+export type DeleteLocationsErrors = {
+    404: ErrorResponse;
+    422: ErrorResponse;
 };
-export type MetaFieldCollectionResponsePartialSuccess_POST_PUT = {
-    data?: Array<Metafield>;
-    errors?: Array<Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
+export type DeleteLocationsError = DeleteLocationsErrors[keyof DeleteLocationsErrors];
+export type DeleteLocationsResponses = {
+    200: SimpleTransactionResponse;
 };
-export type OperatingHours = {
-    sunday?: OperatingHoursForDay;
-    monday?: OperatingHoursForDay;
-    tuesday?: OperatingHoursForDay;
-    wednesday?: OperatingHoursForDay;
-    thursday?: OperatingHoursForDay;
-    friday?: OperatingHoursForDay;
-    saturday?: OperatingHoursForDay;
+export type DeleteLocationsResponse = DeleteLocationsResponses[keyof DeleteLocationsResponses];
+export type GetLocationsData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: {
+        'location_id:in'?: number;
+        'location_code:in'?: string;
+        is_default?: boolean;
+        'type_id:in'?: string;
+        managed_by_external_source?: boolean;
+        is_active?: boolean;
+        storefront_visibility?: boolean;
+        page?: number;
+        limit?: number;
+    };
+    url: '/inventory/locations';
 };
-export type OperatingHoursForDay = {
-    open?: boolean;
-    opening?: string;
-    closing?: string;
+export type GetLocationsResponses = {
+    200: {
+        data?: Array<LocationResponse>;
+        meta?: Meta;
+    };
 };
-export type ParameterAccept = string;
-export type ParameterContentType = string;
-export type Parameterdate_created_max = string;
-export type Parameterdate_created_min = string;
-export type Parameterdate_modified_max = string;
-export type Parameterdate_modified_min = string;
-export type ParameterDirectionParam = 'asc' | 'desc';
-export type ParameterIncludeFieldsParamMetafields = Array<('resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date modified')>;
-export type ParameterLimitParam = number;
-export type ParameterLocationCodeFilterParam = string;
-export type ParameterLocationIdParam = number;
-export type ParameterLocationIdsParam = number;
-export type ParameterLocationIsActiveParam = boolean;
-export type ParameterLocationIsDefaultParam = boolean;
-export type ParameterLocationManagedByExternalSourceParam = boolean;
-export type ParameterLocationStorefrontVisibilityParam = boolean;
-export type ParameterLocationTypeIdParam = string;
-export type ParameterMetafieldIdParam = number;
-export type ParameterMetafieldKeyInParam = Array<(string)>;
-export type ParameterMetafieldKeyParam = string;
-export type ParameterMetafieldNamespaceInParam = Array<(string)>;
-export type ParameterMetafieldNamespaceParam = string;
-export type ParameterPageParam = number;
-export type SimpleTransactionResponse = {
-    transaction_id?: string;
-};
-export type Success = number;
-export type Total = number;
-export type WriteCollectionPartialSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
-export type WriteCollectionSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
+export type GetLocationsResponse = GetLocationsResponses[keyof GetLocationsResponses];
 export type CreateLocationsData = {
     body: LocationsCreateRequest;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/inventory/locations';
 };
-export type CreateLocationsResponse = (SimpleTransactionResponse);
-export type CreateLocationsError = (ErrorResponse);
-export type GetLocationsData = {
-    headers: {
-        Accept: string;
-    };
-    query?: {
-        is_active?: boolean;
-        is_default?: boolean;
-        limit?: number;
-        'location_code:in'?: string;
-        'location_id:in'?: number;
-        managed_by_external_source?: boolean;
-        page?: number;
-        storefront_visibility?: boolean;
-        'type_id:in'?: string;
-    };
+export type CreateLocationsErrors = {
+    422: ErrorResponse;
 };
-export type GetLocationsResponse = ({
-    data?: Array<LocationResponse>;
-    meta?: Meta;
-});
-export type GetLocationsError = unknown;
+export type CreateLocationsError = CreateLocationsErrors[keyof CreateLocationsErrors];
+export type CreateLocationsResponses = {
+    200: SimpleTransactionResponse;
+};
+export type CreateLocationsResponse = CreateLocationsResponses[keyof CreateLocationsResponses];
 export type UpdateLocationsData = {
     body: LocationsUpdateRequest;
     headers: {
         Accept: string;
     };
+    path?: never;
+    query?: never;
+    url: '/inventory/locations';
 };
-export type UpdateLocationsResponse = (SimpleTransactionResponse);
-export type UpdateLocationsError = (ErrorResponse);
-export type DeleteLocationsData = {
-    headers: {
-        Accept: string;
-    };
-    query: {
-        'location_id:in': number;
-    };
+export type UpdateLocationsErrors = {
+    422: ErrorResponse;
 };
-export type DeleteLocationsResponse = (SimpleTransactionResponse);
-export type DeleteLocationsError = (ErrorResponse);
+export type UpdateLocationsError = UpdateLocationsErrors[keyof UpdateLocationsErrors];
+export type UpdateLocationsResponses = {
+    200: SimpleTransactionResponse;
+};
+export type UpdateLocationsResponse = UpdateLocationsResponses[keyof UpdateLocationsResponses];
 export type GetLocationMetafieldsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
     path: {
         location_id: number;
     };
+    query?: never;
+    url: '/inventory/locations/{location_id}/metafields';
 };
-export type GetLocationMetafieldsResponse = ({
-    data?: Array<Metafield>;
-    meta?: {
-        pagination?: {
-            total?: number;
-            count?: number;
-            per_page?: number;
-            current_page?: number;
-            total_pages?: number;
-            links?: {
-                current?: string;
+export type GetLocationMetafieldsResponses = {
+    200: {
+        data?: Array<Metafield>;
+        meta?: {
+            pagination?: {
+                total?: number;
+                count?: number;
+                per_page?: number;
+                current_page?: number;
+                total_pages?: number;
+                links?: {
+                    current?: string;
+                };
             };
         };
     };
-});
-export type GetLocationMetafieldsError = unknown;
+};
+export type GetLocationMetafieldsResponse = GetLocationMetafieldsResponses[keyof GetLocationMetafieldsResponses];
 export type CreateLocationMetafieldData = {
     body: MetafieldBase;
     headers: {
@@ -335,24 +395,35 @@ export type CreateLocationMetafieldData = {
     path: {
         location_id: number;
     };
+    query?: never;
+    url: '/inventory/locations/{location_id}/metafields';
 };
-export type CreateLocationMetafieldResponse = ({
-    data?: Metafield;
-    meta?: {
-        [key: string]: unknown;
+export type CreateLocationMetafieldErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
     };
-});
-export type CreateLocationMetafieldError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | {
-    status?: number;
-    title?: string;
-    type?: string;
-} | ErrorResponse);
-export type GetLocationMetafieldData = {
+    409: {
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+    422: ErrorResponse;
+};
+export type CreateLocationMetafieldError = CreateLocationMetafieldErrors[keyof CreateLocationMetafieldErrors];
+export type CreateLocationMetafieldResponses = {
+    200: {
+        data?: Metafield;
+        meta?: {
+            [key: string]: unknown;
+        };
+    };
+};
+export type CreateLocationMetafieldResponse = CreateLocationMetafieldResponses[keyof CreateLocationMetafieldResponses];
+export type DeleteLocationMetafieldData = {
+    body?: never;
     headers: {
         Accept: string;
     };
@@ -360,14 +431,42 @@ export type GetLocationMetafieldData = {
         location_id: number;
         metafield_id: number;
     };
+    query?: never;
+    url: '/inventory/locations/{location_id}/metafields/{metafield_id}';
 };
-export type GetLocationMetafieldResponse = ({
-    data?: Metafield;
-    meta?: {
-        [key: string]: unknown;
+export type DeleteLocationMetafieldErrors = {
+    404: ErrorResponse;
+};
+export type DeleteLocationMetafieldError = DeleteLocationMetafieldErrors[keyof DeleteLocationMetafieldErrors];
+export type DeleteLocationMetafieldResponses = {
+    204: void;
+};
+export type DeleteLocationMetafieldResponse = DeleteLocationMetafieldResponses[keyof DeleteLocationMetafieldResponses];
+export type GetLocationMetafieldData = {
+    body?: never;
+    headers: {
+        Accept: string;
     };
-});
-export type GetLocationMetafieldError = (ErrorResponse);
+    path: {
+        location_id: number;
+        metafield_id: number;
+    };
+    query?: never;
+    url: '/inventory/locations/{location_id}/metafields/{metafield_id}';
+};
+export type GetLocationMetafieldErrors = {
+    404: ErrorResponse;
+};
+export type GetLocationMetafieldError = GetLocationMetafieldErrors[keyof GetLocationMetafieldErrors];
+export type GetLocationMetafieldResponses = {
+    200: {
+        data?: Metafield;
+        meta?: {
+            [key: string]: unknown;
+        };
+    };
+};
+export type GetLocationMetafieldResponse = GetLocationMetafieldResponses[keyof GetLocationMetafieldResponses];
 export type UpdateLocationMetafieldData = {
     body: MetafieldBase;
     headers: {
@@ -377,74 +476,106 @@ export type UpdateLocationMetafieldData = {
         location_id: number;
         metafield_id: number;
     };
+    query?: never;
+    url: '/inventory/locations/{location_id}/metafields/{metafield_id}';
 };
-export type UpdateLocationMetafieldResponse = ({
-    data?: Metafield;
-    meta?: {
-        [key: string]: unknown;
+export type UpdateLocationMetafieldErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
     };
-});
-export type UpdateLocationMetafieldError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | ErrorResponse);
-export type DeleteLocationMetafieldData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        location_id: number;
-        metafield_id: number;
-    };
+    404: ErrorResponse;
 };
-export type DeleteLocationMetafieldResponse = (void);
-export type DeleteLocationMetafieldError = (ErrorResponse);
-export type GetLocationsMetafieldsData = {
-    query?: {
-        'date_created:max'?: string;
-        'date_created:min'?: string;
-        'date_modified:max'?: string;
-        'date_modified:min'?: string;
-        direction?: 'asc' | 'desc';
-        include_fields?: Array<('resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date modified')>;
-        key?: string;
-        'key:in'?: Array<(string)>;
-        limit?: number;
-        namespace?: string;
-        'namespace:in'?: Array<(string)>;
-        page?: number;
+export type UpdateLocationMetafieldError = UpdateLocationMetafieldErrors[keyof UpdateLocationMetafieldErrors];
+export type UpdateLocationMetafieldResponses = {
+    200: {
+        data?: Metafield;
+        meta?: {
+            [key: string]: unknown;
+        };
     };
 };
-export type GetLocationsMetafieldsResponse = (MetaFieldCollectionResponse);
-export type GetLocationsMetafieldsError = unknown;
-export type CreateLocationsMetafieldsData = {
-    body?: Array<(MetafieldBase_Post & {
-        resource_id: number;
-    })>;
-};
-export type CreateLocationsMetafieldsResponse = (MetaFieldCollectionResponse_POST_PUT);
-export type CreateLocationsMetafieldsError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | MetaFieldCollectionResponsePartialSuccess_POST_PUT);
-export type UpdateLocationsMetafieldsData = {
-    body?: Array<(MetafieldBase_Put & {
-        id: string;
-    })>;
-};
-export type UpdateLocationsMetafieldsResponse = (MetaFieldCollectionResponse_POST_PUT);
-export type UpdateLocationsMetafieldsError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | MetaFieldCollectionResponsePartialSuccess_POST_PUT);
+export type UpdateLocationMetafieldResponse = UpdateLocationMetafieldResponses[keyof UpdateLocationMetafieldResponses];
 export type DeleteLocationsMetafieldsData = {
-    body?: Array<(number)>;
+    body?: Array<number>;
+    path?: never;
+    query?: never;
+    url: '/inventory/locations/metafields';
 };
-export type DeleteLocationsMetafieldsResponse = (MetaFieldCollectionDeleteResponseSuccess);
-export type DeleteLocationsMetafieldsError = (MetaFieldCollectionResponsePartialSuccess_DELETE);
+export type DeleteLocationsMetafieldsErrors = {
+    422: MetaFieldCollectionResponsePartialSuccessDelete;
+};
+export type DeleteLocationsMetafieldsError = DeleteLocationsMetafieldsErrors[keyof DeleteLocationsMetafieldsErrors];
+export type DeleteLocationsMetafieldsResponses = {
+    200: MetaFieldCollectionDeleteResponseSuccess;
+};
+export type DeleteLocationsMetafieldsResponse = DeleteLocationsMetafieldsResponses[keyof DeleteLocationsMetafieldsResponses];
+export type GetLocationsMetafieldsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        page?: number;
+        limit?: number;
+        key?: string;
+        'key:in'?: Array<string>;
+        namespace?: string;
+        'namespace:in'?: Array<string>;
+        direction?: 'asc' | 'desc';
+        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date modified'>;
+        'date_modified:min'?: string;
+        'date_modified:max'?: string;
+        'date_created:min'?: string;
+        'date_created:max'?: string;
+    };
+    url: '/inventory/locations/metafields';
+};
+export type GetLocationsMetafieldsResponses = {
+    200: MetaFieldCollectionResponse;
+};
+export type GetLocationsMetafieldsResponse = GetLocationsMetafieldsResponses[keyof GetLocationsMetafieldsResponses];
+export type CreateLocationsMetafieldsData = {
+    body?: Array<MetafieldBasePost & {
+        resource_id: number;
+    }>;
+    path?: never;
+    query?: never;
+    url: '/inventory/locations/metafields';
+};
+export type CreateLocationsMetafieldsErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
+    };
+    422: MetaFieldCollectionResponsePartialSuccessPostPut;
+};
+export type CreateLocationsMetafieldsError = CreateLocationsMetafieldsErrors[keyof CreateLocationsMetafieldsErrors];
+export type CreateLocationsMetafieldsResponses = {
+    200: MetaFieldCollectionResponsePostPut;
+};
+export type CreateLocationsMetafieldsResponse = CreateLocationsMetafieldsResponses[keyof CreateLocationsMetafieldsResponses];
+export type UpdateLocationsMetafieldsData = {
+    body?: Array<MetafieldBasePut & {
+        id: string;
+    }>;
+    path?: never;
+    query?: never;
+    url: '/inventory/locations/metafields';
+};
+export type UpdateLocationsMetafieldsErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
+    };
+    422: MetaFieldCollectionResponsePartialSuccessPostPut;
+};
+export type UpdateLocationsMetafieldsError = UpdateLocationsMetafieldsErrors[keyof UpdateLocationsMetafieldsErrors];
+export type UpdateLocationsMetafieldsResponses = {
+    200: MetaFieldCollectionResponsePostPut;
+};
+export type UpdateLocationsMetafieldsResponse = UpdateLocationsMetafieldsResponses[keyof UpdateLocationsMetafieldsResponses];

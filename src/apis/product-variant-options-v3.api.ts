@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as ProductVariantOptionsV3ApiSpecs from '../generated/product-variant-options-v3';
 export * as ProductVariantOptionsV3ApiSpecs from '../generated/product-variant-options-v3';
 
@@ -18,7 +19,7 @@ export class ProductVariantOptionsV3Api {
         productId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsData['path']['product_id'],
         query?: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsData['query'],
     ) {
-        return this.request.get<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsResponse, ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsErrors[404]>>>({
             path: `v3/catalog/products/${productId}/options`,
             query,
         });
@@ -51,7 +52,7 @@ export class ProductVariantOptionsV3Api {
         productId: ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionData['path']['product_id'],
         requestBody: ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionData['body'],
     ) {
-        return this.request.post<ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionResponse, ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionResponses[200]>>,(RequestErrorResponse<409, Required<ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionErrors[409]>> | RequestErrorResponse<422, Required<ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/options`,
             contentType: 'application/json',
             body: requestBody,
@@ -68,7 +69,7 @@ export class ProductVariantOptionsV3Api {
         optionId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionData['path']['option_id'],
         query?: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionData['query'],
     ) {
-        return this.request.get<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionResponse, ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionErrors[404]>>>({
             path: `v3/catalog/products/${productId}/options/${optionId}`,
             query,
         });
@@ -87,7 +88,7 @@ export class ProductVariantOptionsV3Api {
         optionId: ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionData['path']['option_id'],
         requestBody: ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionData['body'],
     ) {
-        return this.request.put<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionResponse, ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionResponses[200]>>,(RequestErrorResponse<409, Required<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionErrors[409]>> | RequestErrorResponse<422, Required<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/options/${optionId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -103,7 +104,7 @@ export class ProductVariantOptionsV3Api {
         productId: ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionData['path']['product_id'],
         optionId: ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionData['path']['option_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/options/${optionId}`,
         });
     }
@@ -118,7 +119,7 @@ export class ProductVariantOptionsV3Api {
         optionId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValuesData['path']['option_id'],
         query?: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValuesData['query'],
     ) {
-        return this.request.get<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValuesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValuesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/options/${optionId}/values`,
             query,
         });
@@ -144,7 +145,7 @@ export class ProductVariantOptionsV3Api {
         optionId: ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionValueData['path']['option_id'],
         requestBody: ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionValueData['body'],
     ) {
-        return this.request.post<ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionValueResponse, ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionValueError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionValueResponses[200]>>,RequestErrorResponse<422, Required<ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionValueErrors[422]>>>({
             path: `v3/catalog/products/${productId}/options/${optionId}/values`,
             contentType: 'application/json',
             body: requestBody,
@@ -162,7 +163,7 @@ export class ProductVariantOptionsV3Api {
         valueId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValueData['path']['value_id'],
         query?: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValueData['query'],
     ) {
-        return this.request.get<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValueResponse, ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValueError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValueResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValueErrors[404]>>>({
             path: `v3/catalog/products/${productId}/options/${optionId}/values/${valueId}`,
             query,
         });
@@ -182,7 +183,7 @@ export class ProductVariantOptionsV3Api {
         valueId: ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueData['path']['value_id'],
         requestBody: ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueData['body'],
     ) {
-        return this.request.put<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueResponse, ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueResponses[200]>>,(RequestErrorResponse<404, Required<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueErrors[404]>> | RequestErrorResponse<422, Required<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/options/${optionId}/values/${valueId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -199,7 +200,7 @@ export class ProductVariantOptionsV3Api {
         optionId: ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionValueData['path']['option_id'],
         valueId: ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionValueData['path']['value_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionValueResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/options/${optionId}/values/${valueId}`,
         });
     }

@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as CustomersV3ApiSpecs from '../generated/customers-v3';
 export * as CustomersV3ApiSpecs from '../generated/customers-v3';
 
@@ -21,7 +22,7 @@ export class CustomersV3Api {
     getCustomers(
         query?: CustomersV3ApiSpecs.GetCustomersData['query'],
     ) {
-        return this.request.get<any, CustomersV3ApiSpecs.GetCustomersError>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.GetCustomersErrors[422]>>>({
             path: 'v3/customers',
             query,
         });
@@ -61,7 +62,7 @@ export class CustomersV3Api {
     createCustomers(
         requestBody: CustomersV3ApiSpecs.CreateCustomersData['body'],
     ) {
-        return this.request.post<any, CustomersV3ApiSpecs.CreateCustomersError>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CreateCustomersResponses[200]>>,(RequestErrorResponse<413, Required<CustomersV3ApiSpecs.CreateCustomersErrors[413]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CreateCustomersErrors[422]>>)>({
             path: 'v3/customers',
             contentType: 'application/json',
             body: requestBody,
@@ -96,7 +97,7 @@ export class CustomersV3Api {
     updateCustomers(
         requestBody: CustomersV3ApiSpecs.UpdateCustomersData['body'],
     ) {
-        return this.request.put<any, CustomersV3ApiSpecs.UpdateCustomersError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomersResponses[200]>>,(RequestErrorResponse<413, Required<CustomersV3ApiSpecs.UpdateCustomersErrors[413]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpdateCustomersErrors[422]>>)>({
             path: 'v3/customers',
             contentType: 'application/json',
             body: requestBody,
@@ -118,7 +119,7 @@ export class CustomersV3Api {
     deleteCustomers(
         query?: CustomersV3ApiSpecs.DeleteCustomersData['query'],
     ) {
-        return this.request.delete<any, CustomersV3ApiSpecs.DeleteCustomersError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.DeleteCustomersResponses[204]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.DeleteCustomersErrors[422]>>>({
             path: 'v3/customers',
             query,
         });
@@ -132,7 +133,7 @@ export class CustomersV3Api {
     getCustomersAddresses(
         query?: CustomersV3ApiSpecs.GetCustomersAddressesData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersAddressesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/addresses',
             query,
         });
@@ -173,7 +174,7 @@ export class CustomersV3Api {
     createCustomersAddresses(
         requestBody: CustomersV3ApiSpecs.CreateCustomersAddressesData['body'],
     ) {
-        return this.request.post<any, CustomersV3ApiSpecs.CreateCustomersAddressesError>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CreateCustomersAddressesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CreateCustomersAddressesErrors[422]>>>({
             path: 'v3/customers/addresses',
             contentType: 'application/json',
             body: requestBody,
@@ -209,7 +210,7 @@ export class CustomersV3Api {
     updateCustomersAddresses(
         requestBody: CustomersV3ApiSpecs.UpdateCustomersAddressesData['body'],
     ) {
-        return this.request.put<any, CustomersV3ApiSpecs.UpdateCustomersAddressesError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomersAddressesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpdateCustomersAddressesErrors[422]>>>({
             path: 'v3/customers/addresses',
             contentType: 'application/json',
             body: requestBody,
@@ -227,7 +228,7 @@ export class CustomersV3Api {
     deleteCustomersAddresses(
         query?: CustomersV3ApiSpecs.DeleteCustomersAddressesData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.DeleteCustomersAddressesResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/addresses',
             query,
         });
@@ -241,7 +242,7 @@ export class CustomersV3Api {
     validateCustomerCredentials(
         requestBody: CustomersV3ApiSpecs.ValidateCustomerCredentialsData['body'],
     ) {
-        return this.request.post<CustomersV3ApiSpecs.ValidateCustomerCredentialsResponse, CustomersV3ApiSpecs.ValidateCustomerCredentialsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.ValidateCustomerCredentialsResponses[200]>>,(RequestErrorResponse<422, Required<CustomersV3ApiSpecs.ValidateCustomerCredentialsErrors[422]>> | RequestErrorResponse<429, Required<CustomersV3ApiSpecs.ValidateCustomerCredentialsErrors[429]>>)>({
             path: 'v3/customers/validate-credentials',
             contentType: 'application/json',
             body: requestBody,
@@ -259,7 +260,7 @@ export class CustomersV3Api {
      */
     getCustomersSettings(
     ) {
-        return this.request.get<CustomersV3ApiSpecs.GetCustomersSettingsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersSettingsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/settings',
         });
     }
@@ -272,7 +273,7 @@ export class CustomersV3Api {
     updateCustomersSettings(
         requestBody: CustomersV3ApiSpecs.UpdateCustomersSettingsData['body'],
     ) {
-        return this.request.put<CustomersV3ApiSpecs.UpdateCustomersSettingsResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomersSettingsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/settings',
             contentType: 'application/json',
             body: requestBody,
@@ -292,7 +293,7 @@ export class CustomersV3Api {
     getCustomersSettingsChannel(
         channelId: CustomersV3ApiSpecs.GetCustomersSettingsChannelData['path']['channel_id'],
     ) {
-        return this.request.get<CustomersV3ApiSpecs.GetCustomersSettingsChannelResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersSettingsChannelResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/customers/settings/channels/${channelId}`,
         });
     }
@@ -314,7 +315,7 @@ export class CustomersV3Api {
         channelId: CustomersV3ApiSpecs.UpdateCustomersSettingsChannelData['path']['channel_id'],
         requestBody: CustomersV3ApiSpecs.UpdateCustomersSettingsChannelData['body'],
     ) {
-        return this.request.put<CustomersV3ApiSpecs.UpdateCustomersSettingsChannelResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomersSettingsChannelResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/customers/settings/channels/${channelId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -329,7 +330,7 @@ export class CustomersV3Api {
     getCustomersAttributes(
         query?: CustomersV3ApiSpecs.GetCustomersAttributesData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersAttributesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/attributes',
             query,
         });
@@ -358,7 +359,7 @@ export class CustomersV3Api {
     createCustomersAttributes(
         requestBody: CustomersV3ApiSpecs.CreateCustomersAttributesData['body'],
     ) {
-        return this.request.post<any, CustomersV3ApiSpecs.CreateCustomersAttributesError>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CreateCustomersAttributesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CreateCustomersAttributesErrors[422]>>>({
             path: 'v3/customers/attributes',
             contentType: 'application/json',
             body: requestBody,
@@ -381,7 +382,7 @@ export class CustomersV3Api {
     updateCustomersAttributes(
         requestBody: CustomersV3ApiSpecs.UpdateCustomersAttributesData['body'],
     ) {
-        return this.request.put<any, CustomersV3ApiSpecs.UpdateCustomersAttributesError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomersAttributesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpdateCustomersAttributesErrors[422]>>>({
             path: 'v3/customers/attributes',
             contentType: 'application/json',
             body: requestBody,
@@ -399,7 +400,7 @@ export class CustomersV3Api {
     deleteCustomersAttributes(
         query?: CustomersV3ApiSpecs.DeleteCustomersAttributesData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.DeleteCustomersAttributesResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/attributes',
             query,
         });
@@ -413,7 +414,7 @@ export class CustomersV3Api {
     getCustomersAttributeValues(
         query?: CustomersV3ApiSpecs.GetCustomersAttributeValuesData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersAttributeValuesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/attribute-values',
             query,
         });
@@ -433,7 +434,7 @@ export class CustomersV3Api {
     upsertCustomersAttributeValues(
         requestBody: CustomersV3ApiSpecs.UpsertCustomersAttributeValuesData['body'],
     ) {
-        return this.request.put<any, CustomersV3ApiSpecs.UpsertCustomersAttributeValuesError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpsertCustomersAttributeValuesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpsertCustomersAttributeValuesErrors[422]>>>({
             path: 'v3/customers/attribute-values',
             contentType: 'application/json',
             body: requestBody,
@@ -451,7 +452,7 @@ export class CustomersV3Api {
     deleteCustomersAttributeValues(
         query?: CustomersV3ApiSpecs.DeleteCustomersAttributeValuesData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.DeleteCustomersAttributeValuesResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/attribute-values',
             query,
         });
@@ -467,7 +468,7 @@ export class CustomersV3Api {
     getCustomersFormFieldValues(
         query?: CustomersV3ApiSpecs.GetCustomersFormFieldValuesData['query'],
     ) {
-        return this.request.get<any, CustomersV3ApiSpecs.GetCustomersFormFieldValuesError>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersFormFieldValuesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.GetCustomersFormFieldValuesErrors[422]>>>({
             path: 'v3/customers/form-field-values',
             query,
         });
@@ -486,7 +487,7 @@ export class CustomersV3Api {
     updateCustomerFormFieldValues(
         requestBody: CustomersV3ApiSpecs.UpdateCustomerFormFieldValuesData['body'],
     ) {
-        return this.request.put<any, CustomersV3ApiSpecs.UpdateCustomerFormFieldValuesError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomerFormFieldValuesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpdateCustomerFormFieldValuesErrors[422]>>>({
             path: 'v3/customers/form-field-values',
             contentType: 'application/json',
             body: requestBody,
@@ -501,7 +502,7 @@ export class CustomersV3Api {
     getCustomerConsent(
         customerId: CustomersV3ApiSpecs.GetCustomerConsentData['path']['customerId'],
     ) {
-        return this.request.get<any, CustomersV3ApiSpecs.GetCustomerConsentError>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomerConsentResponses[200]>>,(RequestErrorResponse<401, Required<CustomersV3ApiSpecs.GetCustomerConsentErrors[401]>> | RequestErrorResponse<403, Required<CustomersV3ApiSpecs.GetCustomerConsentErrors[403]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.GetCustomerConsentErrors[422]>>)>({
             path: `v3/customers/${customerId}/consent`,
         });
     }
@@ -515,7 +516,7 @@ export class CustomersV3Api {
         customerId: CustomersV3ApiSpecs.UpdateCustomerConsentData['path']['customerId'],
         requestBody: CustomersV3ApiSpecs.UpdateCustomerConsentData['body'],
     ) {
-        return this.request.put<any, CustomersV3ApiSpecs.UpdateCustomerConsentError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomerConsentResponses[200]>>,(RequestErrorResponse<401, Required<CustomersV3ApiSpecs.UpdateCustomerConsentErrors[401]>> | RequestErrorResponse<403, Required<CustomersV3ApiSpecs.UpdateCustomerConsentErrors[403]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpdateCustomerConsentErrors[422]>>)>({
             path: `v3/customers/${customerId}/consent`,
             contentType: 'application/json',
             body: requestBody,
@@ -528,9 +529,10 @@ export class CustomersV3Api {
      * Lists all available stored instruments for a customer. This list will include all types of stored instruments namely card, account and bank_account instruments
      */
     getCustomerStoredInstruments(
+        customerId: CustomersV3ApiSpecs.GetCustomerStoredInstrumentsData['path']['customerId'],
     ) {
-        return this.request.get<CustomersV3ApiSpecs.GetCustomerStoredInstrumentsResponse, CustomersV3ApiSpecs.GetCustomerStoredInstrumentsError>({
-            path: 'v3/customers/{customerId}/stored-instruments',
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomerStoredInstrumentsResponses[200]>>,(RequestErrorResponse<401, Required<CustomersV3ApiSpecs.GetCustomerStoredInstrumentsErrors[401]>> | RequestErrorResponse<403, Required<CustomersV3ApiSpecs.GetCustomerStoredInstrumentsErrors[403]>>)>({
+            path: `v3/customers/${customerId}/stored-instruments`,
         });
     }
 
@@ -540,9 +542,10 @@ export class CustomersV3Api {
      * Gets customer metafields by passing the `customerId` in the query parameters.
      */
     getCustomersMetafields(
+        customerId: CustomersV3ApiSpecs.GetCustomersMetafieldsData['path']['customerId'],
     ) {
-        return this.request.get<any, any>({
-            path: 'v3/customers/{customerId}/metafields',
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/customers/${customerId}/metafields`,
         });
     }
 
@@ -552,25 +555,28 @@ export class CustomersV3Api {
      * Creates Customer metafields by passing the `customerId` in the query parameters.
      */
     createCustomerMetafields(
+        customerId: CustomersV3ApiSpecs.CreateCustomerMetafieldsData['path']['customerId'],
         requestBody: CustomersV3ApiSpecs.CreateCustomerMetafieldsData['body'],
     ) {
-        return this.request.post<CustomersV3ApiSpecs.CreateCustomerMetafieldsResponse, CustomersV3ApiSpecs.CreateCustomerMetafieldsError>({
-            path: 'v3/customers/{customerId}/metafields',
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CreateCustomerMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CustomersV3ApiSpecs.CreateCustomerMetafieldsErrors[400]>> | RequestErrorResponse<409, Required<CustomersV3ApiSpecs.CreateCustomerMetafieldsErrors[409]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CreateCustomerMetafieldsErrors[422]>>)>({
+            path: `v3/customers/${customerId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
         });
     }
 
     /**
-     * Get Customer Metafields List
+     * Get a Customer Metafield
      *
-     * Lists available metafields for a customer. To retrieve the list, use `customerId` and `metafieldId` in the query parameters.
+     * Returns a single *Customer Metafield*.
 
      */
     getMetafieldsCustomerId(
+        customerId: CustomersV3ApiSpecs.GetMetafieldsCustomerIdData['path']['customerId'],
+        metafieldId: CustomersV3ApiSpecs.GetMetafieldsCustomerIdData['path']['metafieldId'],
     ) {
-        return this.request.get<any, CustomersV3ApiSpecs.GetMetafieldsCustomerIdError>({
-            path: 'v3/customers/{customerId}/metafields/{metafieldId}',
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetMetafieldsCustomerIdResponses[200]>>,RequestErrorResponse<404, Required<CustomersV3ApiSpecs.GetMetafieldsCustomerIdErrors[404]>>>({
+            path: `v3/customers/${customerId}/metafields/${metafieldId}`,
         });
     }
 
@@ -580,11 +586,13 @@ export class CustomersV3Api {
      * Updates customer metafields. To update the customer metafields, use 'customerId' and 'metafield' in the query parameters.
      */
     updateCustomerMetafield(
+        metafieldId: CustomersV3ApiSpecs.UpdateCustomerMetafieldData['path']['metafieldId'],
+        customerId: CustomersV3ApiSpecs.UpdateCustomerMetafieldData['path']['customerId'],
         requestBody: CustomersV3ApiSpecs.UpdateCustomerMetafieldData['body'],
         query?: CustomersV3ApiSpecs.UpdateCustomerMetafieldData['query'],
     ) {
-        return this.request.put<CustomersV3ApiSpecs.UpdateCustomerMetafieldResponse, CustomersV3ApiSpecs.UpdateCustomerMetafieldError>({
-            path: 'v3/customers/{customerId}/metafields/{metafieldId}',
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomerMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<CustomersV3ApiSpecs.UpdateCustomerMetafieldErrors[400]>> | RequestErrorResponse<404, Required<CustomersV3ApiSpecs.UpdateCustomerMetafieldErrors[404]>>)>({
+            path: `v3/customers/${customerId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
             query,
@@ -592,15 +600,17 @@ export class CustomersV3Api {
     }
 
     /**
-     * Delete Customer Metafields
+     * Delete a Customer Metafield
      *
-     * Deletes customer metafields. To delete customer metafields, use 'customerId' and 'metafieldId' in the query parameters.
+     * Deletes a customer metafield. To delete a customer metafield, use 'customerId' and 'metafieldId' in the query parameters.
 
      */
     deleteCustomerMetafieldsId(
+        customerId: CustomersV3ApiSpecs.DeleteCustomerMetafieldsIdData['path']['customerId'],
+        metafieldId: CustomersV3ApiSpecs.DeleteCustomerMetafieldsIdData['path']['metafieldId'],
     ) {
-        return this.request.delete<any, CustomersV3ApiSpecs.DeleteCustomerMetafieldsIdError>({
-            path: 'v3/customers/{customerId}/metafields/{metafieldId}',
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.DeleteCustomerMetafieldsIdResponses[204]>>,RequestErrorResponse<404, Required<CustomersV3ApiSpecs.DeleteCustomerMetafieldsIdErrors[404]>>>({
+            path: `v3/customers/${customerId}/metafields/${metafieldId}`,
         });
     }
 
@@ -612,7 +622,7 @@ export class CustomersV3Api {
     getAllCustomersMetafields(
         query?: CustomersV3ApiSpecs.GetAllCustomersMetafieldsData['query'],
     ) {
-        return this.request.get<CustomersV3ApiSpecs.GetAllCustomersMetafieldsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetAllCustomersMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/metafields',
             query,
         });
@@ -626,7 +636,7 @@ export class CustomersV3Api {
     createCustomersMetafields(
         requestBody: CustomersV3ApiSpecs.CreateCustomersMetafieldsData['body'],
     ) {
-        return this.request.post<CustomersV3ApiSpecs.CreateCustomersMetafieldsResponse, CustomersV3ApiSpecs.CreateCustomersMetafieldsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CreateCustomersMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CustomersV3ApiSpecs.CreateCustomersMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CreateCustomersMetafieldsErrors[422]>>)>({
             path: 'v3/customers/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -641,7 +651,7 @@ export class CustomersV3Api {
     updateCustomersMetafields(
         requestBody: CustomersV3ApiSpecs.UpdateCustomersMetafieldsData['body'],
     ) {
-        return this.request.put<CustomersV3ApiSpecs.UpdateCustomersMetafieldsResponse, CustomersV3ApiSpecs.UpdateCustomersMetafieldsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomersMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CustomersV3ApiSpecs.UpdateCustomersMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpdateCustomersMetafieldsErrors[422]>>)>({
             path: 'v3/customers/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -655,7 +665,7 @@ export class CustomersV3Api {
      */
     deleteCustomersMetafields(
     ) {
-        return this.request.delete<CustomersV3ApiSpecs.DeleteCustomersMetafieldsResponse, CustomersV3ApiSpecs.DeleteCustomersMetafieldsError>({
+        return this.request.delete<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.DeleteCustomersMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CustomersV3ApiSpecs.DeleteCustomersMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.DeleteCustomersMetafieldsErrors[422]>>)>({
             path: 'v3/customers/metafields',
         });
     }

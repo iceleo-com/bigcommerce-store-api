@@ -1,3 +1,57 @@
+export type ClientOptions = {
+    baseUrl: 'https://{app_domain}' | (string & {});
+};
+export type RequestItem = {
+    id: string;
+    item_code?: string;
+    item_reference?: string;
+    name?: string;
+    price: {
+        amount: number;
+        tax_inclusive: boolean;
+    };
+    quantity: number;
+    tax_class?: TaxClass;
+    tax_exempt?: boolean;
+    tax_properties?: Array<RequestItemTaxProperty>;
+};
+export type RequestItemTaxProperty = {
+    code: string;
+    value: string;
+};
+export type RequestDocument = {
+    id: string;
+    billing_address?: Address;
+    destination_address: Address;
+    origin_address: Address;
+    shipping: RequestItem & {
+        type: ShippingType;
+    };
+    handling: RequestItem & {
+        type: HandlingType;
+    };
+    items: Array<RequestItem & {
+        type: ItemType;
+        wrapping?: RequestItem & ({
+            type: WrappingType;
+        } | null);
+    }>;
+};
+export type RequestQuote = {
+    id: string;
+    currency_code: string;
+    customer: {
+        customer_id: string;
+        customer_group_id: string;
+        taxability_code?: string;
+        tax_properties?: Array<RequestItemTaxProperty>;
+    };
+    transaction_date: string;
+    documents: Array<RequestDocument>;
+};
+export type RequestAdjust = {
+    adjust_description?: string;
+} & RequestQuote;
 export type Address = {
     line1?: string;
     line2?: string;
@@ -10,87 +64,36 @@ export type Address = {
     company_name?: string;
     type?: 'RESIDENTIAL' | 'COMMERCIAL';
 };
-export type type = 'RESIDENTIAL' | 'COMMERCIAL';
-export type handling_type = 'handling';
-export type item_type = 'item' | 'refund' | 'fee';
-export type ParameterIdQueryAdjusted = string;
-export type ParameterIdQueryVoid = string;
-export type ParameterStoreHashHeader = string;
-export type request_adjust = {
-    adjust_description?: string;
-} & request_quote;
-export type request_document = {
-    id: string;
-    billing_address?: Address;
-    destination_address: Address;
-    origin_address: Address;
-    shipping: (request_item & {
-        type: shipping_type;
-    });
-    handling: (request_item & {
-        type: handling_type;
-    });
-    items: Array<(request_item & {
-        type: item_type;
-        wrapping?: (request_item & {
-            type: wrapping_type;
-        } | null);
-    })>;
-};
-export type request_item = {
-    id: string;
-    item_code?: string;
-    item_reference?: string;
-    name?: string;
-    price: {
-        amount: number;
-        tax_inclusive: boolean;
-    };
-    quantity: number;
-    tax_class?: TaxClass;
-    tax_exempt?: boolean;
-    tax_properties?: Array<request_item_tax_property>;
-};
-export type request_item_tax_property = {
+export type TaxClass = {
     code: string;
-    value: string;
+    class_id: string;
+    name: string;
 };
-export type request_quote = {
+export type ResponseQuote = {
     id: string;
-    currency_code: string;
-    customer: {
-        customer_id: string;
-        customer_group_id: string;
-        taxability_code?: string;
-    };
-    transaction_date: string;
-    documents: Array<request_document>;
+    documents: Array<ResponseDocument>;
 };
-export type response_document = {
+export type ResponseDocument = {
     id: string;
     external_id?: string;
-    items: Array<(response_item & {
-        type: item_type;
-        wrapping?: (response_item & {
-            type: wrapping_type;
+    items: Array<ResponseItem & {
+        type: ItemType;
+        wrapping?: ResponseItem & ({
+            type: WrappingType;
         } | null);
-    })>;
-    shipping: (response_item & {
-        type: shipping_type;
-    });
-    handling: (response_item & {
-        type: handling_type;
-    });
+    }>;
+    shipping: ResponseItem & {
+        type: ShippingType;
+    };
+    handling: ResponseItem & {
+        type: HandlingType;
+    };
 };
-export type response_item = {
+export type ResponseItem = {
     id: string;
-    price: response_taxprice;
+    price: ResponseTaxprice;
 };
-export type response_quote = {
-    id: string;
-    documents: Array<response_document>;
-};
-export type response_taxprice = {
+export type ResponseTaxprice = {
     amount_inclusive: number;
     amount_exclusive: number;
     total_tax: number;
@@ -104,47 +107,86 @@ export type SalesTax = {
     tax_class?: TaxClass;
     id?: string;
 };
-export type shipping_type = 'shipping';
-export type TaxClass = {
-    code: string;
-    class_id: string;
-    name: string;
-};
-export type wrapping_type = 'wrapping';
+export type ItemType = 'item' | 'refund' | 'fee';
+export type ShippingType = 'shipping';
+export type HandlingType = 'handling';
+export type WrappingType = 'wrapping';
+export type StoreHashHeader = string;
+export type IdQueryVoid = string;
+export type IdQueryAdjusted = string;
 export type EstimateTaxesData = {
-    body: request_quote;
+    body: RequestQuote;
     headers: {
         'X-Bc-Store-Hash': string;
     };
+    path?: never;
+    query?: never;
+    url: '/estimate';
 };
-export type EstimateTaxesResponse = (response_quote);
-export type EstimateTaxesError = (unknown);
+export type EstimateTaxesErrors = {
+    400: unknown;
+    401: unknown;
+    500: unknown;
+};
+export type EstimateTaxesResponses = {
+    200: ResponseQuote;
+};
+export type EstimateTaxesResponse = EstimateTaxesResponses[keyof EstimateTaxesResponses];
 export type VoidTaxQuoteData = {
+    body?: never;
     headers: {
         'X-Bc-Store-Hash': string;
     };
+    path?: never;
     query: {
         id: string;
     };
+    url: '/void';
 };
-export type VoidTaxQuoteResponse = (unknown);
-export type VoidTaxQuoteError = (unknown);
+export type VoidTaxQuoteErrors = {
+    400: unknown;
+    401: unknown;
+    500: unknown;
+};
+export type VoidTaxQuoteResponses = {
+    200: unknown;
+};
 export type CommitTaxQuoteData = {
-    body: request_quote;
+    body: RequestQuote;
     headers: {
         'X-Bc-Store-Hash': string;
     };
+    path?: never;
+    query?: never;
+    url: '/commit';
 };
-export type CommitTaxQuoteResponse = (response_quote);
-export type CommitTaxQuoteError = (unknown);
+export type CommitTaxQuoteErrors = {
+    400: unknown;
+    401: unknown;
+    500: unknown;
+};
+export type CommitTaxQuoteResponses = {
+    200: ResponseQuote;
+};
+export type CommitTaxQuoteResponse = CommitTaxQuoteResponses[keyof CommitTaxQuoteResponses];
 export type AdjustTaxQuoteData = {
-    body?: request_adjust;
+    body?: RequestAdjust;
     headers: {
         'X-Bc-Store-Hash': string;
     };
+    path?: never;
     query: {
         id: string;
     };
+    url: '/adjust';
 };
-export type AdjustTaxQuoteResponse = (response_quote);
-export type AdjustTaxQuoteError = (unknown | response_quote);
+export type AdjustTaxQuoteErrors = {
+    400: unknown;
+    401: unknown;
+    500: ResponseQuote;
+};
+export type AdjustTaxQuoteError = AdjustTaxQuoteErrors[keyof AdjustTaxQuoteErrors];
+export type AdjustTaxQuoteResponses = {
+    200: ResponseQuote;
+};
+export type AdjustTaxQuoteResponse = AdjustTaxQuoteResponses[keyof AdjustTaxQuoteResponses];

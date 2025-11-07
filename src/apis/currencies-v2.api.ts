@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as CurrenciesV2ApiSpecs from '../generated/currencies-v2';
 export * as CurrenciesV2ApiSpecs from '../generated/currencies-v2';
 
@@ -17,7 +18,7 @@ export class CurrenciesV2Api {
     getCurrencies(
         query?: CurrenciesV2ApiSpecs.GetCurrenciesData['query'],
     ) {
-        return this.request.get<CurrenciesV2ApiSpecs.GetCurrenciesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CurrenciesV2ApiSpecs.GetCurrenciesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/currencies',
             query,
         });
@@ -29,7 +30,6 @@ export class CurrenciesV2Api {
      * Creates *Currency*.
 
      **Required Fields** 
-
      * name
      * currency_code
      * currency_exchange_rate
@@ -41,15 +41,14 @@ export class CurrenciesV2Api {
 
      **Read-Only Fields**
      * id
-     * date_created
-     * date_modified
+     * last_updated
 
      The `is_default` property can only be set to true. The value of `is_default` cannot be unset, only overridden. To change the storeʼs default currency in the BigCommerce control panel, please see [Managing Currencies (Help Center)](https://support.bigcommerce.com/s/article/Managing-Currencies-Beta).
      */
     createCurrency(
         requestBody: CurrenciesV2ApiSpecs.CreateCurrencyData['body'],
     ) {
-        return this.request.post<CurrenciesV2ApiSpecs.CreateCurrencyResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<CurrenciesV2ApiSpecs.CreateCurrencyResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/currencies',
             contentType: 'application/json',
             body: requestBody,
@@ -63,7 +62,7 @@ export class CurrenciesV2Api {
      */
     deleteCurrencies(
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CurrenciesV2ApiSpecs.DeleteCurrenciesResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/currencies',
         });
     }
@@ -76,7 +75,7 @@ export class CurrenciesV2Api {
     getCurrency(
         id: CurrenciesV2ApiSpecs.GetCurrencyData['path']['id'],
     ) {
-        return this.request.get<CurrenciesV2ApiSpecs.GetCurrencyResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CurrenciesV2ApiSpecs.GetCurrencyResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/currencies/${id}`,
         });
     }
@@ -89,8 +88,7 @@ export class CurrenciesV2Api {
      **Read-Only Fields**
 
      * id
-     * date_created
-     * date_modified
+     * last_updated
      * currency_code
 
      The `is_default` property can only be set to true. The value of `is_default` cannot be unset, only overridden. 
@@ -99,7 +97,7 @@ export class CurrenciesV2Api {
         id: CurrenciesV2ApiSpecs.UpdateCurrencyData['path']['id'],
         requestBody: CurrenciesV2ApiSpecs.UpdateCurrencyData['body'],
     ) {
-        return this.request.put<CurrenciesV2ApiSpecs.UpdateCurrencyResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<CurrenciesV2ApiSpecs.UpdateCurrencyResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/currencies/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -116,7 +114,7 @@ export class CurrenciesV2Api {
     deleteCurrency(
         id: CurrenciesV2ApiSpecs.DeleteCurrencyData['path']['id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CurrenciesV2ApiSpecs.DeleteCurrencyResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/currencies/${id}`,
         });
     }

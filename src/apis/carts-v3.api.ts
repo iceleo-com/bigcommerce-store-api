@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as CartsV3ApiSpecs from '../generated/carts-v3';
 export * as CartsV3ApiSpecs from '../generated/carts-v3';
 
@@ -39,7 +40,7 @@ export class CartsV3Api {
         requestBody: CartsV3ApiSpecs.CreateCartData['body'],
         query?: CartsV3ApiSpecs.CreateCartData['query'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<201, Required<CartsV3ApiSpecs.CreateCartResponses[201]>>,RequestErrorResponse<400, void>>({
             path: 'v3/carts',
             contentType: 'application/json',
             body: requestBody,
@@ -67,7 +68,7 @@ export class CartsV3Api {
         requestBody: CartsV3ApiSpecs.AddCartLineItemsData['body'],
         query?: CartsV3ApiSpecs.AddCartLineItemsData['query'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<201, Required<CartsV3ApiSpecs.AddCartLineItemsResponses[201]>>,RequestErrorResponse<400, void>>({
             path: `v3/carts/${cartId}/items`,
             contentType: 'application/json',
             body: requestBody,
@@ -95,7 +96,7 @@ export class CartsV3Api {
         cartId: CartsV3ApiSpecs.CreateCartRedirectUrlData['path']['cartId'],
         requestBody: CartsV3ApiSpecs.CreateCartRedirectUrlData['body'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<201, Required<CartsV3ApiSpecs.CreateCartRedirectUrlResponses[201]>>,RequestErrorResponse<400, void>>({
             path: `v3/carts/${cartId}/redirect_urls`,
             contentType: 'application/json',
             body: requestBody,
@@ -127,7 +128,7 @@ export class CartsV3Api {
         requestBody: CartsV3ApiSpecs.UpdateCartLineItemData['body'],
         query?: CartsV3ApiSpecs.UpdateCartLineItemData['query'],
     ) {
-        return this.request.put<any, CartsV3ApiSpecs.UpdateCartLineItemError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.UpdateCartLineItemResponses[200]>>,RequestErrorResponse<409, Required<CartsV3ApiSpecs.UpdateCartLineItemErrors[409]>>>({
             path: `v3/carts/${cartId}/items/${itemId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -152,7 +153,7 @@ export class CartsV3Api {
         requestBody: CartsV3ApiSpecs.DeleteCartLineItemData['body'],
         query?: CartsV3ApiSpecs.DeleteCartLineItemData['query'],
     ) {
-        return this.request.delete<CartsV3ApiSpecs.DeleteCartLineItemResponse, CartsV3ApiSpecs.DeleteCartLineItemError>({
+        return this.request.delete<(RequestSuccessResponse<200, Required<CartsV3ApiSpecs.DeleteCartLineItemResponses[200]>> | RequestSuccessResponse<204, Required<CartsV3ApiSpecs.DeleteCartLineItemResponses[204]>>),RequestErrorResponse<409, Required<CartsV3ApiSpecs.DeleteCartLineItemErrors[409]>>>({
             path: `v3/carts/${cartId}/items/${itemId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -169,7 +170,7 @@ export class CartsV3Api {
         cartId: CartsV3ApiSpecs.GetCartData['path']['cartId'],
         query?: CartsV3ApiSpecs.GetCartData['query'],
     ) {
-        return this.request.get<any, CartsV3ApiSpecs.GetCartError>({
+        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetCartResponses[200]>>,RequestErrorResponse<404, Required<CartsV3ApiSpecs.GetCartErrors[404]>>>({
             path: `v3/carts/${cartId}`,
             query,
         });
@@ -191,7 +192,7 @@ export class CartsV3Api {
         requestBody: CartsV3ApiSpecs.UpdateCartData['body'],
         query?: CartsV3ApiSpecs.UpdateCartData['query'],
     ) {
-        return this.request.put<any, CartsV3ApiSpecs.UpdateCartError>({
+        return this.request.put<RequestSuccessResponse<201, Required<CartsV3ApiSpecs.UpdateCartResponses[201]>>,RequestErrorResponse<409, Required<CartsV3ApiSpecs.UpdateCartErrors[409]>>>({
             path: `v3/carts/${cartId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -207,7 +208,7 @@ export class CartsV3Api {
     deleteCart(
         cartId: CartsV3ApiSpecs.DeleteCartData['path']['cartId'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CartsV3ApiSpecs.DeleteCartResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/carts/${cartId}`,
         });
     }
@@ -226,7 +227,7 @@ export class CartsV3Api {
      */
     getGlobalCartSettings(
     ) {
-        return this.request.get<CartsV3ApiSpecs.GetGlobalCartSettingsResponse, CartsV3ApiSpecs.GetGlobalCartSettingsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetGlobalCartSettingsResponses[200]>>,RequestErrorResponse<401, Required<CartsV3ApiSpecs.GetGlobalCartSettingsErrors[401]>>>({
             path: 'v3/carts/settings',
         });
     }
@@ -246,7 +247,7 @@ export class CartsV3Api {
     updateGlobalCartSettings(
         requestBody: CartsV3ApiSpecs.UpdateGlobalCartSettingsData['body'],
     ) {
-        return this.request.put<CartsV3ApiSpecs.UpdateGlobalCartSettingsResponse, CartsV3ApiSpecs.UpdateGlobalCartSettingsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.UpdateGlobalCartSettingsResponses[200]>>,(RequestErrorResponse<400, Required<CartsV3ApiSpecs.UpdateGlobalCartSettingsErrors[400]>> | RequestErrorResponse<401, Required<CartsV3ApiSpecs.UpdateGlobalCartSettingsErrors[401]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.UpdateGlobalCartSettingsErrors[422]>>)>({
             path: 'v3/carts/settings',
             contentType: 'application/json',
             body: requestBody,
@@ -268,7 +269,7 @@ export class CartsV3Api {
     getChannelCartSettings(
         channelId: CartsV3ApiSpecs.GetChannelCartSettingsData['path']['channel_id'],
     ) {
-        return this.request.get<CartsV3ApiSpecs.GetChannelCartSettingsResponse, CartsV3ApiSpecs.GetChannelCartSettingsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetChannelCartSettingsResponses[200]>>,RequestErrorResponse<401, Required<CartsV3ApiSpecs.GetChannelCartSettingsErrors[401]>>>({
             path: `v3/carts/settings/channels/${channelId}`,
         });
     }
@@ -289,7 +290,7 @@ export class CartsV3Api {
         channelId: CartsV3ApiSpecs.UpdateChannelCartSettingsData['path']['channel_id'],
         requestBody: CartsV3ApiSpecs.UpdateChannelCartSettingsData['body'],
     ) {
-        return this.request.put<CartsV3ApiSpecs.UpdateChannelCartSettingsResponse, CartsV3ApiSpecs.UpdateChannelCartSettingsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.UpdateChannelCartSettingsResponses[200]>>,(RequestErrorResponse<400, Required<CartsV3ApiSpecs.UpdateChannelCartSettingsErrors[400]>> | RequestErrorResponse<401, Required<CartsV3ApiSpecs.UpdateChannelCartSettingsErrors[401]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.UpdateChannelCartSettingsErrors[422]>>)>({
             path: `v3/carts/settings/channels/${channelId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -305,7 +306,7 @@ export class CartsV3Api {
         cartId: CartsV3ApiSpecs.GetCartMetafieldsData['path']['cart_id'],
         query?: CartsV3ApiSpecs.GetCartMetafieldsData['query'],
     ) {
-        return this.request.get<CartsV3ApiSpecs.GetCartMetafieldsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetCartMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/carts/${cartId}/metafields`,
             query,
         });
@@ -316,14 +317,14 @@ export class CartsV3Api {
      *
      * Create a cart `Metafield`. 
 
-     If you create an order from a Cart, you can continue referencing the Cart Metafields even if you delete the original Cart. Use the `cart_id` field on the Order to construct the Cart Metafield endpoint. 
+     If you create an order from a Cart, you can continue referencing the Cart Metafields even if you delete the original Cart. Use the `cart_id` field on the Order to construct the Cart Metafield endpoint.
 
      */
     createCartMetafield(
         cartId: CartsV3ApiSpecs.CreateCartMetafieldData['path']['cart_id'],
         requestBody: CartsV3ApiSpecs.CreateCartMetafieldData['body'],
     ) {
-        return this.request.post<CartsV3ApiSpecs.CreateCartMetafieldResponse, CartsV3ApiSpecs.CreateCartMetafieldError>({
+        return this.request.post<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.CreateCartMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<CartsV3ApiSpecs.CreateCartMetafieldErrors[400]>> | RequestErrorResponse<409, Required<CartsV3ApiSpecs.CreateCartMetafieldErrors[409]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.CreateCartMetafieldErrors[422]>>)>({
             path: `v3/carts/${cartId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
@@ -340,7 +341,7 @@ export class CartsV3Api {
         metafieldId: CartsV3ApiSpecs.GetCartMetafieldData['path']['metafield_id'],
         query?: CartsV3ApiSpecs.GetCartMetafieldData['query'],
     ) {
-        return this.request.get<CartsV3ApiSpecs.GetCartMetafieldResponse, CartsV3ApiSpecs.GetCartMetafieldError>({
+        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetCartMetafieldResponses[200]>>,RequestErrorResponse<404, Required<CartsV3ApiSpecs.GetCartMetafieldErrors[404]>>>({
             path: `v3/carts/${cartId}/metafields/${metafieldId}`,
             query,
         });
@@ -357,7 +358,7 @@ export class CartsV3Api {
         metafieldId: CartsV3ApiSpecs.UpdateCartMetafieldData['path']['metafield_id'],
         requestBody: CartsV3ApiSpecs.UpdateCartMetafieldData['body'],
     ) {
-        return this.request.put<CartsV3ApiSpecs.UpdateCartMetafieldResponse, CartsV3ApiSpecs.UpdateCartMetafieldError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.UpdateCartMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<CartsV3ApiSpecs.UpdateCartMetafieldErrors[400]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.UpdateCartMetafieldErrors[422]>>)>({
             path: `v3/carts/${cartId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -374,7 +375,7 @@ export class CartsV3Api {
         cartId: CartsV3ApiSpecs.DeleteCartMetafieldData['path']['cart_id'],
         metafieldId: CartsV3ApiSpecs.DeleteCartMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.delete<any, CartsV3ApiSpecs.DeleteCartMetafieldError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CartsV3ApiSpecs.DeleteCartMetafieldResponses[204]>>,RequestErrorResponse<404, Required<CartsV3ApiSpecs.DeleteCartMetafieldErrors[404]>>>({
             path: `v3/carts/${cartId}/metafields/${metafieldId}`,
         });
     }
@@ -387,7 +388,7 @@ export class CartsV3Api {
     getCartsMetafields(
         query?: CartsV3ApiSpecs.GetCartsMetafieldsData['query'],
     ) {
-        return this.request.get<CartsV3ApiSpecs.GetCartsMetafieldsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetCartsMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/carts/metafields',
             query,
         });
@@ -401,7 +402,7 @@ export class CartsV3Api {
     createCartsMetafields(
         requestBody: CartsV3ApiSpecs.CreateCartsMetafieldsData['body'],
     ) {
-        return this.request.post<CartsV3ApiSpecs.CreateCartsMetafieldsResponse, CartsV3ApiSpecs.CreateCartsMetafieldsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.CreateCartsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CartsV3ApiSpecs.CreateCartsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.CreateCartsMetafieldsErrors[422]>>)>({
             path: 'v3/carts/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -416,7 +417,7 @@ export class CartsV3Api {
     updateCartsMetafields(
         requestBody: CartsV3ApiSpecs.UpdateCartsMetafieldsData['body'],
     ) {
-        return this.request.put<CartsV3ApiSpecs.UpdateCartsMetafieldsResponse, CartsV3ApiSpecs.UpdateCartsMetafieldsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.UpdateCartsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CartsV3ApiSpecs.UpdateCartsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.UpdateCartsMetafieldsErrors[422]>>)>({
             path: 'v3/carts/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -431,7 +432,7 @@ export class CartsV3Api {
     deleteCartsMetafields(
         requestBody: CartsV3ApiSpecs.DeleteCartsMetafieldsData['body'],
     ) {
-        return this.request.delete<CartsV3ApiSpecs.DeleteCartsMetafieldsResponse, CartsV3ApiSpecs.DeleteCartsMetafieldsError>({
+        return this.request.delete<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.DeleteCartsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CartsV3ApiSpecs.DeleteCartsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.DeleteCartsMetafieldsErrors[422]>>)>({
             path: 'v3/carts/metafields',
             contentType: 'application/json',
             body: requestBody,

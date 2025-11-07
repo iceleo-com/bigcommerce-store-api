@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as SegmentsV3ApiSpecs from '../generated/segments-v3';
 export * as SegmentsV3ApiSpecs from '../generated/segments-v3';
 
@@ -17,7 +18,7 @@ export class SegmentsV3Api {
     getPaginatedSegmentsList(
         query?: SegmentsV3ApiSpecs.GetPaginatedSegmentsListData['query'],
     ) {
-        return this.request.get<SegmentsV3ApiSpecs.GetPaginatedSegmentsListResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SegmentsV3ApiSpecs.GetPaginatedSegmentsListResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/segments',
             query,
         });
@@ -28,11 +29,14 @@ export class SegmentsV3Api {
      *
      * Creates *Segments*.
 
+     **Limits**
+     * Limit of 10 concurrent requests.
+
      */
     segmentsPostRequest(
         requestBody: SegmentsV3ApiSpecs.SegmentsPostRequestData['body'],
     ) {
-        return this.request.post<any, SegmentsV3ApiSpecs.SegmentsPostRequestError>({
+        return this.request.post<RequestSuccessResponse<201, Required<SegmentsV3ApiSpecs.SegmentsPostRequestResponses[201]>>,(RequestErrorResponse<400, Required<SegmentsV3ApiSpecs.SegmentsPostRequestErrors[400]>> | RequestErrorResponse<409, Required<SegmentsV3ApiSpecs.SegmentsPostRequestErrors[409]>>)>({
             path: 'v3/segments',
             contentType: 'application/json',
             body: requestBody,
@@ -44,11 +48,14 @@ export class SegmentsV3Api {
      *
      * Updates *Segments*.
 
+      **Limits**
+      * Limit of 10 concurrent requests.
+
      */
     putSegmentObjects(
         requestBody: SegmentsV3ApiSpecs.PutSegmentObjectsData['body'],
     ) {
-        return this.request.put<any, SegmentsV3ApiSpecs.PutSegmentObjectsError>({
+        return this.request.put<RequestSuccessResponse<201, Required<SegmentsV3ApiSpecs.PutSegmentObjectsResponses[201]>>,RequestErrorResponse<400, Required<SegmentsV3ApiSpecs.PutSegmentObjectsErrors[400]>>>({
             path: 'v3/segments',
             contentType: 'application/json',
             body: requestBody,
@@ -64,7 +71,7 @@ export class SegmentsV3Api {
     deleteStoreSegment(
         query?: SegmentsV3ApiSpecs.DeleteStoreSegmentData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<SegmentsV3ApiSpecs.DeleteStoreSegmentResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/segments',
             query,
         });
@@ -74,12 +81,15 @@ export class SegmentsV3Api {
      * Get All Shopper Profiles in a Segment
      *
      * Returns a list of *Shopper Profiles* that are associated with a given *Segment*.
+
+     **NOTE**: The `modify` Customers OAuth scope is a requirement for this endpoint.
+
      */
     getSegmentProfiles(
         segmentId: SegmentsV3ApiSpecs.GetSegmentProfilesData['path']['segmentId'],
         query?: SegmentsV3ApiSpecs.GetSegmentProfilesData['query'],
     ) {
-        return this.request.get<SegmentsV3ApiSpecs.GetSegmentProfilesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SegmentsV3ApiSpecs.GetSegmentProfilesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/segments/${segmentId}/shopper-profiles`,
             query,
         });
@@ -89,13 +99,16 @@ export class SegmentsV3Api {
      * Add Shopper Profiles to a Segment
      *
      * Add *Shopper Profiles* to a specific *Segment*. 
-     A maximum number of *Shopper Profiles* per request is `50`, and up to three concurrent requests are allowed.
+
+     **Limits**
+     * Limit of *Shopper Profiles* per request is `50`.
+     * Limit of 10 concurrent requests.
      */
     postShopperProfile(
         segmentId: SegmentsV3ApiSpecs.PostShopperProfileData['path']['segmentId'],
         requestBody: SegmentsV3ApiSpecs.PostShopperProfileData['body'],
     ) {
-        return this.request.post<any, SegmentsV3ApiSpecs.PostShopperProfileError>({
+        return this.request.post<RequestSuccessResponse<201, Required<SegmentsV3ApiSpecs.PostShopperProfileResponses[201]>>,RequestErrorResponse<409, Required<SegmentsV3ApiSpecs.PostShopperProfileErrors[409]>>>({
             path: `v3/segments/${segmentId}/shopper-profiles`,
             contentType: 'application/json',
             body: requestBody,
@@ -112,7 +125,7 @@ export class SegmentsV3Api {
         segmentId: SegmentsV3ApiSpecs.DeleteShopperProfileData['path']['segmentId'],
         query?: SegmentsV3ApiSpecs.DeleteShopperProfileData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<SegmentsV3ApiSpecs.DeleteShopperProfileResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/segments/${segmentId}/shopper-profiles`,
             query,
         });
@@ -121,12 +134,13 @@ export class SegmentsV3Api {
     /**
      * Get All Shopper Profiles
      *
-     * Returns a paginated *Shopper Profiles* list.
+     * Returns a paginated *Shopper Profiles* list. 
+
      */
     getShopperList(
         query?: SegmentsV3ApiSpecs.GetShopperListData['query'],
     ) {
-        return this.request.get<SegmentsV3ApiSpecs.GetShopperListResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SegmentsV3ApiSpecs.GetShopperListResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/shopper-profiles',
             query,
         });
@@ -141,7 +155,7 @@ export class SegmentsV3Api {
     shopperProfilesRequest(
         requestBody: SegmentsV3ApiSpecs.ShopperProfilesRequestData['body'],
     ) {
-        return this.request.post<any, SegmentsV3ApiSpecs.ShopperProfilesRequestError>({
+        return this.request.post<RequestSuccessResponse<201, Required<SegmentsV3ApiSpecs.ShopperProfilesRequestResponses[201]>>,RequestErrorResponse<400, Required<SegmentsV3ApiSpecs.ShopperProfilesRequestErrors[400]>>>({
             path: 'v3/shopper-profiles',
             contentType: 'application/json',
             body: requestBody,
@@ -157,7 +171,7 @@ export class SegmentsV3Api {
     deleteStoreShopperProfile(
         query?: SegmentsV3ApiSpecs.DeleteStoreShopperProfileData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<SegmentsV3ApiSpecs.DeleteStoreShopperProfileResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/shopper-profiles',
             query,
         });
@@ -172,7 +186,7 @@ export class SegmentsV3Api {
         shopperProfileId: SegmentsV3ApiSpecs.GetListShopperProfileData['path']['shopperProfileId'],
         query?: SegmentsV3ApiSpecs.GetListShopperProfileData['query'],
     ) {
-        return this.request.get<SegmentsV3ApiSpecs.GetListShopperProfileResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SegmentsV3ApiSpecs.GetListShopperProfileResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/shopper-profiles/${shopperProfileId}/segments`,
             query,
         });

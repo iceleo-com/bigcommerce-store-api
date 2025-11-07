@@ -1,9 +1,10 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as TaxClassesV2ApiSpecs from '../generated/tax-classes-v2';
 export * as TaxClassesV2ApiSpecs from '../generated/tax-classes-v2';
 export declare class TaxClassesV2Api {
     private readonly request;
     constructor(request: RequestService);
-    getTaxClasses(query?: TaxClassesV2ApiSpecs.GetTaxClassesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<TaxClassesV2ApiSpecs.GetTaxClassesResponse, any>>;
-    getTaxClass(): Promise<import("../helpers/request/request-service.types").RequestResponse<TaxClassesV2ApiSpecs.taxClass_Full, any>>;
+    getTaxClasses(query?: TaxClassesV2ApiSpecs.GetTaxClassesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, TaxClassesV2ApiSpecs.TaxClassFull[]>>;
+    getTaxClass(id: TaxClassesV2ApiSpecs.GetTaxClassData['path']['id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<TaxClassesV2ApiSpecs.TaxClassFull>>>;
 }

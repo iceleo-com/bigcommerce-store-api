@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as ShippingV2ApiSpecs from '../generated/shipping-v2';
 export * as ShippingV2ApiSpecs from '../generated/shipping-v2';
 
@@ -16,7 +17,7 @@ export class ShippingV2Api {
      */
     getShippingZones(
     ) {
-        return this.request.get<ShippingV2ApiSpecs.GetShippingZonesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ShippingV2ApiSpecs.GetShippingZonesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/shipping/zones',
         });
     }
@@ -29,7 +30,7 @@ export class ShippingV2Api {
     createShippingZones(
         requestBody: ShippingV2ApiSpecs.CreateShippingZonesData['body'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<201, Required<ShippingV2ApiSpecs.CreateShippingZonesResponses[201]>>,RequestErrorResponse<400, void>>({
             path: 'v2/shipping/zones',
             contentType: 'application/json',
             body: requestBody,
@@ -44,7 +45,7 @@ export class ShippingV2Api {
     getShippingZone(
         id: ShippingV2ApiSpecs.GetShippingZoneData['path']['id'],
     ) {
-        return this.request.get<ShippingV2ApiSpecs.GetShippingZoneResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ShippingV2ApiSpecs.GetShippingZoneResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/shipping/zones/${id}`,
         });
     }
@@ -64,7 +65,7 @@ export class ShippingV2Api {
         id: ShippingV2ApiSpecs.UpdateShippingZoneData['path']['id'],
         requestBody: ShippingV2ApiSpecs.UpdateShippingZoneData['body'],
     ) {
-        return this.request.put<ShippingV2ApiSpecs.UpdateShippingZoneResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<ShippingV2ApiSpecs.UpdateShippingZoneResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/shipping/zones/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -79,7 +80,7 @@ export class ShippingV2Api {
     deleteShippingZone(
         id: ShippingV2ApiSpecs.DeleteShippingZoneData['path']['id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ShippingV2ApiSpecs.DeleteShippingZoneResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/shipping/zones/${id}`,
         });
     }
@@ -92,7 +93,7 @@ export class ShippingV2Api {
     getShippingZoneMethods(
         zoneId: ShippingV2ApiSpecs.GetShippingZoneMethodsData['path']['zone_id'],
     ) {
-        return this.request.get<ShippingV2ApiSpecs.GetShippingZoneMethodsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ShippingV2ApiSpecs.GetShippingZoneMethodsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/shipping/zones/${zoneId}/methods`,
         });
     }
@@ -382,7 +383,7 @@ export class ShippingV2Api {
      | - | - | - |
      | default_cost | number &#124; null | Default shipping cost, applied either as a percentage of the orderʼs total value or as a fixed amount. If default cost is not required, you can supply a value of null. |
      | default_cost_type | string | How the default shipping cost is calculated; either `percentage_of_total` or `fixed_amount`. |
-     | range | number | Array of [range](#range) objects. The units for these ranges' `lower_limit` and `upper_limit` properties depend on the default units set in the storeʼs control panel. |
+     | range | number | Array of [range](#range-object--properties) objects. The units for these ranges' `lower_limit` and `upper_limit` properties depend on the default units set in the storeʼs control panel. |
 
      Example request body:
 
@@ -417,7 +418,7 @@ export class ShippingV2Api {
      | - | - | - |
      | default_cost | number &#124; null | Default shipping cost, applied either as a percentage of the orderʼs total value or as a fixed amount. If default cost is not required, you can supply a value of null. |
      | default_cost_type | string | How the default shipping cost is calculated; either `percentage_of_total` or `fixed_amount`. |
-     | range | number | Array of [range](#range) objects. The units for these ranges' `lower_limit` and `upper_limit` properties are values in the storeʼs currency. |
+     | range | number | Array of [range](#range-object--properties) objects. The units for these ranges' `lower_limit` and `upper_limit` properties are values in the storeʼs currency. |
 
      Example request body:
 
@@ -504,7 +505,7 @@ export class ShippingV2Api {
         zoneId: ShippingV2ApiSpecs.CreateShippingMethodData['path']['zone_id'],
         requestBody: ShippingV2ApiSpecs.CreateShippingMethodData['body'],
     ) {
-        return this.request.post<ShippingV2ApiSpecs.CreateShippingMethodResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<ShippingV2ApiSpecs.CreateShippingMethodResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/shipping/zones/${zoneId}/methods`,
             contentType: 'application/json',
             body: requestBody,
@@ -570,7 +571,7 @@ export class ShippingV2Api {
      | - | - | - |
      | default_cost | number &#124; null | Default shipping cost, applied either as a percentage of the orderʼs total value or as a fixed amount. If default cost is not required, you can supply a value of null. |
      | default_cost_type | string | How the default shipping cost is calculated; either `percentage_of_total` or `fixed_amount`. |
-     | range | number | Array of [range](#range) objects. The units for these ranges' `lower_limit` and `upper_limit` properties depend on the default units set in the storeʼs control panel. |
+     | range | number | Array of [range](#range-object--properties) objects. The units for these ranges' `lower_limit` and `upper_limit` properties depend on the default units set in the storeʼs control panel. |
 
      #### JSON Example
      ```json
@@ -605,7 +606,7 @@ export class ShippingV2Api {
      | - | - | - |
      | default_cost | number &#124; null | Default shipping cost, applied either as a percentage of the orderʼs total value or as a fixed amount. If default cost is not required, you can supply a value of null. |
      | default_cost_type | string | How the default shipping cost is calculated; either `percentage_of_total` or `fixed_amount`. |
-     | range | number | Array of [range](#range) objects. The units for these ranges' `lower_limit` and `upper_limit` properties are values in the storeʼs currency. |
+     | range | number | Array of [range](#range-object--properties) objects. The units for these ranges' `lower_limit` and `upper_limit` properties are values in the storeʼs currency. |
 
      #### JSON Example
 
@@ -654,7 +655,7 @@ export class ShippingV2Api {
 
      Object model to define ranges for shipping quotes. Units are defined in the parent object.
 
-     | Name | Type | Description |
+     | Property | Type | Description |
      | - | - | - |
      | lower_limit | number | Lower limit for order total. |
      | upper_limit | number | Upper limit for order total. |
@@ -693,7 +694,7 @@ export class ShippingV2Api {
         zoneId: ShippingV2ApiSpecs.GetShippingMethodData['path']['zone_id'],
         methodId: ShippingV2ApiSpecs.GetShippingMethodData['path']['method_id'],
     ) {
-        return this.request.get<ShippingV2ApiSpecs.GetShippingMethodResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ShippingV2ApiSpecs.GetShippingMethodResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/shipping/zones/${zoneId}/methods/${methodId}`,
         });
     }
@@ -758,7 +759,7 @@ export class ShippingV2Api {
      | - | - | - |
      | default_cost | number &#124; null | Default shipping cost, applied either as a percentage of the orderʼs total value or as a fixed amount. If default cost is not required, you can supply a value of null. |
      | default_cost_type | string | How the default shipping cost is calculated; either `percentage_of_total` or `fixed_amount`. |
-     | range | number | Array of [range](#range) objects. The units for these ranges' `lower_limit` and `upper_limit` properties depend on the default units set in the storeʼs control panel. |
+     | range | number | Array of [range](#range-object--properties) objects. The units for these ranges' `lower_limit` and `upper_limit` properties depend on the default units set in the storeʼs control panel. |
 
      Example response: 
 
@@ -793,7 +794,7 @@ export class ShippingV2Api {
      | - | - | - |
      | default_cost | number &#124; null | Default shipping cost, applied either as a percentage of the orderʼs total value or as a fixed amount. If default cost is not required, you can supply a value of null. |
      | default_cost_type | string | How the default shipping cost is calculated; either `percentage_of_total` or `fixed_amount`. |
-     | range | number | Array of [range](#range) objects. The units for these ranges' `lower_limit` and `upper_limit` properties are values in the storeʼs currency. |
+     | range | number | Array of [range](#range-object--properties) objects. The units for these ranges' `lower_limit` and `upper_limit` properties are values in the storeʼs currency. |
 
      Example response: 
 
@@ -880,7 +881,7 @@ export class ShippingV2Api {
         methodId: ShippingV2ApiSpecs.UpdateShippingMethodData['path']['method_id'],
         requestBody: ShippingV2ApiSpecs.UpdateShippingMethodData['body'],
     ) {
-        return this.request.put<ShippingV2ApiSpecs.UpdateShippingMethodResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<ShippingV2ApiSpecs.UpdateShippingMethodResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/shipping/zones/${zoneId}/methods/${methodId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -896,7 +897,7 @@ export class ShippingV2Api {
         zoneId: ShippingV2ApiSpecs.DeleteShippingMethodData['path']['zone_id'],
         methodId: ShippingV2ApiSpecs.DeleteShippingMethodData['path']['method_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ShippingV2ApiSpecs.DeleteShippingMethodResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/shipping/zones/${zoneId}/methods/${methodId}`,
         });
     }
@@ -1100,7 +1101,7 @@ export class ShippingV2Api {
     createCarrierConnection(
         requestBody: ShippingV2ApiSpecs.CreateCarrierConnectionData['body'],
     ) {
-        return this.request.post<any, ShippingV2ApiSpecs.CreateCarrierConnectionError>({
+        return this.request.post<RequestSuccessResponse<204, Required<ShippingV2ApiSpecs.CreateCarrierConnectionResponses[204]>>,RequestErrorResponse<400, Required<ShippingV2ApiSpecs.CreateCarrierConnectionErrors[400]>>>({
             path: 'v2/shipping/carrier/connection',
             contentType: 'application/json',
             body: requestBody,
@@ -1117,7 +1118,7 @@ export class ShippingV2Api {
     updateCarrierConnection(
         requestBody: ShippingV2ApiSpecs.UpdateCarrierConnectionData['body'],
     ) {
-        return this.request.put<any, ShippingV2ApiSpecs.UpdateCarrierConnectionError>({
+        return this.request.put<RequestSuccessResponse<204, Required<ShippingV2ApiSpecs.UpdateCarrierConnectionResponses[204]>>,RequestErrorResponse<400, Required<ShippingV2ApiSpecs.UpdateCarrierConnectionErrors[400]>>>({
             path: 'v2/shipping/carrier/connection',
             contentType: 'application/json',
             body: requestBody,
@@ -1135,7 +1136,7 @@ export class ShippingV2Api {
     deleteCarrierConnection(
         requestBody: ShippingV2ApiSpecs.DeleteCarrierConnectionData['body'],
     ) {
-        return this.request.delete<any, ShippingV2ApiSpecs.DeleteCarrierConnectionError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ShippingV2ApiSpecs.DeleteCarrierConnectionResponses[204]>>,RequestErrorResponse<400, Required<ShippingV2ApiSpecs.DeleteCarrierConnectionErrors[400]>>>({
             path: 'v2/shipping/carrier/connection',
             contentType: 'application/json',
             body: requestBody,

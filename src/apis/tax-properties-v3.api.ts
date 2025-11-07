@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as TaxPropertiesV3ApiSpecs from '../generated/tax-properties-v3';
 export * as TaxPropertiesV3ApiSpecs from '../generated/tax-properties-v3';
 
@@ -17,7 +18,7 @@ export class TaxPropertiesV3Api {
     getTaxProperties(
         query?: TaxPropertiesV3ApiSpecs.GetTaxPropertiesData['query'],
     ) {
-        return this.request.get<TaxPropertiesV3ApiSpecs.GetTaxPropertiesResponse, TaxPropertiesV3ApiSpecs.GetTaxPropertiesError>({
+        return this.request.get<RequestSuccessResponse<200, Required<TaxPropertiesV3ApiSpecs.GetTaxPropertiesResponses[200]>>,RequestErrorResponse<400, Required<TaxPropertiesV3ApiSpecs.GetTaxPropertiesErrors[400]>>>({
             path: 'v3/tax/properties',
             query,
         });
@@ -31,7 +32,7 @@ export class TaxPropertiesV3Api {
     createTaxProperties(
         requestBody: TaxPropertiesV3ApiSpecs.CreateTaxPropertiesData['body'],
     ) {
-        return this.request.post<TaxPropertiesV3ApiSpecs.CreateTaxPropertiesResponse, TaxPropertiesV3ApiSpecs.CreateTaxPropertiesError>({
+        return this.request.post<RequestSuccessResponse<200, Required<TaxPropertiesV3ApiSpecs.CreateTaxPropertiesResponses[200]>>,RequestErrorResponse<422, Required<TaxPropertiesV3ApiSpecs.CreateTaxPropertiesErrors[422]>>>({
             path: 'v3/tax/properties',
             contentType: 'application/json',
             body: requestBody,
@@ -46,7 +47,7 @@ export class TaxPropertiesV3Api {
     updateTaxProperties(
         requestBody: TaxPropertiesV3ApiSpecs.UpdateTaxPropertiesData['body'],
     ) {
-        return this.request.put<TaxPropertiesV3ApiSpecs.UpdateTaxPropertiesResponse, TaxPropertiesV3ApiSpecs.UpdateTaxPropertiesError>({
+        return this.request.put<RequestSuccessResponse<200, Required<TaxPropertiesV3ApiSpecs.UpdateTaxPropertiesResponses[200]>>,RequestErrorResponse<422, Required<TaxPropertiesV3ApiSpecs.UpdateTaxPropertiesErrors[422]>>>({
             path: 'v3/tax/properties',
             contentType: 'application/json',
             body: requestBody,
@@ -61,7 +62,7 @@ export class TaxPropertiesV3Api {
     deleteTaxProperties(
         query?: TaxPropertiesV3ApiSpecs.DeleteTaxPropertiesData['query'],
     ) {
-        return this.request.delete<any, TaxPropertiesV3ApiSpecs.DeleteTaxPropertiesError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<TaxPropertiesV3ApiSpecs.DeleteTaxPropertiesResponses[204]>>,(RequestErrorResponse<400, Required<TaxPropertiesV3ApiSpecs.DeleteTaxPropertiesErrors[400]>> | RequestErrorResponse<409, Required<TaxPropertiesV3ApiSpecs.DeleteTaxPropertiesErrors[409]>>)>({
             path: 'v3/tax/properties',
             query,
         });
@@ -75,7 +76,7 @@ export class TaxPropertiesV3Api {
     getProductsTaxProperties(
         query?: TaxPropertiesV3ApiSpecs.GetProductsTaxPropertiesData['query'],
     ) {
-        return this.request.get<TaxPropertiesV3ApiSpecs.GetProductsTaxPropertiesResponse, TaxPropertiesV3ApiSpecs.GetProductsTaxPropertiesError>({
+        return this.request.get<RequestSuccessResponse<200, Required<TaxPropertiesV3ApiSpecs.GetProductsTaxPropertiesResponses[200]>>,RequestErrorResponse<400, Required<TaxPropertiesV3ApiSpecs.GetProductsTaxPropertiesErrors[400]>>>({
             path: 'v3/tax/products/properties',
             query,
         });
@@ -89,7 +90,7 @@ export class TaxPropertiesV3Api {
     updateProductTaxProperties(
         requestBody: TaxPropertiesV3ApiSpecs.UpdateProductTaxPropertiesData['body'],
     ) {
-        return this.request.put<TaxPropertiesV3ApiSpecs.UpdateProductTaxPropertiesResponse, TaxPropertiesV3ApiSpecs.UpdateProductTaxPropertiesError>({
+        return this.request.put<RequestSuccessResponse<200, Required<TaxPropertiesV3ApiSpecs.UpdateProductTaxPropertiesResponses[200]>>,RequestErrorResponse<422, Required<TaxPropertiesV3ApiSpecs.UpdateProductTaxPropertiesErrors[422]>>>({
             path: 'v3/tax/products/properties',
             contentType: 'application/json',
             body: requestBody,
@@ -104,7 +105,7 @@ export class TaxPropertiesV3Api {
     deleteProductTaxProperties(
         query?: TaxPropertiesV3ApiSpecs.DeleteProductTaxPropertiesData['query'],
     ) {
-        return this.request.delete<any, TaxPropertiesV3ApiSpecs.DeleteProductTaxPropertiesError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<TaxPropertiesV3ApiSpecs.DeleteProductTaxPropertiesResponses[204]>>,RequestErrorResponse<400, Required<TaxPropertiesV3ApiSpecs.DeleteProductTaxPropertiesErrors[400]>>>({
             path: 'v3/tax/products/properties',
             query,
         });

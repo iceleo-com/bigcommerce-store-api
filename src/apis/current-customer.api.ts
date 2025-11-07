@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as CurrentCustomerApiSpecs from '../generated/current-customer';
 export * as CurrentCustomerApiSpecs from '../generated/current-customer';
 
@@ -22,7 +23,7 @@ export class CurrentCustomerApi {
     getCurrentCustomer(
         query?: CurrentCustomerApiSpecs.GetCurrentCustomerData['query'],
     ) {
-        return this.request.get<CurrentCustomerApiSpecs.GetCurrentCustomerResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CurrentCustomerApiSpecs.GetCurrentCustomerResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'https://{store_domain}/customer/current.jwt',
             query,
         });

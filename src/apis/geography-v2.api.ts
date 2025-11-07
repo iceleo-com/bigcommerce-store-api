@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as GeographyV2ApiSpecs from '../generated/geography-v2';
 export * as GeographyV2ApiSpecs from '../generated/geography-v2';
 
@@ -17,7 +18,7 @@ export class GeographyV2Api {
     getCountries(
         query?: GeographyV2ApiSpecs.GetCountriesData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<GeographyV2ApiSpecs.GetCountriesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/countries',
             query,
         });
@@ -31,7 +32,7 @@ export class GeographyV2Api {
     getCountry(
         id: GeographyV2ApiSpecs.GetCountryData['path']['id'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<GeographyV2ApiSpecs.GetCountryResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/countries/${id}`,
         });
     }
@@ -46,7 +47,7 @@ export class GeographyV2Api {
         countryId: GeographyV2ApiSpecs.GetCountryStatesData['path']['country_id'],
         query?: GeographyV2ApiSpecs.GetCountryStatesData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<GeographyV2ApiSpecs.GetCountryStatesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/countries/${countryId}/states`,
             query,
         });
@@ -62,7 +63,7 @@ export class GeographyV2Api {
         countryId: GeographyV2ApiSpecs.GetCountryStateData['path']['country_id'],
         id: GeographyV2ApiSpecs.GetCountryStateData['path']['id'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<GeographyV2ApiSpecs.GetCountryStateResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/countries/${countryId}/states/${id}`,
         });
     }
@@ -74,7 +75,7 @@ export class GeographyV2Api {
      */
     getCountriesCount(
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<GeographyV2ApiSpecs.GetCountriesCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/countries/count',
         });
     }
@@ -86,7 +87,7 @@ export class GeographyV2Api {
      */
     getStatesCount(
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<GeographyV2ApiSpecs.GetStatesCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/countries/states/count',
         });
     }
@@ -99,7 +100,7 @@ export class GeographyV2Api {
     getStates(
         query?: GeographyV2ApiSpecs.GetStatesData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<GeographyV2ApiSpecs.GetStatesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/countries/states',
             query,
         });
@@ -113,7 +114,7 @@ export class GeographyV2Api {
     getCountryStatesCount(
         countryId: GeographyV2ApiSpecs.GetCountryStatesCountData['path']['country_id'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<GeographyV2ApiSpecs.GetCountryStatesCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/countries/${countryId}/states/count`,
         });
     }

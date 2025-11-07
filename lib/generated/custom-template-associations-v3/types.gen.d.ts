@@ -1,47 +1,21 @@
-export type BaseError = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
-export type CustomTemplateAssociation = {
-    id?: number;
-    channel_id?: number;
-    entity_type?: 'product' | 'category' | 'brand' | 'page';
-    entity_id?: number;
-    file_name?: string;
-    is_valid?: boolean;
-    date_created?: string;
-    date_modified?: string;
-};
-export type entity_type = 'product' | 'category' | 'brand' | 'page';
-export type CustomTemplateAssociationUpsert = {
-    channel_id: number;
-    entity_type: 'product' | 'category' | 'brand' | 'page';
-    entity_id: number;
-    file_name: string;
-};
-export type DetailedErrors = {
-    [key: string]: (string);
-};
-export type Error = {
+export type _Error = {
     status?: number;
     message?: string;
 };
-export type ErrorResponse = BaseError & {
-    errors?: DetailedErrors;
-};
 export type ErrorResponse400 = {
-    schema?: Error;
+    schema?: _Error;
 };
 export type ErrorResponse404 = {
-    schema?: Error;
+    schema?: _Error;
 };
 export type ErrorResponse409 = {
-    schema?: Error;
+    schema?: _Error;
 };
 export type ErrorResponse422 = {
-    schema?: Error;
+    schema?: _Error;
 };
 export type MetaPaginationObject = {
     pagination?: {
@@ -56,54 +30,101 @@ export type MetaPaginationObject = {
         };
     };
 };
-export type ParameterAccept = string;
-export type ParameterChannelIdQuery = number;
-export type ParameterContentType = string;
-export type ParameterEntityIdInQuery = Array<(number)>;
-export type ParameterIdInQuery = Array<(number)>;
-export type ParameterIsValidQuery = boolean;
-export type ParameterLimitQuery = number;
-export type ParameterPageQuery = number;
-export type ParameterTypeQuery = 'product' | 'category' | 'brand' | 'page';
-export type GetCustomTemplateAssociationsData = {
+export type DetailedErrors = {
+    [key: string]: string;
+};
+export type BaseError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+};
+export type ErrorResponse = BaseError & {
+    errors?: DetailedErrors;
+};
+export type CustomTemplateAssociation = {
+    id?: number;
+    channel_id?: number;
+    entity_type?: 'product' | 'category' | 'brand' | 'page';
+    entity_id?: number;
+    file_name?: string;
+    is_valid?: boolean;
+    date_created?: string;
+    date_modified?: string;
+};
+export type CustomTemplateAssociationUpsert = {
+    channel_id: number;
+    entity_type: 'product' | 'category' | 'brand' | 'page';
+    entity_id: number;
+    file_name: string;
+};
+export type Accept = string;
+export type ContentType = string;
+export type IdInQuery = Array<number>;
+export type ChannelIdQuery = number;
+export type EntityIdInQuery = Array<number>;
+export type TypeQuery = 'product' | 'category' | 'brand' | 'page';
+export type LimitQuery = number;
+export type PageQuery = number;
+export type IsValidQuery = boolean;
+export type DeleteCustomTemplateAssociationsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
+    query?: {
+        'id:in'?: Array<number>;
+        channel_id?: number;
+        type?: 'product' | 'category' | 'brand' | 'page';
+        'entity_id:in'?: Array<number>;
+    };
+    url: '/storefront/custom-template-associations';
+};
+export type DeleteCustomTemplateAssociationsResponses = {
+    204: void;
+};
+export type DeleteCustomTemplateAssociationsResponse = DeleteCustomTemplateAssociationsResponses[keyof DeleteCustomTemplateAssociationsResponses];
+export type GetCustomTemplateAssociationsData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
     query?: {
         channel_id?: number;
-        'entity_id:in'?: Array<(number)>;
-        is_valid?: boolean;
+        'entity_id:in'?: Array<number>;
+        type?: 'product' | 'category' | 'brand' | 'page';
         limit?: number;
         page?: number;
-        type?: 'product' | 'category' | 'brand' | 'page';
+        is_valid?: boolean;
+    };
+    url: '/storefront/custom-template-associations';
+};
+export type GetCustomTemplateAssociationsResponses = {
+    200: {
+        data?: Array<CustomTemplateAssociation>;
+        meta?: MetaPaginationObject;
     };
 };
-export type GetCustomTemplateAssociationsResponse = ({
-    data?: Array<CustomTemplateAssociation>;
-    meta?: MetaPaginationObject;
-});
-export type GetCustomTemplateAssociationsError = unknown;
+export type GetCustomTemplateAssociationsResponse = GetCustomTemplateAssociationsResponses[keyof GetCustomTemplateAssociationsResponses];
 export type UpsertCustomTemplateAssociationsData = {
     body?: Array<CustomTemplateAssociationUpsert>;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/storefront/custom-template-associations';
 };
-export type UpsertCustomTemplateAssociationsResponse = ({
-    [key: string]: unknown;
-});
-export type UpsertCustomTemplateAssociationsError = (ErrorResponse);
-export type DeleteCustomTemplateAssociationsData = {
-    headers: {
-        Accept: string;
-    };
-    query?: {
-        channel_id?: number;
-        'entity_id:in'?: Array<(number)>;
-        'id:in'?: Array<(number)>;
-        type?: 'product' | 'category' | 'brand' | 'page';
+export type UpsertCustomTemplateAssociationsErrors = {
+    422: ErrorResponse;
+};
+export type UpsertCustomTemplateAssociationsError = UpsertCustomTemplateAssociationsErrors[keyof UpsertCustomTemplateAssociationsErrors];
+export type UpsertCustomTemplateAssociationsResponses = {
+    200: {
+        [key: string]: unknown;
     };
 };
-export type DeleteCustomTemplateAssociationsResponse = (void);
-export type DeleteCustomTemplateAssociationsError = unknown;
+export type UpsertCustomTemplateAssociationsResponse = UpsertCustomTemplateAssociationsResponses[keyof UpsertCustomTemplateAssociationsResponses];

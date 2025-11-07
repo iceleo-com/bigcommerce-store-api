@@ -1,18 +1,72 @@
-export type adjuster_Full = {
-    adjuster?: ('relative' | 'percentage') | null;
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
+};
+export type ProductModifierBase = {
+    type: 'date' | 'checkbox' | 'file' | 'text' | 'multi_line_text' | 'numbers_only_text' | 'radio_buttons' | 'rectangles' | 'dropdown' | 'product_list' | 'product_list_with_images' | 'swatch';
+    required: boolean;
+    sort_order?: number;
+    config?: ConfigFull;
+    display_name?: string;
+};
+export type ProductModifierPost = {
+    type: 'date' | 'checkbox' | 'file' | 'text' | 'multi_line_text' | 'numbers_only_text' | 'radio_buttons' | 'rectangles' | 'dropdown' | 'product_list' | 'product_list_with_images' | 'swatch';
+    required: boolean;
+    sort_order?: number;
+    config?: ConfigFull;
+    option_values?: Array<{
+        id?: number;
+        is_default?: boolean;
+        adjusters?: {
+            price?: {
+                adjuster?: string;
+                adjuster_value?: number;
+            };
+        };
+    }>;
+    display_name: string;
+};
+export type ProductModifierFull = ProductModifierBase & {
+    id?: number;
+    product_id?: number;
+    name?: string;
+    option_values?: Array<ProductModifierOptionValueFull>;
+};
+export type ProductModifierOptionValueBase = {
+    is_default?: boolean;
+    label: string;
+    sort_order: number;
+    value_data?: {
+        [key: string]: unknown;
+    } | null;
+    adjusters?: AdjustersFull;
+};
+export type ProductModifierOptionValueFull = ProductModifierOptionValueBase & {
+    id?: number;
+    option_id?: number;
+};
+export type AdjusterFull = {
+    adjuster?: 'relative' | 'percentage';
     adjuster_value?: number;
 };
-export type adjuster = 'relative' | 'percentage';
-export type adjusters_Full = {
-    price?: adjuster_Full;
-    weight?: adjuster_Full;
-    image_url?: string;
-    purchasing_disabled?: {
-        status?: boolean;
-        message?: string;
+export type MetaCollectionFull = {
+    pagination?: PaginationFull;
+};
+export type PaginationFull = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: {
+        previous?: string;
+        current?: string;
+        next?: string;
     };
 };
-export type config_Full = {
+export type MetaEmptyFull = {
+    [key: string]: unknown;
+};
+export type ConfigFull = {
     default_value?: string;
     checked_by_default?: boolean;
     checkbox_label?: string;
@@ -21,8 +75,8 @@ export type config_Full = {
     date_earliest_value?: string;
     date_latest_value?: string;
     file_types_mode?: 'specific' | 'all';
-    file_types_supported?: Array<(string)>;
-    file_types_other?: Array<(string)>;
+    file_types_supported?: Array<string>;
+    file_types_other?: Array<string>;
     file_max_size?: number;
     text_characters_limited?: boolean;
     text_min_length?: number;
@@ -38,82 +92,26 @@ export type config_Full = {
     product_list_adjusts_pricing?: boolean;
     product_list_shipping_calc?: 'none' | 'weight' | 'package';
 };
-export type date_limit_mode = 'earliest' | 'range' | 'latest';
-export type file_types_mode = 'specific' | 'all';
-export type number_limit_mode = 'lowest' | 'highest' | 'range';
-export type product_list_shipping_calc = 'none' | 'weight' | 'package';
-export type metaCollection_Full = {
-    pagination?: pagination_Full;
-};
-export type metaEmpty_Full = {
-    [key: string]: unknown;
-};
-export type pagination_Full = {
-    total?: number;
-    count?: number;
-    per_page?: number;
-    current_page?: number;
-    total_pages?: number;
-    links?: {
-        previous?: string;
-        current?: string;
-        next?: string;
+export type AdjustersFull = {
+    price?: AdjusterFull;
+    weight?: AdjusterFull;
+    image_url?: string;
+    purchasing_disabled?: {
+        status?: boolean;
+        message?: string;
     };
 };
-export type ParameterAccept = string;
-export type ParameterContentType = string;
-export type ParameterExcludeFieldsParam = Array<(string)>;
-export type ParameterIncludeFieldsParam = Array<(string)>;
-export type ParameterLimitParam = number;
-export type ParameterModifierIdParam = number;
-export type ParameterPageParam = number;
-export type ParameterProductIdParam = number;
-export type ParameterValueIdParam = number;
-export type productModifier_Base = {
-    type: 'date' | 'checkbox' | 'file' | 'text' | 'multi_line_text' | 'numbers_only_text' | 'radio_buttons' | 'rectangles' | 'dropdown' | 'product_list' | 'product_list_with_images' | 'swatch';
-    required: boolean;
-    sort_order?: number;
-    config?: config_Full;
-    display_name?: string;
-};
-export type type = 'date' | 'checkbox' | 'file' | 'text' | 'multi_line_text' | 'numbers_only_text' | 'radio_buttons' | 'rectangles' | 'dropdown' | 'product_list' | 'product_list_with_images' | 'swatch';
-export type productModifier_Full = productModifier_Base & {
-    id?: number;
-    product_id?: number;
-    name?: string;
-    option_values?: Array<productModifierOptionValue_Full>;
-};
-export type productModifier_Post = {
-    type: 'date' | 'checkbox' | 'file' | 'text' | 'multi_line_text' | 'numbers_only_text' | 'radio_buttons' | 'rectangles' | 'dropdown' | 'product_list' | 'product_list_with_images' | 'swatch';
-    required: boolean;
-    sort_order?: number;
-    config?: config_Full;
-    option_values?: Array<{
-        id?: number;
-        is_default?: boolean;
-        adjusters?: {
-            price?: {
-                adjuster?: string;
-                adjuster_value?: number;
-            };
-        };
-    }>;
-    display_name: string;
-};
-export type productModifierOptionValue_Base = {
-    is_default?: boolean;
-    label: string;
-    sort_order: number;
-    value_data?: {
-        [key: string]: unknown;
-    } | null;
-    adjusters?: adjusters_Full;
-};
-export type productModifierOptionValue_Full = productModifierOptionValue_Base & {
-    id?: number;
-    option_id?: number;
-};
+export type ProductIdParam = number;
+export type ModifierIdParam = number;
+export type ValueIdParam = number;
+export type Accept = string;
+export type ContentType = string;
+export type PageParam = number;
+export type LimitParam = number;
+export type IncludeFieldsParam = Array<string>;
+export type ExcludeFieldsParam = Array<string>;
 export type GetProductModifiersData = {
+    body?: never;
     headers: {
         Accept: string;
     };
@@ -121,19 +119,22 @@ export type GetProductModifiersData = {
         product_id: number;
     };
     query?: {
-        exclude_fields?: Array<(string)>;
-        include_fields?: Array<(string)>;
-        limit?: number;
+        include_fields?: Array<string>;
+        exclude_fields?: Array<string>;
         page?: number;
+        limit?: number;
+    };
+    url: '/catalog/products/{product_id}/modifiers';
+};
+export type GetProductModifiersResponses = {
+    200: {
+        data?: Array<ProductModifierFull>;
+        meta?: MetaCollectionFull;
     };
 };
-export type GetProductModifiersResponse = ({
-    data?: Array<productModifier_Full>;
-    meta?: metaCollection_Full;
-});
-export type GetProductModifiersError = unknown;
+export type GetProductModifiersResponse = GetProductModifiersResponses[keyof GetProductModifiersResponses];
 export type CreateProductModifierData = {
-    body?: productModifier_Post;
+    body?: ProductModifierPost;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -141,45 +142,86 @@ export type CreateProductModifierData = {
     path: {
         product_id: number;
     };
+    query?: never;
+    url: '/catalog/products/{product_id}/modifiers';
 };
-export type CreateProductModifierResponse = ({
-    data?: {
-        items?: productModifier_Full;
+export type CreateProductModifierErrors = {
+    409: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
     };
-    meta?: metaEmpty_Full;
-});
-export type CreateProductModifierError = ({
-    errors?: {
-        [key: string]: unknown;
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
     };
-    instance?: string;
-    status?: number;
-    title?: string;
-    type?: string;
-});
-export type GetProductModifierData = {
+};
+export type CreateProductModifierError = CreateProductModifierErrors[keyof CreateProductModifierErrors];
+export type CreateProductModifierResponses = {
+    200: {
+        data?: {
+            items?: ProductModifierFull;
+        };
+        meta?: MetaEmptyFull;
+    };
+};
+export type CreateProductModifierResponse = CreateProductModifierResponses[keyof CreateProductModifierResponses];
+export type DeleteProductModifierData = {
+    body?: never;
     headers: {
         Accept: string;
     };
     path: {
-        modifier_id: number;
         product_id: number;
+        modifier_id: number;
+    };
+    query?: never;
+    url: '/catalog/products/{product_id}/modifiers/{modifier_id}';
+};
+export type DeleteProductModifierResponses = {
+    204: void;
+};
+export type DeleteProductModifierResponse = DeleteProductModifierResponses[keyof DeleteProductModifierResponses];
+export type GetProductModifierData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        product_id: number;
+        modifier_id: number;
     };
     query?: {
-        exclude_fields?: Array<(string)>;
-        include_fields?: Array<(string)>;
+        include_fields?: Array<string>;
+        exclude_fields?: Array<string>;
+    };
+    url: '/catalog/products/{product_id}/modifiers/{modifier_id}';
+};
+export type GetProductModifierErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
     };
 };
-export type GetProductModifierResponse = ({
-    data?: productModifier_Full;
-    meta?: metaEmpty_Full;
-});
-export type GetProductModifierError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-});
+export type GetProductModifierError = GetProductModifierErrors[keyof GetProductModifierErrors];
+export type GetProductModifierResponses = {
+    200: {
+        data?: ProductModifierFull;
+        meta?: MetaEmptyFull;
+    };
+};
+export type GetProductModifierResponse = GetProductModifierResponses[keyof GetProductModifierResponses];
 export type UpdateProductModifierData = {
     body?: {
         type: 'date' | 'checkbox' | 'file' | 'text' | 'multi_line_text' | 'numbers_only_text' | 'radio_buttons' | 'rectangles' | 'dropdown' | 'product_list' | 'product_list_with_images' | 'swatch';
@@ -194,8 +236,8 @@ export type UpdateProductModifierData = {
             date_earliest_value?: string;
             date_latest_value?: string;
             file_types_mode?: 'specific' | 'all';
-            file_types_supported?: Array<(string)>;
-            file_types_other?: Array<(string)>;
+            file_types_supported?: Array<string>;
+            file_types_other?: Array<string>;
             file_max_size?: number;
             text_characters_limited?: boolean;
             text_min_length?: number;
@@ -228,48 +270,181 @@ export type UpdateProductModifierData = {
         'Content-Type': string;
     };
     path: {
-        modifier_id: number;
         product_id: number;
+        modifier_id: number;
+    };
+    query?: never;
+    url: '/catalog/products/{product_id}/modifiers/{modifier_id}';
+};
+export type UpdateProductModifierErrors = {
+    409: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
     };
 };
-export type UpdateProductModifierResponse = ({
-    data?: ({
-        type: 'date' | 'checkbox' | 'file' | 'text' | 'multi_line_text' | 'numbers_only_text' | 'radio_buttons' | 'rectangles' | 'dropdown' | 'product_list' | 'product_list_with_images' | 'swatch';
-        required: boolean;
-        sort_order?: number;
-        config?: {
-            default_value?: string;
-            checked_by_default?: boolean;
-            checkbox_label?: string;
-            date_limited?: boolean;
-            date_limit_mode?: 'earliest' | 'range' | 'latest';
-            date_earliest_value?: string;
-            date_latest_value?: string;
-            file_types_mode?: 'specific' | 'all';
-            file_types_supported?: Array<(string)>;
-            file_types_other?: Array<(string)>;
-            file_max_size?: number;
-            text_characters_limited?: boolean;
-            text_min_length?: number;
-            text_max_length?: number;
-            text_lines_limited?: boolean;
-            text_max_lines?: number;
-            number_limited?: boolean;
-            number_limit_mode?: 'lowest' | 'highest' | 'range';
-            number_lowest_value?: number;
-            number_highest_value?: number;
-            number_integers_only?: boolean;
-            product_list_adjusts_inventory?: boolean;
-            product_list_adjusts_pricing?: boolean;
-            product_list_shipping_calc?: 'none' | 'weight' | 'package';
+export type UpdateProductModifierError = UpdateProductModifierErrors[keyof UpdateProductModifierErrors];
+export type UpdateProductModifierResponses = {
+    200: {
+        data?: {
+            type: 'date' | 'checkbox' | 'file' | 'text' | 'multi_line_text' | 'numbers_only_text' | 'radio_buttons' | 'rectangles' | 'dropdown' | 'product_list' | 'product_list_with_images' | 'swatch';
+            required: boolean;
+            sort_order?: number;
+            config?: {
+                default_value?: string;
+                checked_by_default?: boolean;
+                checkbox_label?: string;
+                date_limited?: boolean;
+                date_limit_mode?: 'earliest' | 'range' | 'latest';
+                date_earliest_value?: string;
+                date_latest_value?: string;
+                file_types_mode?: 'specific' | 'all';
+                file_types_supported?: Array<string>;
+                file_types_other?: Array<string>;
+                file_max_size?: number;
+                text_characters_limited?: boolean;
+                text_min_length?: number;
+                text_max_length?: number;
+                text_lines_limited?: boolean;
+                text_max_lines?: number;
+                number_limited?: boolean;
+                number_limit_mode?: 'lowest' | 'highest' | 'range';
+                number_lowest_value?: number;
+                number_highest_value?: number;
+                number_integers_only?: boolean;
+                product_list_adjusts_inventory?: boolean;
+                product_list_adjusts_pricing?: boolean;
+                product_list_shipping_calc?: 'none' | 'weight' | 'package';
+            };
+            option_values?: Array<{
+                is_default?: boolean;
+                label: string;
+                sort_order: number;
+                value_data?: {
+                    [key: string]: unknown;
+                };
+                adjusters?: {
+                    price?: {
+                        adjuster?: 'relative' | 'percentage';
+                        adjuster_value?: number;
+                    };
+                    weight?: {
+                        adjuster?: 'relative' | 'percentage';
+                        adjuster_value?: number;
+                    };
+                    image_url?: string;
+                    purchasing_disabled?: {
+                        status?: boolean;
+                        message?: string;
+                    };
+                };
+                id?: number;
+            }>;
+        } & {
+            id?: number;
+            product_id?: number;
+            name?: string;
+            display_name?: string;
         };
-        option_values?: Array<{
+        meta?: MetaEmptyFull;
+    };
+};
+export type UpdateProductModifierResponse = UpdateProductModifierResponses[keyof UpdateProductModifierResponses];
+export type GetProductModifierValuesData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        product_id: number;
+        modifier_id: number;
+    };
+    query?: {
+        include_fields?: Array<string>;
+        exclude_fields?: Array<string>;
+        page?: number;
+        limit?: number;
+    };
+    url: '/catalog/products/{product_id}/modifiers/{modifier_id}/values';
+};
+export type GetProductModifierValuesResponses = {
+    200: {
+        data?: Array<ProductModifierOptionValueFull>;
+        meta?: MetaCollectionFull;
+    };
+};
+export type GetProductModifierValuesResponse = GetProductModifierValuesResponses[keyof GetProductModifierValuesResponses];
+export type CreateProductModifierValueData = {
+    body: {
+        is_default?: boolean;
+        label: string;
+        sort_order: number;
+        value_data?: {
+            [key: string]: unknown;
+        };
+    } & {
+        adjusters?: {
+            price?: {
+                adjuster?: 'relative' | 'percentage';
+                adjuster_value?: number;
+            };
+            weight?: {
+                adjuster?: 'relative' | 'percentage';
+                adjuster_value?: number;
+            };
+            image_url?: string;
+            purchasing_disabled?: {
+                status?: boolean;
+                message?: string;
+            };
+        };
+    };
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path: {
+        product_id: number;
+        modifier_id: number;
+    };
+    query?: never;
+    url: '/catalog/products/{product_id}/modifiers/{modifier_id}/values';
+};
+export type CreateProductModifierValueErrors = {
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type CreateProductModifierValueError = CreateProductModifierValueErrors[keyof CreateProductModifierValueErrors];
+export type CreateProductModifierValueResponses = {
+    200: {
+        data?: {
             is_default?: boolean;
             label: string;
             sort_order: number;
             value_data?: {
                 [key: string]: unknown;
             };
+        } & {
             adjusters?: {
                 price?: {
                     adjuster?: 'relative' | 'percentage';
@@ -285,271 +460,187 @@ export type UpdateProductModifierResponse = ({
                     message?: string;
                 };
             };
+        } & {
             id?: number;
-        }>;
-    } & {
-        id?: number;
-        product_id?: number;
-        name?: string;
-        display_name?: string;
-    });
-    meta?: metaEmpty_Full;
-});
-export type UpdateProductModifierError = ({
-    errors?: {
-        [key: string]: unknown;
-    };
-    instance?: string;
-    status?: number;
-    title?: string;
-    type?: string;
-});
-export type DeleteProductModifierData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        modifier_id: number;
-        product_id: number;
+        };
+        meta?: MetaEmptyFull;
     };
 };
-export type DeleteProductModifierResponse = (void);
-export type DeleteProductModifierError = unknown;
-export type GetProductModifierValuesData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        modifier_id: number;
-        product_id: number;
-    };
-    query?: {
-        exclude_fields?: Array<(string)>;
-        include_fields?: Array<(string)>;
-        limit?: number;
-        page?: number;
-    };
-};
-export type GetProductModifierValuesResponse = ({
-    data?: Array<productModifierOptionValue_Full>;
-    meta?: metaCollection_Full;
-});
-export type GetProductModifierValuesError = unknown;
-export type CreateProductModifierValueData = {
-    body: (({
-        is_default?: boolean;
-        label: string;
-        sort_order: number;
-        value_data?: {
-            [key: string]: unknown;
-        };
-    } & {
-        adjusters?: {
-            price?: {
-                adjuster?: ('relative' | 'percentage') | null;
-                adjuster_value?: number;
-            };
-            weight?: {
-                adjuster?: ('relative' | 'percentage') | null;
-                adjuster_value?: number;
-            };
-            image_url?: string;
-            purchasing_disabled?: {
-                status?: boolean;
-                message?: string;
-            };
-        };
-    }));
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path: {
-        modifier_id: number;
-        product_id: number;
-    };
-};
-export type CreateProductModifierValueResponse = ({
-    data?: (({
-        is_default?: boolean;
-        label: string;
-        sort_order: number;
-        value_data?: {
-            [key: string]: unknown;
-        };
-    } & {
-        adjusters?: {
-            price?: {
-                adjuster?: 'relative' | 'percentage';
-                adjuster_value?: number;
-            };
-            weight?: {
-                adjuster?: 'relative' | 'percentage';
-                adjuster_value?: number;
-            };
-            image_url?: string;
-            purchasing_disabled?: {
-                status?: boolean;
-                message?: string;
-            };
-        };
-    }) & {
-        id?: number;
-    });
-    meta?: metaEmpty_Full;
-});
-export type CreateProductModifierValueError = ({
-    errors?: {
-        [key: string]: unknown;
-    };
-    instance?: string;
-    status?: number;
-    title?: string;
-    type?: string;
-});
-export type GetProductModifierValueData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        modifier_id: number;
-        product_id: number;
-        value_id: number;
-    };
-    query?: {
-        exclude_fields?: Array<(string)>;
-        include_fields?: Array<(string)>;
-    };
-};
-export type GetProductModifierValueResponse = ({
-    data?: productModifierOptionValue_Full;
-    meta?: metaEmpty_Full;
-});
-export type GetProductModifierValueError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-});
-export type UpdateProductModifierValueData = {
-    body: (({
-        is_default?: boolean;
-        label: string;
-        sort_order: number;
-        value_data?: {
-            [key: string]: unknown;
-        };
-    } & {
-        adjusters?: {
-            price?: {
-                adjuster?: ('relative' | 'percentage') | null;
-                adjuster_value?: number;
-            };
-            weight?: {
-                adjuster?: ('relative' | 'percentage') | null;
-                adjuster_value?: number;
-            };
-            image_url?: string;
-            purchasing_disabled?: {
-                status?: boolean;
-                message?: string;
-            };
-        };
-    }) & {
-        id?: number;
-    });
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path: {
-        modifier_id: number;
-        product_id: number;
-        value_id: number;
-    };
-};
-export type UpdateProductModifierValueResponse = ({
-    data?: (({
-        is_default?: boolean;
-        label: string;
-        sort_order: number;
-        value_data?: {
-            [key: string]: unknown;
-        };
-    } & {
-        adjusters?: {
-            price?: {
-                adjuster?: 'relative' | 'percentage';
-                adjuster_value?: number;
-            };
-            weight?: {
-                adjuster?: 'relative' | 'percentage';
-                adjuster_value?: number;
-            };
-            image_url?: string;
-            purchasing_disabled?: {
-                status?: boolean;
-                message?: string;
-            };
-        };
-    }) & {
-        id?: number;
-    });
-    meta?: metaEmpty_Full;
-});
-export type UpdateProductModifierValueError = ({
-    errors?: {
-        [key: string]: unknown;
-    };
-    instance?: string;
-    status?: number;
-    title?: string;
-    type?: string;
-});
+export type CreateProductModifierValueResponse = CreateProductModifierValueResponses[keyof CreateProductModifierValueResponses];
 export type DeleteProductModifierValueData = {
+    body?: never;
     headers: {
         Accept: string;
     };
     path: {
-        modifier_id: number;
         product_id: number;
+        modifier_id: number;
         value_id: number;
     };
+    query?: never;
+    url: '/catalog/products/{product_id}/modifiers/{modifier_id}/values/{value_id}';
 };
-export type DeleteProductModifierValueResponse = (void);
-export type DeleteProductModifierValueError = unknown;
+export type DeleteProductModifierValueResponses = {
+    204: void;
+};
+export type DeleteProductModifierValueResponse = DeleteProductModifierValueResponses[keyof DeleteProductModifierValueResponses];
+export type GetProductModifierValueData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        product_id: number;
+        modifier_id: number;
+        value_id: number;
+    };
+    query?: {
+        include_fields?: Array<string>;
+        exclude_fields?: Array<string>;
+    };
+    url: '/catalog/products/{product_id}/modifiers/{modifier_id}/values/{value_id}';
+};
+export type GetProductModifierValueErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+export type GetProductModifierValueError = GetProductModifierValueErrors[keyof GetProductModifierValueErrors];
+export type GetProductModifierValueResponses = {
+    200: {
+        data?: ProductModifierOptionValueFull;
+        meta?: MetaEmptyFull;
+    };
+};
+export type GetProductModifierValueResponse = GetProductModifierValueResponses[keyof GetProductModifierValueResponses];
+export type UpdateProductModifierValueData = {
+    body: {
+        is_default?: boolean;
+        label: string;
+        sort_order: number;
+        value_data?: {
+            [key: string]: unknown;
+        };
+    } & {
+        adjusters?: {
+            price?: {
+                adjuster?: 'relative' | 'percentage';
+                adjuster_value?: number;
+            };
+            weight?: {
+                adjuster?: 'relative' | 'percentage';
+                adjuster_value?: number;
+            };
+            image_url?: string;
+            purchasing_disabled?: {
+                status?: boolean;
+                message?: string;
+            };
+        };
+    } & {
+        id?: number;
+    };
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path: {
+        product_id: number;
+        modifier_id: number;
+        value_id: number;
+    };
+    query?: never;
+    url: '/catalog/products/{product_id}/modifiers/{modifier_id}/values/{value_id}';
+};
+export type UpdateProductModifierValueErrors = {
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type UpdateProductModifierValueError = UpdateProductModifierValueErrors[keyof UpdateProductModifierValueErrors];
+export type UpdateProductModifierValueResponses = {
+    200: {
+        data?: {
+            is_default?: boolean;
+            label: string;
+            sort_order: number;
+            value_data?: {
+                [key: string]: unknown;
+            };
+        } & {
+            adjusters?: {
+                price?: {
+                    adjuster?: 'relative' | 'percentage';
+                    adjuster_value?: number;
+                };
+                weight?: {
+                    adjuster?: 'relative' | 'percentage';
+                    adjuster_value?: number;
+                };
+                image_url?: string;
+                purchasing_disabled?: {
+                    status?: boolean;
+                    message?: string;
+                };
+            };
+        } & {
+            id?: number;
+        };
+        meta?: MetaEmptyFull;
+    };
+};
+export type UpdateProductModifierValueResponse = UpdateProductModifierValueResponses[keyof UpdateProductModifierValueResponses];
 export type CreateProductModifierImageData = {
     body?: {
-        image_file?: (Blob | File);
+        image_file?: Blob | File;
     };
     headers: {
         Accept: string;
     };
     path: {
-        modifier_id: number;
         product_id: number;
+        modifier_id: number;
         value_id: number;
     };
+    query?: never;
+    url: '/catalog/products/{product_id}/modifiers/{modifier_id}/values/{value_id}/image';
 };
-export type CreateProductModifierImageResponse = ({
-    data?: {
-        image_url?: string;
-    };
-    meta?: metaEmpty_Full;
-});
-export type CreateProductModifierImageError = ({
-    [key: string]: unknown;
-} | {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-} | {
-    errors?: {
+export type CreateProductModifierImageErrors = {
+    400: {
         [key: string]: unknown;
     };
-    instance?: string;
-    status?: number;
-    title?: string;
-    type?: string;
-});
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type CreateProductModifierImageError = CreateProductModifierImageErrors[keyof CreateProductModifierImageErrors];
+export type CreateProductModifierImageResponses = {
+    200: {
+        data?: {
+            image_url?: string;
+        };
+        meta?: MetaEmptyFull;
+    };
+};
+export type CreateProductModifierImageResponse = CreateProductModifierImageResponses[keyof CreateProductModifierImageResponses];

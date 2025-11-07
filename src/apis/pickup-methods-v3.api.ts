@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as PickupMethodsV3ApiSpecs from '../generated/pickup-methods-v3';
 export * as PickupMethodsV3ApiSpecs from '../generated/pickup-methods-v3';
 
@@ -25,7 +26,7 @@ export class PickupMethodsV3Api {
     getPickupMethods(
         query?: PickupMethodsV3ApiSpecs.GetPickupMethodsData['query'],
     ) {
-        return this.request.get<PickupMethodsV3ApiSpecs.GetPickupMethodsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<PickupMethodsV3ApiSpecs.GetPickupMethodsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/pickup/methods',
             query,
         });
@@ -44,7 +45,7 @@ export class PickupMethodsV3Api {
     postPickupMethods(
         requestBody: PickupMethodsV3ApiSpecs.PostPickupMethodsData['body'],
     ) {
-        return this.request.post<PickupMethodsV3ApiSpecs.PostPickupMethodsResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<PickupMethodsV3ApiSpecs.PostPickupMethodsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/pickup/methods',
             contentType: 'application/json',
             body: requestBody,
@@ -66,7 +67,7 @@ export class PickupMethodsV3Api {
     putPickupMethods(
         requestBody: PickupMethodsV3ApiSpecs.PutPickupMethodsData['body'],
     ) {
-        return this.request.put<PickupMethodsV3ApiSpecs.PutPickupMethodsResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<PickupMethodsV3ApiSpecs.PutPickupMethodsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/pickup/methods',
             contentType: 'application/json',
             body: requestBody,
@@ -81,7 +82,7 @@ export class PickupMethodsV3Api {
     deletePickupMethods(
         query?: PickupMethodsV3ApiSpecs.DeletePickupMethodsData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<PickupMethodsV3ApiSpecs.DeletePickupMethodsResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/pickup/methods',
             query,
         });

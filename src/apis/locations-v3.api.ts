@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as LocationsV3ApiSpecs from '../generated/locations-v3';
 export * as LocationsV3ApiSpecs from '../generated/locations-v3';
 
@@ -13,11 +14,16 @@ export class LocationsV3Api {
      * Get Locations
      *
      * List locations. You can use optional filter parameters.
+
+     **Limits**
+     * Limit of 50 concurrent requests.
+     * Limit of 1000 items for payload length.
+
      */
     getLocations(
         query?: LocationsV3ApiSpecs.GetLocationsData['query'],
     ) {
-        return this.request.get<LocationsV3ApiSpecs.GetLocationsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.GetLocationsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/inventory/locations',
             query,
         });
@@ -27,11 +33,16 @@ export class LocationsV3Api {
      * Create Locations
      *
      * Create new locations.
+
+     **Limits**
+     * Limit of 50 concurrent requests.
+     * Limit of 100 active locations.
+
      */
     createLocations(
         requestBody: LocationsV3ApiSpecs.CreateLocationsData['body'],
     ) {
-        return this.request.post<LocationsV3ApiSpecs.CreateLocationsResponse, LocationsV3ApiSpecs.CreateLocationsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.CreateLocationsResponses[200]>>,RequestErrorResponse<422, Required<LocationsV3ApiSpecs.CreateLocationsErrors[422]>>>({
             path: 'v3/inventory/locations',
             contentType: 'application/json',
             body: requestBody,
@@ -41,12 +52,18 @@ export class LocationsV3Api {
     /**
      * Update Locations
      *
-     * Update existing locations.
+     * 
+     Update existing locations.
+
+     **Limits**
+     * Limit of 50 concurrent requests.
+     * Limit of 100 active locations.
+
      */
     updateLocations(
         requestBody: LocationsV3ApiSpecs.UpdateLocationsData['body'],
     ) {
-        return this.request.put<LocationsV3ApiSpecs.UpdateLocationsResponse, LocationsV3ApiSpecs.UpdateLocationsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.UpdateLocationsResponses[200]>>,RequestErrorResponse<422, Required<LocationsV3ApiSpecs.UpdateLocationsErrors[422]>>>({
             path: 'v3/inventory/locations',
             contentType: 'application/json',
             body: requestBody,
@@ -70,7 +87,7 @@ export class LocationsV3Api {
     deleteLocations(
         query?: LocationsV3ApiSpecs.DeleteLocationsData['query'],
     ) {
-        return this.request.delete<LocationsV3ApiSpecs.DeleteLocationsResponse, LocationsV3ApiSpecs.DeleteLocationsError>({
+        return this.request.delete<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.DeleteLocationsResponses[200]>>,(RequestErrorResponse<404, Required<LocationsV3ApiSpecs.DeleteLocationsErrors[404]>> | RequestErrorResponse<422, Required<LocationsV3ApiSpecs.DeleteLocationsErrors[422]>>)>({
             path: 'v3/inventory/locations',
             query,
         });
@@ -82,9 +99,10 @@ export class LocationsV3Api {
      * Retrieve metafields for a location.
      */
     getLocationMetafields(
+        locationId: LocationsV3ApiSpecs.GetLocationMetafieldsData['path']['location_id'],
     ) {
-        return this.request.get<LocationsV3ApiSpecs.GetLocationMetafieldsResponse, any>({
-            path: 'v3/inventory/locations/{location_id}/metafields',
+        return this.request.get<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.GetLocationMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/inventory/locations/${locationId}/metafields`,
         });
     }
 
@@ -94,10 +112,11 @@ export class LocationsV3Api {
      * Create a location metafield.
      */
     createLocationMetafield(
+        locationId: LocationsV3ApiSpecs.CreateLocationMetafieldData['path']['location_id'],
         requestBody: LocationsV3ApiSpecs.CreateLocationMetafieldData['body'],
     ) {
-        return this.request.post<LocationsV3ApiSpecs.CreateLocationMetafieldResponse, LocationsV3ApiSpecs.CreateLocationMetafieldError>({
-            path: 'v3/inventory/locations/{location_id}/metafields',
+        return this.request.post<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.CreateLocationMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<LocationsV3ApiSpecs.CreateLocationMetafieldErrors[400]>> | RequestErrorResponse<409, Required<LocationsV3ApiSpecs.CreateLocationMetafieldErrors[409]>> | RequestErrorResponse<422, Required<LocationsV3ApiSpecs.CreateLocationMetafieldErrors[422]>>)>({
+            path: `v3/inventory/locations/${locationId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -109,9 +128,11 @@ export class LocationsV3Api {
      * Get a metafield by location.
      */
     getLocationMetafield(
+        locationId: LocationsV3ApiSpecs.GetLocationMetafieldData['path']['location_id'],
+        metafieldId: LocationsV3ApiSpecs.GetLocationMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.get<LocationsV3ApiSpecs.GetLocationMetafieldResponse, LocationsV3ApiSpecs.GetLocationMetafieldError>({
-            path: 'v3/inventory/locations/{location_id}/metafields/{metafield_id}',
+        return this.request.get<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.GetLocationMetafieldResponses[200]>>,RequestErrorResponse<404, Required<LocationsV3ApiSpecs.GetLocationMetafieldErrors[404]>>>({
+            path: `v3/inventory/locations/${locationId}/metafields/${metafieldId}`,
         });
     }
 
@@ -121,10 +142,12 @@ export class LocationsV3Api {
      * Update a metafield.
      */
     updateLocationMetafield(
+        locationId: LocationsV3ApiSpecs.UpdateLocationMetafieldData['path']['location_id'],
+        metafieldId: LocationsV3ApiSpecs.UpdateLocationMetafieldData['path']['metafield_id'],
         requestBody: LocationsV3ApiSpecs.UpdateLocationMetafieldData['body'],
     ) {
-        return this.request.put<LocationsV3ApiSpecs.UpdateLocationMetafieldResponse, LocationsV3ApiSpecs.UpdateLocationMetafieldError>({
-            path: 'v3/inventory/locations/{location_id}/metafields/{metafield_id}',
+        return this.request.put<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.UpdateLocationMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<LocationsV3ApiSpecs.UpdateLocationMetafieldErrors[400]>> | RequestErrorResponse<404, Required<LocationsV3ApiSpecs.UpdateLocationMetafieldErrors[404]>>)>({
+            path: `v3/inventory/locations/${locationId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -136,9 +159,11 @@ export class LocationsV3Api {
      * Delete a metafield.
      */
     deleteLocationMetafield(
+        locationId: LocationsV3ApiSpecs.DeleteLocationMetafieldData['path']['location_id'],
+        metafieldId: LocationsV3ApiSpecs.DeleteLocationMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.delete<any, LocationsV3ApiSpecs.DeleteLocationMetafieldError>({
-            path: 'v3/inventory/locations/{location_id}/metafields/{metafield_id}',
+        return this.request.delete<RequestSuccessResponse<204, Required<LocationsV3ApiSpecs.DeleteLocationMetafieldResponses[204]>>,RequestErrorResponse<404, Required<LocationsV3ApiSpecs.DeleteLocationMetafieldErrors[404]>>>({
+            path: `v3/inventory/locations/${locationId}/metafields/${metafieldId}`,
         });
     }
 
@@ -150,7 +175,7 @@ export class LocationsV3Api {
     getLocationsMetafields(
         query?: LocationsV3ApiSpecs.GetLocationsMetafieldsData['query'],
     ) {
-        return this.request.get<LocationsV3ApiSpecs.GetLocationsMetafieldsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.GetLocationsMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/inventory/locations/metafields',
             query,
         });
@@ -164,7 +189,7 @@ export class LocationsV3Api {
     createLocationsMetafields(
         requestBody: LocationsV3ApiSpecs.CreateLocationsMetafieldsData['body'],
     ) {
-        return this.request.post<LocationsV3ApiSpecs.CreateLocationsMetafieldsResponse, LocationsV3ApiSpecs.CreateLocationsMetafieldsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.CreateLocationsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<LocationsV3ApiSpecs.CreateLocationsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<LocationsV3ApiSpecs.CreateLocationsMetafieldsErrors[422]>>)>({
             path: 'v3/inventory/locations/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -179,7 +204,7 @@ export class LocationsV3Api {
     updateLocationsMetafields(
         requestBody: LocationsV3ApiSpecs.UpdateLocationsMetafieldsData['body'],
     ) {
-        return this.request.put<LocationsV3ApiSpecs.UpdateLocationsMetafieldsResponse, LocationsV3ApiSpecs.UpdateLocationsMetafieldsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.UpdateLocationsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<LocationsV3ApiSpecs.UpdateLocationsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<LocationsV3ApiSpecs.UpdateLocationsMetafieldsErrors[422]>>)>({
             path: 'v3/inventory/locations/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -194,7 +219,7 @@ export class LocationsV3Api {
     deleteLocationsMetafields(
         requestBody: LocationsV3ApiSpecs.DeleteLocationsMetafieldsData['body'],
     ) {
-        return this.request.delete<LocationsV3ApiSpecs.DeleteLocationsMetafieldsResponse, LocationsV3ApiSpecs.DeleteLocationsMetafieldsError>({
+        return this.request.delete<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.DeleteLocationsMetafieldsResponses[200]>>,RequestErrorResponse<422, Required<LocationsV3ApiSpecs.DeleteLocationsMetafieldsErrors[422]>>>({
             path: 'v3/inventory/locations/metafields',
             contentType: 'application/json',
             body: requestBody,

@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as TaxRatesZonesV3ApiSpecs from '../generated/tax-rates-zones-v3';
 export * as TaxRatesZonesV3ApiSpecs from '../generated/tax-rates-zones-v3';
 
@@ -17,7 +18,7 @@ export class TaxRatesZonesV3Api {
     getTaxZones(
         query?: TaxRatesZonesV3ApiSpecs.GetTaxZonesData['query'],
     ) {
-        return this.request.get<TaxRatesZonesV3ApiSpecs.GetTaxZonesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<TaxRatesZonesV3ApiSpecs.GetTaxZonesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/tax/zones',
             query,
         });
@@ -34,8 +35,9 @@ export class TaxRatesZonesV3Api {
     createTaxZones(
         requestBody: TaxRatesZonesV3ApiSpecs.CreateTaxZonesData['body'],
     ) {
-        return this.request.post<TaxRatesZonesV3ApiSpecs.CreateTaxZonesResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<TaxRatesZonesV3ApiSpecs.CreateTaxZonesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/tax/zones',
+            contentType: 'application/json',
             body: requestBody,
         });
     }
@@ -48,8 +50,9 @@ export class TaxRatesZonesV3Api {
     updateTaxZones(
         requestBody: TaxRatesZonesV3ApiSpecs.UpdateTaxZonesData['body'],
     ) {
-        return this.request.put<TaxRatesZonesV3ApiSpecs.UpdateTaxZonesResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<TaxRatesZonesV3ApiSpecs.UpdateTaxZonesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/tax/zones',
+            contentType: 'application/json',
             body: requestBody,
         });
     }
@@ -64,7 +67,7 @@ export class TaxRatesZonesV3Api {
     deleteTaxZones(
         query?: TaxRatesZonesV3ApiSpecs.DeleteTaxZonesData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<TaxRatesZonesV3ApiSpecs.DeleteTaxZonesResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/tax/zones',
             query,
         });
@@ -78,7 +81,7 @@ export class TaxRatesZonesV3Api {
     getTaxRates(
         query?: TaxRatesZonesV3ApiSpecs.GetTaxRatesData['query'],
     ) {
-        return this.request.get<TaxRatesZonesV3ApiSpecs.GetTaxRatesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<TaxRatesZonesV3ApiSpecs.GetTaxRatesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/tax/rates',
             query,
         });
@@ -92,8 +95,9 @@ export class TaxRatesZonesV3Api {
     createTaxRates(
         requestBody: TaxRatesZonesV3ApiSpecs.CreateTaxRatesData['body'],
     ) {
-        return this.request.post<TaxRatesZonesV3ApiSpecs.CreateTaxRatesResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<TaxRatesZonesV3ApiSpecs.CreateTaxRatesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/tax/rates',
+            contentType: 'application/json',
             body: requestBody,
         });
     }
@@ -106,8 +110,9 @@ export class TaxRatesZonesV3Api {
     updateTaxRates(
         requestBody: TaxRatesZonesV3ApiSpecs.UpdateTaxRatesData['body'],
     ) {
-        return this.request.put<TaxRatesZonesV3ApiSpecs.UpdateTaxRatesResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<TaxRatesZonesV3ApiSpecs.UpdateTaxRatesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/tax/rates',
+            contentType: 'application/json',
             body: requestBody,
         });
     }
@@ -122,7 +127,7 @@ export class TaxRatesZonesV3Api {
     deleteTaxRates(
         query?: TaxRatesZonesV3ApiSpecs.DeleteTaxRatesData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<TaxRatesZonesV3ApiSpecs.DeleteTaxRatesResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/tax/rates',
             query,
         });

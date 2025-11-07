@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as CustomersV2ApiSpecs from '../generated/customers-v2';
 export * as CustomersV2ApiSpecs from '../generated/customers-v2';
 
@@ -17,7 +18,7 @@ export class CustomersV2Api {
     getCustomers(
         query?: CustomersV2ApiSpecs.GetCustomersData['query'],
     ) {
-        return this.request.get<CustomersV2ApiSpecs.GetCustomersResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomersResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/customers',
             query,
         });
@@ -73,7 +74,7 @@ export class CustomersV2Api {
     createCustomer(
         requestBody: CustomersV2ApiSpecs.CreateCustomerData['body'],
     ) {
-        return this.request.post<CustomersV2ApiSpecs.CreateCustomerResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CreateCustomerResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/customers',
             contentType: 'application/json',
             body: requestBody,
@@ -87,7 +88,7 @@ export class CustomersV2Api {
      */
     deleteCustomers(
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteCustomersResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/customers',
         });
     }
@@ -100,7 +101,7 @@ export class CustomersV2Api {
     getCustomer(
         customerId: CustomersV2ApiSpecs.GetCustomerData['path']['customer_id'],
     ) {
-        return this.request.get<CustomersV2ApiSpecs.GetCustomerResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}`,
         });
     }
@@ -157,7 +158,7 @@ export class CustomersV2Api {
         customerId: CustomersV2ApiSpecs.UpdateCustomerData['path']['customer_id'],
         requestBody: CustomersV2ApiSpecs.UpdateCustomerData['body'],
     ) {
-        return this.request.put<CustomersV2ApiSpecs.UpdateCustomerResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.UpdateCustomerResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -172,7 +173,7 @@ export class CustomersV2Api {
     deleteCustomer(
         customerId: CustomersV2ApiSpecs.DeleteCustomerData['path']['customer_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteCustomerResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}`,
         });
     }
@@ -184,7 +185,7 @@ export class CustomersV2Api {
      */
     getCustomersCount(
     ) {
-        return this.request.get<CustomersV2ApiSpecs.GetCustomersCountResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomersCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/customers/count',
         });
     }
@@ -213,7 +214,7 @@ export class CustomersV2Api {
         customerId: CustomersV2ApiSpecs.ValidateCustomerPasswordData['path']['customer_id'],
         requestBody: CustomersV2ApiSpecs.ValidateCustomerPasswordData['body'],
     ) {
-        return this.request.post<CustomersV2ApiSpecs.ValidateCustomerPasswordResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.ValidateCustomerPasswordResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/validate`,
             contentType: 'application/json',
             body: requestBody,
@@ -230,7 +231,7 @@ export class CustomersV2Api {
         customerId: CustomersV2ApiSpecs.GetCustomerAddressesData['path']['customer_id'],
         query?: CustomersV2ApiSpecs.GetCustomerAddressesData['query'],
     ) {
-        return this.request.get<CustomersV2ApiSpecs.GetCustomerAddressesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerAddressesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses`,
             query,
         });
@@ -259,7 +260,7 @@ export class CustomersV2Api {
         customerId: CustomersV2ApiSpecs.CreateCustomerAddressData['path']['customer_id'],
         requestBody: CustomersV2ApiSpecs.CreateCustomerAddressData['body'],
     ) {
-        return this.request.post<CustomersV2ApiSpecs.CreateCustomerAddressResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CreateCustomerAddressResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses`,
             contentType: 'application/json',
             body: requestBody,
@@ -275,7 +276,7 @@ export class CustomersV2Api {
         customerId: CustomersV2ApiSpecs.DeleteCustomerAddressesData['path']['customer_id'],
         query?: CustomersV2ApiSpecs.DeleteCustomerAddressesData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteCustomerAddressesResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses`,
             query,
         });
@@ -291,7 +292,7 @@ export class CustomersV2Api {
         customerAddressId: CustomersV2ApiSpecs.GetCustomerAddressData['path']['customer_address_id'],
         query?: CustomersV2ApiSpecs.GetCustomerAddressData['query'],
     ) {
-        return this.request.get<CustomersV2ApiSpecs.GetCustomerAddressResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerAddressResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses/${customerAddressId}`,
             query,
         });
@@ -311,7 +312,7 @@ export class CustomersV2Api {
         customerAddressId: CustomersV2ApiSpecs.UpdateCustomerAddressData['path']['customer_address_id'],
         requestBody: CustomersV2ApiSpecs.UpdateCustomerAddressData['body'],
     ) {
-        return this.request.put<CustomersV2ApiSpecs.UpdateCustomerAddressResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.UpdateCustomerAddressResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses/${customerAddressId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -327,7 +328,7 @@ export class CustomersV2Api {
         customerId: CustomersV2ApiSpecs.DeletesCustomerAddressData['path']['customer_id'],
         customerAddressId: CustomersV2ApiSpecs.DeletesCustomerAddressData['path']['customer_address_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeletesCustomerAddressResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses/${customerAddressId}`,
         });
     }
@@ -341,7 +342,7 @@ export class CustomersV2Api {
         customerId: CustomersV2ApiSpecs.GetCustomerAddressesCountData['path']['customer_id'],
         query?: CustomersV2ApiSpecs.GetCustomerAddressesCountData['query'],
     ) {
-        return this.request.get<CustomersV2ApiSpecs.GetCustomerAddressesCountResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerAddressesCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses/count`,
             query,
         });
@@ -358,7 +359,7 @@ export class CustomersV2Api {
     getCustomerGroups(
         query?: CustomersV2ApiSpecs.GetCustomerGroupsData['query'],
     ) {
-        return this.request.get<CustomersV2ApiSpecs.GetCustomerGroupsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerGroupsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/customer_groups',
             query,
         });
@@ -378,7 +379,7 @@ export class CustomersV2Api {
     createCustomerGroup(
         requestBody: CustomersV2ApiSpecs.CreateCustomerGroupData['body'],
     ) {
-        return this.request.post<CustomersV2ApiSpecs.CreateCustomerGroupResponse, any>({
+        return this.request.post<(RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CreateCustomerGroupResponses[200]>> | RequestSuccessResponse<207, Required<CustomersV2ApiSpecs.CreateCustomerGroupResponses[207]>>),RequestErrorResponse<400, void>>({
             path: 'v2/customer_groups',
             contentType: 'application/json',
             body: requestBody,
@@ -394,7 +395,7 @@ export class CustomersV2Api {
         customerGroupId: CustomersV2ApiSpecs.GetCustomerGroupData['path']['customer_group_id'],
         query?: CustomersV2ApiSpecs.GetCustomerGroupData['query'],
     ) {
-        return this.request.get<CustomersV2ApiSpecs.GetCustomerGroupResponse, CustomersV2ApiSpecs.GetCustomerGroupError>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerGroupResponses[200]>>,RequestErrorResponse<400, Required<CustomersV2ApiSpecs.GetCustomerGroupErrors[400]>>>({
             path: `v2/customer_groups/${customerGroupId}`,
             query,
         });
@@ -413,7 +414,7 @@ export class CustomersV2Api {
         customerGroupId: CustomersV2ApiSpecs.UpdateCustomerGroupData['path']['customer_group_id'],
         requestBody: CustomersV2ApiSpecs.UpdateCustomerGroupData['body'],
     ) {
-        return this.request.put<CustomersV2ApiSpecs.UpdateCustomerGroupResponse, any>({
+        return this.request.put<(RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.UpdateCustomerGroupResponses[200]>> | RequestSuccessResponse<207, Required<CustomersV2ApiSpecs.UpdateCustomerGroupResponses[207]>>),RequestErrorResponse<400, void>>({
             path: `v2/customer_groups/${customerGroupId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -432,7 +433,7 @@ export class CustomersV2Api {
     deleteCustomerGroup(
         customerGroupId: CustomersV2ApiSpecs.DeleteCustomerGroupData['path']['customer_group_id'],
     ) {
-        return this.request.delete<any, CustomersV2ApiSpecs.DeleteCustomerGroupError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteCustomerGroupResponses[204]>>,RequestErrorResponse<400, Required<CustomersV2ApiSpecs.DeleteCustomerGroupErrors[400]>>>({
             path: `v2/customer_groups/${customerGroupId}`,
         });
     }
@@ -444,7 +445,7 @@ export class CustomersV2Api {
      */
     getCustomerGroupsCount(
     ) {
-        return this.request.get<CustomersV2ApiSpecs.GetCustomerGroupsCountResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerGroupsCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/customer_groups/count',
         });
     }

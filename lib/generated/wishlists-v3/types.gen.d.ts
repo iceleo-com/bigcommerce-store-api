@@ -1,29 +1,7 @@
-export type metaCollection = {
-    pagination?: pagination;
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
-export type pagination = {
-    total?: number;
-    count?: number;
-    per_page?: number;
-    current_page?: number;
-    total_pages?: number;
-};
-export type ParameterAccept = string;
-export type ParameterContentType = string;
-export type ParameterCustomerIdQuery = number;
-export type ParameterItemIdPath = number;
-export type ParameterLimitQuery = number;
-export type ParameterPageQuery = number;
-export type ParameterWishlistIdPath = number;
-export type wishlist_Full = {
-    id?: number;
-    customer_id?: number;
-    name?: string;
-    is_public?: boolean;
-    token?: string;
-    items?: Array<wishlistItem_Full>;
-};
-export type wishlist_Post = {
+export type WishlistPost = {
     customer_id: number;
     is_public?: boolean;
     name?: string;
@@ -32,7 +10,7 @@ export type wishlist_Post = {
         variant_id?: number;
     }>;
 };
-export type wishlist_Put = {
+export type WishlistPut = {
     customer_id: number;
     is_public?: boolean;
     name?: string;
@@ -42,134 +20,210 @@ export type wishlist_Put = {
         variant_id?: number;
     }>;
 };
-export type wishlistItem_Full = {
+export type WishlistFull = {
+    id?: number;
+    customer_id?: number;
+    name?: string;
+    is_public?: boolean;
+    token?: string;
+    items?: Array<WishlistItemFull>;
+};
+export type WishlistItemFull = {
     id?: number;
     product_id?: number;
     variant_id?: number;
 };
-export type wishlistItem_Post = {
+export type WishlistItemPost = {
     items?: Array<{
         product_id?: number;
         variant_id?: number;
     }>;
 };
+export type Pagination = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+};
+export type MetaCollection = {
+    pagination?: Pagination;
+};
+export type WishlistIdPath = number;
+export type ItemIdPath = number;
+export type CustomerIdQuery = number;
+export type PageQuery = number;
+export type LimitQuery = number;
+export type Accept = string;
+export type ContentType = string;
 export type GetWishlistsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
     query?: {
         customer_id?: number;
-        limit?: number;
         page?: number;
+        limit?: number;
+    };
+    url: '/wishlists';
+};
+export type GetWishlistsErrors = {
+    401: {
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+    500: {
+        status?: number;
+        title?: string;
+        type?: string;
     };
 };
-export type GetWishlistsResponse = ({
-    data?: Array<wishlist_Full>;
-    meta?: metaCollection;
-});
-export type GetWishlistsError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-});
+export type GetWishlistsError = GetWishlistsErrors[keyof GetWishlistsErrors];
+export type GetWishlistsResponses = {
+    200: {
+        data?: Array<WishlistFull>;
+        meta?: MetaCollection;
+    };
+};
+export type GetWishlistsResponse = GetWishlistsResponses[keyof GetWishlistsResponses];
 export type CreateWishlistData = {
-    body: wishlist_Post;
+    body: WishlistPost;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/wishlists';
 };
-export type CreateWishlistResponse = ({
-    data?: wishlist_Full;
-    meta?: {
-        [key: string]: unknown;
+export type CreateWishlistErrors = {
+    401: {
+        status?: number;
+        title?: string;
+        type?: string;
     };
-});
-export type CreateWishlistError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-});
+    500: {
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type CreateWishlistError = CreateWishlistErrors[keyof CreateWishlistErrors];
+export type CreateWishlistResponses = {
+    201: {
+        data?: WishlistFull;
+        meta?: {
+            [key: string]: unknown;
+        };
+    };
+};
+export type CreateWishlistResponse = CreateWishlistResponses[keyof CreateWishlistResponses];
 export type DeleteWishlistItemData = {
+    body?: never;
     headers: {
         Accept: string;
     };
     path: {
+        wishlist_id: number;
         item_id: number;
-        wishlist_id: number;
     };
+    query?: never;
+    url: '/wishlists/{wishlist_id}/items/{item_id}';
 };
-export type DeleteWishlistItemResponse = ({
-    data?: wishlist_Full;
-    meta?: {
+export type DeleteWishlistItemErrors = {
+    401: {
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+    404: {
         [key: string]: unknown;
     };
-});
-export type DeleteWishlistItemError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-} | {
-    [key: string]: unknown;
-});
-export type GetWishlistData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        wishlist_id: number;
+    500: {
+        status?: number;
+        title?: string;
+        type?: string;
     };
 };
-export type GetWishlistResponse = ({
-    data?: wishlist_Full;
-    meta?: {
-        [key: string]: unknown;
-    };
-});
-export type GetWishlistError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-} | {
-    [key: string]: unknown;
-});
-export type UpdateWishlistData = {
-    body: wishlist_Put;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path: {
-        wishlist_id: number;
+export type DeleteWishlistItemError = DeleteWishlistItemErrors[keyof DeleteWishlistItemErrors];
+export type DeleteWishlistItemResponses = {
+    200: {
+        data?: WishlistFull;
+        meta?: {
+            [key: string]: unknown;
+        };
     };
 };
-export type UpdateWishlistResponse = ({
-    data?: wishlist_Full;
-    meta?: {
-        [key: string]: unknown;
-    };
-});
-export type UpdateWishlistError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-});
+export type DeleteWishlistItemResponse = DeleteWishlistItemResponses[keyof DeleteWishlistItemResponses];
 export type DeleteWishlistData = {
+    body?: never;
     headers: {
         Accept: string;
     };
     path: {
         wishlist_id: number;
     };
+    query?: never;
+    url: '/wishlists/{wishlist_id}';
 };
-export type DeleteWishlistResponse = (void);
-export type DeleteWishlistError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-});
-export type AddWishlistItemData = {
-    body?: wishlistItem_Post;
+export type DeleteWishlistErrors = {
+    401: {
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+    500: {
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type DeleteWishlistError = DeleteWishlistErrors[keyof DeleteWishlistErrors];
+export type DeleteWishlistResponses = {
+    204: void;
+};
+export type DeleteWishlistResponse = DeleteWishlistResponses[keyof DeleteWishlistResponses];
+export type GetWishlistData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        wishlist_id: number;
+    };
+    query?: never;
+    url: '/wishlists/{wishlist_id}';
+};
+export type GetWishlistErrors = {
+    401: {
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+    404: {
+        [key: string]: unknown;
+    };
+    500: {
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type GetWishlistError = GetWishlistErrors[keyof GetWishlistErrors];
+export type GetWishlistResponses = {
+    200: {
+        data?: WishlistFull;
+        meta?: {
+            [key: string]: unknown;
+        };
+    };
+};
+export type GetWishlistResponse = GetWishlistResponses[keyof GetWishlistResponses];
+export type UpdateWishlistData = {
+    body: WishlistPut;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -177,15 +231,59 @@ export type AddWishlistItemData = {
     path: {
         wishlist_id: number;
     };
+    query?: never;
+    url: '/wishlists/{wishlist_id}';
 };
-export type AddWishlistItemResponse = ({
-    data?: wishlist_Full;
-    meta?: {
-        [key: string]: unknown;
+export type UpdateWishlistErrors = {
+    401: {
+        status?: number;
+        title?: string;
+        type?: string;
     };
-});
-export type AddWishlistItemError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-} | unknown);
+    500: {
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type UpdateWishlistError = UpdateWishlistErrors[keyof UpdateWishlistErrors];
+export type UpdateWishlistResponses = {
+    201: {
+        data?: WishlistFull;
+        meta?: {
+            [key: string]: unknown;
+        };
+    };
+};
+export type UpdateWishlistResponse = UpdateWishlistResponses[keyof UpdateWishlistResponses];
+export type AddWishlistItemData = {
+    body?: WishlistItemPost;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path: {
+        wishlist_id: number;
+    };
+    query?: never;
+    url: '/wishlists/{wishlist_id}/items';
+};
+export type AddWishlistItemErrors = {
+    401: {
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+    404: unknown;
+    500: unknown;
+};
+export type AddWishlistItemError = AddWishlistItemErrors[keyof AddWishlistItemErrors];
+export type AddWishlistItemResponses = {
+    201: {
+        data?: WishlistFull;
+        meta?: {
+            [key: string]: unknown;
+        };
+    };
+};
+export type AddWishlistItemResponse = AddWishlistItemResponses[keyof AddWishlistItemResponses];

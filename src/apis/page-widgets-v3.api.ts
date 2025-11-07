@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as PageWidgetsV3ApiSpecs from '../generated/page-widgets-v3';
 export * as PageWidgetsV3ApiSpecs from '../generated/page-widgets-v3';
 
@@ -17,7 +18,7 @@ export class PageWidgetsV3Api {
     getPageWidgets(
         query?: PageWidgetsV3ApiSpecs.GetPageWidgetsData['query'],
     ) {
-        return this.request.get<any, PageWidgetsV3ApiSpecs.GetPageWidgetsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<PageWidgetsV3ApiSpecs.GetPageWidgetsResponses[200]>>,RequestErrorResponse<422, Required<PageWidgetsV3ApiSpecs.GetPageWidgetsErrors[422]>>>({
             path: 'v3/content/page-widgets',
             query,
         });
@@ -31,8 +32,9 @@ export class PageWidgetsV3Api {
     createPageWidgets(
         requestBody: PageWidgetsV3ApiSpecs.CreatePageWidgetsData['body'],
     ) {
-        return this.request.post<any, PageWidgetsV3ApiSpecs.CreatePageWidgetsError>({
+        return this.request.post<RequestSuccessResponse<204, Required<PageWidgetsV3ApiSpecs.CreatePageWidgetsResponses[204]>>,RequestErrorResponse<422, Required<PageWidgetsV3ApiSpecs.CreatePageWidgetsErrors[422]>>>({
             path: 'v3/content/page-widgets',
+            contentType: 'application/json',
             body: requestBody,
         });
     }

@@ -1,7 +1,7 @@
-export type Category = id & parent_id & name & description & views & sort_order & page_title & meta_keywords & meta_description & layout_file & image_url & is_visible & search_keywords & default_product_sort & {
-    custom_url?: Url;
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
-export type category_Full = {
+export type CategoryFull = {
     readonly id?: number;
     parent_id?: number;
     name?: string;
@@ -10,78 +10,109 @@ export type category_Full = {
     sort_order?: number;
     page_title?: string;
     search_keywords?: string;
-    meta_keywords?: Array<(string)>;
+    meta_keywords?: Array<string>;
     meta_description?: string;
     layout_file?: string;
     is_visible?: boolean;
     default_product_sort?: 'use_store_settings' | 'featured' | 'newest' | 'best_selling' | 'alpha_asc' | 'alpha_desc' | 'avg_customer_review' | 'price_asc' | 'price_desc';
     image_url?: string;
-    custom_url?: customUrl_Full;
+    custom_url?: CustomUrlFull;
 };
-export type default_product_sort = 'use_store_settings' | 'featured' | 'newest' | 'best_selling' | 'alpha_asc' | 'alpha_desc' | 'avg_customer_review' | 'price_asc' | 'price_desc';
-export type CollectionMeta = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    };
-    [key: string]: unknown;
+export type MetafieldBase = {
+    key: string;
+    value: string;
+    namespace: string;
+    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    description?: string;
 };
-export type customUrl_Full = {
+export type CustomUrlFull = {
     url?: string;
     is_customized?: boolean;
 };
-export type default_product_sort2 = {
-    default_product_sort?: 'use_store_settings' | 'featured' | 'newest' | 'best_selling' | 'alpha_asc' | 'alpha_desc' | 'avg_customer_review' | 'price_asc' | 'price_desc';
+export type MetaCollectionFull = {
+    pagination?: PaginationFull;
 };
-export type description = {
-    description?: string;
+export type PaginationFull = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: {
+        previous?: string;
+        current?: string;
+        next?: string;
+    };
 };
-export type Error = {
-    status?: number;
-    title?: string;
-    type?: string;
-    errors?: ErrorDetail;
+export type MetaEmptyFull = {
+    [key: string]: unknown;
 };
-export type error_Base = {
+export type ErrorBase = {
     status?: number;
     title?: string;
     type?: string;
     instance?: string;
 };
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-export type id = {
+export type MetafieldFull = {
     readonly id?: number;
+} & MetafieldBase & {
+    resource_type?: 'category' | 'brand' | 'product' | 'variant';
+    resource_id?: number;
+    readonly date_created?: string;
+    readonly date_modified?: string;
 };
-export type image_url = {
-    image_url?: string;
+export type ProductSortOrder = {
+    product_id: number;
+    sort_order: number;
 };
-export type is_visible = {
-    is_visible?: boolean;
+export type Category = Id & ParentId & Name & Description & Views & SortOrder & PageTitle & MetaKeywords & MetaDescription & LayoutFile & ImageUrl & IsVisible & SearchKeywords & DefaultProductSort & {
+    custom_url?: Url;
 };
-export type layout_file = {
+export type Url = {
+    url?: string;
+    is_customized?: boolean;
+};
+export type DefaultProductSort = {
+    default_product_sort?: 'use_store_settings' | 'featured' | 'newest' | 'best_selling' | 'alpha_asc' | 'alpha_desc' | 'avg_customer_review' | 'price_asc' | 'price_desc';
+};
+export type Name = {
+    name?: string;
+};
+export type Description = {
+    description?: string;
+};
+export type Views = {
+    views?: number;
+};
+export type SortOrder = {
+    sort_order?: number;
+};
+export type PageTitle = {
+    page_title?: string;
+};
+export type SearchKeywords = {
+    search_keywords?: string;
+};
+export type MetaKeywords = {
+    meta_keywords?: Array<string>;
+};
+export type LayoutFile = {
     layout_file?: string;
 };
-export type meta_description = {
+export type IsVisible = {
+    is_visible?: boolean;
+};
+export type ImageUrl = {
+    image_url?: string;
+};
+export type MetaDescription = {
     meta_description?: string;
 };
-export type meta_keywords = {
-    meta_keywords?: Array<(string)>;
+export type Id = {
+    readonly id?: number;
 };
-export type metaCollection_Full = {
-    pagination?: pagination_Full;
-};
-export type metaEmpty_Full = {
-    [key: string]: unknown;
+export type ParentId = {
+    parent_id?: number;
 };
 export type Metafield = {
     permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
@@ -96,138 +127,29 @@ export type Metafield = {
     date_modified?: string;
     readonly owner_client_id?: string;
 };
-export type permission_set = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-export type resource_type = 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-export type metafield_Base = {
-    key: string;
-    value: string;
-    namespace: string;
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    description?: string;
-};
-export type metafield_Full = {
-    readonly id?: number;
-} & metafield_Base & {
-    resource_type?: 'category' | 'brand' | 'product' | 'variant';
-    resource_id?: number;
-    readonly date_created?: string;
-    readonly date_modified?: string;
-};
-export type resource_type2 = 'category' | 'brand' | 'product' | 'variant';
-export type MetafieldBase_Post = {
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace: string;
-    key: string;
-    value: string;
-    description?: string;
-};
-export type MetafieldBase_Put = {
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace?: string;
-    key?: string;
-    value?: string;
-    description?: string;
-};
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<(number)>;
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
     meta?: CollectionMeta;
 };
-export type MetaFieldCollectionResponse_POST_PUT = {
+export type MetaFieldCollectionResponsePostPut = {
     data?: Array<Metafield>;
     errors?: Array<unknown>;
     meta?: CollectionMeta;
 };
-export type MetaFieldCollectionResponsePartialSuccess_DELETE = {
-    data?: Array<(number)>;
-    errors?: Array<Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type MetaFieldCollectionResponsePartialSuccess_POST_PUT = {
+export type MetaFieldCollectionResponsePartialSuccessPostPut = {
     data?: Array<Metafield>;
-    errors?: Array<Error>;
+    errors?: Array<_Error>;
     meta?: WriteCollectionPartialSuccessMeta;
 };
-export type name = {
-    name?: string;
+export type MetaFieldCollectionResponsePartialSuccessDelete = {
+    data?: Array<number>;
+    errors?: Array<_Error>;
+    meta?: WriteCollectionPartialSuccessMeta;
 };
-export type page_title = {
-    page_title?: string;
-};
-export type pagination_Full = {
-    total?: number;
-    count?: number;
-    per_page?: number;
-    current_page?: number;
-    total_pages?: number;
-    links?: {
-        previous?: string;
-        current?: string;
-        next?: string;
-    };
-};
-export type ParameterAccept = string;
-export type ParameterCategoryIdParam = number;
-export type ParameterContentType = string;
-export type Parameterdate_created_max = string;
-export type Parameterdate_created_min = string;
-export type Parameterdate_modified_max = string;
-export type Parameterdate_modified_min = string;
-export type ParameterDirectionParam = 'asc' | 'desc';
-export type ParameterExcludeFieldsParam = Array<(string)>;
-export type ParameterIdCategoryQueryParam = number;
-export type ParameterIdGreaterParam = number;
-export type ParameterIdInParam = Array<(number)>;
-export type ParameterIdLessParam = number;
-export type ParameterIdMaxParam = number;
-export type ParameterIdMetafieldQueryParam = number;
-export type ParameterIdMinParam = number;
-export type ParameterIdNotInParam = Array<(number)>;
-export type ParameterIncludeFieldsParam = Array<(string)>;
-export type ParameterIncludeFieldsParamMetafields = Array<('resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified')>;
-export type ParameterIsVisibleParam = boolean;
-export type ParameterKeywordParam = string;
-export type ParameterLimitParam = number;
-export type ParameterMetafieldIdParam = number;
-export type ParameterMetafieldKeyInParam = Array<(string)>;
-export type ParameterMetafieldKeyParam = string;
-export type ParameterMetafieldNamespaceInParam = Array<(string)>;
-export type ParameterMetafieldNamespaceParam = string;
-export type ParameterNameLikeParam = string;
-export type ParameterNameParam = string;
-export type ParameterPageParam = number;
-export type ParameterPageTitleLikeParam = string;
-export type ParameterPageTitleParam = string;
-export type ParameterParentIdGreaterParam = number;
-export type ParameterParentIdInParam = Array<(number)>;
-export type ParameterParentIdLessParam = number;
-export type ParameterParentIdMaxParam = number;
-export type ParameterParentIdMinParam = number;
-export type ParameterParentIdParam = number;
-export type ParameterSortParam = 'name' | 'id' | 'parent_id' | 'sort_order';
-export type parent_id = {
-    parent_id?: number;
-};
-export type productSortOrder = {
-    product_id: number;
-    sort_order: number;
-};
-export type search_keywords = {
-    search_keywords?: string;
-};
-export type sort_order = {
-    sort_order?: number;
-};
-export type Url = {
-    url?: string;
-    is_customized?: boolean;
-};
-export type views = {
-    views?: number;
+export type MetaFieldCollectionDeleteResponseSuccess = {
+    data?: Array<number>;
+    errors?: Array<unknown>;
+    meta?: WriteCollectionSuccessMeta;
 };
 export type WriteCollectionPartialSuccessMeta = {
     total?: number;
@@ -239,42 +161,208 @@ export type WriteCollectionSuccessMeta = {
     success?: number;
     failed?: number;
 };
-export type GetCategoriesData = {
+export type _Error = {
+    status?: number;
+    title?: string;
+    type?: string;
+    errors?: ErrorDetail;
+};
+export type ErrorDetail = {
+    [key: string]: unknown;
+};
+export type CollectionMeta = {
+    pagination?: {
+        total?: number;
+        count?: number;
+        per_page?: number;
+        current_page?: number;
+        total_pages?: number;
+        links?: {
+            previous?: string;
+            current?: string;
+            next?: string;
+        };
+    };
+    [key: string]: unknown | {
+        total?: number;
+        count?: number;
+        per_page?: number;
+        current_page?: number;
+        total_pages?: number;
+        links?: {
+            previous?: string;
+            current?: string;
+            next?: string;
+        };
+    } | undefined;
+};
+export type MetafieldBasePost = {
+    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    namespace: string;
+    key: string;
+    value: string;
+    description?: string;
+};
+export type MetafieldBasePut = {
+    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    namespace?: string;
+    key?: string;
+    value?: string;
+    description?: string;
+};
+export type CategoryFullWritable = {
+    parent_id?: number;
+    name?: string;
+    description?: string;
+    views?: number;
+    sort_order?: number;
+    page_title?: string;
+    search_keywords?: string;
+    meta_keywords?: Array<string>;
+    meta_description?: string;
+    layout_file?: string;
+    is_visible?: boolean;
+    default_product_sort?: 'use_store_settings' | 'featured' | 'newest' | 'best_selling' | 'alpha_asc' | 'alpha_desc' | 'avg_customer_review' | 'price_asc' | 'price_desc';
+    image_url?: string;
+    custom_url?: CustomUrlFull;
+};
+export type MetaEmptyFullWritable = {
+    [key: string]: unknown;
+};
+export type MetafieldFullWritable = MetafieldBase & {
+    resource_type?: 'category' | 'brand' | 'product' | 'variant';
+    resource_id?: number;
+};
+export type CategoryWritable = ParentId & Name & Description & Views & SortOrder & PageTitle & MetaKeywords & MetaDescription & LayoutFile & ImageUrl & IsVisible & SearchKeywords & DefaultProductSort & {
+    custom_url?: Url;
+};
+export type MetafieldWritable = {
+    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    namespace?: string;
+    key?: string;
+    value?: string;
+    description?: string;
+    resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
+    id?: number;
+    date_created?: string;
+    date_modified?: string;
+};
+export type ErrorDetailWritable = {
+    [key: string]: unknown;
+};
+export type CategoryIdParam = number;
+export type MetafieldIdParam = number;
+export type IdMetafieldQueryParam = number;
+export type Accept = string;
+export type ContentType = string;
+export type PageParam = number;
+export type SortParam = 'name' | 'id' | 'parent_id' | 'sort_order';
+export type MetafieldKeyParam = string;
+export type MetafieldKeyInParam = Array<string>;
+export type MetafieldNamespaceParam = string;
+export type MetafieldNamespaceInParam = Array<string>;
+export type LimitParam = number;
+export type DirectionParam = 'asc' | 'desc';
+export type DateCreatedMin = string;
+export type DateCreatedMax = string;
+export type DateModifiedMax = string;
+export type DateModifiedMin = string;
+export type IncludeFieldsParam = Array<string>;
+export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
+export type ExcludeFieldsParam = Array<string>;
+export type KeywordParam = string;
+export type IsVisibleParam = boolean;
+export type NameParam = string;
+export type NameLikeParam = string;
+export type PageTitleLikeParam = string;
+export type PageTitleParam = string;
+export type ParentIdInParam = Array<number>;
+export type ParentIdParam = number;
+export type ParentIdMinParam = number;
+export type ParentIdMaxParam = number;
+export type ParentIdGreaterParam = number;
+export type ParentIdLessParam = number;
+export type IdCategoryQueryParam = number;
+export type IdInParam = Array<number>;
+export type IdNotInParam = Array<number>;
+export type IdMinParam = number;
+export type IdMaxParam = number;
+export type IdGreaterParam = number;
+export type IdLessParam = number;
+export type DeleteCategoriesData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
     query?: {
-        exclude_fields?: Array<(string)>;
         id?: number;
-        'id:greater'?: number;
-        'id:in'?: Array<(number)>;
-        'id:less'?: number;
-        'id:max'?: number;
+        'id:in'?: Array<number>;
+        'id:not_in'?: Array<number>;
         'id:min'?: number;
-        'id:not_in'?: Array<(number)>;
-        include_fields?: Array<(string)>;
-        is_visible?: boolean;
+        'id:max'?: number;
+        'id:greater'?: number;
+        'id:less'?: number;
+        name?: string;
+        parent_id?: number;
+        page_title?: string;
         keyword?: string;
-        limit?: number;
+        is_visible?: boolean;
+        'name:like'?: string;
+        'parent_id:in'?: Array<number>;
+        'parent_id:min'?: number;
+        'parent_id:max'?: number;
+        'parent_id:greater'?: number;
+        'parent_id:less'?: number;
+        'page_title:like'?: string;
+    };
+    url: '/catalog/categories';
+};
+export type DeleteCategoriesResponses = {
+    204: void;
+};
+export type DeleteCategoriesResponse = DeleteCategoriesResponses[keyof DeleteCategoriesResponses];
+export type GetCategoriesData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: {
+        id?: number;
+        'id:in'?: Array<number>;
+        'id:not_in'?: Array<number>;
+        'id:min'?: number;
+        'id:max'?: number;
+        'id:greater'?: number;
+        'id:less'?: number;
         name?: string;
         'name:like'?: string;
-        page?: number;
+        parent_id?: number;
+        'parent_id:in'?: Array<number>;
+        'parent_id:min'?: number;
+        'parent_id:max'?: number;
+        'parent_id:greater'?: number;
+        'parent_id:less'?: number;
         page_title?: string;
         'page_title:like'?: string;
-        parent_id?: number;
-        'parent_id:greater'?: number;
-        'parent_id:in'?: Array<(number)>;
-        'parent_id:less'?: number;
-        'parent_id:max'?: number;
-        'parent_id:min'?: number;
+        keyword?: string;
+        is_visible?: boolean;
         sort?: 'name' | 'id' | 'parent_id' | 'sort_order';
+        page?: number;
+        limit?: number;
+        include_fields?: Array<string>;
+        exclude_fields?: Array<string>;
+    };
+    url: '/catalog/categories';
+};
+export type GetCategoriesResponses = {
+    200: {
+        data?: Array<Category>;
+        meta?: MetaCollectionFull;
     };
 };
-export type GetCategoriesResponse = ({
-    data?: Array<Category>;
-    meta?: metaCollection_Full;
-});
-export type GetCategoriesError = unknown;
+export type GetCategoriesResponse = GetCategoriesResponses[keyof GetCategoriesResponses];
 export type CreateCategoryData = {
     body: {
         parent_id: number;
@@ -284,7 +372,7 @@ export type CreateCategoryData = {
         sort_order?: number;
         page_title?: string;
         search_keywords?: string;
-        meta_keywords?: Array<(string)>;
+        meta_keywords?: Array<string>;
         meta_description?: string;
         layout_file?: string;
         is_visible?: boolean;
@@ -299,49 +387,56 @@ export type CreateCategoryData = {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/catalog/categories';
 };
-export type CreateCategoryResponse = ({
-    data?: category_Full;
-    meta?: metaEmpty_Full;
-} | error_Base);
-export type CreateCategoryError = ({
-    errors?: {
-        [key: string]: unknown;
+export type CreateCategoryErrors = {
+    409: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
     };
-    instance?: string;
-    status?: number;
-    title?: string;
-    type?: string;
-});
-export type DeleteCategoriesData = {
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type CreateCategoryError = CreateCategoryErrors[keyof CreateCategoryErrors];
+export type CreateCategoryResponses = {
+    200: {
+        data?: CategoryFull;
+        meta?: MetaEmptyFull;
+    };
+    207: ErrorBase;
+};
+export type CreateCategoryResponse = CreateCategoryResponses[keyof CreateCategoryResponses];
+export type DeleteCategoryData = {
+    body?: never;
     headers: {
         Accept: string;
     };
-    query?: {
-        id?: number;
-        'id:greater'?: number;
-        'id:in'?: Array<(number)>;
-        'id:less'?: number;
-        'id:max'?: number;
-        'id:min'?: number;
-        'id:not_in'?: Array<(number)>;
-        is_visible?: boolean;
-        keyword?: string;
-        name?: string;
-        'name:like'?: string;
-        page_title?: string;
-        'page_title:like'?: string;
-        parent_id?: number;
-        'parent_id:greater'?: number;
-        'parent_id:in'?: Array<(number)>;
-        'parent_id:less'?: number;
-        'parent_id:max'?: number;
-        'parent_id:min'?: number;
+    path: {
+        category_id: number;
     };
+    query?: never;
+    url: '/catalog/categories/{category_id}';
 };
-export type DeleteCategoriesResponse = (void);
-export type DeleteCategoriesError = unknown;
+export type DeleteCategoryResponses = {
+    204: void;
+};
+export type DeleteCategoryResponse = DeleteCategoryResponses[keyof DeleteCategoryResponses];
 export type GetCategoryData = {
+    body?: never;
     headers: {
         Accept: string;
     };
@@ -349,20 +444,27 @@ export type GetCategoryData = {
         category_id: number;
     };
     query?: {
-        exclude_fields?: Array<(string)>;
-        include_fields?: Array<(string)>;
+        include_fields?: Array<string>;
+        exclude_fields?: Array<string>;
+    };
+    url: '/catalog/categories/{category_id}';
+};
+export type GetCategoryErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
     };
 };
-export type GetCategoryResponse = ({
-    data?: category_Full;
-    meta?: metaEmpty_Full;
-});
-export type GetCategoryError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-});
+export type GetCategoryError = GetCategoryErrors[keyof GetCategoryErrors];
+export type GetCategoryResponses = {
+    200: {
+        data?: CategoryFull;
+        meta?: MetaEmptyFull;
+    };
+};
+export type GetCategoryResponse = GetCategoryResponses[keyof GetCategoryResponses];
 export type UpdateCategoryData = {
     body: {
         readonly id?: number;
@@ -373,7 +475,7 @@ export type UpdateCategoryData = {
         sort_order?: number;
         page_title?: string;
         search_keywords?: string;
-        meta_keywords?: Array<(string)>;
+        meta_keywords?: Array<string>;
         meta_description?: string;
         layout_file?: string;
         is_visible?: boolean;
@@ -391,57 +493,67 @@ export type UpdateCategoryData = {
     path: {
         category_id: number;
     };
+    query?: never;
+    url: '/catalog/categories/{category_id}';
 };
-export type UpdateCategoryResponse = ({
-    data?: {
-        readonly id?: number;
-        parent_id?: number;
-        name?: string;
-        description?: string;
-        views?: number;
-        sort_order?: number;
-        page_title?: string;
-        search_keywords?: string;
-        meta_keywords?: Array<(string)>;
-        meta_description?: string;
-        layout_file?: string;
-        is_visible?: boolean;
-        default_product_sort?: 'use_store_settings' | 'featured' | 'newest' | 'best_selling' | 'alpha_asc' | 'alpha_desc' | 'avg_customer_review' | 'price_asc' | 'price_desc';
-        image_url?: string;
-        custom_url?: {
-            url?: string;
-            is_customized?: boolean;
+export type UpdateCategoryErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+    409: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type UpdateCategoryError = UpdateCategoryErrors[keyof UpdateCategoryErrors];
+export type UpdateCategoryResponses = {
+    200: {
+        data?: {
+            readonly id?: number;
+            parent_id?: number;
+            name?: string;
+            description?: string;
+            views?: number;
+            sort_order?: number;
+            page_title?: string;
+            search_keywords?: string;
+            meta_keywords?: Array<string>;
+            meta_description?: string;
+            layout_file?: string;
+            is_visible?: boolean;
+            default_product_sort?: 'use_store_settings' | 'featured' | 'newest' | 'best_selling' | 'alpha_asc' | 'alpha_desc' | 'avg_customer_review' | 'price_asc' | 'price_desc';
+            image_url?: string;
+            custom_url?: {
+                url?: string;
+                is_customized?: boolean;
+            };
+        };
+        meta?: {
+            [key: string]: unknown;
         };
     };
-    meta?: {
-        [key: string]: unknown;
-    };
-} | error_Base);
-export type UpdateCategoryError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-} | {
-    errors?: {
-        [key: string]: unknown;
-    };
-    instance?: string;
-    status?: number;
-    title?: string;
-    type?: string;
-});
-export type DeleteCategoryData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        category_id: number;
-    };
+    207: ErrorBase;
 };
-export type DeleteCategoryResponse = (void);
-export type DeleteCategoryError = unknown;
+export type UpdateCategoryResponse = UpdateCategoryResponses[keyof UpdateCategoryResponses];
 export type GetCategoryMetafieldsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
@@ -449,28 +561,31 @@ export type GetCategoryMetafieldsData = {
         category_id: number;
     };
     query?: {
-        exclude_fields?: Array<(string)>;
         id?: number;
-        'id:greater'?: number;
-        'id:in'?: Array<(number)>;
-        'id:less'?: number;
-        'id:max'?: number;
+        'id:in'?: Array<number>;
+        'id:not_in'?: Array<number>;
         'id:min'?: number;
-        'id:not_in'?: Array<(number)>;
-        include_fields?: Array<(string)>;
+        'id:max'?: number;
+        'id:greater'?: number;
+        'id:less'?: number;
         key?: string;
-        limit?: number;
         namespace?: string;
         page?: number;
+        limit?: number;
+        include_fields?: Array<string>;
+        exclude_fields?: Array<string>;
+    };
+    url: '/catalog/categories/{category_id}/metafields';
+};
+export type GetCategoryMetafieldsResponses = {
+    200: {
+        data?: Array<MetafieldFull>;
+        meta?: MetaCollectionFull;
     };
 };
-export type GetCategoryMetafieldsResponse = ({
-    data?: Array<metafield_Full>;
-    meta?: metaCollection_Full;
-});
-export type GetCategoryMetafieldsError = unknown;
+export type GetCategoryMetafieldsResponse = GetCategoryMetafieldsResponses[keyof GetCategoryMetafieldsResponses];
 export type CreateCategoryMetafieldData = {
-    body: metafield_Base;
+    body: MetafieldBase;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -478,26 +593,70 @@ export type CreateCategoryMetafieldData = {
     path: {
         category_id: number;
     };
+    query?: never;
+    url: '/catalog/categories/{category_id}/metafields';
 };
-export type CreateCategoryMetafieldResponse = ({
-    data?: metafield_Full;
-    meta?: metaEmpty_Full;
-});
-export type CreateCategoryMetafieldError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | {
-    errors?: {
-        [key: string]: unknown;
+export type CreateCategoryMetafieldErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
     };
-    instance?: string;
-    status?: number;
-    title?: string;
-    type?: string;
-});
+    409: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type CreateCategoryMetafieldError = CreateCategoryMetafieldErrors[keyof CreateCategoryMetafieldErrors];
+export type CreateCategoryMetafieldResponses = {
+    200: {
+        data?: MetafieldFull;
+        meta?: MetaEmptyFull;
+    };
+};
+export type CreateCategoryMetafieldResponse = CreateCategoryMetafieldResponses[keyof CreateCategoryMetafieldResponses];
+export type DeleteCategoryMetafieldData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        category_id: number;
+        metafield_id: number;
+    };
+    query?: never;
+    url: '/catalog/categories/{category_id}/metafields/{metafield_id}';
+};
+export type DeleteCategoryMetafieldErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+export type DeleteCategoryMetafieldError = DeleteCategoryMetafieldErrors[keyof DeleteCategoryMetafieldErrors];
+export type DeleteCategoryMetafieldResponses = {
+    204: void;
+};
+export type DeleteCategoryMetafieldResponse = DeleteCategoryMetafieldResponses[keyof DeleteCategoryMetafieldResponses];
 export type GetCategoryMetafieldData = {
+    body?: never;
     headers: {
         Accept: string;
     };
@@ -506,22 +665,29 @@ export type GetCategoryMetafieldData = {
         metafield_id: number;
     };
     query?: {
-        exclude_fields?: Array<(string)>;
-        include_fields?: Array<(string)>;
+        include_fields?: Array<string>;
+        exclude_fields?: Array<string>;
+    };
+    url: '/catalog/categories/{category_id}/metafields/{metafield_id}';
+};
+export type GetCategoryMetafieldErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
     };
 };
-export type GetCategoryMetafieldResponse = ({
-    data?: metafield_Full;
-    meta?: metaEmpty_Full;
-});
-export type GetCategoryMetafieldError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-});
+export type GetCategoryMetafieldError = GetCategoryMetafieldErrors[keyof GetCategoryMetafieldErrors];
+export type GetCategoryMetafieldResponses = {
+    200: {
+        data?: MetafieldFull;
+        meta?: MetaEmptyFull;
+    };
+};
+export type GetCategoryMetafieldResponse = GetCategoryMetafieldResponses[keyof GetCategoryMetafieldResponses];
 export type UpdateCategoryMetafieldData = {
-    body: metafield_Base;
+    body: MetafieldBase;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -530,41 +696,60 @@ export type UpdateCategoryMetafieldData = {
         category_id: number;
         metafield_id: number;
     };
+    query?: never;
+    url: '/catalog/categories/{category_id}/metafields/{metafield_id}';
 };
-export type UpdateCategoryMetafieldResponse = ({
-    data?: metafield_Full;
-    meta?: metaEmpty_Full;
-});
-export type UpdateCategoryMetafieldError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-});
-export type DeleteCategoryMetafieldData = {
+export type UpdateCategoryMetafieldErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
+    };
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+export type UpdateCategoryMetafieldError = UpdateCategoryMetafieldErrors[keyof UpdateCategoryMetafieldErrors];
+export type UpdateCategoryMetafieldResponses = {
+    200: {
+        data?: MetafieldFull;
+        meta?: MetaEmptyFull;
+    };
+};
+export type UpdateCategoryMetafieldResponse = UpdateCategoryMetafieldResponses[keyof UpdateCategoryMetafieldResponses];
+export type DeleteCategoryImageData = {
+    body?: never;
     headers: {
         Accept: string;
     };
     path: {
         category_id: number;
-        metafield_id: number;
+    };
+    query?: never;
+    url: '/catalog/categories/{category_id}/image';
+};
+export type DeleteCategoryImageErrors = {
+    401: string;
+    403: _Error;
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
     };
 };
-export type DeleteCategoryMetafieldResponse = (void);
-export type DeleteCategoryMetafieldError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-});
+export type DeleteCategoryImageError = DeleteCategoryImageErrors[keyof DeleteCategoryImageErrors];
+export type DeleteCategoryImageResponses = {
+    204: void;
+};
+export type DeleteCategoryImageResponse = DeleteCategoryImageResponses[keyof DeleteCategoryImageResponses];
 export type CreateCategoryImageData = {
     body?: {
-        image_file?: (Blob | File);
+        image_file?: Blob | File;
     };
     headers: {
         Accept: string;
@@ -572,45 +757,43 @@ export type CreateCategoryImageData = {
     path: {
         category_id: number;
     };
+    query?: never;
+    url: '/catalog/categories/{category_id}/image';
 };
-export type CreateCategoryImageResponse = ({
-    data?: {
-        image_url?: string;
-    };
-    meta?: metaEmpty_Full;
-});
-export type CreateCategoryImageError = ({
-    [key: string]: unknown;
-} | string | Error | {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-} | {
-    errors?: {
+export type CreateCategoryImageErrors = {
+    400: {
         [key: string]: unknown;
     };
-    instance?: string;
-    status?: number;
-    title?: string;
-    type?: string;
-});
-export type DeleteCategoryImageData = {
-    headers: {
-        Accept: string;
+    401: string;
+    403: _Error;
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
     };
-    path: {
-        category_id: number;
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
     };
 };
-export type DeleteCategoryImageResponse = (void);
-export type DeleteCategoryImageError = (string | Error | {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-});
+export type CreateCategoryImageError = CreateCategoryImageErrors[keyof CreateCategoryImageErrors];
+export type CreateCategoryImageResponses = {
+    200: {
+        data?: {
+            image_url?: string;
+        };
+        meta?: MetaEmptyFull;
+    };
+};
+export type CreateCategoryImageResponse = CreateCategoryImageResponses[keyof CreateCategoryImageResponses];
 export type GetCategorySortOrdersData = {
+    body?: never;
     headers: {
         Accept: string;
     };
@@ -620,14 +803,23 @@ export type GetCategorySortOrdersData = {
     query?: {
         page?: number;
     };
+    url: '/catalog/categories/{category_id}/products/sort-order';
 };
-export type GetCategorySortOrdersResponse = ({
-    data?: Array<productSortOrder>;
-    meta?: metaCollection_Full;
-});
-export type GetCategorySortOrdersError = (string | Error | error_Base);
+export type GetCategorySortOrdersErrors = {
+    401: string;
+    403: _Error;
+    404: ErrorBase;
+};
+export type GetCategorySortOrdersError = GetCategorySortOrdersErrors[keyof GetCategorySortOrdersErrors];
+export type GetCategorySortOrdersResponses = {
+    200: {
+        data?: Array<ProductSortOrder>;
+        meta?: MetaCollectionFull;
+    };
+};
+export type GetCategorySortOrdersResponse = GetCategorySortOrdersResponses[keyof GetCategorySortOrdersResponses];
 export type UpdateCategorySortOrdersData = {
-    body?: Array<productSortOrder>;
+    body?: Array<ProductSortOrder>;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -638,72 +830,118 @@ export type UpdateCategorySortOrdersData = {
     query?: {
         page?: number;
     };
+    url: '/catalog/categories/{category_id}/products/sort-order';
 };
-export type UpdateCategorySortOrdersResponse = (Array<productSortOrder>);
-export type UpdateCategorySortOrdersError = (string | Error | error_Base);
-export type GetCategoriesMetafieldsData = {
-    headers: {
-        Accept: string;
-    };
-    query?: {
-        'date_created:max'?: string;
-        'date_created:min'?: string;
-        'date_modified:max'?: string;
-        'date_modified:min'?: string;
-        direction?: 'asc' | 'desc';
-        include_fields?: Array<('resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified')>;
-        key?: string;
-        'key:in'?: Array<(string)>;
-        limit?: number;
-        namespace?: string;
-        'namespace:in'?: Array<(string)>;
-        page?: number;
-    };
+export type UpdateCategorySortOrdersErrors = {
+    401: string;
+    403: _Error;
+    404: ErrorBase;
+    415: string;
+    422: ErrorBase;
 };
-export type GetCategoriesMetafieldsResponse = (MetaFieldCollectionResponse);
-export type GetCategoriesMetafieldsError = unknown;
-export type CreateCategoriesMetafieldsData = {
-    body?: Array<(MetafieldBase_Post & {
-        resource_id: number;
-    })>;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
+export type UpdateCategorySortOrdersError = UpdateCategorySortOrdersErrors[keyof UpdateCategorySortOrdersErrors];
+export type UpdateCategorySortOrdersResponses = {
+    200: Array<ProductSortOrder>;
 };
-export type CreateCategoriesMetafieldsResponse = (MetaFieldCollectionResponse_POST_PUT);
-export type CreateCategoriesMetafieldsError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | MetaFieldCollectionResponsePartialSuccess_POST_PUT);
-export type UpdateCategoriesMetafieldsData = {
-    body?: Array<(MetafieldBase_Put & {
-        id: number;
-    })>;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-};
-export type UpdateCategoriesMetafieldsResponse = (MetaFieldCollectionResponse_POST_PUT);
-export type UpdateCategoriesMetafieldsError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | MetaFieldCollectionResponsePartialSuccess_POST_PUT);
+export type UpdateCategorySortOrdersResponse = UpdateCategorySortOrdersResponses[keyof UpdateCategorySortOrdersResponses];
 export type DeleteCategoriesMetafieldsData = {
-    body?: Array<(number)>;
+    body?: Array<number>;
     headers: {
         Accept: string;
     };
+    path?: never;
+    query?: never;
+    url: '/catalog/categories/metafields';
 };
-export type DeleteCategoriesMetafieldsResponse = (MetaFieldCollectionDeleteResponseSuccess);
-export type DeleteCategoriesMetafieldsError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | MetaFieldCollectionResponsePartialSuccess_DELETE);
+export type DeleteCategoriesMetafieldsErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
+    };
+    422: MetaFieldCollectionResponsePartialSuccessDelete;
+};
+export type DeleteCategoriesMetafieldsError = DeleteCategoriesMetafieldsErrors[keyof DeleteCategoriesMetafieldsErrors];
+export type DeleteCategoriesMetafieldsResponses = {
+    200: MetaFieldCollectionDeleteResponseSuccess;
+};
+export type DeleteCategoriesMetafieldsResponse = DeleteCategoriesMetafieldsResponses[keyof DeleteCategoriesMetafieldsResponses];
+export type GetCategoriesMetafieldsData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: {
+        page?: number;
+        limit?: number;
+        key?: string;
+        'key:in'?: Array<string>;
+        namespace?: string;
+        'namespace:in'?: Array<string>;
+        direction?: 'asc' | 'desc';
+        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
+        'date_modified:min'?: string;
+        'date_modified:max'?: string;
+        'date_created:min'?: string;
+        'date_created:max'?: string;
+    };
+    url: '/catalog/categories/metafields';
+};
+export type GetCategoriesMetafieldsResponses = {
+    200: MetaFieldCollectionResponse;
+};
+export type GetCategoriesMetafieldsResponse = GetCategoriesMetafieldsResponses[keyof GetCategoriesMetafieldsResponses];
+export type CreateCategoriesMetafieldsData = {
+    body?: Array<MetafieldBasePost & {
+        resource_id: number;
+    }>;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/catalog/categories/metafields';
+};
+export type CreateCategoriesMetafieldsErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
+    };
+    422: MetaFieldCollectionResponsePartialSuccessPostPut;
+};
+export type CreateCategoriesMetafieldsError = CreateCategoriesMetafieldsErrors[keyof CreateCategoriesMetafieldsErrors];
+export type CreateCategoriesMetafieldsResponses = {
+    200: MetaFieldCollectionResponsePostPut;
+};
+export type CreateCategoriesMetafieldsResponse = CreateCategoriesMetafieldsResponses[keyof CreateCategoriesMetafieldsResponses];
+export type UpdateCategoriesMetafieldsData = {
+    body?: Array<MetafieldBasePut & {
+        id: number;
+    }>;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/catalog/categories/metafields';
+};
+export type UpdateCategoriesMetafieldsErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
+    };
+    422: MetaFieldCollectionResponsePartialSuccessPostPut;
+};
+export type UpdateCategoriesMetafieldsError = UpdateCategoriesMetafieldsErrors[keyof UpdateCategoriesMetafieldsErrors];
+export type UpdateCategoriesMetafieldsResponses = {
+    200: MetaFieldCollectionResponsePostPut;
+};
+export type UpdateCategoriesMetafieldsResponse = UpdateCategoriesMetafieldsResponses[keyof UpdateCategoriesMetafieldsResponses];

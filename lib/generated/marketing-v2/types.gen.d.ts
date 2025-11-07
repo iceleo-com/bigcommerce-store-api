@@ -1,4 +1,35 @@
-export type banner_Base = {
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2' | (string & {});
+};
+export type CouponsResource = {
+    url?: string;
+    resource?: string;
+};
+export type CouponFull = {
+    id: number;
+    date_created?: string;
+    num_uses?: number;
+} & CouponBase;
+export type CouponBase = {
+    name: string;
+    type: 'per_item_discount' | 'per_total_discount' | 'shipping_discount' | 'free_shipping' | 'percentage_discount' | 'promotion';
+    amount: string;
+    min_purchase?: string;
+    expires?: string;
+    enabled?: boolean;
+    code: string;
+    applies_to: {
+        ids?: Array<number>;
+        entity?: string;
+    };
+    max_uses?: number;
+    max_uses_per_customer?: number;
+    restricted_to?: {
+        countries?: string;
+    };
+    shipping_methods?: Array<string>;
+};
+export type BannerBase = {
     name: string;
     content: string;
     page: 'home_page' | 'category_page' | 'brand_page' | 'search_page';
@@ -9,51 +40,19 @@ export type banner_Base = {
     visible?: string;
     item_id?: string;
 };
-export type page = 'home_page' | 'category_page' | 'brand_page' | 'search_page';
-export type location = 'top' | 'bottom';
-export type date_type = 'always' | 'custom';
-export type banner_Full = {
+export type BannerFull = {
     id?: number;
     date_created?: string;
-} & banner_Base;
-export type banner_Put = banner_Base;
-export type coupon_Base = {
-    name: string;
-    type: 'per_item_discount' | 'per_total_discount' | 'shipping_discount' | 'free_shipping' | 'percentage_discount' | 'promotion';
-    amount: string;
-    min_purchase?: string;
-    expires?: string;
-    enabled?: boolean;
-    code: string;
-    applies_to: {
-        ids?: Array<(number)>;
-        entity?: string;
-    };
-    max_uses?: number;
-    max_uses_per_customer?: number;
-    restricted_to?: {
-        countries?: string;
-    };
-    shipping_methods?: Array<(string)>;
-};
-export type type = 'per_item_discount' | 'per_total_discount' | 'shipping_discount' | 'free_shipping' | 'percentage_discount' | 'promotion';
-export type coupon_Full = {
-    id: number;
-    date_created?: string;
-    num_uses?: number;
-} & coupon_Base;
-export type CouponsResource = {
-    url?: string;
-    resource?: string;
-};
-export type giftCertificate_Base = {
+} & BannerBase;
+export type BannerPut = BannerBase;
+export type GiftCertificateBase = {
     to_name: string;
     to_email: string;
     from_name: string;
     from_email: string;
     amount: string;
 };
-export type giftCertificate_Full = giftCertificate_Base & {
+export type GiftCertificateFull = GiftCertificateBase & {
     id?: number;
     customer_id?: number;
     order_id?: number;
@@ -66,9 +65,7 @@ export type giftCertificate_Full = giftCertificate_Base & {
     status?: 'active' | 'pending' | 'disabled' | 'expired';
     currency_code?: string;
 };
-export type template = 'birthday.html' | 'girl.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html';
-export type status = 'active' | 'pending' | 'disabled' | 'expired';
-export type giftCertificate_Post = giftCertificate_Base & {
+export type GiftCertificatePut = GiftCertificateBase & {
     balance?: string;
     purchase_date?: string;
     expiry_date?: string;
@@ -79,7 +76,7 @@ export type giftCertificate_Post = giftCertificate_Base & {
     status?: 'active' | 'pending' | 'expired' | 'disabled';
     currency_code?: string;
 };
-export type giftCertificate_Put = giftCertificate_Base & {
+export type GiftCertificatePost = GiftCertificateBase & {
     balance?: string;
     purchase_date?: string;
     expiry_date?: string;
@@ -90,212 +87,310 @@ export type giftCertificate_Put = giftCertificate_Base & {
     status?: 'active' | 'pending' | 'expired' | 'disabled';
     currency_code?: string;
 };
-export type ParameterAccept = string;
-export type ParameterContentType = string;
-export type GetCouponsData = {
-    headers: {
-        Accept: string;
-    };
-    query?: {
-        code?: string;
-        exclude_type?: 'per_item_discount' | 'percentage_discount' | 'per_total_discount' | 'shipping_discount' | 'free_shipping' | 'promotion';
-        id?: string;
-        limit?: number;
-        max_id?: number;
-        min_id?: number;
-        name?: string;
-        page?: number;
-        type?: 'per_item_discount' | 'percentage_discount' | 'per_total_discount' | 'shipping_discount' | 'free_shipping' | 'promotion';
-    };
-};
-export type GetCouponsResponse = (Array<coupon_Full>);
-export type GetCouponsError = unknown;
-export type CreateCouponData = {
-    body: coupon_Base;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-};
-export type CreateCouponResponse = (coupon_Full);
-export type CreateCouponError = unknown;
+export type Accept = string;
+export type ContentType = string;
 export type DeleteCouponsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
     query?: {
-        'id:in'?: Array<(number)>;
+        'id:in'?: Array<number>;
     };
+    url: '/coupons';
 };
-export type DeleteCouponsResponse = (void);
-export type DeleteCouponsError = unknown;
-export type GetCouponsCountData = {
+export type DeleteCouponsResponses = {
+    204: void;
+};
+export type DeleteCouponsResponse = DeleteCouponsResponses[keyof DeleteCouponsResponses];
+export type GetCouponsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
-};
-export type GetCouponsCountResponse = ({
-    count?: number;
-});
-export type GetCouponsCountError = unknown;
-export type UpdateCouponData = {
-    body: coupon_Base;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path: {
-        id: number;
-    };
-};
-export type UpdateCouponResponse = (coupon_Full);
-export type UpdateCouponError = unknown;
-export type DeleteCouponData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        id: number;
-    };
-};
-export type DeleteCouponResponse = (void);
-export type DeleteCouponError = unknown;
-export type GetBannersData = {
-    headers: {
-        Accept: string;
-    };
+    path?: never;
     query?: {
-        limit?: number;
-        max_id?: number;
-        min_id?: number;
-        page?: number;
-    };
-};
-export type GetBannersResponse = (Array<banner_Full>);
-export type GetBannersError = unknown;
-export type CreateBannerData = {
-    body: banner_Base;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-};
-export type CreateBannerResponse = (banner_Full);
-export type CreateBannerError = unknown;
-export type DeleteBannersData = {
-    headers: {
-        Accept: string;
-    };
-};
-export type DeleteBannersResponse = (void);
-export type DeleteBannersError = unknown;
-export type GetBannerData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        id: number;
-    };
-};
-export type GetBannerResponse = (banner_Full);
-export type GetBannerError = unknown;
-export type UpdateBannerData = {
-    body: banner_Put;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path: {
-        id: number;
-    };
-};
-export type UpdateBannerResponse = (banner_Full);
-export type UpdateBannerError = unknown;
-export type DeleteBannerData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        id: number;
-    };
-};
-export type DeleteBannerResponse = (void);
-export type DeleteBannerError = unknown;
-export type GetBannersCountData = {
-    headers: {
-        Accept: string;
-    };
-};
-export type GetBannersCountResponse = ({
-    count?: number;
-});
-export type GetBannersCountError = unknown;
-export type GetGiftCertificateData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        id: number;
-    };
-};
-export type GetGiftCertificateResponse = (giftCertificate_Full);
-export type GetGiftCertificateError = unknown;
-export type UpdateGiftCertificateData = {
-    body?: giftCertificate_Put;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path: {
-        id: number;
-    };
-};
-export type UpdateGiftCertificateResponse = (giftCertificate_Full);
-export type UpdateGiftCertificateError = unknown;
-export type DeleteGiftCertificateData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        id: number;
-    };
-};
-export type DeleteGiftCertificateResponse = (void);
-export type DeleteGiftCertificateError = unknown;
-export type GetGiftCertificatesData = {
-    headers: {
-        Accept: string;
-    };
-    query?: {
+        id?: string;
         code?: string;
-        from_email?: string;
-        from_name?: string;
-        limit?: number;
-        max_id?: number;
+        name?: string;
+        type?: 'per_item_discount' | 'percentage_discount' | 'per_total_discount' | 'shipping_discount' | 'free_shipping' | 'promotion';
         min_id?: number;
-        order_id?: number;
+        max_id?: number;
         page?: number;
-        to_email?: string;
-        to_name?: string;
+        limit?: number;
+        exclude_type?: 'per_item_discount' | 'percentage_discount' | 'per_total_discount' | 'shipping_discount' | 'free_shipping' | 'promotion';
     };
+    url: '/coupons';
 };
-export type GetGiftCertificatesResponse = (Array<giftCertificate_Full>);
-export type GetGiftCertificatesError = unknown;
-export type CreateGiftCertificateData = {
-    body?: giftCertificate_Post;
+export type GetCouponsResponses = {
+    200: Array<CouponFull>;
+};
+export type GetCouponsResponse = GetCouponsResponses[keyof GetCouponsResponses];
+export type CreateCouponData = {
+    body: CouponBase;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/coupons';
 };
-export type CreateGiftCertificateResponse = (giftCertificate_Full);
-export type CreateGiftCertificateError = unknown;
-export type DeleteGiftCertificatesData = {
+export type CreateCouponResponses = {
+    201: CouponFull;
+};
+export type CreateCouponResponse = CreateCouponResponses[keyof CreateCouponResponses];
+export type GetCouponsCountData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
+    query?: never;
+    url: '/coupons/count';
 };
-export type DeleteGiftCertificatesResponse = ({
-    [key: string]: unknown;
-});
-export type DeleteGiftCertificatesError = unknown;
+export type GetCouponsCountResponses = {
+    200: {
+        count?: number;
+    };
+};
+export type GetCouponsCountResponse = GetCouponsCountResponses[keyof GetCouponsCountResponses];
+export type DeleteCouponData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/coupons/{id}';
+};
+export type DeleteCouponResponses = {
+    204: void;
+};
+export type DeleteCouponResponse = DeleteCouponResponses[keyof DeleteCouponResponses];
+export type UpdateCouponData = {
+    body: CouponBase;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/coupons/{id}';
+};
+export type UpdateCouponResponses = {
+    200: CouponFull;
+};
+export type UpdateCouponResponse = UpdateCouponResponses[keyof UpdateCouponResponses];
+export type DeleteBannersData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/banners';
+};
+export type DeleteBannersResponses = {
+    204: void;
+};
+export type DeleteBannersResponse = DeleteBannersResponses[keyof DeleteBannersResponses];
+export type GetBannersData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: {
+        min_id?: number;
+        max_id?: number;
+        page?: number;
+        limit?: number;
+    };
+    url: '/banners';
+};
+export type GetBannersResponses = {
+    200: Array<BannerFull>;
+};
+export type GetBannersResponse = GetBannersResponses[keyof GetBannersResponses];
+export type CreateBannerData = {
+    body: BannerBase;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/banners';
+};
+export type CreateBannerResponses = {
+    200: BannerFull;
+};
+export type CreateBannerResponse = CreateBannerResponses[keyof CreateBannerResponses];
+export type DeleteBannerData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/banners/{id}';
+};
+export type DeleteBannerResponses = {
+    204: void;
+};
+export type DeleteBannerResponse = DeleteBannerResponses[keyof DeleteBannerResponses];
+export type GetBannerData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/banners/{id}';
+};
+export type GetBannerResponses = {
+    200: BannerFull;
+};
+export type GetBannerResponse = GetBannerResponses[keyof GetBannerResponses];
+export type UpdateBannerData = {
+    body: BannerPut;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/banners/{id}';
+};
+export type UpdateBannerResponses = {
+    200: BannerFull;
+};
+export type UpdateBannerResponse = UpdateBannerResponses[keyof UpdateBannerResponses];
+export type GetBannersCountData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/banners/count';
+};
+export type GetBannersCountResponses = {
+    200: {
+        count?: number;
+    };
+};
+export type GetBannersCountResponse = GetBannersCountResponses[keyof GetBannersCountResponses];
+export type DeleteGiftCertificateData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/gift_certificates/{id}';
+};
+export type DeleteGiftCertificateResponses = {
+    204: void;
+};
+export type DeleteGiftCertificateResponse = DeleteGiftCertificateResponses[keyof DeleteGiftCertificateResponses];
+export type GetGiftCertificateData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/gift_certificates/{id}';
+};
+export type GetGiftCertificateResponses = {
+    200: GiftCertificateFull;
+};
+export type GetGiftCertificateResponse = GetGiftCertificateResponses[keyof GetGiftCertificateResponses];
+export type UpdateGiftCertificateData = {
+    body?: GiftCertificatePut;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/gift_certificates/{id}';
+};
+export type UpdateGiftCertificateResponses = {
+    200: GiftCertificateFull;
+};
+export type UpdateGiftCertificateResponse = UpdateGiftCertificateResponses[keyof UpdateGiftCertificateResponses];
+export type DeleteGiftCertificatesData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/gift_certificates';
+};
+export type DeleteGiftCertificatesResponses = {
+    204: {
+        [key: string]: unknown;
+    };
+};
+export type DeleteGiftCertificatesResponse = DeleteGiftCertificatesResponses[keyof DeleteGiftCertificatesResponses];
+export type GetGiftCertificatesData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: {
+        min_id?: number;
+        max_id?: number;
+        code?: string;
+        order_id?: number;
+        to_name?: string;
+        to_email?: string;
+        from_name?: string;
+        from_email?: string;
+        page?: number;
+        limit?: number;
+        sort?: 'id';
+        direction?: 'asc' | 'desc';
+    };
+    url: '/gift_certificates';
+};
+export type GetGiftCertificatesResponses = {
+    200: Array<GiftCertificateFull>;
+};
+export type GetGiftCertificatesResponse = GetGiftCertificatesResponses[keyof GetGiftCertificatesResponses];
+export type CreateGiftCertificateData = {
+    body?: GiftCertificatePost;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/gift_certificates';
+};
+export type CreateGiftCertificateResponses = {
+    201: GiftCertificateFull;
+};
+export type CreateGiftCertificateResponse = CreateGiftCertificateResponses[keyof CreateGiftCertificateResponses];

@@ -1,3 +1,40 @@
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
+};
+export type _Error = {
+    status?: number;
+    message?: string;
+};
+export type ErrorResponse400 = {
+    schema?: _Error;
+};
+export type ErrorResponse404 = {
+    schema?: _Error;
+};
+export type ErrorResponse409 = {
+    schema?: _Error;
+};
+export type ErrorResponse422 = {
+    schema?: _Error;
+};
+export type _301RedirectUpsert = {
+    from_path: string;
+    site_id: number;
+    to?: RedirectTo;
+};
+export type _301RedirectRead = {
+    id?: number;
+    site_id?: number;
+    from_path?: string;
+    to?: RedirectTo;
+    to_url?: string;
+};
+export type ImportExportJobType = 'import' | 'export';
+export type ImportExportJobStatus = 'new' | 'working' | 'complete' | 'aborted' | 'failed';
+export type ImportErrors = Array<{
+    row?: number;
+    message?: string;
+}>;
 export type _301RedirectImportExportJobRead = {
     id?: string;
     type?: ImportExportJobType;
@@ -9,52 +46,6 @@ export type _301RedirectImportExportJobRead = {
     created_at?: string;
     completed_at?: string;
 };
-export type _301RedirectRead = {
-    id?: number;
-    site_id?: number;
-    from_path?: string;
-    to?: RedirectTo;
-    to_url?: string;
-};
-export type _301RedirectUpsert = {
-    from_path: string;
-    site_id: number;
-    to?: RedirectTo;
-};
-export type BaseError = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-};
-export type DetailedErrors = {
-    [key: string]: unknown;
-};
-export type Error = {
-    status?: number;
-    message?: string;
-};
-export type ErrorResponse = BaseError & {
-    errors?: DetailedErrors;
-};
-export type ErrorResponse400 = {
-    schema?: Error;
-};
-export type ErrorResponse404 = {
-    schema?: Error;
-};
-export type ErrorResponse409 = {
-    schema?: Error;
-};
-export type ErrorResponse422 = {
-    schema?: Error;
-};
-export type ImportErrors = Array<{
-    row?: number;
-    message?: string;
-}>;
-export type ImportExportJobStatus = 'new' | 'working' | 'complete' | 'aborted' | 'failed';
-export type ImportExportJobType = 'import' | 'export';
 export type MetaPaginationObject = {
     pagination?: {
         total?: number;
@@ -68,135 +59,209 @@ export type MetaPaginationObject = {
         };
     };
 };
-export type ParameterAccept = string;
-export type ParameterAcceptEventStream = string;
-export type ParameterContentType = string;
-export type ParameterContentTypeCsv = string;
-export type ParameterContentTypeFormData = string;
-export type ParameterImportExportIdParam = string;
 export type RedirectTo = {
     type?: 'product' | 'brand' | 'category' | 'page' | 'post' | 'url';
     entity_id?: number;
     url?: string;
 };
-export type type = 'product' | 'brand' | 'category' | 'page' | 'post' | 'url';
-export type GetRedirectsData = {
+export type DetailedErrors = {
+    [key: string]: unknown;
+};
+export type BaseError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+};
+export type ErrorResponse = BaseError & {
+    errors?: DetailedErrors;
+};
+export type Accept = string;
+export type AcceptEventStream = string;
+export type ContentType = string;
+export type ContentTypeFormData = string;
+export type ContentTypeCsv = string;
+export type ImportExportIdParam = string;
+export type DeleteRedirectsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
+    query: {
+        'id:in': Array<number>;
+        site_id?: number;
+    };
+    url: '/storefront/redirects';
+};
+export type DeleteRedirectsResponses = {
+    204: void;
+};
+export type DeleteRedirectsResponse = DeleteRedirectsResponses[keyof DeleteRedirectsResponses];
+export type GetRedirectsData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
     query?: {
-        direction?: 'asc' | 'desc';
-        'id:in'?: Array<(number)>;
-        'id:max'?: number;
+        site_id?: number;
+        'id:in'?: Array<number>;
         'id:min'?: number;
-        include?: Array<('to_url')>;
-        keyword?: string;
+        'id:max'?: number;
         limit?: number;
         page?: number;
-        site_id?: number;
         sort?: 'from_path' | 'type' | 'site_id' | 'id';
+        direction?: 'asc' | 'desc';
+        include?: Array<'to_url'>;
+        keyword?: string;
+    };
+    url: '/storefront/redirects';
+};
+export type GetRedirectsResponses = {
+    200: {
+        data?: Array<_301RedirectRead>;
+        meta?: MetaPaginationObject;
     };
 };
-export type GetRedirectsResponse = ({
-    data?: Array<_301RedirectRead>;
-    meta?: MetaPaginationObject;
-});
-export type GetRedirectsError = unknown;
+export type GetRedirectsResponse = GetRedirectsResponses[keyof GetRedirectsResponses];
 export type UpsertRedirectsData = {
     body?: Array<_301RedirectUpsert>;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/storefront/redirects';
 };
-export type UpsertRedirectsResponse = ({
-    data?: Array<_301RedirectRead>;
-    meta?: MetaPaginationObject;
-});
-export type UpsertRedirectsError = unknown;
-export type DeleteRedirectsData = {
-    headers: {
-        Accept: string;
-    };
-    query: {
-        'id:in': Array<(number)>;
-        site_id?: number;
+export type UpsertRedirectsResponses = {
+    201: {
+        data?: Array<_301RedirectRead>;
+        meta?: MetaPaginationObject;
     };
 };
-export type DeleteRedirectsResponse = (void);
-export type DeleteRedirectsError = unknown;
+export type UpsertRedirectsResponse = UpsertRedirectsResponses[keyof UpsertRedirectsResponses];
 export type GetRedirectImportExportJobsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
     query?: {
         id?: string;
+        type?: ImportExportJobType;
+        status?: ImportExportJobStatus;
         limit?: number;
         page?: number;
-        status?: ImportExportJobStatus;
-        type?: ImportExportJobType;
+    };
+    url: '/storefront/redirects/imex/jobs';
+};
+export type GetRedirectImportExportJobsResponses = {
+    200: {
+        data?: Array<_301RedirectImportExportJobRead>;
+        meta?: MetaPaginationObject;
     };
 };
-export type GetRedirectImportExportJobsResponse = ({
-    data?: Array<_301RedirectImportExportJobRead>;
-    meta?: MetaPaginationObject;
-});
-export type GetRedirectImportExportJobsError = unknown;
+export type GetRedirectImportExportJobsResponse = GetRedirectImportExportJobsResponses[keyof GetRedirectImportExportJobsResponses];
 export type CreateRedirectExportJobData = {
     body: {
-        site_id?: (number) | null;
-        redirect_ids?: Array<(number)>;
+        site_id?: number | null;
+        redirect_ids?: Array<number>;
         include_dynamic_target_urls?: boolean;
     };
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/storefront/redirects/imex/export';
 };
-export type CreateRedirectExportJobResponse = ({
-    id?: string;
-});
-export type CreateRedirectExportJobError = (unknown);
+export type CreateRedirectExportJobErrors = {
+    409: unknown;
+    429: unknown;
+};
+export type CreateRedirectExportJobResponses = {
+    201: {
+        id?: string;
+    };
+};
+export type CreateRedirectExportJobResponse = CreateRedirectExportJobResponses[keyof CreateRedirectExportJobResponses];
 export type CreateRedirectImportJobData = {
     body: {
-        import_file: (Blob | File);
+        import_file: Blob | File;
     };
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/storefront/redirects/imex/import';
 };
-export type CreateRedirectImportJobResponse = ({
-    id?: string;
-});
-export type CreateRedirectImportJobError = (unknown);
+export type CreateRedirectImportJobErrors = {
+    400: unknown;
+    413: unknown;
+    429: unknown;
+};
+export type CreateRedirectImportJobResponses = {
+    201: {
+        id?: string;
+    };
+};
+export type CreateRedirectImportJobResponse = CreateRedirectImportJobResponses[keyof CreateRedirectImportJobResponses];
 export type GetRedirectExportEventsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
     path: {
         uuid: string;
     };
+    query?: never;
+    url: '/storefront/redirects/imex/export/{uuid}/events';
 };
-export type GetRedirectExportEventsResponse = (string);
-export type GetRedirectExportEventsError = (unknown);
+export type GetRedirectExportEventsErrors = {
+    404: unknown;
+};
+export type GetRedirectExportEventsResponses = {
+    200: string;
+};
+export type GetRedirectExportEventsResponse = GetRedirectExportEventsResponses[keyof GetRedirectExportEventsResponses];
 export type GetRedirectImportEventsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
     path: {
         uuid: string;
     };
+    query?: never;
+    url: '/storefront/redirects/imex/import/{uuid}/events';
 };
-export type GetRedirectImportEventsResponse = (string);
-export type GetRedirectImportEventsError = (unknown);
+export type GetRedirectImportEventsErrors = {
+    404: unknown;
+};
+export type GetRedirectImportEventsResponses = {
+    200: string;
+};
+export type GetRedirectImportEventsResponse = GetRedirectImportEventsResponses[keyof GetRedirectImportEventsResponses];
 export type GetRedirectExportDownloadData = {
+    body?: never;
     headers: {
         'Content-Type': string;
     };
     path: {
         uuid: string;
     };
+    query?: never;
+    url: '/storefront/redirects/imex/export/{uuid}/download';
 };
-export type GetRedirectExportDownloadResponse = ((Blob | File));
-export type GetRedirectExportDownloadError = (unknown);
+export type GetRedirectExportDownloadErrors = {
+    404: unknown;
+};
+export type GetRedirectExportDownloadResponses = {
+    200: Blob | File;
+};
+export type GetRedirectExportDownloadResponse = GetRedirectExportDownloadResponses[keyof GetRedirectExportDownloadResponses];

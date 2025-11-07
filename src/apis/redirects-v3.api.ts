@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as RedirectsV3ApiSpecs from '../generated/redirects-v3';
 export * as RedirectsV3ApiSpecs from '../generated/redirects-v3';
 
@@ -17,7 +18,7 @@ export class RedirectsV3Api {
     getRedirects(
         query?: RedirectsV3ApiSpecs.GetRedirectsData['query'],
     ) {
-        return this.request.get<RedirectsV3ApiSpecs.GetRedirectsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<RedirectsV3ApiSpecs.GetRedirectsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/storefront/redirects',
             query,
         });
@@ -31,7 +32,7 @@ export class RedirectsV3Api {
     upsertRedirects(
         requestBody: RedirectsV3ApiSpecs.UpsertRedirectsData['body'],
     ) {
-        return this.request.put<any, any>({
+        return this.request.put<RequestSuccessResponse<201, Required<RedirectsV3ApiSpecs.UpsertRedirectsResponses[201]>>,RequestErrorResponse<400, void>>({
             path: 'v3/storefront/redirects',
             contentType: 'application/json',
             body: requestBody,
@@ -46,7 +47,7 @@ export class RedirectsV3Api {
     deleteRedirects(
         query?: RedirectsV3ApiSpecs.DeleteRedirectsData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<RedirectsV3ApiSpecs.DeleteRedirectsResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/storefront/redirects',
             query,
         });
@@ -60,7 +61,7 @@ export class RedirectsV3Api {
     getRedirectImportExportJobs(
         query?: RedirectsV3ApiSpecs.GetRedirectImportExportJobsData['query'],
     ) {
-        return this.request.get<RedirectsV3ApiSpecs.GetRedirectImportExportJobsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<RedirectsV3ApiSpecs.GetRedirectImportExportJobsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/storefront/redirects/imex/jobs',
             query,
         });
@@ -74,7 +75,7 @@ export class RedirectsV3Api {
     createRedirectExportJob(
         requestBody: RedirectsV3ApiSpecs.CreateRedirectExportJobData['body'],
     ) {
-        return this.request.post<any, RedirectsV3ApiSpecs.CreateRedirectExportJobError>({
+        return this.request.post<RequestSuccessResponse<201, Required<RedirectsV3ApiSpecs.CreateRedirectExportJobResponses[201]>>,(RequestErrorResponse<409, Required<RedirectsV3ApiSpecs.CreateRedirectExportJobErrors[409]>> | RequestErrorResponse<429, Required<RedirectsV3ApiSpecs.CreateRedirectExportJobErrors[429]>>)>({
             path: 'v3/storefront/redirects/imex/export',
             contentType: 'application/json',
             body: requestBody,
@@ -89,7 +90,7 @@ export class RedirectsV3Api {
     createRedirectImportJob(
         requestBody: RedirectsV3ApiSpecs.CreateRedirectImportJobData['body'],
     ) {
-        return this.request.post<any, RedirectsV3ApiSpecs.CreateRedirectImportJobError>({
+        return this.request.post<RequestSuccessResponse<201, Required<RedirectsV3ApiSpecs.CreateRedirectImportJobResponses[201]>>,(RequestErrorResponse<400, Required<RedirectsV3ApiSpecs.CreateRedirectImportJobErrors[400]>> | RequestErrorResponse<413, Required<RedirectsV3ApiSpecs.CreateRedirectImportJobErrors[413]>> | RequestErrorResponse<429, Required<RedirectsV3ApiSpecs.CreateRedirectImportJobErrors[429]>>)>({
             path: 'v3/storefront/redirects/imex/import',
             contentType: 'multipart/form-data',
             body: requestBody,
@@ -104,7 +105,7 @@ export class RedirectsV3Api {
     getRedirectExportEvents(
         uuid: RedirectsV3ApiSpecs.GetRedirectExportEventsData['path']['uuid'],
     ) {
-        return this.request.get<any, RedirectsV3ApiSpecs.GetRedirectExportEventsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<RedirectsV3ApiSpecs.GetRedirectExportEventsResponses[200]>>,RequestErrorResponse<404, Required<RedirectsV3ApiSpecs.GetRedirectExportEventsErrors[404]>>>({
             path: `v3/storefront/redirects/imex/export/${uuid}/events`,
         });
     }
@@ -117,7 +118,7 @@ export class RedirectsV3Api {
     getRedirectImportEvents(
         uuid: RedirectsV3ApiSpecs.GetRedirectImportEventsData['path']['uuid'],
     ) {
-        return this.request.get<any, RedirectsV3ApiSpecs.GetRedirectImportEventsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<RedirectsV3ApiSpecs.GetRedirectImportEventsResponses[200]>>,RequestErrorResponse<404, Required<RedirectsV3ApiSpecs.GetRedirectImportEventsErrors[404]>>>({
             path: `v3/storefront/redirects/imex/import/${uuid}/events`,
         });
     }
@@ -130,7 +131,7 @@ export class RedirectsV3Api {
     getRedirectExportDownload(
         uuid: RedirectsV3ApiSpecs.GetRedirectExportDownloadData['path']['uuid'],
     ) {
-        return this.request.get<any, RedirectsV3ApiSpecs.GetRedirectExportDownloadError>({
+        return this.request.get<RequestSuccessResponse<200, Required<RedirectsV3ApiSpecs.GetRedirectExportDownloadResponses[200]>>,RequestErrorResponse<404, Required<RedirectsV3ApiSpecs.GetRedirectExportDownloadErrors[404]>>>({
             path: `v3/storefront/redirects/imex/export/${uuid}/download`,
         });
     }

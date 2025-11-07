@@ -1,18 +1,7 @@
-export type ParameterAccept = string;
-export type ParameterCheckoutIdQuery = string;
-export type ParameterOrderIdQuery = number;
-export type paymentMethod_Full = {
-    id: string;
-    name: string;
-    stored_instruments?: Array<paymentMethodStoredInstrument>;
-    supported_instruments: Array<{
-        instrument_type: 'VISA' | 'MASTERCARD' | 'DISCOVER' | 'AMEX' | 'DINERS_CLUB' | 'JCB' | 'DANKORT' | 'MAESTRO' | 'STORED_CARD';
-        verification_value_required?: boolean;
-    }>;
-    test_mode: boolean;
-    type: string;
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
-export type paymentMethodStoredInstrument = {
+export type PaymentMethodStoredInstrument = {
     brand: string;
     expiry_month: number;
     expiry_year: number;
@@ -22,28 +11,91 @@ export type paymentMethodStoredInstrument = {
     is_default: boolean;
     type: string;
 };
+export type PaymentMethodFull = {
+    id: string;
+    name: string;
+    stored_instruments?: Array<PaymentMethodStoredInstrument>;
+    supported_instruments: Array<{
+        instrument_type: 'VISA' | 'MASTERCARD' | 'DISCOVER' | 'AMEX' | 'DINERS_CLUB' | 'JCB' | 'DANKORT' | 'MAESTRO' | 'STORED_CARD';
+        verification_value_required?: boolean;
+    }>;
+    test_mode: boolean;
+    type: string;
+};
+export type Accept = string;
+export type OrderIdQuery = number;
+export type CheckoutIdQuery = string;
 export type GetPaymentMethodsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
     query?: {
-        checkout_id?: string;
         order_id?: number;
+        checkout_id?: string;
+    };
+    url: '/payments/methods';
+};
+export type GetPaymentMethodsErrors = {
+    400: {
+        status: number;
+        title: string;
+        detail?: string;
+        type: string;
+        code?: number;
+        errors?: {
+            [key: string]: string;
+        };
+    };
+    401: {
+        status: number;
+        title: string;
+        detail?: string;
+        type: string;
+        code?: number;
+        errors?: {
+            [key: string]: string;
+        };
+    };
+    404: {
+        status: number;
+        title: string;
+        detail?: string;
+        type: string;
+        code?: number;
+        errors?: {
+            [key: string]: string;
+        };
+    };
+    422: {
+        status: number;
+        title: string;
+        detail?: string;
+        type: string;
+        code?: number;
+        errors?: {
+            [key: string]: string;
+        };
+    };
+    default: {
+        status: number;
+        title: string;
+        detail?: string;
+        type: string;
+        code?: number;
+        errors?: {
+            [key: string]: string;
+        };
     };
 };
-export type GetPaymentMethodsResponse = ({
-    data?: Array<paymentMethod_Full>;
-    meta?: {
-        [key: string]: unknown;
+export type GetPaymentMethodsError = GetPaymentMethodsErrors[keyof GetPaymentMethodsErrors];
+export type GetPaymentMethodsResponses = {
+    200: {
+        data?: Array<PaymentMethodFull>;
+        meta?: {
+            [key: string]: unknown;
+        };
     };
-});
-export type GetPaymentMethodsError = ({
-    status: number;
-    title: string;
-    detail?: string;
-    type: string;
-    code?: number;
-    errors?: {
-        [key: string]: (string);
-    };
-});
+};
+export type GetPaymentMethodsResponse = GetPaymentMethodsResponses[keyof GetPaymentMethodsResponses];

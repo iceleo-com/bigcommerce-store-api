@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as ThemesV3ApiSpecs from '../generated/themes-v3';
 export * as ThemesV3ApiSpecs from '../generated/themes-v3';
 
@@ -16,7 +17,7 @@ export class ThemesV3Api {
      */
     getStoreThemes(
     ) {
-        return this.request.get<ThemesV3ApiSpecs.GetStoreThemesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetStoreThemesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/themes',
         });
     }
@@ -32,7 +33,7 @@ export class ThemesV3Api {
     uploadStoreTheme(
         requestBody: ThemesV3ApiSpecs.UploadStoreThemeData['body'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<201, Required<ThemesV3ApiSpecs.UploadStoreThemeResponses[201]>>,RequestErrorResponse<400, void>>({
             path: 'v3/themes',
             contentType: 'multipart/form-data',
             body: requestBody,
@@ -47,7 +48,7 @@ export class ThemesV3Api {
     getStoreTheme(
         uuid: ThemesV3ApiSpecs.GetStoreThemeData['path']['uuid'],
     ) {
-        return this.request.get<ThemesV3ApiSpecs.GetStoreThemeResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetStoreThemeResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/${uuid}`,
         });
     }
@@ -61,7 +62,7 @@ export class ThemesV3Api {
     deleteStoreTheme(
         uuid: ThemesV3ApiSpecs.DeleteStoreThemeData['path']['uuid'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ThemesV3ApiSpecs.DeleteStoreThemeResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/${uuid}`,
         });
     }
@@ -75,7 +76,7 @@ export class ThemesV3Api {
         uuid: ThemesV3ApiSpecs.DownloadStoreThemeData['path']['uuid'],
         requestBody: ThemesV3ApiSpecs.DownloadStoreThemeData['body'],
     ) {
-        return this.request.post<ThemesV3ApiSpecs.DownloadStoreThemeResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.DownloadStoreThemeResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/${uuid}/actions/download`,
             contentType: 'application/json',
             body: requestBody,
@@ -91,11 +92,13 @@ export class ThemesV3Api {
      */
     activateStoreTheme(
         requestBody: ThemesV3ApiSpecs.ActivateStoreThemeData['body'],
+        query?: ThemesV3ApiSpecs.ActivateStoreThemeData['query'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<204, Required<ThemesV3ApiSpecs.ActivateStoreThemeResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/themes/actions/activate',
             contentType: 'application/json',
             body: requestBody,
+            query,
         });
     }
 
@@ -107,7 +110,7 @@ export class ThemesV3Api {
     getStoreThemeJob(
         jobId: ThemesV3ApiSpecs.GetStoreThemeJobData['path']['job_id'],
     ) {
-        return this.request.get<ThemesV3ApiSpecs.GetStoreThemeJobResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetStoreThemeJobResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/jobs/${jobId}`,
         });
     }
@@ -124,7 +127,7 @@ export class ThemesV3Api {
         uuid: ThemesV3ApiSpecs.GetThemeConfigurationData['path']['uuid'],
         query?: ThemesV3ApiSpecs.GetThemeConfigurationData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetThemeConfigurationResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/${uuid}/configurations`,
             query,
         });
@@ -139,7 +142,7 @@ export class ThemesV3Api {
         uuid: ThemesV3ApiSpecs.ValidateThemeConfigurationData['path']['uuid'],
         requestBody: ThemesV3ApiSpecs.ValidateThemeConfigurationData['body'],
     ) {
-        return this.request.post<ThemesV3ApiSpecs.ValidateThemeConfigurationResponse, ThemesV3ApiSpecs.ValidateThemeConfigurationError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.ValidateThemeConfigurationResponses[200]>>,RequestErrorResponse<422, Required<ThemesV3ApiSpecs.ValidateThemeConfigurationErrors[422]>>>({
             path: `v3/themes/${uuid}/configurations/validate`,
             contentType: 'application/json',
             body: requestBody,
@@ -154,7 +157,7 @@ export class ThemesV3Api {
     getThemeCustomTemplates(
         versionUuid: ThemesV3ApiSpecs.GetThemeCustomTemplatesData['path']['version_uuid'],
     ) {
-        return this.request.get<ThemesV3ApiSpecs.GetThemeCustomTemplatesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetThemeCustomTemplatesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/custom-templates/${versionUuid}`,
         });
     }

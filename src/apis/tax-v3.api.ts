@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as TaxV3ApiSpecs from '../generated/tax-v3';
 export * as TaxV3ApiSpecs from '../generated/tax-v3';
 
@@ -21,7 +22,7 @@ export class TaxV3Api {
     getTaxProviderConnection(
         providerId: TaxV3ApiSpecs.GetTaxProviderConnectionData['path']['provider_id'],
     ) {
-        return this.request.get<TaxV3ApiSpecs.GetTaxProviderConnectionResponse, TaxV3ApiSpecs.GetTaxProviderConnectionError>({
+        return this.request.get<RequestSuccessResponse<200, Required<TaxV3ApiSpecs.GetTaxProviderConnectionResponses[200]>>,RequestErrorResponse<404, Required<TaxV3ApiSpecs.GetTaxProviderConnectionErrors[404]>>>({
             path: `v3/tax/providers/${providerId}/connection`,
         });
     }
@@ -44,7 +45,7 @@ export class TaxV3Api {
         providerId: TaxV3ApiSpecs.UpdateTaxProviderConnectionData['path']['provider_id'],
         requestBody: TaxV3ApiSpecs.UpdateTaxProviderConnectionData['body'],
     ) {
-        return this.request.put<TaxV3ApiSpecs.UpdateTaxProviderConnectionResponse, TaxV3ApiSpecs.UpdateTaxProviderConnectionError>({
+        return this.request.put<RequestSuccessResponse<200, Required<TaxV3ApiSpecs.UpdateTaxProviderConnectionResponses[200]>>,(RequestErrorResponse<404, Required<TaxV3ApiSpecs.UpdateTaxProviderConnectionErrors[404]>> | RequestErrorResponse<422, Required<TaxV3ApiSpecs.UpdateTaxProviderConnectionErrors[422]>>)>({
             path: `v3/tax/providers/${providerId}/connection`,
             contentType: 'application/json',
             body: requestBody,
@@ -64,7 +65,7 @@ export class TaxV3Api {
     deleteTaxProviderConnection(
         providerId: TaxV3ApiSpecs.DeleteTaxProviderConnectionData['path']['provider_id'],
     ) {
-        return this.request.delete<TaxV3ApiSpecs.DeleteTaxProviderConnectionResponse, TaxV3ApiSpecs.DeleteTaxProviderConnectionError>({
+        return this.request.delete<RequestSuccessResponse<200, Required<TaxV3ApiSpecs.DeleteTaxProviderConnectionResponses[200]>>,RequestErrorResponse<404, Required<TaxV3ApiSpecs.DeleteTaxProviderConnectionErrors[404]>>>({
             path: `v3/tax/providers/${providerId}/connection`,
         });
     }

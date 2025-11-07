@@ -1,26 +1,37 @@
-export type customsInformation = {
-    product_id?: number;
-    country_of_origin?: string;
-    commodity_description?: string;
-    international_shipping?: boolean;
-    hs_codes?: harmonizedSystemCodes;
-    readonly created_at?: string;
-    readonly updated_at?: string;
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
-export type customsInformation_request = {
+export type CustomsInformationRequest = {
     product_id: number;
     country_of_origin: string;
     commodity_description: string;
-    international_shipping: boolean;
-    hs_codes: harmonizedSystemCodes;
+    international_shipping: true | false;
+    hs_codes: HarmonizedSystemCodes;
 };
-export type error_Full = {
+export type ShippingSettings = {
+    checkout?: {
+        country_list_strategy?: 'DISPLAY_ALL_COUNTRIES' | 'DISPLAY_ONLY_SHIPPABLE_COUNTRIES';
+        out_of_delivery_zone_message?: string;
+    };
+};
+export type ChannelShippingSettings = {
+    checkout?: {
+        out_of_delivery_zone_message?: string;
+    };
+};
+export type CustomsInformation = {
+    product_id?: number;
+    country_of_origin?: string;
+    commodity_description?: string;
+    international_shipping?: true | false;
+    hs_codes?: HarmonizedSystemCodes;
+    readonly created_at?: string;
+    readonly updated_at?: string;
+};
+export type HarmonizedSystemCodes = {
     [key: string]: unknown;
 };
-export type harmonizedSystemCodes = {
-    [key: string]: unknown;
-};
-export type metaCollection = {
+export type MetaCollection = {
     pagination?: {
         total?: number;
         count?: number;
@@ -34,74 +45,179 @@ export type metaCollection = {
         };
     };
 };
-export type ParameterAccept = string;
-export type ParameterContentType = string;
-export type Parameterstore_hash = string;
-export type shippingSettings = {
-    checkout?: {
-        country_list_strategy?: 'DISPLAY_ALL_COUNTRIES' | 'DISPLAY_ONLY_SHIPPABLE_COUNTRIES';
-    };
+export type ErrorFull = {
+    [key: string]: unknown;
 };
-export type country_list_strategy = 'DISPLAY_ALL_COUNTRIES' | 'DISPLAY_ONLY_SHIPPABLE_COUNTRIES';
-export type GetCustomsInformationData = {
-    headers: {
-        Accept: string;
-    };
-    query?: {
-        limit?: number;
-        page?: number;
-        'product_id:in'?: Array<(number)>;
-    };
+export type CustomsInformationWritable = {
+    product_id?: number;
+    country_of_origin?: string;
+    commodity_description?: string;
+    international_shipping?: true | false;
+    hs_codes?: HarmonizedSystemCodesWritable;
 };
-export type GetCustomsInformationResponse = ({
-    data?: Array<customsInformation>;
-    meta?: metaCollection;
-});
-export type GetCustomsInformationError = unknown;
+export type HarmonizedSystemCodesWritable = {
+    [key: string]: unknown;
+};
+export type ErrorFullWritable = {
+    [key: string]: unknown;
+};
+export type StoreHash = string;
+export type Accept = string;
+export type ContentType = string;
 export type DeleteCustomsInformationData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
     query: {
-        'product_id:in': Array<(number)>;
+        'product_id:in': Array<number>;
+    };
+    url: '/shipping/products/customs-information';
+};
+export type DeleteCustomsInformationResponses = {
+    204: void;
+};
+export type DeleteCustomsInformationResponse = DeleteCustomsInformationResponses[keyof DeleteCustomsInformationResponses];
+export type GetCustomsInformationData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: {
+        'product_id:in'?: Array<number>;
+        page?: number;
+        limit?: number;
+    };
+    url: '/shipping/products/customs-information';
+};
+export type GetCustomsInformationResponses = {
+    200: {
+        data?: Array<CustomsInformation>;
+        meta?: MetaCollection;
     };
 };
-export type DeleteCustomsInformationResponse = (void);
-export type DeleteCustomsInformationError = unknown;
+export type GetCustomsInformationResponse = GetCustomsInformationResponses[keyof GetCustomsInformationResponses];
 export type UpdateCustomsInformationData = {
-    body?: Array<customsInformation_request>;
+    body?: Array<CustomsInformationRequest>;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/shipping/products/customs-information';
 };
-export type UpdateCustomsInformationResponse = ({
-    data?: Array<customsInformation>;
-});
-export type UpdateCustomsInformationError = unknown;
+export type UpdateCustomsInformationResponses = {
+    200: {
+        data?: Array<CustomsInformation>;
+    };
+};
+export type UpdateCustomsInformationResponse = UpdateCustomsInformationResponses[keyof UpdateCustomsInformationResponses];
 export type GetShippingSettingsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
+    query?: never;
+    url: '/shipping/settings';
 };
-export type GetShippingSettingsResponse = ({
-    data?: shippingSettings;
-    meta?: {
-        [key: string]: unknown;
+export type GetShippingSettingsResponses = {
+    200: {
+        data?: ShippingSettings;
+        meta?: {
+            [key: string]: unknown;
+        };
     };
-});
-export type GetShippingSettingsError = unknown;
+};
+export type GetShippingSettingsResponse = GetShippingSettingsResponses[keyof GetShippingSettingsResponses];
 export type UpdateShippingSettingsData = {
-    body?: shippingSettings;
+    body?: ShippingSettings;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/shipping/settings';
 };
-export type UpdateShippingSettingsResponse = ({
-    data?: shippingSettings;
-    meta?: {
-        [key: string]: unknown;
+export type UpdateShippingSettingsErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
     };
-});
-export type UpdateShippingSettingsError = unknown;
+    422: {
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type UpdateShippingSettingsError = UpdateShippingSettingsErrors[keyof UpdateShippingSettingsErrors];
+export type UpdateShippingSettingsResponses = {
+    200: {
+        data?: ShippingSettings;
+        meta?: {
+            [key: string]: unknown;
+        };
+    };
+};
+export type UpdateShippingSettingsResponse = UpdateShippingSettingsResponses[keyof UpdateShippingSettingsResponses];
+export type GetChannelShippingSettingsData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        channel_id: string;
+    };
+    query?: never;
+    url: '/shipping/settings/channels/{channel_id}';
+};
+export type GetChannelShippingSettingsResponses = {
+    200: {
+        data?: ChannelShippingSettings;
+        meta?: {
+            [key: string]: unknown;
+        };
+    };
+};
+export type GetChannelShippingSettingsResponse = GetChannelShippingSettingsResponses[keyof GetChannelShippingSettingsResponses];
+export type UpdateChannelShippingSettingsData = {
+    body?: ChannelShippingSettings;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path: {
+        channel_id: string;
+    };
+    query?: never;
+    url: '/shipping/settings/channels/{channel_id}';
+};
+export type UpdateChannelShippingSettingsErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
+    };
+    422: {
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type UpdateChannelShippingSettingsError = UpdateChannelShippingSettingsErrors[keyof UpdateChannelShippingSettingsErrors];
+export type UpdateChannelShippingSettingsResponses = {
+    200: {
+        data?: ChannelShippingSettings;
+        meta?: {
+            [key: string]: unknown;
+        };
+    };
+};
+export type UpdateChannelShippingSettingsResponse = UpdateChannelShippingSettingsResponses[keyof UpdateChannelShippingSettingsResponses];

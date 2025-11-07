@@ -33,6 +33,8 @@ paths:
       description: |-
         Calculate batch pricing for products for a specific channel, currency, and customer group.
 
+        The rounded prices in this endpoint's response will align with the currency's decimal precision as defined in the [currency](https://support.bigcommerce.com/s/article/Managing-Currencies?language=en_US#add) settings page.
+
         **Limits**
         * Limit of 50 concurrent requests.
       operationId: getPrices
@@ -43,7 +45,6 @@ paths:
               required:
                 - channel_id
                 - currency_code
-                - customer_group_id
                 - items
               type: object
               properties:
@@ -63,6 +64,9 @@ paths:
                 customer_group_id:
                   type: integer
                   description: The customer group ID that's relevant for any customer group pricing, tax values, etc.
+                customer_id:
+                  type: integer
+                  description: The ID of the customer for whom to fetch prices.
                 items:
                   type: array
                   description: The items for which to fetch prices.

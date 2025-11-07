@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as ProductsV3ApiSpecs from '../generated/products-v3';
 export * as ProductsV3ApiSpecs from '../generated/products-v3';
 
@@ -17,7 +18,7 @@ export class ProductsV3Api {
     getProducts(
         query?: ProductsV3ApiSpecs.GetProductsData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/catalog/products',
             query,
         });
@@ -54,7 +55,7 @@ export class ProductsV3Api {
         requestBody: ProductsV3ApiSpecs.CreateProductData['body'],
         query?: ProductsV3ApiSpecs.CreateProductData['query'],
     ) {
-        return this.request.post<ProductsV3ApiSpecs.CreateProductResponse, ProductsV3ApiSpecs.CreateProductError>({
+        return this.request.post<(RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductResponses[200]>> | RequestSuccessResponse<207, Required<ProductsV3ApiSpecs.CreateProductResponses[207]>>),(RequestErrorResponse<409, Required<ProductsV3ApiSpecs.CreateProductErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductErrors[422]>>)>({
             path: 'v3/catalog/products',
             contentType: 'application/json',
             body: requestBody,
@@ -81,7 +82,7 @@ export class ProductsV3Api {
         requestBody: ProductsV3ApiSpecs.UpdateProductsData['body'],
         query?: ProductsV3ApiSpecs.UpdateProductsData['query'],
     ) {
-        return this.request.put<ProductsV3ApiSpecs.UpdateProductsResponse, ProductsV3ApiSpecs.UpdateProductsError>({
+        return this.request.put<(RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductsResponses[200]>> | RequestSuccessResponse<207, Required<ProductsV3ApiSpecs.UpdateProductsResponses[207]>>),(RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateProductsErrors[404]>> | RequestErrorResponse<409, Required<ProductsV3ApiSpecs.UpdateProductsErrors[409]>> | RequestErrorResponse<413, Required<ProductsV3ApiSpecs.UpdateProductsErrors[413]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateProductsErrors[422]>>)>({
             path: 'v3/catalog/products',
             contentType: 'application/json',
             body: requestBody,
@@ -103,7 +104,7 @@ export class ProductsV3Api {
     deleteProducts(
         query?: ProductsV3ApiSpecs.DeleteProductsData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductsResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/catalog/products',
             query,
         });
@@ -118,7 +119,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.GetProductData['path']['product_id'],
         query?: ProductsV3ApiSpecs.GetProductData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductResponse, ProductsV3ApiSpecs.GetProductError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductErrors[404]>>>({
             path: `v3/catalog/products/${productId}`,
             query,
         });
@@ -145,7 +146,7 @@ export class ProductsV3Api {
         requestBody: ProductsV3ApiSpecs.UpdateProductData['body'],
         query?: ProductsV3ApiSpecs.UpdateProductData['query'],
     ) {
-        return this.request.put<ProductsV3ApiSpecs.UpdateProductResponse, ProductsV3ApiSpecs.UpdateProductError>({
+        return this.request.put<(RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductResponses[200]>> | RequestSuccessResponse<201, Required<ProductsV3ApiSpecs.UpdateProductResponses[201]>> | RequestSuccessResponse<207, Required<ProductsV3ApiSpecs.UpdateProductResponses[207]>>),(RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateProductErrors[404]>> | RequestErrorResponse<409, Required<ProductsV3ApiSpecs.UpdateProductErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateProductErrors[422]>>)>({
             path: `v3/catalog/products/${productId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -161,7 +162,7 @@ export class ProductsV3Api {
     deleteProduct(
         productId: ProductsV3ApiSpecs.DeleteProductData['path']['product_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}`,
         });
     }
@@ -175,7 +176,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.GetProductImagesData['path']['product_id'],
         query?: ProductsV3ApiSpecs.GetProductImagesData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductImagesResponse, ProductsV3ApiSpecs.GetProductImagesError>({
+        return this.request.get<(RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductImagesResponses[200]>> | RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.GetProductImagesResponses[204]>>),RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductImagesErrors[404]>>>({
             path: `v3/catalog/products/${productId}/images`,
             query,
         });
@@ -201,7 +202,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.CreateProductImageData['path']['product_id'],
         requestBody: ProductsV3ApiSpecs.CreateProductImageData['body'],
     ) {
-        return this.request.post<ProductsV3ApiSpecs.CreateProductImageResponse, ProductsV3ApiSpecs.CreateProductImageError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductImageResponses[200]>>,(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.CreateProductImageErrors[400]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.CreateProductImageErrors[404]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductImageErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/images`,
             contentType: 'application/json',
             body: requestBody,
@@ -218,7 +219,7 @@ export class ProductsV3Api {
         imageId: ProductsV3ApiSpecs.GetProductImageData['path']['image_id'],
         query?: ProductsV3ApiSpecs.GetProductImageData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductImageResponse, ProductsV3ApiSpecs.GetProductImageError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductImageResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductImageErrors[404]>>>({
             path: `v3/catalog/products/${productId}/images/${imageId}`,
             query,
         });
@@ -239,7 +240,7 @@ export class ProductsV3Api {
         imageId: ProductsV3ApiSpecs.UpdateProductImageData['path']['image_id'],
         requestBody: ProductsV3ApiSpecs.UpdateProductImageData['body'],
     ) {
-        return this.request.put<ProductsV3ApiSpecs.UpdateProductImageResponse, ProductsV3ApiSpecs.UpdateProductImageError>({
+        return this.request.put<(RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductImageResponses[200]>> | RequestSuccessResponse<201, Required<ProductsV3ApiSpecs.UpdateProductImageResponses[201]>>),(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.UpdateProductImageErrors[400]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateProductImageErrors[404]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateProductImageErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/images/${imageId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -255,7 +256,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.DeleteProductImageData['path']['product_id'],
         imageId: ProductsV3ApiSpecs.DeleteProductImageData['path']['image_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductImageResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/images/${imageId}`,
         });
     }
@@ -269,7 +270,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.GetProductVideosData['path']['product_id'],
         query?: ProductsV3ApiSpecs.GetProductVideosData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductVideosResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductVideosResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/videos`,
             query,
         });
@@ -295,7 +296,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.CreateProductVideoData['path']['product_id'],
         requestBody: ProductsV3ApiSpecs.CreateProductVideoData['body'],
     ) {
-        return this.request.post<ProductsV3ApiSpecs.CreateProductVideoResponse, ProductsV3ApiSpecs.CreateProductVideoError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductVideoResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.CreateProductVideoErrors[404]>>>({
             path: `v3/catalog/products/${productId}/videos`,
             contentType: 'application/json',
             body: requestBody,
@@ -312,7 +313,7 @@ export class ProductsV3Api {
         id: ProductsV3ApiSpecs.GetProductVideoData['path']['id'],
         query?: ProductsV3ApiSpecs.GetProductVideoData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductVideoResponse, ProductsV3ApiSpecs.GetProductVideoError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductVideoResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductVideoErrors[404]>>>({
             path: `v3/catalog/products/${productId}/videos/${id}`,
             query,
         });
@@ -337,7 +338,7 @@ export class ProductsV3Api {
         id: ProductsV3ApiSpecs.UpdateProductVideoData['path']['id'],
         requestBody: ProductsV3ApiSpecs.UpdateProductVideoData['body'],
     ) {
-        return this.request.put<ProductsV3ApiSpecs.UpdateProductVideoResponse, ProductsV3ApiSpecs.UpdateProductVideoError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductVideoResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateProductVideoErrors[404]>>>({
             path: `v3/catalog/products/${productId}/videos/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -353,7 +354,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.DeleteProductVideoData['path']['product_id'],
         id: ProductsV3ApiSpecs.DeleteProductVideoData['path']['id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductVideoResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/videos/${id}`,
         });
     }
@@ -367,7 +368,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.GetProductComplexRulesData['path']['product_id'],
         query?: ProductsV3ApiSpecs.GetProductComplexRulesData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductComplexRulesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductComplexRulesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/complex-rules`,
             query,
         });
@@ -394,7 +395,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.CreateProductComplexRuleData['path']['product_id'],
         requestBody: ProductsV3ApiSpecs.CreateProductComplexRuleData['body'],
     ) {
-        return this.request.post<ProductsV3ApiSpecs.CreateProductComplexRuleResponse, ProductsV3ApiSpecs.CreateProductComplexRuleError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductComplexRuleResponses[200]>>,(RequestErrorResponse<409, Required<ProductsV3ApiSpecs.CreateProductComplexRuleErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductComplexRuleErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/complex-rules`,
             contentType: 'application/json',
             body: requestBody,
@@ -411,7 +412,7 @@ export class ProductsV3Api {
         complexRuleId: ProductsV3ApiSpecs.GetProductComplexRuleData['path']['complex_rule_id'],
         query?: ProductsV3ApiSpecs.GetProductComplexRuleData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductComplexRuleResponse, ProductsV3ApiSpecs.GetProductComplexRuleError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductComplexRuleResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductComplexRuleErrors[404]>>>({
             path: `v3/catalog/products/${productId}/complex-rules/${complexRuleId}`,
             query,
         });
@@ -437,7 +438,7 @@ export class ProductsV3Api {
         complexRuleId: ProductsV3ApiSpecs.UpdateProductComplexRuleData['path']['complex_rule_id'],
         requestBody: ProductsV3ApiSpecs.UpdateProductComplexRuleData['body'],
     ) {
-        return this.request.put<ProductsV3ApiSpecs.UpdateProductComplexRuleResponse, ProductsV3ApiSpecs.UpdateProductComplexRuleError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductComplexRuleResponses[200]>>,(RequestErrorResponse<409, Required<ProductsV3ApiSpecs.UpdateProductComplexRuleErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateProductComplexRuleErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/complex-rules/${complexRuleId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -453,7 +454,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.DeleteProductComplexRuleData['path']['product_id'],
         complexRuleId: ProductsV3ApiSpecs.DeleteProductComplexRuleData['path']['complex_rule_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductComplexRuleResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/complex-rules/${complexRuleId}`,
         });
     }
@@ -467,7 +468,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.GetProductCustomFieldsData['path']['product_id'],
         query?: ProductsV3ApiSpecs.GetProductCustomFieldsData['query'],
     ) {
-        return this.request.get<any, ProductsV3ApiSpecs.GetProductCustomFieldsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductCustomFieldsResponses[200]>>,(RequestErrorResponse<401, Required<ProductsV3ApiSpecs.GetProductCustomFieldsErrors[401]>> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.GetProductCustomFieldsErrors[403]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductCustomFieldsErrors[404]>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.GetProductCustomFieldsErrors[405]>>)>({
             path: `v3/catalog/products/${productId}/custom-fields`,
             query,
         });
@@ -496,7 +497,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.CreateProductCustomFieldData['path']['product_id'],
         requestBody: ProductsV3ApiSpecs.CreateProductCustomFieldData['body'],
     ) {
-        return this.request.post<any, ProductsV3ApiSpecs.CreateProductCustomFieldError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductCustomFieldResponses[200]>>,(RequestErrorResponse<401, Required<ProductsV3ApiSpecs.CreateProductCustomFieldErrors[401]>> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.CreateProductCustomFieldErrors[403]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.CreateProductCustomFieldErrors[404]>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.CreateProductCustomFieldErrors[405]>> | RequestErrorResponse<415, Required<ProductsV3ApiSpecs.CreateProductCustomFieldErrors[415]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductCustomFieldErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/custom-fields`,
             contentType: 'application/json',
             body: requestBody,
@@ -514,7 +515,7 @@ export class ProductsV3Api {
         customFieldId: ProductsV3ApiSpecs.GetProductCustomFieldData['path']['custom_field_id'],
         query?: ProductsV3ApiSpecs.GetProductCustomFieldData['query'],
     ) {
-        return this.request.get<any, ProductsV3ApiSpecs.GetProductCustomFieldError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductCustomFieldResponses[200]>>,(RequestErrorResponse<401, Required<ProductsV3ApiSpecs.GetProductCustomFieldErrors[401]>> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.GetProductCustomFieldErrors[403]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductCustomFieldErrors[404]>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.GetProductCustomFieldErrors[405]>>)>({
             path: `v3/catalog/products/${productId}/custom-fields/${customFieldId}`,
             query,
         });
@@ -543,7 +544,7 @@ export class ProductsV3Api {
         customFieldId: ProductsV3ApiSpecs.UpdateProductCustomFieldData['path']['custom_field_id'],
         requestBody: ProductsV3ApiSpecs.UpdateProductCustomFieldData['body'],
     ) {
-        return this.request.put<any, ProductsV3ApiSpecs.UpdateProductCustomFieldError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldResponses[200]>>,(RequestErrorResponse<401, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldErrors[401]>> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldErrors[403]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldErrors[404]>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldErrors[405]>> | RequestErrorResponse<415, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldErrors[415]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/custom-fields/${customFieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -559,8 +560,23 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.DeleteProductCustomFieldData['path']['product_id'],
         customFieldId: ProductsV3ApiSpecs.DeleteProductCustomFieldData['path']['custom_field_id'],
     ) {
-        return this.request.delete<any, ProductsV3ApiSpecs.DeleteProductCustomFieldError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductCustomFieldResponses[204]>>,(RequestErrorResponse<401, Required<ProductsV3ApiSpecs.DeleteProductCustomFieldErrors[401]>> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.DeleteProductCustomFieldErrors[403]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.DeleteProductCustomFieldErrors[404]>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.DeleteProductCustomFieldErrors[405]>>)>({
             path: `v3/catalog/products/${productId}/custom-fields/${customFieldId}`,
+        });
+    }
+
+    /**
+     * Get all Bulk Pricing Rules
+     *
+     * Returns all *Bulk Pricing Rules*. Optional parameters can be passed in.
+     */
+    getAllBulkPricingRules(
+        productId: ProductsV3ApiSpecs.GetAllBulkPricingRulesData['path']['product_id'],
+        query?: ProductsV3ApiSpecs.GetAllBulkPricingRulesData['query'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetAllBulkPricingRulesResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/catalog/products/${productId}/bulk-pricing-rules`,
+            query,
         });
     }
 
@@ -573,7 +589,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.CreateBulkPricingRuleData['path']['product_id'],
         requestBody: ProductsV3ApiSpecs.CreateBulkPricingRuleData['body'],
     ) {
-        return this.request.post<ProductsV3ApiSpecs.CreateBulkPricingRuleResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateBulkPricingRuleResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/bulk-pricing-rules`,
             contentType: 'application/json',
             body: requestBody,
@@ -590,7 +606,7 @@ export class ProductsV3Api {
         bulkPricingRuleId: ProductsV3ApiSpecs.GetBulkPricingRuleData['path']['bulk_pricing_rule_id'],
         query?: ProductsV3ApiSpecs.GetBulkPricingRuleData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetBulkPricingRuleResponse, ProductsV3ApiSpecs.GetBulkPricingRuleError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetBulkPricingRuleResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetBulkPricingRuleErrors[404]>>>({
             path: `v3/catalog/products/${productId}/bulk-pricing-rules/${bulkPricingRuleId}`,
             query,
         });
@@ -612,7 +628,7 @@ export class ProductsV3Api {
         bulkPricingRuleId: ProductsV3ApiSpecs.UpdateBulkPricingRuleData['path']['bulk_pricing_rule_id'],
         requestBody: ProductsV3ApiSpecs.UpdateBulkPricingRuleData['body'],
     ) {
-        return this.request.put<ProductsV3ApiSpecs.UpdateBulkPricingRuleResponse, ProductsV3ApiSpecs.UpdateBulkPricingRuleError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateBulkPricingRuleResponses[200]>>,(RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateBulkPricingRuleErrors[404]>> | RequestErrorResponse<409, Required<ProductsV3ApiSpecs.UpdateBulkPricingRuleErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateBulkPricingRuleErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/bulk-pricing-rules/${bulkPricingRuleId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -628,7 +644,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.DeleteBulkPricingRuleData['path']['product_id'],
         bulkPricingRuleId: ProductsV3ApiSpecs.DeleteBulkPricingRuleData['path']['bulk_pricing_rule_id'],
     ) {
-        return this.request.delete<any, ProductsV3ApiSpecs.DeleteBulkPricingRuleError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteBulkPricingRuleResponses[204]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.DeleteBulkPricingRuleErrors[404]>>>({
             path: `v3/catalog/products/${productId}/bulk-pricing-rules/${bulkPricingRuleId}`,
         });
     }
@@ -642,7 +658,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.GetProductMetafieldsData['path']['product_id'],
         query?: ProductsV3ApiSpecs.GetProductMetafieldsData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductMetafieldsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/metafields`,
             query,
         });
@@ -665,7 +681,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.CreateProductMetafieldData['path']['product_id'],
         requestBody: ProductsV3ApiSpecs.CreateProductMetafieldData['body'],
     ) {
-        return this.request.post<ProductsV3ApiSpecs.CreateProductMetafieldResponse, ProductsV3ApiSpecs.CreateProductMetafieldError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.CreateProductMetafieldErrors[400]>> | RequestErrorResponse<409, Required<ProductsV3ApiSpecs.CreateProductMetafieldErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductMetafieldErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
@@ -682,7 +698,7 @@ export class ProductsV3Api {
         metafieldId: ProductsV3ApiSpecs.GetProductMetafieldData['path']['metafield_id'],
         query?: ProductsV3ApiSpecs.GetProductMetafieldData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductMetafieldResponse, ProductsV3ApiSpecs.GetProductMetafieldError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductMetafieldResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductMetafieldErrors[404]>>>({
             path: `v3/catalog/products/${productId}/metafields/${metafieldId}`,
             query,
         });
@@ -712,7 +728,7 @@ export class ProductsV3Api {
         metafieldId: ProductsV3ApiSpecs.UpdateProductMetafieldData['path']['metafield_id'],
         requestBody: ProductsV3ApiSpecs.UpdateProductMetafieldData['body'],
     ) {
-        return this.request.put<ProductsV3ApiSpecs.UpdateProductMetafieldResponse, ProductsV3ApiSpecs.UpdateProductMetafieldError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.UpdateProductMetafieldErrors[400]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateProductMetafieldErrors[404]>>)>({
             path: `v3/catalog/products/${productId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -728,7 +744,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.DeleteProductMetafieldData['path']['product_id'],
         metafieldId: ProductsV3ApiSpecs.DeleteProductMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.delete<any, ProductsV3ApiSpecs.DeleteProductMetafieldError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductMetafieldResponses[204]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.DeleteProductMetafieldErrors[404]>>>({
             path: `v3/catalog/products/${productId}/metafields/${metafieldId}`,
         });
     }
@@ -742,7 +758,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.GetProductReviewsData['path']['product_id'],
         query?: ProductsV3ApiSpecs.GetProductReviewsData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductReviewsResponse, ProductsV3ApiSpecs.GetProductReviewsError>({
+        return this.request.get<(RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductReviewsResponses[200]>> | RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.GetProductReviewsResponses[204]>>),RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductReviewsErrors[404]>>>({
             path: `v3/catalog/products/${productId}/reviews`,
             query,
         });
@@ -764,7 +780,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.CreateProductReviewData['path']['product_id'],
         requestBody: ProductsV3ApiSpecs.CreateProductReviewData['body'],
     ) {
-        return this.request.post<ProductsV3ApiSpecs.CreateProductReviewResponse, ProductsV3ApiSpecs.CreateProductReviewError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductReviewResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.CreateProductReviewErrors[404]>>>({
             path: `v3/catalog/products/${productId}/reviews`,
             contentType: 'application/json',
             body: requestBody,
@@ -781,7 +797,7 @@ export class ProductsV3Api {
         reviewId: ProductsV3ApiSpecs.GetProductReviewData['path']['review_id'],
         query?: ProductsV3ApiSpecs.GetProductReviewData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductReviewResponse, ProductsV3ApiSpecs.GetProductReviewError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductReviewResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductReviewErrors[404]>>>({
             path: `v3/catalog/products/${productId}/reviews/${reviewId}`,
             query,
         });
@@ -803,7 +819,7 @@ export class ProductsV3Api {
         reviewId: ProductsV3ApiSpecs.UpdateProductReviewData['path']['review_id'],
         requestBody: ProductsV3ApiSpecs.UpdateProductReviewData['body'],
     ) {
-        return this.request.put<ProductsV3ApiSpecs.UpdateProductReviewResponse, ProductsV3ApiSpecs.UpdateProductReviewError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductReviewResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateProductReviewErrors[404]>>>({
             path: `v3/catalog/products/${productId}/reviews/${reviewId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -819,7 +835,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.DeleteProductReviewData['path']['product_id'],
         reviewId: ProductsV3ApiSpecs.DeleteProductReviewData['path']['review_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductReviewResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/reviews/${reviewId}`,
         });
     }
@@ -832,7 +848,7 @@ export class ProductsV3Api {
     getProductsChannelAssignments(
         query?: ProductsV3ApiSpecs.GetProductsChannelAssignmentsData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductsChannelAssignmentsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductsChannelAssignmentsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/catalog/products/channel-assignments',
             query,
         });
@@ -842,11 +858,16 @@ export class ProductsV3Api {
      * Create Products Channel Assignments
      *
      * Creates products channel assignments.
+
+     Notes:
+      * Avoid parallel assignment requests if possible.
+      * Do not make parallel assignment requests with the same product IDs.
+
      */
     createProductsChannelAssignments(
         requestBody: ProductsV3ApiSpecs.CreateProductsChannelAssignmentsData['body'],
     ) {
-        return this.request.put<any, ProductsV3ApiSpecs.CreateProductsChannelAssignmentsError>({
+        return this.request.put<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.CreateProductsChannelAssignmentsResponses[204]>>,RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductsChannelAssignmentsErrors[422]>>>({
             path: 'v3/catalog/products/channel-assignments',
             contentType: 'application/json',
             body: requestBody,
@@ -861,7 +882,7 @@ export class ProductsV3Api {
     deleteProductsChannelAssignments(
         query?: ProductsV3ApiSpecs.DeleteProductsChannelAssignmentsData['query'],
     ) {
-        return this.request.delete<any, ProductsV3ApiSpecs.DeleteProductsChannelAssignmentsError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductsChannelAssignmentsResponses[204]>>,RequestErrorResponse<422, Required<ProductsV3ApiSpecs.DeleteProductsChannelAssignmentsErrors[422]>>>({
             path: 'v3/catalog/products/channel-assignments',
             query,
         });
@@ -875,7 +896,7 @@ export class ProductsV3Api {
     getProductsCategoryAssignments(
         query?: ProductsV3ApiSpecs.GetProductsCategoryAssignmentsData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductsCategoryAssignmentsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductsCategoryAssignmentsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/catalog/products/category-assignments',
             query,
         });
@@ -889,7 +910,7 @@ export class ProductsV3Api {
     createProductsCategoryAssignments(
         requestBody: ProductsV3ApiSpecs.CreateProductsCategoryAssignmentsData['body'],
     ) {
-        return this.request.put<any, ProductsV3ApiSpecs.CreateProductsCategoryAssignmentsError>({
+        return this.request.put<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.CreateProductsCategoryAssignmentsResponses[204]>>,RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductsCategoryAssignmentsErrors[422]>>>({
             path: 'v3/catalog/products/category-assignments',
             contentType: 'application/json',
             body: requestBody,
@@ -904,7 +925,7 @@ export class ProductsV3Api {
     deleteProductsCategoryAssignments(
         query?: ProductsV3ApiSpecs.DeleteProductsCategoryAssignmentsData['query'],
     ) {
-        return this.request.delete<any, ProductsV3ApiSpecs.DeleteProductsCategoryAssignmentsError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductsCategoryAssignmentsResponses[204]>>,RequestErrorResponse<422, Required<ProductsV3ApiSpecs.DeleteProductsCategoryAssignmentsErrors[422]>>>({
             path: 'v3/catalog/products/category-assignments',
             query,
         });
@@ -929,7 +950,7 @@ export class ProductsV3Api {
      */
     getCatalogSummary(
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetCatalogSummaryResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetCatalogSummaryResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/catalog/summary',
         });
     }
@@ -942,7 +963,7 @@ export class ProductsV3Api {
     getProductsMetafields(
         query?: ProductsV3ApiSpecs.GetProductsMetafieldsData['query'],
     ) {
-        return this.request.get<ProductsV3ApiSpecs.GetProductsMetafieldsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductsMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/catalog/products/metafields',
             query,
         });
@@ -956,7 +977,7 @@ export class ProductsV3Api {
     createProductsMetafields(
         requestBody: ProductsV3ApiSpecs.CreateProductsMetafieldsData['body'],
     ) {
-        return this.request.post<ProductsV3ApiSpecs.CreateProductsMetafieldsResponse, ProductsV3ApiSpecs.CreateProductsMetafieldsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.CreateProductsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductsMetafieldsErrors[422]>>)>({
             path: 'v3/catalog/products/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -971,7 +992,7 @@ export class ProductsV3Api {
     updateProductsMetafields(
         requestBody: ProductsV3ApiSpecs.UpdateProductsMetafieldsData['body'],
     ) {
-        return this.request.put<ProductsV3ApiSpecs.UpdateProductsMetafieldsResponse, ProductsV3ApiSpecs.UpdateProductsMetafieldsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.UpdateProductsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateProductsMetafieldsErrors[422]>>)>({
             path: 'v3/catalog/products/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -986,7 +1007,7 @@ export class ProductsV3Api {
     deleteProductsMetafields(
         requestBody: ProductsV3ApiSpecs.DeleteProductsMetafieldsData['body'],
     ) {
-        return this.request.delete<ProductsV3ApiSpecs.DeleteProductsMetafieldsResponse, ProductsV3ApiSpecs.DeleteProductsMetafieldsError>({
+        return this.request.delete<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.DeleteProductsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.DeleteProductsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.DeleteProductsMetafieldsErrors[422]>>)>({
             path: 'v3/catalog/products/metafields',
             contentType: 'application/json',
             body: requestBody,

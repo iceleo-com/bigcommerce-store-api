@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as PromotionsV3ApiSpecs from '../generated/promotions-v3';
 export * as PromotionsV3ApiSpecs from '../generated/promotions-v3';
 
@@ -22,7 +23,7 @@ export class PromotionsV3Api {
     getPromotions(
         query?: PromotionsV3ApiSpecs.GetPromotionsData['query'],
     ) {
-        return this.request.get<any, PromotionsV3ApiSpecs.GetPromotionsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<PromotionsV3ApiSpecs.GetPromotionsResponses[200]>>,RequestErrorResponse<422, Required<PromotionsV3ApiSpecs.GetPromotionsErrors[422]>>>({
             path: 'v3/promotions',
             query,
         });
@@ -41,7 +42,7 @@ export class PromotionsV3Api {
     createPromotion(
         requestBody: PromotionsV3ApiSpecs.CreatePromotionData['body'],
     ) {
-        return this.request.post<any, PromotionsV3ApiSpecs.CreatePromotionError>({
+        return this.request.post<RequestSuccessResponse<201, Required<PromotionsV3ApiSpecs.CreatePromotionResponses[201]>>,(RequestErrorResponse<400, Required<PromotionsV3ApiSpecs.CreatePromotionErrors[400]>> | RequestErrorResponse<403, Required<PromotionsV3ApiSpecs.CreatePromotionErrors[403]>> | RequestErrorResponse<422, Required<PromotionsV3ApiSpecs.CreatePromotionErrors[422]>>)>({
             path: 'v3/promotions',
             contentType: 'application/json',
             body: requestBody,
@@ -61,7 +62,7 @@ export class PromotionsV3Api {
     deletePromotions(
         query?: PromotionsV3ApiSpecs.DeletePromotionsData['query'],
     ) {
-        return this.request.delete<any, PromotionsV3ApiSpecs.DeletePromotionsError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<PromotionsV3ApiSpecs.DeletePromotionsResponses[204]>>,RequestErrorResponse<422, Required<PromotionsV3ApiSpecs.DeletePromotionsErrors[422]>>>({
             path: 'v3/promotions',
             query,
         });
@@ -76,9 +77,10 @@ export class PromotionsV3Api {
      The default rate limit for this endpoint is 40 concurrent requests
      */
     getPromotion(
+        id: PromotionsV3ApiSpecs.GetPromotionData['path']['id'],
     ) {
-        return this.request.get<any, PromotionsV3ApiSpecs.GetPromotionError>({
-            path: 'v3/promotions/{id}',
+        return this.request.get<RequestSuccessResponse<200, Required<PromotionsV3ApiSpecs.GetPromotionResponses[200]>>,RequestErrorResponse<404, Required<PromotionsV3ApiSpecs.GetPromotionErrors[404]>>>({
+            path: `v3/promotions/${id}`,
         });
     }
 
@@ -91,10 +93,11 @@ export class PromotionsV3Api {
      The default rate limit for this request is 40 concurrent requests.
      */
     updatePromotion(
+        id: PromotionsV3ApiSpecs.UpdatePromotionData['path']['id'],
         requestBody: PromotionsV3ApiSpecs.UpdatePromotionData['body'],
     ) {
-        return this.request.put<any, PromotionsV3ApiSpecs.UpdatePromotionError>({
-            path: 'v3/promotions/{id}',
+        return this.request.put<RequestSuccessResponse<200, Required<PromotionsV3ApiSpecs.UpdatePromotionResponses[200]>>,RequestErrorResponse<404, Required<PromotionsV3ApiSpecs.UpdatePromotionErrors[404]>>>({
+            path: `v3/promotions/${id}`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -109,9 +112,10 @@ export class PromotionsV3Api {
      The default rate limit for this endpoint is 40 concurrent requests.
      */
     deletePromotion(
+        id: PromotionsV3ApiSpecs.DeletePromotionData['path']['id'],
     ) {
-        return this.request.delete<any, any>({
-            path: 'v3/promotions/{id}',
+        return this.request.delete<RequestSuccessResponse<204, Required<PromotionsV3ApiSpecs.DeletePromotionResponses[204]>>,RequestErrorResponse<400, void>>({
+            path: `v3/promotions/${id}`,
         });
     }
 
@@ -121,13 +125,14 @@ export class PromotionsV3Api {
      * Get codes for a particular promotion.
 
      **Note:**
-     The default rate limit for this endpoint is 40 concurrent requests.
+     The default rate limit for this endpoint is 10 concurrent requests.
      */
     getPromotionCodes(
+        promotionId: PromotionsV3ApiSpecs.GetPromotionCodesData['path']['promotion_id'],
         query?: PromotionsV3ApiSpecs.GetPromotionCodesData['query'],
     ) {
-        return this.request.get<any, any>({
-            path: 'v3/promotions/{promotion_id}/codes',
+        return this.request.get<RequestSuccessResponse<200, Required<PromotionsV3ApiSpecs.GetPromotionCodesResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/promotions/${promotionId}/codes`,
             query,
         });
     }
@@ -141,10 +146,11 @@ export class PromotionsV3Api {
      The default rate limit for this endpoint is 40 concurrent requests.
      */
     createPromotionCode(
+        promotionId: PromotionsV3ApiSpecs.CreatePromotionCodeData['path']['promotion_id'],
         requestBody: PromotionsV3ApiSpecs.CreatePromotionCodeData['body'],
     ) {
-        return this.request.post<any, any>({
-            path: 'v3/promotions/{promotion_id}/codes',
+        return this.request.post<RequestSuccessResponse<201, Required<PromotionsV3ApiSpecs.CreatePromotionCodeResponses[201]>>,RequestErrorResponse<400, void>>({
+            path: `v3/promotions/${promotionId}/codes`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -160,11 +166,32 @@ export class PromotionsV3Api {
      * The default rate limit for this endpoint is 40 concurrent requests.
      */
     deleteCouponCodes(
+        promotionId: PromotionsV3ApiSpecs.DeleteCouponCodesData['path']['promotion_id'],
         query?: PromotionsV3ApiSpecs.DeleteCouponCodesData['query'],
     ) {
-        return this.request.delete<any, PromotionsV3ApiSpecs.DeleteCouponCodesError>({
-            path: 'v3/promotions/{promotion_id}/codes',
+        return this.request.delete<RequestSuccessResponse<204, Required<PromotionsV3ApiSpecs.DeleteCouponCodesResponses[204]>>,RequestErrorResponse<422, Required<PromotionsV3ApiSpecs.DeleteCouponCodesErrors[422]>>>({
+            path: `v3/promotions/${promotionId}/codes`,
             query,
+        });
+    }
+
+    /**
+     * Generate Multiple Coupon Codes
+     *
+     * Generate a batch of coupon codes for a particular bulk coupon promotion.
+
+     **Note:**
+     * batch_size (number of codes generated per request) is limited to 250. If batch_size is not an integer or larger than 250, it will return a 422 error code.
+     * The default rate limit for this endpoint is 10 concurrent requests.
+     */
+    generatePromotionCodesBatch(
+        promotionId: PromotionsV3ApiSpecs.GeneratePromotionCodesBatchData['path']['promotion_id'],
+        requestBody: PromotionsV3ApiSpecs.GeneratePromotionCodesBatchData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<201, Required<PromotionsV3ApiSpecs.GeneratePromotionCodesBatchResponses[201]>>,(RequestErrorResponse<400, Required<PromotionsV3ApiSpecs.GeneratePromotionCodesBatchErrors[400]>> | RequestErrorResponse<403, Required<PromotionsV3ApiSpecs.GeneratePromotionCodesBatchErrors[403]>> | RequestErrorResponse<405, Required<PromotionsV3ApiSpecs.GeneratePromotionCodesBatchErrors[405]>> | RequestErrorResponse<422, Required<PromotionsV3ApiSpecs.GeneratePromotionCodesBatchErrors[422]>>)>({
+            path: `v3/promotions/${promotionId}/codegen`,
+            contentType: 'application/json',
+            body: requestBody,
         });
     }
 
@@ -177,9 +204,11 @@ export class PromotionsV3Api {
      The default rate limit for this endpoint is 40 concurrent requests.
      */
     deleteCouponCode(
+        promotionId: PromotionsV3ApiSpecs.DeleteCouponCodeData['path']['promotion_id'],
+        codeId: PromotionsV3ApiSpecs.DeleteCouponCodeData['path']['code_id'],
     ) {
-        return this.request.delete<any, any>({
-            path: 'v3/promotions/{promotion_id}/codes/{code_id}',
+        return this.request.delete<RequestSuccessResponse<204, Required<PromotionsV3ApiSpecs.DeleteCouponCodeResponses[204]>>,RequestErrorResponse<400, void>>({
+            path: `v3/promotions/${promotionId}/codes/${codeId}`,
         });
     }
 }

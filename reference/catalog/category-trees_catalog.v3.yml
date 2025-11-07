@@ -128,9 +128,16 @@ paths:
       description: |-
         Creates new categories. 
 
+        Limits: 
+        - 16,000 categories per store limit.
+        - 1,000 categories per product limit.
+        - 50 characters category name length.
+        - 8 levels of child categories depth limit.
+        - 65,535 characters category description length limit.
+
         Creating a category requires:
          - `name`
-         - `tree_id` or `parent_id` 
+         - `tree_id` or `parent_id`
       parameters:
         - $ref: '#/components/parameters/ContentType'
       tags:
@@ -328,7 +335,8 @@ paths:
         This single endpoint updates and creates category trees. If a tree object contains an ID, it is processed as an update operation using that ID. If you do not provide an ID, a new tree is created. The category tree `name` field is required to create trees, but is not required on the update.
         
         **Usage Notes**
-        * `channel_id` is required to create a category tree. You can assign one `channel_id` to one category tree.
+        * Channel ID in the `channels` field is required to create a category tree. You can only assign a category tree to one channel.
+        * The `channels` field must be absent when updating a category tree. This field is currently unsupported during a category tree update.
       parameters:
         - $ref: '#/components/parameters/ContentType'
       operationId: upsertCategoryTrees
@@ -395,7 +403,11 @@ paths:
   '/catalog/trees/{tree_id}/categories':
     get:
       summary: Get a category tree
-      description: Returns a category tree.
+      description: |-
+        Returns a category tree.
+
+        **Note:**
+        The default rate limit for this endpoint is 1 concurrent request.
       operationId: getCategoryTree
       parameters:
         - name: depth
@@ -421,6 +433,7 @@ paths:
                     is_visible: true
                     children:
                       - string
+                    url: "/bath/"
                 meta:
                   type: object
                   properties: {}
@@ -499,11 +512,13 @@ components:
               $ref: '#/components/schemas/parent_id'
             tree_id:
               $ref: '#/components/schemas/tree_id'
-          required:
+        - $ref: '#/components/schemas/CategoryBase'
+        - required:
             - name
+        anyOf:
+          - required:
             - tree_id
             - parent_id
-        - $ref: '#/components/schemas/CategoryBase'
     UpdateCategories:
       type: array
       items:
@@ -544,6 +559,8 @@ components:
           description: |
             Priority this category will be given when included in the menu and category pages. The lower the number, the closer to the top of the results the category will be.
           example: 3
+          minimum: -2147483648
+          maximum: 2147483647
         page_title:
           type: string
           description: |
@@ -565,7 +582,7 @@ components:
           description: |
             Custom meta description for the category page. If not defined, the storeʼs default meta description will be used.
         layout_file:
-          maxLength: 500
+          maxLength: 50
           minLength: 0
           type: string
           description: |
@@ -585,6 +602,8 @@ components:
           type: string
           description: |
             A comma-separated list of keywords that can be used to locate the category when searching the store.
+          minLength: 0
+          maxLength: 255
         default_product_sort:
           type: string
           description: |
@@ -817,6 +836,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CategoryNode'
+        url:
+          type: string
+          minLength: 1
+          maxLength: 255
       x-tags:
         - Models
     MetaPaginationObject:
@@ -898,6 +921,8 @@ components:
       properties:
         path:
           type: string
+          minLength: 1
+          maxLength: 255
           example: '/bath/'
         is_customized:
           type: boolean

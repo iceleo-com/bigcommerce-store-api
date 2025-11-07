@@ -79,6 +79,7 @@ paths:
         - Orders
       parameters:
         - $ref: '#/components/parameters/order_includes'
+        - $ref: '#/components/parameters/consignment_structure'
       responses:
         '200':
           $ref: '#/components/responses/order_Resp'
@@ -109,6 +110,10 @@ paths:
         * The values for cost_ex_tax, cost_inc_tax and cost_tax in the fees payload should reflect the tax rate associated with the tax_class_id. For a 10% tax rate, the difference between cost_inc_tax and cost_ex_tax should be 10%. If no tax_class_id is provided, the store's default "tax class for fee" will apply. Incorrect data may lead to issues in downstream operations like refunds.
         
         To learn more about creating or updating orders, see [Orders Overview](/docs/store-operations/orders).
+
+        > #### Note
+        > * If historical orders processed on another eCommerce platform are being migrated to BigCommerce, supply the `external_source` field with the code **M-MIG**. This code will exclude the historical orders from the store’s GMV/order count, which factors into pricing.
+
       summary: Update an Order
       tags:
         - Orders
@@ -336,6 +341,7 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/channel_id'
         - $ref: '#/components/parameters/order_includes'
+        - $ref: '#/components/parameters/consignment_structure'
         - $ref: '#/components/parameters/external_order_id'
       responses:
         '200':
@@ -375,12 +381,19 @@ paths:
 
         The V2 Orders API will not trigger the typical [Order Email](https://support.bigcommerce.com/s/article/Customizing-Emails?language=en_US) when creating orders. To create an order that does trigger this email, you can instead [create a cart](/docs/rest-management/carts/carts-single#create-a-cart) and [convert that cart into an order](/docs/rest-management/checkouts/checkout-orders#create-an-order).
 
+        If you are building an app that creates orders, it must include your app's ID in the `external_source` field of new orders to be approved for the App Marketplace. See [App Store Approval Requirements](/docs/integrations/apps/guide/requirements#functionality) to learn more.
+
+        > #### Note
+        > * If historical orders processed on another eCommerce platform are being migrated to BigCommerce, supply the `external_source` field with the code **M-MIG**. This code will exclude the historical orders from the store’s GMV/order count, which factors into pricing.
+        
+
       summary: Create an Order
       tags:
         - Orders
       parameters:
         - $ref: '#/components/parameters/ContentType'
         - $ref: '#/components/parameters/order_includes'
+        - $ref: '#/components/parameters/consignment_structure'
       requestBody:
         content:
           application/json:
@@ -718,7 +731,7 @@ paths:
           description: To return detailed tax information, pass in the details query.
           schema:
             type: string
-            default: 'true'
+            default: 'false'
       responses:
         '200':
           $ref: '#/components/responses/orderTaxes_Resp'
@@ -1343,12 +1356,14 @@ components:
       description: The page to return in the response.
       schema:
         type: number
+        default: 1
     limit:
       name: limit
       in: query
       description: Number of results to return.
       schema:
         type: number
+        default: 50
     sort:
       in: query
       name: sort
@@ -1419,14 +1434,20 @@ components:
       description: Shipping consignment ID.
       schema:
         type: integer
+    consignment_structure:
+      name: consignment_structure
+      in: query
+      schema:
+        type: string
+        enum:
+          - object
+      description: Should be specified along with `include=consignments` or `include=consignments.line_items` to return consignments in the supported object structure. The default array structure provided is legacy and may not be supported in the future.
     order_includes:
       name: include
       in: query
       description: |-
-        * `consignments` - include the response returned from the request to the `/orders/{order_id}/consignments` endpoint.
-        
-        * `consignments.line_items` - include the response returned from the request to the `/orders/{order_id}/products` endpoint in consignments. This implies `include=consignments`.
-
+        * `consignments` - include the response returned from the request to the `/orders/{order_id}/consignments` endpoint. Current default array structure is legacy and will be deprecated from **1 Feb 2026**. Specify `consignment_structure=object` as a request parameter when including consignments.
+        * `consignments.line_items` - include the response returned from the request to the `/orders/{order_id}/products` endpoint in consignments. This will also includes the resources associated with `include=consignments`. Current default array structure is legacy and will be deprecated from **1 Feb 2026**. Specify `consignment_structure=object` as a request parameter when including consignments.
         * `fees` - include the response returned from the request to the `/orders/{order_id}/fees` endpoint.
       style: form
       explode: false
@@ -1923,7 +1944,7 @@ components:
                 wrapping_cost_tax_class_id: 0
                 total_ex_tax: '931.86'
                 total_inc_tax: '1008.74'
-                total_tax: 76.88
+                total_tax: '76.88'
                 is_tax_inclusive_pricing: false
                 items_total: 11
                 items_shipped: 0
@@ -1945,7 +1966,7 @@ components:
                 staff_notes: BIN-45
                 customer_message: Custom Journal Added
                 discount_amount: '0'
-                coupon_discount": 0
+                coupon_discount: '0'
                 shipping_address_count: 1
                 ebay_order_id: '0'
                 cart_id: 8b84f622-faf1-4c10-887b-f5dff2f9eaf4
@@ -2795,6 +2816,7 @@ components:
                   order_id: 138
                   order_address_id: 39
                   tax_rate_id: 1
+                  sales_tax_id: 'TaxId123'
                   tax_class_id: 0
                   name: Tax
                   class: Default Tax Class
@@ -2807,6 +2829,7 @@ components:
                   order_id: 138
                   order_address_id: 40
                   tax_rate_id: 1
+                  sales_tax_id: 'TaxId123'
                   tax_class_id: 0
                   name: Tax
                   class: Default Tax Class
@@ -2960,6 +2983,7 @@ components:
       type: object
       description: ''
       x-internal: false
+      additionalProperties: false
       properties:
         id:
           description: Numeric ID of this product within this order.
@@ -3349,9 +3373,14 @@ components:
           example: 29
           type: integer
         tax_rate_id:
-          description: The unique numeric identifier of the tax rate.
+          description: The unique numeric identifier of the tax rate. This field has been deprecated, use sales_tax_id instead.
           example: 1
           type: integer
+          deprecated: true
+        sales_tax_id:
+          description: A unique identifier for the applied tax rate. This may be a third-party tax provider's identifier.
+          example: 'TaxId123'
+          type: string
         tax_class_id:
           description: |-
             A unique numeric identifier for the tax class. If not provided or null, the default fee tax class from the control panel is used.
@@ -3497,6 +3526,21 @@ components:
           description: Path where you can use a GET request to get the order consignments.
           readOnly: true
           example: /orders/101/consignments
+          type: string
+    orderFees_Resource:
+      title: orderFees_Resource
+      type: object
+      readOnly: true
+      properties:
+        url:
+          description: URL where you can use a GET request to get the order fees.
+          readOnly: true
+          example: 'https://api.bigcommerce.com/stores/{store_hash}/v2/orders/101/fees'
+          type: string
+        resource:
+          description: Path where you can use a GET request to get the order fees.
+          readOnly: true
+          example: /orders/101/fees
           type: string
     products_Resource:
       title: products_Resource
@@ -3966,7 +4010,7 @@ components:
           example: '0.0000'
           type: string
         channel_id:
-          description: Shows where the order originated. The channel_id will default to 1.
+          description: Shows where the order originated. The channel_id defaults to 1. The value must match the ID of a valid and enabled channel. If the ID refers to a non-existing or disconnected channel, the POST and PUT `/v2/orders` endpoints return a validation error.
           example: 1
           type: integer
         customer_id:
@@ -3976,7 +4020,7 @@ components:
           example: Thank you
           type: string
         date_created:
-          description: The date the order was created, formatted in the RFC-2822 standard. You set this attribute on Order creation (POST) to support the migration of historical orders. If you do not provide a value, then it will default to the current date/time. e.g., `Tue, 20 Nov 2012 00:00:00 +0000`.
+          description: The date the order was created, formatted in the RFC-2822 standard. You set this attribute on Order creation (POST) to support the migration of historical orders. If you do not provide a value, then it will default to the current date/time. e.g., `Tue, 20 Nov 2012 00:00:00 +0000`. This date time is always in UTC in the api response.
           type: string
         discount_amount:
           description: Amount of discount for this transaction. The value can't be negative. (Float, Float-As-String, Integer)
@@ -4075,11 +4119,17 @@ components:
           example: '0.0000'
           type: string
         shipping_cost_ex_tax:
-          description: The value of shipping cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+          description: >
+            The value of shipping cost, excluding tax.
+            When specified in a POST or PUT request, the field `shipping_cost_inc_tax` is also required.
+            The value can't be negative (Float, Float-As-String, Integer)
           example: '0.0000'
           type: string
         shipping_cost_inc_tax:
-          description: The value of shipping cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+          description: >
+            The value of shipping cost, including tax.
+            When specified in a POST or PUT request, the field `shipping_cost_ex_tax` is also required.
+            The value can't be negative. (Float, Float-As-String, Integer)
           example: '0.0000'
           type: string
         staff_notes:
@@ -4109,8 +4159,13 @@ components:
           type: string
         customer_locale:
           type: string
-          example: en
-          description: The customer’s locale.
+          example: en, asa, en-US, es-419
+          description: |
+            The customer’s locale. The supported formats are:
+            - 2-char lowercase characters. e.g., `en`
+            - 3-char lowercase characters. e.g., `asa`
+            - 5-char the language code is 2 lowercase characters and the region code is 2 uppercase characters, with `-` in the middle. e.g., `en-US`
+            - 6-char the language code is 2 lowercase character and the region code is three digit number, with `-` in the middle. e.g., `es-419`
         external_order_id:
           type: string
           example: external-order-id
@@ -4228,10 +4283,14 @@ components:
           example: 118
         date_modified:
           type: string
-          description: A read-only value representing the last modification of the order. Do not attempt to modify or set this value in a POST or PUT request. RFC-2822
+          description: A read-only value representing the last modification of the order. Do not attempt to modify or set this value in a POST or PUT request. RFC-2822. This date time is always in UTC in the api response.
         date_shipped:
           type: string
-          description: A read-only value representing the date of shipment. Do not attempt to modify or set this value in a POST or PUT request. RFC-2822
+          description: >
+            A read-only value representing the date when the order is fully shipped.
+            Do not attempt to modify or set this value in a POST or PUT request.
+            RFC-2822
+          example: Wed, 25 Jun 2025 05:22:10 +0000
         cart_id:
           description: The cart ID from which this order originated, if applicable. Correlates with the Cart API. This is a read-only field; do not set or modify its value in a POST or PUT request.
           example: a8458391-ef68-4fe5-9ec1-442e6a767364
@@ -4290,6 +4349,7 @@ components:
             - refunded
             - void
             - void pending
+            - ''
         store_credit_amount:
           description: Represents the store credit that the shopper has redeemed on this individual order. This is a read-only value. Do not pass in a POST or PUT request. (Float, Float-As-String, Integer)
           example: '0.0000'
@@ -4337,6 +4397,10 @@ components:
           description: Indicates whether the order is deleted/archived. When set to true in a PUT request, it has the same result as the DELETE an order request.
           example: false
           type: boolean
+        total_tax:
+          description: Total tax amount for the order
+          example: '25.0000'
+          type: string
         is_tax_inclusive_pricing:
           description: |-
             Indicate whether the order's base prices include tax.
@@ -4356,7 +4420,9 @@ components:
             Allowed values: `www` (Desktop) | `iphone` (Iphone) | `ipad` (Ipad) | `android` (Android) | `mobile` (Mobile) | `manual` (manual order) | `external` (Orders API) | `checkout_api` (Checkout API) | `buybutton` (Buy Button) | `amazon` (Amazon) | `ebay` (Ebay) | `facebookshop` (Facebook Shop) | `facebookcheckout` (Facebook Checkout) | `facebookmarketplace` (Facebook Marketplace) | `pinterest` (Pinterest) | `socialshop` (Social Shop)
           type: string
         consignments:
-          $ref: '#/components/schemas/orderConsignments_Resource'
+          oneOf:
+            - $ref: '#/components/schemas/orderConsignments_Resource'
+            - $ref: '#/components/schemas/orderConsignment_Get'
         products:
           $ref: '#/components/schemas/products_Resource'
         shipping_addresses:
@@ -4370,9 +4436,11 @@ components:
         billing_address:
           $ref: '#/components/schemas/billingAddress_Resp'
         fees:
-          type: array
-          items:
-            $ref: '#/components/schemas/orderFees_Resp'
+          oneOf:
+            - $ref: '#/components/schemas/orderFees_Resource'
+            - type: array
+              items:
+                $ref: '#/components/schemas/orderFees_Resp'
     orderCustomProduct_Put:
       type: object
       title: Custom product
@@ -4652,7 +4720,7 @@ components:
             billing_address:
               $ref: '#/components/schemas/billingAddress_Put'
             channel_id:
-              description: Shows where the order originated. The channel_id will default to 1.
+              description: Shows where the order originated. The channel_id defaults to 1. The value must match the ID of a valid and enabled channel. If the ID refers to a non-existing or disconnected channel, the POST and PUT `/v2/orders` endpoints return a validation error.
               example: 1
               type: integer
             consignments:
@@ -4816,8 +4884,13 @@ components:
               type: string
             customer_locale:
               type: string
-              example: en
-              description: The customer’s locale.
+              example: en, asa, en-US, es-419
+              description: |
+                The customer’s locale. The supported formats are:
+                - 2-char lowercase characters. e.g., `en`
+                - 3-char lowercase characters. e.g., `asa`
+                - 5-char the language code is 2 lowercase characters and the region code is 2 uppercase characters, with `-` in the middle. e.g., `en-US`
+                - 6-char the language code is 2 lowercase character and the region code is three digit number, with `-` in the middle. e.g., `es-419`
             external_order_id:
               type: string
               nullable: true
@@ -5335,9 +5408,13 @@ components:
           example: recipient@email.com
           description: The recipient email of the gift certificate.
         line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/products_Resource'
+              oneOf:
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/products_Resource'
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/orderProducts'
     pickupConsignment_Get:
       allOf:
         - type: object
@@ -5356,9 +5433,13 @@ components:
             location:
               $ref: '#/components/schemas/pickupConsignmentLocation_Get'
             line_items:
-              type: array
-              items:
-                $ref: '#/components/schemas/products_Resource'
+              oneOf:
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/products_Resource'
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/orderProducts'
       x-examples:
         example-1:
           id: 99
@@ -5417,9 +5498,13 @@ components:
         - type: object
           properties:
             line_items:
-              type: array
-              items:
-                $ref: '#/components/schemas/products_Resource'
+              oneOf:
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/products_Resource'
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/orderProducts'
             items_total:
               type: number
               example: 1
@@ -5592,9 +5677,13 @@ components:
           example: recipient@email.com
           description: The recipient email of the digital consignment.
         line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/products_Resource'
+          oneOf:
+            - type: array
+              items:
+                $ref: '#/components/schemas/products_Resource'
+            - type: array
+              items:
+                $ref: '#/components/schemas/orderProducts'
       x-examples:
         example-1:
           recipient_email: recipient@email.com

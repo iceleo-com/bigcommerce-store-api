@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as StorefrontTokensV3ApiSpecs from '../generated/storefront-tokens-v3';
 export * as StorefrontTokensV3ApiSpecs from '../generated/storefront-tokens-v3';
 
@@ -16,11 +17,13 @@ export class StorefrontTokensV3Api {
 
      **Required Scopes**
      * `Manage` `Storefront API Tokens`
+
+     > NOTE: While neither `channel_id` nor `channel_ids` is labelled as required, one must be included in the request body. Including neither will throw an error, and including both will result in unexpected behaviors.
      */
     createToken(
         requestBody: StorefrontTokensV3ApiSpecs.CreateTokenData['body'],
     ) {
-        return this.request.post<StorefrontTokensV3ApiSpecs.CreateTokenResponse, StorefrontTokensV3ApiSpecs.CreateTokenError>({
+        return this.request.post<RequestSuccessResponse<200, Required<StorefrontTokensV3ApiSpecs.CreateTokenResponses[200]>>,(RequestErrorResponse<401, Required<StorefrontTokensV3ApiSpecs.CreateTokenErrors[401]>> | RequestErrorResponse<403, Required<StorefrontTokensV3ApiSpecs.CreateTokenErrors[403]>> | RequestErrorResponse<422, Required<StorefrontTokensV3ApiSpecs.CreateTokenErrors[422]>>)>({
             path: 'v3/storefront/api-token',
             contentType: 'application/json',
             body: requestBody,
@@ -34,7 +37,7 @@ export class StorefrontTokensV3Api {
      */
     revokeToken(
     ) {
-        return this.request.delete<any, StorefrontTokensV3ApiSpecs.RevokeTokenError>({
+        return this.request.delete<RequestSuccessResponse<200, Required<StorefrontTokensV3ApiSpecs.RevokeTokenResponses[200]>>,(RequestErrorResponse<401, Required<StorefrontTokensV3ApiSpecs.RevokeTokenErrors[401]>> | RequestErrorResponse<403, Required<StorefrontTokensV3ApiSpecs.RevokeTokenErrors[403]>> | RequestErrorResponse<422, Required<StorefrontTokensV3ApiSpecs.RevokeTokenErrors[422]>>)>({
             path: 'v3/storefront/api-token',
         });
     }
@@ -46,11 +49,13 @@ export class StorefrontTokensV3Api {
 
      **Required Scopes**
      * `Manage` `Storefront API Customer Impersonation Tokens`
+
+     > NOTE: While neither `channel_id` nor `channel_ids` is labelled as required, one must be included in the request body. Including neither will throw an error, and including both will result in unexpected behaviors.
      */
     createTokenWithCustomerImpersonation(
         requestBody: StorefrontTokensV3ApiSpecs.CreateTokenWithCustomerImpersonationData['body'],
     ) {
-        return this.request.post<StorefrontTokensV3ApiSpecs.CreateTokenWithCustomerImpersonationResponse, StorefrontTokensV3ApiSpecs.CreateTokenWithCustomerImpersonationError>({
+        return this.request.post<RequestSuccessResponse<200, Required<StorefrontTokensV3ApiSpecs.CreateTokenWithCustomerImpersonationResponses[200]>>,(RequestErrorResponse<401, Required<StorefrontTokensV3ApiSpecs.CreateTokenWithCustomerImpersonationErrors[401]>> | RequestErrorResponse<403, Required<StorefrontTokensV3ApiSpecs.CreateTokenWithCustomerImpersonationErrors[403]>> | RequestErrorResponse<422, Required<StorefrontTokensV3ApiSpecs.CreateTokenWithCustomerImpersonationErrors[422]>>)>({
             path: 'v3/storefront/api-token-customer-impersonation',
             contentType: 'application/json',
             body: requestBody,

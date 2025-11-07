@@ -32,6 +32,7 @@ paths:
       operationId: getTaxProperties
       parameters:
         - $ref: "#/components/parameters/idin"
+        - $ref: "#/components/parameters/typein"
       responses:
         "200":
           description: OK
@@ -263,6 +264,17 @@ components:
         type: array
         items:
           type: integer
+    typein:
+      name: type:in
+      in: query
+      required: false
+      description: Filter result by the type of tax property. To target multiple types, provide a comma-separated list of types such as `customer,product`.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
   securitySchemes:
     X-Auth-Token:
       name: X-Auth-Token
@@ -327,6 +339,13 @@ components:
           format: date-time
           example: 2022-07-21T19:33:57+00:00
           readOnly: true
+        type:
+          type: string
+          description: The type of entity that the tax property can be associated with.
+          enum:
+            - PRODUCT
+            - CUSTOMER
+          example: PRODUCT
     PropertyPOST:
       type: object
       properties:
@@ -347,9 +366,18 @@ components:
             This string will be displayed on the Products screen as a tooltip
             associated with the relevant field.
           example: Food Industry
+        type:
+          type: string
+          description: The type of entity that the tax property can be associated with.
+            Default
+          enum:
+            - PRODUCT
+            - CUSTOMER
+          example: PRODUCT
       required:
         - code
         - display_name
+        - type
     PropertyPUT:
       type: object
       properties:

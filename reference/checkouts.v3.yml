@@ -1660,9 +1660,6 @@ paths:
                           discounted_amount:
                             type: number
                             example: 10
-                          name:
-                            type: string
-                            example: manual
                     line_items:
                         type: array
                         items:
@@ -1682,7 +1679,6 @@ paths:
               cart:
                 discounts: 
                   - discounted_amount: 10
-                    name: "manual-discount"
               version: 1
         required: false
       responses:
@@ -7931,7 +7927,11 @@ paths:
       tags:
         - Checkout Fees
       summary: Delete order level fees from a checkout.
-      description: Delete fees from a checkout.
+      description: |
+        Delete fees from a checkout.
+
+        > #### Note 
+        > * The `Try It` feature is not currently supported for this endpoint.  
       operationId: CheckoutsFeesByCheckoutIdDelete
       parameters:
         - $ref: '#/components/parameters/checkoutId'
@@ -8016,6 +8016,8 @@ paths:
                   order_confirmation_use_custom_checkout_script: false
                   custom_order_confirmation_script_url: 'https://example.com/custom-order-confirmation-script.js'
                   custom_checkout_supports_uco_settings: false
+                  custom_checkout_sri_hash: 'sha256-1234567890'
+                  order_confirmation_sri_hash: 'sha256-0987654321'
                 meta: {}
             WebDAV protocol:
               example:
@@ -8056,6 +8058,8 @@ paths:
                   order_confirmation_use_custom_checkout_script: false
                   custom_order_confirmation_script_url: 'https://example.com/custom-order-confirmation-script.js'
                   custom_checkout_supports_uco_settings: false
+                  custom_checkout_sri_hash: 'sha256-1234567890'
+                  order_confirmation_sri_hash: 'sha256-0987654321'
                 meta: {}
             WebDAV protocol:
               example:
@@ -8064,6 +8068,62 @@ paths:
                   order_confirmation_use_custom_checkout_script: false
                   custom_order_confirmation_script_url: 'webdav:vtz-order-confirmation/dist/auto-loader.js'
                 meta: {}
+  /checkouts/settings/channels/{channelId}:
+    parameters:
+      - name: channelId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get Channel-Specific Checkout Settings
+      description: Returns the checkout settings for a given channel (storefront) by channelId.
+      tags:
+        - Checkout Settings
+      operationId: get-channel-checkout-settings
+      responses:
+        '200':
+          description: Channel checkout settings retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ChannelCheckoutsSettings'
+                  meta:
+                    $ref: '#/components/schemas/MetaOpen'
+        '422':
+          description: Invalid channelId or invalid request
+  
+    put:
+      summary: Update Channel-Specific Checkout Settings
+      description: |-
+        Updates the checkout settings for a given channel (storefront) by channelId.
+        
+        This endpoint will update all settings included in the request body. Any settings excluded will remain unchanged. All non-boolean 
+      tags:
+        - Checkout Settings
+      operationId: put-channel-checkout-settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChannelCheckoutsSettings'
+      responses:
+        '200':
+          description: Channel checkout settings updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ChannelCheckoutsSettings'
+                  meta:
+                    $ref: '#/components/schemas/MetaOpen'
+        '422':
+          description: Invalid channelId or invalid request
   '/checkouts/{checkoutId}/token':
     parameters:
       
@@ -8205,6 +8265,9 @@ components:
                   type: string
                   description: 'ISO-4217 currency code. (See: https://www.iso.org/iso-4217-currency-codes.html.)'
                   example: USD
+            tax_included:
+              type: boolean
+              description: 'Indicates whether product prices are shown inclusive of sales tax.'
             base_amount:
               type: number
               description: 'Sum of cart line-item amounts before cart-level discounts, coupons, or taxes are applied.'
@@ -9412,6 +9475,36 @@ components:
           type: string
         custom_checkout_supports_uco_settings:
           type: boolean
+        custom_checkout_sri_hash:
+          type: string
+        custom_order_confirmation_sri_hash:
+          type: string
+    ChannelCheckoutsSettings:
+      title: Channel-Specific Checkouts Settings
+      allOf:
+        - type: object
+          properties:
+            checkout_type:
+              type: string
+            guest_checkout_type:
+              type: string
+            guest_checkout_for_existing_accounts:
+              type: string
+            policy_consent:
+              type: string
+            order_confirmation_contact_email:
+              type: string
+            is_order_terms_and_conditions_enabled:
+              type: boolean
+            order_terms_and_conditions_type:
+              type: string
+            order_terms_and_conditions_link:
+              type: string
+            order_terms_and_conditions_textarea:
+              type: string
+            should_redirect_to_storefront_for_auth: 
+              type: boolean
+        - $ref: "#/components/schemas/CheckoutsSettings"
     CheckoutsSettingsRequest:
       title: Checkouts settings request
       type: object
@@ -9428,6 +9521,12 @@ components:
         custom_checkout_supports_uco_settings:
           type: boolean
           description: Boolean value that specifies whether this checkout supports Optimized One-Page Checkout settings.
+        custom_checkout_sri_hash:
+          type: string
+          description: 'The Subresource Integrity (SRI) hash for the custom checkout script URL.'
+        custom_order_confirmation_sri_hash:
+          type: string
+          description: 'The Subresource Integrity (SRI) hash for the custom order confirmation script URL.'
       description: ''
     PickupOption:
       type: object

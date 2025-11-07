@@ -3,7 +3,13 @@ export type RequestContentType = 'application/json' | 'application/x-www-form-ur
 export type RequestBody = FormData | Record<string, any> | string | undefined;
 export type RequestQuery = Record<string, any> | URLSearchParams | string | undefined;
 
-type RequiredFields<T> = T extends Record<string, any>[] ? Required<T[number]>[] : Required<T>;
+type RequiredFields<T> = T extends void
+    ? T : 
+    T extends Array<Record<PropertyKey, any>>
+        ? Array<Required<{ [K in keyof T[number]]: T[number][K] }>>
+        : T extends Record<PropertyKey, any>
+            ? Required<{ [K in keyof T]: T[K] }>
+            : T;
 
 export interface BigCommerceApiSuccessResponse {
     data?: any;
@@ -17,17 +23,15 @@ export type RequestOptions = {
     query?: RequestQuery;
 };
 
-export type RequestSuccessResponse<T> = {
+export type RequestSuccessResponse<T_Status extends number, T_Data> = {
     status: 'success';
-    http_status: number;
-    data: T extends BigCommerceApiSuccessResponse ? RequiredFields<T['data']> : RequiredFields<T>;
-    meta?: T extends BigCommerceApiSuccessResponse ? T['meta'] : any;
+    http_status: T_Status;
+    data: T_Data extends BigCommerceApiSuccessResponse ? RequiredFields<T_Data['data']> : RequiredFields<T_Data>;
+    meta?: T_Data extends BigCommerceApiSuccessResponse ? T_Data['meta'] : any;
 };
 
-export type RequestErrorResponse<T> = {
+export type RequestErrorResponse<T_Status extends number, T_Errors> = {
     status: 'error';
-    http_status: number;
-    errors: T;
-}
-
-export type RequestResponse<T_Success, T_Error> = RequestSuccessResponse<T_Success> | RequestErrorResponse<T_Error>;
+    http_status: T_Status;
+    errors: T_Errors;
+};

@@ -1,55 +1,8 @@
-export type carrierConnection = {
-    carrier_id?: string;
-    connection?: {
-        [key: string]: unknown;
-    };
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2' | (string & {});
 };
-export type HandlingFees = {
-    fixed_surcharge?: string;
-    display_separately?: boolean;
-} | {
-    percentage_surcharge?: string;
-    display_separately?: boolean;
-};
-export type metaCollection = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_page?: number;
-        links?: {
-            previous?: string;
-            next?: string;
-            current?: string;
-        };
-    };
-};
-export type ParameterAccept = string;
-export type ParameterContentType = string;
-export type shippingMethod_Base = {
-    name?: string;
-    type?: ShippingMethodType;
-    settings?: {
-        rate?: number;
-    };
-    enabled?: boolean;
-    handling_fees?: ({
-        fixed_surcharge?: number;
-    } | {
-        percentage_surcharge?: number;
-    });
-    is_fallback?: boolean;
-    channel_ids?: Array<(number)>;
-};
-export type shippingMethod_Full = {
-    readonly id?: number;
-} & shippingMethod_Base;
-export type ShippingMethodType = 'perorder' | 'peritem' | 'weight' | 'total' | 'auspost' | 'canadapost' | 'endicia' | 'usps' | 'fedex' | 'royalmail' | 'upsready' | 'freeshipping';
+export type TrackingCarrier = 'auspost' | 'canadapost' | 'endicia' | 'usps' | 'fedex' | 'royalmail' | 'ups' | 'upsready' | 'shipperhq';
 export type ShippingProvider = 'fedex' | 'auspost' | 'canadapost' | 'endicia' | 'usps' | 'royalmail' | 'ups' | 'upsready' | 'upsonline' | 'shipperhq';
-export type ShippingResponse = {
-    [key: string]: unknown;
-};
 export type ShippingZone = {
     readonly id?: number;
     name: string;
@@ -65,31 +18,72 @@ export type ShippingZone = {
         minimum_sub_total?: string;
         exclude_fixed_shipping_products?: boolean;
     };
-    handling_fees?: ({
+    handling_fees?: {
         fixed_surcharge?: string;
         display_separately?: boolean;
     } | {
         percentage_surcharge?: string;
         display_separately?: boolean;
-    });
+    };
     enabled?: boolean;
 };
-export type type = 'zip' | 'country' | 'state' | 'global';
 export type ShippingZoneLocations = {
     id?: number;
     zip?: string;
     country_iso2?: string;
     state_iso2?: string;
 };
-export type TrackingCarrier = 'auspost' | 'canadapost' | 'endicia' | 'usps' | 'fedex' | 'royalmail' | 'ups' | 'upsready' | 'shipperhq';
-export type GetShippingZonesData = {
-    headers: {
-        Accept: string;
+export type HandlingFees = {
+    fixed_surcharge?: string;
+    display_separately?: boolean;
+} | {
+    percentage_surcharge?: string;
+    display_separately?: boolean;
+};
+export type ShippingMethodFull = {
+    readonly id?: number;
+} & ShippingMethodBase;
+export type ShippingMethodType = 'perorder' | 'peritem' | 'weight' | 'total' | 'auspost' | 'canadapost' | 'endicia' | 'usps' | 'fedex' | 'royalmail' | 'upsready' | 'freeshipping';
+export type ShippingMethodBase = {
+    name?: string;
+    type?: ShippingMethodType;
+    settings?: {
+        rate?: number;
+    };
+    enabled?: boolean;
+    handling_fees?: {
+        fixed_surcharge?: number;
+    } | {
+        percentage_surcharge?: number;
+    };
+    is_fallback?: boolean;
+    channel_ids?: Array<number>;
+};
+export type ShippingResponse = {
+    [key: string]: unknown;
+};
+export type CarrierConnection = {
+    carrier_id?: string;
+    connection?: {
+        [key: string]: unknown;
     };
 };
-export type GetShippingZonesResponse = (Array<{
-    id?: number;
-    name?: string;
+export type MetaCollection = {
+    pagination?: {
+        total?: number;
+        count?: number;
+        per_page?: number;
+        current_page?: number;
+        total_page?: number;
+        links?: {
+            previous?: string;
+            next?: string;
+            current?: string;
+        };
+    };
+};
+export type ShippingZoneWritable = {
+    name: string;
     type?: 'zip' | 'country' | 'state' | 'global';
     locations?: Array<{
         id?: number;
@@ -102,16 +96,57 @@ export type GetShippingZonesResponse = (Array<{
         minimum_sub_total?: string;
         exclude_fixed_shipping_products?: boolean;
     };
-    handling_fees?: ({
+    handling_fees?: {
         fixed_surcharge?: string;
         display_separately?: boolean;
     } | {
         percentage_surcharge?: string;
         display_separately?: boolean;
-    });
+    };
     enabled?: boolean;
-}>);
-export type GetShippingZonesError = unknown;
+};
+export type ShippingMethodFullWritable = ShippingMethodBase;
+export type ShippingResponseWritable = {
+    [key: string]: unknown;
+};
+export type Accept = string;
+export type ContentType = string;
+export type GetShippingZonesData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/shipping/zones';
+};
+export type GetShippingZonesResponses = {
+    200: Array<{
+        id?: number;
+        name?: string;
+        type?: 'zip' | 'country' | 'state' | 'global';
+        locations?: Array<{
+            id?: number;
+            zip?: string;
+            country_iso2?: string;
+            state_iso2?: string;
+        }>;
+        free_shipping?: {
+            enabled?: boolean;
+            minimum_sub_total?: string;
+            exclude_fixed_shipping_products?: boolean;
+        };
+        handling_fees?: {
+            fixed_surcharge?: string;
+            display_separately?: boolean;
+        } | {
+            percentage_surcharge?: string;
+            display_separately?: boolean;
+        };
+        enabled?: boolean;
+    }>;
+};
+export type GetShippingZonesResponse = GetShippingZonesResponses[keyof GetShippingZonesResponses];
 export type CreateShippingZonesData = {
     body?: {
         name: string;
@@ -127,78 +162,103 @@ export type CreateShippingZonesData = {
             minimum_sub_total?: string;
             exclude_fixed_shipping_products?: boolean;
         };
-        handling_fees?: ({
+        handling_fees?: {
             fixed_surcharge?: string;
             display_separately?: boolean;
         } | {
             percentage_surcharge?: string;
             display_separately?: boolean;
-        });
+        };
         enabled?: boolean;
     };
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/shipping/zones';
 };
-export type CreateShippingZonesResponse = ({
-    id?: number;
-    name?: string;
-    type?: 'zip' | 'country' | 'state' | 'global';
-    locations?: Array<{
+export type CreateShippingZonesResponses = {
+    201: {
         id?: number;
-        zip?: string;
-        country_iso2?: string;
-        state_iso2?: string;
-    }>;
-    free_shipping?: {
+        name?: string;
+        type?: 'zip' | 'country' | 'state' | 'global';
+        locations?: Array<{
+            id?: number;
+            zip?: string;
+            country_iso2?: string;
+            state_iso2?: string;
+        }>;
+        free_shipping?: {
+            enabled?: boolean;
+            minimum_sub_total?: string;
+            exclude_fixed_shipping_products?: boolean;
+        };
+        handling_fees?: {
+            fixed_surcharge?: string;
+            display_separately?: boolean;
+        } | {
+            percentage_surcharge?: string;
+            display_separately?: boolean;
+        };
         enabled?: boolean;
-        minimum_sub_total?: string;
-        exclude_fixed_shipping_products?: boolean;
     };
-    handling_fees?: ({
-        fixed_surcharge?: string;
-        display_separately?: boolean;
-    } | {
-        percentage_surcharge?: string;
-        display_separately?: boolean;
-    });
-    enabled?: boolean;
-});
-export type CreateShippingZonesError = unknown;
-export type GetShippingZoneData = {
+};
+export type CreateShippingZonesResponse = CreateShippingZonesResponses[keyof CreateShippingZonesResponses];
+export type DeleteShippingZoneData = {
+    body?: never;
     headers: {
         Accept: string;
     };
     path: {
         id: number;
     };
+    query?: never;
+    url: '/shipping/zones/{id}';
 };
-export type GetShippingZoneResponse = ({
-    id?: number;
-    name?: string;
-    type?: 'zip' | 'country' | 'state' | 'global';
-    locations?: Array<{
-        id?: number;
-        zip?: string;
-        country_iso2?: string;
-        state_iso2?: string;
-    }>;
-    free_shipping?: {
-        enabled?: boolean;
-        minimum_sub_total?: string;
-        exclude_fixed_shipping_products?: boolean;
+export type DeleteShippingZoneResponses = {
+    204: void;
+};
+export type DeleteShippingZoneResponse = DeleteShippingZoneResponses[keyof DeleteShippingZoneResponses];
+export type GetShippingZoneData = {
+    body?: never;
+    headers: {
+        Accept: string;
     };
-    handling_fees?: ({
-        fixed_surcharge?: string;
-        display_separately?: boolean;
-    } | {
-        percentage_surcharge?: string;
-        display_separately?: boolean;
-    });
-    enabled?: boolean;
-});
-export type GetShippingZoneError = unknown;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/shipping/zones/{id}';
+};
+export type GetShippingZoneResponses = {
+    200: {
+        id?: number;
+        name?: string;
+        type?: 'zip' | 'country' | 'state' | 'global';
+        locations?: Array<{
+            id?: number;
+            zip?: string;
+            country_iso2?: string;
+            state_iso2?: string;
+        }>;
+        free_shipping?: {
+            enabled?: boolean;
+            minimum_sub_total?: string;
+            exclude_fixed_shipping_products?: boolean;
+        };
+        handling_fees?: {
+            fixed_surcharge?: string;
+            display_separately?: boolean;
+        } | {
+            percentage_surcharge?: string;
+            display_separately?: boolean;
+        };
+        enabled?: boolean;
+    };
+};
+export type GetShippingZoneResponse = GetShippingZoneResponses[keyof GetShippingZoneResponses];
 export type UpdateShippingZoneData = {
     body: {
         readonly id?: number;
@@ -215,13 +275,13 @@ export type UpdateShippingZoneData = {
             minimum_sub_total?: string;
             exclude_fixed_shipping_products?: boolean;
         };
-        handling_fees?: ({
+        handling_fees?: {
             fixed_surcharge?: string;
             display_separately?: boolean;
         } | {
             percentage_surcharge?: string;
             display_separately?: boolean;
-        });
+        };
         enabled?: boolean;
     };
     headers: {
@@ -231,54 +291,53 @@ export type UpdateShippingZoneData = {
     path: {
         id: number;
     };
+    query?: never;
+    url: '/shipping/zones/{id}';
 };
-export type UpdateShippingZoneResponse = ({
-    readonly id?: number;
-    name: string;
-    type?: 'zip' | 'country' | 'state' | 'global';
-    locations?: Array<{
-        id?: number;
-        zip?: string;
-        country_iso2?: string;
-        state_iso2?: string;
-    }>;
-    free_shipping?: {
+export type UpdateShippingZoneResponses = {
+    200: {
+        readonly id?: number;
+        name: string;
+        type?: 'zip' | 'country' | 'state' | 'global';
+        locations?: Array<{
+            id?: number;
+            zip?: string;
+            country_iso2?: string;
+            state_iso2?: string;
+        }>;
+        free_shipping?: {
+            enabled?: boolean;
+            minimum_sub_total?: string;
+            exclude_fixed_shipping_products?: boolean;
+        };
+        handling_fees?: {
+            fixed_surcharge?: string;
+            display_separately?: boolean;
+        } | {
+            percentage_surcharge?: string;
+            display_separately?: boolean;
+        };
         enabled?: boolean;
-        minimum_sub_total?: string;
-        exclude_fixed_shipping_products?: boolean;
-    };
-    handling_fees?: ({
-        fixed_surcharge?: string;
-        display_separately?: boolean;
-    } | {
-        percentage_surcharge?: string;
-        display_separately?: boolean;
-    });
-    enabled?: boolean;
-});
-export type UpdateShippingZoneError = unknown;
-export type DeleteShippingZoneData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        id: number;
     };
 };
-export type DeleteShippingZoneResponse = (void);
-export type DeleteShippingZoneError = unknown;
+export type UpdateShippingZoneResponse = UpdateShippingZoneResponses[keyof UpdateShippingZoneResponses];
 export type GetShippingZoneMethodsData = {
+    body?: never;
     headers: {
         Accept: string;
     };
     path: {
         zone_id: number;
     };
+    query?: never;
+    url: '/shipping/zones/{zone_id}/methods';
 };
-export type GetShippingZoneMethodsResponse = (Array<shippingMethod_Full>);
-export type GetShippingZoneMethodsError = unknown;
+export type GetShippingZoneMethodsResponses = {
+    200: Array<ShippingMethodFull>;
+};
+export type GetShippingZoneMethodsResponse = GetShippingZoneMethodsResponses[keyof GetShippingZoneMethodsResponses];
 export type CreateShippingMethodData = {
-    body: shippingMethod_Base;
+    body: ShippingMethodBase;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -286,77 +345,77 @@ export type CreateShippingMethodData = {
     path: {
         zone_id: number;
     };
+    query?: never;
+    url: '/shipping/zones/{zone_id}/methods';
 };
-export type CreateShippingMethodResponse = (shippingMethod_Full);
-export type CreateShippingMethodError = unknown;
-export type GetShippingMethodData = {
-    headers: {
-        Accept: string;
-    };
-    path: {
-        method_id: number;
-        zone_id: number;
-    };
+export type CreateShippingMethodResponses = {
+    200: ShippingMethodFull;
 };
-export type GetShippingMethodResponse = ({
-    readonly id?: number;
-    name?: string;
-    type?: ShippingMethodType;
-    settings?: {
-        [key: string]: unknown;
-    };
-    enabled?: boolean;
-    handling_fees?: ({
-        fixed_surcharge?: number;
-    } | {
-        percentage_surcharge?: number;
-    });
-    is_fallback?: boolean;
-    channel_ids?: Array<(number)>;
-});
-export type GetShippingMethodError = unknown;
-export type UpdateShippingMethodData = {
-    body: shippingMethod_Base;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path: {
-        method_id: number;
-        zone_id: number;
-    };
-};
-export type UpdateShippingMethodResponse = (shippingMethod_Full);
-export type UpdateShippingMethodError = unknown;
+export type CreateShippingMethodResponse = CreateShippingMethodResponses[keyof CreateShippingMethodResponses];
 export type DeleteShippingMethodData = {
+    body?: never;
     headers: {
         Accept: string;
     };
     path: {
-        method_id: number;
         zone_id: number;
+        method_id: number;
+    };
+    query?: never;
+    url: '/shipping/zones/{zone_id}/methods/{method_id}';
+};
+export type DeleteShippingMethodResponses = {
+    204: void;
+};
+export type DeleteShippingMethodResponse = DeleteShippingMethodResponses[keyof DeleteShippingMethodResponses];
+export type GetShippingMethodData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        zone_id: number;
+        method_id: number;
+    };
+    query?: never;
+    url: '/shipping/zones/{zone_id}/methods/{method_id}';
+};
+export type GetShippingMethodResponses = {
+    200: {
+        readonly id?: number;
+        name?: string;
+        type?: ShippingMethodType;
+        settings?: {
+            [key: string]: unknown;
+        };
+        enabled?: boolean;
+        handling_fees?: {
+            fixed_surcharge?: number;
+        } | {
+            percentage_surcharge?: number;
+        };
+        is_fallback?: boolean;
+        channel_ids?: Array<number>;
     };
 };
-export type DeleteShippingMethodResponse = (void);
-export type DeleteShippingMethodError = unknown;
-export type UpdateCarrierConnectionData = {
-    body?: carrierConnection;
+export type GetShippingMethodResponse = GetShippingMethodResponses[keyof GetShippingMethodResponses];
+export type UpdateShippingMethodData = {
+    body: ShippingMethodBase;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
-};
-export type UpdateCarrierConnectionResponse = (void);
-export type UpdateCarrierConnectionError = (unknown);
-export type CreateCarrierConnectionData = {
-    body?: carrierConnection;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
+    path: {
+        zone_id: number;
+        method_id: number;
     };
+    query?: never;
+    url: '/shipping/zones/{zone_id}/methods/{method_id}';
 };
-export type CreateCarrierConnectionResponse = (void);
-export type CreateCarrierConnectionError = (unknown);
+export type UpdateShippingMethodResponses = {
+    200: ShippingMethodFull;
+};
+export type UpdateShippingMethodResponse = UpdateShippingMethodResponses[keyof UpdateShippingMethodResponses];
 export type DeleteCarrierConnectionData = {
     body: {
         carrier_id?: string;
@@ -364,6 +423,48 @@ export type DeleteCarrierConnectionData = {
     headers: {
         Accept: string;
     };
+    path?: never;
+    query?: never;
+    url: '/shipping/carrier/connection';
 };
-export type DeleteCarrierConnectionResponse = (void);
-export type DeleteCarrierConnectionError = (unknown);
+export type DeleteCarrierConnectionErrors = {
+    400: unknown;
+};
+export type DeleteCarrierConnectionResponses = {
+    204: void;
+};
+export type DeleteCarrierConnectionResponse = DeleteCarrierConnectionResponses[keyof DeleteCarrierConnectionResponses];
+export type CreateCarrierConnectionData = {
+    body?: CarrierConnection;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/shipping/carrier/connection';
+};
+export type CreateCarrierConnectionErrors = {
+    400: unknown;
+};
+export type CreateCarrierConnectionResponses = {
+    204: void;
+};
+export type CreateCarrierConnectionResponse = CreateCarrierConnectionResponses[keyof CreateCarrierConnectionResponses];
+export type UpdateCarrierConnectionData = {
+    body?: CarrierConnection;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/shipping/carrier/connection';
+};
+export type UpdateCarrierConnectionErrors = {
+    400: unknown;
+};
+export type UpdateCarrierConnectionResponses = {
+    204: void;
+};
+export type UpdateCarrierConnectionResponse = UpdateCarrierConnectionResponses[keyof UpdateCarrierConnectionResponses];

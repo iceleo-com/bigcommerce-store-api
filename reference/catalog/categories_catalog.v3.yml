@@ -230,7 +230,7 @@ paths:
         - Categories (deprecated)
       deprecated: true
       summary: Create a Category
-      description: "When possible, use the [Category Trees - Create categories](/docs/rest-catalog/category-trees/categories#create-categories) endpoint instead.\n\nCreates a *Category*.\n\nUse this endpoint when an API only works with categories of a default BigCommerce storefront (`channel_id=1`). \n\nUse the [Create categories](/docs/rest-catalog/category-trees/categories#create-categories) endpoint when an API works with categories across different category trees that belong to different storefront channels.\n\n**Required Fields**:\n- `parent_id`: \n\t- To create a child category, set the `parent_id` to the parent category.\n\t- To create a top level category, set the `parent_id` to `0`.\n- `name`\n\n**Read-Only Fields**:\n- `id`\n\n**Limits**:\n- 16,000 categories per store limit.\n- 1,000 categories per product limit.\n- 50 characters category name length.\n- 8 levels of category depth limit.\n- 65,642 characters category description length limit.\n\n **Note:**\n The default rate limit for this endpoint is 40 concurrent requests.\n"
+      description: "When possible, use the [Category Trees - Create categories](/docs/rest-catalog/category-trees/categories#create-categories) endpoint instead.\n\nCreates a *Category*.\n\nUse this endpoint when an API only works with categories of a default BigCommerce storefront (`channel_id=1`). \n\nUse the [Create categories](/docs/rest-catalog/category-trees/categories#create-categories) endpoint when an API works with categories across different category trees that belong to different storefront channels.\n\n**Required Fields**:\n- `parent_id`: \n\t- To create a child category, set the `parent_id` to the parent category.\n\t- To create a top level category, set the `parent_id` to `0`.\n- `name`\n\n**Read-Only Fields**:\n- `id`\n\n**Limits**:\n- 16,000 categories per store limit.\n- 1,000 categories per product limit.\n- 50 characters category name length.\n- 8 levels of child categories depth limit.\n- 65,535 characters category description length limit."
       operationId: createCategory
       parameters:
         - $ref: '#/components/parameters/ContentType'
@@ -302,7 +302,7 @@ paths:
                   description: |
                     Custom meta description for the category page. If not defined, the storeʼs default meta description will be used.
                 layout_file:
-                  maxLength: 500
+                  maxLength: 50
                   minLength: 0
                   type: string
                   description: |
@@ -1432,16 +1432,20 @@ paths:
         Returns a list of products and their sort order for a specific category.
 
         **Limits**
-        * page=2&limit=250 will return page 2 of the results with 250 items per page.
+        
+        - page=2&limit=250 will return page 2 of the results with 250 items per page.
 
         **Usage Notes**
+        
+        * Product sort order only takes effect on the storefront when sorting by **Featured Items** in the category. See [Sort Order](https://support.bigcommerce.com/s/article/Sort-Order) for more information.
         * Data pairs are displayed in ascending order based on products' `sort_order` values.
         * `null` values are allowed for products without specified `sort_order` values.
         * Products with `sort_order` value of `null` will be displayed after products with valid numerical values.
         * The priorities for determining product sort order on a storefront are the following:
-          - Priority 1: Manually specified sort order on Category Level (API).
-          - Priority 2: Manually specified sort order on Product (Global) Level (UI/API).
-          - Priority 3: Default sorting by Product ID (newly added products go first) (UI/API).
+            * Priority 1: Manually specified sort order on Category Level (API).
+            * Priority 2: Manually specified sort order on Product (Global) Level (UI/API).
+            * Priority 3: Default sorting by Product ID (newly added products go first) (UI/API).
+            
       operationId: getCategorySortOrders
       responses:
         '200':
@@ -2072,7 +2076,7 @@ components:
           minimum: 0
           type: integer
           example: 4
-      description: The relative priority of the product among other products inside the category.
+          description: The relative priority of the product among other products inside the category.
       x-internal: false
     Category:
       x-tags:

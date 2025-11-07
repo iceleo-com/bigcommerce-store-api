@@ -1,28 +1,35 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as CustomersV2ApiSpecs from '../generated/customers-v2';
 export * as CustomersV2ApiSpecs from '../generated/customers-v2';
 export declare class CustomersV2Api {
     private readonly request;
     constructor(request: RequestService);
-    getCustomers(query?: CustomersV2ApiSpecs.GetCustomersData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.GetCustomersResponse, any>>;
-    createCustomer(requestBody: CustomersV2ApiSpecs.CreateCustomerData['body']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.customer_Full, any>>;
-    deleteCustomers(): Promise<import("../helpers/request/request-service.types").RequestResponse<any, any>>;
-    getCustomer(customerId: CustomersV2ApiSpecs.GetCustomerData['path']['customer_id']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.customer_Full, any>>;
-    updateCustomer(customerId: CustomersV2ApiSpecs.UpdateCustomerData['path']['customer_id'], requestBody: CustomersV2ApiSpecs.UpdateCustomerData['body']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.customer_Base, any>>;
-    deleteCustomer(customerId: CustomersV2ApiSpecs.DeleteCustomerData['path']['customer_id']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, any>>;
-    getCustomersCount(): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.count_Full, any>>;
-    validateCustomerPassword(customerId: CustomersV2ApiSpecs.ValidateCustomerPasswordData['path']['customer_id'], requestBody: CustomersV2ApiSpecs.ValidateCustomerPasswordData['body']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.validatePassword, any>>;
-    getCustomerAddresses(customerId: CustomersV2ApiSpecs.GetCustomerAddressesData['path']['customer_id'], query?: CustomersV2ApiSpecs.GetCustomerAddressesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.GetCustomerAddressesResponse, any>>;
-    createCustomerAddress(customerId: CustomersV2ApiSpecs.CreateCustomerAddressData['path']['customer_id'], requestBody: CustomersV2ApiSpecs.CreateCustomerAddressData['body']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.customerAddress_Full, any>>;
-    deleteCustomerAddresses(customerId: CustomersV2ApiSpecs.DeleteCustomerAddressesData['path']['customer_id'], query?: CustomersV2ApiSpecs.DeleteCustomerAddressesData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, any>>;
-    getCustomerAddress(customerId: CustomersV2ApiSpecs.GetCustomerAddressData['path']['customer_id'], customerAddressId: CustomersV2ApiSpecs.GetCustomerAddressData['path']['customer_address_id'], query?: CustomersV2ApiSpecs.GetCustomerAddressData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.customerAddress_Full, any>>;
-    updateCustomerAddress(customerId: CustomersV2ApiSpecs.UpdateCustomerAddressData['path']['customer_id'], customerAddressId: CustomersV2ApiSpecs.UpdateCustomerAddressData['path']['customer_address_id'], requestBody: CustomersV2ApiSpecs.UpdateCustomerAddressData['body']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.customerAddress_Full, any>>;
-    deletesCustomerAddress(customerId: CustomersV2ApiSpecs.DeletesCustomerAddressData['path']['customer_id'], customerAddressId: CustomersV2ApiSpecs.DeletesCustomerAddressData['path']['customer_address_id']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, any>>;
-    getCustomerAddressesCount(customerId: CustomersV2ApiSpecs.GetCustomerAddressesCountData['path']['customer_id'], query?: CustomersV2ApiSpecs.GetCustomerAddressesCountData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.count_Full, any>>;
-    getCustomerGroups(query?: CustomersV2ApiSpecs.GetCustomerGroupsData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.GetCustomerGroupsResponse, any>>;
-    createCustomerGroup(requestBody: CustomersV2ApiSpecs.CreateCustomerGroupData['body']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.CreateCustomerGroupResponse, any>>;
-    getCustomerGroup(customerGroupId: CustomersV2ApiSpecs.GetCustomerGroupData['path']['customer_group_id'], query?: CustomersV2ApiSpecs.GetCustomerGroupData['query']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.customerGroup_Full, CustomersV2ApiSpecs.ErrorRequest>>;
-    updateCustomerGroup(customerGroupId: CustomersV2ApiSpecs.UpdateCustomerGroupData['path']['customer_group_id'], requestBody: CustomersV2ApiSpecs.UpdateCustomerGroupData['body']): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.UpdateCustomerGroupResponse, any>>;
-    deleteCustomerGroup(customerGroupId: CustomersV2ApiSpecs.DeleteCustomerGroupData['path']['customer_group_id']): Promise<import("../helpers/request/request-service.types").RequestResponse<any, CustomersV2ApiSpecs.ErrorRequest>>;
-    getCustomerGroupsCount(): Promise<import("../helpers/request/request-service.types").RequestResponse<CustomersV2ApiSpecs.count_Full, any>>;
+    getCustomers(query?: CustomersV2ApiSpecs.GetCustomersData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, CustomersV2ApiSpecs.CustomerFull[]>>;
+    createCustomer(requestBody: CustomersV2ApiSpecs.CreateCustomerData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CustomerFull>>>;
+    deleteCustomers(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    getCustomer(customerId: CustomersV2ApiSpecs.GetCustomerData['path']['customer_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CustomerFull>>>;
+    updateCustomer(customerId: CustomersV2ApiSpecs.UpdateCustomerData['path']['customer_id'], requestBody: CustomersV2ApiSpecs.UpdateCustomerData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CustomerBase>>>;
+    deleteCustomer(customerId: CustomersV2ApiSpecs.DeleteCustomerData['path']['customer_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    getCustomersCount(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CountFull>>>;
+    validateCustomerPassword(customerId: CustomersV2ApiSpecs.ValidateCustomerPasswordData['path']['customer_id'], requestBody: CustomersV2ApiSpecs.ValidateCustomerPasswordData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.ValidatePassword>>>;
+    getCustomerAddresses(customerId: CustomersV2ApiSpecs.GetCustomerAddressesData['path']['customer_id'], query?: CustomersV2ApiSpecs.GetCustomerAddressesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, CustomersV2ApiSpecs.CustomerAddressFull[]>>;
+    createCustomerAddress(customerId: CustomersV2ApiSpecs.CreateCustomerAddressData['path']['customer_id'], requestBody: CustomersV2ApiSpecs.CreateCustomerAddressData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CustomerAddressFull>>>;
+    deleteCustomerAddresses(customerId: CustomersV2ApiSpecs.DeleteCustomerAddressesData['path']['customer_id'], query?: CustomersV2ApiSpecs.DeleteCustomerAddressesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    getCustomerAddress(customerId: CustomersV2ApiSpecs.GetCustomerAddressData['path']['customer_id'], customerAddressId: CustomersV2ApiSpecs.GetCustomerAddressData['path']['customer_address_id'], query?: CustomersV2ApiSpecs.GetCustomerAddressData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CustomerAddressFull>>>;
+    updateCustomerAddress(customerId: CustomersV2ApiSpecs.UpdateCustomerAddressData['path']['customer_id'], customerAddressId: CustomersV2ApiSpecs.UpdateCustomerAddressData['path']['customer_address_id'], requestBody: CustomersV2ApiSpecs.UpdateCustomerAddressData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CustomerAddressFull>>>;
+    deletesCustomerAddress(customerId: CustomersV2ApiSpecs.DeletesCustomerAddressData['path']['customer_id'], customerAddressId: CustomersV2ApiSpecs.DeletesCustomerAddressData['path']['customer_address_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    getCustomerAddressesCount(customerId: CustomersV2ApiSpecs.GetCustomerAddressesCountData['path']['customer_id'], query?: CustomersV2ApiSpecs.GetCustomerAddressesCountData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CountFull>>>;
+    getCustomerGroups(query?: CustomersV2ApiSpecs.GetCustomerGroupsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, CustomersV2ApiSpecs.CustomerGroupFull[]>>;
+    createCustomerGroup(requestBody: CustomersV2ApiSpecs.CreateCustomerGroupData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CustomerGroupFull>> | RequestSuccessResponse<207, Required<{
+        status?: number;
+        message?: string;
+    }>>>;
+    getCustomerGroup(customerGroupId: CustomersV2ApiSpecs.GetCustomerGroupData['path']['customer_group_id'], query?: CustomersV2ApiSpecs.GetCustomerGroupData['query']): Promise<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CustomerGroupFull>> | RequestErrorResponse<400, Required<CustomersV2ApiSpecs.ErrorRequest>>>;
+    updateCustomerGroup(customerGroupId: CustomersV2ApiSpecs.UpdateCustomerGroupData['path']['customer_group_id'], requestBody: CustomersV2ApiSpecs.UpdateCustomerGroupData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CustomerGroupFull>> | RequestSuccessResponse<207, Required<{
+        status: number;
+        message: string;
+    }>>>;
+    deleteCustomerGroup(customerGroupId: CustomersV2ApiSpecs.DeleteCustomerGroupData['path']['customer_group_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<400, Required<CustomersV2ApiSpecs.ErrorRequest>>>;
+    getCustomerGroupsCount(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CountFull>>>;
 }

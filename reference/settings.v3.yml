@@ -19,12 +19,12 @@ info:
     | [Store Profile](/docs/rest-management/settings/store-profile) | Identifies and updates store profile.      |
     | [Storefront Category](/docs/rest-management/settings/storefront-category)| Identifies and updates storefront category settings.   |
     | [Storefront Product](/docs/rest-management/settings/storefront-product)  | Identifies and updates storefront product settings.    |
-    | [Storefront Robots.txt](docs/rest-management/settings/storefront-robotstxt) | Identifies and updates storefront Robots.txt settings.|
+    | [Storefront Robots.txt](/docs/rest-management/settings/storefront-robotstxt) | Identifies and updates storefront Robots.txt settings.|
     | [Storefront Search](/docs/rest-management/settings/storefront-search)  | Identifies and updates storefront search settings.       |
     | [Storefront Security](/docs/rest-management/settings/storefront-security)| Identifies and updates storefront security settings.   |
     | [Storefront SEO](/docs/rest-management/settings/storefront-seo) | Identifies and updates storefront SEO settings.                 |
     | [Storefront Status](/docs/rest-management/settings/storefront-status)  | Identifies and updates storefront status.                |
-    | [Units of Measurement](docs/rest-management/settings/units-of-measurement) | Identifies and updates units of measurement settings.|
+    | [Units of Measurement](/docs/rest-management/settings/units-of-measurement) | Identifies and updates units of measurement settings.|
   termsOfService: 'https://www.bigcommerce.com/terms'
   contact:
     name: BigCommerce
@@ -135,8 +135,6 @@ paths:
               description: ''
               type: object
               properties:
-                channel_id:
-                  type: number
                 code:
                   type: string
                   minLength: 1
@@ -144,8 +142,6 @@ paths:
                   type: boolean
                 enabled:
                   type: boolean
-                id:
-                  type: number
                 is_oauth_connected: {}
                 name:
                   type: string
@@ -154,11 +150,9 @@ paths:
                   type: number
               x-examples:
                 example-1:
-                  channel_id: 1
                   code: GA-1234567890
                   data_tag_enabled: false
                   enabled: false
-                  id: 2
                   is_oauth_connected: null
                   name: Visual Website Optimizer
                   version: 1
@@ -360,6 +354,7 @@ paths:
         Uploads an image file to use as the storefront favicon. Supported MIME types include GIF, JPEG, and PNG. 
 
           - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only.
+          - The uploaded image can be up to 10 MB. Larger files result in an error.
       parameters:
         - $ref: '#/components/parameters/ContentType'
         - $ref: '#/components/parameters/ChannelIdParam'
@@ -375,6 +370,8 @@ paths:
       responses:
         '204':
           description: OK
+        '422':
+          description: Failed to save!
       tags:
         - Favicon Image
   '/settings/inventory/notifications':
@@ -815,7 +812,10 @@ paths:
     get:
       summary: Get Locale Settings
       operationId: getSettingsLocale
-      description: Returns global locale settings.
+      description: |-
+        Returns global locale settings.
+
+        For stores with Catalyst channels, the `shopper_language_selection_method` field is deprecated. Using this endpoint on those stores will return a warning about the deprecation. For additional information, refer to [Locale Configuration](/docs/store-operations/settings/locales).
       parameters:
         - $ref: '#/components/parameters/Accept'
       responses:
@@ -824,13 +824,21 @@ paths:
           content:
             application/json:
               examples:
-                Example:
+                Default Example:
                   value:
                     data:
                       default_shopper_language: en
                       shopper_language_selection_method: default_shopper_language
                       store_country: United States
                     meta: {}
+                Multi-Language Example:
+                  value:
+                    data:
+                      default_shopper_language: en
+                      shopper_language_selection_method: default_shopper_language
+                      store_country: United States
+                    meta:
+                      deprecated_fields: shopper_language_selection_method property has been replaced for the stores with Catalyst channels by the explicit list of languages enabled on a channel. For additional information please check https://developer.bigcommerce.com/docs/store-operations/settings/locales.
               schema:
                 type: object
                 properties:
@@ -845,6 +853,8 @@ paths:
       operationId: updateSettingsLocale
       description: |-
         Updates global locale settings.
+
+        For stores with Catalyst channels, the `shopper_language_selection_method` field is deprecated. Using this endpoint on those stores will return a warning about the deprecation. For additional information, refer to [Locale Configuration](/docs/store-operations/settings/locales).
       parameters:
         - $ref: '#/components/parameters/Accept'
         - $ref: '#/components/parameters/ContentType'
@@ -865,13 +875,21 @@ paths:
           content:
             application/json:
               examples:
-                Example:
+                Default Example:
                   value:
                     data:
                       default_shopper_language: en
                       shopper_language_selection_method: default_shopper_language
                       store_country: United States
                     meta: {}
+                Multi-Lang Example:
+                  value:
+                    data:
+                      default_shopper_language: en
+                      shopper_language_selection_method: default_shopper_language
+                      store_country: United States
+                    meta:
+                      deprecated_fields: shopper_language_selection_method property has been replaced for the stores with Catalyst channels by the explicit list of languages enabled on a channel. For additional information please check https://developer.bigcommerce.com/docs/store-operations/settings/locales.
               schema:
                 type: object
                 properties:
@@ -1586,17 +1604,26 @@ components:
     AnalyticsProvider:
       type: object
       properties:
+        id:
+          description: Web Analytics Provider ID.
+          type: integer
+        channel_id:
+          description: Channels ID
+          type: integer
+        name:
+          description: Web Analytics Provider title.
+          type: string
         code:
           description: Web Analytics Provider code.
           type: string
         enabled:
           description: Flag indicates if Web Analytics Provider is enabled or not.
           type: boolean
-        id:
-          description: Web Analytics Provider ID.
-          type: integer
-        name:
-          description: Web Analytics Provider title.
+        data_tag_enabled:
+          type: boolean
+        version: 
+          type: number
+        api_secret:
           type: string
       x-internal: false
     AnalyticsProviders:
@@ -2461,6 +2488,8 @@ components:
         |:--------|:-----------|:----------|
         |  Information & Settings | modify | `store_v2_information` |
         |  Information & Settings | read-only | `store_v2_information_read_only` |
+
+        NOTE:  Analytics endpoints require the Content (`store_v2_content` and `store_v2_content_read_only`) OAuth scope.
 
         ### Authentication header
         

@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as SubscribersV3ApiSpecs from '../generated/subscribers-v3';
 export * as SubscribersV3ApiSpecs from '../generated/subscribers-v3';
 
@@ -17,7 +18,7 @@ export class SubscribersV3Api {
     getSubscribers(
         query?: SubscribersV3ApiSpecs.GetSubscribersData['query'],
     ) {
-        return this.request.get<SubscribersV3ApiSpecs.GetSubscribersResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SubscribersV3ApiSpecs.GetSubscribersResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/subscribers',
             query,
         });
@@ -37,7 +38,7 @@ export class SubscribersV3Api {
     createSubscriber(
         requestBody: SubscribersV3ApiSpecs.CreateSubscriberData['body'],
     ) {
-        return this.request.post<SubscribersV3ApiSpecs.CreateSubscriberResponse, SubscribersV3ApiSpecs.CreateSubscriberError>({
+        return this.request.post<RequestSuccessResponse<200, Required<SubscribersV3ApiSpecs.CreateSubscriberResponses[200]>>,(RequestErrorResponse<409, Required<SubscribersV3ApiSpecs.CreateSubscriberErrors[409]>> | RequestErrorResponse<422, Required<SubscribersV3ApiSpecs.CreateSubscriberErrors[422]>>)>({
             path: 'v3/customers/subscribers',
             contentType: 'application/json',
             body: requestBody,
@@ -52,7 +53,7 @@ export class SubscribersV3Api {
     deleteSubscribers(
         query?: SubscribersV3ApiSpecs.DeleteSubscribersData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<SubscribersV3ApiSpecs.DeleteSubscribersResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/subscribers',
             query,
         });
@@ -64,9 +65,10 @@ export class SubscribersV3Api {
      * Returns a *Subscriber*.
      */
     getSubscriber(
+        subscriberId: SubscribersV3ApiSpecs.GetSubscriberData['path']['subscriber_id'],
     ) {
-        return this.request.get<SubscribersV3ApiSpecs.GetSubscriberResponse, SubscribersV3ApiSpecs.GetSubscriberError>({
-            path: 'v3/customers/subscribers/{subscriber_id}',
+        return this.request.get<RequestSuccessResponse<200, Required<SubscribersV3ApiSpecs.GetSubscriberResponses[200]>>,RequestErrorResponse<404, Required<SubscribersV3ApiSpecs.GetSubscriberErrors[404]>>>({
+            path: `v3/customers/subscribers/${subscriberId}`,
         });
     }
 
@@ -79,10 +81,11 @@ export class SubscribersV3Api {
      * id
      */
     updateSubscriber(
+        subscriberId: SubscribersV3ApiSpecs.UpdateSubscriberData['path']['subscriber_id'],
         requestBody: SubscribersV3ApiSpecs.UpdateSubscriberData['body'],
     ) {
-        return this.request.put<SubscribersV3ApiSpecs.UpdateSubscriberResponse, SubscribersV3ApiSpecs.UpdateSubscriberError>({
-            path: 'v3/customers/subscribers/{subscriber_id}',
+        return this.request.put<RequestSuccessResponse<200, Required<SubscribersV3ApiSpecs.UpdateSubscriberResponses[200]>>,(RequestErrorResponse<404, Required<SubscribersV3ApiSpecs.UpdateSubscriberErrors[404]>> | RequestErrorResponse<409, Required<SubscribersV3ApiSpecs.UpdateSubscriberErrors[409]>> | RequestErrorResponse<422, Required<SubscribersV3ApiSpecs.UpdateSubscriberErrors[422]>>)>({
+            path: `v3/customers/subscribers/${subscriberId}`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -94,9 +97,10 @@ export class SubscribersV3Api {
      * Deletes a *Subscriber*.
      */
     deleteSubscriber(
+        subscriberId: SubscribersV3ApiSpecs.DeleteSubscriberData['path']['subscriber_id'],
     ) {
-        return this.request.delete<any, any>({
-            path: 'v3/customers/subscribers/{subscriber_id}',
+        return this.request.delete<RequestSuccessResponse<204, Required<SubscribersV3ApiSpecs.DeleteSubscriberResponses[204]>>,RequestErrorResponse<400, void>>({
+            path: `v3/customers/subscribers/${subscriberId}`,
         });
     }
 }

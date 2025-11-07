@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as ShippingProviderApiSpecs from '../generated/shipping-provider';
 export * as ShippingProviderApiSpecs from '../generated/shipping-provider';
 
@@ -21,7 +22,7 @@ export class ShippingProviderApi {
     requestShippingRates(
         requestBody: ShippingProviderApiSpecs.RequestShippingRatesData['body'],
     ) {
-        return this.request.post<ShippingProviderApiSpecs.RequestShippingRatesResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<ShippingProviderApiSpecs.RequestShippingRatesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'https://{app_domain}/rate',
             contentType: 'application/json',
             body: requestBody,
@@ -40,7 +41,7 @@ export class ShippingProviderApi {
     validateConnectionOptions(
         requestBody: ShippingProviderApiSpecs.ValidateConnectionOptionsData['body'],
     ) {
-        return this.request.post<ShippingProviderApiSpecs.ValidateConnectionOptionsResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<ShippingProviderApiSpecs.ValidateConnectionOptionsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'https://{app_domain}/check_connection_options',
             contentType: 'application/json',
             body: requestBody,

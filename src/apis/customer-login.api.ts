@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as CustomerLoginApiSpecs from '../generated/customer-login';
 export * as CustomerLoginApiSpecs from '../generated/customer-login';
 
@@ -23,9 +24,11 @@ export class CustomerLoginApi {
      ```
      */
     getCustomerLogin(
+        storeDomain: string,
+        jwtToken: CustomerLoginApiSpecs.GetCustomerLoginData['path']['jwt_token'],
     ) {
-        return this.request.get<any, any>({
-            path: 'https://{store_domain}/login/token/{jwt_token}',
+        return this.request.get<RequestSuccessResponse<200, Required<CustomerLoginApiSpecs.GetCustomerLoginResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `https://${storeDomain}/login/token/${jwtToken}`,
         });
     }
 }

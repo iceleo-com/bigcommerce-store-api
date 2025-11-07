@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as ProductVariantsV3ApiSpecs from '../generated/product-variants-v3';
 export * as ProductVariantsV3ApiSpecs from '../generated/product-variants-v3';
 
@@ -18,7 +19,7 @@ export class ProductVariantsV3Api {
         productId: ProductVariantsV3ApiSpecs.GetProductVariantsData['path']['product_id'],
         query?: ProductVariantsV3ApiSpecs.GetProductVariantsData['query'],
     ) {
-        return this.request.get<ProductVariantsV3ApiSpecs.GetProductVariantsResponse, ProductVariantsV3ApiSpecs.GetProductVariantsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetProductVariantsResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.GetProductVariantsErrors[404]>>>({
             path: `v3/catalog/products/${productId}/variants`,
             query,
         });
@@ -46,7 +47,7 @@ export class ProductVariantsV3Api {
         productId: ProductVariantsV3ApiSpecs.CreateProductVariantData['path']['product_id'],
         requestBody: ProductVariantsV3ApiSpecs.CreateProductVariantData['body'],
     ) {
-        return this.request.post<ProductVariantsV3ApiSpecs.CreateProductVariantResponse, ProductVariantsV3ApiSpecs.CreateProductVariantError>({
+        return this.request.post<(RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.CreateProductVariantResponses[200]>> | RequestSuccessResponse<207, Required<ProductVariantsV3ApiSpecs.CreateProductVariantResponses[207]>>),RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.CreateProductVariantErrors[404]>>>({
             path: `v3/catalog/products/${productId}/variants`,
             contentType: 'application/json',
             body: requestBody,
@@ -63,7 +64,7 @@ export class ProductVariantsV3Api {
         variantId: ProductVariantsV3ApiSpecs.GetProductVariantData['path']['variant_id'],
         query?: ProductVariantsV3ApiSpecs.GetProductVariantData['query'],
     ) {
-        return this.request.get<ProductVariantsV3ApiSpecs.GetProductVariantResponse, ProductVariantsV3ApiSpecs.GetProductVariantError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetProductVariantResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.GetProductVariantErrors[404]>>>({
             path: `v3/catalog/products/${productId}/variants/${variantId}`,
             query,
         });
@@ -79,7 +80,7 @@ export class ProductVariantsV3Api {
         variantId: ProductVariantsV3ApiSpecs.UpdateProductVariantData['path']['variant_id'],
         requestBody: ProductVariantsV3ApiSpecs.UpdateProductVariantData['body'],
     ) {
-        return this.request.put<ProductVariantsV3ApiSpecs.UpdateProductVariantResponse, ProductVariantsV3ApiSpecs.UpdateProductVariantError>({
+        return this.request.put<(RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.UpdateProductVariantResponses[200]>> | RequestSuccessResponse<207, Required<ProductVariantsV3ApiSpecs.UpdateProductVariantResponses[207]>>),RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.UpdateProductVariantErrors[404]>>>({
             path: `v3/catalog/products/${productId}/variants/${variantId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -95,7 +96,7 @@ export class ProductVariantsV3Api {
         productId: ProductVariantsV3ApiSpecs.DeleteProductVariantData['path']['product_id'],
         variantId: ProductVariantsV3ApiSpecs.DeleteProductVariantData['path']['variant_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductVariantsV3ApiSpecs.DeleteProductVariantResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/variants/${variantId}`,
         });
     }
@@ -110,7 +111,7 @@ export class ProductVariantsV3Api {
         variantId: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldsData['path']['variant_id'],
         query?: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldsData['query'],
     ) {
-        return this.request.get<ProductVariantsV3ApiSpecs.GetProductVariantMetafieldsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetProductVariantMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/variants/${variantId}/metafields`,
             query,
         });
@@ -137,7 +138,7 @@ export class ProductVariantsV3Api {
         variantId: ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldData['path']['variant_id'],
         requestBody: ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldData['body'],
     ) {
-        return this.request.post<ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldResponse, ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldErrors[400]>> | RequestErrorResponse<409, Required<ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldErrors[409]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/variants/${variantId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
@@ -155,7 +156,7 @@ export class ProductVariantsV3Api {
         metafieldId: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldData['path']['metafield_id'],
         query?: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldData['query'],
     ) {
-        return this.request.get<ProductVariantsV3ApiSpecs.GetProductVariantMetafieldResponse, ProductVariantsV3ApiSpecs.GetProductVariantMetafieldError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetProductVariantMetafieldResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.GetProductVariantMetafieldErrors[404]>>>({
             path: `v3/catalog/products/${productId}/variants/${variantId}/metafields/${metafieldId}`,
             query,
         });
@@ -185,7 +186,7 @@ export class ProductVariantsV3Api {
         metafieldId: ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldData['path']['metafield_id'],
         requestBody: ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldData['body'],
     ) {
-        return this.request.put<ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldResponse, ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldErrors[400]>> | RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldErrors[404]>>)>({
             path: `v3/catalog/products/${productId}/variants/${variantId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -202,7 +203,7 @@ export class ProductVariantsV3Api {
         variantId: ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldData['path']['variant_id'],
         metafieldId: ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.delete<any, ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldResponses[204]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldErrors[404]>>>({
             path: `v3/catalog/products/${productId}/variants/${variantId}/metafields/${metafieldId}`,
         });
     }
@@ -225,7 +226,7 @@ export class ProductVariantsV3Api {
         variantId: ProductVariantsV3ApiSpecs.CreateProductVariantImageData['path']['variant_id'],
         requestBody: ProductVariantsV3ApiSpecs.CreateProductVariantImageData['body'],
     ) {
-        return this.request.post<ProductVariantsV3ApiSpecs.CreateProductVariantImageResponse, ProductVariantsV3ApiSpecs.CreateProductVariantImageError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.CreateProductVariantImageResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.CreateProductVariantImageErrors[400]>> | RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.CreateProductVariantImageErrors[404]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.CreateProductVariantImageErrors[422]>> | RequestErrorResponse<500, Required<ProductVariantsV3ApiSpecs.CreateProductVariantImageErrors[500]>>)>({
             path: `v3/catalog/products/${productId}/variants/${variantId}/image`,
             contentType: 'application/json',
             body: requestBody,
@@ -240,7 +241,7 @@ export class ProductVariantsV3Api {
     getVariants(
         query?: ProductVariantsV3ApiSpecs.GetVariantsData['query'],
     ) {
-        return this.request.get<ProductVariantsV3ApiSpecs.GetVariantsResponse, ProductVariantsV3ApiSpecs.GetVariantsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetVariantsResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.GetVariantsErrors[404]>>>({
             path: 'v3/catalog/variants',
             query,
         });
@@ -266,7 +267,7 @@ export class ProductVariantsV3Api {
     updateVariantsBatch(
         requestBody: ProductVariantsV3ApiSpecs.UpdateVariantsBatchData['body'],
     ) {
-        return this.request.put<ProductVariantsV3ApiSpecs.UpdateVariantsBatchResponse, ProductVariantsV3ApiSpecs.UpdateVariantsBatchError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.UpdateVariantsBatchResponses[200]>>,(RequestErrorResponse<413, Required<ProductVariantsV3ApiSpecs.UpdateVariantsBatchErrors[413]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.UpdateVariantsBatchErrors[422]>>)>({
             path: 'v3/catalog/variants',
             contentType: 'application/json',
             body: requestBody,
@@ -281,7 +282,7 @@ export class ProductVariantsV3Api {
     getVariantsMetafields(
         query?: ProductVariantsV3ApiSpecs.GetVariantsMetafieldsData['query'],
     ) {
-        return this.request.get<ProductVariantsV3ApiSpecs.GetVariantsMetafieldsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetVariantsMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/catalog/variants/metafields',
             query,
         });
@@ -295,7 +296,7 @@ export class ProductVariantsV3Api {
     createVariantsMetafields(
         requestBody: ProductVariantsV3ApiSpecs.CreateVariantsMetafieldsData['body'],
     ) {
-        return this.request.post<ProductVariantsV3ApiSpecs.CreateVariantsMetafieldsResponse, ProductVariantsV3ApiSpecs.CreateVariantsMetafieldsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.CreateVariantsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.CreateVariantsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.CreateVariantsMetafieldsErrors[422]>>)>({
             path: 'v3/catalog/variants/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -310,7 +311,7 @@ export class ProductVariantsV3Api {
     updateVariantsMetafields(
         requestBody: ProductVariantsV3ApiSpecs.UpdateVariantsMetafieldsData['body'],
     ) {
-        return this.request.put<ProductVariantsV3ApiSpecs.UpdateVariantsMetafieldsResponse, ProductVariantsV3ApiSpecs.UpdateVariantsMetafieldsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.UpdateVariantsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.UpdateVariantsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.UpdateVariantsMetafieldsErrors[422]>>)>({
             path: 'v3/catalog/variants/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -325,7 +326,7 @@ export class ProductVariantsV3Api {
     deleteVariantsMetafields(
         requestBody: ProductVariantsV3ApiSpecs.DeleteVariantsMetafieldsData['body'],
     ) {
-        return this.request.delete<ProductVariantsV3ApiSpecs.DeleteVariantsMetafieldsResponse, ProductVariantsV3ApiSpecs.DeleteVariantsMetafieldsError>({
+        return this.request.delete<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.DeleteVariantsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.DeleteVariantsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.DeleteVariantsMetafieldsErrors[422]>>)>({
             path: 'v3/catalog/variants/metafields',
             contentType: 'application/json',
             body: requestBody,

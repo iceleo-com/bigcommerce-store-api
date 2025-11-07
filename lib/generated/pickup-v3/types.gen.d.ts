@@ -1,21 +1,10 @@
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
+};
 export type BasePickup = {
     pickup_method_id?: number;
     order_id?: number;
 };
-export type BasePickupItem = {
-    order_product_id?: number;
-    quantity?: number;
-};
-export type ErrorResponse = {
-    status?: number;
-    title?: string;
-    type?: string;
-    errors?: {
-        [key: string]: unknown;
-    };
-};
-export type ParameterAccept = string;
-export type ParameterContentType = string;
 export type Pickup = {
     id?: number;
 } & BasePickup & {
@@ -24,13 +13,16 @@ export type Pickup = {
     updated_at?: string;
     pickup_items?: Array<PickupItem>;
 };
+export type BasePickupItem = {
+    order_product_id?: number;
+    quantity?: number;
+};
 export type PickupItem = {
     id?: number;
 } & BasePickupItem & {
     status?: 'AWAITING_COLLECTION' | 'COLLECTED';
-    collected_at?: (string) | null;
+    collected_at?: string | null;
 };
-export type status = 'AWAITING_COLLECTION' | 'COLLECTED';
 export type PostRequestPickup = BasePickup & {
     ready_at: string;
     collected_at?: string;
@@ -46,54 +38,92 @@ export type PutRequestPickup = {
     ready_at?: string;
     collected_at?: string;
 };
-export type GetPickupData = {
+export type ErrorResponse = {
+    status?: number;
+    title?: string;
+    type?: string;
+    errors?: {
+        [key: string]: unknown;
+    };
+};
+export type Accept = string;
+export type ContentType = string;
+export type DeletePickupData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
+    query: {
+        'id:in': number;
+    };
+    url: '/orders/pickups';
+};
+export type DeletePickupResponses = {
+    204: void;
+};
+export type DeletePickupResponse = DeletePickupResponses[keyof DeletePickupResponses];
+export type GetPickupData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
     query?: {
         'order_id:in'?: number;
         'pickup_id:in'?: number;
     };
+    url: '/orders/pickups';
 };
-export type GetPickupResponse = ({
-    data?: Array<Pickup>;
-});
-export type GetPickupError = unknown;
+export type GetPickupResponses = {
+    200: {
+        data?: Array<Pickup>;
+    };
+};
+export type GetPickupResponse = GetPickupResponses[keyof GetPickupResponses];
 export type PostPickupData = {
     body: Array<PostRequestPickup>;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/orders/pickups';
 };
-export type PostPickupResponse = ({
-    data?: Array<Pickup>;
-    meta?: {
-        [key: string]: unknown;
-    };
-});
-export type PostPickupError = (ErrorResponse);
-export type DeletePickupData = {
-    headers: {
-        Accept: string;
-    };
-    query: {
-        'id:in': number;
+export type PostPickupErrors = {
+    422: ErrorResponse;
+};
+export type PostPickupError = PostPickupErrors[keyof PostPickupErrors];
+export type PostPickupResponses = {
+    200: {
+        data?: Array<Pickup>;
+        meta?: {
+            [key: string]: unknown;
+        };
     };
 };
-export type DeletePickupResponse = (void);
-export type DeletePickupError = unknown;
+export type PostPickupResponse = PostPickupResponses[keyof PostPickupResponses];
 export type PutPickupData = {
     body: Array<PutRequestPickup>;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/orders/pickups';
 };
-export type PutPickupResponse = ({
-    data?: Array<Pickup>;
-    meta?: {
-        [key: string]: unknown;
+export type PutPickupErrors = {
+    422: ErrorResponse;
+};
+export type PutPickupError = PutPickupErrors[keyof PutPickupErrors];
+export type PutPickupResponses = {
+    200: {
+        data?: Array<Pickup>;
+        meta?: {
+            [key: string]: unknown;
+        };
     };
-});
-export type PutPickupError = (ErrorResponse);
+};
+export type PutPickupResponse = PutPickupResponses[keyof PutPickupResponses];

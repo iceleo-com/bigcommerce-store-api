@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as SettingsV3ApiSpecs from '../generated/settings-v3';
 export * as SettingsV3ApiSpecs from '../generated/settings-v3';
 
@@ -17,7 +18,7 @@ export class SettingsV3Api {
     getAnalyticsProviders(
         query?: SettingsV3ApiSpecs.GetAnalyticsProvidersData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetAnalyticsProvidersResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetAnalyticsProvidersResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/analytics',
             query,
         });
@@ -32,7 +33,7 @@ export class SettingsV3Api {
         id: SettingsV3ApiSpecs.GetAnalyticsProviderData['path']['id'],
         query?: SettingsV3ApiSpecs.GetAnalyticsProviderData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetAnalyticsProviderResponse, SettingsV3ApiSpecs.GetAnalyticsProviderError>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetAnalyticsProviderResponses[200]>>,(RequestErrorResponse<400, Required<SettingsV3ApiSpecs.GetAnalyticsProviderErrors[400]>> | RequestErrorResponse<404, Required<SettingsV3ApiSpecs.GetAnalyticsProviderErrors[404]>>)>({
             path: `v3/settings/analytics/${id}`,
             query,
         });
@@ -48,7 +49,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateAnalyticsProviderData['body'],
         query?: SettingsV3ApiSpecs.UpdateAnalyticsProviderData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateAnalyticsProviderResponse, SettingsV3ApiSpecs.UpdateAnalyticsProviderError>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateAnalyticsProviderResponses[200]>>,(RequestErrorResponse<400, Required<SettingsV3ApiSpecs.UpdateAnalyticsProviderErrors[400]>> | RequestErrorResponse<404, Required<SettingsV3ApiSpecs.UpdateAnalyticsProviderErrors[404]>> | RequestErrorResponse<409, Required<SettingsV3ApiSpecs.UpdateAnalyticsProviderErrors[409]>> | RequestErrorResponse<422, Required<SettingsV3ApiSpecs.UpdateAnalyticsProviderErrors[422]>>)>({
             path: `v3/settings/analytics/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -68,7 +69,7 @@ export class SettingsV3Api {
     getSettingsCatalog(
         query?: SettingsV3ApiSpecs.GetSettingsCatalogData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsCatalogResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsCatalogResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/catalog',
             query,
         });
@@ -87,7 +88,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsCatalogData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsCatalogData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsCatalogResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsCatalogResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/catalog',
             contentType: 'application/json',
             body: requestBody,
@@ -103,7 +104,7 @@ export class SettingsV3Api {
     getSettingsEmailStatuses(
         query?: SettingsV3ApiSpecs.GetSettingsEmailStatusesData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsEmailStatusesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsEmailStatusesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/email-statuses',
             query,
         });
@@ -118,7 +119,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsEmailStatusesData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsEmailStatusesData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsEmailStatusesResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsEmailStatusesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/email-statuses',
             contentType: 'application/json',
             body: requestBody,
@@ -132,12 +133,13 @@ export class SettingsV3Api {
      * Uploads an image file to use as the storefront favicon. Supported MIME types include GIF, JPEG, and PNG. 
 
        - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only.
+       - The uploaded image can be up to 10 MB. Larger files result in an error.
      */
     createSettingsFaviconImage(
         requestBody: SettingsV3ApiSpecs.CreateSettingsFaviconImageData['body'],
         query?: SettingsV3ApiSpecs.CreateSettingsFaviconImageData['query'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<204, Required<SettingsV3ApiSpecs.CreateSettingsFaviconImageResponses[204]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.CreateSettingsFaviconImageErrors[422]>>>({
             path: 'v3/settings/favicon/image',
             contentType: 'multipart/form-data',
             body: requestBody,
@@ -154,7 +156,7 @@ export class SettingsV3Api {
     getSettingsInventoryNotifications(
         query?: SettingsV3ApiSpecs.GetSettingsInventoryNotificationsData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsInventoryNotificationsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsInventoryNotificationsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/inventory/notifications',
             query,
         });
@@ -172,7 +174,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsInventoryNotificationsData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsInventoryNotificationsData['query'],
     ) {
-        return this.request.put<any, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsInventoryNotificationsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/inventory/notifications',
             contentType: 'application/json',
             body: requestBody,
@@ -192,7 +194,7 @@ export class SettingsV3Api {
     getSettingsLogo(
         query?: SettingsV3ApiSpecs.GetSettingsLogoData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsLogoResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsLogoResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/logo',
             query,
         });
@@ -211,7 +213,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsLogoData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsLogoData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsLogoResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsLogoResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/logo',
             contentType: 'application/json',
             body: requestBody,
@@ -230,7 +232,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.CreateSettingsLogoImageData['body'],
         query?: SettingsV3ApiSpecs.CreateSettingsLogoImageData['query'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<204, Required<SettingsV3ApiSpecs.CreateSettingsLogoImageResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/logo/image',
             contentType: 'multipart/form-data',
             body: requestBody,
@@ -245,7 +247,7 @@ export class SettingsV3Api {
      */
     getSettingsEnabledSearchFilters(
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsEnabledSearchFiltersResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsEnabledSearchFiltersResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/search/filters',
         });
     }
@@ -258,7 +260,7 @@ export class SettingsV3Api {
     updateSettingsEnabledSearchFilters(
         requestBody: SettingsV3ApiSpecs.UpdateSettingsEnabledSearchFiltersData['body'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsEnabledSearchFiltersResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsEnabledSearchFiltersResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/search/filters',
             contentType: 'application/json',
             body: requestBody,
@@ -273,7 +275,7 @@ export class SettingsV3Api {
     getSettingsAvailableFilters(
         query?: SettingsV3ApiSpecs.GetSettingsAvailableFiltersData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsAvailableFiltersResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsAvailableFiltersResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/search/filters/available',
             query,
         });
@@ -293,7 +295,7 @@ export class SettingsV3Api {
     getSettingsFiltersContexts(
         query?: SettingsV3ApiSpecs.GetSettingsFiltersContextsData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsFiltersContextsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsFiltersContextsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/search/filters/contexts',
             query,
         });
@@ -313,7 +315,7 @@ export class SettingsV3Api {
     upsertSettingsFiltersContexts(
         requestBody: SettingsV3ApiSpecs.UpsertSettingsFiltersContextsData['body'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpsertSettingsFiltersContextsResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpsertSettingsFiltersContextsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/search/filters/contexts',
             contentType: 'application/json',
             body: requestBody,
@@ -324,10 +326,12 @@ export class SettingsV3Api {
      * Get Locale Settings
      *
      * Returns global locale settings.
+
+     For stores with Catalyst channels, the `shopper_language_selection_method` field is deprecated. Using this endpoint on those stores will return a warning about the deprecation. For additional information, refer to [Locale Configuration](/docs/store-operations/settings/locales).
      */
     getSettingsLocale(
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsLocaleResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsLocaleResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/store/locale',
         });
     }
@@ -336,11 +340,13 @@ export class SettingsV3Api {
      * Update Locale Settings
      *
      * Updates global locale settings.
+
+     For stores with Catalyst channels, the `shopper_language_selection_method` field is deprecated. Using this endpoint on those stores will return a warning about the deprecation. For additional information, refer to [Locale Configuration](/docs/store-operations/settings/locales).
      */
     updateSettingsLocale(
         requestBody: SettingsV3ApiSpecs.UpdateSettingsLocaleData['body'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsLocaleResponse, SettingsV3ApiSpecs.UpdateSettingsLocaleError>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsLocaleResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.UpdateSettingsLocaleErrors[422]>>>({
             path: 'v3/settings/store/locale',
             contentType: 'application/json',
             body: requestBody,
@@ -359,7 +365,7 @@ export class SettingsV3Api {
     getSettingsStoreProfile(
         query?: SettingsV3ApiSpecs.GetSettingsStoreProfileData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsStoreProfileResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsStoreProfileResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/store/profile',
             query,
         });
@@ -378,7 +384,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsStoreProfileData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsStoreProfileData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsStoreProfileResponse, SettingsV3ApiSpecs.UpdateSettingsStoreProfileError>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStoreProfileResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.UpdateSettingsStoreProfileErrors[422]>>>({
             path: 'v3/settings/store/profile',
             contentType: 'application/json',
             body: requestBody,
@@ -398,7 +404,7 @@ export class SettingsV3Api {
     getSettingsStorefrontCategory(
         query?: SettingsV3ApiSpecs.GetSettingsStorefrontCategoryData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsStorefrontCategoryResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsStorefrontCategoryResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/category',
             query,
         });
@@ -417,7 +423,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryResponse, SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryError>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryErrors[422]>>>({
             path: 'v3/settings/storefront/category',
             contentType: 'application/json',
             body: requestBody,
@@ -437,7 +443,7 @@ export class SettingsV3Api {
     getSettingsStorefrontProduct(
         query?: SettingsV3ApiSpecs.GetSettingsStorefrontProductData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsStorefrontProductResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/product',
             query,
         });
@@ -456,7 +462,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontProductData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontProductData['query'],
     ) {
-        return this.request.put<any, SettingsV3ApiSpecs.UpdateSettingsStorefrontProductError>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontProductResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontProductErrors[422]>>>({
             path: 'v3/settings/storefront/product',
             contentType: 'application/json',
             body: requestBody,
@@ -476,7 +482,7 @@ export class SettingsV3Api {
     getSettingsRobotsTxt(
         query?: SettingsV3ApiSpecs.GetSettingsRobotsTxtData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsRobotsTxtResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsRobotsTxtResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/robotstxt',
             query,
         });
@@ -495,7 +501,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsRobotsTxtData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsRobotsTxtData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsRobotsTxtResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsRobotsTxtResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/robotstxt',
             contentType: 'application/json',
             body: requestBody,
@@ -515,7 +521,7 @@ export class SettingsV3Api {
     getSettingsStorefrontSearch(
         query?: SettingsV3ApiSpecs.GetSettingsStorefrontSearchData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsStorefrontSearchResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsStorefrontSearchResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/search',
             query,
         });
@@ -534,7 +540,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontSearchData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontSearchData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsStorefrontSearchResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontSearchResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/search',
             contentType: 'application/json',
             body: requestBody,
@@ -554,7 +560,7 @@ export class SettingsV3Api {
     getSettingsStorefrontSecurity(
         query?: SettingsV3ApiSpecs.GetSettingsStorefrontSecurityData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsStorefrontSecurityResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsStorefrontSecurityResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/security',
             query,
         });
@@ -573,7 +579,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontSecurityData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontSecurityData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsStorefrontSecurityResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontSecurityResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/security',
             contentType: 'application/json',
             body: requestBody,
@@ -593,7 +599,7 @@ export class SettingsV3Api {
     getSettingsStorefrontSeo(
         query?: SettingsV3ApiSpecs.GetSettingsStorefrontSeoData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsStorefrontSeoResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsStorefrontSeoResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/seo',
             query,
         });
@@ -614,7 +620,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoResponse, SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoError>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoErrors[422]>>>({
             path: 'v3/settings/storefront/seo',
             contentType: 'application/json',
             body: requestBody,
@@ -634,7 +640,7 @@ export class SettingsV3Api {
     getSettingsStorefrontStatus(
         query?: SettingsV3ApiSpecs.GetSettingsStorefrontStatusData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsStorefrontStatusResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsStorefrontStatusResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/status',
             query,
         });
@@ -653,7 +659,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontStatusData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontStatusData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsStorefrontStatusResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontStatusResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/status',
             contentType: 'application/json',
             body: requestBody,
@@ -669,7 +675,7 @@ export class SettingsV3Api {
     getSettingsInventory(
         query?: SettingsV3ApiSpecs.GetSettingsInventoryData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsInventoryResponse, SettingsV3ApiSpecs.GetSettingsInventoryError>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsInventoryResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.GetSettingsInventoryErrors[422]>>>({
             path: 'v3/settings/inventory',
             query,
         });
@@ -684,7 +690,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsInventoryData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsInventoryData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsInventoryResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsInventoryResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/inventory',
             contentType: 'application/json',
             body: requestBody,
@@ -700,7 +706,7 @@ export class SettingsV3Api {
     getSettingsMeasurementUnits(
         query?: SettingsV3ApiSpecs.GetSettingsMeasurementUnitsData['query'],
     ) {
-        return this.request.get<SettingsV3ApiSpecs.GetSettingsMeasurementUnitsResponse, SettingsV3ApiSpecs.GetSettingsMeasurementUnitsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsMeasurementUnitsResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.GetSettingsMeasurementUnitsErrors[422]>>>({
             path: 'v3/settings/store/units-of-measurement',
             query,
         });
@@ -723,7 +729,7 @@ export class SettingsV3Api {
         requestBody: SettingsV3ApiSpecs.UpdateSettingsMeasurementUnitsData['body'],
         query?: SettingsV3ApiSpecs.UpdateSettingsMeasurementUnitsData['query'],
     ) {
-        return this.request.put<SettingsV3ApiSpecs.UpdateSettingsMeasurementUnitsResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsMeasurementUnitsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/store/units-of-measurement',
             contentType: 'application/json',
             body: requestBody,

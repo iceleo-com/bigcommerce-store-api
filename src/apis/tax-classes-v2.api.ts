@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as TaxClassesV2ApiSpecs from '../generated/tax-classes-v2';
 export * as TaxClassesV2ApiSpecs from '../generated/tax-classes-v2';
 
@@ -19,7 +20,7 @@ export class TaxClassesV2Api {
     getTaxClasses(
         query?: TaxClassesV2ApiSpecs.GetTaxClassesData['query'],
     ) {
-        return this.request.get<TaxClassesV2ApiSpecs.GetTaxClassesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<TaxClassesV2ApiSpecs.GetTaxClassesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/tax_classes',
             query,
         });
@@ -31,9 +32,10 @@ export class TaxClassesV2Api {
      * Returns a single *Tax Class*.
      */
     getTaxClass(
+        id: TaxClassesV2ApiSpecs.GetTaxClassData['path']['id'],
     ) {
-        return this.request.get<TaxClassesV2ApiSpecs.GetTaxClassResponse, any>({
-            path: 'v2/tax_classes/{id}',
+        return this.request.get<RequestSuccessResponse<200, Required<TaxClassesV2ApiSpecs.GetTaxClassResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v2/tax_classes/${id}`,
         });
     }
 }

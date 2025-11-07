@@ -1,23 +1,41 @@
-export type BaseError = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
-export type beta4DetailedErrors = {
+export type MetaEmptyFull = {
     [key: string]: unknown;
 };
-export type beta4ErrorResponse = BaseError & {
-    errors?: beta4DetailedErrors;
+export type DetailedErrors = {
+    [key: string]: unknown;
 };
-export type category_id = number;
-export type category_uuid = string;
+export type GetCategories = {
+    name?: Name;
+    category_id?: CategoryId;
+    category_uuid?: CategoryUuid;
+    tree_id?: TreeId;
+    parent_id?: ParentId;
+} & CategoryBase & {
+    url?: Url;
+};
+export type CreateCategories = Array<{
+    name?: Name;
+    url?: Url;
+    parent_id?: ParentId;
+    tree_id?: TreeId;
+} & CategoryBase & unknown>;
+export type UpdateCategories = Array<{
+    category_id: CategoryId;
+    name?: Name;
+    tree_id?: TreeId;
+    parent_id?: ParentId;
+} & CategoryBase & {
+    url?: Url;
+}>;
 export type CategoryBase = {
     description?: string;
     views?: number;
     sort_order?: number;
     page_title?: string;
-    meta_keywords?: Array<(string)>;
+    meta_keywords?: Array<string>;
     meta_description?: string;
     layout_file?: string;
     image_url?: string;
@@ -25,56 +43,127 @@ export type CategoryBase = {
     search_keywords?: string;
     default_product_sort?: 'use_store_settings' | 'featured' | 'newest' | 'best_selling' | 'alpha_asc' | 'alpha_desc' | 'avg_customer_review' | 'price_asc' | 'price_desc';
 };
-export type default_product_sort = 'use_store_settings' | 'featured' | 'newest' | 'best_selling' | 'alpha_asc' | 'alpha_desc' | 'avg_customer_review' | 'price_asc' | 'price_desc';
 export type CategoryList = {
     data?: Array<GetCategories>;
     meta?: MetaPagination;
 };
-export type CategoryNode = {
-    id?: number;
-    parent_id?: number;
-    depth?: number;
-    path?: Array<(number)>;
-    name?: string;
-    is_visible?: boolean;
-    children?: Array<CategoryNode>;
-};
 export type CategoryNodeTree = {
     data?: Array<CategoryNode>;
-    meta?: metaEmpty_Full;
-};
-export type CategoryTree = {
-    data?: Array<Tree>;
-    meta?: metaEmpty_Full;
+    meta?: MetaEmptyFull;
 };
 export type CategoryTreeList = {
     data?: Array<Tree>;
     meta?: MetaPaginationObject;
 };
-export type CategoryTreeListRequest = Array<Tree>;
-export type CreateCategories = Array<({
-    name: name;
-    url?: url;
-    parent_id: parent_id;
-    tree_id: tree_id;
-} & CategoryBase)>;
-export type DetailedErrors = {
-    [key: string]: unknown;
+export type CategoryTree = {
+    data?: Array<Tree>;
+    meta?: MetaEmptyFull;
 };
-export type ErrorAdditional = {
-    errors?: DetailedErrors;
+export type MetaPagination = {
+    pagination?: {
+        total?: number;
+        count?: number;
+        per_page?: number;
+        current_page?: number;
+        total_pages?: number;
+        links?: {
+            previous?: string;
+            current?: string;
+            next?: string;
+        };
+    };
+};
+export type ErrorRequest = {
+    errors?: Array<ErrorBasic>;
 };
 export type ErrorBasic = {
     status?: number;
     title?: string;
     type?: string;
 };
-export type ErrorRequest = {
-    errors?: Array<ErrorBasic>;
+export type ErrorAdditional = {
+    errors?: DetailedErrors;
+};
+export type MetaError = ErrorBasic & ErrorAdditional;
+export type MetaData = {
+    total?: number;
+    success?: number;
+    failed?: number;
+};
+export type SuccessNoContentResponse = {
+    meta?: MetaData;
+};
+export type PartialSuccessNoContentResponse = {
+    errors?: MetaError;
+    meta?: MetaData;
+};
+export type PartialSuccessResponse = {
+    data?: Array<GetCategories>;
+    errors?: MetaError;
+    meta?: MetaData;
+};
+export type SuccessResponse = {
+    data?: Array<GetCategories>;
+    meta?: MetaData;
 };
 export type ErrorResponse = {
     errors?: MetaError;
     meta?: MetaData;
+};
+export type Tree = {
+    id?: number;
+    name?: string;
+    channels?: Array<number>;
+};
+export type CategoryTreeListRequest = Array<Tree>;
+export type CategoryNode = {
+    id?: number;
+    parent_id?: number;
+    depth?: number;
+    path?: Array<number>;
+    name?: string;
+    is_visible?: boolean;
+    children?: Array<CategoryNode>;
+    url?: string;
+};
+export type MetaPaginationObject = {
+    pagination?: {
+        total?: number;
+        count?: number;
+        per_page?: number;
+        current_page?: number;
+        total_pages?: number;
+        links?: {
+            next?: string;
+            current?: string;
+        };
+    };
+};
+export type Beta4DetailedErrors = {
+    [key: string]: unknown;
+};
+export type BaseError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+};
+export type Beta4ErrorResponse = BaseError & {
+    errors?: Beta4DetailedErrors;
+};
+export type Url = {
+    path?: string;
+    is_customized?: boolean;
+};
+export type CategoryUuid = string;
+export type CategoryId = number;
+export type ParentId = number;
+export type TreeId = number;
+export type Name = string;
+export type NotFoundError = {
+    status: number;
+    title: string;
+    type: string;
 };
 export type GeneralError = {
     status: number;
@@ -90,216 +179,231 @@ export type GeneralErrorWithErrors = {
         [key: string]: unknown;
     };
 };
-export type GetCategories = {
-    name?: name;
-    category_id?: category_id;
-    category_uuid?: category_uuid;
-    tree_id?: tree_id;
-    parent_id?: parent_id;
-} & CategoryBase & {
-    url?: url;
-};
-export type MetaData = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
-export type metaEmpty_Full = {
+export type MetaEmptyFullWritable = {
     [key: string]: unknown;
 };
-export type MetaError = ErrorBasic & ErrorAdditional;
-export type MetaPagination = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    };
+export type DetailedErrorsWritable = {
+    [key: string]: unknown;
 };
-export type MetaPaginationObject = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            next?: string;
-            current?: string;
-        };
-    };
-};
-export type name = string;
-export type NotFoundError = {
-    status: number;
-    title: string;
-    type: string;
-};
-export type ParameterAccept = string;
-export type ParameterCategoryIdInParam = Array<(number)>;
-export type ParameterCategoryIdNotInParam = Array<(number)>;
-export type ParameterCategoryUuidInParam = Array<(string)>;
-export type ParameterCategoryUuidNotInParam = Array<(string)>;
-export type ParameterChannelIdInParam = Array<(number)>;
-export type ParameterContentType = string;
-export type ParameterExcludeFieldsParam = Array<(string)>;
-export type ParameterIdInParam = Array<(number)>;
-export type ParameterIncludeFieldsParam = Array<(string)>;
-export type ParameterIsVisibleParam = boolean;
-export type ParameterKeywordParam = string;
-export type ParameterLimitParam = number;
-export type ParameterNameLikeParam = string;
-export type ParameterNameParam = string;
-export type ParameterPageParam = number;
-export type ParameterPageTitleLikeParam = string;
-export type ParameterPageTitleParam = string;
-export type ParameterParentIdInParam = Array<(number)>;
-export type ParameterParentIdNotInParam = Array<(number)>;
-export type ParameterTreeIdInParam = Array<(number)>;
-export type ParameterTreeIdNotInParam = Array<(number)>;
-export type ParameterTreeIdParam = number;
-export type parent_id = number;
-export type PartialSuccessNoContentResponse = {
-    errors?: MetaError;
-    meta?: MetaData;
-};
-export type PartialSuccessResponse = {
-    data?: Array<GetCategories>;
-    errors?: MetaError;
-    meta?: MetaData;
-};
-export type SuccessNoContentResponse = {
-    meta?: MetaData;
-};
-export type SuccessResponse = {
-    data?: Array<GetCategories>;
-    meta?: MetaData;
-};
-export type Tree = {
-    id?: number;
-    name?: string;
-    channels?: Array<(number)>;
-};
-export type tree_id = number;
-export type UpdateCategories = Array<({
-    category_id: category_id;
-    name?: name;
-    tree_id?: tree_id;
-    parent_id?: parent_id;
+export type GetCategoriesWritable = {
+    name?: Name;
+    category_id?: CategoryId;
+    tree_id?: TreeId;
+    parent_id?: ParentId;
 } & CategoryBase & {
-    url?: url;
-})>;
-export type url = {
-    path?: string;
-    is_customized?: boolean;
+    url?: Url;
 };
-export type GetAllCategoriesData = {
+export type Beta4DetailedErrorsWritable = {
+    [key: string]: unknown;
+};
+export type Accept = string;
+export type ContentType = string;
+export type PageParam = number;
+export type LimitParam = number;
+export type IncludeFieldsParam = Array<string>;
+export type ExcludeFieldsParam = Array<string>;
+export type KeywordParam = string;
+export type IsVisibleParam = boolean;
+export type NameParam = string;
+export type NameLikeParam = string;
+export type PageTitleLikeParam = string;
+export type PageTitleParam = string;
+export type TreeIdParam = number;
+export type IdInParam = Array<number>;
+export type ChannelIdInParam = Array<number>;
+export type CategoryUuidInParam = Array<string>;
+export type CategoryIdInParam = Array<number>;
+export type TreeIdInParam = Array<number>;
+export type ParentIdInParam = Array<number>;
+export type CategoryUuidNotInParam = Array<string>;
+export type CategoryIdNotInParam = Array<number>;
+export type TreeIdNotInParam = Array<number>;
+export type ParentIdNotInParam = Array<number>;
+export type DeleteTreeCategoriesData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
     query?: {
-        'category_id:in'?: Array<(number)>;
-        'category_id:not_in'?: Array<(number)>;
-        'category_uuid:in'?: Array<(string)>;
-        'category_uuid:not_in'?: Array<(string)>;
-        exclude_fields?: Array<(string)>;
-        include_fields?: Array<(string)>;
-        is_visible?: boolean;
-        keyword?: string;
-        limit?: number;
-        name?: string;
-        'name:like'?: string;
-        page?: number;
-        page_title?: string;
-        'page_title:like'?: string;
-        'parent_id:in'?: Array<(number)>;
-        'parent_id:not_in'?: Array<(number)>;
-        'tree_id:in'?: Array<(number)>;
-        'tree_id:not_in'?: Array<(number)>;
+        'category_uuid:in'?: Array<string>;
+        'category_id:in'?: Array<number>;
+        'tree_id:in'?: Array<number>;
+        'parent_id:in'?: Array<number>;
+    };
+    url: '/catalog/trees/categories';
+};
+export type DeleteTreeCategoriesErrors = {
+    400: ErrorRequest;
+    401: string;
+    403: GeneralError;
+    422: {
+        errors?: GeneralErrorWithErrors;
+        meta?: MetaData;
     };
 };
-export type GetAllCategoriesResponse = (CategoryList);
-export type GetAllCategoriesError = (string | GeneralError | {
-    errors?: GeneralErrorWithErrors;
-    meta?: MetaData;
-});
+export type DeleteTreeCategoriesError = DeleteTreeCategoriesErrors[keyof DeleteTreeCategoriesErrors];
+export type DeleteTreeCategoriesResponses = {
+    202: SuccessNoContentResponse;
+};
+export type DeleteTreeCategoriesResponse = DeleteTreeCategoriesResponses[keyof DeleteTreeCategoriesResponses];
+export type GetAllCategoriesData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: {
+        'category_uuid:in'?: Array<string>;
+        'category_uuid:not_in'?: Array<string>;
+        'category_id:in'?: Array<number>;
+        'category_id:not_in'?: Array<number>;
+        'tree_id:in'?: Array<number>;
+        'tree_id:not_in'?: Array<number>;
+        'parent_id:in'?: Array<number>;
+        'parent_id:not_in'?: Array<number>;
+        page_title?: string;
+        'page_title:like'?: string;
+        name?: string;
+        'name:like'?: string;
+        keyword?: string;
+        is_visible?: boolean;
+        include_fields?: Array<string>;
+        exclude_fields?: Array<string>;
+        page?: number;
+        limit?: number;
+    };
+    url: '/catalog/trees/categories';
+};
+export type GetAllCategoriesErrors = {
+    400: string;
+    401: string;
+    403: GeneralError;
+    422: {
+        errors?: GeneralErrorWithErrors;
+        meta?: MetaData;
+    };
+};
+export type GetAllCategoriesError = GetAllCategoriesErrors[keyof GetAllCategoriesErrors];
+export type GetAllCategoriesResponses = {
+    200: CategoryList;
+};
+export type GetAllCategoriesResponse = GetAllCategoriesResponses[keyof GetAllCategoriesResponses];
 export type CreateCategoriesData = {
     body: CreateCategories;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/catalog/trees/categories';
 };
-export type CreateCategoriesResponse = (SuccessResponse | PartialSuccessResponse);
-export type CreateCategoriesError = (ErrorRequest | string | GeneralError | ErrorResponse);
+export type CreateCategoriesErrors = {
+    400: ErrorRequest;
+    401: string;
+    403: GeneralError;
+    422: ErrorResponse;
+};
+export type CreateCategoriesError = CreateCategoriesErrors[keyof CreateCategoriesErrors];
+export type CreateCategoriesResponses = {
+    201: SuccessResponse;
+    207: PartialSuccessResponse;
+};
+export type CreateCategoriesResponse = CreateCategoriesResponses[keyof CreateCategoriesResponses];
 export type UpdateCategoriesData = {
     body: UpdateCategories;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/catalog/trees/categories';
 };
-export type UpdateCategoriesResponse = (SuccessNoContentResponse | PartialSuccessNoContentResponse);
-export type UpdateCategoriesError = (ErrorRequest | string | GeneralError | ErrorResponse);
-export type DeleteTreeCategoriesData = {
+export type UpdateCategoriesErrors = {
+    400: ErrorRequest;
+    401: string;
+    403: GeneralError;
+    422: ErrorResponse;
+};
+export type UpdateCategoriesError = UpdateCategoriesErrors[keyof UpdateCategoriesErrors];
+export type UpdateCategoriesResponses = {
+    200: SuccessNoContentResponse;
+    207: PartialSuccessNoContentResponse;
+};
+export type UpdateCategoriesResponse = UpdateCategoriesResponses[keyof UpdateCategoriesResponses];
+export type DeleteCategoryTreesData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
     query?: {
-        'category_id:in'?: Array<(number)>;
-        'category_uuid:in'?: Array<(string)>;
-        'parent_id:in'?: Array<(number)>;
-        'tree_id:in'?: Array<(number)>;
+        'id:in'?: Array<number>;
+    };
+    url: '/catalog/trees';
+};
+export type DeleteCategoryTreesErrors = {
+    401: string;
+    403: GeneralError;
+    422: {
+        errors?: GeneralErrorWithErrors;
+        meta?: MetaData;
     };
 };
-export type DeleteTreeCategoriesResponse = (SuccessNoContentResponse);
-export type DeleteTreeCategoriesError = (ErrorRequest | string | GeneralError | {
-    errors?: GeneralErrorWithErrors;
-    meta?: MetaData;
-});
+export type DeleteCategoryTreesError = DeleteCategoryTreesErrors[keyof DeleteCategoryTreesErrors];
+export type DeleteCategoryTreesResponses = {
+    204: void;
+};
+export type DeleteCategoryTreesResponse = DeleteCategoryTreesResponses[keyof DeleteCategoryTreesResponses];
 export type GetCategoryTreesData = {
+    body?: never;
     headers: {
         Accept: string;
     };
+    path?: never;
     query?: {
-        'channel_id:in'?: Array<(number)>;
-        'id:in'?: Array<(number)>;
+        'id:in'?: Array<number>;
+        'channel_id:in'?: Array<number>;
+    };
+    url: '/catalog/trees';
+};
+export type GetCategoryTreesErrors = {
+    401: string;
+    403: GeneralError;
+    422: {
+        errors?: GeneralErrorWithErrors;
+        meta?: MetaData;
     };
 };
-export type GetCategoryTreesResponse = (CategoryTreeList);
-export type GetCategoryTreesError = (string | GeneralError | {
-    errors?: GeneralErrorWithErrors;
-    meta?: MetaData;
-});
+export type GetCategoryTreesError = GetCategoryTreesErrors[keyof GetCategoryTreesErrors];
+export type GetCategoryTreesResponses = {
+    200: CategoryTreeList;
+};
+export type GetCategoryTreesResponse = GetCategoryTreesResponses[keyof GetCategoryTreesResponses];
 export type UpsertCategoryTreesData = {
     body: CategoryTreeListRequest;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/catalog/trees';
 };
-export type UpsertCategoryTreesResponse = (CategoryTree);
-export type UpsertCategoryTreesError = (string | GeneralError | beta4ErrorResponse);
-export type DeleteCategoryTreesData = {
-    headers: {
-        Accept: string;
-    };
-    query?: {
-        'id:in'?: Array<(number)>;
-    };
+export type UpsertCategoryTreesErrors = {
+    401: string;
+    403: GeneralError;
+    422: Beta4ErrorResponse;
 };
-export type DeleteCategoryTreesResponse = (void);
-export type DeleteCategoryTreesError = (string | GeneralError | {
-    errors?: GeneralErrorWithErrors;
-    meta?: MetaData;
-});
+export type UpsertCategoryTreesError = UpsertCategoryTreesErrors[keyof UpsertCategoryTreesErrors];
+export type UpsertCategoryTreesResponses = {
+    200: CategoryTree;
+};
+export type UpsertCategoryTreesResponse = UpsertCategoryTreesResponses[keyof UpsertCategoryTreesResponses];
 export type GetCategoryTreeData = {
+    body?: never;
     headers: {
         Accept: string;
     };
@@ -309,6 +413,15 @@ export type GetCategoryTreeData = {
     query?: {
         depth?: number;
     };
+    url: '/catalog/trees/{tree_id}/categories';
 };
-export type GetCategoryTreeResponse = (CategoryNodeTree);
-export type GetCategoryTreeError = (string | GeneralError | beta4ErrorResponse);
+export type GetCategoryTreeErrors = {
+    401: string;
+    403: GeneralError;
+    404: Beta4ErrorResponse;
+};
+export type GetCategoryTreeError = GetCategoryTreeErrors[keyof GetCategoryTreeErrors];
+export type GetCategoryTreeResponses = {
+    200: CategoryNodeTree;
+};
+export type GetCategoryTreeResponse = GetCategoryTreeResponses[keyof GetCategoryTreeResponses];

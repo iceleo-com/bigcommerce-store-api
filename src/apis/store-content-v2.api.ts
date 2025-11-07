@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as StoreContentV2ApiSpecs from '../generated/store-content-v2';
 export * as StoreContentV2ApiSpecs from '../generated/store-content-v2';
 
@@ -16,7 +17,7 @@ export class StoreContentV2Api {
      */
     getBlogTags(
     ) {
-        return this.request.get<StoreContentV2ApiSpecs.GetBlogTagsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetBlogTagsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/blog/tags',
         });
     }
@@ -29,7 +30,7 @@ export class StoreContentV2Api {
     getBlogPosts(
         query?: StoreContentV2ApiSpecs.GetBlogPostsData['query'],
     ) {
-        return this.request.get<StoreContentV2ApiSpecs.GetBlogPostsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetBlogPostsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/blog/posts',
             query,
         });
@@ -53,7 +54,7 @@ export class StoreContentV2Api {
     createBlogPosts(
         requestBody: StoreContentV2ApiSpecs.CreateBlogPostsData['body'],
     ) {
-        return this.request.post<StoreContentV2ApiSpecs.CreateBlogPostsResponse, any>({
+        return this.request.post<(RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.CreateBlogPostsResponses[200]>> | RequestSuccessResponse<207, Required<StoreContentV2ApiSpecs.CreateBlogPostsResponses[207]>>),RequestErrorResponse<400, void>>({
             path: 'v2/blog/posts',
             contentType: 'application/json',
             body: requestBody,
@@ -68,7 +69,7 @@ export class StoreContentV2Api {
     deleteBlogPosts(
         query?: StoreContentV2ApiSpecs.DeleteBlogPostsData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteBlogPostsResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/blog/posts',
             query,
         });
@@ -82,7 +83,7 @@ export class StoreContentV2Api {
     getBlogPost(
         id: StoreContentV2ApiSpecs.GetBlogPostData['path']['id'],
     ) {
-        return this.request.get<StoreContentV2ApiSpecs.GetBlogPostResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetBlogPostResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/blog/posts/${id}`,
         });
     }
@@ -102,7 +103,7 @@ export class StoreContentV2Api {
         id: StoreContentV2ApiSpecs.UpdateBlogPostData['path']['id'],
         requestBody: StoreContentV2ApiSpecs.UpdateBlogPostData['body'],
     ) {
-        return this.request.put<StoreContentV2ApiSpecs.UpdateBlogPostResponse, any>({
+        return this.request.put<(RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.UpdateBlogPostResponses[200]>> | RequestSuccessResponse<207, Required<StoreContentV2ApiSpecs.UpdateBlogPostResponses[207]>>),RequestErrorResponse<400, void>>({
             path: `v2/blog/posts/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -117,7 +118,7 @@ export class StoreContentV2Api {
     deleteBlogPost(
         id: StoreContentV2ApiSpecs.DeleteBlogPostData['path']['id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteBlogPostResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/blog/posts/${id}`,
         });
     }
@@ -129,7 +130,7 @@ export class StoreContentV2Api {
      */
     getBlogPostsCount(
     ) {
-        return this.request.get<StoreContentV2ApiSpecs.GetBlogPostsCountResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetBlogPostsCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/blog/posts/count',
         });
     }
@@ -148,7 +149,7 @@ export class StoreContentV2Api {
     getPages(
         query?: StoreContentV2ApiSpecs.GetPagesData['query'],
     ) {
-        return this.request.get<StoreContentV2ApiSpecs.GetPagesResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetPagesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/pages',
             query,
         });
@@ -163,7 +164,6 @@ export class StoreContentV2Api {
      *   `type`
      *   `name`
      *   `link` (for a page of `type: link`)
-     *   `feed` (for a page of `type: rss_feed`)
      *   `body` (for a page of `type: raw`)
 
      **Read Only Fields**
@@ -176,12 +176,12 @@ export class StoreContentV2Api {
      > #### Warning
      > **Deprecated**
      > * This API operation is deprecated. Avoid using this API operation if possible. It will be removed in a future version.
-     > * To create one or more pages, use Pages V3ʼs [Create pages](/docs/rest-content/pages#create-pages) endpoint. 
+     > * To create one or more pages, use Pages V3ʼs [Create pages](/docs/rest-content/pages#create-pages) endpoint.
      */
     createPage(
         requestBody: StoreContentV2ApiSpecs.CreatePageData['body'],
     ) {
-        return this.request.post<StoreContentV2ApiSpecs.CreatePageResponse, any>({
+        return this.request.post<(RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.CreatePageResponses[200]>> | RequestSuccessResponse<207, Required<StoreContentV2ApiSpecs.CreatePageResponses[207]>>),RequestErrorResponse<400, void>>({
             path: 'v2/pages',
             contentType: 'application/json',
             body: requestBody,
@@ -202,7 +202,7 @@ export class StoreContentV2Api {
     getPage(
         id: StoreContentV2ApiSpecs.GetPageData['path']['id'],
     ) {
-        return this.request.get<StoreContentV2ApiSpecs.GetPageResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetPageResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/pages/${id}`,
         });
     }
@@ -225,7 +225,7 @@ export class StoreContentV2Api {
         id: StoreContentV2ApiSpecs.UpdatePageData['path']['id'],
         requestBody: StoreContentV2ApiSpecs.UpdatePageData['body'],
     ) {
-        return this.request.put<StoreContentV2ApiSpecs.UpdatePageResponse, any>({
+        return this.request.put<(RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.UpdatePageResponses[200]>> | RequestSuccessResponse<207, Required<StoreContentV2ApiSpecs.UpdatePageResponses[207]>>),RequestErrorResponse<400, void>>({
             path: `v2/pages/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -240,13 +240,13 @@ export class StoreContentV2Api {
      > #### Warning
      > **Deprecated**
      > * This API operation is deprecated. Avoid using this API operation if possible. It will be removed in a future version.
-     > * To delete multiple pages, use Pages V3ʼs [Delete pages](/docs/rest-content/pages#delete-pages) endpoint. To delete a single page, use Pages V3ʼs [Delete a page](/docs/rest-content/pages#delete-a-page) endpoint. 
+     > * To delete multiple pages, use Pages V3ʼs [Delete pages](/docs/rest-content/pages#delete-pages) endpoint. To delete a single page, use Pages V3ʼs [Delete a page](/docs/rest-content/pages#delete-a-page) endpoint.
 
      */
     deletePage(
         id: StoreContentV2ApiSpecs.DeletePageData['path']['id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeletePageResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/pages/${id}`,
         });
     }
@@ -264,7 +264,7 @@ export class StoreContentV2Api {
     getRedirects(
         query?: StoreContentV2ApiSpecs.GetRedirectsData['query'],
     ) {
-        return this.request.get<StoreContentV2ApiSpecs.GetRedirectsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetRedirectsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/redirects',
             query,
         });
@@ -290,7 +290,7 @@ export class StoreContentV2Api {
     createRedirect(
         requestBody: StoreContentV2ApiSpecs.CreateRedirectData['body'],
     ) {
-        return this.request.post<StoreContentV2ApiSpecs.CreateRedirectResponse, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.CreateRedirectResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/redirects',
             contentType: 'application/json',
             body: requestBody,
@@ -309,7 +309,7 @@ export class StoreContentV2Api {
      */
     deleteRedirects(
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteRedirectsResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/redirects',
         });
     }
@@ -327,7 +327,7 @@ export class StoreContentV2Api {
     getRedirect(
         id: StoreContentV2ApiSpecs.GetRedirectData['path']['id'],
     ) {
-        return this.request.get<StoreContentV2ApiSpecs.GetRedirectResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetRedirectResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/redirects/${id}`,
         });
     }
@@ -353,7 +353,7 @@ export class StoreContentV2Api {
         id: StoreContentV2ApiSpecs.UpdateRedirectData['path']['id'],
         requestBody: StoreContentV2ApiSpecs.UpdateRedirectData['body'],
     ) {
-        return this.request.put<StoreContentV2ApiSpecs.UpdateRedirectResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.UpdateRedirectResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/redirects/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -373,7 +373,7 @@ export class StoreContentV2Api {
     deleteRedirect(
         id: StoreContentV2ApiSpecs.DeleteRedirectData['path']['id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteRedirectResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/redirects/${id}`,
         });
     }
@@ -390,7 +390,7 @@ export class StoreContentV2Api {
      */
     getRedirectsCount(
     ) {
-        return this.request.get<StoreContentV2ApiSpecs.GetRedirectsCountResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetRedirectsCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/redirects/count',
         });
     }

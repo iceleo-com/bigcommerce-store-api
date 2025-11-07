@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as ChannelsV3ApiSpecs from '../generated/channels-v3';
 export * as ChannelsV3ApiSpecs from '../generated/channels-v3';
 
@@ -19,7 +20,7 @@ export class ChannelsV3Api {
     getChannels(
         query?: ChannelsV3ApiSpecs.GetChannelsData['query'],
     ) {
-        return this.request.get<any, ChannelsV3ApiSpecs.GetChannelsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelsResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.GetChannelsErrors[422]>>>({
             path: 'v3/channels',
             query,
         });
@@ -33,7 +34,7 @@ export class ChannelsV3Api {
     createChannel(
         requestBody: ChannelsV3ApiSpecs.CreateChannelData['body'],
     ) {
-        return this.request.post<any, ChannelsV3ApiSpecs.CreateChannelError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.CreateChannelResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.CreateChannelErrors[422]>>>({
             path: 'v3/channels',
             contentType: 'application/json',
             body: requestBody,
@@ -49,7 +50,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.GetChannelData['path']['channel_id'],
         query?: ChannelsV3ApiSpecs.GetChannelData['query'],
     ) {
-        return this.request.get<any, ChannelsV3ApiSpecs.GetChannelError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelResponses[200]>>,RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.GetChannelErrors[404]>>>({
             path: `v3/channels/${channelId}`,
             query,
         });
@@ -68,7 +69,6 @@ export class ChannelsV3Api {
      * `status`
      * `is_listable_from_ui`
      * `is_visible`
-     * `config_meta`
 
      > #### Note
      > * Partial updates are supported. In most cases, if a field that *cannot* be updated is passed in, the API **will not** respond with an error. It returns a 200 response with the object, in which you will see the field(s) were not updated.
@@ -79,7 +79,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.UpdateChannelData['path']['channel_id'],
         requestBody: ChannelsV3ApiSpecs.UpdateChannelData['body'],
     ) {
-        return this.request.put<any, ChannelsV3ApiSpecs.UpdateChannelError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.UpdateChannelResponses[200]>>,(RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.UpdateChannelErrors[404]>> | RequestErrorResponse<409, Required<ChannelsV3ApiSpecs.UpdateChannelErrors[409]>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.UpdateChannelErrors[422]>>)>({
             path: `v3/channels/${channelId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -95,7 +95,7 @@ export class ChannelsV3Api {
     getChannelActiveTheme(
         channelId: ChannelsV3ApiSpecs.GetChannelActiveThemeData['path']['channel_id'],
     ) {
-        return this.request.get<any, ChannelsV3ApiSpecs.GetChannelActiveThemeError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelActiveThemeResponses[200]>>,RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.GetChannelActiveThemeErrors[404]>>>({
             path: `v3/channels/${channelId}/active-theme`,
         });
     }
@@ -107,7 +107,7 @@ export class ChannelsV3Api {
      */
     getAllCurrencyAssignments(
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetAllCurrencyAssignmentsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/channels/currency-assignments',
         });
     }
@@ -120,7 +120,7 @@ export class ChannelsV3Api {
     createMultipleChannelsCurrencyAssignments(
         requestBody: ChannelsV3ApiSpecs.CreateMultipleChannelsCurrencyAssignmentsData['body'],
     ) {
-        return this.request.post<any, ChannelsV3ApiSpecs.CreateMultipleChannelsCurrencyAssignmentsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.CreateMultipleChannelsCurrencyAssignmentsResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.CreateMultipleChannelsCurrencyAssignmentsErrors[422]>>>({
             path: 'v3/channels/currency-assignments',
             contentType: 'application/json',
             body: requestBody,
@@ -135,7 +135,7 @@ export class ChannelsV3Api {
     updateMultipleChannelsCurrencyAssignments(
         requestBody: ChannelsV3ApiSpecs.UpdateMultipleChannelsCurrencyAssignmentsData['body'],
     ) {
-        return this.request.put<any, ChannelsV3ApiSpecs.UpdateMultipleChannelsCurrencyAssignmentsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.UpdateMultipleChannelsCurrencyAssignmentsResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.UpdateMultipleChannelsCurrencyAssignmentsErrors[422]>>>({
             path: 'v3/channels/currency-assignments',
             contentType: 'application/json',
             body: requestBody,
@@ -150,7 +150,7 @@ export class ChannelsV3Api {
     getSingleChannelCurrencyAssignments(
         channelId: ChannelsV3ApiSpecs.GetSingleChannelCurrencyAssignmentsData['path']['channel_id'],
     ) {
-        return this.request.get<any, ChannelsV3ApiSpecs.GetSingleChannelCurrencyAssignmentsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetSingleChannelCurrencyAssignmentsResponses[200]>>,RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.GetSingleChannelCurrencyAssignmentsErrors[404]>>>({
             path: `v3/channels/${channelId}/currency-assignments`,
         });
     }
@@ -164,7 +164,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.CreateSingleChannelCurrencyAssignmentsData['path']['channel_id'],
         requestBody: ChannelsV3ApiSpecs.CreateSingleChannelCurrencyAssignmentsData['body'],
     ) {
-        return this.request.post<any, ChannelsV3ApiSpecs.CreateSingleChannelCurrencyAssignmentsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.CreateSingleChannelCurrencyAssignmentsResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.CreateSingleChannelCurrencyAssignmentsErrors[422]>>>({
             path: `v3/channels/${channelId}/currency-assignments`,
             contentType: 'application/json',
             body: requestBody,
@@ -180,7 +180,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.UpdateSingleChannelCurrencyAssignmentsData['path']['channel_id'],
         requestBody: ChannelsV3ApiSpecs.UpdateSingleChannelCurrencyAssignmentsData['body'],
     ) {
-        return this.request.put<any, ChannelsV3ApiSpecs.UpdateSingleChannelCurrencyAssignmentsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.UpdateSingleChannelCurrencyAssignmentsResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.UpdateSingleChannelCurrencyAssignmentsErrors[422]>>>({
             path: `v3/channels/${channelId}/currency-assignments`,
             contentType: 'application/json',
             body: requestBody,
@@ -195,7 +195,7 @@ export class ChannelsV3Api {
     deleteSingleChannelCurrencyAssignments(
         channelId: ChannelsV3ApiSpecs.DeleteSingleChannelCurrencyAssignmentsData['path']['channel_id'],
     ) {
-        return this.request.delete<any, ChannelsV3ApiSpecs.DeleteSingleChannelCurrencyAssignmentsError>({
+        return this.request.delete<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.DeleteSingleChannelCurrencyAssignmentsResponses[200]>>,RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.DeleteSingleChannelCurrencyAssignmentsErrors[404]>>>({
             path: `v3/channels/${channelId}/currency-assignments`,
         });
     }
@@ -209,7 +209,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.GetChannelListingsData['path']['channel_id'],
         query?: ChannelsV3ApiSpecs.GetChannelListingsData['query'],
     ) {
-        return this.request.get<any, ChannelsV3ApiSpecs.GetChannelListingsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelListingsResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.GetChannelListingsErrors[400]>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.GetChannelListingsErrors[422]>>)>({
             path: `v3/channels/${channelId}/listings`,
             query,
         });
@@ -224,7 +224,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.CreateChannelListingsData['path']['channel_id'],
         requestBody: ChannelsV3ApiSpecs.CreateChannelListingsData['body'],
     ) {
-        return this.request.post<any, ChannelsV3ApiSpecs.CreateChannelListingsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.CreateChannelListingsResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.CreateChannelListingsErrors[422]>>>({
             path: `v3/channels/${channelId}/listings`,
             contentType: 'application/json',
             body: requestBody,
@@ -248,7 +248,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.UpdateChannelListingsData['path']['channel_id'],
         requestBody: ChannelsV3ApiSpecs.UpdateChannelListingsData['body'],
     ) {
-        return this.request.put<any, ChannelsV3ApiSpecs.UpdateChannelListingsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.UpdateChannelListingsResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.UpdateChannelListingsErrors[422]>>>({
             path: `v3/channels/${channelId}/listings`,
             contentType: 'application/json',
             body: requestBody,
@@ -264,7 +264,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.GetChannelListingData['path']['channel_id'],
         listingId: ChannelsV3ApiSpecs.GetChannelListingData['path']['listing_id'],
     ) {
-        return this.request.get<any, ChannelsV3ApiSpecs.GetChannelListingError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelListingResponses[200]>>,RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.GetChannelListingErrors[404]>>>({
             path: `v3/channels/${channelId}/listings/${listingId}`,
         });
     }
@@ -273,12 +273,19 @@ export class ChannelsV3Api {
      * Upsert a Siteʼs Checkout URL
      *
      * Creates or updates (upserts) a siteʼs checkout URL
+
+     <Callout type="info">
+         For the "urls" object, we no longer modify the `www` prefix of the primary URL. The API returns URLs exactly as the customer enters them, similar to the "url" field.
+
+           * If the customer saves a URL with `www`, the API returns it with `www`.
+           * If the customer saves a URL without `www`, the API returns it without `www`.
+       </Callout>
      */
     updateCheckoutUrl(
         channelId: ChannelsV3ApiSpecs.UpdateCheckoutUrlData['path']['channel_id'],
         requestBody: ChannelsV3ApiSpecs.UpdateCheckoutUrlData['body'],
     ) {
-        return this.request.put<ChannelsV3ApiSpecs.UpdateCheckoutUrlResponse, ChannelsV3ApiSpecs.UpdateCheckoutUrlError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.UpdateCheckoutUrlResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.UpdateCheckoutUrlErrors[422]>>>({
             path: `v3/channels/${channelId}/site/checkout-url`,
             contentType: 'application/json',
             body: requestBody,
@@ -293,7 +300,7 @@ export class ChannelsV3Api {
     deleteCheckoutUrl(
         channelId: ChannelsV3ApiSpecs.DeleteCheckoutUrlData['path']['channel_id'],
     ) {
-        return this.request.delete<ChannelsV3ApiSpecs.DeleteCheckoutUrlResponse, any>({
+        return this.request.delete<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.DeleteCheckoutUrlResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/channels/${channelId}/site/checkout-url`,
         });
     }
@@ -305,11 +312,18 @@ export class ChannelsV3Api {
 
      Returns site data for the specified channel.
 
+     <Callout type="info">
+       For the "urls" object, we no longer modify the `www` prefix of the primary URL. The API returns URLs exactly as the customer enters them, similar to the "url" field.
+
+         * If the customer saves a URL with `www`, the API returns it with `www`.
+         * If the customer saves a URL without `www`, the API returns it without `www`.
+     </Callout>
+
      */
     getChannelSite(
         channelId: ChannelsV3ApiSpecs.GetChannelSiteData['path']['channel_id'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelSiteResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/channels/${channelId}/site`,
         });
     }
@@ -318,12 +332,19 @@ export class ChannelsV3Api {
      * Create a Channel Site
      *
      * Alias of POST `/sites`. Creates a site for provided channel.
+
+      <Callout type="info">
+         For the "urls" object, we no longer modify the `www` prefix of the primary URL. The API returns URLs exactly as the customer enters them, similar to the "url" field.
+
+           * If the customer saves a URL with `www`, the API returns it with `www`.
+           * If the customer saves a URL without `www`, the API returns it without `www`.
+       </Callout>
      */
     createChannelSite(
         channelId: ChannelsV3ApiSpecs.CreateChannelSiteData['path']['channel_id'],
         requestBody: ChannelsV3ApiSpecs.CreateChannelSiteData['body'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.CreateChannelSiteResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/channels/${channelId}/site`,
             contentType: 'application/json',
             body: requestBody,
@@ -334,12 +355,19 @@ export class ChannelsV3Api {
      * Update a Channel Site
      *
      * Updates a site for provided channel.
+
+       <Callout type="info">
+         For the "urls" object, we no longer modify the `www` prefix of the primary URL. The API returns URLs exactly as the customer enters them, similar to the "url" field.
+
+           * If the customer saves a URL with `www`, the API returns it with `www`.
+           * If the customer saves a URL without `www`, the API returns it without `www`.
+       </Callout>
      */
     updateChannelSite(
         channelId: ChannelsV3ApiSpecs.UpdateChannelSiteData['path']['channel_id'],
         requestBody: ChannelsV3ApiSpecs.UpdateChannelSiteData['body'],
     ) {
-        return this.request.put<any, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.UpdateChannelSiteResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/channels/${channelId}/site`,
             contentType: 'application/json',
             body: requestBody,
@@ -354,7 +382,7 @@ export class ChannelsV3Api {
     deleteChannelSite(
         channelId: ChannelsV3ApiSpecs.DeleteChannelSiteData['path']['channel_id'],
     ) {
-        return this.request.delete<ChannelsV3ApiSpecs.DeleteChannelSiteResponse, any>({
+        return this.request.delete<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.DeleteChannelSiteResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/channels/${channelId}/site`,
         });
     }
@@ -368,7 +396,7 @@ export class ChannelsV3Api {
     getChannelMenus(
         channelId: ChannelsV3ApiSpecs.GetChannelMenusData['path']['channel_id'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelMenusResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/channels/${channelId}/channel-menus`,
         });
     }
@@ -382,7 +410,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.CreateChannelMenusData['path']['channel_id'],
         requestBody: ChannelsV3ApiSpecs.CreateChannelMenusData['body'],
     ) {
-        return this.request.post<any, ChannelsV3ApiSpecs.CreateChannelMenusError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.CreateChannelMenusResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.CreateChannelMenusErrors[422]>>>({
             path: `v3/channels/${channelId}/channel-menus`,
             contentType: 'application/json',
             body: requestBody,
@@ -397,7 +425,7 @@ export class ChannelsV3Api {
     deleteChannelMenus(
         channelId: ChannelsV3ApiSpecs.DeleteChannelMenusData['path']['channel_id'],
     ) {
-        return this.request.delete<ChannelsV3ApiSpecs.DeleteChannelMenusResponse, any>({
+        return this.request.delete<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.DeleteChannelMenusResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/channels/${channelId}/channel-menus`,
         });
     }
@@ -411,7 +439,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.GetChannelMetafieldsData['path']['channel_id'],
         query?: ChannelsV3ApiSpecs.GetChannelMetafieldsData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/channels/${channelId}/metafields`,
             query,
         });
@@ -428,7 +456,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.CreateChannelMetafieldData['path']['channel_id'],
         requestBody: ChannelsV3ApiSpecs.CreateChannelMetafieldData['body'],
     ) {
-        return this.request.post<any, ChannelsV3ApiSpecs.CreateChannelMetafieldError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.CreateChannelMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.CreateChannelMetafieldErrors[400]>> | RequestErrorResponse<409, Required<ChannelsV3ApiSpecs.CreateChannelMetafieldErrors[409]>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.CreateChannelMetafieldErrors[422]>>)>({
             path: `v3/channels/${channelId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
@@ -444,7 +472,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.GetChannelMetafieldData['path']['channel_id'],
         metafieldId: ChannelsV3ApiSpecs.GetChannelMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.get<any, ChannelsV3ApiSpecs.GetChannelMetafieldError>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelMetafieldResponses[200]>>,RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.GetChannelMetafieldErrors[404]>>>({
             path: `v3/channels/${channelId}/metafields/${metafieldId}`,
         });
     }
@@ -462,7 +490,7 @@ export class ChannelsV3Api {
         metafieldId: ChannelsV3ApiSpecs.UpdateChannelMetafieldData['path']['metafield_id'],
         requestBody: ChannelsV3ApiSpecs.UpdateChannelMetafieldData['body'],
     ) {
-        return this.request.put<any, ChannelsV3ApiSpecs.UpdateChannelMetafieldError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.UpdateChannelMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.UpdateChannelMetafieldErrors[400]>> | RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.UpdateChannelMetafieldErrors[404]>>)>({
             path: `v3/channels/${channelId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -478,7 +506,7 @@ export class ChannelsV3Api {
         channelId: ChannelsV3ApiSpecs.DeleteChannelMetafieldData['path']['channel_id'],
         metafieldId: ChannelsV3ApiSpecs.DeleteChannelMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.delete<any, ChannelsV3ApiSpecs.DeleteChannelMetafieldError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ChannelsV3ApiSpecs.DeleteChannelMetafieldResponses[204]>>,RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.DeleteChannelMetafieldErrors[404]>>>({
             path: `v3/channels/${channelId}/metafields/${metafieldId}`,
         });
     }
@@ -491,7 +519,7 @@ export class ChannelsV3Api {
     getChannelsMetafields(
         query?: ChannelsV3ApiSpecs.GetChannelsMetafieldsData['query'],
     ) {
-        return this.request.get<ChannelsV3ApiSpecs.GetChannelsMetafieldsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelsMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/channels/metafields',
             query,
         });
@@ -505,7 +533,7 @@ export class ChannelsV3Api {
     createChannelsMetafields(
         requestBody: ChannelsV3ApiSpecs.CreateChannelsMetafieldsData['body'],
     ) {
-        return this.request.post<ChannelsV3ApiSpecs.CreateChannelsMetafieldsResponse, ChannelsV3ApiSpecs.CreateChannelsMetafieldsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.CreateChannelsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.CreateChannelsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.CreateChannelsMetafieldsErrors[422]>>)>({
             path: 'v3/channels/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -520,7 +548,7 @@ export class ChannelsV3Api {
     updateChannelsMetafields(
         requestBody: ChannelsV3ApiSpecs.UpdateChannelsMetafieldsData['body'],
     ) {
-        return this.request.put<ChannelsV3ApiSpecs.UpdateChannelsMetafieldsResponse, ChannelsV3ApiSpecs.UpdateChannelsMetafieldsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.UpdateChannelsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.UpdateChannelsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.UpdateChannelsMetafieldsErrors[422]>>)>({
             path: 'v3/channels/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -535,7 +563,7 @@ export class ChannelsV3Api {
     deleteChannelsMetafields(
         requestBody: ChannelsV3ApiSpecs.DeleteChannelsMetafieldsData['body'],
     ) {
-        return this.request.delete<ChannelsV3ApiSpecs.DeleteChannelsMetafieldsResponse, ChannelsV3ApiSpecs.DeleteChannelsMetafieldsError>({
+        return this.request.delete<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.DeleteChannelsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.DeleteChannelsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.DeleteChannelsMetafieldsErrors[422]>>)>({
             path: 'v3/channels/metafields',
             contentType: 'application/json',
             body: requestBody,

@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as AcceptedMethodsV3ApiSpecs from '../generated/accepted-methods-v3';
 export * as AcceptedMethodsV3ApiSpecs from '../generated/accepted-methods-v3';
 
@@ -25,7 +26,7 @@ export class AcceptedMethodsV3Api {
     getPaymentMethods(
         query?: AcceptedMethodsV3ApiSpecs.GetPaymentMethodsData['query'],
     ) {
-        return this.request.get<any, AcceptedMethodsV3ApiSpecs.GetPaymentMethodsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsResponses[200]>>,(RequestErrorResponse<400, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[400]>> | RequestErrorResponse<401, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[401]>> | RequestErrorResponse<404, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[404]>> | RequestErrorResponse<422, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[422]>>)>({
             path: 'v3/payments/methods',
             query,
         });

@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as WishlistsV3ApiSpecs from '../generated/wishlists-v3';
 export * as WishlistsV3ApiSpecs from '../generated/wishlists-v3';
 
@@ -17,7 +18,7 @@ export class WishlistsV3Api {
     getWishlists(
         query?: WishlistsV3ApiSpecs.GetWishlistsData['query'],
     ) {
-        return this.request.get<WishlistsV3ApiSpecs.GetWishlistsResponse, WishlistsV3ApiSpecs.GetWishlistsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<WishlistsV3ApiSpecs.GetWishlistsResponses[200]>>,(RequestErrorResponse<401, Required<WishlistsV3ApiSpecs.GetWishlistsErrors[401]>> | RequestErrorResponse<500, Required<WishlistsV3ApiSpecs.GetWishlistsErrors[500]>>)>({
             path: 'v3/wishlists',
             query,
         });
@@ -35,7 +36,7 @@ export class WishlistsV3Api {
     createWishlist(
         requestBody: WishlistsV3ApiSpecs.CreateWishlistData['body'],
     ) {
-        return this.request.post<any, WishlistsV3ApiSpecs.CreateWishlistError>({
+        return this.request.post<RequestSuccessResponse<201, Required<WishlistsV3ApiSpecs.CreateWishlistResponses[201]>>,(RequestErrorResponse<401, Required<WishlistsV3ApiSpecs.CreateWishlistErrors[401]>> | RequestErrorResponse<500, Required<WishlistsV3ApiSpecs.CreateWishlistErrors[500]>>)>({
             path: 'v3/wishlists',
             contentType: 'application/json',
             body: requestBody,
@@ -51,7 +52,7 @@ export class WishlistsV3Api {
         wishlistId: WishlistsV3ApiSpecs.DeleteWishlistItemData['path']['wishlist_id'],
         itemId: WishlistsV3ApiSpecs.DeleteWishlistItemData['path']['item_id'],
     ) {
-        return this.request.delete<WishlistsV3ApiSpecs.DeleteWishlistItemResponse, WishlistsV3ApiSpecs.DeleteWishlistItemError>({
+        return this.request.delete<RequestSuccessResponse<200, Required<WishlistsV3ApiSpecs.DeleteWishlistItemResponses[200]>>,(RequestErrorResponse<401, Required<WishlistsV3ApiSpecs.DeleteWishlistItemErrors[401]>> | RequestErrorResponse<404, Required<WishlistsV3ApiSpecs.DeleteWishlistItemErrors[404]>> | RequestErrorResponse<500, Required<WishlistsV3ApiSpecs.DeleteWishlistItemErrors[500]>>)>({
             path: `v3/wishlists/${wishlistId}/items/${itemId}`,
         });
     }
@@ -64,7 +65,7 @@ export class WishlistsV3Api {
     getWishlist(
         wishlistId: WishlistsV3ApiSpecs.GetWishlistData['path']['wishlist_id'],
     ) {
-        return this.request.get<WishlistsV3ApiSpecs.GetWishlistResponse, WishlistsV3ApiSpecs.GetWishlistError>({
+        return this.request.get<RequestSuccessResponse<200, Required<WishlistsV3ApiSpecs.GetWishlistResponses[200]>>,(RequestErrorResponse<401, Required<WishlistsV3ApiSpecs.GetWishlistErrors[401]>> | RequestErrorResponse<404, Required<WishlistsV3ApiSpecs.GetWishlistErrors[404]>> | RequestErrorResponse<500, Required<WishlistsV3ApiSpecs.GetWishlistErrors[500]>>)>({
             path: `v3/wishlists/${wishlistId}`,
         });
     }
@@ -80,7 +81,7 @@ export class WishlistsV3Api {
         wishlistId: WishlistsV3ApiSpecs.UpdateWishlistData['path']['wishlist_id'],
         requestBody: WishlistsV3ApiSpecs.UpdateWishlistData['body'],
     ) {
-        return this.request.put<any, WishlistsV3ApiSpecs.UpdateWishlistError>({
+        return this.request.put<RequestSuccessResponse<201, Required<WishlistsV3ApiSpecs.UpdateWishlistResponses[201]>>,(RequestErrorResponse<401, Required<WishlistsV3ApiSpecs.UpdateWishlistErrors[401]>> | RequestErrorResponse<500, Required<WishlistsV3ApiSpecs.UpdateWishlistErrors[500]>>)>({
             path: `v3/wishlists/${wishlistId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -95,7 +96,7 @@ export class WishlistsV3Api {
     deleteWishlist(
         wishlistId: WishlistsV3ApiSpecs.DeleteWishlistData['path']['wishlist_id'],
     ) {
-        return this.request.delete<any, WishlistsV3ApiSpecs.DeleteWishlistError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<WishlistsV3ApiSpecs.DeleteWishlistResponses[204]>>,(RequestErrorResponse<401, Required<WishlistsV3ApiSpecs.DeleteWishlistErrors[401]>> | RequestErrorResponse<500, Required<WishlistsV3ApiSpecs.DeleteWishlistErrors[500]>>)>({
             path: `v3/wishlists/${wishlistId}`,
         });
     }
@@ -109,7 +110,7 @@ export class WishlistsV3Api {
         wishlistId: WishlistsV3ApiSpecs.AddWishlistItemData['path']['wishlist_id'],
         requestBody: WishlistsV3ApiSpecs.AddWishlistItemData['body'],
     ) {
-        return this.request.post<any, WishlistsV3ApiSpecs.AddWishlistItemError>({
+        return this.request.post<RequestSuccessResponse<201, Required<WishlistsV3ApiSpecs.AddWishlistItemResponses[201]>>,(RequestErrorResponse<401, Required<WishlistsV3ApiSpecs.AddWishlistItemErrors[401]>> | RequestErrorResponse<404, Required<WishlistsV3ApiSpecs.AddWishlistItemErrors[404]>> | RequestErrorResponse<500, Required<WishlistsV3ApiSpecs.AddWishlistItemErrors[500]>>)>({
             path: `v3/wishlists/${wishlistId}/items`,
             contentType: 'application/json',
             body: requestBody,

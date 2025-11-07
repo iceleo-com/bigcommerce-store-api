@@ -1,133 +1,41 @@
-export type _metaCollection = {
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
+};
+export type Pagination = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: Links;
+};
+export type CursorPagination = {
+    count?: number;
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: Links;
+};
+export type MetaCollection = {
     pagination?: Pagination;
 };
-export type address_Full = {
-    first_name: string;
-    last_name: string;
-    company?: string;
-    address1: string;
-    address2?: string;
-    city: string;
-    state_or_province: string;
-    postal_code: string;
-    country_code: string;
-    phone?: string;
-    address_type?: 'residential' | 'commercial';
-    customer_id: number;
-    id: number;
-    country?: string;
-    form_fields?: Array<(formFieldValue)>;
+export type MetaCollectionWithCursorPagination = {
+    pagination?: Pagination;
+    cursor_pagination?: CursorPagination;
 };
-export type address_type = 'residential' | 'commercial';
-export type address_Post = {
-    first_name: string;
-    last_name: string;
-    company?: string;
-    address1: string;
-    address2?: string;
-    city: string;
-    state_or_province: string;
-    postal_code: string;
-    country_code: string;
-    phone?: string;
-    address_type?: 'residential' | 'commercial';
-    customer_id: number;
-    form_fields?: Array<formFieldValue>;
-};
-export type address_Put = {
-    first_name?: string;
-    last_name?: string;
-    company?: string;
-    address1?: string;
-    address2?: string;
-    city?: string;
-    state_or_province?: string;
-    postal_code?: string;
-    country_code?: string;
-    phone?: string;
-    address_type?: 'residential' | 'commercial';
-    id: number;
-    form_fields?: Array<formFieldValue>;
-};
-export type attribute_Full = {
-    attribute_id?: number;
-    attribute_value?: string;
-    customer_id?: number;
-    date_created?: string;
-    date_modified?: string;
-    id?: number;
-};
-export type attribute_Post = {
-    name: string;
-    type: 'string' | 'number' | 'date';
-};
-export type type = 'string' | 'number' | 'date';
-export type attribute_Put = {
-    name: string;
-    id: number;
-};
-export type attributeValue_Base = {
-    id?: number;
-    attribute_id: number;
-    value: string;
-    customer_id: number;
-};
-export type BankAccountInstrument = {
-    type?: 'stored_bank_account';
-    token?: string;
-    is_default?: boolean;
-    masked_account_number?: string;
-    issuer?: string;
-};
-export type type2 = 'stored_bank_account';
-export type BillingAddress = {
-    first_name?: string;
-    last_name?: string;
-    email?: string;
-    company?: string;
-    address1?: string;
-    address2?: string;
-    city?: string;
-    postal_code?: string;
-    state_or_province?: string;
-    state_or_province_code?: string;
-    country_code?: string;
-    phone?: string;
-};
-export type CardInstrument = {
-    type?: 'stored_card';
-    token?: string;
-    is_default?: boolean;
-    brand?: string;
-    expiry_month?: number;
-    expiry_year?: number;
-    issuer_identification_number?: string;
-    last_4?: string;
-    billing_address?: BillingAddress;
-};
-export type type3 = 'stored_card';
-export type CollectionMeta = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    };
+export type MetaOpen = {
     [key: string]: unknown;
 };
-export type consent_Full = {
-    allow?: consentAllow;
-    deny?: Deny;
-    updated_at?: string;
+export type ErrorResponse = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: {
+        [key: string]: string;
+    };
 };
-export type consentAllow = Array<('essential' | 'functional' | 'analytics' | 'targeting')>;
-export type customer_Full = {
+export type CustomerFull = {
     email?: string;
     first_name?: string;
     last_name?: string;
@@ -145,15 +53,15 @@ export type customer_Full = {
     authentication?: {
         force_password_reset?: boolean;
     };
-    addresses?: Array<address_Full>;
-    attributes?: Array<attribute_Full>;
-    form_fields?: Array<formFieldValue_Customer>;
+    addresses?: Array<AddressFull>;
+    attributes?: Array<AttributeFull>;
+    form_fields?: Array<FormFieldValueCustomer>;
     store_credit_amounts?: CustomerStoredCreditAmounts;
     accepts_product_review_abandoned_cart_emails?: boolean;
     origin_channel_id?: number;
-    channel_ids?: customerChannelIds;
+    channel_ids?: CustomerChannelIds;
 };
-export type customer_Post = {
+export type CustomerPost = {
     email: string;
     first_name: string;
     last_name: string;
@@ -162,17 +70,17 @@ export type customer_Post = {
     notes?: string;
     tax_exempt_category?: string;
     customer_group_id?: number;
-    addresses?: Array<customerAddresses_CustomerPost>;
-    attributes?: Array<customerAttributes_Base>;
-    authentication?: customerAuthentication_PostPut;
+    addresses?: Array<CustomerAddressesCustomerPost>;
+    attributes?: Array<CustomerAttributesBase>;
+    authentication?: CustomerAuthenticationPostPut;
     accepts_product_review_abandoned_cart_emails?: boolean;
     store_credit_amounts?: CustomerStoredCreditAmounts;
     origin_channel_id?: number;
-    channel_ids?: Array<(number)>;
-    form_fields?: Array<formFieldValue>;
+    channel_ids?: Array<number>;
+    form_fields?: Array<FormFieldValue>;
     trigger_account_created_notification?: boolean;
 };
-export type customer_Put = {
+export type CustomerPut = {
     email?: string;
     first_name?: string;
     last_name?: string;
@@ -183,49 +91,200 @@ export type customer_Put = {
     tax_exempt_category?: string;
     customer_group_id?: number;
     id: number;
-    authentication?: customerAuthentication_PostPut;
+    authentication?: CustomerAuthenticationPostPut;
     accepts_product_review_abandoned_cart_emails?: boolean;
     store_credit_amounts?: CustomerStoredCreditAmounts;
     origin_channel_id?: number;
-    channel_ids?: Array<(number)>;
-    form_fields?: Array<formFieldValue>;
+    channel_ids?: Array<number>;
+    form_fields?: Array<FormFieldValue>;
 };
-export type customerAddresses_Base = {
-    first_name: string;
-    last_name: string;
-    company?: string;
-    address1: string;
-    address2?: string;
-    city: string;
-    state_or_province?: string;
-    postal_code?: string;
-    country_code: string;
-    phone?: string;
-    address_type?: 'residential' | 'commercial';
+export type AttributeValueBase = {
+    id?: number;
+    attribute_id: number;
+    value: string;
+    customer_id: number;
 };
-export type customerAddresses_CustomerPost = {
-    first_name: string;
-    last_name: string;
-    company?: string;
-    address1: string;
-    address2?: string;
-    city: string;
-    state_or_province?: string;
-    postal_code?: string;
-    country_code: string;
-    phone?: string;
-    address_type?: 'residential' | 'commercial';
-    form_fields?: Array<(formFieldValue)>;
-};
-export type customerAttributes_Base = {
+export type AttributeFull = {
     attribute_id?: number;
     attribute_value?: string;
+    customer_id?: number;
+    date_created?: string;
+    date_modified?: string;
+    id?: number;
 };
-export type customerAuthentication_PostPut = {
+export type AttributePut = {
+    name: string;
+    id: number;
+};
+export type AttributePost = {
+    name: string;
+    type: 'string' | 'number' | 'date';
+};
+export type AddressFull = {
+    first_name: string;
+    last_name: string;
+    company?: string;
+    address1: string;
+    address2?: string;
+    city: string;
+    state_or_province: string;
+    postal_code: string;
+    country_code: string;
+    phone?: string;
+    address_type?: 'residential' | 'commercial';
+    customer_id: number;
+    id: number;
+    country?: string;
+    form_fields?: Array<FormFieldValue>;
+};
+export type AddressPut = {
+    first_name?: string;
+    last_name?: string;
+    company?: string;
+    address1?: string;
+    address2?: string;
+    city?: string;
+    state_or_province?: string;
+    postal_code?: string;
+    country_code?: string;
+    phone?: string;
+    address_type?: 'residential' | 'commercial';
+    id: number;
+    form_fields?: Array<FormFieldValue>;
+};
+export type AddressPost = {
+    first_name: string;
+    last_name: string;
+    company?: string;
+    address1: string;
+    address2?: string;
+    city: string;
+    state_or_province: string;
+    postal_code: string;
+    country_code: string;
+    phone?: string;
+    address_type?: 'residential' | 'commercial';
+    customer_id: number;
+    form_fields?: Array<FormFieldValue>;
+};
+export type CustomerAddressesBase = {
+    first_name: string;
+    last_name: string;
+    company?: string;
+    address1: string;
+    address2?: string;
+    city: string;
+    state_or_province?: string;
+    postal_code?: string;
+    country_code: string;
+    phone?: string;
+    address_type?: 'residential' | 'commercial';
+};
+export type CustomerAddressesCustomerPost = {
+    first_name: string;
+    last_name: string;
+    company?: string;
+    address1: string;
+    address2?: string;
+    city: string;
+    state_or_province?: string;
+    postal_code?: string;
+    country_code: string;
+    phone?: string;
+    address_type?: 'residential' | 'commercial';
+    form_fields?: Array<FormFieldValue>;
+};
+export type CustomerAuthenticationPostPut = {
     force_password_reset?: boolean;
     new_password?: string;
 };
-export type customerChannelIds = Array<unknown>;
+export type Links = {
+    previous?: string;
+    current?: string;
+    next?: string;
+};
+export type FormFieldValue = {
+    name: string;
+    value: string | number | Array<string>;
+};
+export type FormFieldValueCustomer = {
+    name: string;
+    value: string | number | Array<string>;
+    customer_id: number;
+};
+export type FormFieldValueAddress = {
+    name: string;
+    value: string | number | Array<string>;
+    address_id: number;
+};
+export type FormFieldValueFull = FormFieldValueCustomer | FormFieldValueAddress;
+export type ConsentFull = {
+    allow?: ConsentAllow;
+    deny?: Deny;
+    updated_at?: string;
+};
+export type ConsentAllow = Array<'essential' | 'functional' | 'analytics' | 'targeting'>;
+export type Deny = Array<'essential' | 'functional' | 'analytics' | 'targeting'>;
+export type DeclareCustomerConsentRequest = {
+    allow?: ConsentAllow;
+    deny?: Deny;
+};
+export type CustomerAttributesBase = {
+    attribute_id?: number;
+    attribute_value?: string;
+};
+export type CustomerChannelIds = Array<unknown>;
+export type CardInstrument = {
+    type?: 'stored_card';
+    token?: string;
+    is_default?: boolean;
+    brand?: string;
+    expiry_month?: number;
+    expiry_year?: number;
+    issuer_identification_number?: string;
+    last_4?: string;
+    billing_address?: BillingAddress;
+};
+export type PayPalAccountInstrument = {
+    type?: 'stored_paypal_account';
+    token?: string;
+    is_default?: boolean;
+    email?: string;
+};
+export type BankAccountInstrument = {
+    type?: 'stored_bank_account';
+    token?: string;
+    is_default?: boolean;
+    masked_account_number?: string;
+    issuer?: string;
+};
+export type BillingAddress = {
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    company?: string;
+    address1?: string;
+    address2?: string;
+    city?: string;
+    postal_code?: string;
+    state_or_province?: string;
+    state_or_province_code?: string;
+    country_code?: string;
+    phone?: string;
+};
+export type CustomerStoredCreditAmounts = Array<{
+    amount?: number;
+}>;
+export type CustomerSettingsObject = {
+    privacy_settings?: {
+        ask_shopper_for_tracking_consent?: boolean;
+        policy_url?: string;
+    };
+    customer_group_settings?: {
+        guest_customer_group_id?: number;
+        default_customer_group_id?: number;
+    };
+};
 export type CustomerChannelSettingsObject = {
     privacy_settings?: {
         ask_shopper_for_tracking_consent?: boolean;
@@ -237,68 +296,14 @@ export type CustomerChannelSettingsObject = {
     };
     allow_global_logins?: boolean;
 };
-export type CustomerSettingsObject = {
-    privacy_settings?: {
-        ask_shopper_for_tracking_consent?: boolean;
-        policy_url?: string;
-    };
-    customer_group_settings?: {
-        guest_customer_group_id?: number;
-        default_customer_group_id?: number;
-    };
+export type ValidateCustomerCredentialsObject = {
+    email: string;
+    password: string;
+    channel_id?: number;
 };
-export type CustomerStoredCreditAmounts = Array<{
-    amount?: number;
-}>;
-export type DeclareCustomerConsentRequest = {
-    allow?: consentAllow;
-    deny?: Deny;
-};
-export type Deny = Array<('essential' | 'functional' | 'analytics' | 'targeting')>;
-export type Error = {
-    status?: number;
-    title?: string;
-    type?: string;
-    errors?: ErrorDetail;
-};
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-export type ErrorResponse = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-    errors?: {
-        [key: string]: (string);
-    };
-};
-export type Failed = number;
-export type formFieldValue = {
-    name: string;
-    value: (string | number | Array<(string)>);
-};
-export type formFieldValue_Address = {
-    name: string;
-    value: (string | number | Array<(string)>);
-    address_id: number;
-};
-export type formFieldValue_Customer = {
-    name: string;
-    value: (string | number | Array<(string)>);
-    customer_id: number;
-};
-export type formFieldValue_Full = formFieldValue_Customer | formFieldValue_Address;
-export type Links = {
-    previous?: string;
-    current?: string;
-    next?: string;
-};
-export type metaCollection_Full = {
-    pagination?: pagination_Full;
-};
-export type metaEmpty_Full = {
-    [key: string]: unknown;
+export type ValidateCustomerCredentialsResponseObject = {
+    customer_id?: number | null;
+    is_valid?: boolean;
 };
 export type Metafield = {
     permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
@@ -313,121 +318,29 @@ export type Metafield = {
     date_modified: string;
     readonly owner_client_id?: string;
 };
-export type permission_set = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-export type resource_type = 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-export type metafield_Base = {
-    key: string;
-    value: string;
-    namespace: string;
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    description?: string;
-};
-export type metafield_Full = {
-    readonly id?: number;
-} & metafield_Base & {
-    resource_type?: 'category' | 'brand' | 'product' | 'variant' | 'customer';
-    resource_id?: number;
-    readonly date_created?: string;
-    readonly date_modified?: string;
-};
-export type resource_type2 = 'category' | 'brand' | 'product' | 'variant' | 'customer';
-export type MetafieldBase_Post = {
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace: string;
-    key: string;
-    value: string;
-    description?: string;
-};
-export type MetafieldBase_Put = {
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace?: string;
-    key?: string;
-    value?: string;
-    description?: string;
-};
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<(number)>;
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
+export type MetaFieldCollectionResponse = {
+    data?: Array<Metafield>;
+    meta?: CollectionMeta;
 };
 export type MetaFieldCollectionPostPutResponses = {
     data?: Array<Metafield>;
     errors?: Array<unknown>;
     meta?: CollectionMeta;
 };
-export type MetaFieldCollectionResponse = {
+export type MetaFieldCollectionResponsePartialSuccessPostPut = {
     data?: Array<Metafield>;
-};
-export type MetaFieldCollectionResponsePartialSuccess_DELETE = {
-    data?: Array<(number)>;
-    errors?: Array<Error>;
+    errors?: Array<_Error>;
     meta?: WriteCollectionPartialSuccessMeta;
 };
-export type MetaFieldCollectionResponsePartialSuccess_POST_PUT = {
-    data?: Array<Metafield>;
-    errors?: Array<Error>;
+export type MetaFieldCollectionResponsePartialSuccessDelete = {
+    data?: Array<number>;
+    errors?: Array<_Error>;
     meta?: WriteCollectionPartialSuccessMeta;
 };
-export type MetaOpen = {
-    [key: string]: unknown;
-};
-export type NotFound = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-};
-export type Pagination = {
-    total?: number;
-    count?: number;
-    per_page?: number;
-    current_page?: number;
-    total_pages?: number;
-    links?: Links;
-};
-export type pagination_Full = {
-    total?: number;
-    count?: number;
-    per_page?: number;
-    current_page?: number;
-    total_pages?: number;
-    links?: {
-        previous?: string;
-        current?: string;
-        next?: string;
-    };
-};
-export type ParametercustomerId = number;
-export type Parameterdate_created_max = string;
-export type Parameterdate_created_min = string;
-export type Parameterdate_modified_max = string;
-export type Parameterdate_modified_min = string;
-export type ParameterDirectionParam = 'asc' | 'desc';
-export type ParameterIncludeFieldsParamMetafields = Array<('resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified')>;
-export type ParameterLimitParam = number;
-export type ParametermetafieldId = number;
-export type ParameterMetafieldKeyInParam = Array<(string)>;
-export type ParameterMetafieldKeyParam = string;
-export type ParameterMetafieldNamespaceInParam = Array<(string)>;
-export type ParameterMetafieldNamespaceParam = string;
-export type ParameterPageParam = number;
-export type PayPalAccountInstrument = {
-    type?: 'stored_paypal_account';
-    token?: string;
-    is_default?: boolean;
-    email?: string;
-};
-export type type4 = 'stored_paypal_account';
-export type Success = number;
-export type Total = number;
-export type ValidateCustomerCredentialsObject = {
-    email: string;
-    password: string;
-    channel_id?: number;
-};
-export type ValidateCustomerCredentialsResponseObject = {
-    customer_id?: (number) | null;
-    is_valid?: boolean;
+export type MetaFieldCollectionDeleteResponseSuccess = {
+    data?: Array<number>;
+    errors?: Array<unknown>;
+    meta?: WriteCollectionSuccessMeta;
 };
 export type WriteCollectionPartialSuccessMeta = {
     total?: number;
@@ -439,479 +352,773 @@ export type WriteCollectionSuccessMeta = {
     success?: number;
     failed?: number;
 };
+export type Total = number;
+export type Success = number;
+export type Failed = number;
+export type _Error = {
+    status?: number;
+    title?: string;
+    type?: string;
+    errors?: ErrorDetail;
+};
+export type ErrorDetail = {
+    [key: string]: unknown;
+};
+export type CollectionMeta = {
+    pagination?: {
+        total?: number;
+        count?: number;
+        per_page?: number;
+        current_page?: number;
+        total_pages?: number;
+        links?: {
+            previous?: string;
+            current?: string;
+            next?: string;
+        };
+    };
+    [key: string]: unknown | {
+        total?: number;
+        count?: number;
+        per_page?: number;
+        current_page?: number;
+        total_pages?: number;
+        links?: {
+            previous?: string;
+            current?: string;
+            next?: string;
+        };
+    } | undefined;
+};
+export type MetafieldBasePost = {
+    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    namespace: string;
+    key: string;
+    value: string;
+    description?: string;
+};
+export type MetafieldBasePut = {
+    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    namespace?: string;
+    key?: string;
+    value?: string;
+    description?: string;
+};
+export type MetafieldFull = {
+    readonly id?: number;
+} & MetafieldBase & {
+    resource_type?: 'category' | 'brand' | 'product' | 'variant' | 'customer';
+    resource_id?: number;
+    readonly date_created?: string;
+    readonly date_modified?: string;
+};
+export type MetafieldBase = {
+    key: string;
+    value: string;
+    namespace: string;
+    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    description?: string;
+};
+export type MetaEmptyFull = {
+    [key: string]: unknown;
+};
+export type MetaCollectionFull = {
+    pagination?: PaginationFull;
+};
+export type NotFound = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+};
+export type PaginationFull = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: {
+        previous?: string;
+        current?: string;
+        next?: string;
+    };
+};
+export type MetaOpenWritable = {
+    [key: string]: unknown;
+};
+export type MetafieldWritable = {
+    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    namespace: string;
+    key: string;
+    value: string;
+    description: string;
+    resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
+    id: number;
+    date_created: string;
+    date_modified: string;
+};
+export type ErrorDetailWritable = {
+    [key: string]: unknown;
+};
+export type MetafieldFullWritable = MetafieldBase & {
+    resource_type?: 'category' | 'brand' | 'product' | 'variant' | 'customer';
+    resource_id?: number;
+};
+export type MetaEmptyFullWritable = {
+    [key: string]: unknown;
+};
+export type MetafieldId = number;
+export type CustomerId = number;
+export type PageParam = number;
+export type MetafieldKeyParam = string;
+export type MetafieldKeyInParam = Array<string>;
+export type MetafieldNamespaceParam = string;
+export type MetafieldNamespaceInParam = Array<string>;
+export type LimitParam = number;
+export type DateCreatedMin = string;
+export type DateCreatedMax = string;
+export type DateModifiedMin = string;
+export type DateModifiedMax = string;
+export type DirectionParam = 'asc' | 'desc';
+export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
+export type DeleteCustomersData = {
+    body?: never;
+    path?: never;
+    query: {
+        'id:in': Array<number>;
+    };
+    url: '/customers';
+};
+export type DeleteCustomersErrors = {
+    422: _Error;
+};
+export type DeleteCustomersError = DeleteCustomersErrors[keyof DeleteCustomersErrors];
+export type DeleteCustomersResponses = {
+    204: void;
+};
+export type DeleteCustomersResponse = DeleteCustomersResponses[keyof DeleteCustomersResponses];
 export type GetCustomersData = {
+    body?: never;
+    path?: never;
     query?: {
-        'company:in'?: Array<(string)>;
-        'customer_group_id:in'?: Array<(string)>;
+        page?: number;
+        limit?: number;
+        'id:in'?: Array<number>;
+        'company:in'?: Array<string>;
+        'customer_group_id:in'?: Array<string>;
         date_created?: string;
         'date_created:max'?: string;
         'date_created:min'?: string;
         date_modified?: string;
-        'date_modified:max'?: string;
         'date_modified:min'?: string;
-        'email:in'?: Array<(string)>;
-        'id:in'?: Array<(number)>;
-        include?: Array<('addresses' | 'storecredit' | 'attributes' | 'formfields' | 'shopper_profile_id' | 'segment_ids')>;
-        limit?: number;
-        'name:in'?: Array<(string)>;
-        'name:like'?: Array<(string)>;
-        page?: number;
+        'date_modified:max'?: string;
+        'email:in'?: Array<string>;
+        'name:in'?: Array<string>;
+        'name:like'?: Array<string>;
         'phone:in'?: string;
-        'registration_ip_address:in'?: Array<(number)>;
+        'registration_ip_address:in'?: Array<number>;
+        include?: Array<'addresses' | 'storecredit' | 'attributes' | 'formfields' | 'shopper_profile_id' | 'segment_ids'>;
         sort?: 'date_created:asc' | 'date_created:desc' | 'last_name:asc' | 'last_name:desc' | 'date_modified:asc' | 'date_modified:desc';
+        after?: string;
+        before?: string;
+    };
+    url: '/customers';
+};
+export type GetCustomersErrors = {
+    422: _Error;
+};
+export type GetCustomersError = GetCustomersErrors[keyof GetCustomersErrors];
+export type GetCustomersResponses = {
+    200: {
+        data?: Array<CustomerFull>;
+        meta?: MetaCollectionWithCursorPagination;
     };
 };
-export type GetCustomersResponse = ({
-    data?: Array<customer_Full>;
-    meta?: _metaCollection;
-});
-export type GetCustomersError = (Error);
+export type GetCustomersResponse = GetCustomersResponses[keyof GetCustomersResponses];
 export type CreateCustomersData = {
-    body: Array<customer_Post>;
+    body: Array<CustomerPost>;
+    path?: never;
+    query?: never;
+    url: '/customers';
 };
-export type CreateCustomersResponse = ({
-    data?: Array<customer_Full>;
-    meta?: _metaCollection;
-});
-export type CreateCustomersError = (unknown | ErrorResponse);
+export type CreateCustomersErrors = {
+    413: unknown;
+    422: ErrorResponse;
+};
+export type CreateCustomersError = CreateCustomersErrors[keyof CreateCustomersErrors];
+export type CreateCustomersResponses = {
+    200: {
+        data?: Array<CustomerFull>;
+        meta?: MetaOpen;
+    };
+};
+export type CreateCustomersResponse = CreateCustomersResponses[keyof CreateCustomersResponses];
 export type UpdateCustomersData = {
-    body?: Array<customer_Put>;
+    body?: Array<CustomerPut>;
+    path?: never;
+    query?: never;
+    url: '/customers';
 };
-export type UpdateCustomersResponse = ({
-    data?: Array<customer_Full>;
-    meta?: _metaCollection;
-});
-export type UpdateCustomersError = (unknown | ErrorResponse);
-export type DeleteCustomersData = {
-    query: {
-        'id:in': Array<(number)>;
+export type UpdateCustomersErrors = {
+    413: unknown;
+    422: ErrorResponse;
+};
+export type UpdateCustomersError = UpdateCustomersErrors[keyof UpdateCustomersErrors];
+export type UpdateCustomersResponses = {
+    200: {
+        data?: Array<CustomerFull>;
+        meta?: MetaOpen;
     };
 };
-export type DeleteCustomersResponse = (void);
-export type DeleteCustomersError = (Error);
-export type GetCustomersAddressesData = {
-    headers?: {
-        Accept?: string;
-        'Content-Type'?: string;
-    };
-    query?: {
-        'company:in'?: Array<(string)>;
-        'customer_id:in'?: Array<(number)>;
-        'id:in'?: Array<(number)>;
-        include?: Array<('formfields')>;
-        limit?: number;
-        'name:in'?: Array<(string)>;
-        page?: number;
-    };
-};
-export type GetCustomersAddressesResponse = ({
-    data?: Array<{
-        address1: string;
-        address2?: string;
-        address_type?: 'residential' | 'commercial';
-        city: string;
-        company?: string;
-        country?: string;
-        country_code: string;
-        customer_id: number;
-        first_name: string;
-        id: number;
-        last_name: string;
-        phone?: string;
-        postal_code: string;
-        state_or_province: string;
-        form_fields?: Array<(formFieldValue_Address)>;
-    }>;
-    meta?: _metaCollection;
-});
-export type GetCustomersAddressesError = unknown;
-export type CreateCustomersAddressesData = {
-    body: Array<address_Post>;
-    headers?: {
-        Accept?: string;
-        'Content-Type'?: string;
-    };
-};
-export type CreateCustomersAddressesResponse = (({
-    data?: Array<{
-        address1?: string;
-        address2?: string;
-        address_type?: 'residential' | 'commercial';
-        city?: string;
-        company?: string;
-        country?: string;
-        country_code?: string;
-        customer_id?: number;
-        first_name?: string;
-        id?: number;
-        last_name?: string;
-        phone?: string;
-        postal_code?: string;
-        state_or_province?: string;
-        form_fields?: Array<formFieldValue_Full>;
-    }>;
-    meta?: MetaOpen;
-} | {
-    [key: string]: unknown;
-} | {
-    data?: Array<{
-        address1?: string;
-        address2?: string;
-        address_type?: 'residential' | 'commercial';
-        city?: string;
-        company?: string;
-        country?: string;
-        country_code?: string;
-        customer_id?: number;
-        first_name?: string;
-        id?: number;
-        last_name?: string;
-        phone?: string;
-        postal_code?: string;
-        state_or_province?: string;
-        form_fields?: Array<(formFieldValue_Address)>;
-    }>;
-    meta?: MetaOpen;
-}));
-export type CreateCustomersAddressesError = (ErrorResponse);
-export type UpdateCustomersAddressesData = {
-    body: Array<address_Put>;
-    headers?: {
-        Accept?: string;
-        'Content-Type'?: string;
-    };
-};
-export type UpdateCustomersAddressesResponse = (({
-    data?: Array<{
-        address1?: string;
-        address2?: string;
-        address_type?: 'residential' | 'commercial';
-        city?: string;
-        company?: string;
-        country?: string;
-        country_code?: string;
-        customer_id?: number;
-        first_name?: string;
-        id?: number;
-        last_name?: string;
-        phone?: string;
-        postal_code?: string;
-        state_or_province?: string;
-        form_fields?: Array<formFieldValue_Full>;
-    }>;
-    meta?: MetaOpen;
-} | {
-    [key: string]: unknown;
-} | {
-    data?: Array<{
-        address1?: string;
-        address2?: string;
-        address_type?: 'residential' | 'commercial';
-        city?: string;
-        company?: string;
-        country?: string;
-        country_code?: string;
-        customer_id?: number;
-        first_name?: string;
-        id?: number;
-        last_name?: string;
-        phone?: string;
-        postal_code?: string;
-        state_or_province?: string;
-        form_fields?: Array<(formFieldValue_Address)>;
-    }>;
-    meta?: MetaOpen;
-}));
-export type UpdateCustomersAddressesError = (ErrorResponse);
+export type UpdateCustomersResponse = UpdateCustomersResponses[keyof UpdateCustomersResponses];
 export type DeleteCustomersAddressesData = {
+    body?: never;
     headers?: {
         Accept?: string;
         'Content-Type'?: string;
     };
+    path?: never;
     query: {
-        'id:in': Array<(number)>;
+        'id:in': Array<number>;
+    };
+    url: '/customers/addresses';
+};
+export type DeleteCustomersAddressesResponses = {
+    204: void;
+};
+export type DeleteCustomersAddressesResponse = DeleteCustomersAddressesResponses[keyof DeleteCustomersAddressesResponses];
+export type GetCustomersAddressesData = {
+    body?: never;
+    headers?: {
+        Accept?: string;
+        'Content-Type'?: string;
+    };
+    path?: never;
+    query?: {
+        page?: number;
+        limit?: number;
+        'company:in'?: Array<string>;
+        'name:in'?: Array<string>;
+        'customer_id:in'?: Array<number>;
+        include?: Array<'formfields'>;
+        'id:in'?: Array<number>;
+    };
+    url: '/customers/addresses';
+};
+export type GetCustomersAddressesResponses = {
+    200: {
+        data?: Array<{
+            address1: string;
+            address2?: string;
+            address_type?: 'residential' | 'commercial';
+            city: string;
+            company?: string;
+            country?: string;
+            country_code: string;
+            customer_id: number;
+            first_name: string;
+            id: number;
+            last_name: string;
+            phone?: string;
+            postal_code: string;
+            state_or_province: string;
+            form_fields?: Array<FormFieldValueAddress>;
+        }>;
+        meta?: MetaCollection;
     };
 };
-export type DeleteCustomersAddressesResponse = (void);
-export type DeleteCustomersAddressesError = unknown;
+export type GetCustomersAddressesResponse = GetCustomersAddressesResponses[keyof GetCustomersAddressesResponses];
+export type CreateCustomersAddressesData = {
+    body: Array<AddressPost>;
+    headers?: {
+        Accept?: string;
+        'Content-Type'?: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/customers/addresses';
+};
+export type CreateCustomersAddressesErrors = {
+    422: ErrorResponse;
+};
+export type CreateCustomersAddressesError = CreateCustomersAddressesErrors[keyof CreateCustomersAddressesErrors];
+export type CreateCustomersAddressesResponses = {
+    200: ({
+        data?: Array<{
+            address1?: string;
+            address2?: string;
+            address_type?: 'residential' | 'commercial';
+            city?: string;
+            company?: string;
+            country?: string;
+            country_code?: string;
+            customer_id?: number;
+            first_name?: string;
+            id?: number;
+            last_name?: string;
+            phone?: string;
+            postal_code?: string;
+            state_or_province?: string;
+            form_fields?: Array<FormFieldValueFull>;
+        }>;
+        meta?: MetaOpen;
+    } | {
+        [key: string]: unknown;
+    }) & {
+        data?: Array<{
+            address1?: string;
+            address2?: string;
+            address_type?: 'residential' | 'commercial';
+            city?: string;
+            company?: string;
+            country?: string;
+            country_code?: string;
+            customer_id?: number;
+            first_name?: string;
+            id?: number;
+            last_name?: string;
+            phone?: string;
+            postal_code?: string;
+            state_or_province?: string;
+            form_fields?: Array<FormFieldValueAddress>;
+        }>;
+        meta?: MetaOpen;
+    };
+};
+export type CreateCustomersAddressesResponse = CreateCustomersAddressesResponses[keyof CreateCustomersAddressesResponses];
+export type UpdateCustomersAddressesData = {
+    body: Array<AddressPut>;
+    headers?: {
+        Accept?: string;
+        'Content-Type'?: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/customers/addresses';
+};
+export type UpdateCustomersAddressesErrors = {
+    422: ErrorResponse;
+};
+export type UpdateCustomersAddressesError = UpdateCustomersAddressesErrors[keyof UpdateCustomersAddressesErrors];
+export type UpdateCustomersAddressesResponses = {
+    200: ({
+        data?: Array<{
+            address1?: string;
+            address2?: string;
+            address_type?: 'residential' | 'commercial';
+            city?: string;
+            company?: string;
+            country?: string;
+            country_code?: string;
+            customer_id?: number;
+            first_name?: string;
+            id?: number;
+            last_name?: string;
+            phone?: string;
+            postal_code?: string;
+            state_or_province?: string;
+            form_fields?: Array<FormFieldValueFull>;
+        }>;
+        meta?: MetaOpen;
+    } | {
+        [key: string]: unknown;
+    }) & {
+        data?: Array<{
+            address1?: string;
+            address2?: string;
+            address_type?: 'residential' | 'commercial';
+            city?: string;
+            company?: string;
+            country?: string;
+            country_code?: string;
+            customer_id?: number;
+            first_name?: string;
+            id?: number;
+            last_name?: string;
+            phone?: string;
+            postal_code?: string;
+            state_or_province?: string;
+            form_fields?: Array<FormFieldValueAddress>;
+        }>;
+        meta?: MetaOpen;
+    };
+};
+export type UpdateCustomersAddressesResponse = UpdateCustomersAddressesResponses[keyof UpdateCustomersAddressesResponses];
 export type ValidateCustomerCredentialsData = {
     body: ValidateCustomerCredentialsObject;
+    path?: never;
+    query?: never;
+    url: '/customers/validate-credentials';
 };
-export type ValidateCustomerCredentialsResponse = (ValidateCustomerCredentialsResponseObject);
-export type ValidateCustomerCredentialsError = (ErrorResponse);
-export type GetCustomersSettingsResponse = ({
-    data?: CustomerSettingsObject;
-    meta?: {
-        [key: string]: unknown;
+export type ValidateCustomerCredentialsErrors = {
+    422: ErrorResponse;
+    429: ErrorResponse;
+};
+export type ValidateCustomerCredentialsError = ValidateCustomerCredentialsErrors[keyof ValidateCustomerCredentialsErrors];
+export type ValidateCustomerCredentialsResponses = {
+    200: ValidateCustomerCredentialsResponseObject;
+};
+export type ValidateCustomerCredentialsResponse = ValidateCustomerCredentialsResponses[keyof ValidateCustomerCredentialsResponses];
+export type GetCustomersSettingsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/customers/settings';
+};
+export type GetCustomersSettingsResponses = {
+    200: {
+        data?: CustomerSettingsObject;
+        meta?: {
+            [key: string]: unknown;
+        };
     };
-});
-export type GetCustomersSettingsError = unknown;
+};
+export type GetCustomersSettingsResponse = GetCustomersSettingsResponses[keyof GetCustomersSettingsResponses];
 export type UpdateCustomersSettingsData = {
     body: CustomerSettingsObject;
+    path?: never;
+    query?: never;
+    url: '/customers/settings';
 };
-export type UpdateCustomersSettingsResponse = ({
-    data?: CustomerSettingsObject;
-    meta?: {
-        [key: string]: unknown;
+export type UpdateCustomersSettingsResponses = {
+    200: {
+        data?: CustomerSettingsObject;
+        meta?: {
+            [key: string]: unknown;
+        };
     };
-});
-export type UpdateCustomersSettingsError = unknown;
+};
+export type UpdateCustomersSettingsResponse = UpdateCustomersSettingsResponses[keyof UpdateCustomersSettingsResponses];
 export type GetCustomersSettingsChannelData = {
+    body?: never;
     path: {
         channel_id: number;
     };
+    query?: never;
+    url: '/customers/settings/channels/{channel_id}';
 };
-export type GetCustomersSettingsChannelResponse = ({
-    data?: CustomerChannelSettingsObject;
-    meta?: {
-        [key: string]: unknown;
+export type GetCustomersSettingsChannelResponses = {
+    200: {
+        data?: CustomerChannelSettingsObject;
+        meta?: {
+            [key: string]: unknown;
+        };
     };
-});
-export type GetCustomersSettingsChannelError = unknown;
+};
+export type GetCustomersSettingsChannelResponse = GetCustomersSettingsChannelResponses[keyof GetCustomersSettingsChannelResponses];
 export type UpdateCustomersSettingsChannelData = {
     body: CustomerChannelSettingsObject;
     path: {
         channel_id: number;
     };
+    query?: never;
+    url: '/customers/settings/channels/{channel_id}';
 };
-export type UpdateCustomersSettingsChannelResponse = ({
-    data?: CustomerSettingsObject;
-    meta?: {
-        [key: string]: unknown;
+export type UpdateCustomersSettingsChannelResponses = {
+    200: {
+        data?: CustomerSettingsObject;
+        meta?: {
+            [key: string]: unknown;
+        };
     };
-});
-export type UpdateCustomersSettingsChannelError = unknown;
-export type GetCustomersAttributesData = {
+};
+export type UpdateCustomersSettingsChannelResponse = UpdateCustomersSettingsChannelResponses[keyof UpdateCustomersSettingsChannelResponses];
+export type DeleteCustomersAttributesData = {
+    body?: never;
     headers?: {
         Accept?: string;
         'Content-Type'?: string;
     };
+    path?: never;
+    query: {
+        'id:in': Array<number>;
+    };
+    url: '/customers/attributes';
+};
+export type DeleteCustomersAttributesResponses = {
+    204: void;
+};
+export type DeleteCustomersAttributesResponse = DeleteCustomersAttributesResponses[keyof DeleteCustomersAttributesResponses];
+export type GetCustomersAttributesData = {
+    body?: never;
+    headers?: {
+        Accept?: string;
+        'Content-Type'?: string;
+    };
+    path?: never;
     query?: {
-        date_created?: string;
-        'date_created:max'?: string;
-        'date_created:min'?: string;
-        date_modified?: string;
-        'date_modified:max'?: string;
-        'date_modified:min'?: string;
+        page?: number;
         limit?: number;
         name?: string;
         'name:like'?: string;
-        page?: number;
         type?: string;
-    };
-};
-export type GetCustomersAttributesResponse = ({
-    data?: Array<{
-        name: string;
-        type: 'string' | 'number' | 'date';
-        id: number;
-        date_modified?: string;
-        date_created?: string;
-    }>;
-    meta?: MetaOpen;
-});
-export type GetCustomersAttributesError = unknown;
-export type CreateCustomersAttributesData = {
-    body: Array<attribute_Post>;
-    headers?: {
-        Accept?: string;
-        'Content-Type'?: string;
-    };
-};
-export type CreateCustomersAttributesResponse = ({
-    data?: Array<{
-        name: string;
-        type: 'string' | 'number' | 'date';
-        id: number;
-        date_modified?: string;
-        date_created?: string;
-    }>;
-    meta?: MetaOpen;
-});
-export type CreateCustomersAttributesError = (ErrorResponse);
-export type UpdateCustomersAttributesData = {
-    body: Array<attribute_Put>;
-    headers?: {
-        Accept?: string;
-        'Content-Type'?: string;
-    };
-};
-export type UpdateCustomersAttributesResponse = ({
-    data?: Array<{
-        name: string;
-        type: 'string' | 'number' | 'date';
-        id: number;
-        date_modified?: string;
-        date_created?: string;
-    }>;
-    meta?: MetaOpen;
-});
-export type UpdateCustomersAttributesError = (ErrorResponse);
-export type DeleteCustomersAttributesData = {
-    headers?: {
-        Accept?: string;
-        'Content-Type'?: string;
-    };
-    query: {
-        'id:in': Array<(number)>;
-    };
-};
-export type DeleteCustomersAttributesResponse = (void);
-export type DeleteCustomersAttributesError = unknown;
-export type GetCustomersAttributeValuesData = {
-    headers?: {
-        Accept?: string;
-        'Content-Type'?: string;
-    };
-    query?: {
-        'attribute_id:in'?: Array<(number)>;
-        'customer_id:in'?: Array<(number)>;
         date_created?: string;
         'date_created:max'?: string;
         'date_created:min'?: string;
         date_modified?: string;
         'date_modified:max'?: string;
         'date_modified:min'?: string;
-        limit?: number;
-        name?: string;
-        page?: number;
+    };
+    url: '/customers/attributes';
+};
+export type GetCustomersAttributesResponses = {
+    200: {
+        data?: Array<{
+            name: string;
+            type: 'string' | 'number' | 'date';
+            id: number;
+            date_modified?: string;
+            date_created?: string;
+        }>;
+        meta?: MetaOpen;
     };
 };
-export type GetCustomersAttributeValuesResponse = ({
-    data?: Array<{
-        attribute_id: number;
-        attribute_value: string;
-        id?: number;
-        customer_id: number;
-        date_modified?: string;
-        date_created?: string;
-    }>;
-    meta?: {
-        pagination?: {
-            total?: number;
-            count?: number;
-            per_page?: number;
-            current_page?: number;
-            total_pages?: number;
-            links?: {
-                previous?: string;
-                current?: string;
-                next?: string;
-            };
-        };
-    };
-});
-export type GetCustomersAttributeValuesError = unknown;
-export type UpsertCustomersAttributeValuesData = {
-    body: Array<attributeValue_Base>;
+export type GetCustomersAttributesResponse = GetCustomersAttributesResponses[keyof GetCustomersAttributesResponses];
+export type CreateCustomersAttributesData = {
+    body: Array<AttributePost>;
     headers?: {
         Accept?: string;
         'Content-Type'?: string;
     };
+    path?: never;
+    query?: never;
+    url: '/customers/attributes';
 };
-export type UpsertCustomersAttributeValuesResponse = ({
-    data?: Array<{
-        attribute_id: number;
-        attribute_value: string;
-        id?: number;
-        customer_id: number;
-        date_modified?: string;
-        date_created?: string;
-    }>;
-    meta?: {
-        pagination?: {
-            total?: number;
-            count?: number;
-            per_page?: number;
-            current_page?: number;
-            total_pages?: number;
-            links?: {
-                previous?: string;
-                current?: string;
-                next?: string;
-            };
-        };
+export type CreateCustomersAttributesErrors = {
+    422: ErrorResponse;
+};
+export type CreateCustomersAttributesError = CreateCustomersAttributesErrors[keyof CreateCustomersAttributesErrors];
+export type CreateCustomersAttributesResponses = {
+    200: {
+        data?: Array<{
+            name: string;
+            type: 'string' | 'number' | 'date';
+            id: number;
+            date_modified?: string;
+            date_created?: string;
+        }>;
+        meta?: MetaOpen;
     };
-});
-export type UpsertCustomersAttributeValuesError = (ErrorResponse);
+};
+export type CreateCustomersAttributesResponse = CreateCustomersAttributesResponses[keyof CreateCustomersAttributesResponses];
+export type UpdateCustomersAttributesData = {
+    body: Array<AttributePut>;
+    headers?: {
+        Accept?: string;
+        'Content-Type'?: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/customers/attributes';
+};
+export type UpdateCustomersAttributesErrors = {
+    422: ErrorResponse;
+};
+export type UpdateCustomersAttributesError = UpdateCustomersAttributesErrors[keyof UpdateCustomersAttributesErrors];
+export type UpdateCustomersAttributesResponses = {
+    200: {
+        data?: Array<{
+            name: string;
+            type: 'string' | 'number' | 'date';
+            id: number;
+            date_modified?: string;
+            date_created?: string;
+        }>;
+        meta?: MetaOpen;
+    };
+};
+export type UpdateCustomersAttributesResponse = UpdateCustomersAttributesResponses[keyof UpdateCustomersAttributesResponses];
 export type DeleteCustomersAttributeValuesData = {
+    body?: never;
     headers?: {
         Accept?: string;
         'Content-Type'?: string;
     };
+    path?: never;
     query: {
-        'id:in': Array<(number)>;
+        'id:in': Array<number>;
+    };
+    url: '/customers/attribute-values';
+};
+export type DeleteCustomersAttributeValuesResponses = {
+    204: void;
+};
+export type DeleteCustomersAttributeValuesResponse = DeleteCustomersAttributeValuesResponses[keyof DeleteCustomersAttributeValuesResponses];
+export type GetCustomersAttributeValuesData = {
+    body?: never;
+    headers?: {
+        Accept?: string;
+        'Content-Type'?: string;
+    };
+    path?: never;
+    query?: {
+        page?: number;
+        limit?: number;
+        'customer_id:in'?: Array<number>;
+        'attribute_id:in'?: Array<number>;
+        name?: string;
+        date_created?: string;
+        'date_created:max'?: string;
+        'date_created:min'?: string;
+        date_modified?: string;
+        'date_modified:max'?: string;
+        'date_modified:min'?: string;
+    };
+    url: '/customers/attribute-values';
+};
+export type GetCustomersAttributeValuesResponses = {
+    200: {
+        data?: Array<{
+            attribute_id: number;
+            attribute_value: string;
+            id?: number;
+            customer_id: number;
+            date_modified?: string;
+            date_created?: string;
+        }>;
+        meta?: {
+            pagination?: {
+                total?: number;
+                count?: number;
+                per_page?: number;
+                current_page?: number;
+                total_pages?: number;
+                links?: {
+                    previous?: string;
+                    current?: string;
+                    next?: string;
+                };
+            };
+        };
     };
 };
-export type DeleteCustomersAttributeValuesResponse = (void);
-export type DeleteCustomersAttributeValuesError = unknown;
-export type GetCustomersFormFieldValuesData = {
+export type GetCustomersAttributeValuesResponse = GetCustomersAttributeValuesResponses[keyof GetCustomersAttributeValuesResponses];
+export type UpsertCustomersAttributeValuesData = {
+    body: Array<AttributeValueBase>;
     headers?: {
         Accept?: string;
         'Content-Type'?: string;
     };
+    path?: never;
+    query?: never;
+    url: '/customers/attribute-values';
+};
+export type UpsertCustomersAttributeValuesErrors = {
+    422: ErrorResponse;
+};
+export type UpsertCustomersAttributeValuesError = UpsertCustomersAttributeValuesErrors[keyof UpsertCustomersAttributeValuesErrors];
+export type UpsertCustomersAttributeValuesResponses = {
+    200: {
+        data?: Array<{
+            attribute_id: number;
+            attribute_value: string;
+            id?: number;
+            customer_id: number;
+            date_modified?: string;
+            date_created?: string;
+        }>;
+        meta?: {
+            pagination?: {
+                total?: number;
+                count?: number;
+                per_page?: number;
+                current_page?: number;
+                total_pages?: number;
+                links?: {
+                    previous?: string;
+                    current?: string;
+                    next?: string;
+                };
+            };
+        };
+    };
+};
+export type UpsertCustomersAttributeValuesResponse = UpsertCustomersAttributeValuesResponses[keyof UpsertCustomersAttributeValuesResponses];
+export type GetCustomersFormFieldValuesData = {
+    body?: never;
+    headers?: {
+        Accept?: string;
+        'Content-Type'?: string;
+    };
+    path?: never;
     query?: {
-        address_id?: number;
+        page?: number;
+        limit?: number;
         customer_id?: number;
+        address_id?: number;
         field_name?: string;
         field_type?: 'checkboxes' | 'date' | 'multiline' | 'numbers' | 'password' | 'radiobuttons' | 'text' | 'picklist';
-        limit?: number;
-        page?: number;
+        after?: string;
+        before?: string;
+    };
+    url: '/customers/form-field-values';
+};
+export type GetCustomersFormFieldValuesErrors = {
+    422: ErrorResponse;
+};
+export type GetCustomersFormFieldValuesError = GetCustomersFormFieldValuesErrors[keyof GetCustomersFormFieldValuesErrors];
+export type GetCustomersFormFieldValuesResponses = {
+    200: {
+        data?: Array<({
+            name: string;
+            value: string | number | Array<string>;
+        } & {
+            customer_id: number;
+        }) | ({
+            name: string;
+            value: string | number | Array<string>;
+        } & {
+            address_id: number;
+        })>;
+        meta?: MetaCollectionWithCursorPagination;
     };
 };
-export type GetCustomersFormFieldValuesResponse = ({
-    data?: Array<(({
-        name: string;
-        value: (string | number | Array<(string)>);
-    } & {
-        customer_id: number;
-    }) | ({
-        name: string;
-        value: (string | number | Array<(string)>);
-    } & {
-        address_id: number;
-    }))>;
-    meta?: {
-        pagination?: {
-            total?: number;
-            count?: number;
-            per_page?: number;
-            current_page?: number;
-            total_pages?: number;
-            links?: {
-                previous?: string;
-                current?: string;
-                next?: string;
-            };
-        };
-    };
-});
-export type GetCustomersFormFieldValuesError = (ErrorResponse);
+export type GetCustomersFormFieldValuesResponse = GetCustomersFormFieldValuesResponses[keyof GetCustomersFormFieldValuesResponses];
 export type UpdateCustomerFormFieldValuesData = {
-    body?: Array<formFieldValue_Full>;
+    body?: Array<FormFieldValueFull>;
+    path?: never;
+    query?: never;
+    url: '/customers/form-field-values';
 };
-export type UpdateCustomerFormFieldValuesResponse = ({
-    data?: Array<(({
-        name: string;
-        value: (string | number | Array<(string)>);
-    } & {
-        customer_id: number;
-    }) | ({
-        name: string;
-        value: (string | number | Array<(string)>);
-    } & {
-        address_id: number;
-    }))>;
-    meta?: MetaOpen;
-});
-export type UpdateCustomerFormFieldValuesError = (ErrorResponse);
+export type UpdateCustomerFormFieldValuesErrors = {
+    422: ErrorResponse;
+};
+export type UpdateCustomerFormFieldValuesError = UpdateCustomerFormFieldValuesErrors[keyof UpdateCustomerFormFieldValuesErrors];
+export type UpdateCustomerFormFieldValuesResponses = {
+    200: {
+        data?: Array<({
+            name: string;
+            value: string | number | Array<string>;
+        } & {
+            customer_id: number;
+        }) | ({
+            name: string;
+            value: string | number | Array<string>;
+        } & {
+            address_id: number;
+        })>;
+        meta?: MetaOpen;
+    };
+};
+export type UpdateCustomerFormFieldValuesResponse = UpdateCustomerFormFieldValuesResponses[keyof UpdateCustomerFormFieldValuesResponses];
 export type GetCustomerConsentData = {
+    body?: never;
     path: {
         customerId: number;
     };
+    query?: never;
+    url: '/customers/{customerId}/consent';
 };
-export type GetCustomerConsentResponse = (consent_Full);
-export type GetCustomerConsentError = (ErrorResponse);
+export type GetCustomerConsentErrors = {
+    401: ErrorResponse;
+    403: ErrorResponse;
+    422: ErrorResponse;
+};
+export type GetCustomerConsentError = GetCustomerConsentErrors[keyof GetCustomerConsentErrors];
+export type GetCustomerConsentResponses = {
+    200: ConsentFull;
+};
+export type GetCustomerConsentResponse = GetCustomerConsentResponses[keyof GetCustomerConsentResponses];
 export type UpdateCustomerConsentData = {
     body?: DeclareCustomerConsentRequest;
     headers?: {
@@ -920,145 +1127,228 @@ export type UpdateCustomerConsentData = {
     path: {
         customerId: number;
     };
+    query?: never;
+    url: '/customers/{customerId}/consent';
 };
-export type UpdateCustomerConsentResponse = (consent_Full);
-export type UpdateCustomerConsentError = (ErrorResponse);
+export type UpdateCustomerConsentErrors = {
+    401: ErrorResponse;
+    403: ErrorResponse;
+    422: ErrorResponse;
+};
+export type UpdateCustomerConsentError = UpdateCustomerConsentErrors[keyof UpdateCustomerConsentErrors];
+export type UpdateCustomerConsentResponses = {
+    200: ConsentFull;
+};
+export type UpdateCustomerConsentResponse = UpdateCustomerConsentResponses[keyof UpdateCustomerConsentResponses];
 export type GetCustomerStoredInstrumentsData = {
+    body?: never;
     path: {
         customerId: number;
     };
+    query?: never;
+    url: '/customers/{customerId}/stored-instruments';
 };
-export type GetCustomerStoredInstrumentsResponse = (Array<(CardInstrument | PayPalAccountInstrument | BankAccountInstrument)>);
-export type GetCustomerStoredInstrumentsError = (ErrorResponse);
+export type GetCustomerStoredInstrumentsErrors = {
+    401: ErrorResponse;
+    403: ErrorResponse;
+};
+export type GetCustomerStoredInstrumentsError = GetCustomerStoredInstrumentsErrors[keyof GetCustomerStoredInstrumentsErrors];
+export type GetCustomerStoredInstrumentsResponses = {
+    200: Array<({
+        type: 'stored_card';
+    } & CardInstrument) | ({
+        type: 'stored_paypal_account';
+    } & PayPalAccountInstrument) | ({
+        type: 'stored_bank_account';
+    } & BankAccountInstrument)>;
+};
+export type GetCustomerStoredInstrumentsResponse = GetCustomerStoredInstrumentsResponses[keyof GetCustomerStoredInstrumentsResponses];
 export type GetCustomersMetafieldsData = {
+    body?: never;
     path: {
         customerId: number;
     };
+    query?: never;
+    url: '/customers/{customerId}/metafields';
 };
-export type GetCustomersMetafieldsResponse = ({
-    items?: {
-        readonly id: number;
-        key: string;
-        value: string;
-        namespace: string;
-        permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-        resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-        readonly resource_id: number;
-        description: string;
-        date_created: string;
-        date_modified: string;
-        readonly owner_client_id?: string;
+export type GetCustomersMetafieldsResponses = {
+    200: {
+        data?: Array<MetafieldFull>;
+        meta?: MetaCollectionFull;
     };
-});
-export type GetCustomersMetafieldsError = unknown;
+};
+export type GetCustomersMetafieldsResponse = GetCustomersMetafieldsResponses[keyof GetCustomersMetafieldsResponses];
 export type CreateCustomerMetafieldsData = {
-    body: MetafieldBase_Post;
+    body: MetafieldBasePost;
     path: {
         customerId: number;
     };
+    query?: never;
+    url: '/customers/{customerId}/metafields';
 };
-export type CreateCustomerMetafieldsResponse = (MetaFieldCollectionPostPutResponses);
-export type CreateCustomerMetafieldsError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | ErrorResponse);
+export type CreateCustomerMetafieldsErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
+    };
+    409: ErrorResponse;
+    422: ErrorResponse;
+};
+export type CreateCustomerMetafieldsError = CreateCustomerMetafieldsErrors[keyof CreateCustomerMetafieldsErrors];
+export type CreateCustomerMetafieldsResponses = {
+    200: MetaFieldCollectionPostPutResponses;
+};
+export type CreateCustomerMetafieldsResponse = CreateCustomerMetafieldsResponses[keyof CreateCustomerMetafieldsResponses];
+export type DeleteCustomerMetafieldsIdData = {
+    body?: never;
+    path: {
+        customerId: number;
+        metafieldId: number;
+    };
+    query?: never;
+    url: '/customers/{customerId}/metafields/{metafieldId}';
+};
+export type DeleteCustomerMetafieldsIdErrors = {
+    404: NotFound;
+};
+export type DeleteCustomerMetafieldsIdError = DeleteCustomerMetafieldsIdErrors[keyof DeleteCustomerMetafieldsIdErrors];
+export type DeleteCustomerMetafieldsIdResponses = {
+    204: void;
+};
+export type DeleteCustomerMetafieldsIdResponse = DeleteCustomerMetafieldsIdResponses[keyof DeleteCustomerMetafieldsIdResponses];
 export type GetMetafieldsCustomerIdData = {
+    body?: never;
     path: {
         customerId: number;
         metafieldId: number;
+    };
+    query?: never;
+    url: '/customers/{customerId}/metafields/{metafieldId}';
+};
+export type GetMetafieldsCustomerIdErrors = {
+    404: NotFound;
+};
+export type GetMetafieldsCustomerIdError = GetMetafieldsCustomerIdErrors[keyof GetMetafieldsCustomerIdErrors];
+export type GetMetafieldsCustomerIdResponses = {
+    200: {
+        data?: MetafieldFull;
+        meta?: MetaEmptyFull;
     };
 };
-export type GetMetafieldsCustomerIdResponse = ({
-    items?: {
-        readonly id: number;
-        key: string;
-        value: string;
-        namespace: string;
-        permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-        resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-        readonly resource_id: number;
-        description: string;
-        date_created: string;
-        date_modified: string;
-        readonly owner_client_id?: string;
-    };
-});
-export type GetMetafieldsCustomerIdError = (NotFound);
+export type GetMetafieldsCustomerIdResponse = GetMetafieldsCustomerIdResponses[keyof GetMetafieldsCustomerIdResponses];
 export type UpdateCustomerMetafieldData = {
-    body?: (MetafieldBase_Put & {
+    body?: MetafieldBasePut & {
         id: number;
-    });
+    };
     path: {
-        customerId: number;
         metafieldId: number;
+        customerId: number;
     };
     query?: {
         metafieldId?: number;
     };
+    url: '/customers/{customerId}/metafields/{metafieldId}';
 };
-export type UpdateCustomerMetafieldResponse = (MetaFieldCollectionPostPutResponses);
-export type UpdateCustomerMetafieldError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | NotFound);
-export type DeleteCustomerMetafieldsIdData = {
-    path: {
-        customerId: number;
-        metafieldId: number;
+export type UpdateCustomerMetafieldErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
     };
+    404: NotFound;
 };
-export type DeleteCustomerMetafieldsIdResponse = (void);
-export type DeleteCustomerMetafieldsIdError = (NotFound);
+export type UpdateCustomerMetafieldError = UpdateCustomerMetafieldErrors[keyof UpdateCustomerMetafieldErrors];
+export type UpdateCustomerMetafieldResponses = {
+    200: MetaFieldCollectionPostPutResponses;
+};
+export type UpdateCustomerMetafieldResponse = UpdateCustomerMetafieldResponses[keyof UpdateCustomerMetafieldResponses];
+export type DeleteCustomersMetafieldsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/customers/metafields';
+};
+export type DeleteCustomersMetafieldsErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
+    };
+    422: MetaFieldCollectionResponsePartialSuccessDelete;
+};
+export type DeleteCustomersMetafieldsError = DeleteCustomersMetafieldsErrors[keyof DeleteCustomersMetafieldsErrors];
+export type DeleteCustomersMetafieldsResponses = {
+    200: MetaFieldCollectionDeleteResponseSuccess;
+};
+export type DeleteCustomersMetafieldsResponse = DeleteCustomersMetafieldsResponses[keyof DeleteCustomersMetafieldsResponses];
 export type GetAllCustomersMetafieldsData = {
+    body?: never;
+    path?: never;
     query?: {
-        'date_created:max'?: string;
-        'date_created:min'?: string;
-        'date_modified:max'?: string;
-        'date_modified:min'?: string;
-        direction?: 'asc' | 'desc';
-        include_fields?: Array<('resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified')>;
-        key?: string;
-        'key:in'?: Array<(string)>;
-        limit?: number;
-        namespace?: string;
-        'namespace:in'?: Array<(string)>;
         page?: number;
+        limit?: number;
+        key?: string;
+        'key:in'?: Array<string>;
+        namespace?: string;
+        'namespace:in'?: Array<string>;
+        direction?: 'asc' | 'desc';
+        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
+        'date_modified:min'?: string;
+        'date_modified:max'?: string;
+        'date_created:min'?: string;
+        'date_created:max'?: string;
     };
+    url: '/customers/metafields';
 };
-export type GetAllCustomersMetafieldsResponse = (MetaFieldCollectionResponse);
-export type GetAllCustomersMetafieldsError = unknown;
+export type GetAllCustomersMetafieldsResponses = {
+    200: MetaFieldCollectionResponse;
+};
+export type GetAllCustomersMetafieldsResponse = GetAllCustomersMetafieldsResponses[keyof GetAllCustomersMetafieldsResponses];
 export type CreateCustomersMetafieldsData = {
-    body?: Array<(MetafieldBase_Post & {
+    body?: Array<MetafieldBasePost & {
         resource_id: number;
-    })>;
+    }>;
+    path?: never;
+    query?: never;
+    url: '/customers/metafields';
 };
-export type CreateCustomersMetafieldsResponse = (MetaFieldCollectionPostPutResponses);
-export type CreateCustomersMetafieldsError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | MetaFieldCollectionResponsePartialSuccess_POST_PUT);
+export type CreateCustomersMetafieldsErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
+    };
+    422: MetaFieldCollectionResponsePartialSuccessPostPut;
+};
+export type CreateCustomersMetafieldsError = CreateCustomersMetafieldsErrors[keyof CreateCustomersMetafieldsErrors];
+export type CreateCustomersMetafieldsResponses = {
+    200: MetaFieldCollectionPostPutResponses;
+};
+export type CreateCustomersMetafieldsResponse = CreateCustomersMetafieldsResponses[keyof CreateCustomersMetafieldsResponses];
 export type UpdateCustomersMetafieldsData = {
-    body?: Array<(MetafieldBase_Put & {
+    body?: Array<MetafieldBasePut & {
         id: number;
-    })>;
+    }>;
+    path?: never;
+    query?: never;
+    url: '/customers/metafields';
 };
-export type UpdateCustomersMetafieldsResponse = (MetaFieldCollectionPostPutResponses);
-export type UpdateCustomersMetafieldsError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | MetaFieldCollectionResponsePartialSuccess_POST_PUT);
-export type DeleteCustomersMetafieldsResponse = (MetaFieldCollectionDeleteResponseSuccess);
-export type DeleteCustomersMetafieldsError = ({
-    status?: number;
-    title?: string;
-    type?: string;
-    detail?: string;
-} | MetaFieldCollectionResponsePartialSuccess_DELETE);
+export type UpdateCustomersMetafieldsErrors = {
+    400: {
+        status?: number;
+        title?: string;
+        type?: string;
+        detail?: string;
+    };
+    422: MetaFieldCollectionResponsePartialSuccessPostPut;
+};
+export type UpdateCustomersMetafieldsError = UpdateCustomersMetafieldsErrors[keyof UpdateCustomersMetafieldsErrors];
+export type UpdateCustomersMetafieldsResponses = {
+    200: MetaFieldCollectionPostPutResponses;
+};
+export type UpdateCustomersMetafieldsResponse = UpdateCustomersMetafieldsResponses[keyof UpdateCustomersMetafieldsResponses];

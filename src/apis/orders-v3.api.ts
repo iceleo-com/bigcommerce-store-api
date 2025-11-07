@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as OrdersV3ApiSpecs from '../generated/orders-v3';
 export * as OrdersV3ApiSpecs from '../generated/orders-v3';
 
@@ -20,7 +21,7 @@ export class OrdersV3Api {
     captureOrderPayment(
         orderId: OrdersV3ApiSpecs.CaptureOrderPaymentData['path']['order_id'],
     ) {
-        return this.request.post<any, OrdersV3ApiSpecs.CaptureOrderPaymentError>({
+        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.CaptureOrderPaymentResponses[201]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.CaptureOrderPaymentErrors[400]>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.CaptureOrderPaymentErrors[404]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.CaptureOrderPaymentErrors[422]>> | RequestErrorResponse<502, Required<OrdersV3ApiSpecs.CaptureOrderPaymentErrors[502]>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.CaptureOrderPaymentErrors[503]>> | RequestErrorResponse<504, Required<OrdersV3ApiSpecs.CaptureOrderPaymentErrors[504]>>)>({
             path: `v3/orders/${orderId}/payment_actions/capture`,
         });
     }
@@ -37,7 +38,7 @@ export class OrdersV3Api {
     voidOrderPayment(
         orderId: OrdersV3ApiSpecs.VoidOrderPaymentData['path']['order_id'],
     ) {
-        return this.request.post<any, OrdersV3ApiSpecs.VoidOrderPaymentError>({
+        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.VoidOrderPaymentResponses[201]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.VoidOrderPaymentErrors[400]>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.VoidOrderPaymentErrors[404]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.VoidOrderPaymentErrors[422]>> | RequestErrorResponse<502, Required<OrdersV3ApiSpecs.VoidOrderPaymentErrors[502]>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.VoidOrderPaymentErrors[503]>> | RequestErrorResponse<504, Required<OrdersV3ApiSpecs.VoidOrderPaymentErrors[504]>>)>({
             path: `v3/orders/${orderId}/payment_actions/void`,
         });
     }
@@ -57,7 +58,7 @@ export class OrdersV3Api {
     getOrderTransactions(
         orderId: OrdersV3ApiSpecs.GetOrderTransactionsData['path']['order_id'],
     ) {
-        return this.request.get<any, OrdersV3ApiSpecs.GetOrderTransactionsError>({
+        return this.request.get<(RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrderTransactionsResponses[200]>> | RequestSuccessResponse<204, Required<OrdersV3ApiSpecs.GetOrderTransactionsResponses[204]>>),(RequestErrorResponse<404, Required<OrdersV3ApiSpecs.GetOrderTransactionsErrors[404]>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.GetOrderTransactionsErrors[503]>>)>({
             path: `v3/orders/${orderId}/transactions`,
         });
     }
@@ -79,7 +80,7 @@ export class OrdersV3Api {
         orderId: OrdersV3ApiSpecs.CreateOrderRefundQuotesData['path']['order_id'],
         requestBody: OrdersV3ApiSpecs.CreateOrderRefundQuotesData['body'],
     ) {
-        return this.request.post<any, OrdersV3ApiSpecs.CreateOrderRefundQuotesError>({
+        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.CreateOrderRefundQuotesResponses[201]>>,RequestErrorResponse<422, Required<OrdersV3ApiSpecs.CreateOrderRefundQuotesErrors[422]>>>({
             path: `v3/orders/${orderId}/payment_actions/refund_quotes`,
             contentType: 'application/json',
             body: requestBody,
@@ -99,9 +100,11 @@ export class OrdersV3Api {
      */
     getOrderRefunds(
         orderId: OrdersV3ApiSpecs.GetOrderRefundsData['path']['order_id'],
+        query?: OrdersV3ApiSpecs.GetOrderRefundsData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrderRefundsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/orders/${orderId}/payment_actions/refunds`,
+            query,
         });
     }
 
@@ -120,11 +123,13 @@ export class OrdersV3Api {
     createOrderRefund(
         orderId: OrdersV3ApiSpecs.CreateOrderRefundData['path']['order_id'],
         requestBody: OrdersV3ApiSpecs.CreateOrderRefundData['body'],
+        query?: OrdersV3ApiSpecs.CreateOrderRefundData['query'],
     ) {
-        return this.request.post<any, OrdersV3ApiSpecs.CreateOrderRefundError>({
+        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.CreateOrderRefundResponses[201]>>,(RequestErrorResponse<422, Required<OrdersV3ApiSpecs.CreateOrderRefundErrors[422]>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.CreateOrderRefundErrors[503]>>)>({
             path: `v3/orders/${orderId}/payment_actions/refunds`,
             contentType: 'application/json',
             body: requestBody,
+            query,
         });
     }
 
@@ -136,7 +141,7 @@ export class OrdersV3Api {
     getOrderRefund(
         refundId: OrdersV3ApiSpecs.GetOrderRefundData['path']['refund_id'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrderRefundResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/orders/payment_actions/refunds/${refundId}`,
         });
     }
@@ -155,7 +160,7 @@ export class OrdersV3Api {
     getOrdersRefunds(
         query?: OrdersV3ApiSpecs.GetOrdersRefundsData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrdersRefundsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/orders/payment_actions/refunds',
             query,
         });
@@ -173,7 +178,7 @@ export class OrdersV3Api {
         orderId: OrdersV3ApiSpecs.GetOrderMetafieldsData['path']['order_id'],
         query?: OrdersV3ApiSpecs.GetOrderMetafieldsData['query'],
     ) {
-        return this.request.get<OrdersV3ApiSpecs.GetOrderMetafieldsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrderMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/orders/${orderId}/metafields`,
             query,
         });
@@ -190,7 +195,7 @@ export class OrdersV3Api {
         orderId: OrdersV3ApiSpecs.CreateOrderMetafieldData['path']['order_id'],
         requestBody: OrdersV3ApiSpecs.CreateOrderMetafieldData['body'],
     ) {
-        return this.request.post<OrdersV3ApiSpecs.CreateOrderMetafieldResponse, OrdersV3ApiSpecs.CreateOrderMetafieldError>({
+        return this.request.post<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.CreateOrderMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.CreateOrderMetafieldErrors[400]>> | RequestErrorResponse<409, Required<OrdersV3ApiSpecs.CreateOrderMetafieldErrors[409]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.CreateOrderMetafieldErrors[422]>>)>({
             path: `v3/orders/${orderId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
@@ -207,7 +212,7 @@ export class OrdersV3Api {
         orderId: OrdersV3ApiSpecs.GetOrderMetafieldData['path']['order_id'],
         metafieldId: OrdersV3ApiSpecs.GetOrderMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.get<OrdersV3ApiSpecs.GetOrderMetafieldResponse, OrdersV3ApiSpecs.GetOrderMetafieldError>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrderMetafieldResponses[200]>>,RequestErrorResponse<404, Required<OrdersV3ApiSpecs.GetOrderMetafieldErrors[404]>>>({
             path: `v3/orders/${orderId}/metafields/${metafieldId}`,
         });
     }
@@ -224,7 +229,7 @@ export class OrdersV3Api {
         metafieldId: OrdersV3ApiSpecs.UpdateOrderMetafieldData['path']['metafield_id'],
         requestBody: OrdersV3ApiSpecs.UpdateOrderMetafieldData['body'],
     ) {
-        return this.request.put<OrdersV3ApiSpecs.UpdateOrderMetafieldResponse, OrdersV3ApiSpecs.UpdateOrderMetafieldError>({
+        return this.request.put<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.UpdateOrderMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.UpdateOrderMetafieldErrors[400]>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.UpdateOrderMetafieldErrors[404]>>)>({
             path: `v3/orders/${orderId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -241,7 +246,7 @@ export class OrdersV3Api {
         orderId: OrdersV3ApiSpecs.DeleteOrderMetafieldData['path']['order_id'],
         metafieldId: OrdersV3ApiSpecs.DeleteOrderMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.delete<any, OrdersV3ApiSpecs.DeleteOrderMetafieldError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<OrdersV3ApiSpecs.DeleteOrderMetafieldResponses[204]>>,RequestErrorResponse<404, Required<OrdersV3ApiSpecs.DeleteOrderMetafieldErrors[404]>>>({
             path: `v3/orders/${orderId}/metafields/${metafieldId}`,
         });
     }
@@ -253,7 +258,7 @@ export class OrdersV3Api {
      */
     getGlobalOrderSettings(
     ) {
-        return this.request.get<OrdersV3ApiSpecs.GetGlobalOrderSettingsResponse, OrdersV3ApiSpecs.GetGlobalOrderSettingsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetGlobalOrderSettingsResponses[200]>>,RequestErrorResponse<400, Required<OrdersV3ApiSpecs.GetGlobalOrderSettingsErrors[400]>>>({
             path: 'v3/orders/settings',
         });
     }
@@ -266,7 +271,7 @@ export class OrdersV3Api {
     updateGlobalOrderSettings(
         requestBody: OrdersV3ApiSpecs.UpdateGlobalOrderSettingsData['body'],
     ) {
-        return this.request.put<OrdersV3ApiSpecs.UpdateGlobalOrderSettingsResponse, OrdersV3ApiSpecs.UpdateGlobalOrderSettingsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.UpdateGlobalOrderSettingsResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.UpdateGlobalOrderSettingsErrors[400]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.UpdateGlobalOrderSettingsErrors[422]>>)>({
             path: 'v3/orders/settings',
             contentType: 'application/json',
             body: requestBody,
@@ -281,7 +286,7 @@ export class OrdersV3Api {
     getChannelOrderSettings(
         channelId: OrdersV3ApiSpecs.GetChannelOrderSettingsData['path']['channel_id'],
     ) {
-        return this.request.get<OrdersV3ApiSpecs.GetChannelOrderSettingsResponse, OrdersV3ApiSpecs.GetChannelOrderSettingsError>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetChannelOrderSettingsResponses[200]>>,RequestErrorResponse<400, Required<OrdersV3ApiSpecs.GetChannelOrderSettingsErrors[400]>>>({
             path: `v3/orders/settings/channels/${channelId}`,
         });
     }
@@ -297,7 +302,7 @@ export class OrdersV3Api {
         channelId: OrdersV3ApiSpecs.UpdateChannelOrderSettingsData['path']['channel_id'],
         requestBody: OrdersV3ApiSpecs.UpdateChannelOrderSettingsData['body'],
     ) {
-        return this.request.put<OrdersV3ApiSpecs.UpdateChannelOrderSettingsResponse, OrdersV3ApiSpecs.UpdateChannelOrderSettingsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.UpdateChannelOrderSettingsResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.UpdateChannelOrderSettingsErrors[400]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.UpdateChannelOrderSettingsErrors[422]>>)>({
             path: `v3/orders/settings/channels/${channelId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -312,7 +317,7 @@ export class OrdersV3Api {
     getOrdersMetafields(
         query?: OrdersV3ApiSpecs.GetOrdersMetafieldsData['query'],
     ) {
-        return this.request.get<OrdersV3ApiSpecs.GetOrdersMetafieldsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrdersMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/orders/metafields',
             query,
         });
@@ -326,7 +331,7 @@ export class OrdersV3Api {
     createOrdersMetafields(
         requestBody: OrdersV3ApiSpecs.CreateOrdersMetafieldsData['body'],
     ) {
-        return this.request.post<OrdersV3ApiSpecs.CreateOrdersMetafieldsResponse, OrdersV3ApiSpecs.CreateOrdersMetafieldsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.CreateOrdersMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.CreateOrdersMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.CreateOrdersMetafieldsErrors[422]>>)>({
             path: 'v3/orders/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -341,7 +346,7 @@ export class OrdersV3Api {
     updateOrdersMetafields(
         requestBody: OrdersV3ApiSpecs.UpdateOrdersMetafieldsData['body'],
     ) {
-        return this.request.put<OrdersV3ApiSpecs.UpdateOrdersMetafieldsResponse, OrdersV3ApiSpecs.UpdateOrdersMetafieldsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.UpdateOrdersMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.UpdateOrdersMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.UpdateOrdersMetafieldsErrors[422]>>)>({
             path: 'v3/orders/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -356,7 +361,7 @@ export class OrdersV3Api {
     deleteOrdersMetafields(
         requestBody: OrdersV3ApiSpecs.DeleteOrdersMetafieldsData['body'],
     ) {
-        return this.request.delete<OrdersV3ApiSpecs.DeleteOrdersMetafieldsResponse, OrdersV3ApiSpecs.DeleteOrdersMetafieldsError>({
+        return this.request.delete<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.DeleteOrdersMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.DeleteOrdersMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.DeleteOrdersMetafieldsErrors[422]>>)>({
             path: 'v3/orders/metafields',
             contentType: 'application/json',
             body: requestBody,

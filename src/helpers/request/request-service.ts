@@ -1,8 +1,9 @@
 import { BigCommerceStoreApiConfig } from '../../index.types';
 import {
+    RequestErrorResponse,
     RequestMethod,
     RequestOptions,
-    RequestResponse,
+    RequestSuccessResponse,
 } from './request-service.types';
 import { buildPath, parseBody } from './request-service.helpers';
 
@@ -15,14 +16,14 @@ class RequestService {
         this.config = config;
     }
 
-    private async request<T_Success = any, T_Error = any>(
+    private async request<T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(
         method: RequestMethod,
         options: RequestOptions,
         // path: string,
         // method: RequestMethod,
         // contentType: RequestContentType,
         // body?: RequestBody,
-    ): Promise<RequestResponse<T_Success, T_Error>> {
+    ): Promise<T_Success | T_Error> {
         const {
             path,
             contentType,
@@ -71,8 +72,8 @@ class RequestService {
                     errors: {
                         message: responseError,
                     },
-                } as any,
-            }
+                },
+            } as T_Error;
         }
 
         // parse the response
@@ -98,7 +99,7 @@ class RequestService {
                     title: responseBodyContents,
                     type: 'internal_server_error',
                 },
-            };
+            } as T_Error;
         }
 
         return {
@@ -106,59 +107,59 @@ class RequestService {
             http_status: response.status,
             data: result.data ? result.data : result,
             meta: result.meta,
-        };
+        } as T_Success;
     }
 
-    get = <T_Success = any, T_Error = any>(
+    get = <T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(
         options: RequestOptions,
     ) => this.request<T_Success, T_Error>(
         'GET',
         options,
     );
 
-    post = <T_Success = any, T_Error = any>(
+    post = <T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(
         options: RequestOptions,
     ) => this.request<T_Success, T_Error>(
         'POST',
         options,
     );
 
-    put = <T_Success = any, T_Error = any>(
+    put = <T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(
         options: RequestOptions,
     ) => this.request<T_Success, T_Error>(
         'PUT',
         options,
     );
 
-    delete = <T_Success = any, T_Error = any>(
+    delete = <T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(
         options: RequestOptions,
     ) => this.request<T_Success, T_Error>(
         'DELETE',
         options,
     );
 
-    options = <T_Success = any, T_Error = any>(
+    options = <T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(
         options: RequestOptions,
     ) => this.request<T_Success, T_Error>(
         'OPTIONS',
         options,
     );
 
-    head = <T_Success = any, T_Error = any>(
+    head = <T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(
         options: RequestOptions,
     ) => this.request<T_Success, T_Error>(
         'HEAD',
         options,
     );
 
-    patch = <T_Success = any, T_Error = any>(
+    patch = <T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(
         options: RequestOptions,
     ) => this.request<T_Success, T_Error>(
         'PATCH',
         options,
     );
 
-    trace = <T_Success = any, T_Error = any>(
+    trace = <T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(
         options: RequestOptions,
     ) => this.request<T_Success, T_Error>(
         'TRACE',

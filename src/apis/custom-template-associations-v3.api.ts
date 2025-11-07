@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as CustomTemplateAssociationsV3ApiSpecs from '../generated/custom-template-associations-v3';
 export * as CustomTemplateAssociationsV3ApiSpecs from '../generated/custom-template-associations-v3';
 
@@ -17,7 +18,7 @@ export class CustomTemplateAssociationsV3Api {
     getCustomTemplateAssociations(
         query?: CustomTemplateAssociationsV3ApiSpecs.GetCustomTemplateAssociationsData['query'],
     ) {
-        return this.request.get<CustomTemplateAssociationsV3ApiSpecs.GetCustomTemplateAssociationsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomTemplateAssociationsV3ApiSpecs.GetCustomTemplateAssociationsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/storefront/custom-template-associations',
             query,
         });
@@ -31,7 +32,7 @@ export class CustomTemplateAssociationsV3Api {
     upsertCustomTemplateAssociations(
         requestBody: CustomTemplateAssociationsV3ApiSpecs.UpsertCustomTemplateAssociationsData['body'],
     ) {
-        return this.request.put<CustomTemplateAssociationsV3ApiSpecs.UpsertCustomTemplateAssociationsResponse, CustomTemplateAssociationsV3ApiSpecs.UpsertCustomTemplateAssociationsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomTemplateAssociationsV3ApiSpecs.UpsertCustomTemplateAssociationsResponses[200]>>,RequestErrorResponse<422, Required<CustomTemplateAssociationsV3ApiSpecs.UpsertCustomTemplateAssociationsErrors[422]>>>({
             path: 'v3/storefront/custom-template-associations',
             contentType: 'application/json',
             body: requestBody,
@@ -46,7 +47,7 @@ export class CustomTemplateAssociationsV3Api {
     deleteCustomTemplateAssociations(
         query?: CustomTemplateAssociationsV3ApiSpecs.DeleteCustomTemplateAssociationsData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomTemplateAssociationsV3ApiSpecs.DeleteCustomTemplateAssociationsResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/storefront/custom-template-associations',
             query,
         });

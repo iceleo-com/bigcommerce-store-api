@@ -1,42 +1,51 @@
-export type count_Full = {
-    count?: number;
+export type ClientOptions = {
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2' | (string & {});
 };
-export type countriesState_Full = {
+export type CountryFull = {
+    id?: number;
+} & CountryBase & {
+    states?: CountriesStatesFull;
+};
+export type CountriesStatesFull = {
+    url?: string;
+    resource?: string;
+};
+export type CountriesStateFull = {
     id?: number;
     state?: string;
     state_abbreviation?: string;
     country_id?: number;
 };
-export type countriesStates_Full = {
-    url?: string;
-    resource?: string;
-};
-export type country_Base = {
+export type CountryBase = {
     country?: string;
     country_iso2?: string;
     country_iso3?: string;
 };
-export type country_Full = {
-    id?: number;
-} & country_Base & {
-    states?: countriesStates_Full;
+export type CountFull = {
+    count?: number;
 };
 export type GetCountriesData = {
+    body?: never;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
+    path?: never;
     query?: {
+        page?: number;
+        limit?: number;
         country?: string;
         country_iso2?: string;
         country_iso3?: string;
-        limit?: number;
-        page?: number;
     };
+    url: '/countries';
 };
-export type GetCountriesResponse = (Array<country_Full>);
-export type GetCountriesError = unknown;
+export type GetCountriesResponses = {
+    200: Array<CountryFull>;
+};
+export type GetCountriesResponse = GetCountriesResponses[keyof GetCountriesResponses];
 export type GetCountryData = {
+    body?: never;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -44,10 +53,15 @@ export type GetCountryData = {
     path: {
         id: number;
     };
+    query?: never;
+    url: '/countries/{id}';
 };
-export type GetCountryResponse = (country_Full);
-export type GetCountryError = unknown;
+export type GetCountryResponses = {
+    200: CountryFull;
+};
+export type GetCountryResponse = GetCountryResponses[keyof GetCountryResponses];
 export type GetCountryStatesData = {
+    body?: never;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -56,15 +70,19 @@ export type GetCountryStatesData = {
         country_id: number;
     };
     query?: {
-        limit?: number;
-        page?: number;
         state?: string;
         state_abbreviation?: string;
+        page?: number;
+        limit?: number;
     };
+    url: '/countries/{country_id}/states';
 };
-export type GetCountryStatesResponse = (Array<countriesState_Full>);
-export type GetCountryStatesError = unknown;
+export type GetCountryStatesResponses = {
+    200: Array<CountriesStateFull>;
+};
+export type GetCountryStatesResponse = GetCountryStatesResponses[keyof GetCountryStatesResponses];
 export type GetCountryStateData = {
+    body?: never;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -73,25 +91,55 @@ export type GetCountryStateData = {
         country_id: number;
         id: number;
     };
+    query?: never;
+    url: '/countries/{country_id}/states/{id}';
 };
-export type GetCountryStateResponse = (countriesState_Full);
-export type GetCountryStateError = unknown;
-export type GetCountriesCountResponse = (count_Full);
-export type GetCountriesCountError = unknown;
-export type GetStatesCountResponse = (count_Full);
-export type GetStatesCountError = unknown;
+export type GetCountryStateResponses = {
+    200: CountriesStateFull;
+};
+export type GetCountryStateResponse = GetCountryStateResponses[keyof GetCountryStateResponses];
+export type GetCountriesCountData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/countries/count';
+};
+export type GetCountriesCountResponses = {
+    200: CountFull;
+};
+export type GetCountriesCountResponse = GetCountriesCountResponses[keyof GetCountriesCountResponses];
+export type GetStatesCountData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/countries/states/count';
+};
+export type GetStatesCountResponses = {
+    200: CountFull;
+};
+export type GetStatesCountResponse = GetStatesCountResponses[keyof GetStatesCountResponses];
 export type GetStatesData = {
+    body?: never;
+    path?: never;
     query?: {
         limit?: number;
         page?: number;
     };
+    url: '/countries/states';
 };
-export type GetStatesResponse = (Array<countriesState_Full>);
-export type GetStatesError = unknown;
+export type GetStatesResponses = {
+    200: Array<CountriesStateFull>;
+};
+export type GetStatesResponse = GetStatesResponses[keyof GetStatesResponses];
 export type GetCountryStatesCountData = {
+    body?: never;
     path: {
         country_id: number;
     };
+    query?: never;
+    url: '/countries/{country_id}/states/count';
 };
-export type GetCountryStatesCountResponse = (count_Full);
-export type GetCountryStatesCountError = unknown;
+export type GetCountryStatesCountResponses = {
+    200: CountFull;
+};
+export type GetCountryStatesCountResponse = GetCountryStatesCountResponses[keyof GetCountryStatesCountResponses];

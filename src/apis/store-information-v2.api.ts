@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as StoreInformationV2ApiSpecs from '../generated/store-information-v2';
 export * as StoreInformationV2ApiSpecs from '../generated/store-information-v2';
 
@@ -16,7 +17,7 @@ export class StoreInformationV2Api {
      */
     getStoreInformation(
     ) {
-        return this.request.get<StoreInformationV2ApiSpecs.GetStoreInformationResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.GetStoreInformationResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/store',
         });
     }
@@ -29,7 +30,7 @@ export class StoreInformationV2Api {
     getStoreMetafields(
         query?: StoreInformationV2ApiSpecs.GetStoreMetafieldsData['query'],
     ) {
-        return this.request.get<StoreInformationV2ApiSpecs.GetStoreMetafieldsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.GetStoreMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/store/metafields',
             query,
         });
@@ -43,7 +44,7 @@ export class StoreInformationV2Api {
     createStoresMetafields(
         requestBody: StoreInformationV2ApiSpecs.CreateStoresMetafieldsData['body'],
     ) {
-        return this.request.post<StoreInformationV2ApiSpecs.CreateStoresMetafieldsResponse, StoreInformationV2ApiSpecs.CreateStoresMetafieldsError>({
+        return this.request.post<RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.CreateStoresMetafieldsResponses[200]>>,RequestErrorResponse<422, Required<StoreInformationV2ApiSpecs.CreateStoresMetafieldsErrors[422]>>>({
             path: 'v2/store/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -58,7 +59,7 @@ export class StoreInformationV2Api {
     updateStoreMetafields(
         requestBody: StoreInformationV2ApiSpecs.UpdateStoreMetafieldsData['body'],
     ) {
-        return this.request.put<StoreInformationV2ApiSpecs.UpdateStoreMetafieldsResponse, StoreInformationV2ApiSpecs.UpdateStoreMetafieldsError>({
+        return this.request.put<RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.UpdateStoreMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<StoreInformationV2ApiSpecs.UpdateStoreMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<StoreInformationV2ApiSpecs.UpdateStoreMetafieldsErrors[422]>>)>({
             path: 'v2/store/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -73,7 +74,7 @@ export class StoreInformationV2Api {
     deleteStoreMetafields(
         requestBody: StoreInformationV2ApiSpecs.DeleteStoreMetafieldsData['body'],
     ) {
-        return this.request.delete<StoreInformationV2ApiSpecs.DeleteStoreMetafieldsResponse, any>({
+        return this.request.delete<RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.DeleteStoreMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/store/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -88,7 +89,7 @@ export class StoreInformationV2Api {
     getStoreMetafield(
         metafieldId: StoreInformationV2ApiSpecs.GetStoreMetafieldData['path']['metafieldId'],
     ) {
-        return this.request.get<StoreInformationV2ApiSpecs.GetStoreMetafieldResponse, StoreInformationV2ApiSpecs.GetStoreMetafieldError>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.GetStoreMetafieldResponses[200]>>,RequestErrorResponse<404, Required<StoreInformationV2ApiSpecs.GetStoreMetafieldErrors[404]>>>({
             path: `v2/store/metafields/${metafieldId}`,
         });
     }
@@ -103,7 +104,7 @@ export class StoreInformationV2Api {
         metafieldId: StoreInformationV2ApiSpecs.UpdateStoreMetafieldData['path']['metafieldId'],
         requestBody: StoreInformationV2ApiSpecs.UpdateStoreMetafieldData['body'],
     ) {
-        return this.request.put<StoreInformationV2ApiSpecs.UpdateStoreMetafieldResponse, StoreInformationV2ApiSpecs.UpdateStoreMetafieldError>({
+        return this.request.put<RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.UpdateStoreMetafieldResponses[200]>>,RequestErrorResponse<404, Required<StoreInformationV2ApiSpecs.UpdateStoreMetafieldErrors[404]>>>({
             path: `v2/store/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -119,7 +120,7 @@ export class StoreInformationV2Api {
     deleteStoreMetafield(
         metafieldId: StoreInformationV2ApiSpecs.DeleteStoreMetafieldData['path']['metafieldId'],
     ) {
-        return this.request.delete<any, StoreInformationV2ApiSpecs.DeleteStoreMetafieldError>({
+        return this.request.delete<RequestSuccessResponse<204, Required<StoreInformationV2ApiSpecs.DeleteStoreMetafieldResponses[204]>>,RequestErrorResponse<404, Required<StoreInformationV2ApiSpecs.DeleteStoreMetafieldErrors[404]>>>({
             path: `v2/store/metafields/${metafieldId}`,
         });
     }
@@ -131,7 +132,7 @@ export class StoreInformationV2Api {
      */
     getSystemTimestamp(
     ) {
-        return this.request.get<StoreInformationV2ApiSpecs.GetSystemTimestampResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.GetSystemTimestampResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/time',
         });
     }

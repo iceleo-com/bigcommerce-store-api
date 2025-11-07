@@ -52,6 +52,7 @@ import { StoreLogsV3Api } from './apis/store-logs-v3.api';
 import { StorefrontTokensV3Api } from './apis/storefront-tokens-v3.api';
 import { SubscribersV3Api } from './apis/subscribers-v3.api';
 import { TaxV3Api } from './apis/tax-v3.api';
+import { TaxCustomersV3Api } from './apis/tax-customers-v3.api';
 import { TaxPropertiesV3Api } from './apis/tax-properties-v3.api';
 import { TaxProviderApi } from './apis/tax-provider.api';
 import { TaxRatesZonesV3Api } from './apis/tax-rates-zones-v3.api';
@@ -114,6 +115,7 @@ export * from './apis/store-logs-v3.api';
 export * from './apis/storefront-tokens-v3.api';
 export * from './apis/subscribers-v3.api';
 export * from './apis/tax-v3.api';
+export * from './apis/tax-customers-v3.api';
 export * from './apis/tax-properties-v3.api';
 export * from './apis/tax-provider.api';
 export * from './apis/tax-rates-zones-v3.api';
@@ -190,6 +192,7 @@ class BigCommerceStoreApi {
         readonly storefrontTokens: StorefrontTokensV3Api;
         readonly subscribers: SubscribersV3Api;
         readonly tax: TaxV3Api;
+        readonly taxCustomers: TaxCustomersV3Api;
         readonly taxProperties: TaxPropertiesV3Api;
         readonly taxProvider: TaxProviderApi;
         readonly taxRatesZones: TaxRatesZonesV3Api;
@@ -260,6 +263,7 @@ class BigCommerceStoreApi {
             storefrontTokens: new StorefrontTokensV3Api(this.request),
             subscribers: new SubscribersV3Api(this.request),
             tax: new TaxV3Api(this.request),
+            taxCustomers: new TaxCustomersV3Api(this.request),
             taxProperties: new TaxPropertiesV3Api(this.request),
             taxProvider: new TaxProviderApi(this.request),
             taxRatesZones: new TaxRatesZonesV3Api(this.request),

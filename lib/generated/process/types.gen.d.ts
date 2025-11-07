@@ -1,3 +1,6 @@
+export type ClientOptions = {
+    baseUrl: 'https://payments.bigcommerce.com/stores/{store_hash}' | (string & {});
+};
 export type Card = {
     type?: string;
     cardholder_name?: string;
@@ -9,20 +12,6 @@ export type Card = {
     issue_year?: number;
     issue_number?: number;
 };
-export type GiftCertificate = {
-    type?: string;
-    gift_certificate_code?: string;
-};
-export type ParameterAcceptPaymentResponse = 'application/vnd.bc.v1+json';
-export type ParameterContentType = string;
-export type StoreCredit = {
-    type?: string;
-};
-export type StoredBankAccount = {
-    type?: 'stored_bank_account';
-    token?: string;
-};
-export type type = 'stored_bank_account';
 export type StoredCard = {
     type?: string;
     token?: string;
@@ -32,7 +21,17 @@ export type StoredPayPalAccount = {
     type?: 'stored_paypal_account';
     token?: string;
 };
-export type type2 = 'stored_paypal_account';
+export type StoredBankAccount = {
+    type?: 'stored_bank_account';
+    token?: string;
+};
+export type GiftCertificate = {
+    type?: string;
+    gift_certificate_code?: string;
+};
+export type StoreCredit = {
+    type?: string;
+};
 export type TokenizedCard = {
     type: 'tokenized_card';
     token: string;
@@ -41,11 +40,12 @@ export type TokenizedCard = {
     expiration_month?: string;
     expiration_year?: string;
 };
-export type type3 = 'tokenized_card';
+export type AcceptPaymentResponse = 'application/vnd.bc.v1+json';
+export type ContentType = string;
 export type PaymentsPostData = {
     body?: {
         payment: {
-            instrument: (Card | StoredCard | StoredPayPalAccount | GiftCertificate | StoreCredit | TokenizedCard | StoredBankAccount);
+            instrument: Card | StoredCard | StoredPayPalAccount | GiftCertificate | StoreCredit | TokenizedCard | StoredBankAccount;
             payment_method_id: string;
             save_instrument?: boolean;
         };
@@ -54,19 +54,58 @@ export type PaymentsPostData = {
         Accept: 'application/vnd.bc.v1+json';
         'Content-Type': string;
     };
+    path?: never;
+    query?: never;
+    url: '/payments';
 };
-export type PaymentsPostResponse = ({
-    id?: string;
-    transaction_type?: 'authorization' | 'purchase';
-    status?: 'success' | 'pending';
-});
-export type PaymentsPostError = ({
-    status: number;
-    title: string;
-    detail?: string;
-    type: string;
-    code?: number;
-    errors?: {
-        [key: string]: (string);
+export type PaymentsPostErrors = {
+    400: {
+        status: number;
+        title: string;
+        detail?: string;
+        type: string;
+        code?: number;
+        errors?: {
+            [key: string]: string;
+        };
     };
-});
+    401: {
+        status: number;
+        title: string;
+        detail?: string;
+        type: string;
+        code?: number;
+        errors?: {
+            [key: string]: string;
+        };
+    };
+    422: {
+        status: number;
+        title: string;
+        detail?: string;
+        type: string;
+        code?: number;
+        errors?: {
+            [key: string]: string;
+        };
+    };
+    default: {
+        status: number;
+        title: string;
+        detail?: string;
+        type: string;
+        code?: number;
+        errors?: {
+            [key: string]: string;
+        };
+    };
+};
+export type PaymentsPostError = PaymentsPostErrors[keyof PaymentsPostErrors];
+export type PaymentsPostResponses = {
+    202: {
+        id?: string;
+        transaction_type?: 'authorization' | 'purchase';
+        status?: 'success' | 'pending';
+    };
+};
+export type PaymentsPostResponse = PaymentsPostResponses[keyof PaymentsPostResponses];

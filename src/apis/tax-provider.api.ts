@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as TaxProviderApiSpecs from '../generated/tax-provider';
 export * as TaxProviderApiSpecs from '../generated/tax-provider';
 
@@ -41,7 +42,7 @@ export class TaxProviderApi {
     estimateTaxes(
         requestBody: TaxProviderApiSpecs.EstimateTaxesData['body'],
     ) {
-        return this.request.post<TaxProviderApiSpecs.EstimateTaxesResponse, TaxProviderApiSpecs.EstimateTaxesError>({
+        return this.request.post<RequestSuccessResponse<200, Required<TaxProviderApiSpecs.EstimateTaxesResponses[200]>>,(RequestErrorResponse<400, Required<TaxProviderApiSpecs.EstimateTaxesErrors[400]>> | RequestErrorResponse<401, Required<TaxProviderApiSpecs.EstimateTaxesErrors[401]>> | RequestErrorResponse<500, Required<TaxProviderApiSpecs.EstimateTaxesErrors[500]>>)>({
             path: 'https://{app_domain}/estimate',
             contentType: 'application/json',
             body: requestBody,
@@ -60,7 +61,7 @@ export class TaxProviderApi {
     voidTaxQuote(
         query?: TaxProviderApiSpecs.VoidTaxQuoteData['query'],
     ) {
-        return this.request.post<any, TaxProviderApiSpecs.VoidTaxQuoteError>({
+        return this.request.post<RequestSuccessResponse<200, Required<TaxProviderApiSpecs.VoidTaxQuoteResponses[200]>>,(RequestErrorResponse<400, Required<TaxProviderApiSpecs.VoidTaxQuoteErrors[400]>> | RequestErrorResponse<401, Required<TaxProviderApiSpecs.VoidTaxQuoteErrors[401]>> | RequestErrorResponse<500, Required<TaxProviderApiSpecs.VoidTaxQuoteErrors[500]>>)>({
             path: 'https://{app_domain}/void',
             query,
         });
@@ -71,6 +72,8 @@ export class TaxProviderApi {
      *
      * Submit the quote request to be persisted by the enabled third-party tax provider. A commit operation is intended to be submitted once only, when the Order has been confirmed and paid.
 
+     Merchants may adjust when commit operations occur by adjusting the document submission strategy in their store tax settings. The selected document submission strategy will adjust whether order status or payment status is used to determine if the order is paid. For more information, see the [Tax Settings API Reference](/docs/rest-management/tax-settings).
+
      > Server URL
      > - For supporting tax providers, the server URL contains the tax providerʼs profile field; for example, `your_profile.example.com`.
      > - The Try it feature is not currently supported for this endpoint.
@@ -78,7 +81,7 @@ export class TaxProviderApi {
     commitTaxQuote(
         requestBody: TaxProviderApiSpecs.CommitTaxQuoteData['body'],
     ) {
-        return this.request.post<TaxProviderApiSpecs.CommitTaxQuoteResponse, TaxProviderApiSpecs.CommitTaxQuoteError>({
+        return this.request.post<RequestSuccessResponse<200, Required<TaxProviderApiSpecs.CommitTaxQuoteResponses[200]>>,(RequestErrorResponse<400, Required<TaxProviderApiSpecs.CommitTaxQuoteErrors[400]>> | RequestErrorResponse<401, Required<TaxProviderApiSpecs.CommitTaxQuoteErrors[401]>> | RequestErrorResponse<500, Required<TaxProviderApiSpecs.CommitTaxQuoteErrors[500]>>)>({
             path: 'https://{app_domain}/commit',
             contentType: 'application/json',
             body: requestBody,
@@ -102,7 +105,7 @@ export class TaxProviderApi {
         requestBody: TaxProviderApiSpecs.AdjustTaxQuoteData['body'],
         query?: TaxProviderApiSpecs.AdjustTaxQuoteData['query'],
     ) {
-        return this.request.post<TaxProviderApiSpecs.AdjustTaxQuoteResponse, TaxProviderApiSpecs.AdjustTaxQuoteError>({
+        return this.request.post<RequestSuccessResponse<200, Required<TaxProviderApiSpecs.AdjustTaxQuoteResponses[200]>>,(RequestErrorResponse<400, Required<TaxProviderApiSpecs.AdjustTaxQuoteErrors[400]>> | RequestErrorResponse<401, Required<TaxProviderApiSpecs.AdjustTaxQuoteErrors[401]>> | RequestErrorResponse<500, Required<TaxProviderApiSpecs.AdjustTaxQuoteErrors[500]>>)>({
             path: 'https://{app_domain}/adjust',
             contentType: 'application/json',
             body: requestBody,

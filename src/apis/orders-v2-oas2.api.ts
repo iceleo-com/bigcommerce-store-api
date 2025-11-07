@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as OrdersV2Oas2ApiSpecs from '../generated/orders-v2-oas2';
 export * as OrdersV2Oas2ApiSpecs from '../generated/orders-v2-oas2';
 
@@ -18,7 +19,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.GetOrderData['path']['order_id'],
         query?: OrdersV2Oas2ApiSpecs.GetOrderData['query'],
     ) {
-        return this.request.get<any, OrdersV2Oas2ApiSpecs.GetOrderError>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderResponses[200]>>,RequestErrorResponse<404, Required<OrdersV2Oas2ApiSpecs.GetOrderErrors[404]>>>({
             path: `v2/orders/${orderId}`,
             query,
         });
@@ -46,12 +47,15 @@ export class OrdersV2Oas2Api {
      * The values for cost_ex_tax, cost_inc_tax and cost_tax in the fees payload should reflect the tax rate associated with the tax_class_id. For a 10% tax rate, the difference between cost_inc_tax and cost_ex_tax should be 10%. If no tax_class_id is provided, the store's default "tax class for fee" will apply. Incorrect data may lead to issues in downstream operations like refunds.
 
      To learn more about creating or updating orders, see [Orders Overview](/docs/store-operations/orders).
+
+     > #### Note
+     > * If historical orders processed on another eCommerce platform are being migrated to BigCommerce, supply the `external_source` field with the code **M-MIG**. This code will exclude the historical orders from the store’s GMV/order count, which factors into pricing.
      */
     updateOrder(
         orderId: OrdersV2Oas2ApiSpecs.UpdateOrderData['path']['order_id'],
         requestBody: OrdersV2Oas2ApiSpecs.UpdateOrderData['body'],
     ) {
-        return this.request.put<any, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.UpdateOrderResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -66,7 +70,7 @@ export class OrdersV2Oas2Api {
     deleteOrder(
         orderId: OrdersV2Oas2ApiSpecs.DeleteOrderData['path']['order_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<OrdersV2Oas2ApiSpecs.DeleteOrderResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}`,
         });
     }
@@ -77,9 +81,11 @@ export class OrdersV2Oas2Api {
      * Gets an array of orders in the store organized by order status.
      */
     getOrdersCount(
+        query?: OrdersV2Oas2ApiSpecs.GetOrdersCountData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrdersCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/orders/count',
+            query,
         });
     }
 
@@ -96,7 +102,7 @@ export class OrdersV2Oas2Api {
     getOrders(
         query?: OrdersV2Oas2ApiSpecs.GetOrdersData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrdersResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/orders',
             query,
         });
@@ -135,12 +141,17 @@ export class OrdersV2Oas2Api {
      * The values for cost_ex_tax, cost_inc_tax and cost_tax in the fees payload should reflect the tax rate associated with the tax_class_id. For a 10% tax rate, the difference between cost_inc_tax and cost_ex_tax should be 10%. If no tax_class_id is provided, the store's default "tax class for fee" will apply. Incorrect data may lead to issues in downstream operations like refunds.
 
      The V2 Orders API will not trigger the typical [Order Email](https://support.bigcommerce.com/s/article/Customizing-Emails?language=en_US) when creating orders. To create an order that does trigger this email, you can instead [create a cart](/docs/rest-management/carts/carts-single#create-a-cart) and [convert that cart into an order](/docs/rest-management/checkouts/checkout-orders#create-an-order).
+
+     If you are building an app that creates orders, it must include your app's ID in the `external_source` field of new orders to be approved for the App Marketplace. See [App Store Approval Requirements](/docs/integrations/apps/guide/requirements#functionality) to learn more.
+
+     > #### Note
+     > * If historical orders processed on another eCommerce platform are being migrated to BigCommerce, supply the `external_source` field with the code **M-MIG**. This code will exclude the historical orders from the store’s GMV/order count, which factors into pricing.
      */
     createOrder(
         requestBody: OrdersV2Oas2ApiSpecs.CreateOrderData['body'],
         query?: OrdersV2Oas2ApiSpecs.CreateOrderData['query'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.CreateOrderResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/orders',
             contentType: 'application/json',
             body: requestBody,
@@ -156,7 +167,7 @@ export class OrdersV2Oas2Api {
     deleteOrders(
         query?: OrdersV2Oas2ApiSpecs.DeleteOrdersData['query'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<OrdersV2Oas2ApiSpecs.DeleteOrdersResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/orders',
             query,
         });
@@ -180,7 +191,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.GetOrderCouponsData['path']['order_id'],
         query?: OrdersV2Oas2ApiSpecs.GetOrderCouponsData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderCouponsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/coupons`,
             query,
         });
@@ -197,7 +208,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.GetOrderProductsData['path']['order_id'],
         query?: OrdersV2Oas2ApiSpecs.GetOrderProductsData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderProductsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/products`,
             query,
         });
@@ -214,7 +225,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.GetOrderShippingAddressesData['path']['order_id'],
         query?: OrdersV2Oas2ApiSpecs.GetOrderShippingAddressesData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderShippingAddressesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/shipping_addresses`,
             query,
         });
@@ -247,7 +258,7 @@ export class OrdersV2Oas2Api {
      */
     getOrderStatuses(
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderStatusesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/order_statuses',
         });
     }
@@ -279,7 +290,7 @@ export class OrdersV2Oas2Api {
     getOrderStatusesStatus(
         statusId: OrdersV2Oas2ApiSpecs.GetOrderStatusesStatusData['path']['status_id'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderStatusesStatusResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/order_statuses/${statusId}`,
         });
     }
@@ -298,7 +309,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.GetOrderTaxesData['path']['order_id'],
         query?: OrdersV2Oas2ApiSpecs.GetOrderTaxesData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderTaxesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/taxes`,
             query,
         });
@@ -313,7 +324,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.GetOrderShipmentsData['path']['order_id'],
         query?: OrdersV2Oas2ApiSpecs.GetOrderShipmentsData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<(RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderShipmentsResponses[200]>> | RequestSuccessResponse<204, Required<OrdersV2Oas2ApiSpecs.GetOrderShipmentsResponses[204]>>),RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/shipments`,
             query,
         });
@@ -358,7 +369,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.CreateOrderShipmentsData['path']['order_id'],
         requestBody: OrdersV2Oas2ApiSpecs.CreateOrderShipmentsData['body'],
     ) {
-        return this.request.post<any, any>({
+        return this.request.post<RequestSuccessResponse<201, Required<OrdersV2Oas2ApiSpecs.CreateOrderShipmentsResponses[201]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/shipments`,
             contentType: 'application/json',
             body: requestBody,
@@ -373,7 +384,7 @@ export class OrdersV2Oas2Api {
     deleteOrderShipments(
         orderId: OrdersV2Oas2ApiSpecs.DeleteOrderShipmentsData['path']['order_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<OrdersV2Oas2ApiSpecs.DeleteOrderShipmentsResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/shipments`,
         });
     }
@@ -386,7 +397,7 @@ export class OrdersV2Oas2Api {
     getOrderShipmentsCount(
         orderId: OrdersV2Oas2ApiSpecs.GetOrderShipmentsCountData['path']['order_id'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderShipmentsCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/shipments/count`,
         });
     }
@@ -400,7 +411,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.GetOrderShipmentData['path']['order_id'],
         shipmentId: OrdersV2Oas2ApiSpecs.GetOrderShipmentData['path']['shipment_id'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderShipmentResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/shipments/${shipmentId}`,
         });
     }
@@ -415,7 +426,7 @@ export class OrdersV2Oas2Api {
         shipmentId: OrdersV2Oas2ApiSpecs.UpdateOrderShipmentData['path']['shipment_id'],
         requestBody: OrdersV2Oas2ApiSpecs.UpdateOrderShipmentData['body'],
     ) {
-        return this.request.put<any, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.UpdateOrderShipmentResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/shipments/${shipmentId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -431,7 +442,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.DeleteOrderShipmentData['path']['order_id'],
         shipmentId: OrdersV2Oas2ApiSpecs.DeleteOrderShipmentData['path']['shipment_id'],
     ) {
-        return this.request.delete<any, any>({
+        return this.request.delete<RequestSuccessResponse<204, Required<OrdersV2Oas2ApiSpecs.DeleteOrderShipmentResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/shipments/${shipmentId}`,
         });
     }
@@ -445,7 +456,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.GetOrderMessagesData['path']['order_id'],
         query?: OrdersV2Oas2ApiSpecs.GetOrderMessagesData['query'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderMessagesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/messages`,
             query,
         });
@@ -460,7 +471,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.GetOrderProductData['path']['order_id'],
         productId: OrdersV2Oas2ApiSpecs.GetOrderProductData['path']['product_id'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderProductResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/products/${productId}`,
         });
     }
@@ -476,7 +487,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.GetOrderShippingAddressData['path']['order_id'],
         id: OrdersV2Oas2ApiSpecs.GetOrderShippingAddressData['path']['id'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderShippingAddressResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/shipping_addresses/${id}`,
         });
     }
@@ -493,7 +504,7 @@ export class OrdersV2Oas2Api {
         id: OrdersV2Oas2ApiSpecs.UpdateOrderShippingAddressData['path']['id'],
         requestBody: OrdersV2Oas2ApiSpecs.UpdateOrderShippingAddressData['body'],
     ) {
-        return this.request.put<OrdersV2Oas2ApiSpecs.UpdateOrderShippingAddressResponse, OrdersV2Oas2ApiSpecs.UpdateOrderShippingAddressError>({
+        return this.request.put<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.UpdateOrderShippingAddressResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV2Oas2ApiSpecs.UpdateOrderShippingAddressErrors[400]>> | RequestErrorResponse<404, Required<OrdersV2Oas2ApiSpecs.UpdateOrderShippingAddressErrors[404]>>)>({
             path: `v2/orders/${orderId}/shipping_addresses/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -511,7 +522,7 @@ export class OrdersV2Oas2Api {
         orderId: OrdersV2Oas2ApiSpecs.GetOrderShippingAddressShippingQuotesData['path']['order_id'],
         shippingAddressId: OrdersV2Oas2ApiSpecs.GetOrderShippingAddressShippingQuotesData['path']['shipping_address_id'],
     ) {
-        return this.request.get<any, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderShippingAddressShippingQuotesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/shipping_addresses/${shippingAddressId}/shipping_quotes`,
         });
     }
@@ -522,9 +533,12 @@ export class OrdersV2Oas2Api {
      * Get all consignments for an order. 
      */
     getOrderConsignments(
+        orderId: OrdersV2Oas2ApiSpecs.GetOrderConsignmentsData['path']['order_id'],
+        query?: OrdersV2Oas2ApiSpecs.GetOrderConsignmentsData['query'],
     ) {
-        return this.request.get<OrdersV2Oas2ApiSpecs.GetOrderConsignmentsResponse, OrdersV2Oas2ApiSpecs.GetOrderConsignmentsError>({
-            path: 'v2/orders/{order_id}/consignments',
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderConsignmentsResponses[200]>>,RequestErrorResponse<404, Required<OrdersV2Oas2ApiSpecs.GetOrderConsignmentsErrors[404]>>>({
+            path: `v2/orders/${orderId}/consignments`,
+            query,
         });
     }
 
@@ -535,9 +549,11 @@ export class OrdersV2Oas2Api {
      This is a read-only endpoint whose response depends on the shipping quote. You can only generate a shipping quote using the storefront at this time. Orders that are created in the control panel, or using the API, return a 204 status response since you can't generate a shipping quote during that process.
      */
     getOrderConsignmentShippingQuotes(
+        orderId: OrdersV2Oas2ApiSpecs.GetOrderConsignmentShippingQuotesData['path']['order_id'],
+        shippingConsignmentId: OrdersV2Oas2ApiSpecs.GetOrderConsignmentShippingQuotesData['path']['shipping_consignment_id'],
     ) {
-        return this.request.get<OrdersV2Oas2ApiSpecs.GetOrderConsignmentShippingQuotesResponse, OrdersV2Oas2ApiSpecs.GetOrderConsignmentShippingQuotesError>({
-            path: 'v2/orders/{order_id}/consignments/shipping/{shipping_consignment_id}/shipping_quotes',
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderConsignmentShippingQuotesResponses[200]>>,RequestErrorResponse<404, Required<OrdersV2Oas2ApiSpecs.GetOrderConsignmentShippingQuotesErrors[404]>>>({
+            path: `v2/orders/${orderId}/consignments/shipping/${shippingConsignmentId}/shipping_quotes`,
         });
     }
 
@@ -547,9 +563,10 @@ export class OrdersV2Oas2Api {
      * Get all fees for an order. 
      */
     getOrderFees(
+        orderId: OrdersV2Oas2ApiSpecs.GetOrderFeesData['path']['order_id'],
     ) {
-        return this.request.get<OrdersV2Oas2ApiSpecs.GetOrderFeesResponse, OrdersV2Oas2ApiSpecs.GetOrderFeesError>({
-            path: 'v2/orders/{order_id}/fees',
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderFeesResponses[200]>>,RequestErrorResponse<404, Required<OrdersV2Oas2ApiSpecs.GetOrderFeesErrors[404]>>>({
+            path: `v2/orders/${orderId}/fees`,
         });
     }
 }

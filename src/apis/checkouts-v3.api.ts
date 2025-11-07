@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as CheckoutsV3ApiSpecs from '../generated/checkouts-v3';
 export * as CheckoutsV3ApiSpecs from '../generated/checkouts-v3';
 
@@ -22,7 +23,7 @@ export class CheckoutsV3Api {
         checkoutId: CheckoutsV3ApiSpecs.GetCheckoutData['path']['checkoutId'],
         query?: CheckoutsV3ApiSpecs.GetCheckoutData['query'],
     ) {
-        return this.request.get<CheckoutsV3ApiSpecs.GetCheckoutResponse, CheckoutsV3ApiSpecs.GetCheckoutError>({
+        return this.request.get<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.GetCheckoutResponses[200]>>,RequestErrorResponse<404, Required<CheckoutsV3ApiSpecs.GetCheckoutErrors[404]>>>({
             path: `v3/checkouts/${checkoutId}`,
             query,
         });
@@ -40,7 +41,7 @@ export class CheckoutsV3Api {
         checkoutId: CheckoutsV3ApiSpecs.UpdateCheckoutData['path']['checkoutId'],
         requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutData['body'],
     ) {
-        return this.request.put<CheckoutsV3ApiSpecs.UpdateCheckoutResponse, CheckoutsV3ApiSpecs.UpdateCheckoutError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.UpdateCheckoutResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.UpdateCheckoutErrors[409]>>>({
             path: `v3/checkouts/${checkoutId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -67,10 +68,11 @@ export class CheckoutsV3Api {
      To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
      */
     addCheckoutDiscount(
+        checkoutId: CheckoutsV3ApiSpecs.AddCheckoutDiscountData['path']['checkoutId'],
         requestBody: CheckoutsV3ApiSpecs.AddCheckoutDiscountData['body'],
     ) {
-        return this.request.post<CheckoutsV3ApiSpecs.AddCheckoutDiscountResponse, CheckoutsV3ApiSpecs.AddCheckoutDiscountError>({
-            path: 'v3/checkouts/{checkoutId}/discounts',
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.AddCheckoutDiscountResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.AddCheckoutDiscountErrors[409]>>>({
+            path: `v3/checkouts/${checkoutId}/discounts`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -88,10 +90,11 @@ export class CheckoutsV3Api {
      To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
      */
     addCheckoutBillingAddress(
+        checkoutId: CheckoutsV3ApiSpecs.AddCheckoutBillingAddressData['path']['checkoutId'],
         requestBody: CheckoutsV3ApiSpecs.AddCheckoutBillingAddressData['body'],
     ) {
-        return this.request.post<CheckoutsV3ApiSpecs.AddCheckoutBillingAddressResponse, CheckoutsV3ApiSpecs.AddCheckoutBillingAddressError>({
-            path: 'v3/checkouts/{checkoutId}/billing-address',
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.AddCheckoutBillingAddressResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.AddCheckoutBillingAddressErrors[409]>>>({
+            path: `v3/checkouts/${checkoutId}/billing-address`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -105,10 +108,12 @@ export class CheckoutsV3Api {
      To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
      */
     updateCheckoutBillingAddress(
+        checkoutId: CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressData['path']['checkoutId'],
+        addressId: CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressData['path']['addressId'],
         requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressData['body'],
     ) {
-        return this.request.put<CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressResponse, CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressError>({
-            path: 'v3/checkouts/{checkoutId}/billing-address/{addressId}',
+        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressErrors[409]>>>({
+            path: `v3/checkouts/${checkoutId}/billing-address/${addressId}`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -138,11 +143,12 @@ export class CheckoutsV3Api {
      * `state_or_province`
      */
     addCheckoutConsignment(
+        checkoutId: CheckoutsV3ApiSpecs.AddCheckoutConsignmentData['path']['checkoutId'],
         requestBody: CheckoutsV3ApiSpecs.AddCheckoutConsignmentData['body'],
         query?: CheckoutsV3ApiSpecs.AddCheckoutConsignmentData['query'],
     ) {
-        return this.request.post<CheckoutsV3ApiSpecs.AddCheckoutConsignmentResponse, CheckoutsV3ApiSpecs.AddCheckoutConsignmentError>({
-            path: 'v3/checkouts/{checkoutId}/consignments',
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.AddCheckoutConsignmentResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.AddCheckoutConsignmentErrors[409]>>>({
+            path: `v3/checkouts/${checkoutId}/consignments`,
             contentType: 'application/json',
             body: requestBody,
             query,
@@ -172,7 +178,7 @@ export class CheckoutsV3Api {
         requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentData['body'],
         query?: CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentData['query'],
     ) {
-        return this.request.put<CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentResponse, CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentError>({
+        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentErrors[409]>>>({
             path: `v3/checkouts/${checkoutId}/consignments/${consignmentId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -192,7 +198,7 @@ export class CheckoutsV3Api {
         consignmentId: CheckoutsV3ApiSpecs.DeleteCheckoutConsignmentData['path']['consignmentId'],
         requestBody: CheckoutsV3ApiSpecs.DeleteCheckoutConsignmentData['body'],
     ) {
-        return this.request.delete<CheckoutsV3ApiSpecs.DeleteCheckoutConsignmentResponse, any>({
+        return this.request.delete<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.DeleteCheckoutConsignmentResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/checkouts/${checkoutId}/consignments/${consignmentId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -215,10 +221,11 @@ export class CheckoutsV3Api {
      To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
      */
     addCheckoutCoupon(
+        checkoutId: CheckoutsV3ApiSpecs.AddCheckoutCouponData['path']['checkoutId'],
         requestBody: CheckoutsV3ApiSpecs.AddCheckoutCouponData['body'],
     ) {
-        return this.request.post<CheckoutsV3ApiSpecs.AddCheckoutCouponResponse, CheckoutsV3ApiSpecs.AddCheckoutCouponError>({
-            path: 'v3/checkouts/{checkoutId}/coupons',
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.AddCheckoutCouponResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.AddCheckoutCouponErrors[409]>>>({
+            path: `v3/checkouts/${checkoutId}/coupons`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -232,10 +239,12 @@ export class CheckoutsV3Api {
      To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
      */
     deleteCheckoutCoupon(
+        checkoutId: CheckoutsV3ApiSpecs.DeleteCheckoutCouponData['path']['checkoutId'],
+        couponCode: CheckoutsV3ApiSpecs.DeleteCheckoutCouponData['path']['couponCode'],
         requestBody: CheckoutsV3ApiSpecs.DeleteCheckoutCouponData['body'],
     ) {
-        return this.request.delete<CheckoutsV3ApiSpecs.DeleteCheckoutCouponResponse, CheckoutsV3ApiSpecs.DeleteCheckoutCouponError>({
-            path: 'v3/checkouts/{checkoutId}/coupons/{couponCode}',
+        return this.request.delete<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.DeleteCheckoutCouponResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.DeleteCheckoutCouponErrors[409]>>>({
+            path: `v3/checkouts/${checkoutId}/coupons/${couponCode}`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -250,10 +259,11 @@ export class CheckoutsV3Api {
        - Maximum of 5 fees per checkout.
      */
     checkoutsFeesByCheckoutIdPost(
+        checkoutId: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPostData['path']['checkoutId'],
         requestBody: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPostData['body'],
     ) {
-        return this.request.post<CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPostResponse, any>({
-            path: 'v3/checkouts/{checkoutId}/fees',
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPostResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/checkouts/${checkoutId}/fees`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -266,10 +276,11 @@ export class CheckoutsV3Api {
      > We do not support partial updates, so please send the total entity values for each fee to be updated.
      */
     checkoutsFeesByCheckoutIdPut(
+        checkoutId: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPutData['path']['checkoutId'],
         requestBody: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPutData['body'],
     ) {
-        return this.request.put<CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPutResponse, any>({
-            path: 'v3/checkouts/{checkoutId}/fees',
+        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPutResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/checkouts/${checkoutId}/fees`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -279,12 +290,17 @@ export class CheckoutsV3Api {
      * Delete order level fees from a checkout.
      *
      * Delete fees from a checkout.
+
+     > #### Note 
+     > * The `Try It` feature is not currently supported for this endpoint.  
+
      */
     checkoutsFeesByCheckoutIdDelete(
+        checkoutId: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdDeleteData['path']['checkoutId'],
         requestBody: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdDeleteData['body'],
     ) {
-        return this.request.delete<CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdDeleteResponse, any>({
-            path: 'v3/checkouts/{checkoutId}/fees',
+        return this.request.delete<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdDeleteResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/checkouts/${checkoutId}/fees`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -303,9 +319,10 @@ export class CheckoutsV3Api {
      * Cart deletion occurs if you are using BigCommerce to accept payments on orders.
      */
     createOrder(
+        checkoutId: CheckoutsV3ApiSpecs.CreateOrderData['path']['checkoutId'],
     ) {
-        return this.request.post<CheckoutsV3ApiSpecs.CreateOrderResponse, any>({
-            path: 'v3/checkouts/{checkoutId}/orders',
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CreateOrderResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/checkouts/${checkoutId}/orders`,
         });
     }
 
@@ -316,7 +333,7 @@ export class CheckoutsV3Api {
      */
     getCheckoutSettings(
     ) {
-        return this.request.get<CheckoutsV3ApiSpecs.GetCheckoutSettingsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.GetCheckoutSettingsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/checkouts/settings',
         });
     }
@@ -329,8 +346,39 @@ export class CheckoutsV3Api {
     updateCheckoutSettings(
         requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutSettingsData['body'],
     ) {
-        return this.request.put<CheckoutsV3ApiSpecs.UpdateCheckoutSettingsResponse, any>({
+        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.UpdateCheckoutSettingsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/checkouts/settings',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Get Channel-Specific Checkout Settings
+     *
+     * Returns the checkout settings for a given channel (storefront) by channelId.
+     */
+    getChannelCheckoutSettings(
+        channelId: CheckoutsV3ApiSpecs.GetChannelCheckoutSettingsData['path']['channelId'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.GetChannelCheckoutSettingsResponses[200]>>,RequestErrorResponse<422, Required<CheckoutsV3ApiSpecs.GetChannelCheckoutSettingsErrors[422]>>>({
+            path: `v3/checkouts/settings/channels/${channelId}`,
+        });
+    }
+
+    /**
+     * Update Channel-Specific Checkout Settings
+     *
+     * Updates the checkout settings for a given channel (storefront) by channelId.
+
+     This endpoint will update all settings included in the request body. Any settings excluded will remain unchanged. All non-boolean 
+     */
+    putChannelCheckoutSettings(
+        channelId: CheckoutsV3ApiSpecs.PutChannelCheckoutSettingsData['path']['channelId'],
+        requestBody: CheckoutsV3ApiSpecs.PutChannelCheckoutSettingsData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.PutChannelCheckoutSettingsResponses[200]>>,RequestErrorResponse<422, Required<CheckoutsV3ApiSpecs.PutChannelCheckoutSettingsErrors[422]>>>({
+            path: `v3/checkouts/settings/channels/${channelId}`,
             contentType: 'application/json',
             body: requestBody,
         });
@@ -346,7 +394,7 @@ export class CheckoutsV3Api {
         checkoutId: CheckoutsV3ApiSpecs.CreateCheckoutTokenData['path']['checkoutId'],
         requestBody: CheckoutsV3ApiSpecs.CreateCheckoutTokenData['body'],
     ) {
-        return this.request.post<CheckoutsV3ApiSpecs.CreateCheckoutTokenResponse, CheckoutsV3ApiSpecs.CreateCheckoutTokenError>({
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CreateCheckoutTokenResponses[200]>>,(RequestErrorResponse<401, Required<CheckoutsV3ApiSpecs.CreateCheckoutTokenErrors[401]>> | RequestErrorResponse<422, Required<CheckoutsV3ApiSpecs.CreateCheckoutTokenErrors[422]>>)>({
             path: `v3/checkouts/${checkoutId}/token`,
             contentType: 'application/json',
             body: requestBody,

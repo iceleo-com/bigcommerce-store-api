@@ -1,4 +1,5 @@
 import RequestService from '../helpers/request/request-service';
+import type { RequestSuccessResponse, RequestErrorResponse } from '../helpers/request/request-service.types';
 import * as InventoryV3ApiSpecs from '../generated/inventory-v3';
 export * as InventoryV3ApiSpecs from '../generated/inventory-v3';
 
@@ -12,15 +13,17 @@ export class InventoryV3Api {
     /**
      * Absolute Adjustment
      *
-     * Override the existing inventory levels for an inventory item at a location. For maximum inventory levels, see [Inventory adjustments](/docs/store-operations/catalog/inventory-adjustments#inventory-adjustments). For payload limits, see [Optimizing performance](/docs/store-operations/catalog/inventory-adjustments#optimizing-performance).
+     * Override the existing inventory levels for an inventory item at a location. Use absolute adjustments as the default method for updating inventory. This endpoint batches requests, making them more resource friendly than the [Catalog API](/docs/rest-catalog/products#update-products-batch). Absolute adjustments have lower complexity than [relative adjustments](/docs/rest-management/inventory/adjustments#relative-adjustment), which synchronize with orders.
 
-     Use absolute adjustments as the default method for updating inventory. This endpoint batches requests, making them more resource friendly than the [Catalog API](/docs/rest-catalog/products#update-products-batch). Absolute adjustments have lower complexity than [relative adjustments](/docs/rest-management/inventory/adjustments#relative-adjustment), which synchronize with orders.
+     **Limits**
+     * For maximum inventory levels, see [Inventory adjustments](/docs/store-operations/catalog/inventory-adjustments#inventory-adjustments). 
+     * Limit of 2000 items for payload length, see [Optimizing performance](/docs/store-operations/catalog/inventory-adjustments#optimizing-performance) for more information.
 
      */
     putAbsoluteAdjustment(
         requestBody: InventoryV3ApiSpecs.PutAbsoluteAdjustmentData['body'],
     ) {
-        return this.request.put<InventoryV3ApiSpecs.PutAbsoluteAdjustmentResponse, InventoryV3ApiSpecs.PutAbsoluteAdjustmentError>({
+        return this.request.put<RequestSuccessResponse<200, Required<InventoryV3ApiSpecs.PutAbsoluteAdjustmentResponses[200]>>,RequestErrorResponse<422, Required<InventoryV3ApiSpecs.PutAbsoluteAdjustmentErrors[422]>>>({
             path: 'v3/inventory/adjustments/absolute',
             contentType: 'application/json',
             body: requestBody,
@@ -30,15 +33,17 @@ export class InventoryV3Api {
     /**
      * Relative Adjustment
      *
-     * Add or subtract inventory for an inventory item at a location. For maximum inventory levels, see [Inventory adjustments](/docs/store-operations/catalog/inventory-adjustments#inventory-adjustments). For payload limits, see [Optimizing performance](/docs/store-operations/catalog/inventory-adjustments#optimizing-performance).
+     * Add or subtract inventory for an inventory item at a location. Use this endpoint only when you do not know absolute quantities. For example, making order-related inventory changes through a third-party may require relative adjustments. Otherwise, use the [Absolute adjustment](/docs/rest-management/inventory/adjustments#absolute-adjustment) endpoint for updating inventory.
 
-     Use this endpoint only when you do not know absolute quantities. For example, making order-related inventory changes through a third-party may require relative adjustments. Otherwise, use the [Absolute adjustment](/docs/rest-management/inventory/adjustments#absolute-adjustment) endpoint for updating inventory.
+     **Limits**
+     * For maximum inventory levels, see [Inventory adjustments](/docs/store-operations/catalog/inventory-adjustments#inventory-adjustments). 
+     * Limit of 2000 items for payload length, see [Optimizing performance](/docs/store-operations/catalog/inventory-adjustments#optimizing-performance) for more information.
 
      */
     postRelativeAdjustment(
         requestBody: InventoryV3ApiSpecs.PostRelativeAdjustmentData['body'],
     ) {
-        return this.request.post<InventoryV3ApiSpecs.PostRelativeAdjustmentResponse, InventoryV3ApiSpecs.PostRelativeAdjustmentError>({
+        return this.request.post<RequestSuccessResponse<200, Required<InventoryV3ApiSpecs.PostRelativeAdjustmentResponses[200]>>,RequestErrorResponse<422, Required<InventoryV3ApiSpecs.PostRelativeAdjustmentErrors[422]>>>({
             path: 'v3/inventory/adjustments/relative',
             contentType: 'application/json',
             body: requestBody,
@@ -50,11 +55,14 @@ export class InventoryV3Api {
      *
      * Return a list of inventory and inventory settings for all items in all locations.
 
+     **Limits**
+     * Limit of 1000 items for payload length.
+
      */
     getInventoryItems(
         query?: InventoryV3ApiSpecs.GetInventoryItemsData['query'],
     ) {
-        return this.request.get<InventoryV3ApiSpecs.GetInventoryItemsResponse, any>({
+        return this.request.get<RequestSuccessResponse<200, Required<InventoryV3ApiSpecs.GetInventoryItemsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/inventory/items',
             query,
         });
@@ -64,12 +72,17 @@ export class InventoryV3Api {
      * Get Inventory at a Location
      *
      * Return a list of inventory and inventory settings for all items in a location.
+
+     **Limits**
+     * Limit of 1000 items for payload length.
+
      */
     getLocationInventoryItems(
+        locationId: InventoryV3ApiSpecs.GetLocationInventoryItemsData['path']['location_id'],
         query?: InventoryV3ApiSpecs.GetLocationInventoryItemsData['query'],
     ) {
-        return this.request.get<InventoryV3ApiSpecs.GetLocationInventoryItemsResponse, InventoryV3ApiSpecs.GetLocationInventoryItemsError>({
-            path: 'v3/inventory/locations/{location_id}/items',
+        return this.request.get<RequestSuccessResponse<200, Required<InventoryV3ApiSpecs.GetLocationInventoryItemsResponses[200]>>,RequestErrorResponse<404, Required<InventoryV3ApiSpecs.GetLocationInventoryItemsErrors[404]>>>({
+            path: `v3/inventory/locations/${locationId}/items`,
             query,
         });
     }
@@ -77,13 +90,19 @@ export class InventoryV3Api {
     /**
      * Update Inventory Settings for a Location
      *
-     * Update inventory settings for items at a location.
+     * 
+     Update inventory settings for items at a location.
+
+     **Limits**
+     * Limit of 2000 items for payload length.
+
      */
     putLocationInventoryItems(
+        locationId: InventoryV3ApiSpecs.PutLocationInventoryItemsData['path']['location_id'],
         requestBody: InventoryV3ApiSpecs.PutLocationInventoryItemsData['body'],
     ) {
-        return this.request.put<InventoryV3ApiSpecs.PutLocationInventoryItemsResponse, InventoryV3ApiSpecs.PutLocationInventoryItemsError>({
-            path: 'v3/inventory/locations/{location_id}/items',
+        return this.request.put<RequestSuccessResponse<200, Required<InventoryV3ApiSpecs.PutLocationInventoryItemsResponses[200]>>,RequestErrorResponse<422, Required<InventoryV3ApiSpecs.PutLocationInventoryItemsErrors[422]>>>({
+            path: `v3/inventory/locations/${locationId}/items`,
             contentType: 'application/json',
             body: requestBody,
         });
