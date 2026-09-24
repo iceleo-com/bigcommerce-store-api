@@ -1,6 +1,21 @@
+const fs = require('fs');
+const path = require('path');
 const readline = require('readline');
 
+const credentialsPath = path.resolve(__dirname, '../bigcommerce-credentials.json');
+
 module.exports = async () => {
+    if (fs.existsSync(credentialsPath)) {
+        const { storeHash, accessToken } = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
+
+        if (storeHash && accessToken) {
+            console.log(`Using credentials from ${path.basename(credentialsPath)}`);
+            process.env.STORE_HASH = storeHash;
+            process.env.ACCESS_TOKEN = accessToken;
+            return;
+        }
+    }
+
     await new Promise((resolve) => {
         console.log('Please provide store hash and access token');
 

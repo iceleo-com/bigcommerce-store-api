@@ -128,3 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# BigCommerce API credentials
+bigcommerce-credentials.json
