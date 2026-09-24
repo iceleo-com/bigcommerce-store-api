@@ -47,7 +47,7 @@ export type ProductOptionFull = {
     product_id?: number;
     display_name?: string;
     type?: ProductOptionBaseType;
-    config?: ProductOptionConfigFull;
+    config?: ProductOptionConfigFull | [];
     sort_order?: number;
     option_values?: Array<ProductOptionOptionValueFull>;
     name?: string;
@@ -157,7 +157,7 @@ export type CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSc
     is_default?: boolean;
     label: string;
     sort_order: number;
-    value_data?: CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSchemaDataOptionValuesItemsValueData;
+    value_data?: CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSchemaDataOptionValuesItemsValueData | null;
     id?: number;
 };
 export type CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSchemaData = {
@@ -165,7 +165,7 @@ export type CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSc
     product_id?: number;
     display_name?: string;
     type?: CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSchemaDataType;
-    config?: CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSchemaDataConfig;
+    config?: CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSchemaDataConfig | [];
     sort_order?: number;
     option_values?: Array<CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSchemaDataOptionValuesItems>;
     image_url?: string;
@@ -287,7 +287,7 @@ export type CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicatio
     is_default?: boolean;
     label: string;
     sort_order: number;
-    value_data?: CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicationJsonSchemaDataOptionValuesItemsValueData;
+    value_data?: CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicationJsonSchemaDataOptionValuesItemsValueData | null;
     id?: number;
 };
 export type CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicationJsonSchemaData = {
@@ -295,7 +295,7 @@ export type CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicatio
     product_id?: number;
     display_name?: string;
     type?: CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicationJsonSchemaDataType;
-    config?: CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicationJsonSchemaDataConfig;
+    config?: CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicationJsonSchemaDataConfig | [];
     sort_order?: number;
     option_values?: Array<CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicationJsonSchemaDataOptionValuesItems>;
     image_url?: string;
@@ -331,7 +331,7 @@ export type CatalogProductsProductIdOptionsOptionIdValuesGetResponsesContentAppl
     is_default?: boolean;
     label: string;
     sort_order: number;
-    value_data?: CatalogProductsProductIdOptionsOptionIdValuesGetResponsesContentApplicationJsonSchemaDataItemsValueData;
+    value_data?: CatalogProductsProductIdOptionsOptionIdValuesGetResponsesContentApplicationJsonSchemaDataItemsValueData | null;
     id?: number;
 };
 export type ValuesGetProductVariantOptionValuesResponse200 = {
@@ -348,7 +348,7 @@ export type CatalogProductsProductIdOptionsOptionIdValuesPostResponsesContentApp
     is_default?: boolean;
     label: string;
     sort_order: number;
-    value_data?: CatalogProductsProductIdOptionsOptionIdValuesPostResponsesContentApplicationJsonSchemaDataValueData;
+    value_data?: CatalogProductsProductIdOptionsOptionIdValuesPostResponsesContentApplicationJsonSchemaDataValueData | null;
     id?: number;
 };
 export type ValuesCreateProductVariantOptionValueResponse200 = {
@@ -374,7 +374,7 @@ export type CatalogProductsProductIdOptionsOptionIdValuesValueIdGetResponsesCont
     is_default?: boolean;
     label: string;
     sort_order: number;
-    value_data?: CatalogProductsProductIdOptionsOptionIdValuesValueIdGetResponsesContentApplicationJsonSchemaDataValueData;
+    value_data?: CatalogProductsProductIdOptionsOptionIdValuesValueIdGetResponsesContentApplicationJsonSchemaDataValueData | null;
     id?: number;
 };
 export type ValuesGetProductVariantOptionValueResponse200 = {
@@ -397,7 +397,7 @@ export type CatalogProductsProductIdOptionsOptionIdValuesValueIdPutResponsesCont
     is_default?: boolean;
     label: string;
     sort_order: number;
-    value_data?: CatalogProductsProductIdOptionsOptionIdValuesValueIdPutResponsesContentApplicationJsonSchemaDataValueData;
+    value_data?: CatalogProductsProductIdOptionsOptionIdValuesValueIdPutResponsesContentApplicationJsonSchemaDataValueData | null;
     id?: number;
 };
 export type ValuesUpdateProductVariantOptionValueResponse200 = {

@@ -804,7 +804,7 @@ export type CollectionMeta = {
  */
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 
 /**
@@ -1270,7 +1270,7 @@ export type MetafieldFull = {
  */
 export type MetafieldsGetCategoryMetafieldsResponse200 = {
     data?: Array<MetafieldFull>;
-    meta?: MetaCollectionFull;
+    meta?: MetaCollectionFull & MetafieldCursorPaginationMeta;
 };
 
 /**
@@ -1474,10 +1474,26 @@ export type ProductSortOrder = {
 };
 
 /**
+ * productSortOrder_Full
+ *
+ * A product sort order as returned by the API.
+ */
+export type ProductSortOrderFull = {
+    /**
+     * The ID of the associated product.
+     */
+    product_id: number;
+    /**
+     * The relative priority of the product among other products inside the category. `null` when no sort order has been set.
+     */
+    sort_order: number | null;
+};
+
+/**
  * Sort order_getCategorySortOrders_Response_200
  */
 export type SortOrderGetCategorySortOrdersResponse200 = {
-    data?: Array<ProductSortOrder>;
+    data?: Array<ProductSortOrderFull>;
     meta?: MetaCollectionFull;
 };
 
@@ -2705,7 +2721,45 @@ export type UpdateCategorySortOrdersResponses = {
     /**
      * OK
      */
-    200: Array<ProductSortOrder>;
+    200: Array<ProductSortOrderFull>;
 };
 
 export type UpdateCategorySortOrdersResponse = UpdateCategorySortOrdersResponses[keyof UpdateCategorySortOrdersResponses];
+
+/**
+ * MetafieldCursorPaginationLinks
+ *
+ * Links to the previous and next pages of the collection; empty when there are no other pages.
+ */
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+
+/**
+ * MetafieldCursorPagination
+ *
+ * Cursor based pagination of a metafield collection. `start_cursor` and `end_cursor` are omitted when the collection is empty.
+ */
+export type MetafieldCursorPagination = {
+    /**
+     * Number of items in the current page.
+     */
+    count?: number;
+    /**
+     * The number of items per page, controlled by the `limit` parameter.
+     */
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+
+/**
+ * MetafieldCursorPaginationMeta
+ *
+ * Metafield collections return `cursor_pagination` next to the offset based `pagination`.
+ */
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

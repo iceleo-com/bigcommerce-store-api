@@ -70,6 +70,14 @@ export type BlogPostFull = {
      * ID of this blog post. READ-ONLY.
      */
     id?: number;
+    /**
+     * The preview code used in `preview_url` for unpublished posts. READ-ONLY.
+     */
+    preview_code?: string;
+    /**
+     * The tags as a comma-separated string. Returned only by Get a Blog Post.
+     */
+    tags_as_string: string | undefined;
 };
 
 /**
@@ -304,6 +312,91 @@ export type PageFull = {
 };
 
 /**
+ * PageFullRes
+ *
+ * A page as returned by the API. The keys that depend on the page type are `T | undefined`
+ * (e.g. `link` pages have no `body`, `url` or SEO fields; `email` and `contact_fields` only exist on `contact_form` pages).
+ */
+export type PageFullRes = {
+    id: number;
+    channel_id: number;
+    /**
+     * The name of the page. Must be unique.
+     */
+    name: string;
+    /**
+     * If true, this page appears in the storefront navigation menu.
+     */
+    is_visible: boolean;
+    /**
+     * ID of any parent Web page.
+     */
+    parent_id: number;
+    /**
+     * Order in which this page should display on the storefront. (Lower integers specify earlier display.)
+     */
+    sort_order: number;
+    type: PageBaseResType | 'blog_index';
+    /**
+     * If true, this page is the storefront’s home page.
+     */
+    is_homepage: boolean;
+    /**
+     * If true, this page is for customers only.
+     */
+    is_customers_only: boolean;
+    /**
+     * Text specified for this page's `<title>` element. If empty, the value of the name property is used.
+     */
+    meta_title: string | undefined;
+    /**
+     * HTML or variable that populates this page’s `<body>` element, in default/desktop view.
+     */
+    body: string | undefined;
+    /**
+     * Comma-separated list of SEO-relevant keywords to include in the page's `<meta/>` element.
+     */
+    meta_keywords: string | null | undefined;
+    /**
+     * Description contained within this page’s `<meta/>` element.
+     */
+    meta_description: string | undefined;
+    /**
+     * Layout template for this page.
+     */
+    layout_file: string | undefined;
+    /**
+     * Comma-separated list of keywords that shoppers can use to locate this page when searching the store.
+     */
+    search_keywords: string | undefined;
+    /**
+     * If true, this page has a mobile version. (For Blueprint themes only)
+     */
+    has_mobile_version: boolean | undefined;
+    /**
+     * HTML to use for this page’s body when viewed in the mobile template (deprecated - Blueprint only).
+     */
+    mobile_body: string | null | undefined;
+    /**
+     * Relative URL on the storefront for this page.
+     */
+    url: string | undefined;
+    /**
+     * If page type is `link`, this field is returned.
+     */
+    link: string | undefined;
+    /**
+     * Where the page’s type is a contact form, the email address that receives messages sent using the form.
+     */
+    email: string | undefined;
+    /**
+     * Where the page’s type is a contact form, the fields enabled for storefront display.
+     */
+    contact_fields: string | undefined;
+    content_type: PageBaseResContentType | undefined;
+};
+
+/**
  * PageBaseType
  *
  * `page`: free-text page
@@ -418,8 +511,9 @@ export type Forward = {
     type?: string;
     /**
      * Reference of the redirect. Dynamic redirects will have the category or product number. Manual redirects will have the url that is being directed to.
+     * The API returns the reference as a string.
      */
-    ref?: number;
+    ref?: number | string;
 };
 
 /**
@@ -680,7 +774,7 @@ export type GetBlogTagsResponses = {
     /**
      * OK
      */
-    200: Array<BlogTags>;
+    200: BlogTags;
 };
 
 export type GetBlogTagsResponse = GetBlogTagsResponses[keyof GetBlogTagsResponses];
@@ -711,7 +805,7 @@ export type GetPagesResponses = {
     /**
      * OK
      */
-    200: Array<PageFull>;
+    200: Array<PageFullRes>;
 };
 
 export type GetPagesResponse = GetPagesResponses[keyof GetPagesResponses];
@@ -733,7 +827,7 @@ export type CreatePageResponses = {
     /**
      * OK
      */
-    200: PageFull;
+    200: PageFullRes;
 };
 
 export type CreatePageResponse = CreatePageResponses[keyof CreatePageResponses];
@@ -789,7 +883,7 @@ export type GetPageResponses = {
     /**
      * OK
      */
-    200: PageFull;
+    200: PageFullRes;
 };
 
 export type GetPageResponse = GetPageResponses[keyof GetPageResponses];
@@ -816,7 +910,7 @@ export type UpdatePageResponses = {
     /**
      * OK
      */
-    200: PageFull;
+    200: PageFullRes;
 };
 
 export type UpdatePageResponse = UpdatePageResponses[keyof UpdatePageResponses];

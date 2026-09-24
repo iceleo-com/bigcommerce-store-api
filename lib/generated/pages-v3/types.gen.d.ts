@@ -2,7 +2,7 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3/stores/{store_hash}/v3' | (string & {});
 };
 export type ContentPagesGetParametersIncludeSchemaItems = 'body';
-export type TypePageType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypePageType = 'page';
 export type TypePage = {
     id?: number;
     channel_id?: number;
@@ -18,8 +18,9 @@ export type TypePage = {
     meta_keywords?: string | null;
     meta_description?: string | null;
     search_keywords?: string | null;
+    body?: string | null;
 };
-export type TypeBlogType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypeBlogType = 'blog';
 export type TypeBlog = {
     id?: number;
     channel_id?: number;
@@ -36,7 +37,7 @@ export type TypeBlog = {
     meta_description?: string | null;
     search_keywords?: string | null;
 };
-export type TypeContactFormType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypeContactFormType = 'contact_form';
 export type TypeContactForm = {
     id?: number;
     channel_id?: number;
@@ -54,8 +55,9 @@ export type TypeContactForm = {
     search_keywords?: string | null;
     email?: string;
     contact_fields?: string;
+    body?: string | null;
 };
-export type TypeRawType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypeRawType = 'raw';
 export type TypeRaw = {
     id?: number;
     channel_id?: number;
@@ -71,7 +73,7 @@ export type TypeRaw = {
     body: string | null;
     content_type?: string;
 };
-export type TypeLinkType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypeLinkType = 'link';
 export type TypeLink = {
     id?: number;
     channel_id?: number;
@@ -85,7 +87,19 @@ export type TypeLink = {
     url?: string;
     link: string;
 };
-export type PagesCollectionResponseDataItems = TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+export type PageResponseTypePage = Omit<TypePage, 'body'> & {
+    body: string | null | undefined;
+};
+export type PageResponseTypeBlog = Omit<TypeBlog, 'meta_title' | 'meta_keywords' | 'meta_description' | 'search_keywords'>;
+export type PageResponseTypeContactForm = Omit<TypeContactForm, 'body'> & {
+    body: string | null | undefined;
+};
+export type PageResponseTypeRaw = Omit<TypeRaw, 'body'> & {
+    body: string | null | undefined;
+};
+export type PageResponseTypeLink = Omit<TypeLink, 'url'>;
+export type PageResponse = PageResponseTypePage | PageResponseTypeBlog | PageResponseTypeContactForm | PageResponseTypeRaw | PageResponseTypeLink;
+export type PagesCollectionResponseDataItems = PageResponse;
 export type ResponseMetaPaginationLinks = {
     previous?: string;
     current?: string;
@@ -123,7 +137,7 @@ export type PagesBulkCreatePagesRequest0 = TypePage | TypeBlog | TypeContactForm
 export type ContentPagesPostRequestBodyContentApplicationJsonSchemaOneOf1Items = TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
 export type PagesBulkCreatePagesRequest1 = Array<ContentPagesPostRequestBodyContentApplicationJsonSchemaOneOf1Items>;
 export type PagesBulkCreatePagesRequest = PagesBulkCreatePagesRequest0 | PagesBulkCreatePagesRequest1;
-export type ContentPagesPostResponsesContentApplicationJsonSchemaData = TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+export type ContentPagesPostResponsesContentApplicationJsonSchemaData = PageResponse;
 export type PagesBulkCreatePagesResponse201 = {
     data?: ContentPagesPostResponsesContentApplicationJsonSchemaData;
     meta?: ResponseMeta;
@@ -158,7 +172,7 @@ export type ResponseErrorBrief = {
     type?: string;
 };
 export type ContentPagesPageIdGetParametersIncludeSchemaItems = 'body';
-export type SinglePageResponseData = TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+export type SinglePageResponseData = PageResponse;
 export type SinglePageResponse = {
     data?: SinglePageResponseData;
     meta?: ResponseMeta;

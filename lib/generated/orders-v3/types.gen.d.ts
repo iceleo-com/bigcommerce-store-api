@@ -2,8 +2,8 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3' | (string & {});
 };
 export type TransactionEvent = 'purchase' | 'authorization' | 'capture' | 'refund' | 'void' | 'pending' | 'settled';
-export type TransactionMethod = 'credit_card' | 'electronic_wallet' | 'gift_certificate' | 'store_credit' | 'apple_pay_card' | 'bigpay_token' | 'apple_pay_token' | 'token' | 'custom' | 'offsite' | 'offline' | 'nonce';
-export type TransactionGateway = '2checkout' | 'adyen' | 'amazon' | 'authorizenet' | 'bankdeposit' | 'braintree' | 'cheque' | 'cod' | 'custom' | 'firstdatagge4' | 'giftcertificate' | 'hps' | 'instore' | 'klarna' | 'migs' | 'moneyorder' | 'nmi' | 'paypalexpress' | 'paypalpaymentsprous' | 'plugnpay' | 'qbmsv2' | 'securenet' | 'square' | 'storecredit' | 'stripe' | 'testgateway' | 'usaepay';
+export type TransactionMethod = 'credit_card' | 'electronic_wallet' | 'gift_certificate' | 'store_credit' | 'apple_pay_card' | 'bigpay_token' | 'apple_pay_token' | 'token' | 'custom' | 'offsite' | 'offline' | 'nonce' | 'paypal';
+export type TransactionGateway = '2checkout' | 'adyen' | 'amazon' | 'authorizenet' | 'bankdeposit' | 'braintree' | 'cheque' | 'cod' | 'custom' | 'firstdatagge4' | 'giftcertificate' | 'hps' | 'instore' | 'klarna' | 'migs' | 'moneyorder' | 'nmi' | 'paypalexpress' | 'paypalpaymentsprous' | 'plugnpay' | 'qbmsv2' | 'securenet' | 'square' | 'storecredit' | 'stripe' | 'testgateway' | 'usaepay' | 'paypalcommerce';
 export type TransactionStatus = 'ok' | 'error';
 export type TransactionOffline = {
     display_name?: string;
@@ -26,8 +26,8 @@ export type CreditCard = {
     card_type?: CreditCardCardType;
     card_iin?: string;
     card_last4?: string;
-    card_expiry_month?: number;
-    card_expiry_year?: number;
+    card_expiry_month?: number | null;
+    card_expiry_year?: number | null;
 };
 export type TransactionGiftCertificateStatus = 'active' | 'pending' | 'disabled' | 'expired';
 export type TransactionGiftCertificate = {
@@ -49,14 +49,14 @@ export type TransactionCustomProviderFieldResult = {
 export type Transaction = {
     event: TransactionEvent;
     method: TransactionMethod;
-    amount: string;
+    amount: number;
     currency: string;
     gateway: TransactionGateway;
     gateway_transaction_id?: string;
     test?: boolean;
     status?: TransactionStatus;
     fraud_review?: boolean;
-    reference_transaction_id?: number;
+    reference_transaction_id?: number | null;
     offline?: TransactionOffline | null;
     custom?: TransactionCustom | null;
     payment_method_id?: string;
@@ -64,11 +64,11 @@ export type Transaction = {
     order_id?: string;
     date_created?: string;
     payment_instrument_token?: string | null;
-    provider_instrument_token?: string | null;
-    provider_customer_id?: string | null;
+    provider_instrument_token: string | null | undefined;
+    provider_customer_id: string | null | undefined;
     avs_result?: TransactionAvsResult;
     cvv_result?: TransactionCvvResult;
-    credit_card?: CreditCard;
+    credit_card?: CreditCard | null;
     gift_certificate?: TransactionGiftCertificate | null;
     store_credit?: TransactionStoreCredit | null;
     custom_provider_field_result?: TransactionCustomProviderFieldResult | null;
@@ -139,7 +139,7 @@ export type CollectionMeta = {
 };
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 export type OrdersMetafieldsPostRequestBodyContentApplicationJsonSchemaItemsPermissionSet = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
 export type OrdersMetafieldsPostRequestBodyContentApplicationJsonSchemaItems = {
@@ -457,18 +457,18 @@ export type RefundItem = {
     item_type?: RefundItemItemType;
     item_id?: number;
     reason?: string;
-    quantity?: number;
+    quantity?: number | null;
     adjustments?: Array<RefundItemAdjustment>;
-    requested_amount?: Amount;
+    requested_amount?: number | null;
 };
 export type RefundPayment = {
     id?: number;
     provider_id?: string;
-    amount?: Amount;
+    amount?: number;
     offline?: boolean;
     is_declined?: boolean;
     declined_message?: string;
-    transaction_id?: string;
+    transaction_id?: string | null;
 };
 export type Refund = {
     id?: number;
@@ -476,7 +476,7 @@ export type Refund = {
     user_id?: number;
     created?: string;
     reason?: string;
-    total_amount?: Amount;
+    total_amount?: number;
     total_tax?: number;
     uses_merchant_override_values?: boolean;
     items?: Array<RefundItem>;
@@ -484,7 +484,7 @@ export type Refund = {
 };
 export type PaymentActionsGetOrderRefundsResponse200 = {
     data?: Array<Refund>;
-    meta?: MetaEmptyFull;
+    meta?: CollectionMeta;
 };
 export type PaymentRequest = {
     provider_id?: string;
@@ -544,14 +544,16 @@ export type RefundIdGetDataPaymentsItems = {
     offline?: boolean;
     is_declined?: boolean;
     declined_message?: string;
+    transaction_id?: string | null;
 };
 export type RefundIdGetDataItemsItemsItemType = 'PRODUCT' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'ORDER' | 'FEE';
 export type RefundIdGetDataItemsItems = {
     item_type?: RefundIdGetDataItemsItemsItemType;
     item_id?: number;
-    quantity?: number;
-    requested_amount?: string | null;
+    quantity?: number | null;
+    requested_amount?: number | null;
     reason?: string;
+    adjustments?: Array<RefundItemAdjustment>;
 };
 export type RefundIdGetData = {
     id?: number;
@@ -571,7 +573,7 @@ export type RefundIdGet = {
 };
 export type PaymentActionsGetOrdersRefundsResponse200 = {
     data?: Array<Refund>;
-    meta?: MetaEmptyFull;
+    meta?: CollectionMeta;
 };
 export type GetOrderTransactionsData = {
     body?: never;
@@ -1004,3 +1006,17 @@ export type GetOrdersRefundsResponses = {
     200: PaymentActionsGetOrdersRefundsResponse200;
 };
 export type GetOrdersRefundsResponse = GetOrdersRefundsResponses[keyof GetOrdersRefundsResponses];
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+export type MetafieldCursorPagination = {
+    count?: number;
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

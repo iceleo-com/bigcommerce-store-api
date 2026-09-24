@@ -247,11 +247,11 @@ export type CouponFull = {
      * Maximum number of times each customer can use this coupon.
      */
     max_uses_per_customer?: number;
-    restricted_to?: CouponBaseRestrictedTo;
+    restricted_to?: CouponBaseRestrictedTo | [];
     /**
      * This is a list of shipping-method names. A shipping method must be enabled on the store to use it with a coupon. To check which shipping methods are enabled, please use the [List Shipping Methods](/developer/docs/archive/store-operations/v2-catalog-products/v2-products#list-shipping-methods) endpoint.
      */
-    shipping_methods?: Array<string>;
+    shipping_methods?: Array<string> | null;
     /**
      * The coupon's ID. This is a read-only field; do not set or modify its value in a POST or PUT request.
      */
@@ -326,7 +326,7 @@ export type CouponsGetCouponsCountResponse200 = {
  *
  * The email theme to use in the message sent to the recipient.
  */
-export type GiftCertificateFullTemplate = 'birthday.html' | 'girl.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html';
+export type GiftCertificateFullTemplate = 'birthday.html' | 'girl.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'Birthday.html' | 'Girl.html' | 'Boy.html' | 'Celebration.html' | 'Christmas.html' | 'General.html';
 
 /**
  * GiftCertificateFullStatus
@@ -362,13 +362,13 @@ export type GiftCertificateFull = {
      */
     id?: number;
     /**
-     * The ID of the customer placing the order.
+     * The ID of the customer placing the order, as a numeric string (`"0"` for guests).
      */
-    customer_id?: number;
+    customer_id?: string;
     /**
-     * The ID of the order.
+     * The ID of the order, as a numeric string.
      */
-    order_id?: number;
+    order_id?: string;
     /**
      * Remaining value of the gift certificate. If not set, will default to the amount.
      */

@@ -3,7 +3,7 @@ export type ClientOptions = {
 };
 export type CurrencyFull = {
     is_default?: boolean;
-    country_iso2?: string;
+    country_iso2?: string | null;
     default_for_country_codes?: Array<string>;
     currency_code?: string;
     currency_exchange_rate?: string;

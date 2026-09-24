@@ -494,7 +494,7 @@ export type GetSubscribersData = {
         Accept: string;
     };
     path?: never;
-    query: {
+    query?: {
         /**
          * Filter items by email.
          *
@@ -567,7 +567,7 @@ export type GetSubscribersData = {
          * Filter items by ID.
          *
          */
-        id: number;
+        id?: number;
         /**
          * Filter items by ID.
          * `id:in=4,5,6`

@@ -6,30 +6,101 @@ export type WidgetBaseWidgetConfiguration = {
     [key: string]: unknown;
 };
 export type WidgetSchemaTabType = 'tab';
-export type WidgetSchemaTabSectionsItemsSettingsItemsType = 'alignment' | 'boolean' | 'boxModel' | 'code' | 'color' | 'imageManager' | 'input' | 'number' | 'productId' | 'productImage' | 'range' | 'regexInput' | 'select' | 'text' | 'toggle';
+export type WidgetSchemaSettingDefaultAlignment = {
+    horizontal?: string;
+    vertical?: string;
+};
+export type WidgetSchemaSettingDimension = {
+    value?: string | number;
+    type?: string;
+};
+export type WidgetSchemaSettingDefaultBoxModel = {
+    top?: WidgetSchemaSettingDimension;
+    right?: WidgetSchemaSettingDimension;
+    bottom?: WidgetSchemaSettingDimension;
+    left?: WidgetSchemaSettingDimension;
+};
+export type WidgetSchemaSettingDefaultImage = {
+    src?: string;
+    type?: string;
+};
+export type WidgetSchemaSettingDefaultProductSet = {
+    type?: string;
+    value?: Array<{
+        productId?: string | number;
+        [key: string]: unknown;
+    }>;
+};
+export type WidgetSchemaSettingDefault = string | number | boolean | WidgetSchemaSettingDefaultAlignment | WidgetSchemaSettingDefaultBoxModel | WidgetSchemaSettingDefaultImage | WidgetSchemaSettingDimension | WidgetSchemaSettingDefaultProductSet;
+export type WidgetSchemaSettingTypeMetaRangeValues = {
+    min?: number;
+    max?: number;
+    step?: number;
+    unit?: string;
+};
+export type WidgetSchemaSettingTypeMetaRegExPattern = {
+    pattern?: string;
+    matchIndex?: number;
+    configKey?: string;
+};
+export type WidgetSchemaSettingTypeMetaConditionalSettings = {
+    condition?: string;
+    settings?: Array<WidgetSchemaTabSectionsItemsSettingsItems>;
+};
+export type WidgetSchemaSettingTypeMetaControls = {
+    visibility?: {
+        default?: string;
+    };
+    advanced?: {
+        label?: string;
+        settings?: Array<WidgetSchemaTabSectionsItemsSettingsItems>;
+    };
+};
+export type WidgetSchemaSettingTypeMetaMapping = {
+    reads?: string;
+    type?: string;
+};
+export type WidgetSchemaSettingTypeMeta = {
+    placeholder?: string;
+    language?: string;
+    display?: string;
+    rangeValues?: WidgetSchemaSettingTypeMetaRangeValues;
+    parseType?: string;
+    regExPatterns?: Array<WidgetSchemaSettingTypeMetaRegExPattern>;
+    conditionalSettings?: Array<WidgetSchemaSettingTypeMetaConditionalSettings>;
+    controls?: WidgetSchemaSettingTypeMetaControls;
+    mappings?: {
+        [variable: string]: WidgetSchemaSettingTypeMetaMapping;
+    };
+};
+export type WidgetSchemaTabSectionsItemsSettingsItemsType = 'alignment' | 'boolean' | 'boxModel' | 'code' | 'color' | 'element' | 'graphQl' | 'imageManager' | 'input' | 'number' | 'productId' | 'productImage' | 'productSet' | 'range' | 'regexInput' | 'select' | 'text' | 'toggle' | 'typography' | 'visibility';
 export type WidgetSchemaTabSectionsItemsSettingsItemsTypeMetaSelectOptionsItems = {
     label?: string;
-    value?: string;
+    value?: string | number;
 };
-export type WidgetSchemaTabSectionsItemsSettingsItemsTypeMeta = {
+export type WidgetSchemaTabSectionsItemsSettingsItemsTypeMeta = WidgetSchemaSettingTypeMeta & {
     selectOptions?: Array<WidgetSchemaTabSectionsItemsSettingsItemsTypeMetaSelectOptionsItems>;
 };
 export type WidgetSchemaTabSectionsItemsSettingsItemsConditional = {
     key?: string;
     operator?: string;
-    value?: Array<unknown>;
+    value?: Array<string | number | boolean>;
 };
 export type WidgetSchemaTabSectionsItemsSettingsItems = {
     type?: WidgetSchemaTabSectionsItemsSettingsItemsType;
     label?: string;
     id?: string;
-    default?: string;
+    default?: WidgetSchemaSettingDefault;
     typeMeta?: WidgetSchemaTabSectionsItemsSettingsItemsTypeMeta;
     conditional?: WidgetSchemaTabSectionsItemsSettingsItemsConditional;
+    entryLabel?: string;
 };
 export type WidgetSchemaTabSectionsItems = {
     label?: string;
     settings?: Array<WidgetSchemaTabSectionsItemsSettingsItems>;
+    typeMeta?: {
+        type?: string;
+    };
 };
 export type WidgetSchemaTab = {
     type?: WidgetSchemaTabType;
@@ -40,28 +111,36 @@ export type WidgetSchemaArrayType = 'array';
 export type WidgetSchemaArrayThumbnail = {
     type?: string;
     valueKey?: string;
+    conditionKey?: string;
+    thumbnailConditions?: {
+        [value: string]: {
+            type?: string;
+            valueKey?: string;
+        };
+    };
 };
 export type WidgetSchemaHiddenType = 'hidden';
-export type WidgetSchemaHiddenSettingsItemsType = 'alignment' | 'boolean' | 'boxModel' | 'code' | 'color' | 'imageManager' | 'input' | 'number' | 'productId' | 'productImage' | 'range' | 'regexInput' | 'select' | 'text' | 'toggle';
+export type WidgetSchemaHiddenSettingsItemsType = 'alignment' | 'boolean' | 'boxModel' | 'code' | 'color' | 'element' | 'graphQl' | 'imageManager' | 'input' | 'number' | 'productId' | 'productImage' | 'productSet' | 'range' | 'regexInput' | 'select' | 'text' | 'toggle' | 'typography' | 'visibility';
 export type WidgetSchemaHiddenSettingsItemsTypeMetaSelectOptionsItems = {
     label?: string;
-    value?: string;
+    value?: string | number;
 };
-export type WidgetSchemaHiddenSettingsItemsTypeMeta = {
+export type WidgetSchemaHiddenSettingsItemsTypeMeta = WidgetSchemaSettingTypeMeta & {
     selectOptions?: Array<WidgetSchemaHiddenSettingsItemsTypeMetaSelectOptionsItems>;
 };
 export type WidgetSchemaHiddenSettingsItemsConditional = {
     key?: string;
     operator?: string;
-    value?: Array<unknown>;
+    value?: Array<string | number | boolean>;
 };
 export type WidgetSchemaHiddenSettingsItems = {
     type?: WidgetSchemaHiddenSettingsItemsType;
     label?: string;
     id?: string;
-    default?: string;
+    default?: WidgetSchemaSettingDefault;
     typeMeta?: WidgetSchemaHiddenSettingsItemsTypeMeta;
     conditional?: WidgetSchemaHiddenSettingsItemsConditional;
+    entryLabel?: string;
 };
 export type WidgetSchemaHidden = {
     type?: WidgetSchemaHiddenType;
@@ -90,6 +169,12 @@ export type WidgetTemplateFull = {
     date_modified?: string;
     current_version_uuid?: string;
     icon_name?: string;
+    template_engine?: string;
+    client_rerender?: boolean;
+    channel_id?: number;
+    schema_translations?: {
+        [key: string]: unknown;
+    };
 };
 export type WidgetFull = {
     name?: string;
@@ -100,6 +185,9 @@ export type WidgetFull = {
     date_created?: string;
     date_modified?: string;
     version_uuid?: string;
+    storefront_api_query_params?: {
+        [key: string]: unknown;
+    };
     channel_id?: number;
 };
 export type PlacementFull = {

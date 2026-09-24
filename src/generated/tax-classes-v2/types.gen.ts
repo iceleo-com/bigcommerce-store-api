@@ -19,11 +19,11 @@ export type TaxClassFull = {
     /**
      * Date and time of the tax class' creation. Read-Only.
      */
-    created_at?: string;
+    date_created?: string;
     /**
      * Date and time when the tax class was last updated. Read-Only.
      */
-    updated_at?: string;
+    date_modified?: string;
 };
 
 export type GetTaxClassesData = {

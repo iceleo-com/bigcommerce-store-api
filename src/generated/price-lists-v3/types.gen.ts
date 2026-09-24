@@ -497,7 +497,7 @@ export type AssignmentForGetResponse = {
     /**
      * Channel ID for assignment.
      */
-    channel_id?: number;
+    channel_id?: number | null;
 };
 
 /**
@@ -929,7 +929,7 @@ export type PricelistsPriceListIdRecordsGetResponsesContentApplicationJsonSchema
      * The SKU code associated with this `Price Record` if requested and it exists.
      *
      */
-    sku?: string;
+    sku: string | undefined;
     /**
      * The 3-letter currency code with which this price set is associated.
      *
@@ -949,13 +949,16 @@ export type PricelistsPriceListIdRecordsGetResponsesContentApplicationJsonSchema
      * The retail price for the variant mapped in a Price List. Overrides any existing or Catalog retail price for the variant/product. If empty, the retail price will be treated as not being set on this variant.
      *
      */
-    retail_price?: number;
+    retail_price?: number | null;
     /**
      * The MAP (Minimum Advertised Price) for the variant mapped in a Price List. Overrides any existing or Catalog MAP price for the variant/product. If empty, the MAP price will be treated as not being set on this variant.
      *
      */
-    map_price?: number;
-    bulk_pricing_tiers?: Array<PricelistsPriceListIdRecordsGetResponsesContentApplicationJsonSchemaDataItemsBulkPricingTiersItems>;
+    map_price?: number | null;
+    /**
+     * Only returned with `include=bulk_pricing_tiers`.
+     */
+    bulk_pricing_tiers: Array<PricelistsPriceListIdRecordsGetResponsesContentApplicationJsonSchemaDataItemsBulkPricingTiersItems> | undefined;
 };
 
 /**
@@ -1484,7 +1487,7 @@ export type PricelistsPriceListIdRecordsVariantIdGetResponsesContentApplicationJ
      * The SKU code associated with this `Price Record` if requested and it exists.
      *
      */
-    sku?: string;
+    sku: string | undefined;
     /**
      * The 3-letter currency code with which this price set is associated.
      *
@@ -1504,13 +1507,16 @@ export type PricelistsPriceListIdRecordsVariantIdGetResponsesContentApplicationJ
      * The retail price for the variant mapped in a Price List. Overrides any existing or Catalog retail price for the variant/product. If empty, the retail price will be treated as not being set on this variant.
      *
      */
-    retail_price?: number;
+    retail_price?: number | null;
     /**
      * The MAP (Minimum Advertised Price) for the variant mapped in a Price List. Overrides any existing or Catalog MAP price for the variant/product. If empty, the MAP price will be treated as not being set on this variant.
      *
      */
-    map_price?: number;
-    bulk_pricing_tiers?: Array<PricelistsPriceListIdRecordsVariantIdGetResponsesContentApplicationJsonSchemaDataItemsBulkPricingTiersItems>;
+    map_price?: number | null;
+    /**
+     * Only returned with `include=bulk_pricing_tiers`.
+     */
+    bulk_pricing_tiers: Array<PricelistsPriceListIdRecordsVariantIdGetResponsesContentApplicationJsonSchemaDataItemsBulkPricingTiersItems> | undefined;
 };
 
 /**
@@ -1704,7 +1710,7 @@ export type PricelistsPriceListIdRecordsVariantIdCurrencyCodeGetResponsesContent
      * The SKU code associated with this `Price Record` if requested and it exists.
      *
      */
-    sku?: string;
+    sku: string | undefined;
     /**
      * The 3-letter currency code with which this price set is associated.
      *
@@ -1724,13 +1730,16 @@ export type PricelistsPriceListIdRecordsVariantIdCurrencyCodeGetResponsesContent
      * The retail price for the variant mapped in a Price List. Overrides any existing or Catalog retail price for the variant/product. If empty, the retail price will be treated as not being set on this variant.
      *
      */
-    retail_price?: number;
+    retail_price?: number | null;
     /**
      * The MAP (Minimum Advertised Price) for the variant mapped in a Price List. Overrides any existing or Catalog MAP price for the variant/product. If empty, the MAP price will be treated as not being set on this variant.
      *
      */
-    map_price?: number;
-    bulk_pricing_tiers?: Array<PricelistsPriceListIdRecordsVariantIdCurrencyCodeGetResponsesContentApplicationJsonSchemaDataBulkPricingTiersItems>;
+    map_price?: number | null;
+    /**
+     * Only returned with `include=bulk_pricing_tiers`.
+     */
+    bulk_pricing_tiers: Array<PricelistsPriceListIdRecordsVariantIdCurrencyCodeGetResponsesContentApplicationJsonSchemaDataBulkPricingTiersItems> | undefined;
 };
 
 /**

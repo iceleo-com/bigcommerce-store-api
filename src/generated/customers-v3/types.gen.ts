@@ -167,7 +167,7 @@ export type CustomerStoredCreditAmountsItems = {
     /**
      * float
      */
-    amount?: string;
+    amount?: number | string;
 };
 
 /**
@@ -182,7 +182,7 @@ export type CustomerStoredCreditAmounts = Array<CustomerStoredCreditAmountsItems
  *
  * Array of channel ids the Customer has access to.
  */
-export type CustomerChannelIds = Array<unknown>;
+export type CustomerChannelIds = Array<number>;
 
 /**
  * customer_Full
@@ -237,27 +237,30 @@ export type CustomerFull = {
      */
     date_created?: string;
     /**
-     * Total number of customer addresses.
+     * Total number of customer addresses. Only returned with `include=addresses`.
      */
-    address_count?: number;
+    address_count: number | undefined;
     /**
-     * Total number of customer attributes.
+     * Total number of customer attributes. Only returned with `include=attributes`.
      */
-    attribute_count?: number;
+    attribute_count: number | undefined;
     authentication?: CustomerFullAuthentication;
     /**
-     * Array of customer addresses. Limited to 10.
+     * Array of customer addresses. Limited to 10. Only returned with `include=addresses`.
      */
-    addresses?: Array<AddressFull>;
+    addresses: Array<AddressFull> | undefined;
     /**
-     * Array of customer attributes. Limited to 10.
+     * Array of customer attributes. Limited to 10. Only returned with `include=attributes`.
      */
-    attributes?: Array<AttributeFull>;
+    attributes: Array<AttributeFull> | undefined;
     /**
      * Array of form fields. Controlled by `formfields` parameter.
      */
-    form_fields?: Array<FormFieldValueCustomer>;
-    store_credit_amounts?: CustomerStoredCreditAmounts;
+    form_fields: Array<FormFieldValueCustomer> | undefined;
+    /**
+     * Store credit. Only returned with `include=storecredit`.
+     */
+    store_credit_amounts: CustomerStoredCreditAmounts | undefined;
     /**
      * Determines if the customer is signed up to receive either product review or abandoned cart emails or receive both emails.
      */
@@ -266,7 +269,18 @@ export type CustomerFull = {
      * Channel ID of the customer that has created the form.
      */
     origin_channel_id?: number;
-    channel_ids?: CustomerChannelIds;
+    /**
+     * `null` when the customer has access to all channels.
+     */
+    channel_ids?: CustomerChannelIds | null;
+    /**
+     * ID of the shopper profile. Only returned with `include=shopper_profile_id`.
+     */
+    shopper_profile_id: string | undefined;
+    /**
+     * IDs of the segments the customer belongs to. Only returned with `include=segment_ids`.
+     */
+    segment_ids: Array<string> | undefined;
 };
 
 /**
@@ -768,7 +782,7 @@ export type CustomersAddressesGetResponsesContentApplicationJsonSchemaDataItems 
     /**
      * Array of form fields. Controlled by `formfields` parameter.
      */
-    form_fields?: Array<FormFieldValueAddress>;
+    form_fields: Array<FormFieldValueAddress> | undefined;
 };
 
 /**
@@ -1524,11 +1538,15 @@ export type CustomerChannelSettingsObjectPrivacySettings = {
     /**
      * Determines if a customer requires consent for tracking privacy.
      */
-    ask_shopper_for_tracking_consent?: boolean;
+    ask_shopper_for_tracking_consent?: boolean | null;
     /**
      * The URL for a websiteʼs privacy policy.
      */
-    policy_url?: string;
+    policy_url?: string | null;
+    /**
+     * Determines if a customer requires consent for tracking privacy on checkout. `null` when inherited from the global settings.
+     */
+    ask_shopper_for_tracking_consent_on_checkout?: boolean | null;
 };
 
 /**
@@ -1540,11 +1558,11 @@ export type CustomerChannelSettingsObjectCustomerGroupSettings = {
     /**
      * The ID for a guest customer group.
      */
-    guest_customer_group_id?: number;
+    guest_customer_group_id?: number | null;
     /**
      * The ID for a default customer group.
      */
-    default_customer_group_id?: number;
+    default_customer_group_id?: number | null;
 };
 
 /**
@@ -1595,6 +1613,10 @@ export type CustomerSettingsObjectPrivacySettings = {
      * The URL for a websiteʼs privacy policy.
      */
     policy_url?: string;
+    /**
+     * Determines if a customer requires consent for tracking privacy on checkout.
+     */
+    ask_shopper_for_tracking_consent_on_checkout?: boolean;
 };
 
 /**
@@ -1678,8 +1700,9 @@ export type ConsentFull = {
      * > NOTE
      * >
      * > Currently, this field returns the time of the current API Call, not the time of last update. For PUT requests, this is typically accurate; however, it will not be accurate for GET requests.
+     * Not returned when the customer has no consent record.
      */
-    updated_at?: string;
+    updated_at: string | undefined;
 };
 
 /**
@@ -1988,7 +2011,7 @@ export type MetaCollectionFull = {
  */
 export type MetafieldsGetCustomersMetafieldsResponse200 = {
     data?: Array<MetafieldFull>;
-    meta?: MetaCollectionFull;
+    meta?: MetaCollectionFull & MetafieldCursorPaginationMeta;
 };
 
 /**
@@ -2315,7 +2338,7 @@ export type CustomersMetafieldsGetParametersIncludeFieldsSchemaItems = 'resource
  */
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 
 /**
@@ -4031,3 +4054,42 @@ export type ValidateCustomerCredentialsResponses = {
 };
 
 export type ValidateCustomerCredentialsResponse = ValidateCustomerCredentialsResponses[keyof ValidateCustomerCredentialsResponses];
+
+
+/**
+ * MetafieldCursorPaginationLinks
+ *
+ * Links to the previous and next pages of the collection; empty when there are no other pages.
+ */
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+
+/**
+ * MetafieldCursorPagination
+ *
+ * Cursor based pagination of a metafield collection. `start_cursor` and `end_cursor` are omitted when the collection is empty.
+ */
+export type MetafieldCursorPagination = {
+    /**
+     * Number of items in the current page.
+     */
+    count?: number;
+    /**
+     * The number of items per page, controlled by the `limit` parameter.
+     */
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+
+/**
+ * MetafieldCursorPaginationMeta
+ *
+ * Metafield collections return `cursor_pagination` next to the offset based `pagination`.
+ */
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

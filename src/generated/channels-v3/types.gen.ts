@@ -314,7 +314,10 @@ export type ChannelWithCurrencies = {
     date_created?: ChannelDateCreated;
     date_modified?: ChannelDateModified;
     icon_url?: IconUrl;
-    currencies?: CurrencyNotRequiredWithChannelId;
+    /**
+     * Only returned with `include=currencies`.
+     */
+    currencies: CurrencyNotRequiredWithChannelId | undefined;
 };
 
 /**
@@ -548,6 +551,46 @@ export type CollectionMeta = {
      * Data about the response, including pagination and collection totals.
      */
     pagination?: CollectionMetaPagination;
+    /**
+     * Cursor based pagination, returned on the first page and when `before` / `after` is provided.
+     */
+    cursor_pagination?: CursorPagination;
+};
+
+/**
+ * CursorPaginationLinks
+ *
+ * Cursor pagination links for the previous and next parts of the whole collection.
+ */
+export type CursorPaginationLinks = {
+    previous?: string;
+    current?: string;
+    next?: string;
+};
+
+/**
+ * CursorPagination
+ *
+ * Data about the response, including cursor pagination.
+ */
+export type CursorPagination = {
+    /**
+     * Total number of items in the collection response.
+     */
+    count?: number;
+    /**
+     * The amount of items returned in the collection per page, controlled by the limit parameter.
+     */
+    per_page?: number;
+    /**
+     * Cursor referring to the start of the current page.
+     */
+    start_cursor?: string;
+    /**
+     * Cursor referring to the end of the current page, used to fetch the next page.
+     */
+    end_cursor?: string;
+    links?: CursorPaginationLinks;
 };
 
 /**
@@ -1233,6 +1276,12 @@ export type CustomAppSections = Array<CustomAppSectionsItems>;
 export type ChannelsChannelIdChannelMenusGetResponsesContentApplicationJsonSchemaData = {
     bigcommerce_protected_app_sections?: BigCommerceProtectedAppSections;
     custom_app_sections?: CustomAppSections;
+    /**
+     * Customizations of the protected app sections (undocumented, empty object when not customized).
+     */
+    protected_app_section_customization?: {
+        [key: string]: unknown;
+    };
 };
 
 /**
@@ -1369,7 +1418,7 @@ export type MetafieldBase = {
  */
 export type MetafieldsGetChannelMetafieldsResponse200 = {
     data?: Array<MetafieldBase>;
-    meta?: MetaWithFullPagination;
+    meta?: CollectionMeta;
 };
 
 /**
@@ -1613,9 +1662,9 @@ export type Site = {
      */
     updated_at?: string;
     /**
-     * Indicates if a private/dedicated SSL is installed on this site, or if itʼs using shared SSL.
+     * Indicates if a private/dedicated SSL is installed on this site, or if itʼs using shared SSL. Not always returned.
      */
-    ssl_status?: SiteSslStatus;
+    ssl_status: SiteSslStatus | undefined;
     /**
      * All URLs that belong to the site, including `primary`, `canonical`, and `checkout` URLs.
      */

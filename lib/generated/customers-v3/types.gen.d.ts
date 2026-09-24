@@ -44,10 +44,10 @@ export type FormFieldValueCustomer = {
     customer_id: number;
 };
 export type CustomerStoredCreditAmountsItems = {
-    amount?: string;
+    amount?: number | string;
 };
 export type CustomerStoredCreditAmounts = Array<CustomerStoredCreditAmountsItems>;
-export type CustomerChannelIds = Array<unknown>;
+export type CustomerChannelIds = Array<number>;
 export type CustomerFull = {
     email?: string;
     first_name?: string;
@@ -61,16 +61,18 @@ export type CustomerFull = {
     id?: number;
     date_modified?: string;
     date_created?: string;
-    address_count?: number;
-    attribute_count?: number;
+    address_count: number | undefined;
+    attribute_count: number | undefined;
     authentication?: CustomerFullAuthentication;
-    addresses?: Array<AddressFull>;
-    attributes?: Array<AttributeFull>;
-    form_fields?: Array<FormFieldValueCustomer>;
-    store_credit_amounts?: CustomerStoredCreditAmounts;
+    addresses: Array<AddressFull> | undefined;
+    attributes: Array<AttributeFull> | undefined;
+    form_fields: Array<FormFieldValueCustomer> | undefined;
+    store_credit_amounts: CustomerStoredCreditAmounts | undefined;
     accepts_product_review_abandoned_cart_emails?: boolean;
     origin_channel_id?: number;
-    channel_ids?: CustomerChannelIds;
+    channel_ids?: CustomerChannelIds | null;
+    shopper_profile_id: string | undefined;
+    segment_ids: Array<string> | undefined;
 };
 export type Links = {
     previous?: string;
@@ -213,7 +215,7 @@ export type CustomersAddressesGetResponsesContentApplicationJsonSchemaDataItems 
     phone?: string;
     postal_code: string;
     state_or_province: string;
-    form_fields?: Array<FormFieldValueAddress>;
+    form_fields: Array<FormFieldValueAddress> | undefined;
 };
 export type MetaCollection = {
     pagination?: Pagination;
@@ -413,12 +415,13 @@ export type AttributesUpdateCustomersAttributesResponse200 = {
     meta?: MetaOpen;
 };
 export type CustomerChannelSettingsObjectPrivacySettings = {
-    ask_shopper_for_tracking_consent?: boolean;
-    policy_url?: string;
+    ask_shopper_for_tracking_consent?: boolean | null;
+    policy_url?: string | null;
+    ask_shopper_for_tracking_consent_on_checkout?: boolean | null;
 };
 export type CustomerChannelSettingsObjectCustomerGroupSettings = {
-    guest_customer_group_id?: number;
-    default_customer_group_id?: number;
+    guest_customer_group_id?: number | null;
+    default_customer_group_id?: number | null;
 };
 export type CustomerChannelSettingsObject = {
     privacy_settings?: CustomerChannelSettingsObjectPrivacySettings;
@@ -435,6 +438,7 @@ export type ChannelSettingsGetCustomersSettingsChannelResponse200 = {
 export type CustomerSettingsObjectPrivacySettings = {
     ask_shopper_for_tracking_consent?: boolean;
     policy_url?: string;
+    ask_shopper_for_tracking_consent_on_checkout?: boolean;
 };
 export type CustomerSettingsObjectCustomerGroupSettings = {
     guest_customer_group_id?: number;
@@ -458,7 +462,7 @@ export type Deny = Array<DenyItems>;
 export type ConsentFull = {
     allow?: ConsentAllow;
     deny?: Deny;
-    updated_at?: string;
+    updated_at: string | undefined;
 };
 export type DeclareCustomerConsentRequest = {
     allow?: ConsentAllow;
@@ -545,7 +549,7 @@ export type MetaCollectionFull = {
 };
 export type MetafieldsGetCustomersMetafieldsResponse200 = {
     data?: Array<MetafieldFull>;
-    meta?: MetaCollectionFull;
+    meta?: MetaCollectionFull & MetafieldCursorPaginationMeta;
 };
 export type MetafieldBasePostPermissionSet = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
 export type MetafieldBasePost = {
@@ -621,7 +625,7 @@ export type CustomersMetafieldsGetParametersDirection = 'asc' | 'desc';
 export type CustomersMetafieldsGetParametersIncludeFieldsSchemaItems = 'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified';
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 export type CustomersMetafieldsPostRequestBodyContentApplicationJsonSchemaItemsPermissionSet = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
 export type CustomersMetafieldsPostRequestBodyContentApplicationJsonSchemaItems = {
@@ -1330,3 +1334,17 @@ export type ValidateCustomerCredentialsResponses = {
     200: ValidateCustomerCredentialsResponseObject;
 };
 export type ValidateCustomerCredentialsResponse = ValidateCustomerCredentialsResponses[keyof ValidateCustomerCredentialsResponses];
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+export type MetafieldCursorPagination = {
+    count?: number;
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

@@ -188,7 +188,7 @@ export type CollectionMeta = {
  */
 export type MetaFieldCollectionResponseBatch = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 
 /**
@@ -2397,7 +2397,7 @@ export type GetCartMetafieldsResponses = {
      * An array of metafields and metadata.
      *
      */
-    200: MetafieldResponse;
+    200: MetaFieldCollectionResponseBatch;
 };
 
 export type GetCartMetafieldsResponse = GetCartMetafieldsResponses[keyof GetCartMetafieldsResponses];
@@ -2798,3 +2798,42 @@ export type UpdateChannelCartSettingsResponses = {
 };
 
 export type UpdateChannelCartSettingsResponse = UpdateChannelCartSettingsResponses[keyof UpdateChannelCartSettingsResponses];
+
+
+/**
+ * MetafieldCursorPaginationLinks
+ *
+ * Links to the previous and next pages of the collection; empty when there are no other pages.
+ */
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+
+/**
+ * MetafieldCursorPagination
+ *
+ * Cursor based pagination of a metafield collection. `start_cursor` and `end_cursor` are omitted when the collection is empty.
+ */
+export type MetafieldCursorPagination = {
+    /**
+     * Number of items in the current page.
+     */
+    count?: number;
+    /**
+     * The number of items per page, controlled by the `limit` parameter.
+     */
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+
+/**
+ * MetafieldCursorPaginationMeta
+ *
+ * Metafield collections return `cursor_pagination` next to the offset based `pagination`.
+ */
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

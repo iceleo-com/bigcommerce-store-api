@@ -124,14 +124,20 @@ export type EnabledTransactionalEmails = {
     abandoned_cart_email?: boolean;
     account_details_changed_email?: boolean;
     combined_order_status_email?: boolean;
-    create_account_email?: boolean;
-    create_guest_account_email?: boolean;
-    gift_certificate_email?: boolean;
+    createaccount_email?: boolean;
+    createguestaccount_email?: boolean;
+    giftcertificate_email?: boolean;
     invoice_email?: boolean;
-    order_message_notification_email?: boolean;
+    ordermessage_notification?: boolean;
+    order_ready_for_pickup?: boolean;
     product_review_email?: boolean;
+    guest_order_access_email?: boolean;
     return_confirmation_email?: boolean;
     return_statuschange_email?: boolean;
+    return_created_email?: boolean;
+    return_cancelled_email?: boolean;
+    return_updated_email?: boolean;
+    return_resolved_email?: boolean;
 };
 
 /**
@@ -376,7 +382,7 @@ export type LogoUpdateSettingsLogoResponse200 = {
 /**
  * EnabledProductFilterItemsToShow
  */
-export type EnabledProductFilterItemsToShow = '5' | '10' | '15';
+export type EnabledProductFilterItemsToShow = 5 | 10 | 15 | '5' | '10' | '15';
 
 /**
  * EnabledProductFilterSortBy
@@ -405,6 +411,14 @@ export type EnabledProductFilter = {
     items_to_show?: EnabledProductFilterItemsToShow;
     sort_by?: EnabledProductFilterSortBy;
     type?: EnabledProductFilterType;
+    /**
+     * The ID of the search facet, `null` when not assigned.
+     */
+    facet_id?: number | null;
+    /**
+     * The name of the search facet.
+     */
+    facet?: string;
 };
 
 /**
@@ -426,12 +440,20 @@ export type EnabledPriceFilter = {
     id?: string;
     is_enabled?: boolean;
     type?: EnabledPriceFilterType;
+    /**
+     * The ID of the search facet, `null` when not assigned.
+     */
+    facet_id?: number | null;
+    /**
+     * The name of the search facet.
+     */
+    facet?: string;
 };
 
 /**
  * EnabledCategoryFilterItemsToShow
  */
-export type EnabledCategoryFilterItemsToShow = '5' | '10' | '15';
+export type EnabledCategoryFilterItemsToShow = 5 | 10 | 15 | '5' | '10' | '15';
 
 /**
  * EnabledCategoryFilterType
@@ -454,12 +476,20 @@ export type EnabledCategoryFilter = {
     is_enabled?: boolean;
     items_to_show?: EnabledCategoryFilterItemsToShow;
     type?: EnabledCategoryFilterType;
+    /**
+     * The ID of the search facet, `null` when not assigned.
+     */
+    facet_id?: number | null;
+    /**
+     * The name of the search facet.
+     */
+    facet?: string;
 };
 
 /**
  * EnabledBrandFilterItemsToShow
  */
-export type EnabledBrandFilterItemsToShow = '5' | '10' | '15';
+export type EnabledBrandFilterItemsToShow = 5 | 10 | 15 | '5' | '10' | '15';
 
 /**
  * EnabledBrandFilterSortBy
@@ -488,6 +518,14 @@ export type EnabledBrandFilter = {
     items_to_show?: EnabledBrandFilterItemsToShow;
     sort_by?: EnabledBrandFilterSortBy;
     type?: EnabledBrandFilterType;
+    /**
+     * The ID of the search facet, `null` when not assigned.
+     */
+    facet_id?: number | null;
+    /**
+     * The name of the search facet.
+     */
+    facet?: string;
 };
 
 /**
@@ -509,6 +547,14 @@ export type EnabledRatingFilter = {
     id?: string;
     is_enabled?: boolean;
     type?: EnabledRatingFilterType;
+    /**
+     * The ID of the search facet, `null` when not assigned.
+     */
+    facet_id?: number | null;
+    /**
+     * The name of the search facet.
+     */
+    facet?: string;
 };
 
 /**
@@ -535,6 +581,14 @@ export type EnabledMiscFilter = {
     show_is_featured_filter?: boolean;
     show_product_count?: boolean;
     type?: EnabledMiscFilterType;
+    /**
+     * The ID of the search facet, `null` when not assigned.
+     */
+    facet_id?: number | null;
+    /**
+     * The name of the search facet.
+     */
+    facet?: string;
 };
 
 /**
@@ -548,10 +602,24 @@ export type ConfiguredFilter = EnabledProductFilter | EnabledPriceFilter | Enabl
 export type ConfiguredFilters = Array<ConfiguredFilter>;
 
 /**
+ * EnabledMiscFilterResponse
+ *
+ * `show_product_count` is not returned by the API.
+ */
+export type EnabledMiscFilterResponse = Omit<EnabledMiscFilter, 'show_product_count'> & {
+    show_product_count: boolean | undefined;
+};
+
+/**
+ * ConfiguredFiltersResponse
+ */
+export type ConfiguredFiltersResponse = Array<EnabledProductFilter | EnabledPriceFilter | EnabledCategoryFilter | EnabledBrandFilter | EnabledRatingFilter | EnabledMiscFilterResponse>;
+
+/**
  * Search Filters_getSettingsEnabledSearchFilters_Response_200
  */
 export type SearchFiltersGetSettingsEnabledSearchFiltersResponse200 = {
-    data?: ConfiguredFilters;
+    data?: ConfiguredFiltersResponse;
     meta?: MetaOpen;
 };
 
@@ -559,7 +627,7 @@ export type SearchFiltersGetSettingsEnabledSearchFiltersResponse200 = {
  * Search Filters_updateSettingsEnabledSearchFilters_Response_200
  */
 export type SearchFiltersUpdateSettingsEnabledSearchFiltersResponse200 = {
-    data?: ConfiguredFilters;
+    data?: ConfiguredFiltersResponse;
     meta?: MetaOpen;
 };
 
@@ -745,6 +813,10 @@ export type StoreProfile = {
     store_email?: string;
     store_name?: string;
     store_phone?: string;
+    /**
+     * The new store email pending confirmation, `null` when none. Read-only.
+     */
+    pending_confirmation_email?: string | null;
 };
 
 /**

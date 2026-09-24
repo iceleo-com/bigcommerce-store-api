@@ -56,18 +56,34 @@ export type Activate = {
     which?: ActivateWhich;
 };
 export type ThemeConfigurationFullSettings = {
-    [key: string]: unknown;
+    [key: string]: string | number | boolean | null | Array<unknown>;
 };
 export type ThemeConfigurationFull = {
     uuid?: string;
-    theme_uuid?: string;
-    variation_id?: string;
+    store_hash?: string;
+    channel_id?: number;
     settings?: ThemeConfigurationFullSettings;
-    date_created?: string;
-    site_id?: number;
+    theme_uuid?: string;
+    version_uuid?: string;
+    variation_uuid?: string;
+    created_at?: string;
+    updated_at?: string;
+};
+export type PaginationLinks = {
+    previous?: string;
+    current?: string;
+    next?: string;
+};
+export type Pagination = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: PaginationLinks;
 };
 export type ThemesCollectionMeta = {
-    [key: string]: unknown;
+    pagination?: Pagination;
 };
 export type ThemeConfigurationsGetThemeConfigurationResponse200 = {
     data?: Array<ThemeConfigurationFull>;
@@ -94,16 +110,14 @@ export type ErrorResponse = {
     errors?: ErrorResponseErrors;
 };
 export type ThemesCustomTemplatesVersionUuidGetResponsesContentApplicationJsonSchemaData = {
-    product?: Array<string>;
-    category?: Array<string>;
-    brand?: Array<string>;
-    page?: Array<string>;
+    page_type?: 'product' | 'category' | 'brand' | 'page' | (string & {});
+    templates?: Array<string>;
 };
 export type OpenMeta = {
     [key: string]: unknown;
 };
 export type ThemeCustomTemplatesGetThemeCustomTemplatesResponse200 = {
-    data?: ThemesCustomTemplatesVersionUuidGetResponsesContentApplicationJsonSchemaData;
+    data?: Array<ThemesCustomTemplatesVersionUuidGetResponsesContentApplicationJsonSchemaData>;
     meta?: OpenMeta;
 };
 export type JobResponseDataErrorsItems = {

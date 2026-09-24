@@ -21,6 +21,8 @@ export type BlogPostFull = {
     author?: string | null;
     thumbnail_path?: string | null;
     id?: number;
+    preview_code?: string;
+    tags_as_string: string | undefined;
 };
 export type BlogPostBasePost = {
     title: string;
@@ -83,6 +85,30 @@ export type PageFull = {
     link?: string;
     id?: number;
 };
+export type PageFullRes = {
+    id: number;
+    channel_id: number;
+    name: string;
+    is_visible: boolean;
+    parent_id: number;
+    sort_order: number;
+    type: PageBaseResType | 'blog_index';
+    is_homepage: boolean;
+    is_customers_only: boolean;
+    meta_title: string | undefined;
+    body: string | undefined;
+    meta_keywords: string | null | undefined;
+    meta_description: string | undefined;
+    layout_file: string | undefined;
+    search_keywords: string | undefined;
+    has_mobile_version: boolean | undefined;
+    mobile_body: string | null | undefined;
+    url: string | undefined;
+    link: string | undefined;
+    email: string | undefined;
+    contact_fields: string | undefined;
+    content_type: PageBaseResContentType | undefined;
+};
 export type PageBaseType = 'page' | 'contact_form' | 'raw' | 'link';
 export type PageBaseContentType = 'application/json' | 'text/javascript' | 'text/html';
 export type PageBase = {
@@ -110,7 +136,7 @@ export type PageBase = {
 };
 export type Forward = {
     type?: string;
-    ref?: number;
+    ref?: number | string;
 };
 export type Redirect = {
     id?: number;
@@ -243,7 +269,7 @@ export type GetBlogTagsData = {
     url: '/blog/tags';
 };
 export type GetBlogTagsResponses = {
-    200: Array<BlogTags>;
+    200: BlogTags;
 };
 export type GetBlogTagsResponse = GetBlogTagsResponses[keyof GetBlogTagsResponses];
 export type GetPagesData = {
@@ -259,7 +285,7 @@ export type GetPagesData = {
     url: '/pages';
 };
 export type GetPagesResponses = {
-    200: Array<PageFull>;
+    200: Array<PageFullRes>;
 };
 export type GetPagesResponse = GetPagesResponses[keyof GetPagesResponses];
 export type CreatePageData = {
@@ -272,7 +298,7 @@ export type CreatePageData = {
     url: '/pages';
 };
 export type CreatePageResponses = {
-    200: PageFull;
+    200: PageFullRes;
 };
 export type CreatePageResponse = CreatePageResponses[keyof CreatePageResponses];
 export type DeletePageData = {
@@ -304,7 +330,7 @@ export type GetPageData = {
     url: '/pages/{id}';
 };
 export type GetPageResponses = {
-    200: PageFull;
+    200: PageFullRes;
 };
 export type GetPageResponse = GetPageResponses[keyof GetPageResponses];
 export type UpdatePageData = {
@@ -319,7 +345,7 @@ export type UpdatePageData = {
     url: '/pages/{id}';
 };
 export type UpdatePageResponses = {
-    200: PageFull;
+    200: PageFullRes;
 };
 export type UpdatePageResponse = UpdatePageResponses[keyof UpdatePageResponses];
 export type DeleteRedirectsData = {

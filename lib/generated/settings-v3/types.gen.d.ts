@@ -51,14 +51,20 @@ export type EnabledTransactionalEmails = {
     abandoned_cart_email?: boolean;
     account_details_changed_email?: boolean;
     combined_order_status_email?: boolean;
-    create_account_email?: boolean;
-    create_guest_account_email?: boolean;
-    gift_certificate_email?: boolean;
+    createaccount_email?: boolean;
+    createguestaccount_email?: boolean;
+    giftcertificate_email?: boolean;
     invoice_email?: boolean;
-    order_message_notification_email?: boolean;
+    ordermessage_notification?: boolean;
+    order_ready_for_pickup?: boolean;
     product_review_email?: boolean;
+    guest_order_access_email?: boolean;
     return_confirmation_email?: boolean;
     return_statuschange_email?: boolean;
+    return_created_email?: boolean;
+    return_cancelled_email?: boolean;
+    return_updated_email?: boolean;
+    return_resolved_email?: boolean;
 };
 export type EmailStatusesGetSettingsEmailStatusesResponse200 = {
     data?: EnabledTransactionalEmails;
@@ -140,7 +146,7 @@ export type LogoUpdateSettingsLogoResponse200 = {
     data?: LogoSettings;
     meta?: MetaOpen;
 };
-export type EnabledProductFilterItemsToShow = '5' | '10' | '15';
+export type EnabledProductFilterItemsToShow = 5 | 10 | 15 | '5' | '10' | '15';
 export type EnabledProductFilterSortBy = 'alpha' | 'option_values' | 'item_count';
 export type EnabledProductFilterType = 'product';
 export type EnabledProductFilter = {
@@ -152,6 +158,8 @@ export type EnabledProductFilter = {
     items_to_show?: EnabledProductFilterItemsToShow;
     sort_by?: EnabledProductFilterSortBy;
     type?: EnabledProductFilterType;
+    facet_id?: number | null;
+    facet?: string;
 };
 export type EnabledPriceFilterType = 'price';
 export type EnabledPriceFilter = {
@@ -160,8 +168,10 @@ export type EnabledPriceFilter = {
     id?: string;
     is_enabled?: boolean;
     type?: EnabledPriceFilterType;
+    facet_id?: number | null;
+    facet?: string;
 };
-export type EnabledCategoryFilterItemsToShow = '5' | '10' | '15';
+export type EnabledCategoryFilterItemsToShow = 5 | 10 | 15 | '5' | '10' | '15';
 export type EnabledCategoryFilterType = 'category';
 export type EnabledCategoryFilter = {
     collapsed_by_default?: boolean;
@@ -171,8 +181,10 @@ export type EnabledCategoryFilter = {
     is_enabled?: boolean;
     items_to_show?: EnabledCategoryFilterItemsToShow;
     type?: EnabledCategoryFilterType;
+    facet_id?: number | null;
+    facet?: string;
 };
-export type EnabledBrandFilterItemsToShow = '5' | '10' | '15';
+export type EnabledBrandFilterItemsToShow = 5 | 10 | 15 | '5' | '10' | '15';
 export type EnabledBrandFilterSortBy = 'alpha' | 'item_count';
 export type EnabledBrandFilterType = 'brand';
 export type EnabledBrandFilter = {
@@ -184,6 +196,8 @@ export type EnabledBrandFilter = {
     items_to_show?: EnabledBrandFilterItemsToShow;
     sort_by?: EnabledBrandFilterSortBy;
     type?: EnabledBrandFilterType;
+    facet_id?: number | null;
+    facet?: string;
 };
 export type EnabledRatingFilterType = 'rating';
 export type EnabledRatingFilter = {
@@ -192,6 +206,8 @@ export type EnabledRatingFilter = {
     id?: string;
     is_enabled?: boolean;
     type?: EnabledRatingFilterType;
+    facet_id?: number | null;
+    facet?: string;
 };
 export type EnabledMiscFilterType = 'other';
 export type EnabledMiscFilter = {
@@ -205,15 +221,21 @@ export type EnabledMiscFilter = {
     show_is_featured_filter?: boolean;
     show_product_count?: boolean;
     type?: EnabledMiscFilterType;
+    facet_id?: number | null;
+    facet?: string;
 };
 export type ConfiguredFilter = EnabledProductFilter | EnabledPriceFilter | EnabledCategoryFilter | EnabledBrandFilter | EnabledRatingFilter | EnabledMiscFilter;
 export type ConfiguredFilters = Array<ConfiguredFilter>;
+export type EnabledMiscFilterResponse = Omit<EnabledMiscFilter, 'show_product_count'> & {
+    show_product_count: boolean | undefined;
+};
+export type ConfiguredFiltersResponse = Array<EnabledProductFilter | EnabledPriceFilter | EnabledCategoryFilter | EnabledBrandFilter | EnabledRatingFilter | EnabledMiscFilterResponse>;
 export type SearchFiltersGetSettingsEnabledSearchFiltersResponse200 = {
-    data?: ConfiguredFilters;
+    data?: ConfiguredFiltersResponse;
     meta?: MetaOpen;
 };
 export type SearchFiltersUpdateSettingsEnabledSearchFiltersResponse200 = {
-    data?: ConfiguredFilters;
+    data?: ConfiguredFiltersResponse;
     meta?: MetaOpen;
 };
 export type AvailableNormalFilterType = 'category' | 'brand' | 'rating' | 'product';
@@ -294,6 +316,7 @@ export type StoreProfile = {
     store_email?: string;
     store_name?: string;
     store_phone?: string;
+    pending_confirmation_email?: string | null;
 };
 export type StoreProfileGetSettingsStoreProfileResponse200 = {
     data?: StoreProfile;

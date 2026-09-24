@@ -7,7 +7,7 @@ export type ClientOptions = {
 /**
  * EmailTemplateTypeId
  */
-export type EmailTemplateTypeId = 'abandoned_cart_email' | 'account_details_changed_email' | 'combined_order_status_email' | 'createaccount_email' | 'createguestaccount_email' | 'giftcertificate_email' | 'invoice_email' | 'ordermessage_notification' | 'return_confirmation_email' | 'return_statuschange_email' | 'product_review_email' | 'account_reset_password_email';
+export type EmailTemplateTypeId = 'abandoned_cart_email' | 'account_details_changed_email' | 'combined_order_status_email' | 'createaccount_email' | 'createguestaccount_email' | 'giftcertificate_email' | 'invoice_email' | 'ordermessage_notification' | 'return_confirmation_email' | 'return_statuschange_email' | 'product_review_email' | 'account_reset_password_email' | 'order_ready_for_pickup' | 'passwordless_login_email' | 'guest_order_access_email';
 
 /**
  * LocaleObjectKeys
@@ -15,7 +15,7 @@ export type EmailTemplateTypeId = 'abandoned_cart_email' | 'account_details_chan
  * Language keys for the template. User-defined. Should match any lang keys used in the template.
  */
 export type LocaleObjectKeys = {
-    [key: string]: unknown;
+    [key: string]: string;
 };
 
 /**

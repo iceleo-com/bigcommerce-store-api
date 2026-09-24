@@ -14,11 +14,13 @@ export class CustomersV2Api {
      * List Customers
      *
      * Returns a list of all *Customers*. Default sorting is by `customer_ID`, from lowest to highest. Optional parameters can be passed in.
+     *
+     * Responds with `204` and no data when nothing matches.
      */
     getCustomers(
         query?: CustomersV2ApiSpecs.GetCustomersData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomersResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomersResponses[200]>> | RequestSuccessResponse<204, void>,RequestErrorResponse<400, void>>({
             path: 'v2/customers',
             query,
         });
@@ -195,12 +197,14 @@ export class CustomersV2Api {
      *
      * Returns a list of *Customer Addresses*. Returns the addresses belonging to a customer. Default sorting is by address id, from lowest to highest. 
      The maximum limit is 250. If a limit isn’t provided, up to 50 `customer_addresses` are returned by default.
+     *
+     * Responds with `204` and no data when nothing matches.
      */
     getCustomerAddresses(
         customerId: CustomersV2ApiSpecs.GetCustomerAddressesData['path']['customer_id'],
         query?: CustomersV2ApiSpecs.GetCustomerAddressesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerAddressesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerAddressesResponses[200]>> | RequestSuccessResponse<204, void>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses`,
             query,
         });
@@ -324,11 +328,13 @@ export class CustomersV2Api {
 
      **Note:**
      The default rate limit for this endpoint is 40 concurrent requests.
+     *
+     * Responds with `204` and no data when nothing matches.
      */
     getCustomerGroups(
         query?: CustomersV2ApiSpecs.GetCustomerGroupsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerGroupsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerGroupsResponses[200]>> | RequestSuccessResponse<204, void>,RequestErrorResponse<400, void>>({
             path: 'v2/customer_groups',
             query,
         });

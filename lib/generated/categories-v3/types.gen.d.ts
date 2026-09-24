@@ -197,7 +197,7 @@ export type CollectionMeta = {
 };
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 export type CatalogCategoriesMetafieldsPostRequestBodyContentApplicationJsonSchemaItemsPermissionSet = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
 export type CatalogCategoriesMetafieldsPostRequestBodyContentApplicationJsonSchemaItems = {
@@ -322,7 +322,7 @@ export type MetafieldFull = {
 };
 export type MetafieldsGetCategoryMetafieldsResponse200 = {
     data?: Array<MetafieldFull>;
-    meta?: MetaCollectionFull;
+    meta?: MetaCollectionFull & MetafieldCursorPaginationMeta;
 };
 export type MetafieldBase = {
     key: string;
@@ -394,8 +394,12 @@ export type ProductSortOrder = {
     product_id: number;
     sort_order: number;
 };
+export type ProductSortOrderFull = {
+    product_id: number;
+    sort_order: number | null;
+};
 export type SortOrderGetCategorySortOrdersResponse200 = {
-    data?: Array<ProductSortOrder>;
+    data?: Array<ProductSortOrderFull>;
     meta?: MetaCollectionFull;
 };
 export type ErrorBase = {
@@ -870,6 +874,20 @@ export type UpdateCategorySortOrdersErrors = {
 };
 export type UpdateCategorySortOrdersError = UpdateCategorySortOrdersErrors[keyof UpdateCategorySortOrdersErrors];
 export type UpdateCategorySortOrdersResponses = {
-    200: Array<ProductSortOrder>;
+    200: Array<ProductSortOrderFull>;
 };
 export type UpdateCategorySortOrdersResponse = UpdateCategorySortOrdersResponses[keyof UpdateCategorySortOrdersResponses];
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+export type MetafieldCursorPagination = {
+    count?: number;
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

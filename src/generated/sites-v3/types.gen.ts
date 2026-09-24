@@ -97,11 +97,11 @@ export type Site = {
      */
     updated_at?: string;
     /**
-     * Indicates whether a site is using a private/dedicated SSL or a shared SSL.
+     * Indicates whether a site is using a private/dedicated SSL or a shared SSL. No longer returned.
      *
      * @deprecated
      */
-    ssl_status?: SiteSslStatus;
+    ssl_status: SiteSslStatus | undefined;
     /**
      * All URLs that belong to the site, including `primary`, `canonical`, and `checkout` URLs.
      */
@@ -273,7 +273,10 @@ export type CertificateResponseData = {
  * CertificateResponse
  */
 export type CertificateResponse = {
-    data?: CertificateResponseData;
+    /**
+     * The API returns the installed certificate details directly (not wrapped in `status` / `installed_certificate`).
+     */
+    data?: InstalledCertificateDetail;
     meta?: MetaOpen;
 };
 
@@ -397,7 +400,7 @@ export type MetaCollectionPagination = {
     /**
      * Total number of pages.
      */
-    total_page?: number;
+    total_pages?: number;
     links?: MetaCollectionPaginationLinks;
 };
 

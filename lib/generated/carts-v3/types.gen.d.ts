@@ -36,7 +36,7 @@ export type CollectionMeta = {
 };
 export type MetaFieldCollectionResponseBatch = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 export type CartsMetafieldsPostRequestBodyContentApplicationJsonSchemaItemsPermissionSet = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
 export type CartsMetafieldsPostRequestBodyContentApplicationJsonSchemaItems = {
@@ -763,7 +763,7 @@ export type GetCartMetafieldsData = {
     url: '/carts/{cart_id}/metafields';
 };
 export type GetCartMetafieldsResponses = {
-    200: MetafieldResponse;
+    200: MetaFieldCollectionResponseBatch;
 };
 export type GetCartMetafieldsResponse = GetCartMetafieldsResponses[keyof GetCartMetafieldsResponses];
 export type CreateCartMetafieldData = {
@@ -947,3 +947,17 @@ export type UpdateChannelCartSettingsResponses = {
     200: ChannelCartSettingsResponse;
 };
 export type UpdateChannelCartSettingsResponse = UpdateChannelCartSettingsResponses[keyof UpdateChannelCartSettingsResponses];
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+export type MetafieldCursorPagination = {
+    count?: number;
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

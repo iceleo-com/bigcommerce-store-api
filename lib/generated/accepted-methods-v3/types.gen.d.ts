@@ -82,6 +82,7 @@ export type GetPaymentMethodsErrors = {
     400: GetPaymentMethodsRequestBadRequestError;
     401: GetPaymentMethodsRequestUnauthorizedError;
     404: GetPaymentMethodsRequestNotFoundError;
+    409: GetPaymentMethodsRequestNotFoundError;
     422: GetPaymentMethodsRequestUnprocessableEntityError;
 };
 export type GetPaymentMethodsError = GetPaymentMethodsErrors[keyof GetPaymentMethodsErrors];

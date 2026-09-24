@@ -1,74 +1,82 @@
-const {
-    describe,
-    test,
-    expect,
-} = require('@jest/globals');
-const BigCommerceStoreApi = require('../lib/index').default;
+const { describe, test, expect } = require('@jest/globals');
+const { apiClient, expectSuccess, expectShape, expectPagination } = require('./helpers/api-client');
 
-let storeHash = '';
-let accessToken = '';
+const brandShape = {
+    id: 'number',
+    name: 'string',
+    page_title: 'string',
+    meta_keywords: 'array',
+    meta_description: 'string',
+    image_url: 'string',
+    search_keywords: 'string',
+    custom_url: 'object',
+};
 
-if (typeof process.env.STORE_HASH === 'string') {
-    storeHash = process.env.STORE_HASH;
-}
+const metafieldShape = {
+    id: 'number',
+    key: 'string',
+    value: 'string',
+    namespace: 'string',
+    permission_set: 'string',
+    resource_type: 'string',
+    resource_id: 'number',
+    date_created: 'string',
+    date_modified: 'string',
+};
 
-if (typeof process.env.ACCESS_TOKEN === 'string') {
-    accessToken = process.env.ACCESS_TOKEN;
-}
+describe('Brands V3 API', () => {
+    test('List and get brands and brand metafields', async () => {
+        const response = await apiClient.v3.brands.getBrands({ limit: 5 });
+        const brands = expectSuccess(response);
 
-describe('Store Hash and Access Token', () => {
-    test('should be provided as arguments', () => {
-        expect(storeHash).toBeTruthy();
-        expect(accessToken).toBeTruthy();
-    });
-});
+        expect(Array.isArray(brands)).toBe(true);
+        expectPagination(response.meta);
 
-if (!storeHash || !accessToken) {
-    process.exit(1);
-}
-
-const apiClient = new BigCommerceStoreApi({
-    storeHash,
-    accessToken,
-});
-
-describe('Brand API', () => {
-    test('Get brands', async () => {
-        const response = await apiClient.v3.brands.getBrands({
-            limit: 1,
-        });
-
-        expect(response.http_status).toBe(200);
-        expect(response).toHaveProperty('status');
-        expect(response.status).toBe('success');
-
-        if (response.status === 'success') {
-            expect(response).toHaveProperty('data');
-            expect(response.data).toBeInstanceOf(Array);
-
-            const brands = response.data;
-            if (Array.isArray(brands)
-                && brands.length > 0
-            ) {
-                const brand = brands[0];
-                expect(brand).toHaveProperty('id');
-                expect(brand).toHaveProperty('name');
-
-                const responseBrand = await apiClient.v3.brands.getBrand(brand.id);
-                expect(responseBrand.http_status).toBe(200);
-                expect(responseBrand).toHaveProperty('status');
-
-                if (responseBrand.status === 'success') {
-                    expect(responseBrand).toHaveProperty('data');
-
-                    const brandData = responseBrand.data;
-                    if (brandData) {
-                        expect(brandData.id).toBe(brand.id);
-                    }
-                } else {
-                    expect(responseBrand).toHaveProperty('errors');
-                }
-            }
+        if (brands.length === 0) {
+            return;
         }
+
+        expectShape(brands[0], brandShape);
+        expectShape(brands[0].custom_url, { url: 'string', is_customized: 'boolean' });
+
+        const brandId = brands[0].id;
+
+        const brandResponse = await apiClient.v3.brands.getBrand(brandId);
+        const brand = expectSuccess(brandResponse);
+        expectShape(brand, brandShape);
+        expect(brand.id).toBe(brandId);
+
+        const metafieldsResponse = await apiClient.v3.brands.getBrandMetafields(brandId);
+        const metafields = expectSuccess(metafieldsResponse);
+
+        expect(Array.isArray(metafields)).toBe(true);
+        expectPagination(metafieldsResponse.meta);
+
+        if (metafields.length === 0) {
+            return;
+        }
+
+        expectShape(metafields[0], metafieldShape);
+
+        const metafieldResponse = await apiClient.v3.brands.getBrandMetafield(brandId, metafields[0].id);
+        const metafield = expectSuccess(metafieldResponse);
+        expectShape(metafield, metafieldShape);
+        expect(metafield.id).toBe(metafields[0].id);
+    });
+
+    test('List all brand metafields', async () => {
+        const response = await apiClient.v3.brands.getBrandsMetafields({ limit: 5 });
+        const metafields = expectSuccess(response);
+
+        expect(Array.isArray(metafields)).toBe(true);
+        expectPagination(response.meta);
+        expectShape(response.meta, { cursor_pagination: ['object', 'undefined'] });
+
+        if (metafields.length === 0) {
+            return;
+        }
+
+        expectShape(metafields[0], metafieldShape);
+        expect(metafields[0].resource_type).toBe('brand');
     });
 });

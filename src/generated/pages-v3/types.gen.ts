@@ -14,7 +14,7 @@ export type ContentPagesGetParametersIncludeSchemaItems = 'body';
  *
  * Determines the type of page. See [Pages V3 page types](/developer/api-reference/rest/admin/content/pages#page-types) for more about the differences.
  */
-export type TypePageType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypePageType = 'page';
 
 /**
  * typePage
@@ -74,6 +74,10 @@ export type TypePage = {
      *
      */
     search_keywords?: string | null;
+    /**
+     * The page content. Returned only with `include=body`.
+     */
+    body?: string | null;
 };
 
 /**
@@ -81,7 +85,7 @@ export type TypePage = {
  *
  * Determines the type of page. See [Pages V3 page types](/developer/api-reference/rest/admin/content/pages#page-types) for more about the differences.
  */
-export type TypeBlogType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypeBlogType = 'blog';
 
 /**
  * typeBlog
@@ -147,7 +151,7 @@ export type TypeBlog = {
  *
  * Determines the type of page. See [Pages V3 page types](/developer/api-reference/rest/admin/content/pages#page-types) for more about the differences.
  */
-export type TypeContactFormType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypeContactFormType = 'contact_form';
 
 /**
  * typeContactForm
@@ -223,6 +227,10 @@ export type TypeContactForm = {
      *
      */
     contact_fields?: string;
+    /**
+     * The page content. Returned only with `include=body`.
+     */
+    body?: string | null;
 };
 
 /**
@@ -230,7 +238,7 @@ export type TypeContactForm = {
  *
  * Determines the type of page. See [Pages V3 page types](/developer/api-reference/rest/admin/content/pages#page-types) for more about the differences.
  */
-export type TypeRawType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypeRawType = 'raw';
 
 /**
  * typeRaw
@@ -294,7 +302,7 @@ export type TypeRaw = {
  *
  * Determines the type of page. See [Pages V3 page types](/developer/api-reference/rest/admin/content/pages#page-types) for more about the differences.
  */
-export type TypeLinkType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypeLinkType = 'link';
 
 /**
  * typeLink
@@ -344,9 +352,55 @@ export type TypeLink = {
 };
 
 /**
+ * PageResponseTypePage
+ *
+ * A `page` page as returned by the API: `body` is returned only with `include=body`.
+ */
+export type PageResponseTypePage = Omit<TypePage, 'body'> & {
+    body: string | null | undefined;
+};
+
+/**
+ * PageResponseTypeBlog
+ *
+ * A `blog` page as returned by the API (no SEO fields).
+ */
+export type PageResponseTypeBlog = Omit<TypeBlog, 'meta_title' | 'meta_keywords' | 'meta_description' | 'search_keywords'>;
+
+/**
+ * PageResponseTypeContactForm
+ *
+ * A `contact_form` page as returned by the API: `body` is returned only with `include=body`.
+ */
+export type PageResponseTypeContactForm = Omit<TypeContactForm, 'body'> & {
+    body: string | null | undefined;
+};
+
+/**
+ * PageResponseTypeRaw
+ *
+ * A `raw` page as returned by the API: `body` is returned only with `include=body`.
+ */
+export type PageResponseTypeRaw = Omit<TypeRaw, 'body'> & {
+    body: string | null | undefined;
+};
+
+/**
+ * PageResponseTypeLink
+ *
+ * A `link` page as returned by the API (no `url`).
+ */
+export type PageResponseTypeLink = Omit<TypeLink, 'url'>;
+
+/**
+ * PageResponse
+ */
+export type PageResponse = PageResponseTypePage | PageResponseTypeBlog | PageResponseTypeContactForm | PageResponseTypeRaw | PageResponseTypeLink;
+
+/**
  * PagesCollectionResponseDataItems
  */
-export type PagesCollectionResponseDataItems = TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+export type PagesCollectionResponseDataItems = PageResponse;
 
 /**
  * ResponseMetaPaginationLinks
@@ -506,7 +560,7 @@ export type PagesBulkCreatePagesRequest = PagesBulkCreatePagesRequest0 | PagesBu
 /**
  * ContentPagesPostResponsesContentApplicationJsonSchemaData
  */
-export type ContentPagesPostResponsesContentApplicationJsonSchemaData = TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+export type ContentPagesPostResponsesContentApplicationJsonSchemaData = PageResponse;
 
 /**
  * Pages (Bulk)_createPages_Response_201
@@ -665,7 +719,7 @@ export type ContentPagesPageIdGetParametersIncludeSchemaItems = 'body';
 /**
  * SinglePageResponseData
  */
-export type SinglePageResponseData = TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+export type SinglePageResponseData = PageResponse;
 
 /**
  * SinglePageResponse

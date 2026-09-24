@@ -44,15 +44,16 @@ export type _301RedirectRead = {
     from_path?: string;
     to?: RedirectTo;
     /**
-     * Full destination URL for the redirect. Must be explicitly included via URL parameter.
+     * Full destination URL for the redirect. Returned only with `include=to_url`.
      */
-    to_url?: string;
+    to_url: string | undefined;
 };
 
 /**
  * MetaPaginationObjectPaginationLinks
  */
 export type MetaPaginationObjectPaginationLinks = {
+    previous?: string;
     next?: string;
     current?: string;
 };

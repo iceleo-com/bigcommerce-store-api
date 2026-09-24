@@ -28,20 +28,210 @@ export type WidgetBaseWidgetConfiguration = {
 export type WidgetSchemaTabType = 'tab';
 
 /**
+ * WidgetSchemaSettingDefaultAlignment
+ *
+ * The default value of an `alignment` setting.
+ */
+export type WidgetSchemaSettingDefaultAlignment = {
+    horizontal?: string;
+    vertical?: string;
+};
+
+/**
+ * WidgetSchemaSettingDimension
+ *
+ * A value with its unit, e.g. `{ value: '0', type: 'px' }`.
+ */
+export type WidgetSchemaSettingDimension = {
+    value?: string | number;
+    /**
+     * The unit, e.g. `px` or `%`.
+     */
+    type?: string;
+};
+
+/**
+ * WidgetSchemaSettingDefaultBoxModel
+ *
+ * The default value of a `boxModel` setting.
+ */
+export type WidgetSchemaSettingDefaultBoxModel = {
+    top?: WidgetSchemaSettingDimension;
+    right?: WidgetSchemaSettingDimension;
+    bottom?: WidgetSchemaSettingDimension;
+    left?: WidgetSchemaSettingDimension;
+};
+
+/**
+ * WidgetSchemaSettingDefaultImage
+ *
+ * The default value of an `imageManager` setting.
+ */
+export type WidgetSchemaSettingDefaultImage = {
+    src?: string;
+    /**
+     * The image source, e.g. `IMAGE_MANAGER`.
+     */
+    type?: string;
+};
+
+/**
+ * WidgetSchemaSettingDefaultProductSet
+ *
+ * The default value of a `productSet` setting.
+ */
+export type WidgetSchemaSettingDefaultProductSet = {
+    /**
+     * How the products are selected, e.g. `manual`.
+     */
+    type?: string;
+    value?: Array<{
+        productId?: string | number;
+        [key: string]: unknown;
+    }>;
+};
+
+/**
+ * WidgetSchemaSettingDefault
+ *
+ * The default value of a setting; its shape depends on the setting type
+ * (`number` settings use `{ value, type }`).
+ */
+export type WidgetSchemaSettingDefault = string | number | boolean | WidgetSchemaSettingDefaultAlignment | WidgetSchemaSettingDefaultBoxModel | WidgetSchemaSettingDefaultImage | WidgetSchemaSettingDimension | WidgetSchemaSettingDefaultProductSet;
+
+/**
+ * WidgetSchemaSettingTypeMetaRangeValues
+ */
+export type WidgetSchemaSettingTypeMetaRangeValues = {
+    min?: number;
+    max?: number;
+    step?: number;
+    /**
+     * The unit, e.g. `px` or `%`.
+     */
+    unit?: string;
+};
+
+/**
+ * WidgetSchemaSettingTypeMetaRegExPattern
+ */
+export type WidgetSchemaSettingTypeMetaRegExPattern = {
+    pattern?: string;
+    /**
+     * The index of the match group to store.
+     */
+    matchIndex?: number;
+    /**
+     * The key under which the match is stored in the setting value.
+     */
+    configKey?: string;
+};
+
+/**
+ * WidgetSchemaSettingTypeMetaConditionalSettings
+ *
+ * Settings displayed when the setting value equals `condition` (`typography` settings).
+ */
+export type WidgetSchemaSettingTypeMetaConditionalSettings = {
+    condition?: string;
+    settings?: Array<WidgetSchemaTabSectionsItemsSettingsItems>;
+};
+
+/**
+ * WidgetSchemaSettingTypeMetaControls
+ *
+ * The controls of an `element` setting.
+ */
+export type WidgetSchemaSettingTypeMetaControls = {
+    visibility?: {
+        /**
+         * `show` or `hide`.
+         */
+        default?: string;
+    };
+    advanced?: {
+        label?: string;
+        settings?: Array<WidgetSchemaTabSectionsItemsSettingsItems>;
+    };
+};
+
+/**
+ * WidgetSchemaSettingTypeMetaMapping
+ *
+ * A `graphQl` setting mapping: the setting path to read and the GraphQL variable type.
+ */
+export type WidgetSchemaSettingTypeMetaMapping = {
+    /**
+     * The setting path to read, e.g. `product.value.*.productId`.
+     */
+    reads?: string;
+    /**
+     * The GraphQL type, e.g. `Int!`.
+     */
+    type?: string;
+};
+
+/**
+ * WidgetSchemaSettingTypeMeta
+ *
+ * The type-specific settings metadata, besides `selectOptions`.
+ */
+export type WidgetSchemaSettingTypeMeta = {
+    /**
+     * `input`, `regexInput`, `code` and `productId` settings.
+     */
+    placeholder?: string;
+    /**
+     * `code` settings, e.g. `html`.
+     */
+    language?: string;
+    /**
+     * `alignment` settings: `horizontal`, `vertical` or `both`.
+     */
+    display?: string;
+    /**
+     * `range` settings.
+     */
+    rangeValues?: WidgetSchemaSettingTypeMetaRangeValues;
+    /**
+     * `number` settings: `integer` or `float`.
+     */
+    parseType?: string;
+    /**
+     * `regexInput` settings.
+     */
+    regExPatterns?: Array<WidgetSchemaSettingTypeMetaRegExPattern>;
+    /**
+     * `typography` settings.
+     */
+    conditionalSettings?: Array<WidgetSchemaSettingTypeMetaConditionalSettings>;
+    /**
+     * `element` settings.
+     */
+    controls?: WidgetSchemaSettingTypeMetaControls;
+    /**
+     * `graphQl` settings: GraphQL variable name to mapping.
+     */
+    mappings?: {
+        [variable: string]: WidgetSchemaSettingTypeMetaMapping;
+    };
+};
+
+/**
  * WidgetSchemaTabSectionsItemsSettingsItemsType
  *
  * The type of setting component to display. You can view the list of elements below to discover which are available to use.
  *
  * For examples of each type of setting, see [Page Builder > Schema Settings](/developer/docs/admin/widgets-and-scripts/input-reference/schema#alignment) in Theme Docs.
  */
-export type WidgetSchemaTabSectionsItemsSettingsItemsType = 'alignment' | 'boolean' | 'boxModel' | 'code' | 'color' | 'imageManager' | 'input' | 'number' | 'productId' | 'productImage' | 'range' | 'regexInput' | 'select' | 'text' | 'toggle';
+export type WidgetSchemaTabSectionsItemsSettingsItemsType = 'alignment' | 'boolean' | 'boxModel' | 'code' | 'color' | 'element' | 'graphQl' | 'imageManager' | 'input' | 'number' | 'productId' | 'productImage' | 'productSet' | 'range' | 'regexInput' | 'select' | 'text' | 'toggle' | 'typography' | 'visibility';
 
 /**
  * WidgetSchemaTabSectionsItemsSettingsItemsTypeMetaSelectOptionsItems
  */
 export type WidgetSchemaTabSectionsItemsSettingsItemsTypeMetaSelectOptionsItems = {
     label?: string;
-    value?: string;
+    value?: string | number;
 };
 
 /**
@@ -49,7 +239,10 @@ export type WidgetSchemaTabSectionsItemsSettingsItemsTypeMetaSelectOptionsItems 
  *
  * Additional information needed based on the selected setting type.
  */
-export type WidgetSchemaTabSectionsItemsSettingsItemsTypeMeta = {
+export type WidgetSchemaTabSectionsItemsSettingsItemsTypeMeta = WidgetSchemaSettingTypeMeta & {
+    /**
+     * The options of a `select` setting.
+     */
     selectOptions?: Array<WidgetSchemaTabSectionsItemsSettingsItemsTypeMetaSelectOptionsItems>;
 };
 
@@ -70,7 +263,7 @@ export type WidgetSchemaTabSectionsItemsSettingsItemsConditional = {
     /**
      * A single-object array containing a value from the `typeMeta`'s `selectOptions`.
      */
-    value?: Array<unknown>;
+    value?: Array<string | number | boolean>;
 };
 
 /**
@@ -96,7 +289,7 @@ export type WidgetSchemaTabSectionsItemsSettingsItems = {
     /**
      * The default value to use when rendering the widget for the first time. Make sure to set sensible defaults to make your widget easier to use.
      */
-    default?: string;
+    default?: WidgetSchemaSettingDefault;
     /**
      * Additional information needed based on the selected setting type.
      */
@@ -105,6 +298,10 @@ export type WidgetSchemaTabSectionsItemsSettingsItems = {
      * An optional property that can be added to each setting to control whether it should be displayed to the user while editing in Page Builder. This does not clear the value in the setting, just controls the display of the setting.
      */
     conditional?: WidgetSchemaTabSectionsItemsSettingsItemsConditional;
+    /**
+     * The name of each entry (`productSet` settings).
+     */
+    entryLabel?: string;
 };
 
 /**
@@ -119,6 +316,12 @@ export type WidgetSchemaTabSectionsItems = {
      * For examples of schema settings, see [Widget UI Input Types](/developer/docs/admin/widgets-and-scripts/input-reference/schema).
      */
     settings?: Array<WidgetSchemaTabSectionsItemsSettingsItems>;
+    /**
+     * Section metadata, e.g. `{ type: 'setSection' }`.
+     */
+    typeMeta?: {
+        type?: string;
+    };
 };
 
 /**
@@ -154,6 +357,19 @@ export type WidgetSchemaArrayType = 'array';
 export type WidgetSchemaArrayThumbnail = {
     type?: string;
     valueKey?: string;
+    /**
+     * The setting whose value selects one of the `thumbnailConditions`.
+     */
+    conditionKey?: string;
+    /**
+     * Thumbnails by value of the `conditionKey` setting.
+     */
+    thumbnailConditions?: {
+        [value: string]: {
+            type?: string;
+            valueKey?: string;
+        };
+    };
 };
 
 /**
@@ -168,14 +384,14 @@ export type WidgetSchemaHiddenType = 'hidden';
  *
  * For examples of each type of setting, see [Page Builder > Schema Settings](/developer/docs/admin/widgets-and-scripts/input-reference/schema#alignment) in Theme Docs.
  */
-export type WidgetSchemaHiddenSettingsItemsType = 'alignment' | 'boolean' | 'boxModel' | 'code' | 'color' | 'imageManager' | 'input' | 'number' | 'productId' | 'productImage' | 'range' | 'regexInput' | 'select' | 'text' | 'toggle';
+export type WidgetSchemaHiddenSettingsItemsType = 'alignment' | 'boolean' | 'boxModel' | 'code' | 'color' | 'element' | 'graphQl' | 'imageManager' | 'input' | 'number' | 'productId' | 'productImage' | 'productSet' | 'range' | 'regexInput' | 'select' | 'text' | 'toggle' | 'typography' | 'visibility';
 
 /**
  * WidgetSchemaHiddenSettingsItemsTypeMetaSelectOptionsItems
  */
 export type WidgetSchemaHiddenSettingsItemsTypeMetaSelectOptionsItems = {
     label?: string;
-    value?: string;
+    value?: string | number;
 };
 
 /**
@@ -183,7 +399,10 @@ export type WidgetSchemaHiddenSettingsItemsTypeMetaSelectOptionsItems = {
  *
  * Additional information needed based on the selected setting type.
  */
-export type WidgetSchemaHiddenSettingsItemsTypeMeta = {
+export type WidgetSchemaHiddenSettingsItemsTypeMeta = WidgetSchemaSettingTypeMeta & {
+    /**
+     * The options of a `select` setting.
+     */
     selectOptions?: Array<WidgetSchemaHiddenSettingsItemsTypeMetaSelectOptionsItems>;
 };
 
@@ -204,7 +423,7 @@ export type WidgetSchemaHiddenSettingsItemsConditional = {
     /**
      * A single-object array containing a value from the `typeMeta`'s `selectOptions`.
      */
-    value?: Array<unknown>;
+    value?: Array<string | number | boolean>;
 };
 
 /**
@@ -230,7 +449,7 @@ export type WidgetSchemaHiddenSettingsItems = {
     /**
      * The default value to use when rendering the widget for the first time. Make sure to set sensible defaults to make your widget easier to use.
      */
-    default?: string;
+    default?: WidgetSchemaSettingDefault;
     /**
      * Additional information needed based on the selected setting type.
      */
@@ -239,6 +458,10 @@ export type WidgetSchemaHiddenSettingsItems = {
      * An optional property that can be added to each setting to control whether it should be displayed to the user while editing in Page Builder. This does not clear the value in the setting, just controls the display of the setting.
      */
     conditional?: WidgetSchemaHiddenSettingsItemsConditional;
+    /**
+     * The name of each entry (`productSet` settings).
+     */
+    entryLabel?: string;
 };
 
 /**
@@ -336,6 +559,21 @@ export type WidgetTemplateFull = {
      * A read-only value. Do not attempt to set or modify this value in a POST or PUT operation.
      */
     icon_name?: string;
+    /**
+     * The template engine, e.g. `handlebars_v3`.
+     */
+    template_engine?: string;
+    client_rerender?: boolean;
+    /**
+     * The ID of the channel on which this widget template exists.
+     */
+    channel_id?: number;
+    /**
+     * Translations of the schema labels.
+     */
+    schema_translations?: {
+        [key: string]: unknown;
+    };
 };
 
 /**
@@ -371,6 +609,12 @@ export type WidgetFull = {
      * The identifier of the widget template version associated with this widget.
      */
     version_uuid?: string;
+    /**
+     * The variables passed to the widget template's `storefront_api_query`.
+     */
+    storefront_api_query_params?: {
+        [key: string]: unknown;
+    };
     /**
      * The ID of the channel on which this widget exists.
      */

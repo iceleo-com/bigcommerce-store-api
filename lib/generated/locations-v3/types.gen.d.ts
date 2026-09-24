@@ -92,7 +92,7 @@ export type MetaFieldCollectionResponsePostPutMeta = {
 };
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 export type CollectionMeta = {
     pagination?: CollectionMetaPagination;
@@ -160,7 +160,7 @@ export type InventoryLocationsLocationIdMetafieldsPostResponsesContentApplicatio
 };
 export type MetafieldsGetLocationMetafieldsResponse200 = {
     data?: Array<Metafield>;
-    meta?: InventoryLocationsLocationIdMetafieldsGetResponsesContentApplicationJsonSchemaMeta;
+    meta?: InventoryLocationsLocationIdMetafieldsGetResponsesContentApplicationJsonSchemaMeta & MetafieldCursorPaginationMeta;
 };
 export type InventoryLocationsLocationIdMetafieldsGetResponsesContentApplicationJsonSchemaMeta = {
     pagination?: InventoryLocationsLocationIdMetafieldsGetResponsesContentApplicationJsonSchemaMetaPagination;
@@ -256,12 +256,12 @@ export type LocationResponse = {
     id?: number;
     code?: string;
     label?: string;
-    description?: string;
+    description?: string | null;
     managed_by_external_source?: boolean;
     type_id?: LocationResponseTypeId;
     enabled?: boolean;
-    operating_hours?: OperatingHours;
-    time_zone?: string;
+    operating_hours?: OperatingHours | null;
+    time_zone?: string | null;
     created_at?: string;
     updated_at?: string;
     address?: LocationResponseAddress;
@@ -289,8 +289,8 @@ export type LocationResponseAddress = {
     country_code?: string;
 };
 export type LocationResponseAddressGeoCoordinates = {
-    latitude?: string;
-    longitude?: string;
+    latitude?: string | null;
+    longitude?: string | null;
 };
 export type LocationResponseTypeId = 'PHYSICAL' | 'VIRTUAL';
 export type LocationsCreateRequest = Array<LocationsCreateRequestItems>;
@@ -579,3 +579,17 @@ export type UpdateLocationsMetafieldsResponses = {
     200: MetaFieldCollectionResponsePostPut;
 };
 export type UpdateLocationsMetafieldsResponse = UpdateLocationsMetafieldsResponses[keyof UpdateLocationsMetafieldsResponses];
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+export type MetafieldCursorPagination = {
+    count?: number;
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

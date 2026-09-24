@@ -16,11 +16,11 @@ export declare class StoreContentV2Api {
         [key: string]: unknown;
     }>>>;
     getBlogPostsCount(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.CountResponse>>>;
-    getBlogTags(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, StoreContentV2ApiSpecs.BlogTags[]>>;
-    getPages(query?: StoreContentV2ApiSpecs.GetPagesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, StoreContentV2ApiSpecs.PageFull[]>>;
-    createPage(requestBody: StoreContentV2ApiSpecs.CreatePageData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.PageFull>>>;
-    getPage(id: StoreContentV2ApiSpecs.GetPageData['path']['id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.PageFull>>>;
-    updatePage(id: StoreContentV2ApiSpecs.UpdatePageData['path']['id'], requestBody: StoreContentV2ApiSpecs.UpdatePageData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.PageFull>>>;
+    getBlogTags(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, StoreContentV2ApiSpecs.BlogTagsItems[]>>;
+    getPages(query?: StoreContentV2ApiSpecs.GetPagesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, StoreContentV2ApiSpecs.PageFullRes[]>>;
+    createPage(requestBody: StoreContentV2ApiSpecs.CreatePageData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.PageFullRes>>>;
+    getPage(id: StoreContentV2ApiSpecs.GetPageData['path']['id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.PageFullRes>>>;
+    updatePage(id: StoreContentV2ApiSpecs.UpdatePageData['path']['id'], requestBody: StoreContentV2ApiSpecs.UpdatePageData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.PageFullRes>>>;
     deletePage(id: StoreContentV2ApiSpecs.DeletePageData['path']['id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, Required<{
         [key: string]: unknown;
     }>>>;

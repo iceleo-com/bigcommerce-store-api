@@ -1,6 +1,6 @@
 {
   "name": "bigcommerce-store-api",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "BigCommerce Store API Client",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -17,7 +17,8 @@
     "node": ">=20.18.1"
   },
   "jest": {
-    "globalSetup": "<rootDir>/jest/global-setup.js"
+    "globalSetup": "<rootDir>/jest/global-setup.js",
+    "testTimeout": 30000
   },
   "repository": {
     "type": "git",

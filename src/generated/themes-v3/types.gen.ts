@@ -219,33 +219,79 @@ export type Activate = {
  * The content of the configuration, which is a JSON object which will vary in structure from theme to theme.
  */
 export type ThemeConfigurationFullSettings = {
-    [key: string]: unknown;
+    [key: string]: string | number | boolean | null | Array<unknown>;
 };
 
 /**
  * themeConfiguration_Full
  *
- * A theme.
+ * A theme configuration.
  */
 export type ThemeConfigurationFull = {
     uuid?: string;
+    store_hash?: string;
+    /**
+     * The channel to which the configuration belongs.
+     */
+    channel_id?: number;
+    /**
+     * The content of the configuration, which is a JSON object which will vary in structure from theme to theme.
+     */
+    settings?: ThemeConfigurationFullSettings;
     /**
      * The Theme to which the Configuration belongs.
      */
     theme_uuid?: string;
     /**
+     * The theme version to which the configuration belongs.
+     */
+    version_uuid?: string;
+    /**
      * The Variation to which the Configuration belongs.
      */
-    variation_id?: string;
+    variation_uuid?: string;
+    created_at?: string;
+    updated_at?: string;
+};
+
+/**
+ * PaginationLinks
+ *
+ * Pagination links for the previous and next parts of the whole collection.
+ */
+export type PaginationLinks = {
+    previous?: string;
+    current?: string;
+    next?: string;
+};
+
+/**
+ * pagination
+ *
+ * Data about the response, including pagination and collection totals.
+ */
+export type Pagination = {
     /**
-     * The content of the configuration, which is a JSON object which will vary in structure from theme to theme.
+     * Total number of items in the result set.
      */
-    settings?: ThemeConfigurationFullSettings;
-    date_created?: string;
+    total?: number;
     /**
-     * Site ID to which this configuration belongs. Will be 0 for the original configuration for a Theme.
+     * Total number of items in the collection response.
      */
-    site_id?: number;
+    count?: number;
+    /**
+     * The amount of items returned in the collection per page, controlled by the limit parameter.
+     */
+    per_page?: number;
+    /**
+     * The page you are currently on within the collection.
+     */
+    current_page?: number;
+    /**
+     * The total number of pages in the collection.
+     */
+    total_pages?: number;
+    links?: PaginationLinks;
 };
 
 /**
@@ -254,7 +300,7 @@ export type ThemeConfigurationFull = {
  * Response metadata.
  */
 export type ThemesCollectionMeta = {
-    [key: string]: unknown;
+    pagination?: Pagination;
 };
 
 /**
@@ -330,10 +376,14 @@ export type ErrorResponse = {
  * ThemesCustomTemplatesVersionUuidGetResponsesContentApplicationJsonSchemaData
  */
 export type ThemesCustomTemplatesVersionUuidGetResponsesContentApplicationJsonSchemaData = {
-    product?: Array<string>;
-    category?: Array<string>;
-    brand?: Array<string>;
-    page?: Array<string>;
+    /**
+     * The page type, e.g. `product`, `category`, `brand` or `page`.
+     */
+    page_type?: 'product' | 'category' | 'brand' | 'page' | (string & {});
+    /**
+     * The custom template file names (without extension).
+     */
+    templates?: Array<string>;
 };
 
 /**
@@ -349,7 +399,7 @@ export type OpenMeta = {
  * Theme Custom Templates_getThemeCustomTemplates_Response_200
  */
 export type ThemeCustomTemplatesGetThemeCustomTemplatesResponse200 = {
-    data?: ThemesCustomTemplatesVersionUuidGetResponsesContentApplicationJsonSchemaData;
+    data?: Array<ThemesCustomTemplatesVersionUuidGetResponsesContentApplicationJsonSchemaData>;
     meta?: OpenMeta;
 };
 

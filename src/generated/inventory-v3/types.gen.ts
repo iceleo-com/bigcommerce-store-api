@@ -353,7 +353,7 @@ export type ItemResponseIdentity = {
     /**
      * Read-only reference to Catalog V2 API's SKU ID. `null` if the item is a base variant.
      */
-    sku_id?: number;
+    sku_id?: number | null;
 };
 
 /**

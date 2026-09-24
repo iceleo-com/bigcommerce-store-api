@@ -103,11 +103,13 @@ export class OrdersV2Oas2Api {
 
      * The default sort is by order id, from lowest to highest.
      * By default, requests sent without parameters will only return 50 orders. 
+     *
+     * Responds with `204` and no data when nothing matches.
      */
     getOrders(
         query?: OrdersV2Oas2ApiSpecs.GetOrdersData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrdersResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrdersResponses[200]>> | RequestSuccessResponse<204, void>,RequestErrorResponse<400, void>>({
             path: 'v2/orders',
             query,
         });
@@ -221,12 +223,14 @@ export class OrdersV2Oas2Api {
      |`3`|`shipping_discount`|
      |`4`|`free_shipping`|
      |`5`|`promotion`|
+     *
+     * Responds with `204` and no data when the order has none.
      */
     getOrderCoupons(
         orderId: OrdersV2Oas2ApiSpecs.GetOrderCouponsData['path']['order_id'],
         query?: OrdersV2Oas2ApiSpecs.GetOrderCouponsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderCouponsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderCouponsResponses[200]>> | RequestSuccessResponse<204, void>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/coupons`,
             query,
         });
@@ -236,11 +240,13 @@ export class OrdersV2Oas2Api {
      * List Fees
      *
      * Get all fees for an order. 
+     *
+     * Responds with `204` and no data when the order has none.
      */
     getOrderFees(
         orderId: OrdersV2Oas2ApiSpecs.GetOrderFeesData['path']['order_id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderFeesResponses[200]>>,RequestErrorResponse<404, Required<OrdersV2Oas2ApiSpecs.GetOrderFeesErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderFeesResponses[200]>> | RequestSuccessResponse<204, void>,RequestErrorResponse<404, Required<OrdersV2Oas2ApiSpecs.GetOrderFeesErrors[404]>>>({
             path: `v2/orders/${orderId}/fees`,
         });
     }
@@ -249,12 +255,14 @@ export class OrdersV2Oas2Api {
      * List Order Messages
      *
      * Gets the messages associated with an order.
+     *
+     * Responds with `204` and no data when the order has none.
      */
     getOrderMessages(
         orderId: OrdersV2Oas2ApiSpecs.GetOrderMessagesData['path']['order_id'],
         query?: OrdersV2Oas2ApiSpecs.GetOrderMessagesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderMessagesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderMessagesResponses[200]>> | RequestSuccessResponse<204, void>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/messages`,
             query,
         });
@@ -295,12 +303,14 @@ export class OrdersV2Oas2Api {
      * List Order Shipments
      *
      * Gets a list of all shipments on an order.
+     *
+     * Responds with `204` and no data when the order has none.
      */
     getOrderShipments(
         orderId: OrdersV2Oas2ApiSpecs.GetOrderShipmentsData['path']['order_id'],
         query?: OrdersV2Oas2ApiSpecs.GetOrderShipmentsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderShipmentsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV2Oas2ApiSpecs.GetOrderShipmentsResponses[200]>> | RequestSuccessResponse<204, void>,RequestErrorResponse<400, void>>({
             path: `v2/orders/${orderId}/shipments`,
             query,
         });

@@ -35,6 +35,7 @@ export type CustomTemplateAssociation = {
  * MetaPaginationObjectPaginationLinks
  */
 export type MetaPaginationObjectPaginationLinks = {
+    previous?: string;
     next?: string;
     current?: string;
 };

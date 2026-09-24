@@ -258,6 +258,10 @@ export type GetPaymentMethodsErrors = {
      */
     404: GetPaymentMethodsRequestNotFoundError;
     /**
+     * The order is not in a status that accepts payments (only incomplete orders do)
+     */
+    409: GetPaymentMethodsRequestNotFoundError;
+    /**
      * Request has been rejected due to missing or invalid data
      */
     422: GetPaymentMethodsRequestUnprocessableEntityError;

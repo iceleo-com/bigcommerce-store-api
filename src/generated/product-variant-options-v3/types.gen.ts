@@ -241,7 +241,10 @@ export type ProductOptionFull = {
      *
      */
     type?: ProductOptionBaseType;
-    config?: ProductOptionConfigFull;
+    /**
+     * An empty array when the option has no configuration.
+     */
+    config?: ProductOptionConfigFull | [];
     /**
      * Order in which the option is displayed on the storefront.
      */
@@ -772,7 +775,7 @@ export type CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSc
      * Extra data describing the value, based on the type of option or modifier with which the value is associated. The `swatch` type option can accept an array of `colors`, with up to three hexidecimal color keys; or an `image_url`, which is a full image URL path including protocol. The `product list` type option requires a `product_id`. The `checkbox` type option requires a boolean flag, called `checked_value`, to determine which value is considered to be the checked state.
      *
      */
-    value_data?: CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSchemaDataOptionValuesItemsValueData;
+    value_data?: CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSchemaDataOptionValuesItemsValueData | null;
     /**
      * The unique numeric ID of the value; increments sequentially.
      *
@@ -809,7 +812,7 @@ export type CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSc
     /**
      * The values for option config can vary based on the Modifier created.
      */
-    config?: CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSchemaDataConfig;
+    config?: CatalogProductsProductIdOptionsPostResponsesContentApplicationJsonSchemaDataConfig | [];
     /**
      * Order in which the option is displayed on the storefront.
      */
@@ -1348,7 +1351,7 @@ export type CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicatio
      * Extra data describing the value, based on the type of option or modifier with which the value is associated. The `swatch` type option can accept an array of `colors`, with up to three hexidecimal color keys; or an `image_url`, which is a full image URL path including protocol. The `product list` type option requires a `product_id`. The `checkbox` type option requires a boolean flag, called `checked_value`, to determine which value is considered to be the checked state.
      *
      */
-    value_data?: CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicationJsonSchemaDataOptionValuesItemsValueData;
+    value_data?: CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicationJsonSchemaDataOptionValuesItemsValueData | null;
     /**
      * The unique numeric ID of the value; increments sequentially.
      *
@@ -1385,7 +1388,7 @@ export type CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicatio
     /**
      * The values for option config can vary based on the Modifier created.
      */
-    config?: CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicationJsonSchemaDataConfig;
+    config?: CatalogProductsProductIdOptionsOptionIdPutResponsesContentApplicationJsonSchemaDataConfig | [];
     /**
      * Order in which the option is displayed on the storefront.
      */
@@ -1503,7 +1506,7 @@ export type CatalogProductsProductIdOptionsOptionIdValuesGetResponsesContentAppl
      * Extra data describing the value, based on the type of option or modifier with which the value is associated. The `swatch` type option can accept an array of `colors`, with up to three hexidecimal color keys; or an `image_url`, which is a full image URL path including protocol. The `product list` type option requires a `product_id`. The `checkbox` type option requires a boolean flag, called `checked_value`, to determine which value is considered to be the checked state.
      *
      */
-    value_data?: CatalogProductsProductIdOptionsOptionIdValuesGetResponsesContentApplicationJsonSchemaDataItemsValueData;
+    value_data?: CatalogProductsProductIdOptionsOptionIdValuesGetResponsesContentApplicationJsonSchemaDataItemsValueData | null;
     /**
      * The unique numeric ID of the value; increments sequentially.
      *
@@ -1566,7 +1569,7 @@ export type CatalogProductsProductIdOptionsOptionIdValuesPostResponsesContentApp
      * Extra data describing the value, based on the type of option or modifier with which the value is associated. The `swatch` type option can accept an array of `colors`, with up to three hexidecimal color keys; or an `image_url`, which is a full image URL path including protocol. The `product list` type option requires a `product_id`. The `checkbox` type option requires a boolean flag, called `checked_value`, to determine which value is considered to be the checked state.
      *
      */
-    value_data?: CatalogProductsProductIdOptionsOptionIdValuesPostResponsesContentApplicationJsonSchemaDataValueData;
+    value_data?: CatalogProductsProductIdOptionsOptionIdValuesPostResponsesContentApplicationJsonSchemaDataValueData | null;
     /**
      * The unique numeric ID of the value; increments sequentially.
      *
@@ -1656,7 +1659,7 @@ export type CatalogProductsProductIdOptionsOptionIdValuesValueIdGetResponsesCont
      * Extra data describing the value, based on the type of option or modifier with which the value is associated. The `swatch` type option can accept an array of `colors`, with up to three hexidecimal color keys; or an `image_url`, which is a full image URL path including protocol. The `product list` type option requires a `product_id`. The `checkbox` type option requires a boolean flag, called `checked_value`, to determine which value is considered to be the checked state.
      *
      */
-    value_data?: CatalogProductsProductIdOptionsOptionIdValuesValueIdGetResponsesContentApplicationJsonSchemaDataValueData;
+    value_data?: CatalogProductsProductIdOptionsOptionIdValuesValueIdGetResponsesContentApplicationJsonSchemaDataValueData | null;
     /**
      * The unique numeric ID of the value; increments sequentially.
      *
@@ -1739,7 +1742,7 @@ export type CatalogProductsProductIdOptionsOptionIdValuesValueIdPutResponsesCont
      * Extra data describing the value, based on the type of option or modifier with which the value is associated. The `swatch` type option can accept an array of `colors`, with up to three hexidecimal color keys; or an `image_url`, which is a full image URL path including protocol. The `product list` type option requires a `product_id`. The `checkbox` type option requires a boolean flag, called `checked_value`, to determine which value is considered to be the checked state.
      *
      */
-    value_data?: CatalogProductsProductIdOptionsOptionIdValuesValueIdPutResponsesContentApplicationJsonSchemaDataValueData;
+    value_data?: CatalogProductsProductIdOptionsOptionIdValuesValueIdPutResponsesContentApplicationJsonSchemaDataValueData | null;
     /**
      * The unique numeric ID of the value; increments sequentially.
      *

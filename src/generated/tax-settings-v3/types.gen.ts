@@ -74,6 +74,10 @@ export type TaxSettingsFallbackStrategy = 'FIXED' | 'BASIC' | 'DISABLE';
  */
 export type TaxSettingsPriceDisplaySettings = {
     /**
+     * Whether to show prices as tax inclusive in the BigCommerce control panel.
+     */
+    show_inclusive_in_control_panel?: boolean;
+    /**
      * Whether to show prices as tax inclusive or tax exclusive in the BigCommerce control panel, or use the order's tax zone for price display.
      */
     control_panel_price_display_strategy?: TaxSettingsPriceDisplaySettingsControlPanelPriceDisplayStrategy;

@@ -17,6 +17,7 @@ export type Tree = {
  * MetaPaginationObjectPaginationLinks
  */
 export type MetaPaginationObjectPaginationLinks = {
+    previous?: string;
     next?: string;
     current?: string;
 };
@@ -249,7 +250,10 @@ export type Url = {
 export type GetCategories = {
     name?: Name;
     category_id?: CategoryId;
-    category_uuid?: CategoryUuid;
+    /**
+     * Not returned by all stores.
+     */
+    category_uuid: CategoryUuid | undefined;
     tree_id?: TreeId;
     parent_id?: ParentId;
     /**

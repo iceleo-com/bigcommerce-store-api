@@ -50,6 +50,7 @@ export type Timezone = {
  */
 export type StoreInformationLogo0 = {
     url?: string;
+    mobile_url?: string;
 };
 
 /**
@@ -115,6 +116,8 @@ export type StoreInformationFeatures = {
      * Indicates whether the storeʼs plan provides the possibility of using more than one storefront or sales channel. Internally, this value indicates whether the store has the MSF feature flag enabled.
      */
     multi_storefront_enabled?: boolean;
+    multi_language_enabled?: boolean;
+    b2b_enabled?: boolean;
     storefront_limits?: StoreInformationFeaturesStorefrontLimits;
 };
 

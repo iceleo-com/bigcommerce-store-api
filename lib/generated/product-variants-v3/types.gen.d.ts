@@ -12,6 +12,7 @@ export type ProductVariantFull = {
     price?: number | null;
     sale_price?: number | null;
     retail_price?: number | null;
+    map_price?: number | null;
     weight?: number | null;
     width?: number | null;
     height?: number | null;
@@ -176,7 +177,7 @@ export type CollectionMeta = {
 };
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 export type CatalogVariantsMetafieldsPostRequestBodyContentApplicationJsonSchemaItemsPermissionSet = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
 export type CatalogVariantsMetafieldsPostRequestBodyContentApplicationJsonSchemaItems = {
@@ -313,7 +314,7 @@ export type CategoriesTreeResp = {
 };
 export type MetafieldsGetProductVariantMetafieldsResponse200 = {
     data?: Array<MetafieldFull>;
-    meta?: CategoriesTreeResp;
+    meta?: MetaCollectionFull & MetafieldCursorPaginationMeta;
 };
 export type MetafieldBase = {
     key: string;
@@ -388,28 +389,33 @@ export type CatalogVariantsGetResponsesContentApplicationJsonSchemaDataItemsOpti
     option_id?: number;
 };
 export type CatalogVariantsGetResponsesContentApplicationJsonSchemaDataItems = {
-    cost_price?: number;
-    price?: number;
-    sale_price?: number;
-    retail_price?: number;
-    weight?: number;
-    width?: number;
-    height?: number;
-    depth?: number;
+    cost_price?: number | null;
+    price?: number | null;
+    sale_price?: number | null;
+    retail_price?: number | null;
+    map_price?: number | null;
+    weight?: number | null;
+    width?: number | null;
+    height?: number | null;
+    depth?: number | null;
     is_free_shipping?: boolean;
-    fixed_cost_shipping_price?: number;
+    fixed_cost_shipping_price?: number | null;
     purchasing_disabled?: boolean;
     purchasing_disabled_message?: string;
     upc?: string | null;
-    inventory_level?: number;
-    inventory_warning_level?: number;
-    bin_picking_number?: string;
+    inventory_level?: number | null;
+    inventory_warning_level?: number | null;
+    bin_picking_number?: string | null;
     id?: number;
     product_id?: number;
     sku?: string;
-    sku_id?: number;
+    sku_id?: number | null;
     option_values?: Array<CatalogVariantsGetResponsesContentApplicationJsonSchemaDataItemsOptionValuesItems>;
     calculated_price?: number;
+    calculated_weight?: number;
+    image_url?: string;
+    mpn?: string | null;
+    gtin?: string | null;
 };
 export type VariantsBatchGetVariantsResponse200 = {
     data?: Array<CatalogVariantsGetResponsesContentApplicationJsonSchemaDataItems>;
@@ -870,3 +876,17 @@ export type UpdateVariantsBatchResponses = {
     200: VariantsBatchUpdateVariantsBatchResponse200;
 };
 export type UpdateVariantsBatchResponse = UpdateVariantsBatchResponses[keyof UpdateVariantsBatchResponses];
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+export type MetafieldCursorPagination = {
+    count?: number;
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

@@ -120,6 +120,11 @@ export type CustomerFull = {
 };
 
 /**
+ * customer_Full as returned in responses (`_authentication` is write-only)
+ */
+export type CustomerFullResponse = Omit<CustomerFull, '_authentication'>;
+
+/**
  * CustomersPostRequestBodyContentApplicationJsonSchemaAuthentication
  *
  * This can vary depending on the action being taken to update, validate or force a password change. See [Customers V2, Update a customer (Deprecated)](/developer/api-reference/rest/admin/management/customers/v2/update-customer).
@@ -374,6 +379,10 @@ export type CustomerAddressFull = {
      * 2-letter ISO Alpha-2 code for the customer’s country. Read-Only.
      */
     country_iso2?: string;
+    /**
+     * Array of address form fields. Read-Only.
+     */
+    form_fields?: Array<CustomerBaseFormFieldsItems> | null;
 };
 
 /**
@@ -642,11 +651,11 @@ export type CustomerGroupFull = {
     /**
      * Date on which the customer group was created.
      */
-    date_created?: string;
+    date_created?: string | null;
     /**
      * Date on which the customer group was last modified.
      */
-    date_modified?: string;
+    date_modified?: string | null;
     /**
      * Describes whether the group is for guests. There can only be one customer group for guests at a time.
      */
@@ -952,7 +961,7 @@ export type GetCustomersResponses = {
     /**
      * OK
      */
-    200: Array<CustomerFull>;
+    200: Array<CustomerFullResponse>;
 };
 
 export type GetCustomersResponse = GetCustomersResponses[keyof GetCustomersResponses];
@@ -989,7 +998,7 @@ export type CreateCustomerResponses = {
     /**
      * OK
      */
-    200: CustomerFull;
+    200: CustomerFullResponse;
 };
 
 export type CreateCustomerResponse = CreateCustomerResponses[keyof CreateCustomerResponses];
@@ -1045,7 +1054,7 @@ export type GetCustomerResponses = {
     /**
      * OK
      */
-    200: CustomerFull;
+    200: CustomerFullResponse;
 };
 
 export type GetCustomerResponse = GetCustomerResponses[keyof GetCustomerResponses];
@@ -1072,7 +1081,7 @@ export type UpdateCustomerResponses = {
     /**
      * OK
      */
-    200: CustomerBase;
+    200: CustomerFullResponse;
 };
 
 export type UpdateCustomerResponse = UpdateCustomerResponses[keyof UpdateCustomerResponses];

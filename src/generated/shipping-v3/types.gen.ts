@@ -93,7 +93,7 @@ export type MetaCollectionPagination = {
     /**
      * Total number of pages.
      */
-    total_page?: number;
+    total_pages?: number;
     links?: MetaCollectionPaginationLinks;
 };
 
@@ -254,9 +254,9 @@ export type UpdateShippingSettingsRequestUnprocessableEntityError = {
  */
 export type ChannelShippingSettingsCheckout = {
     /**
-     * Message shown to the shopper during checkout when their order does not meet the merchant's shipping criteria.
+     * Message shown to the shopper during checkout when their order does not meet the merchant's shipping criteria. `null` when the channel uses the global message.
      */
-    out_of_delivery_zone_message?: string;
+    out_of_delivery_zone_message?: string | null;
 };
 
 /**

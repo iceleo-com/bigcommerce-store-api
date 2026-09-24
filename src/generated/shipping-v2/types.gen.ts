@@ -27,7 +27,7 @@ export type CarrierConnection = {
 /**
  * ShippingMethodType
  */
-export type ShippingMethodType = 'perorder' | 'peritem' | 'weight' | 'total' | 'auspost' | 'canadapost' | 'endicia' | 'usps' | 'fedex' | 'royalmail' | 'upsready' | 'freeshipping';
+export type ShippingMethodType = 'perorder' | 'peritem' | 'weight' | 'total' | 'auspost' | 'canadapost' | 'endicia' | 'usps' | 'fedex' | 'royalmail' | 'upsready' | 'freeshipping' | 'pickupinstore' | `carrier_${number}`;
 
 /**
  * ShippingMethodBaseSettings
@@ -36,9 +36,37 @@ export type ShippingMethodType = 'perorder' | 'peritem' | 'weight' | 'total' | '
  */
 export type ShippingMethodBaseSettings = {
     /**
-     * Flat rate per order.
+     * Flat rate per order (`perorder`) or per item (`peritem`).
      */
     rate?: number;
+    /**
+     * Default cost when no range matches (`weight`, `total`).
+     */
+    default_cost?: number | null;
+    /**
+     * How `default_cost` is applied (`weight`, `total`).
+     */
+    default_cost_type?: 'fixed_amount' | 'percentage_of_total';
+    /**
+     * Cost ranges (`weight`, `total`).
+     */
+    range?: Array<ShippingMethodSettingsRange>;
+    /**
+     * Carrier specific options (carrier methods and `freeshipping`); values depend on the carrier.
+     */
+    carrier_options?: {
+        packaging?: Array<unknown>;
+        [key: string]: unknown;
+    };
+};
+
+/**
+ * ShippingMethodSettingsRange
+ */
+export type ShippingMethodSettingsRange = {
+    lower_limit?: number;
+    upper_limit?: number;
+    shipping_cost?: number;
 };
 
 /**
@@ -78,7 +106,7 @@ export type ShippingMethodFull = {
     /**
      * Depends on the shipping method type. See the [supported settings object](#settings-objects).
      */
-    settings?: ShippingMethodBaseSettings;
+    settings?: ShippingMethodBaseSettings | [];
     /**
      * Whether or not this shipping zone method is enabled.
      */
@@ -176,7 +204,7 @@ export type ShippingMethodGetShippingMethodResponse200 = {
     /**
      * Depends on the shipping method type. See the [supported settings object](#settings-objects).
      */
-    settings?: ShippingZonesZoneIdMethodsMethodIdGetResponsesContentApplicationJsonSchemaSettings;
+    settings?: ShippingMethodBaseSettings | [];
     /**
      * Whether or not this shipping zone method is enabled.
      */

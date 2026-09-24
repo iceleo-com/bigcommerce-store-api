@@ -192,7 +192,7 @@ export type CollectionMeta = {
 };
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 export type GetBrandsMetafieldsRequestBadRequestError = {
     status?: number;
@@ -318,7 +318,7 @@ export type MetafieldFull = {
 };
 export type MetafieldsGetBrandMetafieldsResponse200 = {
     data?: Array<MetafieldFull>;
-    meta?: MetaCollectionFull;
+    meta?: MetaCollectionFull & MetafieldCursorPaginationMeta;
 };
 export type MetafieldBase = {
     key: string;
@@ -796,3 +796,17 @@ export type UpdateBrandMetafieldResponses = {
     200: MetafieldsUpdateBrandMetafieldResponse200;
 };
 export type UpdateBrandMetafieldResponse = UpdateBrandMetafieldResponses[keyof UpdateBrandMetafieldResponses];
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+export type MetafieldCursorPagination = {
+    count?: number;
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

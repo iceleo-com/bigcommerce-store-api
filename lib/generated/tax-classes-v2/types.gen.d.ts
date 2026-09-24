@@ -4,8 +4,8 @@ export type ClientOptions = {
 export type TaxClassFull = {
     id?: string;
     name?: string;
-    created_at?: string;
-    updated_at?: string;
+    date_created?: string;
+    date_modified?: string;
 };
 export type GetTaxClassesData = {
     body?: never;

@@ -483,6 +483,10 @@ export type OrderProducts = {
      * This field includes all types of discounts (automatic, coupon, manual) and therefore if you use this value, you don't need to deduct any more discounts at line item level or order level.
      */
     discounted_total_inc_tax?: string;
+    /**
+     * Fulfillment source of the order product (empty string when not set).
+     */
+    fulfillment_source?: string;
 };
 
 /**
@@ -671,6 +675,10 @@ export type ShippingConsignmentGet = {
      */
     shipping_zone_name?: string;
     shipping_quotes?: ShippingQuotesConsignmentResource;
+    /**
+     * Discounts applied to this shipping consignment.
+     */
+    applied_discounts?: Array<OrderProductAppliedDiscounts>;
 };
 
 /**
@@ -1235,6 +1243,14 @@ export type OrderResp = {
      * The value of the wrapping cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
      */
     wrapping_cost_inc_tax?: string;
+    /**
+     * Credit card type used for the payment, e.g. `Visa`.
+     */
+    credit_card_type?: string | null;
+    /**
+     * The custom label of the order status.
+     */
+    custom_status?: string;
 };
 
 /**
@@ -2453,8 +2469,9 @@ export type ShippingQuotesBase = {
     shipping_provider_id?: string;
     /**
      * Shipping quotes vary based on the shipping provider. Manual shipping methods such as fixed will return an empty array. Real-time shipping providers will return an object with the shipping information exactly as received, including the original cost and currency. Since the shipping quote is tied to a shipping address, only one quote is returned in the response.
+     * Observed: an object (e.g. `{ additionalInfo: {} }`) for static methods too.
      */
-    shipping_provider_quote?: Array<ShippingQuotesBaseShippingProviderQuoteItems>;
+    shipping_provider_quote?: ShippingQuotesBaseShippingProviderQuoteItems | Array<ShippingQuotesBaseShippingProviderQuoteItems>;
     /**
      * Code of the shipping provider.
      */
@@ -2502,7 +2519,7 @@ export type OrderCouponsBaseAmount = string | number | number;
  * 4: free_shipping
  * 5: promotions
  */
-export type OrderCouponsBaseType = '0' | '1' | '2' | '3' | '4' | '5';
+export type OrderCouponsBaseType = 0 | 1 | 2 | 3 | 4 | 5;
 
 /**
  * orderCoupons_Base
@@ -2541,7 +2558,7 @@ export type OrderCouponsBase = {
      * The amount off the order the discount is worth. For example, if an order subtotal is $90 and the discount is $3 then it will return as 3.000. If the discount is
      * 3% then will return as 2.7000 or the amount of the order. (Float, Float-As-String, Integer)
      */
-    discount?: number;
+    discount?: string;
 };
 
 /**
@@ -2702,7 +2719,7 @@ export type OrderShipment = {
     /**
      * Comments the shipper wishes to add.
      */
-    comments?: string;
+    comments?: string | null;
     billing_address?: BillingAddressBase;
     shipping_address?: ShippingAddressBase;
     /**
@@ -3018,6 +3035,10 @@ export type OrderStatusBase = {
      * System description of the order status.
      */
     system_description?: string;
+    /**
+     * Sort order of the status.
+     */
+    order?: number;
 };
 
 /**
@@ -3025,7 +3046,7 @@ export type OrderStatusBase = {
  *
  * Type of tax on item.
  */
-export type OrderTaxesBaseLineItemType = 'item' | 'shipping' | 'handling' | 'gift-wrapping';
+export type OrderTaxesBaseLineItemType = 'item' | 'product' | 'shipping' | 'handling' | 'gift-wrapping';
 
 /**
  * orderTaxes_Base
@@ -3048,7 +3069,7 @@ export type OrderTaxesBase = {
      *
      * @deprecated
      */
-    tax_rate_id?: number;
+    tax_rate_id: number | undefined;
     /**
      * A unique identifier for the applied tax rate. This may be a third-party tax provider's identifier.
      */
@@ -3084,15 +3105,16 @@ export type OrderTaxesBase = {
     /**
      * The ID of the order pickup method object (which contains pickup location details) associated with the order.
      */
-    order_pickup_method_id?: number;
+    order_pickup_method_id?: number | null;
     /**
      * If the `line_item_type` is `item` or `handling` then this field will be the order product id. Otherwise the field will return as null.
+     * Only returned with the `details` query parameter.
      */
-    order_product_id?: string;
+    order_product_id: number | null | undefined;
     /**
-     * Type of tax on item.
+     * Type of tax on item. Only returned with the `details` query parameter.
      */
-    line_item_type?: OrderTaxesBaseLineItemType;
+    line_item_type: OrderTaxesBaseLineItemType | undefined;
 };
 
 export type DeleteOrderData = {
@@ -3612,7 +3634,7 @@ export type GetOrderFeesResponses = {
     /**
      * OK
      */
-    200: OrderFeesResp;
+    200: Array<OrderFeesResp>;
 };
 
 export type GetOrderFeesResponse = GetOrderFeesResponses[keyof GetOrderFeesResponses];

@@ -15,9 +15,10 @@ export type _301RedirectRead = {
     site_id?: number;
     from_path?: string;
     to?: RedirectTo;
-    to_url?: string;
+    to_url: string | undefined;
 };
 export type MetaPaginationObjectPaginationLinks = {
+    previous?: string;
     next?: string;
     current?: string;
 };

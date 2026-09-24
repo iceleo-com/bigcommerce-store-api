@@ -14,6 +14,7 @@ export type CustomTemplateAssociation = {
     date_modified?: string;
 };
 export type MetaPaginationObjectPaginationLinks = {
+    previous?: string;
     next?: string;
     current?: string;
 };

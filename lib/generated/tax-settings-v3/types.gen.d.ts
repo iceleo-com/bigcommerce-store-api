@@ -16,6 +16,7 @@ export type TaxSettingsRoundingStrategy = 'NO_ROUNDING' | 'RATE_RESULT_ROUNDING'
 export type TaxSettingsDocumentSubmissionStrategy = 'ON_PAYMENT_CAPTURE' | 'ON_ORDER_CREATION';
 export type TaxSettingsFallbackStrategy = 'FIXED' | 'BASIC' | 'DISABLE';
 export type TaxSettingsPriceDisplaySettings = {
+    show_inclusive_in_control_panel?: boolean;
     control_panel_price_display_strategy?: TaxSettingsPriceDisplaySettingsControlPanelPriceDisplayStrategy;
     invoice_price_display_strategy?: TaxSettingsPriceDisplaySettingsInvoicePriceDisplayStrategy;
 };

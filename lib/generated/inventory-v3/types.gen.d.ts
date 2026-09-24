@@ -108,7 +108,7 @@ export type ItemResponseIdentity = {
     sku?: string;
     variant_id?: number;
     product_id?: number;
-    sku_id?: number;
+    sku_id?: number | null;
 };
 export type AdjustmentsRelativeRequest = {
     reason?: string;

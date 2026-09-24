@@ -265,6 +265,34 @@ export type ProductImageFull = {
 };
 
 /**
+ * productImage_Response
+ *
+ * A product image as returned by the API. `image_url` is only used to create an image from a URL and is not returned.
+ */
+export type ProductImageResponse = Omit<ProductImageFull, 'image_url'> & {
+    /**
+     * The local path to the original image file uploaded to BigCommerce.
+     */
+    image_file?: string;
+};
+
+/**
+ * productOption_Response
+ *
+ * A product option as returned by the API.
+ */
+export type ProductOptionResponse = Omit<ProductOptionBase, 'config'> & {
+    /**
+     * The unique option name. Auto-generated from the display name, a timestamp, and the product ID.
+     */
+    name?: string;
+    /**
+     * An empty array when the option has no configuration.
+     */
+    config?: ProductOptionConfigFull | [];
+};
+
+/**
  * primaryImage_Full
  *
  * Common PrimaryImage properties.
@@ -982,56 +1010,56 @@ export type CatalogProductsGetResponsesContentApplicationJsonSchemaDataItems = {
      * Weight of the product, which can be used when calculating shipping costs. This is based on the unit set on the store
      *
      */
-    weight?: string;
+    weight?: number;
     /**
      * float
      *
      * Width of the product, which can be used when calculating shipping costs.
      *
      */
-    width?: string;
+    width?: number;
     /**
      * float
      *
      * Depth of the product, which can be used when calculating shipping costs.
      *
      */
-    depth?: string;
+    depth?: number;
     /**
      * float
      *
      * Height of the product, which can be used when calculating shipping costs.
      *
      */
-    height?: string;
+    height?: number;
     /**
      * float
      *
      * The price of the product. The price should include or exclude tax, based on the store settings.
      *
      */
-    price?: string;
+    price?: number;
     /**
      * float
      *
      * The cost price of the product. Stored for reference only; it is not used or displayed anywhere on the store.
      *
      */
-    cost_price?: string;
+    cost_price?: number;
     /**
      * float
      *
      * The retail cost of the product. If entered, the retail cost price will be shown on the product page.
      *
      */
-    retail_price?: string;
+    retail_price?: number;
     /**
      * float
      *
      * If entered, the sale price will be used instead of value in the price field when calculating the productʼs cost.
      *
      */
-    sale_price?: string;
+    sale_price?: number;
     /**
      * Minimum Advertised Price.
      */
@@ -1080,7 +1108,7 @@ export type CatalogProductsGetResponsesContentApplicationJsonSchemaDataItems = {
      * A fixed shipping cost for the product. If defined, this value will be used during checkout instead of normal shipping-cost calculation.
      *
      */
-    fixed_cost_shipping_price?: string;
+    fixed_cost_shipping_price?: number;
     /**
      * Flag used to indicate whether the product has free shipping. If `true`, the shipping cost for the product will be zero.
      *
@@ -1266,7 +1294,7 @@ export type CatalogProductsGetResponsesContentApplicationJsonSchemaDataItems = {
     /**
      * the date when the Product had been imported
      */
-    date_last_imported?: string;
+    date_last_imported?: string | null;
     /**
      * The total (cumulative) rating for the product.
      *
@@ -1285,16 +1313,16 @@ export type CatalogProductsGetResponsesContentApplicationJsonSchemaDataItems = {
     /**
      * 200 maximum custom fields per product. 255 maximum characters per custom field.
      */
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<CatalogProductsGetResponsesContentApplicationJsonSchemaDataItemsBulkPricingRulesItems>;
-    images?: Array<ProductImageFull>;
-    primary_image?: PrimaryImageFull;
+    custom_fields: Array<ProductCustomFieldPut> | undefined;
+    bulk_pricing_rules: Array<CatalogProductsGetResponsesContentApplicationJsonSchemaDataItemsBulkPricingRulesItems> | undefined;
+    images: Array<ProductImageResponse> | undefined;
+    primary_image: PrimaryImageFull | null | undefined;
     /**
      * The Catalog API integrates with third-party YouTube.
      * The [YouTube Terms of Service](https://www.youtube.com/t/terms) and [Google Privacy Policy](https://policies.google.com/privacy) apply, as indicated in our [Privacy Policy](https://www.bigcommerce.com/privacy/) and [Terms of Service](https://www.bigcommerce.com/terms/).
      *
      */
-    videos?: Array<ProductVideoFull>;
+    videos: Array<ProductVideoFull> | undefined;
     /**
      * The date on which the product was created.
      *
@@ -1314,19 +1342,19 @@ export type CatalogProductsGetResponsesContentApplicationJsonSchemaDataItems = {
     /**
      * The unique identifier of the base variant associated with a simple product. This value is `null` for complex products.
      */
-    base_variant_id?: number;
+    base_variant_id?: number | null;
     /**
      * float
      *
      * The calculated_price is derived from the default price and sale price of the product. It is equal to the sale price if set or the default price if there is not a sale price present. Depending on your store settings and customer group, or channel-specific pricing, this value may or may not be equal to the price seen on the storefront.
      */
-    calculated_price?: string;
-    options?: Array<ProductOptionBase>;
-    modifiers?: Array<ProductModifierFull>;
+    calculated_price?: number;
+    options: Array<ProductOptionResponse> | undefined;
+    modifiers: Array<ProductModifierFull> | undefined;
     /**
      * Indicates that the product is in an Option Set (legacy V2 concept).
      */
-    option_set_id?: number;
+    option_set_id?: number | null;
     /**
      * Legacy template setting which controls if the option set shows up to the side of or below the product image and description.
      */
@@ -1334,7 +1362,19 @@ export type CatalogProductsGetResponsesContentApplicationJsonSchemaDataItems = {
     /**
      * The channels to which the product is assigned. This field only appears in the response if you include `channels` in the `include` query parameter.
      */
-    channels?: Array<number>;
+    channels: Array<number> | undefined;
+    /**
+     * Only returned with `include=variants`.
+     */
+    variants: Array<ProductVariantFull> | undefined;
+    /**
+     * Only returned with `include=reviews`.
+     */
+    reviews: Array<CatalogProductsProductIdReviewsGetResponsesContentApplicationJsonSchemaDataItems> | undefined;
+    /**
+     * Only returned with `include=parent_relations`. The item shape is not documented.
+     */
+    parent_relations: Array<unknown> | undefined;
 };
 
 /**
@@ -1397,6 +1437,10 @@ export type PaginationFull = {
      *
      */
     links?: PaginationFullLinks;
+    /**
+     * Undocumented flag returned by the product list pagination.
+     */
+    too_many?: boolean;
 };
 
 /**
@@ -2011,56 +2055,56 @@ export type ProductFull = {
      * Weight of the product, which can be used when calculating shipping costs. This is based on the unit set on the store
      *
      */
-    weight?: string;
+    weight?: number;
     /**
      * float
      *
      * Width of the product, which can be used when calculating shipping costs.
      *
      */
-    width?: string;
+    width?: number;
     /**
      * float
      *
      * Depth of the product, which can be used when calculating shipping costs.
      *
      */
-    depth?: string;
+    depth?: number;
     /**
      * float
      *
      * Height of the product, which can be used when calculating shipping costs.
      *
      */
-    height?: string;
+    height?: number;
     /**
      * float
      *
      * The price of the product. The price should include or exclude tax, based on the store settings.
      *
      */
-    price?: string;
+    price?: number;
     /**
      * float
      *
      * The cost price of the product. Stored for reference only; it is not used or displayed anywhere on the store.
      *
      */
-    cost_price?: string;
+    cost_price?: number;
     /**
      * float
      *
      * The retail cost of the product. If entered, the retail cost price will be shown on the product page.
      *
      */
-    retail_price?: string;
+    retail_price?: number;
     /**
      * float
      *
      * If entered, the sale price will be used instead of value in the price field when calculating the productʼs cost.
      *
      */
-    sale_price?: string;
+    sale_price?: number;
     /**
      * Minimum Advertised Price.
      */
@@ -2109,7 +2153,7 @@ export type ProductFull = {
      * A fixed shipping cost for the product. If defined, this value will be used during checkout instead of normal shipping-cost calculation.
      *
      */
-    fixed_cost_shipping_price?: string;
+    fixed_cost_shipping_price?: number;
     /**
      * Flag used to indicate whether the product has free shipping. If `true`, the shipping cost for the product will be zero.
      *
@@ -2295,7 +2339,7 @@ export type ProductFull = {
     /**
      * the date when the Product had been imported
      */
-    date_last_imported?: string;
+    date_last_imported?: string | null;
     /**
      * The total (cumulative) rating for the product.
      *
@@ -2314,16 +2358,16 @@ export type ProductFull = {
     /**
      * 200 maximum custom fields per product. 255 maximum characters per custom field.
      */
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<ProductBaseResponseBulkPricingRulesItems>;
-    images?: Array<ProductImageFull>;
-    primary_image?: PrimaryImageFull;
+    custom_fields: Array<ProductCustomFieldPut> | undefined;
+    bulk_pricing_rules: Array<ProductBaseResponseBulkPricingRulesItems> | undefined;
+    images: Array<ProductImageResponse> | undefined;
+    primary_image: PrimaryImageFull | null | undefined;
     /**
      * The Catalog API integrates with third-party YouTube.
      * The [YouTube Terms of Service](https://www.youtube.com/t/terms) and [Google Privacy Policy](https://policies.google.com/privacy) apply, as indicated in our [Privacy Policy](https://www.bigcommerce.com/privacy/) and [Terms of Service](https://www.bigcommerce.com/terms/).
      *
      */
-    videos?: Array<ProductVideoFull>;
+    videos: Array<ProductVideoFull> | undefined;
     /**
      * ID of the product. Read-Only.
      */
@@ -2347,23 +2391,39 @@ export type ProductFull = {
     /**
      * The unique identifier of the base variant associated with a simple product. This value is `null` for complex products.
      */
-    base_variant_id?: number;
+    base_variant_id?: number | null;
     /**
      * float
      *
      * The calculated_price is derived from the default price and sale price of the product. It is equal to the sale price if set or the default price if there is not a sale price present. Depending on your store settings and customer group, or channel-specific pricing, this value may or may not be equal to the price seen on the storefront.
      */
-    calculated_price?: string;
-    options?: Array<ProductOptionBase>;
-    modifiers?: Array<ProductModifierFull>;
+    calculated_price?: number;
+    options: Array<ProductOptionResponse> | undefined;
+    modifiers: Array<ProductModifierFull> | undefined;
     /**
      * Indicates that the product is in an Option Set (legacy V2 concept).
      */
-    option_set_id?: number;
+    option_set_id?: number | null;
     /**
      * Legacy template setting which controls if the option set shows up to the side of or below the product image and description.
      */
     option_set_display?: string;
+    /**
+     * The IDs of the channels the product is assigned to. Only returned with `include=channels`.
+     */
+    channels: Array<number> | undefined;
+    /**
+     * Only returned with `include=variants`.
+     */
+    variants: Array<ProductVariantFull> | undefined;
+    /**
+     * Only returned with `include=reviews`.
+     */
+    reviews: Array<CatalogProductsProductIdReviewsGetResponsesContentApplicationJsonSchemaDataItems> | undefined;
+    /**
+     * Only returned with `include=parent_relations`. The item shape is not documented.
+     */
+    parent_relations: Array<unknown> | undefined;
 };
 
 /**
@@ -2605,7 +2665,7 @@ export type ProductVariantFull = {
     /**
      * Minimum Advertised Price.
      */
-    map_price?: number;
+    map_price?: number | null;
     /**
      * This variant’s base weight on the storefront. If this value is null, the product’s default weight (set in the Product resource’s weight field) will be used as the base weight.
      */
@@ -2687,7 +2747,7 @@ export type ProductVariantFull = {
      * A unique user-defined alphanumeric product code/stock keeping unit (SKU). The SKU is always unique regardless of the letter case for both products and variants.
      */
     sku: string;
-    sku_id?: number;
+    sku_id?: number | null;
     /**
      * Array of option and option values IDs that make up this variant. Will be empty if the variant is the productʼs base variant.
      */
@@ -3295,56 +3355,56 @@ export type CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaData
      * Weight of the product, which can be used when calculating shipping costs. This is based on the unit set on the store
      *
      */
-    weight?: string;
+    weight?: number;
     /**
      * float
      *
      * Width of the product, which can be used when calculating shipping costs.
      *
      */
-    width?: string;
+    width?: number;
     /**
      * float
      *
      * Depth of the product, which can be used when calculating shipping costs.
      *
      */
-    depth?: string;
+    depth?: number;
     /**
      * float
      *
      * Height of the product, which can be used when calculating shipping costs.
      *
      */
-    height?: string;
+    height?: number;
     /**
      * float
      *
      * The price of the product. The price should include or exclude tax, based on the store settings.
      *
      */
-    price?: string;
+    price?: number;
     /**
      * float
      *
      * The cost price of the product. Stored for reference only; it is not used or displayed anywhere on the store.
      *
      */
-    cost_price?: string;
+    cost_price?: number;
     /**
      * float
      *
      * The retail cost of the product. If entered, the retail cost price will be shown on the product page.
      *
      */
-    retail_price?: string;
+    retail_price?: number;
     /**
      * float
      *
      * If entered, the sale price will be used instead of value in the price field when calculating the productʼs cost.
      *
      */
-    sale_price?: string;
+    sale_price?: number;
     /**
      * Minimum Advertised Price.
      */
@@ -3393,7 +3453,7 @@ export type CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaData
      * A fixed shipping cost for the product. If defined, this value will be used during checkout instead of normal shipping-cost calculation.
      *
      */
-    fixed_cost_shipping_price?: string;
+    fixed_cost_shipping_price?: number;
     /**
      * Flag used to indicate whether the product has free shipping. If `true`, the shipping cost for the product will be zero.
      *
@@ -3579,7 +3639,7 @@ export type CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaData
     /**
      * the date when the Product had been imported
      */
-    date_last_imported?: string;
+    date_last_imported?: string | null;
     /**
      * The total (cumulative) rating for the product.
      *
@@ -3598,16 +3658,16 @@ export type CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaData
     /**
      * 200 maximum custom fields per product. 255 maximum characters per custom field.
      */
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaDataBulkPricingRulesItems>;
-    images?: Array<ProductImageFull>;
-    primary_image?: PrimaryImageFull;
+    custom_fields: Array<ProductCustomFieldPut> | undefined;
+    bulk_pricing_rules: Array<CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaDataBulkPricingRulesItems> | undefined;
+    images: Array<ProductImageResponse> | undefined;
+    primary_image: PrimaryImageFull | null | undefined;
     /**
      * The Catalog API integrates with third-party YouTube.
      * The [YouTube Terms of Service](https://www.youtube.com/t/terms) and [Google Privacy Policy](https://policies.google.com/privacy) apply, as indicated in our [Privacy Policy](https://www.bigcommerce.com/privacy/) and [Terms of Service](https://www.bigcommerce.com/terms/).
      *
      */
-    videos?: Array<ProductVideoFull>;
+    videos: Array<ProductVideoFull> | undefined;
     /**
      * The date on which the product was created.
      *
@@ -3627,19 +3687,19 @@ export type CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaData
     /**
      * The unique identifier of the base variant associated with a simple product. This value is `null` for complex products.
      */
-    base_variant_id?: number;
+    base_variant_id?: number | null;
     /**
      * float
      *
      * The calculated_price is derived from the default price and sale price of the product. It is equal to the sale price if set or the default price if there is not a sale price present. Depending on your store settings and customer group, or channel-specific pricing, this value may or may not be equal to the price seen on the storefront.
      */
-    calculated_price?: string;
-    options?: Array<ProductOptionBase>;
-    modifiers?: Array<ProductModifierFull>;
+    calculated_price?: number;
+    options: Array<ProductOptionResponse> | undefined;
+    modifiers: Array<ProductModifierFull> | undefined;
     /**
      * Indicates that the product is in an Option Set (legacy V2 concept).
      */
-    option_set_id?: number;
+    option_set_id?: number | null;
     /**
      * Legacy template setting which controls if the option set shows up to the side of or below the product image and description.
      */
@@ -3647,7 +3707,19 @@ export type CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaData
     /**
      * The channels to which the product is assigned. This field only appears in the response if you include `channels` in the `include` query parameter.
      */
-    channels?: Array<number>;
+    channels: Array<number> | undefined;
+    /**
+     * Only returned with `include=variants`.
+     */
+    variants: Array<ProductVariantFull> | undefined;
+    /**
+     * Only returned with `include=reviews`.
+     */
+    reviews: Array<CatalogProductsProductIdReviewsGetResponsesContentApplicationJsonSchemaDataItems> | undefined;
+    /**
+     * Only returned with `include=parent_relations`. The item shape is not documented.
+     */
+    parent_relations: Array<unknown> | undefined;
 };
 
 /**
@@ -4388,7 +4460,7 @@ export type CollectionMeta = {
  */
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 
 /**
@@ -4734,7 +4806,7 @@ export type CatalogProductsProductIdBulkPricingRulesGetResponsesContentApplicati
  * Bulk pricing rules_getAllBulkPricingRules_Response_200
  */
 export type BulkPricingRulesGetAllBulkPricingRulesResponse200 = {
-    data?: CatalogProductsProductIdBulkPricingRulesGetResponsesContentApplicationJsonSchemaData;
+    data?: Array<CatalogProductsProductIdBulkPricingRulesGetResponsesContentApplicationJsonSchemaData>;
     meta?: MetaCollectionFull;
 };
 
@@ -6184,7 +6256,7 @@ export type CatalogProductsProductIdImagesGetParametersIncludeFieldsSchemaItems 
  *
  */
 export type ImagesGetProductImagesResponse200 = {
-    data?: Array<ProductImageFull>;
+    data?: Array<ProductImageResponse>;
     meta?: MetaCollectionFull;
 };
 
@@ -6436,7 +6508,7 @@ export type CatalogProductsProductIdImagesImageIdGetParametersIncludeFieldsSchem
  *
  */
 export type ImagesGetProductImageResponse200 = {
-    data?: ProductImageFull;
+    data?: ProductImageResponse;
     meta?: MetaEmptyFull;
 };
 
@@ -6726,7 +6798,7 @@ export type MetafieldFull = {
  */
 export type MetafieldsGetProductMetafieldsResponse200 = {
     data?: Array<MetafieldFull>;
-    meta?: MetaCollectionFull;
+    meta?: MetaCollectionFull & MetafieldCursorPaginationMeta;
 };
 
 /**
@@ -7327,7 +7399,7 @@ export type CatalogSummaryGetResponsesContentApplicationJsonSchemaData = {
     /**
      * Lowest priced variant in the store
      */
-    lowest_variant_price?: string;
+    lowest_variant_price?: number;
     oldest_variant_date?: string;
     newest_variant_date?: string;
 };
@@ -10466,3 +10538,41 @@ export type UpdateProductVideoResponses = {
 };
 
 export type UpdateProductVideoResponse = UpdateProductVideoResponses[keyof UpdateProductVideoResponses];
+
+/**
+ * MetafieldCursorPaginationLinks
+ *
+ * Links to the previous and next pages of the collection; empty when there are no other pages.
+ */
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+
+/**
+ * MetafieldCursorPagination
+ *
+ * Cursor based pagination of a metafield collection. `start_cursor` and `end_cursor` are omitted when the collection is empty.
+ */
+export type MetafieldCursorPagination = {
+    /**
+     * Number of items in the current page.
+     */
+    count?: number;
+    /**
+     * The number of items per page, controlled by the `limit` parameter.
+     */
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+
+/**
+ * MetafieldCursorPaginationMeta
+ *
+ * Metafield collections return `cursor_pagination` next to the offset based `pagination`.
+ */
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

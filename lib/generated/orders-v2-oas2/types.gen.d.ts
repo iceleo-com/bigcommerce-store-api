@@ -118,6 +118,7 @@ export type OrderProducts = {
     name_merchant?: string;
     gift_certificate_id?: number | null;
     discounted_total_inc_tax?: string;
+    fulfillment_source?: string;
 };
 export type PickupConsignmentGetLineItems1 = Array<OrderProducts>;
 export type PickupConsignmentGetLineItems = PickupConsignmentGetLineItems0 | PickupConsignmentGetLineItems1;
@@ -174,6 +175,7 @@ export type ShippingConsignmentGet = {
     shipping_zone_id?: number;
     shipping_zone_name?: string;
     shipping_quotes?: ShippingQuotesConsignmentResource;
+    applied_discounts?: Array<OrderProductAppliedDiscounts>;
 };
 export type DigitalConsignmentGetLineItems0 = Array<ProductsResource>;
 export type DigitalConsignmentGetLineItems1 = Array<OrderProducts>;
@@ -320,6 +322,8 @@ export type OrderResp = {
     total_inc_tax?: string;
     wrapping_cost_ex_tax?: string;
     wrapping_cost_inc_tax?: string;
+    credit_card_type?: string | null;
+    custom_status?: string;
 };
 export type BillingAddressPut = {
     first_name?: string;
@@ -663,7 +667,7 @@ export type ShippingQuotesBase = {
     uuid?: string;
     timestamp?: string;
     shipping_provider_id?: string;
-    shipping_provider_quote?: Array<ShippingQuotesBaseShippingProviderQuoteItems>;
+    shipping_provider_quote?: ShippingQuotesBaseShippingProviderQuoteItems | Array<ShippingQuotesBaseShippingProviderQuoteItems>;
     provider_code?: string;
     carrier_code?: string;
     rate_code?: string;
@@ -675,7 +679,7 @@ export type OrdersOrderIdConsignmentsShippingShippingConsignmentIdShippingQuotes
     message?: string;
 };
 export type OrderCouponsBaseAmount = string | number | number;
-export type OrderCouponsBaseType = '0' | '1' | '2' | '3' | '4' | '5';
+export type OrderCouponsBaseType = 0 | 1 | 2 | 3 | 4 | 5;
 export type OrderCouponsBase = {
     id?: number;
     coupon_id?: number;
@@ -683,7 +687,7 @@ export type OrderCouponsBase = {
     code?: string | null;
     amount?: OrderCouponsBaseAmount;
     type?: OrderCouponsBaseType;
-    discount?: number;
+    discount?: string;
 };
 export type OrdersOrderIdFeesGetResponsesContentApplicationJsonSchemaItems = {
     status?: number;
@@ -741,7 +745,7 @@ export type OrderShipment = {
     shipping_provider?: OrderShipmentShippingProvider;
     tracking_carrier?: string;
     tracking_link?: string;
-    comments?: string;
+    comments?: string | null;
     billing_address?: BillingAddressBase;
     shipping_address?: ShippingAddressBase;
     items?: Array<OrderShipmentItemsItems>;
@@ -841,13 +845,14 @@ export type OrderStatusBase = {
     system_label?: string;
     custom_label?: string;
     system_description?: string;
+    order?: number;
 };
-export type OrderTaxesBaseLineItemType = 'item' | 'shipping' | 'handling' | 'gift-wrapping';
+export type OrderTaxesBaseLineItemType = 'item' | 'product' | 'shipping' | 'handling' | 'gift-wrapping';
 export type OrderTaxesBase = {
     id?: number;
     order_id?: number;
     order_address_id?: number;
-    tax_rate_id?: number;
+    tax_rate_id: number | undefined;
     sales_tax_id?: string;
     tax_class_id?: number | null;
     name?: string;
@@ -856,9 +861,9 @@ export type OrderTaxesBase = {
     priority?: number;
     priority_amount?: string;
     line_amount?: string;
-    order_pickup_method_id?: number;
-    order_product_id?: string;
-    line_item_type?: OrderTaxesBaseLineItemType;
+    order_pickup_method_id?: number | null;
+    order_product_id: number | null | undefined;
+    line_item_type: OrderTaxesBaseLineItemType | undefined;
 };
 export type DeleteOrderData = {
     body?: never;
@@ -1075,7 +1080,7 @@ export type GetOrderFeesErrors = {
 };
 export type GetOrderFeesError = GetOrderFeesErrors[keyof GetOrderFeesErrors];
 export type GetOrderFeesResponses = {
-    200: OrderFeesResp;
+    200: Array<OrderFeesResp>;
 };
 export type GetOrderFeesResponse = GetOrderFeesResponses[keyof GetOrderFeesResponses];
 export type GetOrderMessagesData = {

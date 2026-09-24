@@ -1,9 +1,9 @@
 export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3/stores/{store_hash}/v3' | (string & {});
 };
-export type EmailTemplateTypeId = 'abandoned_cart_email' | 'account_details_changed_email' | 'combined_order_status_email' | 'createaccount_email' | 'createguestaccount_email' | 'giftcertificate_email' | 'invoice_email' | 'ordermessage_notification' | 'return_confirmation_email' | 'return_statuschange_email' | 'product_review_email' | 'account_reset_password_email';
+export type EmailTemplateTypeId = 'abandoned_cart_email' | 'account_details_changed_email' | 'combined_order_status_email' | 'createaccount_email' | 'createguestaccount_email' | 'giftcertificate_email' | 'invoice_email' | 'ordermessage_notification' | 'return_confirmation_email' | 'return_statuschange_email' | 'product_review_email' | 'account_reset_password_email' | 'order_ready_for_pickup' | 'passwordless_login_email' | 'guest_order_access_email';
 export type LocaleObjectKeys = {
-    [key: string]: unknown;
+    [key: string]: string;
 };
 export type LocaleObject = {
     locale?: string;

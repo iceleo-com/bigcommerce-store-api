@@ -25,7 +25,7 @@ export type Site = {
     channel_id?: number;
     created_at?: string;
     updated_at?: string;
-    ssl_status?: SiteSslStatus;
+    ssl_status: SiteSslStatus | undefined;
     urls?: Array<Url>;
     is_checkout_url_customized?: boolean;
 };
@@ -86,7 +86,7 @@ export type CertificateResponseData = {
     installed_certificate?: InstalledCertificateDetail;
 };
 export type CertificateResponse = {
-    data?: CertificateResponseData;
+    data?: InstalledCertificateDetail;
     meta?: MetaOpen;
 };
 export type InstallCertificateData = {
@@ -124,7 +124,7 @@ export type MetaCollectionPagination = {
     count?: number;
     per_page?: number;
     current_page?: number;
-    total_page?: number;
+    total_pages?: number;
     links?: MetaCollectionPaginationLinks;
 };
 export type MetaCollection = {

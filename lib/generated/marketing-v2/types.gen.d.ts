@@ -63,8 +63,8 @@ export type CouponFull = {
     applies_to: CouponBaseAppliesTo;
     max_uses?: number;
     max_uses_per_customer?: number;
-    restricted_to?: CouponBaseRestrictedTo;
-    shipping_methods?: Array<string>;
+    restricted_to?: CouponBaseRestrictedTo | [];
+    shipping_methods?: Array<string> | null;
     id: number;
     date_created?: string;
     num_uses?: number;
@@ -86,7 +86,7 @@ export type CouponBase = {
 export type CouponsGetCouponsCountResponse200 = {
     count?: number;
 };
-export type GiftCertificateFullTemplate = 'birthday.html' | 'girl.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html';
+export type GiftCertificateFullTemplate = 'birthday.html' | 'girl.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'Birthday.html' | 'Girl.html' | 'Boy.html' | 'Celebration.html' | 'Christmas.html' | 'General.html';
 export type GiftCertificateFullStatus = 'active' | 'pending' | 'disabled' | 'expired';
 export type GiftCertificateFull = {
     to_name: string;
@@ -95,8 +95,8 @@ export type GiftCertificateFull = {
     from_email: string;
     amount: string;
     id?: number;
-    customer_id?: number;
-    order_id?: number;
+    customer_id?: string;
+    order_id?: string;
     balance?: string;
     purchase_date?: string;
     expiry_date?: string;

@@ -132,7 +132,7 @@ export type AssignmentForGetResponse = {
     id?: number;
     price_list_id?: number;
     customer_group_id?: number;
-    channel_id?: number;
+    channel_id?: number | null;
 };
 export type CollectionMetaPagination = {
     total?: number;
@@ -253,13 +253,13 @@ export type PricelistsPriceListIdRecordsGetResponsesContentApplicationJsonSchema
     product_id?: number;
     price_list_id?: number;
     variant_id?: number;
-    sku?: string;
+    sku: string | undefined;
     currency?: string;
     price?: number;
     sale_price?: number;
-    retail_price?: number;
-    map_price?: number;
-    bulk_pricing_tiers?: Array<PricelistsPriceListIdRecordsGetResponsesContentApplicationJsonSchemaDataItemsBulkPricingTiersItems>;
+    retail_price?: number | null;
+    map_price?: number | null;
+    bulk_pricing_tiers: Array<PricelistsPriceListIdRecordsGetResponsesContentApplicationJsonSchemaDataItemsBulkPricingTiersItems> | undefined;
 };
 export type PricelistsPriceListIdRecordsGetResponsesContentApplicationJsonSchemaMetaPagination = {
     total?: number;
@@ -399,13 +399,13 @@ export type PricelistsPriceListIdRecordsVariantIdGetResponsesContentApplicationJ
     product_id?: number;
     price_list_id?: number;
     variant_id?: number;
-    sku?: string;
+    sku: string | undefined;
     currency?: string;
     price?: number;
     sale_price?: number;
-    retail_price?: number;
-    map_price?: number;
-    bulk_pricing_tiers?: Array<PricelistsPriceListIdRecordsVariantIdGetResponsesContentApplicationJsonSchemaDataItemsBulkPricingTiersItems>;
+    retail_price?: number | null;
+    map_price?: number | null;
+    bulk_pricing_tiers: Array<PricelistsPriceListIdRecordsVariantIdGetResponsesContentApplicationJsonSchemaDataItemsBulkPricingTiersItems> | undefined;
 };
 export type PricelistsPriceListIdRecordsVariantIdGetResponsesContentApplicationJsonSchemaMetaPagination = {
     total?: number;
@@ -449,13 +449,13 @@ export type PricelistsPriceListIdRecordsVariantIdCurrencyCodeGetResponsesContent
     product_id?: number;
     price_list_id?: number;
     variant_id?: number;
-    sku?: string;
+    sku: string | undefined;
     currency?: string;
     price?: number;
     sale_price?: number;
-    retail_price?: number;
-    map_price?: number;
-    bulk_pricing_tiers?: Array<PricelistsPriceListIdRecordsVariantIdCurrencyCodeGetResponsesContentApplicationJsonSchemaDataBulkPricingTiersItems>;
+    retail_price?: number | null;
+    map_price?: number | null;
+    bulk_pricing_tiers: Array<PricelistsPriceListIdRecordsVariantIdCurrencyCodeGetResponsesContentApplicationJsonSchemaDataBulkPricingTiersItems> | undefined;
 };
 export type PriceListsRecordsGetPriceListRecordResponse200 = {
     data?: PricelistsPriceListIdRecordsVariantIdCurrencyCodeGetResponsesContentApplicationJsonSchemaData;

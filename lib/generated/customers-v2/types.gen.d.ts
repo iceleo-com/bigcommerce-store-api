@@ -34,6 +34,7 @@ export type CustomerFull = {
     date_created?: string;
     date_modified?: string;
 };
+export type CustomerFullResponse = Omit<CustomerFull, '_authentication'>;
 export type CustomersPostRequestBodyContentApplicationJsonSchemaAuthentication = {
     [key: string]: unknown;
 };
@@ -106,6 +107,7 @@ export type CustomerAddressFull = {
     address_type?: CustomerAddressBaseAddressType;
     id?: number;
     country_iso2?: string;
+    form_fields?: Array<CustomerBaseFormFieldsItems> | null;
 };
 export type CustomerAddressBase = {
     customer_id?: number;
@@ -177,8 +179,8 @@ export type CustomerGroupFull = {
     is_default?: boolean;
     category_access?: CategoryAccessLevelFull;
     discount_rules?: CustomerGroupFullDiscountRules;
-    date_created?: string;
-    date_modified?: string;
+    date_created?: string | null;
+    date_modified?: string | null;
     is_group_for_guests?: boolean;
 };
 export type CustomerGroupPostPutDiscountRulesOneOf0ItemsType = 'price_list';
@@ -279,7 +281,7 @@ export type GetCustomersData = {
     url: '/customers';
 };
 export type GetCustomersResponses = {
-    200: Array<CustomerFull>;
+    200: Array<CustomerFullResponse>;
 };
 export type GetCustomersResponse = GetCustomersResponses[keyof GetCustomersResponses];
 export type CreateCustomerData = {
@@ -304,7 +306,7 @@ export type CreateCustomerData = {
     url: '/customers';
 };
 export type CreateCustomerResponses = {
-    200: CustomerFull;
+    200: CustomerFullResponse;
 };
 export type CreateCustomerResponse = CreateCustomerResponses[keyof CreateCustomerResponses];
 export type DeleteCustomerData = {
@@ -336,7 +338,7 @@ export type GetCustomerData = {
     url: '/customers/{customer_id}';
 };
 export type GetCustomerResponses = {
-    200: CustomerFull;
+    200: CustomerFullResponse;
 };
 export type GetCustomerResponse = GetCustomerResponses[keyof GetCustomerResponses];
 export type UpdateCustomerData = {
@@ -351,7 +353,7 @@ export type UpdateCustomerData = {
     url: '/customers/{customer_id}';
 };
 export type UpdateCustomerResponses = {
-    200: CustomerBase;
+    200: CustomerFullResponse;
 };
 export type UpdateCustomerResponse = UpdateCustomerResponses[keyof UpdateCustomerResponses];
 export type GetCustomersCountData = {

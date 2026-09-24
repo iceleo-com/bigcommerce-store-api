@@ -3,11 +3,10 @@ export type RequestContentType = 'application/json' | 'application/x-www-form-ur
 export type RequestBody = FormData | Record<string, any> | string | undefined;
 export type RequestQuery = Record<string, any> | URLSearchParams | string | undefined;
 export type ResponseHeaders = Record<string, string | string[] | undefined>;
-type RequiredFields<T> = T extends void ? T : T extends Array<Record<PropertyKey, any>> ? Array<Required<{
-    [K in keyof T[number]]: T[number][K];
-}>> : T extends Record<PropertyKey, any> ? Required<{
+type RequiredObject<T> = T extends Record<PropertyKey, any> ? Required<{
     [K in keyof T]: T[K];
 }> : T;
+type RequiredFields<T> = T extends void ? T : T extends Array<infer I> ? Array<RequiredObject<I>> : RequiredObject<T>;
 export interface BigCommerceApiSuccessResponse {
     data?: any;
     meta?: any;

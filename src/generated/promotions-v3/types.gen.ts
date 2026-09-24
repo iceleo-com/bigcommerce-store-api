@@ -555,7 +555,7 @@ export type Customer = {
      * A list of customer group IDs that the promotion will exclude. Only customers who are NOT in those groups are eligible for this promotion. When unspecified, or set to an empty array, this requirement will not have any effects, and all customers who satisfy the other requirements (group_ids, minimum_order_count) are eligible for the promotion.
      */
     excluded_group_ids?: Array<number>;
-    segments?: CustomerSegments;
+    segments?: CustomerSegments | null;
 };
 
 /**
@@ -1122,7 +1122,7 @@ export type SavedAutomaticPromotionStatus = 'ENABLED' | 'DISABLED' | 'INVALID';
 /**
  * NotificationType
  */
-export type NotificationType = 'UPSELL' | 'ELIGIBLE' | 'APPLIED';
+export type NotificationType = 'PROMOTION' | 'UPSELL' | 'ELIGIBLE' | 'APPLIED';
 
 /**
  * Notification
@@ -1266,7 +1266,7 @@ export type SavedAutomaticPromotion = {
     /**
      * The maximum number of times this discount can be used by customers.
      */
-    max_uses?: number;
+    max_uses?: number | null;
     /**
      * Controls whether or not a discount rule can be used by customers. `INVALID` is a read-only status into which enabled discount rules may transition when they become invalid.
      */
@@ -1278,7 +1278,7 @@ export type SavedAutomaticPromotion = {
     /**
      * The date and time when this rule will expire. If this property is left null, the promotion never expires.
      */
-    end_date?: string;
+    end_date?: string | null;
     /**
      * Boolean value that specifies whether to stop evaluating promotions down the priority list when the promotion is applied successfully.
      */
@@ -1295,8 +1295,8 @@ export type SavedAutomaticPromotion = {
      * Notifications to display on the storefront based on the result of the evaluation for promotion eligibility.
      */
     notifications: Array<Notification>;
-    shipping_address?: AddressMatcher;
-    schedule?: AvailabilityByWeekDay;
+    shipping_address?: AddressMatcher | null;
+    schedule?: AvailabilityByWeekDay | null;
     /**
      * The category of the promotion, determined by the type of discount it applies. Promotions that discount shipping (excluding free shipping) are categorized as `shipping`; all other promotions are categorized as `cart`. This field is computed from the promotion's rules and is read-only.
      *
@@ -1334,6 +1334,10 @@ export type SavedAutomaticPromotion = {
      */
     featured_promotion_callout_message: string;
     created_from: CreatedFrom;
+    /**
+     * Whether the promotion is archived.
+     */
+    is_archived?: boolean;
 };
 
 /**
@@ -1411,7 +1415,7 @@ export type SavedCouponPromotion = {
     /**
      * The maximum number of times this discount can be used by customers.
      */
-    max_uses?: number;
+    max_uses?: number | null;
     /**
      * Controls whether or not a discount rule can be used by customers. `INVALID` is a read-only status into which enabled discount rules may transition when they become invalid.
      */
@@ -1423,7 +1427,7 @@ export type SavedCouponPromotion = {
     /**
      * The date and time when this rule will expire. If this property is left null, the promotion never expires.
      */
-    end_date?: string;
+    end_date?: string | null;
     /**
      * Boolean value that specifies whether to stop evaluating promotions down the priority list when the promotion is applied successfully.
      */
@@ -1440,8 +1444,8 @@ export type SavedCouponPromotion = {
      * Notifications to display on the storefront based on the result of the evaluation for promotion eligibility.
      */
     notifications: Array<Notification>;
-    shipping_address?: AddressMatcher;
-    schedule?: AvailabilityByWeekDay;
+    shipping_address?: AddressMatcher | null;
+    schedule?: AvailabilityByWeekDay | null;
     /**
      * The category of the promotion, determined by the type of discount it applies. Promotions that discount shipping (excluding free shipping) are categorized as `shipping`; all other promotions are categorized as `cart`. This field is computed from the promotion's rules and is read-only.
      *
@@ -1493,6 +1497,10 @@ export type SavedCouponPromotion = {
      * The type of the coupon promotion, whether it will have single or multiple codes.
      */
     coupon_type: SavedCouponPromotionCouponType;
+    /**
+     * Whether the promotion is archived.
+     */
+    is_archived?: boolean;
 };
 
 /**

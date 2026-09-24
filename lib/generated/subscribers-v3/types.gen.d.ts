@@ -150,7 +150,7 @@ export type GetSubscribersData = {
         Accept: string;
     };
     path?: never;
-    query: {
+    query?: {
         email?: string;
         first_name?: string;
         last_name?: string;
@@ -166,7 +166,7 @@ export type GetSubscribersData = {
         limit?: number;
         sort?: CustomersSubscribersGetParametersSort;
         direction?: CustomersSubscribersGetParametersDirection;
-        id: number;
+        id?: number;
         'id:in'?: Array<number>;
     };
     url: '/customers/subscribers';

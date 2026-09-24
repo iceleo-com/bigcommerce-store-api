@@ -26,7 +26,7 @@ export class AcceptedMethodsV3Api {
     getPaymentMethods(
         query?: AcceptedMethodsV3ApiSpecs.GetPaymentMethodsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsResponses[200]>>,(RequestErrorResponse<400, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[400]>> | RequestErrorResponse<401, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[401]>> | RequestErrorResponse<404, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[404]>> | RequestErrorResponse<422, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[422]>>)>({
+        return this.request.get<RequestSuccessResponse<200, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsResponses[200]>>,(RequestErrorResponse<400, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[400]>> | RequestErrorResponse<401, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[401]>> | RequestErrorResponse<404, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[404]>> | RequestErrorResponse<409, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[409]>> | RequestErrorResponse<422, Required<AcceptedMethodsV3ApiSpecs.GetPaymentMethodsErrors[422]>>)>({
             path: 'v3/payments/methods',
             query,
         });

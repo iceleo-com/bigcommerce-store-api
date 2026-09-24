@@ -49,6 +49,13 @@ export type ProductImageFull = {
     url_thumbnail?: string;
     url_tiny?: string;
 };
+export type ProductImageResponse = Omit<ProductImageFull, 'image_url'> & {
+    image_file?: string;
+};
+export type ProductOptionResponse = Omit<ProductOptionBase, 'config'> & {
+    name?: string;
+    config?: ProductOptionConfigFull | [];
+};
 export type PrimaryImageFull = {
     id?: number;
     product_id?: number;
@@ -198,14 +205,14 @@ export type CatalogProductsGetResponsesContentApplicationJsonSchemaDataItems = {
     type?: CatalogProductsGetResponsesContentApplicationJsonSchemaDataItemsType;
     sku?: string;
     description?: string;
-    weight?: string;
-    width?: string;
-    depth?: string;
-    height?: string;
-    price?: string;
-    cost_price?: string;
-    retail_price?: string;
-    sale_price?: string;
+    weight?: number;
+    width?: number;
+    depth?: number;
+    height?: number;
+    price?: number;
+    cost_price?: number;
+    retail_price?: number;
+    sale_price?: number;
     map_price?: number;
     tax_class_id?: number;
     product_tax_code?: string;
@@ -214,7 +221,7 @@ export type CatalogProductsGetResponsesContentApplicationJsonSchemaDataItems = {
     inventory_level?: number;
     inventory_warning_level?: number;
     inventory_tracking?: CatalogProductsGetResponsesContentApplicationJsonSchemaDataItemsInventoryTracking;
-    fixed_cost_shipping_price?: string;
+    fixed_cost_shipping_price?: number;
     is_free_shipping?: boolean;
     is_visible?: boolean;
     is_featured?: boolean;
@@ -251,24 +258,27 @@ export type CatalogProductsGetResponsesContentApplicationJsonSchemaDataItems = {
     open_graph_use_image?: boolean;
     gtin?: string;
     mpn?: string;
-    date_last_imported?: string;
+    date_last_imported?: string | null;
     reviews_rating_sum?: number;
     reviews_count?: number;
     total_sold?: number;
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<CatalogProductsGetResponsesContentApplicationJsonSchemaDataItemsBulkPricingRulesItems>;
-    images?: Array<ProductImageFull>;
-    primary_image?: PrimaryImageFull;
-    videos?: Array<ProductVideoFull>;
+    custom_fields: Array<ProductCustomFieldPut> | undefined;
+    bulk_pricing_rules: Array<CatalogProductsGetResponsesContentApplicationJsonSchemaDataItemsBulkPricingRulesItems> | undefined;
+    images: Array<ProductImageResponse> | undefined;
+    primary_image: PrimaryImageFull | null | undefined;
+    videos: Array<ProductVideoFull> | undefined;
     date_created?: string;
     date_modified?: string;
-    base_variant_id?: number;
-    calculated_price?: string;
-    options?: Array<ProductOptionBase>;
-    modifiers?: Array<ProductModifierFull>;
-    option_set_id?: number;
+    base_variant_id?: number | null;
+    calculated_price?: number;
+    options: Array<ProductOptionResponse> | undefined;
+    modifiers: Array<ProductModifierFull> | undefined;
+    option_set_id?: number | null;
     option_set_display?: string;
-    channels?: Array<number>;
+    channels: Array<number> | undefined;
+    variants: Array<ProductVariantFull> | undefined;
+    reviews: Array<CatalogProductsProductIdReviewsGetResponsesContentApplicationJsonSchemaDataItems> | undefined;
+    parent_relations: Array<unknown> | undefined;
 };
 export type PaginationFullLinks = {
     previous?: string;
@@ -282,6 +292,7 @@ export type PaginationFull = {
     current_page?: number;
     total_pages?: number;
     links?: PaginationFullLinks;
+    too_many?: boolean;
 };
 export type MetaCollectionFull = {
     pagination?: PaginationFull;
@@ -396,14 +407,14 @@ export type ProductFull = {
     type?: ProductBaseResponseType;
     sku?: string;
     description?: string;
-    weight?: string;
-    width?: string;
-    depth?: string;
-    height?: string;
-    price?: string;
-    cost_price?: string;
-    retail_price?: string;
-    sale_price?: string;
+    weight?: number;
+    width?: number;
+    depth?: number;
+    height?: number;
+    price?: number;
+    cost_price?: number;
+    retail_price?: number;
+    sale_price?: number;
     map_price?: number;
     tax_class_id?: number;
     product_tax_code?: string;
@@ -412,7 +423,7 @@ export type ProductFull = {
     inventory_level?: number;
     inventory_warning_level?: number;
     inventory_tracking?: ProductBaseResponseInventoryTracking;
-    fixed_cost_shipping_price?: string;
+    fixed_cost_shipping_price?: number;
     is_free_shipping?: boolean;
     is_visible?: boolean;
     is_featured?: boolean;
@@ -449,24 +460,28 @@ export type ProductFull = {
     open_graph_use_image?: boolean;
     gtin?: string;
     mpn?: string;
-    date_last_imported?: string;
+    date_last_imported?: string | null;
     reviews_rating_sum?: number;
     reviews_count?: number;
     total_sold?: number;
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<ProductBaseResponseBulkPricingRulesItems>;
-    images?: Array<ProductImageFull>;
-    primary_image?: PrimaryImageFull;
-    videos?: Array<ProductVideoFull>;
+    custom_fields: Array<ProductCustomFieldPut> | undefined;
+    bulk_pricing_rules: Array<ProductBaseResponseBulkPricingRulesItems> | undefined;
+    images: Array<ProductImageResponse> | undefined;
+    primary_image: PrimaryImageFull | null | undefined;
+    videos: Array<ProductVideoFull> | undefined;
     id?: number;
     date_created?: string;
     date_modified?: string;
-    base_variant_id?: number;
-    calculated_price?: string;
-    options?: Array<ProductOptionBase>;
-    modifiers?: Array<ProductModifierFull>;
-    option_set_id?: number;
+    base_variant_id?: number | null;
+    calculated_price?: number;
+    options: Array<ProductOptionResponse> | undefined;
+    modifiers: Array<ProductModifierFull> | undefined;
+    option_set_id?: number | null;
     option_set_display?: string;
+    channels: Array<number> | undefined;
+    variants: Array<ProductVariantFull> | undefined;
+    reviews: Array<CatalogProductsProductIdReviewsGetResponsesContentApplicationJsonSchemaDataItems> | undefined;
+    parent_relations: Array<unknown> | undefined;
 };
 export type ProductsUpdateProductsResponse200 = {
     data?: Array<ProductFull>;
@@ -528,7 +543,7 @@ export type ProductVariantFull = {
     price?: number | null;
     sale_price?: number | null;
     retail_price?: number | null;
-    map_price?: number;
+    map_price?: number | null;
     weight?: number | null;
     width?: number | null;
     height?: number | null;
@@ -547,7 +562,7 @@ export type ProductVariantFull = {
     product_id: number;
     id: number;
     sku: string;
-    sku_id?: number;
+    sku_id?: number | null;
     option_values?: Array<ProductVariantOptionValueFull>;
     calculated_price?: number;
     calculated_weight?: number;
@@ -680,14 +695,14 @@ export type CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaData
     type?: CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaDataType;
     sku?: string;
     description?: string;
-    weight?: string;
-    width?: string;
-    depth?: string;
-    height?: string;
-    price?: string;
-    cost_price?: string;
-    retail_price?: string;
-    sale_price?: string;
+    weight?: number;
+    width?: number;
+    depth?: number;
+    height?: number;
+    price?: number;
+    cost_price?: number;
+    retail_price?: number;
+    sale_price?: number;
     map_price?: number;
     tax_class_id?: number;
     product_tax_code?: string;
@@ -696,7 +711,7 @@ export type CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaData
     inventory_level?: number;
     inventory_warning_level?: number;
     inventory_tracking?: CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaDataInventoryTracking;
-    fixed_cost_shipping_price?: string;
+    fixed_cost_shipping_price?: number;
     is_free_shipping?: boolean;
     is_visible?: boolean;
     is_featured?: boolean;
@@ -733,24 +748,27 @@ export type CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaData
     open_graph_use_image?: boolean;
     gtin?: string;
     mpn?: string;
-    date_last_imported?: string;
+    date_last_imported?: string | null;
     reviews_rating_sum?: number;
     reviews_count?: number;
     total_sold?: number;
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaDataBulkPricingRulesItems>;
-    images?: Array<ProductImageFull>;
-    primary_image?: PrimaryImageFull;
-    videos?: Array<ProductVideoFull>;
+    custom_fields: Array<ProductCustomFieldPut> | undefined;
+    bulk_pricing_rules: Array<CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaDataBulkPricingRulesItems> | undefined;
+    images: Array<ProductImageResponse> | undefined;
+    primary_image: PrimaryImageFull | null | undefined;
+    videos: Array<ProductVideoFull> | undefined;
     date_created?: string;
     date_modified?: string;
-    base_variant_id?: number;
-    calculated_price?: string;
-    options?: Array<ProductOptionBase>;
-    modifiers?: Array<ProductModifierFull>;
-    option_set_id?: number;
+    base_variant_id?: number | null;
+    calculated_price?: number;
+    options: Array<ProductOptionResponse> | undefined;
+    modifiers: Array<ProductModifierFull> | undefined;
+    option_set_id?: number | null;
     option_set_display?: string;
-    channels?: Array<number>;
+    channels: Array<number> | undefined;
+    variants: Array<ProductVariantFull> | undefined;
+    reviews: Array<CatalogProductsProductIdReviewsGetResponsesContentApplicationJsonSchemaDataItems> | undefined;
+    parent_relations: Array<unknown> | undefined;
 };
 export type ProductsGetProductResponse200 = {
     data?: CatalogProductsProductIdGetResponsesContentApplicationJsonSchemaData;
@@ -908,7 +926,7 @@ export type CollectionMeta = {
 };
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 export type CatalogProductsMetafieldsPostRequestBodyContentApplicationJsonSchemaItemsPermissionSet = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
 export type CatalogProductsMetafieldsPostRequestBodyContentApplicationJsonSchemaItems = {
@@ -996,7 +1014,7 @@ export type CatalogProductsProductIdBulkPricingRulesGetResponsesContentApplicati
     amount?: CatalogProductsProductIdBulkPricingRulesGetResponsesContentApplicationJsonSchemaDataAmount;
 };
 export type BulkPricingRulesGetAllBulkPricingRulesResponse200 = {
-    data?: CatalogProductsProductIdBulkPricingRulesGetResponsesContentApplicationJsonSchemaData;
+    data?: Array<CatalogProductsProductIdBulkPricingRulesGetResponsesContentApplicationJsonSchemaData>;
     meta?: MetaCollectionFull;
 };
 export type BulkPricingRuleFullType = 'price' | 'percent' | 'fixed';
@@ -1387,7 +1405,7 @@ export type CustomFieldsUpdateProductCustomFieldResponse200 = {
 };
 export type CatalogProductsProductIdImagesGetParametersIncludeFieldsSchemaItems = 'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image';
 export type ImagesGetProductImagesResponse200 = {
-    data?: Array<ProductImageFull>;
+    data?: Array<ProductImageResponse>;
     meta?: MetaCollectionFull;
 };
 export type GetProductImagesRequestNotFoundError = {
@@ -1451,7 +1469,7 @@ export type CreateProductImageRequestUnprocessableEntityError = {
 };
 export type CatalogProductsProductIdImagesImageIdGetParametersIncludeFieldsSchemaItems = 'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image';
 export type ImagesGetProductImageResponse200 = {
-    data?: ProductImageFull;
+    data?: ProductImageResponse;
     meta?: MetaEmptyFull;
 };
 export type GetProductImageRequestNotFoundError = {
@@ -1518,7 +1536,7 @@ export type MetafieldFull = {
 };
 export type MetafieldsGetProductMetafieldsResponse200 = {
     data?: Array<MetafieldFull>;
-    meta?: MetaCollectionFull;
+    meta?: MetaCollectionFull & MetafieldCursorPaginationMeta;
 };
 export type MetafieldBase = {
     key: string;
@@ -1686,7 +1704,7 @@ export type CatalogSummaryGetResponsesContentApplicationJsonSchemaData = {
     variant_count?: number;
     highest_variant_price?: number;
     average_variant_price?: number;
-    lowest_variant_price?: string;
+    lowest_variant_price?: number;
     oldest_variant_date?: string;
     newest_variant_date?: string;
 };
@@ -2945,3 +2963,17 @@ export type UpdateProductVideoResponses = {
     200: VideosUpdateProductVideoResponse200;
 };
 export type UpdateProductVideoResponse = UpdateProductVideoResponses[keyof UpdateProductVideoResponses];
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+export type MetafieldCursorPagination = {
+    count?: number;
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

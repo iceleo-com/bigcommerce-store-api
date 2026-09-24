@@ -23,7 +23,7 @@ export type MetaCollectionPagination = {
     count?: number;
     per_page?: number;
     current_page?: number;
-    total_page?: number;
+    total_pages?: number;
     links?: MetaCollectionPaginationLinks;
 };
 export type MetaCollection = {
@@ -85,7 +85,7 @@ export type UpdateShippingSettingsRequestUnprocessableEntityError = {
     type?: string;
 };
 export type ChannelShippingSettingsCheckout = {
-    out_of_delivery_zone_message?: string;
+    out_of_delivery_zone_message?: string | null;
 };
 export type ChannelShippingSettings = {
     checkout?: ChannelShippingSettingsCheckout;

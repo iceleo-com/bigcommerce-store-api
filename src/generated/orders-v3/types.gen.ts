@@ -18,7 +18,7 @@ export type TransactionEvent = 'purchase' | 'authorization' | 'capture' | 'refun
  * The payment method: `credit_card` - a credit card transaction; `electronic_wallet` - an online wallet; `store_credit` - a transaction using store credit; `gift_certificate` - a transaction using a gift certificate; `custom` - manual payment methods; `token` - payment token; `nonce` - temporary payment token; `offsite` - online payment off the site; `offline` - payment method that takes place offline.
  *
  */
-export type TransactionMethod = 'credit_card' | 'electronic_wallet' | 'gift_certificate' | 'store_credit' | 'apple_pay_card' | 'bigpay_token' | 'apple_pay_token' | 'token' | 'custom' | 'offsite' | 'offline' | 'nonce';
+export type TransactionMethod = 'credit_card' | 'electronic_wallet' | 'gift_certificate' | 'store_credit' | 'apple_pay_card' | 'bigpay_token' | 'apple_pay_token' | 'token' | 'custom' | 'offsite' | 'offline' | 'nonce' | 'paypal';
 
 /**
  * TransactionGateway
@@ -26,7 +26,7 @@ export type TransactionMethod = 'credit_card' | 'electronic_wallet' | 'gift_cert
  * The payment gateway, where applicable.
  *
  */
-export type TransactionGateway = '2checkout' | 'adyen' | 'amazon' | 'authorizenet' | 'bankdeposit' | 'braintree' | 'cheque' | 'cod' | 'custom' | 'firstdatagge4' | 'giftcertificate' | 'hps' | 'instore' | 'klarna' | 'migs' | 'moneyorder' | 'nmi' | 'paypalexpress' | 'paypalpaymentsprous' | 'plugnpay' | 'qbmsv2' | 'securenet' | 'square' | 'storecredit' | 'stripe' | 'testgateway' | 'usaepay';
+export type TransactionGateway = '2checkout' | 'adyen' | 'amazon' | 'authorizenet' | 'bankdeposit' | 'braintree' | 'cheque' | 'cod' | 'custom' | 'firstdatagge4' | 'giftcertificate' | 'hps' | 'instore' | 'klarna' | 'migs' | 'moneyorder' | 'nmi' | 'paypalexpress' | 'paypalpaymentsprous' | 'plugnpay' | 'qbmsv2' | 'securenet' | 'square' | 'storecredit' | 'stripe' | 'testgateway' | 'usaepay' | 'paypalcommerce';
 
 /**
  * TransactionStatus
@@ -133,12 +133,12 @@ export type CreditCard = {
      * The expiry month of a credit card.
      *
      */
-    card_expiry_month?: number;
+    card_expiry_month?: number | null;
     /**
      * The expiry year of a credit card.
      *
      */
-    card_expiry_year?: number;
+    card_expiry_year?: number | null;
 };
 
 /**
@@ -254,7 +254,7 @@ export type Transaction = {
      * Amount of money in the transaction.
      *
      */
-    amount: string;
+    amount: number;
     /**
      * Currency used for the transaction.
      *
@@ -289,7 +289,7 @@ export type Transaction = {
      * Identifier for an existing transaction upon which this transaction acts.
      *
      */
-    reference_transaction_id?: number;
+    reference_transaction_id?: number | null;
     /**
      * Offline payment (e.g., check or purchase order).
      */
@@ -328,14 +328,14 @@ export type Transaction = {
      * **Note:** This field is connected to an optional feature and may not be returned when using this endpoint. If your implementation requires access to this field, please reach out to support or your account manager to enable the inclusion of a provider token here.
      *
      */
-    provider_instrument_token?: string | null;
+    provider_instrument_token: string | null | undefined;
     /**
      * The payment provider's customer identifier associated with the stored instrument used to process this transaction, if applicable.
      *
      * **Note:** This field is connected to an optional feature and may not be returned when using this endpoint. If your implementation requires access to this field, please reach out to support or your account manager to enable the inclusion of a provider customer id here.
      *
      */
-    provider_customer_id?: string | null;
+    provider_customer_id: string | null | undefined;
     /**
      * Address Verification Service (AVS) result from the payment gateway.
      */
@@ -344,7 +344,7 @@ export type Transaction = {
      * Card Verification Value result from the payment gateway.
      */
     cvv_result?: TransactionCvvResult;
-    credit_card?: CreditCard;
+    credit_card?: CreditCard | null;
     /**
      * A gift-certificate model.
      */
@@ -647,7 +647,7 @@ export type CollectionMeta = {
  */
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 
 /**
@@ -1887,12 +1887,12 @@ export type RefundItem = {
     /**
      * Quantity of item refunded. Note: this will only be populated for item_type PRODUCT
      */
-    quantity?: number;
+    quantity?: number | null;
     /**
      * Adjustments to apply to the refunded amount for an item. Only supported for item_type PRODUCT
      */
     adjustments?: Array<RefundItemAdjustment>;
-    requested_amount?: Amount;
+    requested_amount?: number | null;
 };
 
 /**
@@ -1907,7 +1907,7 @@ export type RefundPayment = {
      * Reference to payment provider.
      */
     provider_id?: string;
-    amount?: Amount;
+    amount?: number;
     /**
      * Indicate whether payment was offline.
      */
@@ -1923,7 +1923,7 @@ export type RefundPayment = {
     /**
      * The BigCommerce `transaction_id`.
      */
-    transaction_id?: string;
+    transaction_id?: string | null;
 };
 
 /**
@@ -1950,7 +1950,7 @@ export type Refund = {
      * Reason for refund.
      */
     reason?: string;
-    total_amount?: Amount;
+    total_amount?: number;
     /**
      * Total tax amount refunded back to the shopper. Note: `order_level_amount` does not affect tax liability. This can be a negative amount indicating we have collected tax by refunding less to the customer.
      */
@@ -1979,7 +1979,7 @@ export type PaymentActionsGetOrderRefundsResponse200 = {
      * Collection of Refunds
      */
     data?: Array<Refund>;
-    meta?: MetaEmptyFull;
+    meta?: CollectionMeta;
 };
 
 /**
@@ -2197,6 +2197,10 @@ export type RefundIdGetDataPaymentsItems = {
      *
      */
     declined_message?: string;
+    /**
+     * Transaction ID of the refund at the payment provider.
+     */
+    transaction_id?: string | null;
 };
 
 /**
@@ -2225,17 +2229,18 @@ export type RefundIdGetDataItemsItems = {
      * Quantity of item refunded. Note: this will only be populated for item_type PRODUCT.
      *
      */
-    quantity?: number;
+    quantity?: number | null;
     /**
      * A non-negative two decimal place rounded value that represents the amount that can be refunded with the payment provider(s).
      *
      */
-    requested_amount?: string | null;
+    requested_amount?: number | null;
     /**
      * Reason for refunding an item.
      *
      */
     reason?: string;
+    adjustments?: Array<RefundItemAdjustment>;
 };
 
 /**
@@ -2306,7 +2311,7 @@ export type PaymentActionsGetOrdersRefundsResponse200 = {
      * Collection of Refunds
      */
     data?: Array<Refund>;
-    meta?: MetaEmptyFull;
+    meta?: CollectionMeta;
 };
 
 export type GetOrderTransactionsData = {
@@ -3278,3 +3283,42 @@ export type GetOrdersRefundsResponses = {
 };
 
 export type GetOrdersRefundsResponse = GetOrdersRefundsResponses[keyof GetOrdersRefundsResponses];
+
+
+/**
+ * MetafieldCursorPaginationLinks
+ *
+ * Links to the previous and next pages of the collection; empty when there are no other pages.
+ */
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+
+/**
+ * MetafieldCursorPagination
+ *
+ * Cursor based pagination of a metafield collection. `start_cursor` and `end_cursor` are omitted when the collection is empty.
+ */
+export type MetafieldCursorPagination = {
+    /**
+     * Number of items in the current page.
+     */
+    count?: number;
+    /**
+     * The number of items per page, controlled by the `limit` parameter.
+     */
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+
+/**
+ * MetafieldCursorPaginationMeta
+ *
+ * Metafield collections return `cursor_pagination` next to the offset based `pagination`.
+ */
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

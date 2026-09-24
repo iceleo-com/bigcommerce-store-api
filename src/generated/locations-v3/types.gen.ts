@@ -403,7 +403,7 @@ export type MetaFieldCollectionResponsePostPutMeta = {
  */
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
-    meta?: CollectionMeta;
+    meta?: CollectionMeta & MetafieldCursorPaginationMeta;
 };
 
 /**
@@ -633,7 +633,7 @@ export type InventoryLocationsLocationIdMetafieldsPostResponsesContentApplicatio
  */
 export type MetafieldsGetLocationMetafieldsResponse200 = {
     data?: Array<Metafield>;
-    meta?: InventoryLocationsLocationIdMetafieldsGetResponsesContentApplicationJsonSchemaMeta;
+    meta?: InventoryLocationsLocationIdMetafieldsGetResponsesContentApplicationJsonSchemaMeta & MetafieldCursorPaginationMeta;
 };
 
 /**
@@ -949,7 +949,7 @@ export type LocationResponse = {
     /**
      * Description of location.
      */
-    description?: string;
+    description?: string | null;
     /**
      * Indicates if the third-party system is the source of truth for inventory values. If set to true, manually editing inventory in the BigCommerce control panel will be disabled.
      *
@@ -963,11 +963,11 @@ export type LocationResponse = {
      * Indicator of accessibility of the location.
      */
     enabled?: boolean;
-    operating_hours?: OperatingHours;
+    operating_hours?: OperatingHours | null;
     /**
      * Time zone of location.
      */
-    time_zone?: string;
+    time_zone?: string | null;
     /**
      * Time when location was created.
      */
@@ -1050,13 +1050,13 @@ export type LocationResponseAddressGeoCoordinates = {
      *
      * Latitude.
      */
-    latitude?: string;
+    latitude?: string | null;
     /**
      * float
      *
      * Longitude.
      */
-    longitude?: string;
+    longitude?: string | null;
 };
 
 /**
@@ -1750,3 +1750,41 @@ export type UpdateLocationsMetafieldsResponses = {
 };
 
 export type UpdateLocationsMetafieldsResponse = UpdateLocationsMetafieldsResponses[keyof UpdateLocationsMetafieldsResponses];
+
+/**
+ * MetafieldCursorPaginationLinks
+ *
+ * Links to the previous and next pages of the collection; empty when there are no other pages.
+ */
+export type MetafieldCursorPaginationLinks = {
+    previous?: string;
+    next?: string;
+};
+
+/**
+ * MetafieldCursorPagination
+ *
+ * Cursor based pagination of a metafield collection. `start_cursor` and `end_cursor` are omitted when the collection is empty.
+ */
+export type MetafieldCursorPagination = {
+    /**
+     * Number of items in the current page.
+     */
+    count?: number;
+    /**
+     * The number of items per page, controlled by the `limit` parameter.
+     */
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: MetafieldCursorPaginationLinks;
+};
+
+/**
+ * MetafieldCursorPaginationMeta
+ *
+ * Metafield collections return `cursor_pagination` next to the offset based `pagination`.
+ */
+export type MetafieldCursorPaginationMeta = {
+    cursor_pagination?: MetafieldCursorPagination;
+};

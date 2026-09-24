@@ -8,9 +8,21 @@ export type CarrierConnection = {
     carrier_id?: string;
     connection?: CarrierConnectionConnection;
 };
-export type ShippingMethodType = 'perorder' | 'peritem' | 'weight' | 'total' | 'auspost' | 'canadapost' | 'endicia' | 'usps' | 'fedex' | 'royalmail' | 'upsready' | 'freeshipping';
+export type ShippingMethodType = 'perorder' | 'peritem' | 'weight' | 'total' | 'auspost' | 'canadapost' | 'endicia' | 'usps' | 'fedex' | 'royalmail' | 'upsready' | 'freeshipping' | 'pickupinstore' | `carrier_${number}`;
 export type ShippingMethodBaseSettings = {
     rate?: number;
+    default_cost?: number | null;
+    default_cost_type?: 'fixed_amount' | 'percentage_of_total';
+    range?: Array<ShippingMethodSettingsRange>;
+    carrier_options?: {
+        packaging?: Array<unknown>;
+        [key: string]: unknown;
+    };
+};
+export type ShippingMethodSettingsRange = {
+    lower_limit?: number;
+    upper_limit?: number;
+    shipping_cost?: number;
 };
 export type ShippingMethodBaseHandlingFees0 = {
     fixed_surcharge?: number;
@@ -22,7 +34,7 @@ export type ShippingMethodBaseHandlingFees = ShippingMethodBaseHandlingFees0 | S
 export type ShippingMethodFull = {
     name?: string;
     type?: ShippingMethodType;
-    settings?: ShippingMethodBaseSettings;
+    settings?: ShippingMethodBaseSettings | [];
     enabled?: boolean;
     handling_fees?: ShippingMethodBaseHandlingFees;
     is_fallback?: boolean;
@@ -52,7 +64,7 @@ export type ShippingMethodGetShippingMethodResponse200 = {
     id?: number;
     name?: string;
     type?: ShippingMethodType;
-    settings?: ShippingZonesZoneIdMethodsMethodIdGetResponsesContentApplicationJsonSchemaSettings;
+    settings?: ShippingMethodBaseSettings | [];
     enabled?: boolean;
     handling_fees?: ShippingZonesZoneIdMethodsMethodIdGetResponsesContentApplicationJsonSchemaHandlingFees;
     is_fallback?: boolean;

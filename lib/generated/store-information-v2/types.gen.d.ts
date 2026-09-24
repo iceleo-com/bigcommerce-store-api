@@ -15,6 +15,7 @@ export type Timezone = {
 };
 export type StoreInformationLogo0 = {
     url?: string;
+    mobile_url?: string;
 };
 export type StoreInformationLogo = StoreInformationLogo0 | Array<unknown>;
 export type StoreInformationFeaturesCheckoutType = 'optimized' | 'single' | 'single_customizable' | 'klarna';
@@ -31,6 +32,8 @@ export type StoreInformationFeatures = {
     graphql_storefront_api_enabled?: boolean;
     shopper_consent_tracking_enabled?: boolean;
     multi_storefront_enabled?: boolean;
+    multi_language_enabled?: boolean;
+    b2b_enabled?: boolean;
     storefront_limits?: StoreInformationFeaturesStorefrontLimits;
 };
 export type StoreInformation = {

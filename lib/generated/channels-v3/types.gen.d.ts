@@ -95,7 +95,7 @@ export type ChannelWithCurrencies = {
     date_created?: ChannelDateCreated;
     date_modified?: ChannelDateModified;
     icon_url?: IconUrl;
-    currencies?: CurrencyNotRequiredWithChannelId;
+    currencies: CurrencyNotRequiredWithChannelId | undefined;
 };
 export type ChannelsGetChannelResponse200 = {
     data?: ChannelWithCurrencies;
@@ -154,6 +154,19 @@ export type CollectionMetaPagination = {
 };
 export type CollectionMeta = {
     pagination?: CollectionMetaPagination;
+    cursor_pagination?: CursorPagination;
+};
+export type CursorPaginationLinks = {
+    previous?: string;
+    current?: string;
+    next?: string;
+};
+export type CursorPagination = {
+    count?: number;
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: CursorPaginationLinks;
 };
 export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
@@ -378,6 +391,9 @@ export type CustomAppSections = Array<CustomAppSectionsItems>;
 export type ChannelsChannelIdChannelMenusGetResponsesContentApplicationJsonSchemaData = {
     bigcommerce_protected_app_sections?: BigCommerceProtectedAppSections;
     custom_app_sections?: CustomAppSections;
+    protected_app_section_customization?: {
+        [key: string]: unknown;
+    };
 };
 export type MenusGetChannelMenusResponse200 = {
     data?: ChannelsChannelIdChannelMenusGetResponsesContentApplicationJsonSchemaData;
@@ -416,7 +432,7 @@ export type MetafieldBase = {
 };
 export type MetafieldsGetChannelMetafieldsResponse200 = {
     data?: Array<MetafieldBase>;
-    meta?: MetaWithFullPagination;
+    meta?: CollectionMeta;
 };
 export type MetafieldPostPermissionSet = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
 export type MetafieldPost2 = {
@@ -478,7 +494,7 @@ export type Site = {
     channel_id?: number;
     created_at?: string;
     updated_at?: string;
-    ssl_status?: SiteSslStatus;
+    ssl_status: SiteSslStatus | undefined;
     urls?: Array<Url>;
     is_checkout_url_customized?: boolean;
 };

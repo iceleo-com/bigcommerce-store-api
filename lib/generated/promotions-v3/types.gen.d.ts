@@ -162,7 +162,7 @@ export type Customer = {
     group_ids?: Array<number>;
     minimum_order_count?: number;
     excluded_group_ids?: Array<number>;
-    segments?: CustomerSegments;
+    segments?: CustomerSegments | null;
 };
 export type Money = string;
 export type FixedDiscount = {
@@ -312,7 +312,7 @@ export type Rule = {
     condition?: Condition;
 };
 export type SavedAutomaticPromotionStatus = 'ENABLED' | 'DISABLED' | 'INVALID';
-export type NotificationType = 'UPSELL' | 'ELIGIBLE' | 'APPLIED';
+export type NotificationType = 'PROMOTION' | 'UPSELL' | 'ELIGIBLE' | 'APPLIED';
 export type Notification = {
     content: string;
     type: NotificationType;
@@ -346,20 +346,21 @@ export type SavedAutomaticPromotion = {
     customer: Customer;
     rules: Array<Rule>;
     current_uses: number;
-    max_uses?: number;
+    max_uses?: number | null;
     status: SavedAutomaticPromotionStatus;
     start_date: string;
-    end_date?: string;
+    end_date?: string | null;
     stop: boolean;
     can_be_used_with_other_promotions: boolean;
     currency_code: string;
     notifications: Array<Notification>;
-    shipping_address?: AddressMatcher;
-    schedule?: AvailabilityByWeekDay;
+    shipping_address?: AddressMatcher | null;
+    schedule?: AvailabilityByWeekDay | null;
     promotion_category?: SavedAutomaticPromotionPromotionCategory;
     is_featured_promotion: boolean;
     featured_promotion_callout_message: string;
     created_from: CreatedFrom;
+    is_archived?: boolean;
 };
 export type SavedCouponPromotionRedemptionType = 'COUPON';
 export type SavedCouponPromotionStatus = 'ENABLED' | 'DISABLED' | 'INVALID';
@@ -377,16 +378,16 @@ export type SavedCouponPromotion = {
     customer: Customer;
     rules: Array<Rule>;
     current_uses: number;
-    max_uses?: number;
+    max_uses?: number | null;
     status: SavedCouponPromotionStatus;
     start_date: string;
-    end_date?: string;
+    end_date?: string | null;
     stop: boolean;
     can_be_used_with_other_promotions: boolean;
     currency_code: string;
     notifications: Array<Notification>;
-    shipping_address?: AddressMatcher;
-    schedule?: AvailabilityByWeekDay;
+    shipping_address?: AddressMatcher | null;
+    schedule?: AvailabilityByWeekDay | null;
     promotion_category?: SavedCouponPromotionPromotionCategory;
     is_featured_promotion: boolean;
     featured_promotion_callout_message: string;
@@ -395,6 +396,7 @@ export type SavedCouponPromotion = {
     coupon_overrides_automatic_when_offering_higher_discounts: boolean;
     multiple_codes?: SavedCouponPromotionMultipleCodes;
     coupon_type: SavedCouponPromotionCouponType;
+    is_archived?: boolean;
 };
 export type PromotionsGetResponsesContentApplicationJsonSchemaDataItems = SavedAutomaticPromotion | SavedCouponPromotion;
 export type PaginationLinks = {

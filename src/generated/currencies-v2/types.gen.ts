@@ -15,7 +15,7 @@ export type CurrencyFull = {
     /**
      * 2-letter ISO Alpha-2 code for this currency’s country.
      */
-    country_iso2?: string;
+    country_iso2?: string | null;
     /**
      * Default 3-letter ISO 4217 code for this currency.
      */
