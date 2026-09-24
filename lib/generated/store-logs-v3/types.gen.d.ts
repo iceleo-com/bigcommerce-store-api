@@ -36,7 +36,7 @@ export type SystemLog = {
     message?: string;
     date_created?: string;
 };
-export type GetStoreSystemLogsData = {
+export type GetSitesData = {
     body?: never;
     path?: never;
     query?: {
@@ -49,16 +49,16 @@ export type GetStoreSystemLogsData = {
         severity?: 1 | 2 | 3 | 4;
         'severity:min'?: number;
         'severity:max'?: number;
-        'id:in'?: Array<number>;
-        sort?: 'date_created' | 'type';
-        direction?: 'asc' | 'desc';
+        'id:in'?: string;
+        'date_created:min'?: string;
+        'date_created:max'?: string;
     };
     url: '/store/systemlogs';
 };
-export type GetStoreSystemLogsResponses = {
+export type GetSitesResponses = {
     200: {
         data?: Array<SystemLog>;
         meta?: IndexMeta;
     };
 };
-export type GetStoreSystemLogsResponse = GetStoreSystemLogsResponses[keyof GetStoreSystemLogsResponses];
+export type GetSitesResponse = GetSitesResponses[keyof GetSitesResponses];

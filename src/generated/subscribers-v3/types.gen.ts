@@ -24,10 +24,6 @@ export type SubscriberFull = SubscriberBase & {
      *
      */
     date_created?: string;
-    /**
-     * Shows the active subscriptions a shopper may have. If the consents array is empty, the user has unsubscribed or didn’t enable the newsletter subscription checkbox during checkout. The array will contain consent types like 'marketing_newsletter' and 'abandoned_cart'.
-     */
-    consents?: Array<'marketing_newsletter' | 'abandoned_cart'>;
 };
 
 /**
@@ -65,10 +61,6 @@ export type SubscriberBase = {
      * The channel ID where the subscriber was created.
      */
     channel_id?: number;
-    /**
-     * Shows the active subscriptions a shopper may have. If the consents array is empty, the user has unsubscribed or didn’t enable the newsletter subscription checkbox during checkout. The array will contain consent types like 'marketing_newsletter' and 'abandoned_cart'.
-     */
-    consents?: Array<'marketing_newsletter' | 'abandoned_cart'>;
 };
 
 export type Subscriber = {
@@ -363,30 +355,10 @@ export type FilterOrderIdParam = number;
 export type FilterDateModifiedParam = string;
 
 /**
- * Filter items by minimum date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.
- */
-export type FilterDateModifiedMinParam = string;
-
-/**
- * Filter items by maximum date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.
- */
-export type FilterDateModifiedMaxParam = string;
-
-/**
  * Filter items by date_created.
  *
  */
 export type FilterDateCreatedParam = string;
-
-/**
- * Filter items by minimum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.
- */
-export type FilterDateCreatedMinParam = string;
-
-/**
- * Filter items by maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.
- */
-export type FilterDateCreatedMaxParam = string;
 
 /**
  * Specifies the page number in a limited (paginated) list of products.
@@ -411,20 +383,7 @@ export type ScriptsSortKeyParam = 'name' | 'description' | 'date_created' | 'dat
 export type DirectionParam = 'asc' | 'desc';
 
 /**
- * Filter items by ID.
- *
- */
-export type IdParam = number;
-
-/**
- * Filter items by ID.
- * `id:in=4,5,6`
- *
- */
-export type IdInParam = Array<number>;
-
-/**
- * The ID of the subscriber requested.
+ * The ID of the `Subscriber` requested.
  *
  */
 export type SubscriberIdParam = number;
@@ -502,7 +461,7 @@ export type GetSubscribersData = {
         Accept: string;
     };
     path?: never;
-    query: {
+    query?: {
         /**
          * Filter items by email.
          *
@@ -534,25 +493,9 @@ export type GetSubscribersData = {
          */
         date_created?: string;
         /**
-         * Filter items by minimum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.
-         */
-        'date_created:min'?: string;
-        /**
-         * Filter items by maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.
-         */
-        'date_created:max'?: string;
-        /**
          * Filter items by date_modified. For example `v3/catalog/products?date_last_imported:min=2018-06-15`
          */
         date_modified?: string;
-        /**
-         * Filter items by minimum date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.
-         */
-        'date_modified:min'?: string;
-        /**
-         * Filter items by maximum date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.
-         */
-        'date_modified:max'?: string;
         /**
          * Specifies the page number in a limited (paginated) list of products.
          */
@@ -562,16 +505,9 @@ export type GetSubscribersData = {
          */
         limit?: number;
         /**
-         * Filter items by ID.
-         *
+         * Filter items by id.
          */
-        id: number;
-        /**
-         * Filter items by ID.
-         * `id:in=4,5,6`
-         *
-         */
-        'id:in'?: Array<number>;
+        id?: number;
     };
     url: '/customers/subscribers';
 };
@@ -677,7 +613,7 @@ export type CreateSubscriberResponses = {
 
 export type CreateSubscriberResponse = CreateSubscriberResponses[keyof CreateSubscriberResponses];
 
-export type DeleteSubscriberData = {
+export type DeleteSubscriberByIdData = {
     body?: never;
     headers: {
         /**
@@ -696,13 +632,13 @@ export type DeleteSubscriberData = {
     url: '/customers/subscribers/{subscriber_id}';
 };
 
-export type DeleteSubscriberResponses = {
+export type DeleteSubscriberByIdResponses = {
     204: void;
 };
 
-export type DeleteSubscriberResponse = DeleteSubscriberResponses[keyof DeleteSubscriberResponses];
+export type DeleteSubscriberByIdResponse = DeleteSubscriberByIdResponses[keyof DeleteSubscriberByIdResponses];
 
-export type GetSubscriberData = {
+export type GetSubscriberByIdData = {
     body?: never;
     headers: {
         /**
@@ -721,7 +657,7 @@ export type GetSubscriberData = {
     url: '/customers/subscribers/{subscriber_id}';
 };
 
-export type GetSubscriberErrors = {
+export type GetSubscriberByIdErrors = {
     /**
      * Not Found
      *
@@ -742,9 +678,9 @@ export type GetSubscriberErrors = {
     };
 };
 
-export type GetSubscriberError = GetSubscriberErrors[keyof GetSubscriberErrors];
+export type GetSubscriberByIdError = GetSubscriberByIdErrors[keyof GetSubscriberByIdErrors];
 
-export type GetSubscriberResponses = {
+export type GetSubscriberByIdResponses = {
     /**
      * Subscriber Response
      */
@@ -754,7 +690,7 @@ export type GetSubscriberResponses = {
     };
 };
 
-export type GetSubscriberResponse = GetSubscriberResponses[keyof GetSubscriberResponses];
+export type GetSubscriberByIdResponse = GetSubscriberByIdResponses[keyof GetSubscriberByIdResponses];
 
 export type UpdateSubscriberData = {
     body: SubscriberPut;

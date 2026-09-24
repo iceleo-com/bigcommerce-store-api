@@ -261,10 +261,6 @@ export type KeyValuePair = {
  */
 export type RateResponsePayload = {
     quote_id: string;
-    /**
-     * Time-to-live (TTL) in seconds
-     */
-    ttl?: number;
     messages: Array<{
         text: string;
         type: 'INFO' | 'WARNING' | 'ERROR';

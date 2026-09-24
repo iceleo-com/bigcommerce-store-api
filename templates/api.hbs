@@ -50,5 +50,14 @@ export class {{{className}}} {
             {{#if queries.length}}query,{{/if}}
         });
     }
+    {{#each aliases}}
+
+    /**
+     * @deprecated Use `{{{../name}}}` instead.
+     */
+    {{{this}}}(...args: Parameters<{{{../../className}}}['{{{../name}}}']>) {
+        return this.{{{../name}}}(...args);
+    }
+    {{/each}}
     {{/each}}
 }

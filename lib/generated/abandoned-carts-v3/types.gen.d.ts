@@ -60,10 +60,11 @@ export type Accept = string;
 export type ContentType = string;
 export type GetGlobalAbandonedCartSettingsData = {
     body?: never;
-    path?: never;
-    query?: {
-        pagination?: number;
+    headers: {
+        Accept: string;
     };
+    path?: never;
+    query?: never;
     url: '/abandoned-carts/settings';
 };
 export type GetGlobalAbandonedCartSettingsErrors = {
@@ -77,8 +78,8 @@ export type GetGlobalAbandonedCartSettingsResponse = GetGlobalAbandonedCartSetti
 export type UpdateGlobalAbandonedCartSettingsData = {
     body: GlobalAbandonedCartSettingsRequest;
     headers: {
-        'Content-Type': string;
         Accept: string;
+        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -95,6 +96,9 @@ export type UpdateGlobalAbandonedCartSettingsResponses = {
 export type UpdateGlobalAbandonedCartSettingsResponse = UpdateGlobalAbandonedCartSettingsResponses[keyof UpdateGlobalAbandonedCartSettingsResponses];
 export type GetChannelAbandonedCartSettingsData = {
     body?: never;
+    headers: {
+        Accept: string;
+    };
     path: {
         channel_id: number;
     };
@@ -112,8 +116,8 @@ export type GetChannelAbandonedCartSettingsResponse = GetChannelAbandonedCartSet
 export type UpdateChannelAbandonedCartSettingsData = {
     body: ChannelAbandonedCartSettingsRequest;
     headers: {
-        'Content-Type': string;
         Accept: string;
+        'Content-Type': string;
     };
     path: {
         channel_id: number;

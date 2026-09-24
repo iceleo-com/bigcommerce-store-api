@@ -15,13 +15,20 @@ export class CustomersV2Api {
      *
      * Returns a list of all *Customers*. Default sorting is by `customer_ID`, from lowest to highest. Optional parameters can be passed in.
      */
-    getCustomers(
-        query?: CustomersV2ApiSpecs.GetCustomersData['query'],
+    getAllCustomers(
+        query?: CustomersV2ApiSpecs.GetAllCustomersData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomersResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetAllCustomersResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/customers',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getAllCustomers` instead.
+     */
+    getCustomers(...args: Parameters<CustomersV2Api['getAllCustomers']>) {
+        return this.getAllCustomers(...args);
     }
 
     /**
@@ -71,10 +78,10 @@ export class CustomersV2Api {
      }
      ```
      */
-    createCustomer(
-        requestBody: CustomersV2ApiSpecs.CreateCustomerData['body'],
+    createAnewCustomer(
+        requestBody: CustomersV2ApiSpecs.CreateANewCustomerData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CreateCustomerResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CreateANewCustomerResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/customers',
             contentType: 'application/json',
             body: requestBody,
@@ -82,15 +89,29 @@ export class CustomersV2Api {
     }
 
     /**
+     * @deprecated Use `createAnewCustomer` instead.
+     */
+    createCustomer(...args: Parameters<CustomersV2Api['createAnewCustomer']>) {
+        return this.createAnewCustomer(...args);
+    }
+
+    /**
      * Delete Customers
      *
      * By default, it deletes all *Customers*. Up to 100 customers per batch can be deleted.
      */
-    deleteCustomers(
+    deleteAllCustomers(
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteCustomersResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteAllCustomersResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/customers',
         });
+    }
+
+    /**
+     * @deprecated Use `deleteAllCustomers` instead.
+     */
+    deleteCustomers(...args: Parameters<CustomersV2Api['deleteAllCustomers']>) {
+        return this.deleteAllCustomers(...args);
     }
 
     /**
@@ -98,12 +119,19 @@ export class CustomersV2Api {
      *
      * Returns a single *Customer*.
      */
-    getCustomer(
-        customerId: CustomersV2ApiSpecs.GetCustomerData['path']['customer_id'],
+    getAcustomer(
+        customerId: CustomersV2ApiSpecs.GetACustomerData['path']['customer_id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetACustomerResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `getAcustomer` instead.
+     */
+    getCustomer(...args: Parameters<CustomersV2Api['getAcustomer']>) {
+        return this.getAcustomer(...args);
     }
 
     /**
@@ -154,11 +182,11 @@ export class CustomersV2Api {
      }
      ```
      */
-    updateCustomer(
-        customerId: CustomersV2ApiSpecs.UpdateCustomerData['path']['customer_id'],
-        requestBody: CustomersV2ApiSpecs.UpdateCustomerData['body'],
+    updateAcustomer(
+        customerId: CustomersV2ApiSpecs.UpdateACustomerData['path']['customer_id'],
+        requestBody: CustomersV2ApiSpecs.UpdateACustomerData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.UpdateCustomerResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.UpdateACustomerResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -166,16 +194,30 @@ export class CustomersV2Api {
     }
 
     /**
+     * @deprecated Use `updateAcustomer` instead.
+     */
+    updateCustomer(...args: Parameters<CustomersV2Api['updateAcustomer']>) {
+        return this.updateAcustomer(...args);
+    }
+
+    /**
      * Delete a Customer
      *
      * Deletes a *Customer*.
      */
-    deleteCustomer(
-        customerId: CustomersV2ApiSpecs.DeleteCustomerData['path']['customer_id'],
+    deleteAcustomer(
+        customerId: CustomersV2ApiSpecs.DeleteACustomerData['path']['customer_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteCustomerResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteACustomerResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteAcustomer` instead.
+     */
+    deleteCustomer(...args: Parameters<CustomersV2Api['deleteAcustomer']>) {
+        return this.deleteAcustomer(...args);
     }
 
     /**
@@ -183,11 +225,18 @@ export class CustomersV2Api {
      *
      * Returns a count of all *Customers*.
      */
-    getCustomersCount(
+    getAcountOfCustomers(
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomersCountResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetACountOfCustomersResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/customers/count',
         });
+    }
+
+    /**
+     * @deprecated Use `getAcountOfCustomers` instead.
+     */
+    getCustomersCount(...args: Parameters<CustomersV2Api['getAcountOfCustomers']>) {
+        return this.getAcountOfCustomers(...args);
     }
 
     /**
@@ -227,14 +276,21 @@ export class CustomersV2Api {
      * Returns a list of *Customer Addresses*. Returns the addresses belonging to a customer. Default sorting is by address id, from lowest to highest. 
      The maximum limit is 250. If a limit isn’t provided, up to 50 `customer_addresses` are returned by default.
      */
-    getCustomerAddresses(
-        customerId: CustomersV2ApiSpecs.GetCustomerAddressesData['path']['customer_id'],
-        query?: CustomersV2ApiSpecs.GetCustomerAddressesData['query'],
+    getAllCustomerAddresses(
+        customerId: CustomersV2ApiSpecs.GetAllCustomerAddressesData['path']['customer_id'],
+        query?: CustomersV2ApiSpecs.GetAllCustomerAddressesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerAddressesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetAllCustomerAddressesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getAllCustomerAddresses` instead.
+     */
+    getCustomerAddresses(...args: Parameters<CustomersV2Api['getAllCustomerAddresses']>) {
+        return this.getAllCustomerAddresses(...args);
     }
 
     /**
@@ -256,11 +312,11 @@ export class CustomersV2Api {
      *   id
      *   country_iso2
      */
-    createCustomerAddress(
-        customerId: CustomersV2ApiSpecs.CreateCustomerAddressData['path']['customer_id'],
-        requestBody: CustomersV2ApiSpecs.CreateCustomerAddressData['body'],
+    createAcustomerAddress(
+        customerId: CustomersV2ApiSpecs.CreateACustomerAddressData['path']['customer_id'],
+        requestBody: CustomersV2ApiSpecs.CreateACustomerAddressData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CreateCustomerAddressResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CreateACustomerAddressResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses`,
             contentType: 'application/json',
             body: requestBody,
@@ -268,18 +324,32 @@ export class CustomersV2Api {
     }
 
     /**
+     * @deprecated Use `createAcustomerAddress` instead.
+     */
+    createCustomerAddress(...args: Parameters<CustomersV2Api['createAcustomerAddress']>) {
+        return this.createAcustomerAddress(...args);
+    }
+
+    /**
      * Delete Customer Address
      *
      * By default, it deletes all *Customer Addresses*.
      */
-    deleteCustomerAddresses(
-        customerId: CustomersV2ApiSpecs.DeleteCustomerAddressesData['path']['customer_id'],
-        query?: CustomersV2ApiSpecs.DeleteCustomerAddressesData['query'],
+    deleteAllCustomerAddresses(
+        customerId: CustomersV2ApiSpecs.DeleteAllCustomerAddressesData['path']['customer_id'],
+        query?: CustomersV2ApiSpecs.DeleteAllCustomerAddressesData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteCustomerAddressesResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteAllCustomerAddressesResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteAllCustomerAddresses` instead.
+     */
+    deleteCustomerAddresses(...args: Parameters<CustomersV2Api['deleteAllCustomerAddresses']>) {
+        return this.deleteAllCustomerAddresses(...args);
     }
 
     /**
@@ -287,15 +357,22 @@ export class CustomersV2Api {
      *
      * Returns a *Customer Address*.
      */
-    getCustomerAddress(
-        customerId: CustomersV2ApiSpecs.GetCustomerAddressData['path']['customer_id'],
-        customerAddressId: CustomersV2ApiSpecs.GetCustomerAddressData['path']['customer_address_id'],
-        query?: CustomersV2ApiSpecs.GetCustomerAddressData['query'],
+    getAcustomerAddress(
+        customerId: CustomersV2ApiSpecs.GetACustomerAddressData['path']['customer_id'],
+        customerAddressId: CustomersV2ApiSpecs.GetACustomerAddressData['path']['customer_address_id'],
+        query?: CustomersV2ApiSpecs.GetACustomerAddressData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerAddressResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetACustomerAddressResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses/${customerAddressId}`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getAcustomerAddress` instead.
+     */
+    getCustomerAddress(...args: Parameters<CustomersV2Api['getAcustomerAddress']>) {
+        return this.getAcustomerAddress(...args);
     }
 
     /**
@@ -307,12 +384,12 @@ export class CustomersV2Api {
      *   id
      *   country_iso2
      */
-    updateCustomerAddress(
-        customerId: CustomersV2ApiSpecs.UpdateCustomerAddressData['path']['customer_id'],
-        customerAddressId: CustomersV2ApiSpecs.UpdateCustomerAddressData['path']['customer_address_id'],
-        requestBody: CustomersV2ApiSpecs.UpdateCustomerAddressData['body'],
+    updateAcustomerAddress(
+        customerId: CustomersV2ApiSpecs.UpdateACustomerAddressData['path']['customer_id'],
+        customerAddressId: CustomersV2ApiSpecs.UpdateACustomerAddressData['path']['customer_address_id'],
+        requestBody: CustomersV2ApiSpecs.UpdateACustomerAddressData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.UpdateCustomerAddressResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.UpdateACustomerAddressResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses/${customerAddressId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -320,17 +397,31 @@ export class CustomersV2Api {
     }
 
     /**
+     * @deprecated Use `updateAcustomerAddress` instead.
+     */
+    updateCustomerAddress(...args: Parameters<CustomersV2Api['updateAcustomerAddress']>) {
+        return this.updateAcustomerAddress(...args);
+    }
+
+    /**
      * Delete a Customer Address
      *
      * Deletes a *Customer Address*.
      */
-    deletesCustomerAddress(
-        customerId: CustomersV2ApiSpecs.DeletesCustomerAddressData['path']['customer_id'],
-        customerAddressId: CustomersV2ApiSpecs.DeletesCustomerAddressData['path']['customer_address_id'],
+    deletesAcustomerAddress(
+        customerId: CustomersV2ApiSpecs.DeletesACustomerAddressData['path']['customer_id'],
+        customerAddressId: CustomersV2ApiSpecs.DeletesACustomerAddressData['path']['customer_address_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeletesCustomerAddressResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeletesACustomerAddressResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses/${customerAddressId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deletesAcustomerAddress` instead.
+     */
+    deletesCustomerAddress(...args: Parameters<CustomersV2Api['deletesAcustomerAddress']>) {
+        return this.deletesAcustomerAddress(...args);
     }
 
     /**
@@ -338,14 +429,21 @@ export class CustomersV2Api {
      *
      * Returns a count of addresses for a customer.
      */
-    getCustomerAddressesCount(
-        customerId: CustomersV2ApiSpecs.GetCustomerAddressesCountData['path']['customer_id'],
-        query?: CustomersV2ApiSpecs.GetCustomerAddressesCountData['query'],
+    getAcountofCustomerAddresses(
+        customerId: CustomersV2ApiSpecs.GetACountofCustomerAddressesData['path']['customer_id'],
+        query?: CustomersV2ApiSpecs.GetACountofCustomerAddressesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerAddressesCountResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetACountofCustomerAddressesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/customers/${customerId}/addresses/count`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getAcountofCustomerAddresses` instead.
+     */
+    getCustomerAddressesCount(...args: Parameters<CustomersV2Api['getAcountofCustomerAddresses']>) {
+        return this.getAcountofCustomerAddresses(...args);
     }
 
     /**
@@ -356,13 +454,20 @@ export class CustomersV2Api {
      **Note:**
      The default rate limit for this endpoint is 40 concurrent requests.
      */
-    getCustomerGroups(
-        query?: CustomersV2ApiSpecs.GetCustomerGroupsData['query'],
+    getAllCustomerGroups(
+        query?: CustomersV2ApiSpecs.GetAllCustomerGroupsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerGroupsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetAllCustomerGroupsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/customer_groups',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getAllCustomerGroups` instead.
+     */
+    getCustomerGroups(...args: Parameters<CustomersV2Api['getAllCustomerGroups']>) {
+        return this.getAllCustomerGroups(...args);
     }
 
     /**
@@ -376,13 +481,33 @@ export class CustomersV2Api {
      **Note:**
      The default rate limit for this endpoint is 40 concurrent requests.
      */
-    createCustomerGroup(
-        requestBody: CustomersV2ApiSpecs.CreateCustomerGroupData['body'],
+    createAcustomerGroup(
+        requestBody: CustomersV2ApiSpecs.CreateACustomerGroupData['body'],
     ) {
-        return this.request.post<(RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CreateCustomerGroupResponses[200]>> | RequestSuccessResponse<207, Required<CustomersV2ApiSpecs.CreateCustomerGroupResponses[207]>>),RequestErrorResponse<400, void>>({
+        return this.request.post<(RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.CreateACustomerGroupResponses[200]>> | RequestSuccessResponse<207, Required<CustomersV2ApiSpecs.CreateACustomerGroupResponses[207]>>),RequestErrorResponse<400, void>>({
             path: 'v2/customer_groups',
             contentType: 'application/json',
             body: requestBody,
+        });
+    }
+
+    /**
+     * @deprecated Use `createAcustomerGroup` instead.
+     */
+    createCustomerGroup(...args: Parameters<CustomersV2Api['createAcustomerGroup']>) {
+        return this.createAcustomerGroup(...args);
+    }
+
+    /**
+     * Delete Customer Groups
+     *
+     * By default, it deletes all *Customer Groups*. 
+     All existing customers are unassigned from the group when it is deleted.
+     */
+    deleteAllCustomerGroups(
+    ) {
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteAllCustomerGroupsResponses[204]>>,RequestErrorResponse<400, void>>({
+            path: 'v2/customer_groups',
         });
     }
 
@@ -391,14 +516,21 @@ export class CustomersV2Api {
      *
      * Returns a *Customer Group*.
      */
-    getCustomerGroup(
-        customerGroupId: CustomersV2ApiSpecs.GetCustomerGroupData['path']['customer_group_id'],
-        query?: CustomersV2ApiSpecs.GetCustomerGroupData['query'],
+    getAcustomerGroup(
+        customerGroupId: CustomersV2ApiSpecs.GetACustomerGroupData['path']['customer_group_id'],
+        query?: CustomersV2ApiSpecs.GetACustomerGroupData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerGroupResponses[200]>>,RequestErrorResponse<400, Required<CustomersV2ApiSpecs.GetCustomerGroupErrors[400]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetACustomerGroupResponses[200]>>,RequestErrorResponse<400, Required<CustomersV2ApiSpecs.GetACustomerGroupErrors[400]>>>({
             path: `v2/customer_groups/${customerGroupId}`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getAcustomerGroup` instead.
+     */
+    getCustomerGroup(...args: Parameters<CustomersV2Api['getAcustomerGroup']>) {
+        return this.getAcustomerGroup(...args);
     }
 
     /**
@@ -410,15 +542,22 @@ export class CustomersV2Api {
 
      Any combination of fields can be updated at once. Discount rules are treated in bulk. The entire set of rules is overwritten when a request is sent.
      */
-    updateCustomerGroup(
-        customerGroupId: CustomersV2ApiSpecs.UpdateCustomerGroupData['path']['customer_group_id'],
-        requestBody: CustomersV2ApiSpecs.UpdateCustomerGroupData['body'],
+    updateAcustomerGroup(
+        customerGroupId: CustomersV2ApiSpecs.UpdateACustomerGroupData['path']['customer_group_id'],
+        requestBody: CustomersV2ApiSpecs.UpdateACustomerGroupData['body'],
     ) {
-        return this.request.put<(RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.UpdateCustomerGroupResponses[200]>> | RequestSuccessResponse<207, Required<CustomersV2ApiSpecs.UpdateCustomerGroupResponses[207]>>),RequestErrorResponse<400, void>>({
+        return this.request.put<(RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.UpdateACustomerGroupResponses[200]>> | RequestSuccessResponse<207, Required<CustomersV2ApiSpecs.UpdateACustomerGroupResponses[207]>>),RequestErrorResponse<400, void>>({
             path: `v2/customer_groups/${customerGroupId}`,
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `updateAcustomerGroup` instead.
+     */
+    updateCustomerGroup(...args: Parameters<CustomersV2Api['updateAcustomerGroup']>) {
+        return this.updateAcustomerGroup(...args);
     }
 
     /**
@@ -430,12 +569,19 @@ export class CustomersV2Api {
      - All existing customers are unassigned from the group when it is deleted.
      - The default rate limit for this endpoint is 40 concurrent requests.
      */
-    deleteCustomerGroup(
-        customerGroupId: CustomersV2ApiSpecs.DeleteCustomerGroupData['path']['customer_group_id'],
+    deleteAcustomerGroup(
+        customerGroupId: CustomersV2ApiSpecs.DeleteACustomerGroupData['path']['customer_group_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteCustomerGroupResponses[204]>>,RequestErrorResponse<400, Required<CustomersV2ApiSpecs.DeleteCustomerGroupErrors[400]>>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV2ApiSpecs.DeleteACustomerGroupResponses[204]>>,RequestErrorResponse<400, Required<CustomersV2ApiSpecs.DeleteACustomerGroupErrors[400]>>>({
             path: `v2/customer_groups/${customerGroupId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteAcustomerGroup` instead.
+     */
+    deleteCustomerGroup(...args: Parameters<CustomersV2Api['deleteAcustomerGroup']>) {
+        return this.deleteAcustomerGroup(...args);
     }
 
     /**
@@ -443,10 +589,17 @@ export class CustomersV2Api {
      *
      * Returns a count of all *Customer Groups*.
      */
-    getCustomerGroupsCount(
+    getAcountOfCustomerGroups(
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetCustomerGroupsCountResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV2ApiSpecs.GetACountOfCustomerGroupsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/customer_groups/count',
         });
+    }
+
+    /**
+     * @deprecated Use `getAcountOfCustomerGroups` instead.
+     */
+    getCustomerGroupsCount(...args: Parameters<CustomersV2Api['getAcountOfCustomerGroups']>) {
+        return this.getAcountOfCustomerGroups(...args);
     }
 }

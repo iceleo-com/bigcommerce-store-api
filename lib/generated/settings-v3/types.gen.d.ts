@@ -3,14 +3,10 @@ export type ClientOptions = {
 };
 export type AddressTypeEnumValues = 'Home Office' | 'Commercial Office' | 'Retail' | 'Warehouse';
 export type AnalyticsProvider = {
-    id?: number;
-    channel_id?: number;
-    name?: string;
     code?: string;
     enabled?: boolean;
-    data_tag_enabled?: boolean;
-    version?: number;
-    api_secret?: string;
+    id?: number;
+    name?: string;
 };
 export type AnalyticsProviders = Array<AnalyticsProvider>;
 export type AvailableFilter = AvailableNormalFilter | AvailablePriceFilter | AvailableOtherFilter;
@@ -72,11 +68,17 @@ export type EnabledCategoryFilter = {
     items_to_show?: 5 | 10 | 15;
     type?: 'category';
 };
+export type EnabledFilter = EnabledProductFilter | EnabledPriceFilter | EnabledCategoryFilter | EnabledBrandFilter | EnabledRatingFilter | EnabledMiscFilter;
+export type EnabledFilters = Array<EnabledFilter>;
+export type EnabledFiltersOverride = {
+    data?: EnabledFilters;
+    scope?: SearchFilterOverrideScopeIdentifier;
+};
 export type EnabledMiscFilter = {
     collapsed_by_default?: boolean;
     display_name?: string;
     display_product_count?: boolean;
-    id?: string;
+    id?: number;
     is_enabled?: boolean;
     show_free_shipping_filter?: boolean;
     show_in_stock_filter?: boolean;
@@ -202,6 +204,10 @@ export type SearchFilterOverrideContextIdentifier = {
     category_id?: number;
     channel_id?: number;
 };
+export type SearchFilterOverrideScopeIdentifier = {
+    category_id?: number;
+    channel_id?: number;
+};
 export type StoreProfile = {
     store_address?: string;
     store_address_type?: AddressTypeEnumValues;
@@ -268,7 +274,9 @@ export type MeasurementUnitsSettings = {
 export type Accept = string;
 export type ContentType = string;
 export type ChannelIdParam = number;
-export type GetAnalyticsProvidersData = {
+export type KeysToDelete = Array<string>;
+export type RequiredChannelIdParamForDelete = number;
+export type GetSettingsAnalyticsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -279,14 +287,14 @@ export type GetAnalyticsProvidersData = {
     };
     url: '/settings/analytics';
 };
-export type GetAnalyticsProvidersResponses = {
+export type GetSettingsAnalyticsResponses = {
     200: {
         data?: AnalyticsProviders;
         meta?: MetaOpen;
     };
 };
-export type GetAnalyticsProvidersResponse = GetAnalyticsProvidersResponses[keyof GetAnalyticsProvidersResponses];
-export type GetAnalyticsProviderData = {
+export type GetSettingsAnalyticsResponse = GetSettingsAnalyticsResponses[keyof GetSettingsAnalyticsResponses];
+export type GetSettingsAnalyticsByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -299,20 +307,22 @@ export type GetAnalyticsProviderData = {
     };
     url: '/settings/analytics/{id}';
 };
-export type GetAnalyticsProviderErrors = {
+export type GetSettingsAnalyticsByIdErrors = {
     400: ErrorResponse400;
     404: ErrorResponse404;
 };
-export type GetAnalyticsProviderError = GetAnalyticsProviderErrors[keyof GetAnalyticsProviderErrors];
-export type GetAnalyticsProviderResponses = {
+export type GetSettingsAnalyticsByIdError = GetSettingsAnalyticsByIdErrors[keyof GetSettingsAnalyticsByIdErrors];
+export type GetSettingsAnalyticsByIdResponses = {
     200: AnalyticsProvider;
 };
-export type GetAnalyticsProviderResponse = GetAnalyticsProviderResponses[keyof GetAnalyticsProviderResponses];
-export type UpdateAnalyticsProviderData = {
+export type GetSettingsAnalyticsByIdResponse = GetSettingsAnalyticsByIdResponses[keyof GetSettingsAnalyticsByIdResponses];
+export type PutSettingsAnalyticsByIdData = {
     body?: {
+        channel_id?: number;
         code?: string;
         data_tag_enabled?: boolean;
         enabled?: boolean;
+        id?: number;
         is_oauth_connected?: unknown;
         name?: string;
         version?: number;
@@ -329,17 +339,17 @@ export type UpdateAnalyticsProviderData = {
     };
     url: '/settings/analytics/{id}';
 };
-export type UpdateAnalyticsProviderErrors = {
+export type PutSettingsAnalyticsByIdErrors = {
     400: ErrorResponse400;
     404: ErrorResponse404;
     409: ErrorResponse409;
     422: ErrorResponse422;
 };
-export type UpdateAnalyticsProviderError = UpdateAnalyticsProviderErrors[keyof UpdateAnalyticsProviderErrors];
-export type UpdateAnalyticsProviderResponses = {
+export type PutSettingsAnalyticsByIdError = PutSettingsAnalyticsByIdErrors[keyof PutSettingsAnalyticsByIdErrors];
+export type PutSettingsAnalyticsByIdResponses = {
     200: AnalyticsProvider;
 };
-export type UpdateAnalyticsProviderResponse = UpdateAnalyticsProviderResponses[keyof UpdateAnalyticsProviderResponses];
+export type PutSettingsAnalyticsByIdResponse = PutSettingsAnalyticsByIdResponses[keyof PutSettingsAnalyticsByIdResponses];
 export type GetSettingsCatalogData = {
     body?: never;
     headers: {
@@ -358,7 +368,7 @@ export type GetSettingsCatalogResponses = {
     };
 };
 export type GetSettingsCatalogResponse = GetSettingsCatalogResponses[keyof GetSettingsCatalogResponses];
-export type UpdateSettingsCatalogData = {
+export type PutSettingsCatalogData = {
     body?: CatalogSettings;
     headers: {
         Accept: string;
@@ -370,14 +380,14 @@ export type UpdateSettingsCatalogData = {
     };
     url: '/settings/catalog';
 };
-export type UpdateSettingsCatalogResponses = {
+export type PutSettingsCatalogResponses = {
     200: {
         data?: CatalogSettings;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsCatalogResponse = UpdateSettingsCatalogResponses[keyof UpdateSettingsCatalogResponses];
-export type GetSettingsEmailStatusesData = {
+export type PutSettingsCatalogResponse = PutSettingsCatalogResponses[keyof PutSettingsCatalogResponses];
+export type GetSettingsEmailsEnabledData = {
     body?: never;
     headers: {
         Accept: string;
@@ -388,14 +398,14 @@ export type GetSettingsEmailStatusesData = {
     };
     url: '/settings/email-statuses';
 };
-export type GetSettingsEmailStatusesResponses = {
+export type GetSettingsEmailsEnabledResponses = {
     200: {
         data?: EnabledTransactionalEmails;
         meta?: MetaOpen;
     };
 };
-export type GetSettingsEmailStatusesResponse = GetSettingsEmailStatusesResponses[keyof GetSettingsEmailStatusesResponses];
-export type UpdateSettingsEmailStatusesData = {
+export type GetSettingsEmailsEnabledResponse = GetSettingsEmailsEnabledResponses[keyof GetSettingsEmailsEnabledResponses];
+export type PutSettingsTransactionalEmailsEnabledData = {
     body?: EnabledTransactionalEmails;
     headers: {
         Accept: string;
@@ -407,14 +417,14 @@ export type UpdateSettingsEmailStatusesData = {
     };
     url: '/settings/email-statuses';
 };
-export type UpdateSettingsEmailStatusesResponses = {
+export type PutSettingsTransactionalEmailsEnabledResponses = {
     200: {
         data?: EnabledTransactionalEmails;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsEmailStatusesResponse = UpdateSettingsEmailStatusesResponses[keyof UpdateSettingsEmailStatusesResponses];
-export type CreateSettingsFaviconImageData = {
+export type PutSettingsTransactionalEmailsEnabledResponse = PutSettingsTransactionalEmailsEnabledResponses[keyof PutSettingsTransactionalEmailsEnabledResponses];
+export type PostFaviconLogoImageData = {
     body?: {
         FaviconFile?: Blob | File;
     };
@@ -428,13 +438,10 @@ export type CreateSettingsFaviconImageData = {
     };
     url: '/settings/favicon/image';
 };
-export type CreateSettingsFaviconImageErrors = {
-    422: unknown;
-};
-export type CreateSettingsFaviconImageResponses = {
+export type PostFaviconLogoImageResponses = {
     204: void;
 };
-export type CreateSettingsFaviconImageResponse = CreateSettingsFaviconImageResponses[keyof CreateSettingsFaviconImageResponses];
+export type PostFaviconLogoImageResponse = PostFaviconLogoImageResponses[keyof PostFaviconLogoImageResponses];
 export type GetSettingsInventoryNotificationsData = {
     body?: never;
     headers: {
@@ -453,7 +460,7 @@ export type GetSettingsInventoryNotificationsResponses = {
     };
 };
 export type GetSettingsInventoryNotificationsResponse = GetSettingsInventoryNotificationsResponses[keyof GetSettingsInventoryNotificationsResponses];
-export type UpdateSettingsInventoryNotificationsData = {
+export type PutSettingsInventoryNotificationsData = {
     body?: InventoryNotificationsSettings;
     headers: {
         Accept: string;
@@ -465,7 +472,7 @@ export type UpdateSettingsInventoryNotificationsData = {
     };
     url: '/settings/inventory/notifications';
 };
-export type UpdateSettingsInventoryNotificationsResponses = {
+export type PutSettingsInventoryNotificationsResponses = {
     200: unknown;
 };
 export type GetSettingsLogoData = {
@@ -486,7 +493,7 @@ export type GetSettingsLogoResponses = {
     };
 };
 export type GetSettingsLogoResponse = GetSettingsLogoResponses[keyof GetSettingsLogoResponses];
-export type UpdateSettingsLogoData = {
+export type PutSettingsLogoData = {
     body?: LogoSettingsUpdate;
     headers: {
         Accept: string;
@@ -497,14 +504,14 @@ export type UpdateSettingsLogoData = {
     };
     url: '/settings/logo';
 };
-export type UpdateSettingsLogoResponses = {
+export type PutSettingsLogoResponses = {
     200: {
         data?: LogoSettings;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsLogoResponse = UpdateSettingsLogoResponses[keyof UpdateSettingsLogoResponses];
-export type CreateSettingsLogoImageData = {
+export type PutSettingsLogoResponse = PutSettingsLogoResponses[keyof PutSettingsLogoResponses];
+export type PostSettingsLogoImageData = {
     body?: {
         LogoFile?: Blob | File;
     };
@@ -518,24 +525,24 @@ export type CreateSettingsLogoImageData = {
     };
     url: '/settings/logo/image';
 };
-export type CreateSettingsLogoImageResponses = {
+export type PostSettingsLogoImageResponses = {
     204: void;
 };
-export type CreateSettingsLogoImageResponse = CreateSettingsLogoImageResponses[keyof CreateSettingsLogoImageResponses];
-export type GetSettingsEnabledSearchFiltersData = {
+export type PostSettingsLogoImageResponse = PostSettingsLogoImageResponses[keyof PostSettingsLogoImageResponses];
+export type GetEnabledData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/settings/search/filters';
 };
-export type GetSettingsEnabledSearchFiltersResponses = {
+export type GetEnabledResponses = {
     200: {
         data?: ConfiguredFilters;
         meta?: MetaOpen;
     };
 };
-export type GetSettingsEnabledSearchFiltersResponse = GetSettingsEnabledSearchFiltersResponses[keyof GetSettingsEnabledSearchFiltersResponses];
-export type UpdateSettingsEnabledSearchFiltersData = {
+export type GetEnabledResponse = GetEnabledResponses[keyof GetEnabledResponses];
+export type UpdateEnabledData = {
     body?: ConfiguredFilters;
     headers: {
         'Content-Type': string;
@@ -544,14 +551,14 @@ export type UpdateSettingsEnabledSearchFiltersData = {
     query?: never;
     url: '/settings/search/filters';
 };
-export type UpdateSettingsEnabledSearchFiltersResponses = {
+export type UpdateEnabledResponses = {
     200: {
         data?: ConfiguredFilters;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsEnabledSearchFiltersResponse = UpdateSettingsEnabledSearchFiltersResponses[keyof UpdateSettingsEnabledSearchFiltersResponses];
-export type GetSettingsAvailableFiltersData = {
+export type UpdateEnabledResponse = UpdateEnabledResponses[keyof UpdateEnabledResponses];
+export type GetAvailableData = {
     body?: never;
     headers: {
         Accept: string;
@@ -564,14 +571,14 @@ export type GetSettingsAvailableFiltersData = {
     };
     url: '/settings/search/filters/available';
 };
-export type GetSettingsAvailableFiltersResponses = {
+export type GetAvailableResponses = {
     200: {
         data?: Array<AvailableFilter>;
         meta?: MetaOpen;
     };
 };
-export type GetSettingsAvailableFiltersResponse = GetSettingsAvailableFiltersResponses[keyof GetSettingsAvailableFiltersResponses];
-export type GetSettingsFiltersContextsData = {
+export type GetAvailableResponse = GetAvailableResponses[keyof GetAvailableResponses];
+export type GetContextsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -583,14 +590,14 @@ export type GetSettingsFiltersContextsData = {
     };
     url: '/settings/search/filters/contexts';
 };
-export type GetSettingsFiltersContextsResponses = {
+export type GetContextsResponses = {
     200: {
         data?: Array<ConfiguredFiltersOverride>;
         meta?: MetaPaginationObject;
     };
 };
-export type GetSettingsFiltersContextsResponse = GetSettingsFiltersContextsResponses[keyof GetSettingsFiltersContextsResponses];
-export type UpsertSettingsFiltersContextsData = {
+export type GetContextsResponse = GetContextsResponses[keyof GetContextsResponses];
+export type UpsertContextsData = {
     body?: Array<ConfiguredFiltersOverride>;
     headers: {
         Accept: string;
@@ -600,50 +607,54 @@ export type UpsertSettingsFiltersContextsData = {
     query?: never;
     url: '/settings/search/filters/contexts';
 };
-export type UpsertSettingsFiltersContextsResponses = {
+export type UpsertContextsResponses = {
     200: {
         data?: Array<ConfiguredFiltersOverride>;
         meta?: MetaOpen;
     };
 };
-export type UpsertSettingsFiltersContextsResponse = UpsertSettingsFiltersContextsResponses[keyof UpsertSettingsFiltersContextsResponses];
-export type GetSettingsLocaleData = {
+export type UpsertContextsResponse = UpsertContextsResponses[keyof UpsertContextsResponses];
+export type GetSettingsStoreLocaleData = {
     body?: never;
     headers: {
         Accept: string;
     };
     path?: never;
-    query?: never;
+    query?: {
+        channel_id?: number;
+    };
     url: '/settings/store/locale';
 };
-export type GetSettingsLocaleResponses = {
+export type GetSettingsStoreLocaleResponses = {
     200: {
         data?: Locale;
         meta?: MetaOpen;
     };
 };
-export type GetSettingsLocaleResponse = GetSettingsLocaleResponses[keyof GetSettingsLocaleResponses];
-export type UpdateSettingsLocaleData = {
+export type GetSettingsStoreLocaleResponse = GetSettingsStoreLocaleResponses[keyof GetSettingsStoreLocaleResponses];
+export type PutSettingsStoreLocaleData = {
     body?: Locale;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
     path?: never;
-    query?: never;
+    query?: {
+        channel_id?: number;
+    };
     url: '/settings/store/locale';
 };
-export type UpdateSettingsLocaleErrors = {
+export type PutSettingsStoreLocaleErrors = {
     422: ErrorResponse;
 };
-export type UpdateSettingsLocaleError = UpdateSettingsLocaleErrors[keyof UpdateSettingsLocaleErrors];
-export type UpdateSettingsLocaleResponses = {
+export type PutSettingsStoreLocaleError = PutSettingsStoreLocaleErrors[keyof PutSettingsStoreLocaleErrors];
+export type PutSettingsStoreLocaleResponses = {
     200: {
         data?: Locale;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsLocaleResponse = UpdateSettingsLocaleResponses[keyof UpdateSettingsLocaleResponses];
+export type PutSettingsStoreLocaleResponse = PutSettingsStoreLocaleResponses[keyof PutSettingsStoreLocaleResponses];
 export type GetSettingsStoreProfileData = {
     body?: never;
     headers: {
@@ -662,7 +673,7 @@ export type GetSettingsStoreProfileResponses = {
     };
 };
 export type GetSettingsStoreProfileResponse = GetSettingsStoreProfileResponses[keyof GetSettingsStoreProfileResponses];
-export type UpdateSettingsStoreProfileData = {
+export type PutSettingsStoreProfileData = {
     body?: StoreProfile;
     headers: {
         Accept: string;
@@ -674,17 +685,17 @@ export type UpdateSettingsStoreProfileData = {
     };
     url: '/settings/store/profile';
 };
-export type UpdateSettingsStoreProfileErrors = {
+export type PutSettingsStoreProfileErrors = {
     422: ErrorResponse;
 };
-export type UpdateSettingsStoreProfileError = UpdateSettingsStoreProfileErrors[keyof UpdateSettingsStoreProfileErrors];
-export type UpdateSettingsStoreProfileResponses = {
+export type PutSettingsStoreProfileError = PutSettingsStoreProfileErrors[keyof PutSettingsStoreProfileErrors];
+export type PutSettingsStoreProfileResponses = {
     200: {
         data?: StoreProfile;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsStoreProfileResponse = UpdateSettingsStoreProfileResponses[keyof UpdateSettingsStoreProfileResponses];
+export type PutSettingsStoreProfileResponse = PutSettingsStoreProfileResponses[keyof PutSettingsStoreProfileResponses];
 export type GetSettingsStorefrontCategoryData = {
     body?: never;
     headers: {
@@ -703,7 +714,7 @@ export type GetSettingsStorefrontCategoryResponses = {
     };
 };
 export type GetSettingsStorefrontCategoryResponse = GetSettingsStorefrontCategoryResponses[keyof GetSettingsStorefrontCategoryResponses];
-export type UpdateSettingsStorefrontCategoryData = {
+export type PutSettingsStorefrontCategoryData = {
     body?: StorefrontCategorySettings;
     headers: {
         Accept: string;
@@ -715,7 +726,7 @@ export type UpdateSettingsStorefrontCategoryData = {
     };
     url: '/settings/storefront/category';
 };
-export type UpdateSettingsStorefrontCategoryErrors = {
+export type PutSettingsStorefrontCategoryErrors = {
     422: {
         errors?: {
             ''?: string;
@@ -725,14 +736,14 @@ export type UpdateSettingsStorefrontCategoryErrors = {
         type?: string;
     };
 };
-export type UpdateSettingsStorefrontCategoryError = UpdateSettingsStorefrontCategoryErrors[keyof UpdateSettingsStorefrontCategoryErrors];
-export type UpdateSettingsStorefrontCategoryResponses = {
+export type PutSettingsStorefrontCategoryError = PutSettingsStorefrontCategoryErrors[keyof PutSettingsStorefrontCategoryErrors];
+export type PutSettingsStorefrontCategoryResponses = {
     200: {
         data?: StorefrontCategorySettings;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsStorefrontCategoryResponse = UpdateSettingsStorefrontCategoryResponses[keyof UpdateSettingsStorefrontCategoryResponses];
+export type PutSettingsStorefrontCategoryResponse = PutSettingsStorefrontCategoryResponses[keyof PutSettingsStorefrontCategoryResponses];
 export type GetSettingsStorefrontProductData = {
     body?: never;
     headers: {
@@ -751,7 +762,7 @@ export type GetSettingsStorefrontProductResponses = {
     };
 };
 export type GetSettingsStorefrontProductResponse = GetSettingsStorefrontProductResponses[keyof GetSettingsStorefrontProductResponses];
-export type UpdateSettingsStorefrontProductData = {
+export type PutSettingsStorefrontProductData = {
     body?: StorefrontProductSettings;
     headers: {
         Accept: string;
@@ -763,7 +774,7 @@ export type UpdateSettingsStorefrontProductData = {
     };
     url: '/settings/storefront/product';
 };
-export type UpdateSettingsStorefrontProductErrors = {
+export type PutSettingsStorefrontProductErrors = {
     422: {
         errors?: {
             ''?: string;
@@ -773,15 +784,15 @@ export type UpdateSettingsStorefrontProductErrors = {
         type?: string;
     };
 };
-export type UpdateSettingsStorefrontProductError = UpdateSettingsStorefrontProductErrors[keyof UpdateSettingsStorefrontProductErrors];
-export type UpdateSettingsStorefrontProductResponses = {
+export type PutSettingsStorefrontProductError = PutSettingsStorefrontProductErrors[keyof PutSettingsStorefrontProductErrors];
+export type PutSettingsStorefrontProductResponses = {
     200: {
         data?: StorefrontProductSettings;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsStorefrontProductResponse = UpdateSettingsStorefrontProductResponses[keyof UpdateSettingsStorefrontProductResponses];
-export type GetSettingsRobotsTxtData = {
+export type PutSettingsStorefrontProductResponse = PutSettingsStorefrontProductResponses[keyof PutSettingsStorefrontProductResponses];
+export type GetSettingsStorefrontRobotstxtData = {
     body?: never;
     headers: {
         Accept: string;
@@ -792,14 +803,14 @@ export type GetSettingsRobotsTxtData = {
     };
     url: '/settings/storefront/robotstxt';
 };
-export type GetSettingsRobotsTxtResponses = {
+export type GetSettingsStorefrontRobotstxtResponses = {
     200: {
         data?: RobotsTxtSettings;
         meta?: MetaOpen;
     };
 };
-export type GetSettingsRobotsTxtResponse = GetSettingsRobotsTxtResponses[keyof GetSettingsRobotsTxtResponses];
-export type UpdateSettingsRobotsTxtData = {
+export type GetSettingsStorefrontRobotstxtResponse = GetSettingsStorefrontRobotstxtResponses[keyof GetSettingsStorefrontRobotstxtResponses];
+export type PutSettingsStorefrontRobotstxtData = {
     body?: RobotsTxtSettings;
     headers: {
         Accept: string;
@@ -811,13 +822,13 @@ export type UpdateSettingsRobotsTxtData = {
     };
     url: '/settings/storefront/robotstxt';
 };
-export type UpdateSettingsRobotsTxtResponses = {
+export type PutSettingsStorefrontRobotstxtResponses = {
     200: {
         data?: RobotsTxtSettings;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsRobotsTxtResponse = UpdateSettingsRobotsTxtResponses[keyof UpdateSettingsRobotsTxtResponses];
+export type PutSettingsStorefrontRobotstxtResponse = PutSettingsStorefrontRobotstxtResponses[keyof PutSettingsStorefrontRobotstxtResponses];
 export type GetSettingsStorefrontSearchData = {
     body?: never;
     headers: {
@@ -836,7 +847,7 @@ export type GetSettingsStorefrontSearchResponses = {
     };
 };
 export type GetSettingsStorefrontSearchResponse = GetSettingsStorefrontSearchResponses[keyof GetSettingsStorefrontSearchResponses];
-export type UpdateSettingsStorefrontSearchData = {
+export type PutSettingsStorefrontSearchData = {
     body?: StorefrontSearchSettings;
     headers: {
         Accept: string;
@@ -848,13 +859,13 @@ export type UpdateSettingsStorefrontSearchData = {
     };
     url: '/settings/storefront/search';
 };
-export type UpdateSettingsStorefrontSearchResponses = {
+export type PutSettingsStorefrontSearchResponses = {
     200: {
         data?: StorefrontSearchSettings;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsStorefrontSearchResponse = UpdateSettingsStorefrontSearchResponses[keyof UpdateSettingsStorefrontSearchResponses];
+export type PutSettingsStorefrontSearchResponse = PutSettingsStorefrontSearchResponses[keyof PutSettingsStorefrontSearchResponses];
 export type GetSettingsStorefrontSecurityData = {
     body?: never;
     headers: {
@@ -873,7 +884,7 @@ export type GetSettingsStorefrontSecurityResponses = {
     };
 };
 export type GetSettingsStorefrontSecurityResponse = GetSettingsStorefrontSecurityResponses[keyof GetSettingsStorefrontSecurityResponses];
-export type UpdateSettingsStorefrontSecurityData = {
+export type PutSettingsStorefrontSecurityData = {
     body?: StorefrontSecuritySettings;
     headers: {
         Accept: string;
@@ -885,13 +896,13 @@ export type UpdateSettingsStorefrontSecurityData = {
     };
     url: '/settings/storefront/security';
 };
-export type UpdateSettingsStorefrontSecurityResponses = {
+export type PutSettingsStorefrontSecurityResponses = {
     200: {
         data?: StorefrontSecuritySettings;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsStorefrontSecurityResponse = UpdateSettingsStorefrontSecurityResponses[keyof UpdateSettingsStorefrontSecurityResponses];
+export type PutSettingsStorefrontSecurityResponse = PutSettingsStorefrontSecurityResponses[keyof PutSettingsStorefrontSecurityResponses];
 export type GetSettingsStorefrontSeoData = {
     body?: never;
     headers: {
@@ -910,7 +921,7 @@ export type GetSettingsStorefrontSeoResponses = {
     };
 };
 export type GetSettingsStorefrontSeoResponse = GetSettingsStorefrontSeoResponses[keyof GetSettingsStorefrontSeoResponses];
-export type UpdateSettingsStorefrontSeoData = {
+export type PutSettingsStorefrontSeoData = {
     body?: SeoSettings;
     headers: {
         Accept: string;
@@ -922,7 +933,7 @@ export type UpdateSettingsStorefrontSeoData = {
     };
     url: '/settings/storefront/seo';
 };
-export type UpdateSettingsStorefrontSeoErrors = {
+export type PutSettingsStorefrontSeoErrors = {
     422: {
         errors?: {
             ''?: string;
@@ -932,14 +943,14 @@ export type UpdateSettingsStorefrontSeoErrors = {
         type?: string;
     };
 };
-export type UpdateSettingsStorefrontSeoError = UpdateSettingsStorefrontSeoErrors[keyof UpdateSettingsStorefrontSeoErrors];
-export type UpdateSettingsStorefrontSeoResponses = {
+export type PutSettingsStorefrontSeoError = PutSettingsStorefrontSeoErrors[keyof PutSettingsStorefrontSeoErrors];
+export type PutSettingsStorefrontSeoResponses = {
     200: {
         data?: SeoSettings;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsStorefrontSeoResponse = UpdateSettingsStorefrontSeoResponses[keyof UpdateSettingsStorefrontSeoResponses];
+export type PutSettingsStorefrontSeoResponse = PutSettingsStorefrontSeoResponses[keyof PutSettingsStorefrontSeoResponses];
 export type GetSettingsStorefrontStatusData = {
     body?: never;
     headers: {
@@ -958,7 +969,7 @@ export type GetSettingsStorefrontStatusResponses = {
     };
 };
 export type GetSettingsStorefrontStatusResponse = GetSettingsStorefrontStatusResponses[keyof GetSettingsStorefrontStatusResponses];
-export type UpdateSettingsStorefrontStatusData = {
+export type PutSettingsStorefrontStatusData = {
     body?: StorefrontStatus;
     headers: {
         Accept: string;
@@ -970,13 +981,13 @@ export type UpdateSettingsStorefrontStatusData = {
     };
     url: '/settings/storefront/status';
 };
-export type UpdateSettingsStorefrontStatusResponses = {
+export type PutSettingsStorefrontStatusResponses = {
     200: {
         data?: StorefrontStatus;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsStorefrontStatusResponse = UpdateSettingsStorefrontStatusResponses[keyof UpdateSettingsStorefrontStatusResponses];
+export type PutSettingsStorefrontStatusResponse = PutSettingsStorefrontStatusResponses[keyof PutSettingsStorefrontStatusResponses];
 export type GetSettingsInventoryData = {
     body?: never;
     headers: {
@@ -999,7 +1010,7 @@ export type GetSettingsInventoryResponses = {
     };
 };
 export type GetSettingsInventoryResponse = GetSettingsInventoryResponses[keyof GetSettingsInventoryResponses];
-export type UpdateSettingsInventoryData = {
+export type PutSettingsInventoryData = {
     body?: InventorySettings;
     headers: {
         Accept: string;
@@ -1011,14 +1022,14 @@ export type UpdateSettingsInventoryData = {
     };
     url: '/settings/inventory';
 };
-export type UpdateSettingsInventoryResponses = {
+export type PutSettingsInventoryResponses = {
     200: {
         data?: InventorySettings;
         meta?: MetaOpen;
     };
 };
-export type UpdateSettingsInventoryResponse = UpdateSettingsInventoryResponses[keyof UpdateSettingsInventoryResponses];
-export type GetSettingsMeasurementUnitsData = {
+export type PutSettingsInventoryResponse = PutSettingsInventoryResponses[keyof PutSettingsInventoryResponses];
+export type GetSettingsStoreUnitsOfMeasurementData = {
     body?: never;
     path?: never;
     query?: {
@@ -1026,11 +1037,11 @@ export type GetSettingsMeasurementUnitsData = {
     };
     url: '/settings/store/units-of-measurement';
 };
-export type GetSettingsMeasurementUnitsErrors = {
+export type GetSettingsStoreUnitsOfMeasurementErrors = {
     422: ErrorResponse;
 };
-export type GetSettingsMeasurementUnitsError = GetSettingsMeasurementUnitsErrors[keyof GetSettingsMeasurementUnitsErrors];
-export type GetSettingsMeasurementUnitsResponses = {
+export type GetSettingsStoreUnitsOfMeasurementError = GetSettingsStoreUnitsOfMeasurementErrors[keyof GetSettingsStoreUnitsOfMeasurementErrors];
+export type GetSettingsStoreUnitsOfMeasurementResponses = {
     200: {
         data?: MeasurementUnitsSettings;
         meta?: {
@@ -1038,8 +1049,8 @@ export type GetSettingsMeasurementUnitsResponses = {
         };
     };
 };
-export type GetSettingsMeasurementUnitsResponse = GetSettingsMeasurementUnitsResponses[keyof GetSettingsMeasurementUnitsResponses];
-export type UpdateSettingsMeasurementUnitsData = {
+export type GetSettingsStoreUnitsOfMeasurementResponse = GetSettingsStoreUnitsOfMeasurementResponses[keyof GetSettingsStoreUnitsOfMeasurementResponses];
+export type PutSettingsStoreUnitsOfMeasurementData = {
     body?: MeasurementUnitsSettings;
     path?: never;
     query?: {
@@ -1047,7 +1058,7 @@ export type UpdateSettingsMeasurementUnitsData = {
     };
     url: '/settings/store/units-of-measurement';
 };
-export type UpdateSettingsMeasurementUnitsResponses = {
+export type PutSettingsStoreUnitsOfMeasurementResponses = {
     200: {
         data?: MeasurementUnitsSettings;
         meta?: {
@@ -1055,4 +1066,4 @@ export type UpdateSettingsMeasurementUnitsResponses = {
         };
     };
 };
-export type UpdateSettingsMeasurementUnitsResponse = UpdateSettingsMeasurementUnitsResponses[keyof UpdateSettingsMeasurementUnitsResponses];
+export type PutSettingsStoreUnitsOfMeasurementResponse = PutSettingsStoreUnitsOfMeasurementResponses[keyof PutSettingsStoreUnitsOfMeasurementResponses];

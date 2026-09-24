@@ -15,14 +15,21 @@ export class ProductVariantOptionsV3Api {
      *
      * Returns a list of product *Variant Options*. Optional parameters can be passed in. 
      */
-    getProductVariantOptions(
-        productId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsData['path']['product_id'],
-        query?: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsData['query'],
+    getOptions(
+        productId: ProductVariantOptionsV3ApiSpecs.GetOptionsData['path']['product_id'],
+        query?: ProductVariantOptionsV3ApiSpecs.GetOptionsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionsErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.GetOptionsResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantOptionsV3ApiSpecs.GetOptionsErrors[404]>>>({
             path: `v3/catalog/products/${productId}/options`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getOptions` instead.
+     */
+    getProductVariantOptions(...args: Parameters<ProductVariantOptionsV3Api['getOptions']>) {
+        return this.getOptions(...args);
     }
 
     /**
@@ -48,11 +55,11 @@ export class ProductVariantOptionsV3Api {
      * Variant options will show on the storefront as an option that can be selected by the customer. A request like this could be used to add new choices to a variant that has already been created.
      * If more than one variant needs to be created, use the [Create a Product](/docs/rest-catalog/products#create-a-product) endpoint.
      */
-    createProductVariantOption(
-        productId: ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionData['path']['product_id'],
-        requestBody: ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionData['body'],
+    createOption(
+        productId: ProductVariantOptionsV3ApiSpecs.CreateOptionData['path']['product_id'],
+        requestBody: ProductVariantOptionsV3ApiSpecs.CreateOptionData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionResponses[200]>>,(RequestErrorResponse<409, Required<ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionErrors[409]>> | RequestErrorResponse<422, Required<ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionErrors[422]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.CreateOptionResponses[200]>>,(RequestErrorResponse<409, Required<ProductVariantOptionsV3ApiSpecs.CreateOptionErrors[409]>> | RequestErrorResponse<422, Required<ProductVariantOptionsV3ApiSpecs.CreateOptionErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/options`,
             contentType: 'application/json',
             body: requestBody,
@@ -60,19 +67,33 @@ export class ProductVariantOptionsV3Api {
     }
 
     /**
+     * @deprecated Use `createOption` instead.
+     */
+    createProductVariantOption(...args: Parameters<ProductVariantOptionsV3Api['createOption']>) {
+        return this.createOption(...args);
+    }
+
+    /**
      * Get a Product Variant Option
      *
      * Returns a single *Variant Option*. Optional parameters can be passed in.
      */
-    getProductVariantOption(
-        productId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionData['path']['product_id'],
-        optionId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionData['path']['option_id'],
-        query?: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionData['query'],
+    getOptionById(
+        productId: ProductVariantOptionsV3ApiSpecs.GetOptionByIdData['path']['product_id'],
+        optionId: ProductVariantOptionsV3ApiSpecs.GetOptionByIdData['path']['option_id'],
+        query?: ProductVariantOptionsV3ApiSpecs.GetOptionByIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.GetOptionByIdResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantOptionsV3ApiSpecs.GetOptionByIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}/options/${optionId}`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getOptionById` instead.
+     */
+    getProductVariantOption(...args: Parameters<ProductVariantOptionsV3Api['getOptionById']>) {
+        return this.getOptionById(...args);
     }
 
     /**
@@ -83,12 +104,12 @@ export class ProductVariantOptionsV3Api {
      **Read-Only Fields**
      * id
      */
-    updateProductVariantOption(
-        productId: ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionData['path']['product_id'],
-        optionId: ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionData['path']['option_id'],
-        requestBody: ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionData['body'],
+    updateOption(
+        productId: ProductVariantOptionsV3ApiSpecs.UpdateOptionData['path']['product_id'],
+        optionId: ProductVariantOptionsV3ApiSpecs.UpdateOptionData['path']['option_id'],
+        requestBody: ProductVariantOptionsV3ApiSpecs.UpdateOptionData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionResponses[200]>>,(RequestErrorResponse<409, Required<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionErrors[409]>> | RequestErrorResponse<422, Required<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.UpdateOptionResponses[200]>>,(RequestErrorResponse<409, Required<ProductVariantOptionsV3ApiSpecs.UpdateOptionErrors[409]>> | RequestErrorResponse<422, Required<ProductVariantOptionsV3ApiSpecs.UpdateOptionErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/options/${optionId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -96,17 +117,31 @@ export class ProductVariantOptionsV3Api {
     }
 
     /**
+     * @deprecated Use `updateOption` instead.
+     */
+    updateProductVariantOption(...args: Parameters<ProductVariantOptionsV3Api['updateOption']>) {
+        return this.updateOption(...args);
+    }
+
+    /**
      * Delete a Product Variant Option
      *
      * Deletes a *Variant Option*.
      */
-    deleteProductVariantOption(
-        productId: ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionData['path']['product_id'],
-        optionId: ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionData['path']['option_id'],
+    deleteOptionById(
+        productId: ProductVariantOptionsV3ApiSpecs.DeleteOptionByIdData['path']['product_id'],
+        optionId: ProductVariantOptionsV3ApiSpecs.DeleteOptionByIdData['path']['option_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductVariantOptionsV3ApiSpecs.DeleteOptionByIdResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/options/${optionId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteOptionById` instead.
+     */
+    deleteProductVariantOption(...args: Parameters<ProductVariantOptionsV3Api['deleteOptionById']>) {
+        return this.deleteOptionById(...args);
     }
 
     /**
@@ -114,15 +149,22 @@ export class ProductVariantOptionsV3Api {
      *
      * Returns a list of all *Variant Option Values*. Optional parameters can be passed in.
      */
-    getProductVariantOptionValues(
-        productId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValuesData['path']['product_id'],
-        optionId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValuesData['path']['option_id'],
-        query?: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValuesData['query'],
+    getOptionValues(
+        productId: ProductVariantOptionsV3ApiSpecs.GetOptionValuesData['path']['product_id'],
+        optionId: ProductVariantOptionsV3ApiSpecs.GetOptionValuesData['path']['option_id'],
+        query?: ProductVariantOptionsV3ApiSpecs.GetOptionValuesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValuesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.GetOptionValuesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/options/${optionId}/values`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getOptionValues` instead.
+     */
+    getProductVariantOptionValues(...args: Parameters<ProductVariantOptionsV3Api['getOptionValues']>) {
+        return this.getOptionValues(...args);
     }
 
     /**
@@ -140,12 +182,12 @@ export class ProductVariantOptionsV3Api {
      **Limits**
      * 250 option values per option limit.
      */
-    createProductVariantOptionValue(
-        productId: ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionValueData['path']['product_id'],
-        optionId: ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionValueData['path']['option_id'],
-        requestBody: ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionValueData['body'],
+    createOptionValue(
+        productId: ProductVariantOptionsV3ApiSpecs.CreateOptionValueData['path']['product_id'],
+        optionId: ProductVariantOptionsV3ApiSpecs.CreateOptionValueData['path']['option_id'],
+        requestBody: ProductVariantOptionsV3ApiSpecs.CreateOptionValueData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionValueResponses[200]>>,RequestErrorResponse<422, Required<ProductVariantOptionsV3ApiSpecs.CreateProductVariantOptionValueErrors[422]>>>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.CreateOptionValueResponses[200]>>,RequestErrorResponse<422, Required<ProductVariantOptionsV3ApiSpecs.CreateOptionValueErrors[422]>>>({
             path: `v3/catalog/products/${productId}/options/${optionId}/values`,
             contentType: 'application/json',
             body: requestBody,
@@ -153,20 +195,34 @@ export class ProductVariantOptionsV3Api {
     }
 
     /**
+     * @deprecated Use `createOptionValue` instead.
+     */
+    createProductVariantOptionValue(...args: Parameters<ProductVariantOptionsV3Api['createOptionValue']>) {
+        return this.createOptionValue(...args);
+    }
+
+    /**
      * Get a Product Variant Option Value
      *
      * Returns a single *Variant Option Value*. Optional parameters can be passed in.
      */
-    getProductVariantOptionValue(
-        productId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValueData['path']['product_id'],
-        optionId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValueData['path']['option_id'],
-        valueId: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValueData['path']['value_id'],
-        query?: ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValueData['query'],
+    getOptionValueById(
+        productId: ProductVariantOptionsV3ApiSpecs.GetOptionValueByIdData['path']['product_id'],
+        optionId: ProductVariantOptionsV3ApiSpecs.GetOptionValueByIdData['path']['option_id'],
+        valueId: ProductVariantOptionsV3ApiSpecs.GetOptionValueByIdData['path']['value_id'],
+        query?: ProductVariantOptionsV3ApiSpecs.GetOptionValueByIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValueResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantOptionsV3ApiSpecs.GetProductVariantOptionValueErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.GetOptionValueByIdResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantOptionsV3ApiSpecs.GetOptionValueByIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}/options/${optionId}/values/${valueId}`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getOptionValueById` instead.
+     */
+    getProductVariantOptionValue(...args: Parameters<ProductVariantOptionsV3Api['getOptionValueById']>) {
+        return this.getOptionValueById(...args);
     }
 
     /**
@@ -177,13 +233,13 @@ export class ProductVariantOptionsV3Api {
      **Read-Only Fields**
      * id
      */
-    updateProductVariantOptionValue(
-        productId: ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueData['path']['product_id'],
-        optionId: ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueData['path']['option_id'],
-        valueId: ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueData['path']['value_id'],
-        requestBody: ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueData['body'],
+    updateOptionValue(
+        productId: ProductVariantOptionsV3ApiSpecs.UpdateOptionValueData['path']['product_id'],
+        optionId: ProductVariantOptionsV3ApiSpecs.UpdateOptionValueData['path']['option_id'],
+        valueId: ProductVariantOptionsV3ApiSpecs.UpdateOptionValueData['path']['value_id'],
+        requestBody: ProductVariantOptionsV3ApiSpecs.UpdateOptionValueData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueResponses[200]>>,(RequestErrorResponse<404, Required<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueErrors[404]>> | RequestErrorResponse<422, Required<ProductVariantOptionsV3ApiSpecs.UpdateProductVariantOptionValueErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantOptionsV3ApiSpecs.UpdateOptionValueResponses[200]>>,(RequestErrorResponse<404, Required<ProductVariantOptionsV3ApiSpecs.UpdateOptionValueErrors[404]>> | RequestErrorResponse<422, Required<ProductVariantOptionsV3ApiSpecs.UpdateOptionValueErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/options/${optionId}/values/${valueId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -191,17 +247,31 @@ export class ProductVariantOptionsV3Api {
     }
 
     /**
+     * @deprecated Use `updateOptionValue` instead.
+     */
+    updateProductVariantOptionValue(...args: Parameters<ProductVariantOptionsV3Api['updateOptionValue']>) {
+        return this.updateOptionValue(...args);
+    }
+
+    /**
      * Delete a Product Variant Option Value
      *
      * Deletes a *Variant Option Value*.
      */
-    deleteProductVariantOptionValue(
-        productId: ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionValueData['path']['product_id'],
-        optionId: ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionValueData['path']['option_id'],
-        valueId: ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionValueData['path']['value_id'],
+    deleteOptionValueById(
+        productId: ProductVariantOptionsV3ApiSpecs.DeleteOptionValueByIdData['path']['product_id'],
+        optionId: ProductVariantOptionsV3ApiSpecs.DeleteOptionValueByIdData['path']['option_id'],
+        valueId: ProductVariantOptionsV3ApiSpecs.DeleteOptionValueByIdData['path']['value_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<ProductVariantOptionsV3ApiSpecs.DeleteProductVariantOptionValueResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductVariantOptionsV3ApiSpecs.DeleteOptionValueByIdResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/options/${optionId}/values/${valueId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteOptionValueById` instead.
+     */
+    deleteProductVariantOptionValue(...args: Parameters<ProductVariantOptionsV3Api['deleteOptionValueById']>) {
+        return this.deleteOptionValueById(...args);
     }
 }

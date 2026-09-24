@@ -32,24 +32,69 @@ paths:
       tags:
       - Subscribers
       summary: Get Subscribers
-      description: Returns a list of *Subscribers*. Optional filter parameters can be passed in.
+      description: Returns a list of *Subscribers*. Optional filter parameters can
+        be passed in.
       operationId: getSubscribers
       parameters:
-      - $ref: '#/components/parameters/FilterEmailParam'
-      - $ref: '#/components/parameters/FilterFirstNameParam'
-      - $ref: '#/components/parameters/FilterLastNameParam'
-      - $ref: '#/components/parameters/FilterSourceParam'
-      - $ref: '#/components/parameters/FilterOrderIdParam'
-      - $ref: '#/components/parameters/FilterDateCreatedParam'
-      - $ref: '#/components/parameters/FilterDateCreatedMinParam'
-      - $ref: '#/components/parameters/FilterDateCreatedMaxParam'
-      - $ref: '#/components/parameters/FilterDateModifiedParam'
-      - $ref: '#/components/parameters/FilterDateModifiedMinParam'
-      - $ref: '#/components/parameters/FilterDateModifiedMaxParam'
-      - $ref: '#/components/parameters/PageParam'
-      - $ref: '#/components/parameters/LimitParam'
-      - $ref: '#/components/parameters/IdParam'
-      - $ref: '#/components/parameters/IdInParam'
+      - name: email
+        in: query
+        description: |
+          Filter items by email.
+        schema:
+          type: string
+      - name: first_name
+        in: query
+        description: |
+          Filter items by first_name.
+        schema:
+          type: string
+      - name: last_name
+        in: query
+        description: |
+          Filter items by last_name.
+        schema:
+          type: string
+      - name: source
+        in: query
+        description: |
+          Filter items by source.
+        schema:
+          type: string
+      - name: order_id
+        in: query
+        description: |
+          Filter items by order_id.
+        schema:
+          type: integer
+      - name: date_created
+        in: query
+        description: |
+          Filter items by date_created.
+        schema:
+          type: string
+          format: date-time
+      - name: date_modified
+        in: query
+        description: Filter items by date_modified. For example `v3/catalog/products?date_last_imported:min=2018-06-15`
+        schema:
+          type: string
+          format: date-time
+      - name: page
+        in: query
+        description: Specifies the page number in a limited (paginated) list of products.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Controls the number of items per page in a limited (paginated)
+          list of products.
+        schema:
+          type: integer
+      - name: id
+        in: query
+        description: Filter items by id.
+        schema:
+          type: integer
       responses:
         '200':
           description: ""
@@ -158,16 +203,53 @@ paths:
       tags:
       - Subscribers
       summary: Delete Subscribers
-      description: By default, it deletes all subscribers. Use a filter to avoid deleting all subscribers in a store.
+      description: By default, it deletes all *Subscribers*. A filter should be added
+        to avoid deleting all subscribers in a store.
       operationId: deleteSubscribers
       parameters:
-        - $ref: '#/components/parameters/FilterEmailParam'
-        - $ref: '#/components/parameters/FilterFirstNameParam'
-        - $ref: '#/components/parameters/FilterLastNameParam'
-        - $ref: '#/components/parameters/FilterSourceParam'
-        - $ref: '#/components/parameters/FilterOrderIdParam'
-        - $ref: '#/components/parameters/FilterDateCreatedParam'
-        - $ref: '#/components/parameters/FilterDateModifiedParam'
+      - name: email
+        in: query
+        description: |
+          Filter items by email.
+        schema:
+          type: string
+      - name: first_name
+        in: query
+        description: |
+          Filter items by first_name.
+        schema:
+          type: string
+      - name: last_name
+        in: query
+        description: |
+          Filter items by last_name.
+        schema:
+          type: string
+      - name: source
+        in: query
+        description: |
+          Filter items by source.
+        schema:
+          type: string
+      - name: order_id
+        in: query
+        description: |
+          Filter items by order_id.
+        schema:
+          type: integer
+      - name: date_created
+        in: query
+        description: |
+          Filter items by date_created.
+        schema:
+          type: string
+          format: date-time
+      - name: date_modified
+        in: query
+        description: Filter items by date_modified. For example `v3/catalog/products?date_last_imported:min=2018-06-15`
+        schema:
+          type: string
+          format: date-time
       responses:
         '204':
           description: ""
@@ -180,7 +262,7 @@ paths:
       - Subscribers
       summary: Get a Subscriber
       description: Returns a *Subscriber*.
-      operationId: getSubscriber
+      operationId: getSubscriberById
       parameters:
       - name: subscriber_id
         in: path
@@ -341,7 +423,7 @@ paths:
       - Subscribers
       summary: Delete a Subscriber
       description: Deletes a *Subscriber*.
-      operationId: deleteSubscriber
+      operationId: deleteSubscriberById
       parameters:
       - name: subscriber_id
         in: path
@@ -376,15 +458,6 @@ components:
             description: |
               The date of which the subscriber was created.
             format: date-time
-          consents:
-            type: array
-            items:
-              type: string
-              enum:
-                - marketing_newsletter
-                - abandoned_cart
-            description: Shows the active subscriptions a shopper may have. If the consents array is empty, the user has unsubscribed or didn’t enable the newsletter subscription checkbox during checkout. The array will contain consent types like 'marketing_newsletter' and 'abandoned_cart'.
-            example: ["marketing_newsletter"]
       x-internal: false
     subscriber_Base:
       title: subscriber_Base
@@ -426,15 +499,6 @@ components:
           minimum: 1
           type: integer
           description: The channel ID where the subscriber was created.
-        consents:
-            type: array
-            items:
-              type: string
-              enum:
-                - marketing_newsletter
-                - abandoned_cart
-            description: Shows the active subscriptions a shopper may have. If the consents array is empty, the user has unsubscribed or didn’t enable the newsletter subscription checkbox during checkout. The array will contain consent types like 'marketing_newsletter' and 'abandoned_cart'.
-            example: ["abandoned_cart"]
       description: Common Subscriber properties.
       x-internal: false
     Subscriber:
@@ -688,7 +752,7 @@ components:
       additionalProperties: true
       x-internal: false
   responses:
-    subscriberCollection_Resp:
+    subrscriberCollection_Resp:
       description: ""
       content:
         application/json:
@@ -759,39 +823,11 @@ components:
       schema:
         type: string
         format: date-time
-    FilterDateModifiedMinParam:
-      name: date_modified:min
-      in: query
-      description: 'Filter items by minimum date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.'
-      schema:
-        type: string
-        format: date-time
-    FilterDateModifiedMaxParam:
-      name: date_modified:max
-      in: query
-      description: 'Filter items by maximum date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.'
-      schema:
-        type: string
-        format: date-time
     FilterDateCreatedParam:
       name: date_created
       in: query
       description: |
         Filter items by date_created.
-      schema:
-        type: string
-        format: date-time
-    FilterDateCreatedMinParam:
-      name: date_created:min
-      in: query
-      description: 'Filter items by minimum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.'
-      schema:
-        type: string
-        format: date-time
-    FilterDateCreatedMaxParam:
-      name: date_created:max
-      in: query
-      description: 'Filter items by maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.'
       schema:
         type: string
         format: date-time
@@ -816,10 +852,10 @@ components:
       schema:
         type: string
         enum:
-          - name
-          - description
-          - date_created
-          - date_modified
+        - name
+        - description
+        - date_created
+        - date_modified
     DirectionParam:
       name: direction
       in: query
@@ -828,31 +864,13 @@ components:
       schema:
         type: string
         enum:
-          - asc
-          - desc
-    IdParam:
-      name: id
-      in: query
-      description: |
-        Filter items by ID.
-      required: true
-      schema:
-        type: integer
-    IdInParam:
-      name: id:in
-      in: query
-      description: |
-        Filter items by ID.
-        `id:in=4,5,6`
-      schema:
-        type: array
-        items:
-          type: integer
+        - asc
+        - desc
     SubscriberIdParam:
       name: subscriber_id
       in: path
       description: |
-        The ID of the subscriber requested.
+        The ID of the `Subscriber` requested.
       required: true
       schema:
         type: integer

@@ -36,16 +36,23 @@ export class CartsV3Api {
      * To restore a cart that was created by a shopper or through a Storefront API, first recreate the cart using the **REST Management API**.
      * To get cart `promotions` in the response, append the following query parameter to the request URL: `include=promotions.banners`.
      */
-    createCart(
-        requestBody: CartsV3ApiSpecs.CreateCartData['body'],
-        query?: CartsV3ApiSpecs.CreateCartData['query'],
+    createAcart(
+        requestBody: CartsV3ApiSpecs.CreateACartData['body'],
+        query?: CartsV3ApiSpecs.CreateACartData['query'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<CartsV3ApiSpecs.CreateCartResponses[201]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<201, Required<CartsV3ApiSpecs.CreateACartResponses[201]>>,RequestErrorResponse<400, void>>({
             path: 'v3/carts',
             contentType: 'application/json',
             body: requestBody,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `createAcart` instead.
+     */
+    createCart(...args: Parameters<CartsV3Api['createAcart']>) {
+        return this.createAcart(...args);
     }
 
     /**
@@ -57,23 +64,30 @@ export class CartsV3Api {
 
      To add a custom item use `custom_items`. 
 
-     By default, overriding a product's list_price makes it ineligible for V3 product-level promotions. In **Store Settings** under **Promotions and Coupons** in the control panel, you can change this behavior to allow promotions on overridden prices.
+     Overriding a product’s `list_price` will make that item ineligible for V3 product level promotions.
 
      If a product has modifiers, omit the `variant_id` and instead use the `option_selections` array to describe both the **variant** and the **modifier** selections.
 
-     To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
+     Please note that this API endpoint is not concurrent safe, meaning multiple simultaneous requests could result in unexpected and inconsistent results.
      */
-    addCartLineItems(
-        cartId: CartsV3ApiSpecs.AddCartLineItemsData['path']['cartId'],
-        requestBody: CartsV3ApiSpecs.AddCartLineItemsData['body'],
-        query?: CartsV3ApiSpecs.AddCartLineItemsData['query'],
+    addCartLineItem(
+        cartId: CartsV3ApiSpecs.AddCartLineItemData['path']['cartId'],
+        requestBody: CartsV3ApiSpecs.AddCartLineItemData['body'],
+        query?: CartsV3ApiSpecs.AddCartLineItemData['query'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<CartsV3ApiSpecs.AddCartLineItemsResponses[201]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<201, Required<CartsV3ApiSpecs.AddCartLineItemResponses[201]>>,RequestErrorResponse<400, void>>({
             path: `v3/carts/${cartId}/items`,
             contentType: 'application/json',
             body: requestBody,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `addCartLineItem` instead.
+     */
+    addCartLineItems(...args: Parameters<CartsV3Api['addCartLineItem']>) {
+        return this.addCartLineItem(...args);
     }
 
     /**
@@ -83,23 +97,19 @@ export class CartsV3Api {
 
      **Usage Notes**
 
-     * To use redirect URLs, first create the cart using the REST Management API or GraphQL Storefront API.
      * Redirect URLs can also be created with **Create a Cart** requests by appending `include=redirect_urls`.
-     * A **Carts** redirect URL is valid for 30 days and may only be used once.
+     * A **Carts** redirect URL may only be used once.
      * Redirect URLs point to either a shared checkout domain or a channel-specific domain, depending on the storefront configuration.
      * Once a redirect URL has been visited, it will be invalidated and cannot be used again. 
      * If your application requires URLs to be visited more than once, consider generating a fresh one each time you need to restore a cart, and redirecting to the URL from your own application.
+     * Redirect URLs can be generated only from carts that were created using the **REST Management API**. 
      * To restore a cart that was created on the storefront, either by a shopper or a Storefront API, first recreate the cart using the **REST Management API**.
-     * When redirecting the shopper, you can add a set of `query_params` to the URL. The `query_params` feature allows passing additional information to the redirect URL.
      */
     createCartRedirectUrl(
         cartId: CartsV3ApiSpecs.CreateCartRedirectUrlData['path']['cartId'],
-        requestBody: CartsV3ApiSpecs.CreateCartRedirectUrlData['body'],
     ) {
         return this.request.post<RequestSuccessResponse<201, Required<CartsV3ApiSpecs.CreateCartRedirectUrlResponses[201]>>,RequestErrorResponse<400, void>>({
             path: `v3/carts/${cartId}/redirect_urls`,
-            contentType: 'application/json',
-            body: requestBody,
         });
     }
 
@@ -110,7 +120,7 @@ export class CartsV3Api {
 
      **Notes**
 
-     Currently, only updating `list_price` and `quantity` are supported. By default, overriding a product's list_price makes it ineligible for V3 product-level promotions. In **Store Settings** under **Promotions and Coupons** in the control panel, you can change this behavior to allow promotions on overridden prices.
+     Currently, only updating `list_price` and `quantity` are supported. Updating a product’s `list_price` will make that item ineligible for V3 product-level promotions. 
 
      If the product has modifiers, omit the `variant_id` and instead use the `option_selections` array to describe both the **variant** and the **modifier** selections.
 
@@ -120,7 +130,7 @@ export class CartsV3Api {
 
      Deleting all line items from the cart will invalidate the cart. 
 
-     To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
+     Please note that this API endpoint is not concurrent safe, meaning multiple simultaneous requests could result in unexpected and inconsistent results.
      */
     updateCartLineItem(
         cartId: CartsV3ApiSpecs.UpdateCartLineItemData['path']['cartId'],
@@ -128,7 +138,7 @@ export class CartsV3Api {
         requestBody: CartsV3ApiSpecs.UpdateCartLineItemData['body'],
         query?: CartsV3ApiSpecs.UpdateCartLineItemData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.UpdateCartLineItemResponses[200]>>,RequestErrorResponse<409, Required<CartsV3ApiSpecs.UpdateCartLineItemErrors[409]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.UpdateCartLineItemResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/carts/${cartId}/items/${itemId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -144,19 +154,14 @@ export class CartsV3Api {
      **Notes**
 
      Removing the last `line_item` in the *Cart* deletes the *Cart*.
-
-     To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
      */
     deleteCartLineItem(
         cartId: CartsV3ApiSpecs.DeleteCartLineItemData['path']['cartId'],
         itemId: CartsV3ApiSpecs.DeleteCartLineItemData['path']['itemId'],
-        requestBody: CartsV3ApiSpecs.DeleteCartLineItemData['body'],
         query?: CartsV3ApiSpecs.DeleteCartLineItemData['query'],
     ) {
-        return this.request.delete<(RequestSuccessResponse<200, Required<CartsV3ApiSpecs.DeleteCartLineItemResponses[200]>> | RequestSuccessResponse<204, Required<CartsV3ApiSpecs.DeleteCartLineItemResponses[204]>>),RequestErrorResponse<409, Required<CartsV3ApiSpecs.DeleteCartLineItemErrors[409]>>>({
+        return this.request.delete<(RequestSuccessResponse<200, Required<CartsV3ApiSpecs.DeleteCartLineItemResponses[200]>> | RequestSuccessResponse<204, Required<CartsV3ApiSpecs.DeleteCartLineItemResponses[204]>>),RequestErrorResponse<400, void>>({
             path: `v3/carts/${cartId}/items/${itemId}`,
-            contentType: 'application/json',
-            body: requestBody,
             query,
         });
     }
@@ -164,35 +169,40 @@ export class CartsV3Api {
     /**
      * Get a Cart
      *
-     * Returns a storeʼs *Cart*.
+     * Returns a store's *Cart*.
      */
-    getCart(
-        cartId: CartsV3ApiSpecs.GetCartData['path']['cartId'],
-        query?: CartsV3ApiSpecs.GetCartData['query'],
+    getAcart(
+        cartId: CartsV3ApiSpecs.GetACartData['path']['cartId'],
+        query?: CartsV3ApiSpecs.GetACartData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetCartResponses[200]>>,RequestErrorResponse<404, Required<CartsV3ApiSpecs.GetCartErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetACartResponses[200]>>,RequestErrorResponse<404, Required<CartsV3ApiSpecs.GetACartErrors[404]>>>({
             path: `v3/carts/${cartId}`,
             query,
         });
     }
 
     /**
+     * @deprecated Use `getAcart` instead.
+     */
+    getCart(...args: Parameters<CartsV3Api['getAcart']>) {
+        return this.getAcart(...args);
+    }
+
+    /**
      * Update Customer ID
      *
-     * Updates a *Cartʼs* `customer_id`.
+     * Updates a *Cart's* `customer_id`.
 
      **Notes**
 
      Changing the *Cart* `customer_id` will remove any promotions or shipping calculations on the *Cart*. These are tied to the customer depending on cart conditions and any customer groups. 
-
-     To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
      */
-    updateCart(
-        cartId: CartsV3ApiSpecs.UpdateCartData['path']['cartId'],
-        requestBody: CartsV3ApiSpecs.UpdateCartData['body'],
-        query?: CartsV3ApiSpecs.UpdateCartData['query'],
+    updateAcart(
+        cartId: CartsV3ApiSpecs.UpdateACartData['path']['cartId'],
+        requestBody: CartsV3ApiSpecs.UpdateACartData['body'],
+        query?: CartsV3ApiSpecs.UpdateACartData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<201, Required<CartsV3ApiSpecs.UpdateCartResponses[201]>>,RequestErrorResponse<409, Required<CartsV3ApiSpecs.UpdateCartErrors[409]>>>({
+        return this.request.put<RequestSuccessResponse<201, Required<CartsV3ApiSpecs.UpdateACartResponses[201]>>,RequestErrorResponse<400, void>>({
             path: `v3/carts/${cartId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -201,29 +211,36 @@ export class CartsV3Api {
     }
 
     /**
+     * @deprecated Use `updateAcart` instead.
+     */
+    updateCart(...args: Parameters<CartsV3Api['updateAcart']>) {
+        return this.updateAcart(...args);
+    }
+
+    /**
      * Delete a Cart
      *
      * Deletes a *Cart*. Once a *Cart* has been deleted it can’t be recovered.
      */
-    deleteCart(
-        cartId: CartsV3ApiSpecs.DeleteCartData['path']['cartId'],
+    deleteAcart(
+        cartId: CartsV3ApiSpecs.DeleteACartData['path']['cartId'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CartsV3ApiSpecs.DeleteCartResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CartsV3ApiSpecs.DeleteACartResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/carts/${cartId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteAcart` instead.
+     */
+    deleteCart(...args: Parameters<CartsV3Api['deleteAcart']>) {
+        return this.deleteAcart(...args);
     }
 
     /**
      * Get Global Cart Settings
      *
      * Returns the global cart settings of a store.
-
-       ### OAuth scopes
-
-       | UI Name | Permission | Parameter |
-       |:--------|:-----------|:----------|
-       |Information & Settings | modify | `store_v2_information`|
-       |Information & Settings | read-only| `store_v2_information`|
      */
     getGlobalCartSettings(
     ) {
@@ -236,13 +253,6 @@ export class CartsV3Api {
      * Update Global Cart Settings
      *
      * Update the global cart settings of a store.
-       *Authentication*
-       ### OAuth scopes
-
-       | UI Name | Permission | Parameter |
-       |:--------|:-----------|:----------|
-       |Information & Settings | modify | `store_v2_information`|
-       |Information & Settings | read-only| `store_v2_information`|
      */
     updateGlobalCartSettings(
         requestBody: CartsV3ApiSpecs.UpdateGlobalCartSettingsData['body'],
@@ -258,13 +268,6 @@ export class CartsV3Api {
      * Get Channel Cart Settings
      *
      * Returns the per-channel overrides for the cart settings of a store.
-
-       ### OAuth scopes
-
-       | UI Name | Permission | Parameter |
-       |:--------|:-----------|:----------|
-       |Information & Settings | modify | `store_v2_information`|
-       |Information & Settings | read-only| `store_v2_information`|
      */
     getChannelCartSettings(
         channelId: CartsV3ApiSpecs.GetChannelCartSettingsData['path']['channel_id'],
@@ -278,13 +281,6 @@ export class CartsV3Api {
      * Update Channel Cart Settings
      *
      * Update the per-channel overrides for the cart settings of a store.
-
-     ### OAuth scopes
-
-     | UI Name | Permission | Parameter |
-     |:--------|:-----------|:----------|
-     |Information & Settings | modify | `store_v2_information`|
-     |Information & Settings | read-only| `store_v2_information`|
      */
     updateChannelCartSettings(
         channelId: CartsV3ApiSpecs.UpdateChannelCartSettingsData['path']['channel_id'],
@@ -298,18 +294,25 @@ export class CartsV3Api {
     }
 
     /**
-     * Get Cart Metafields
+     * Get All Metafields
      *
-     * Get a cart's metafields.
+     * Get all cart metafields.
      */
-    getCartMetafields(
-        cartId: CartsV3ApiSpecs.GetCartMetafieldsData['path']['cart_id'],
-        query?: CartsV3ApiSpecs.GetCartMetafieldsData['query'],
+    getAllCartMetafields(
+        cartId: CartsV3ApiSpecs.GetAllCartMetafieldsData['path']['cart_id'],
+        query?: CartsV3ApiSpecs.GetAllCartMetafieldsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetCartMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetAllCartMetafieldsResponses[200]>>,(RequestErrorResponse<409, Required<CartsV3ApiSpecs.GetAllCartMetafieldsErrors[409]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.GetAllCartMetafieldsErrors[422]>>)>({
             path: `v3/carts/${cartId}/metafields`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getAllCartMetafields` instead.
+     */
+    getCartMetafields(...args: Parameters<CartsV3Api['getAllCartMetafields']>) {
+        return this.getAllCartMetafields(...args);
     }
 
     /**
@@ -317,14 +320,14 @@ export class CartsV3Api {
      *
      * Create a cart `Metafield`. 
 
-     If you create an order from a Cart, you can continue referencing the Cart Metafields even if you delete the original Cart. Use the `cart_id` field on the Order to construct the Cart Metafield endpoint.
+     If you create an order from a Cart, you can continue referencing the Cart Metafields even if you delete the original Cart. Use the `cart_id` field on the Order to construct the Cart Metafield endpoint. 
 
      */
-    createCartMetafield(
-        cartId: CartsV3ApiSpecs.CreateCartMetafieldData['path']['cart_id'],
-        requestBody: CartsV3ApiSpecs.CreateCartMetafieldData['body'],
+    createCartMetafieldsByCartId(
+        cartId: CartsV3ApiSpecs.CreateCartMetafieldsByCartIdData['path']['cart_id'],
+        requestBody: CartsV3ApiSpecs.CreateCartMetafieldsByCartIdData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.CreateCartMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<CartsV3ApiSpecs.CreateCartMetafieldErrors[400]>> | RequestErrorResponse<409, Required<CartsV3ApiSpecs.CreateCartMetafieldErrors[409]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.CreateCartMetafieldErrors[422]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.CreateCartMetafieldsByCartIdResponses[200]>>,RequestErrorResponse<404, Required<CartsV3ApiSpecs.CreateCartMetafieldsByCartIdErrors[404]>>>({
             path: `v3/carts/${cartId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
@@ -332,19 +335,33 @@ export class CartsV3Api {
     }
 
     /**
+     * @deprecated Use `createCartMetafieldsByCartId` instead.
+     */
+    createCartMetafield(...args: Parameters<CartsV3Api['createCartMetafieldsByCartId']>) {
+        return this.createCartMetafieldsByCartId(...args);
+    }
+
+    /**
      * Get a Cart Metafield
      *
      * Gets a cart metafield.
      */
-    getCartMetafield(
-        cartId: CartsV3ApiSpecs.GetCartMetafieldData['path']['cart_id'],
-        metafieldId: CartsV3ApiSpecs.GetCartMetafieldData['path']['metafield_id'],
-        query?: CartsV3ApiSpecs.GetCartMetafieldData['query'],
+    getAcartMetafield(
+        cartId: CartsV3ApiSpecs.GetACartMetafieldData['path']['cart_id'],
+        metafieldId: CartsV3ApiSpecs.GetACartMetafieldData['path']['metafield_id'],
+        query?: CartsV3ApiSpecs.GetACartMetafieldData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetCartMetafieldResponses[200]>>,RequestErrorResponse<404, Required<CartsV3ApiSpecs.GetCartMetafieldErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetACartMetafieldResponses[200]>>,(RequestErrorResponse<409, Required<CartsV3ApiSpecs.GetACartMetafieldErrors[409]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.GetACartMetafieldErrors[422]>> | RequestErrorResponse<500, Required<CartsV3ApiSpecs.GetACartMetafieldErrors[500]>>)>({
             path: `v3/carts/${cartId}/metafields/${metafieldId}`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getAcartMetafield` instead.
+     */
+    getCartMetafield(...args: Parameters<CartsV3Api['getAcartMetafield']>) {
+        return this.getAcartMetafield(...args);
     }
 
     /**
@@ -353,16 +370,23 @@ export class CartsV3Api {
      * Update a `Metafield`, by `cart_id`.
 
      */
-    updateCartMetafield(
-        cartId: CartsV3ApiSpecs.UpdateCartMetafieldData['path']['cart_id'],
-        metafieldId: CartsV3ApiSpecs.UpdateCartMetafieldData['path']['metafield_id'],
-        requestBody: CartsV3ApiSpecs.UpdateCartMetafieldData['body'],
+    updateCartMetafieldsByCartId(
+        cartId: CartsV3ApiSpecs.UpdateCartMetafieldsByCartIdData['path']['cart_id'],
+        metafieldId: CartsV3ApiSpecs.UpdateCartMetafieldsByCartIdData['path']['metafield_id'],
+        requestBody: CartsV3ApiSpecs.UpdateCartMetafieldsByCartIdData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.UpdateCartMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<CartsV3ApiSpecs.UpdateCartMetafieldErrors[400]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.UpdateCartMetafieldErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.UpdateCartMetafieldsByCartIdResponses[200]>>,RequestErrorResponse<404, Required<CartsV3ApiSpecs.UpdateCartMetafieldsByCartIdErrors[404]>>>({
             path: `v3/carts/${cartId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `updateCartMetafieldsByCartId` instead.
+     */
+    updateCartMetafield(...args: Parameters<CartsV3Api['updateCartMetafieldsByCartId']>) {
+        return this.updateCartMetafieldsByCartId(...args);
     }
 
     /**
@@ -371,71 +395,19 @@ export class CartsV3Api {
      * Deletes a `Metafield`.
 
      */
-    deleteCartMetafield(
-        cartId: CartsV3ApiSpecs.DeleteCartMetafieldData['path']['cart_id'],
-        metafieldId: CartsV3ApiSpecs.DeleteCartMetafieldData['path']['metafield_id'],
+    deleteCartMetafieldById(
+        cartId: CartsV3ApiSpecs.DeleteCartMetafieldByIdData['path']['cart_id'],
+        metafieldId: CartsV3ApiSpecs.DeleteCartMetafieldByIdData['path']['metafield_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CartsV3ApiSpecs.DeleteCartMetafieldResponses[204]>>,RequestErrorResponse<404, Required<CartsV3ApiSpecs.DeleteCartMetafieldErrors[404]>>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CartsV3ApiSpecs.DeleteCartMetafieldByIdResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/carts/${cartId}/metafields/${metafieldId}`,
         });
     }
 
     /**
-     * Get All Cart Metafields
-     *
-     * Get all cart metafields.
+     * @deprecated Use `deleteCartMetafieldById` instead.
      */
-    getCartsMetafields(
-        query?: CartsV3ApiSpecs.GetCartsMetafieldsData['query'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GetCartsMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: 'v3/carts/metafields',
-            query,
-        });
-    }
-
-    /**
-     * Create multiple Metafields
-     *
-     * Create multiple metafields.
-     */
-    createCartsMetafields(
-        requestBody: CartsV3ApiSpecs.CreateCartsMetafieldsData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.CreateCartsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CartsV3ApiSpecs.CreateCartsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.CreateCartsMetafieldsErrors[422]>>)>({
-            path: 'v3/carts/metafields',
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Update multiple Metafields
-     *
-     * Create multiple metafields.
-     */
-    updateCartsMetafields(
-        requestBody: CartsV3ApiSpecs.UpdateCartsMetafieldsData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.UpdateCartsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CartsV3ApiSpecs.UpdateCartsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.UpdateCartsMetafieldsErrors[422]>>)>({
-            path: 'v3/carts/metafields',
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Delete multiple Metafields
-     *
-     * Delete all cart metafields.
-     */
-    deleteCartsMetafields(
-        requestBody: CartsV3ApiSpecs.DeleteCartsMetafieldsData['body'],
-    ) {
-        return this.request.delete<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.DeleteCartsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CartsV3ApiSpecs.DeleteCartsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.DeleteCartsMetafieldsErrors[422]>>)>({
-            path: 'v3/carts/metafields',
-            contentType: 'application/json',
-            body: requestBody,
-        });
+    deleteCartMetafield(...args: Parameters<CartsV3Api['deleteCartMetafieldById']>) {
+        return this.deleteCartMetafieldById(...args);
     }
 }

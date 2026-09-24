@@ -5,15 +5,11 @@ export * as CartsV3ApiSpecs from '../generated/carts-v3';
 export declare class CartsV3Api {
     private readonly request;
     constructor(request: RequestService);
-    createCart(requestBody: CartsV3ApiSpecs.CreateCartData['body'], query?: CartsV3ApiSpecs.CreateCartData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<201, Required<{
-        data?: CartsV3ApiSpecs.CartFull;
-        meta?: CartsV3ApiSpecs.MetaCollectionOpen;
-    }>>>;
-    addCartLineItems(cartId: CartsV3ApiSpecs.AddCartLineItemsData['path']['cartId'], requestBody: CartsV3ApiSpecs.AddCartLineItemsData['body'], query?: CartsV3ApiSpecs.AddCartLineItemsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<201, Required<{
-        data?: CartsV3ApiSpecs.CartFull;
-        meta?: CartsV3ApiSpecs.MetaCollectionOpen;
-    }>>>;
-    createCartRedirectUrl(cartId: CartsV3ApiSpecs.CreateCartRedirectUrlData['path']['cartId'], requestBody: CartsV3ApiSpecs.CreateCartRedirectUrlData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<201, Required<{
+    createAcart(requestBody: CartsV3ApiSpecs.CreateACartData['body'], query?: CartsV3ApiSpecs.CreateACartData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<201, Required<CartsV3ApiSpecs.CartFull>>>;
+    createCart(...args: Parameters<CartsV3Api['createAcart']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<201, Required<CartsV3ApiSpecs.CartFull>>>;
+    addCartLineItem(cartId: CartsV3ApiSpecs.AddCartLineItemData['path']['cartId'], requestBody: CartsV3ApiSpecs.AddCartLineItemData['body'], query?: CartsV3ApiSpecs.AddCartLineItemData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<201, Required<CartsV3ApiSpecs.CartFull>>>;
+    addCartLineItems(...args: Parameters<CartsV3Api['addCartLineItem']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<201, Required<CartsV3ApiSpecs.CartFull>>>;
+    createCartRedirectUrl(cartId: CartsV3ApiSpecs.CreateCartRedirectUrlData['path']['cartId']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<201, Required<{
         data?: {
             cart_url?: string;
             checkout_url?: string;
@@ -21,20 +17,14 @@ export declare class CartsV3Api {
         };
         meta?: CartsV3ApiSpecs.MetaCollectionOpen;
     }>>>;
-    updateCartLineItem(cartId: CartsV3ApiSpecs.UpdateCartLineItemData['path']['cartId'], itemId: CartsV3ApiSpecs.UpdateCartLineItemData['path']['itemId'], requestBody: CartsV3ApiSpecs.UpdateCartLineItemData['body'], query?: CartsV3ApiSpecs.UpdateCartLineItemData['query']): Promise<RequestSuccessResponse<200, Required<{
-        data?: CartsV3ApiSpecs.CartFull;
-        meta?: CartsV3ApiSpecs.MetaCollectionOpen;
-    }>> | RequestErrorResponse<409, Required<CartsV3ApiSpecs.ErrorResponse>>>;
-    deleteCartLineItem(cartId: CartsV3ApiSpecs.DeleteCartLineItemData['path']['cartId'], itemId: CartsV3ApiSpecs.DeleteCartLineItemData['path']['itemId'], requestBody: CartsV3ApiSpecs.DeleteCartLineItemData['body'], query?: CartsV3ApiSpecs.DeleteCartLineItemData['query']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<409, Required<CartsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.CartFull>>>;
-    getCart(cartId: CartsV3ApiSpecs.GetCartData['path']['cartId'], query?: CartsV3ApiSpecs.GetCartData['query']): Promise<RequestErrorResponse<404, Required<unknown>> | RequestSuccessResponse<200, Required<{
-        data?: CartsV3ApiSpecs.CartFull;
-        meta?: CartsV3ApiSpecs.MetaCollectionOpen;
-    }>>>;
-    updateCart(cartId: CartsV3ApiSpecs.UpdateCartData['path']['cartId'], requestBody: CartsV3ApiSpecs.UpdateCartData['body'], query?: CartsV3ApiSpecs.UpdateCartData['query']): Promise<RequestErrorResponse<409, Required<CartsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<201, Required<{
-        data?: CartsV3ApiSpecs.CartFull;
-        meta?: CartsV3ApiSpecs.MetaCollectionOpen;
-    }>>>;
-    deleteCart(cartId: CartsV3ApiSpecs.DeleteCartData['path']['cartId']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    updateCartLineItem(cartId: CartsV3ApiSpecs.UpdateCartLineItemData['path']['cartId'], itemId: CartsV3ApiSpecs.UpdateCartLineItemData['path']['itemId'], requestBody: CartsV3ApiSpecs.UpdateCartLineItemData['body'], query?: CartsV3ApiSpecs.UpdateCartLineItemData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.CartFull>>>;
+    deleteCartLineItem(cartId: CartsV3ApiSpecs.DeleteCartLineItemData['path']['cartId'], itemId: CartsV3ApiSpecs.DeleteCartLineItemData['path']['itemId'], query?: CartsV3ApiSpecs.DeleteCartLineItemData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.CartFull>>>;
+    getAcart(cartId: CartsV3ApiSpecs.GetACartData['path']['cartId'], query?: CartsV3ApiSpecs.GetACartData['query']): Promise<RequestErrorResponse<404, Required<unknown>> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.CartFull>>>;
+    getCart(...args: Parameters<CartsV3Api['getAcart']>): Promise<RequestErrorResponse<404, Required<unknown>> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.CartFull>>>;
+    updateAcart(cartId: CartsV3ApiSpecs.UpdateACartData['path']['cartId'], requestBody: CartsV3ApiSpecs.UpdateACartData['body'], query?: CartsV3ApiSpecs.UpdateACartData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<201, Required<CartsV3ApiSpecs.CartFull>>>;
+    updateCart(...args: Parameters<CartsV3Api['updateAcart']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<201, Required<CartsV3ApiSpecs.CartFull>>>;
+    deleteAcart(cartId: CartsV3ApiSpecs.DeleteACartData['path']['cartId']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteCart(...args: Parameters<CartsV3Api['deleteAcart']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
     getGlobalCartSettings(): Promise<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GlobalCartSettingsResponse>> | RequestErrorResponse<401, Required<CartsV3ApiSpecs.ErrorResponse>>>;
     updateGlobalCartSettings(requestBody: CartsV3ApiSpecs.UpdateGlobalCartSettingsData['body']): Promise<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.GlobalCartSettingsResponse>> | RequestErrorResponse<401, Required<CartsV3ApiSpecs.ErrorResponse>> | RequestErrorResponse<400, Required<{
         status?: number;
@@ -49,38 +39,14 @@ export declare class CartsV3Api {
         type?: string;
         detail?: string;
     }>>>;
-    getCartMetafields(cartId: CartsV3ApiSpecs.GetCartMetafieldsData['path']['cart_id'], query?: CartsV3ApiSpecs.GetCartMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetafieldResponse>>>;
-    createCartMetafield(cartId: CartsV3ApiSpecs.CreateCartMetafieldData['path']['cart_id'], requestBody: CartsV3ApiSpecs.CreateCartMetafieldData['body']): Promise<RequestErrorResponse<409, Required<CartsV3ApiSpecs.ErrorResponse>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetaFieldCollectionResponse>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>>>;
-    getCartMetafield(cartId: CartsV3ApiSpecs.GetCartMetafieldData['path']['cart_id'], metafieldId: CartsV3ApiSpecs.GetCartMetafieldData['path']['metafield_id'], query?: CartsV3ApiSpecs.GetCartMetafieldData['query']): Promise<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetafieldResponse>> | RequestErrorResponse<404, Required<CartsV3ApiSpecs.NotFound>>>;
-    updateCartMetafield(cartId: CartsV3ApiSpecs.UpdateCartMetafieldData['path']['cart_id'], metafieldId: CartsV3ApiSpecs.UpdateCartMetafieldData['path']['metafield_id'], requestBody: CartsV3ApiSpecs.UpdateCartMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetaFieldCollectionResponse>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>>>;
-    deleteCartMetafield(cartId: CartsV3ApiSpecs.DeleteCartMetafieldData['path']['cart_id'], metafieldId: CartsV3ApiSpecs.DeleteCartMetafieldData['path']['metafield_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<404, Required<CartsV3ApiSpecs.NotFound>>>;
-    getCartsMetafields(query?: CartsV3ApiSpecs.GetCartsMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetaFieldCollectionResponseBatch>>>;
-    createCartsMetafields(requestBody: CartsV3ApiSpecs.CreateCartsMetafieldsData['body']): Promise<RequestErrorResponse<422, Required<CartsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetaFieldCollectionResponseBatchPostPut>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>>>;
-    updateCartsMetafields(requestBody: CartsV3ApiSpecs.UpdateCartsMetafieldsData['body']): Promise<RequestErrorResponse<422, Required<CartsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetaFieldCollectionResponseBatchPostPut>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>>>;
-    deleteCartsMetafields(requestBody: CartsV3ApiSpecs.DeleteCartsMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetaFieldCollectionDeleteResponseSuccess>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>> | RequestErrorResponse<422, Required<CartsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessDelete>>>;
+    getAllCartMetafields(cartId: CartsV3ApiSpecs.GetAllCartMetafieldsData['path']['cart_id'], query?: CartsV3ApiSpecs.GetAllCartMetafieldsData['query']): Promise<RequestErrorResponse<422, Required<CartsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetafieldResponse>> | RequestErrorResponse<409, Required<CartsV3ApiSpecs.ErrorResponse>>>;
+    getCartMetafields(...args: Parameters<CartsV3Api['getAllCartMetafields']>): Promise<RequestErrorResponse<422, Required<CartsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetafieldResponse>> | RequestErrorResponse<409, Required<CartsV3ApiSpecs.ErrorResponse>>>;
+    createCartMetafieldsByCartId(cartId: CartsV3ApiSpecs.CreateCartMetafieldsByCartIdData['path']['cart_id'], requestBody: CartsV3ApiSpecs.CreateCartMetafieldsByCartIdData['body']): Promise<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetaFieldCollectionResponse>> | RequestErrorResponse<404, Required<CartsV3ApiSpecs.NotFound>>>;
+    createCartMetafield(...args: Parameters<CartsV3Api['createCartMetafieldsByCartId']>): Promise<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetaFieldCollectionResponse>> | RequestErrorResponse<404, Required<CartsV3ApiSpecs.NotFound>>>;
+    getAcartMetafield(cartId: CartsV3ApiSpecs.GetACartMetafieldData['path']['cart_id'], metafieldId: CartsV3ApiSpecs.GetACartMetafieldData['path']['metafield_id'], query?: CartsV3ApiSpecs.GetACartMetafieldData['query']): Promise<RequestErrorResponse<422, Required<CartsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetafieldResponse>> | RequestErrorResponse<409, Required<CartsV3ApiSpecs.ErrorResponse>> | RequestErrorResponse<500, Required<unknown>>>;
+    getCartMetafield(...args: Parameters<CartsV3Api['getAcartMetafield']>): Promise<RequestErrorResponse<422, Required<CartsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetafieldResponse>> | RequestErrorResponse<409, Required<CartsV3ApiSpecs.ErrorResponse>> | RequestErrorResponse<500, Required<unknown>>>;
+    updateCartMetafieldsByCartId(cartId: CartsV3ApiSpecs.UpdateCartMetafieldsByCartIdData['path']['cart_id'], metafieldId: CartsV3ApiSpecs.UpdateCartMetafieldsByCartIdData['path']['metafield_id'], requestBody: CartsV3ApiSpecs.UpdateCartMetafieldsByCartIdData['body']): Promise<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetaFieldCollectionResponse>> | RequestErrorResponse<404, Required<CartsV3ApiSpecs.NotFound>>>;
+    updateCartMetafield(...args: Parameters<CartsV3Api['updateCartMetafieldsByCartId']>): Promise<RequestSuccessResponse<200, Required<CartsV3ApiSpecs.MetaFieldCollectionResponse>> | RequestErrorResponse<404, Required<CartsV3ApiSpecs.NotFound>>>;
+    deleteCartMetafieldById(cartId: CartsV3ApiSpecs.DeleteCartMetafieldByIdData['path']['cart_id'], metafieldId: CartsV3ApiSpecs.DeleteCartMetafieldByIdData['path']['metafield_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteCartMetafield(...args: Parameters<CartsV3Api['deleteCartMetafieldById']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
 }

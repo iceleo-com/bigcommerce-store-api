@@ -5,429 +5,13 @@ export type ClientOptions = {
 };
 
 /**
- * Not Found
- *
- * Error payload for the BigCommerce API.
- */
-export type NotFound = {
-    /**
-     * 404 HTTP status code.
-     *
-     */
-    status?: number;
-    /**
-     * The error title describing the particular error.
-     */
-    title?: string;
-    type?: string;
-};
-
-export type ErrorResponse = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-    errors?: {
-        [key: string]: unknown;
-    };
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetafieldResponse = {
-    data?: Metafield;
-    meta?: MetaCollectionOpen;
-};
-
-/**
- * Allows app partners to write custom data to various resources in the API.
- *
- */
-export type Metafield = MetafieldBase & {
-    /**
-     * The unique identifier for the metafield.
-     */
-    id?: string;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created?: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified?: string;
-    /**
-     * Client ID for the metafieldʼs creator.
-     */
-    readonly owner_client_id?: string;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBase = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     *
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'store';
-    /**
-     * The unique identifier for the resource with which the metafield is associated.
-     *
-     */
-    readonly resource_id?: string;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBasePostPut = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     *
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponse = {
-    data?: Metafield;
-    meta?: MetaCollectionOpen;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponseBatch = {
-    data?: Array<Metafield>;
-    meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponseBatchPostPut = {
-    data?: Array<Metafield>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    /**
-     * Empty for 200 responses.
-     */
-    data?: Array<Metafield>;
-    errors?: _Error;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Error response payload for the BigCommerce API.
- *
- */
-export type _Error = {
-    /**
-     * The HTTP status code for the error.
-     *
-     */
-    status?: number;
-    /**
-     * The error title.
-     *
-     */
-    title?: string;
-    /**
-     * The error type.
-     *
-     */
-    type?: string;
-    errors?: ErrorDetail;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionPartialSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Collection Meta
- *
- * Data about the response, including pagination and collection totals.
- */
-export type CollectionMeta = {
-    /**
-     * Pagination
-     *
-     * Data about the response, including pagination and collection totals.
-     */
-    pagination?: {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    };
-    [key: string]: unknown | {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    } | undefined;
-};
-
-/**
- * Response meta
- *
- * Response metadata.
- */
-export type MetaCollectionOpen = {
-    [key: string]: unknown;
-};
-
-/**
  * Store Information
  */
 export type StoreInformation = {
     /**
-     * The store hash, a unique store identifier.
+     * Unique store identifier.
      */
     id?: string;
-    /**
-     * The UUID of the account to which the store belongs.
-     */
-    account_uuid?: string;
     /**
      * Primary domain name.
      */
@@ -441,11 +25,7 @@ export type StoreInformation = {
      */
     control_panel_base_url?: string;
     /**
-     * The status of the store.
-     */
-    status?: string;
-    /**
-     * Store’s name.
+     * Store's name.
      */
     name?: string;
     /**
@@ -465,14 +45,6 @@ export type StoreInformation = {
      */
     country?: string;
     /**
-     * Two-letter ISO 3166-1 country code
-     */
-    country_code?: string;
-    /**
-     * The infrastructure region where the store is located. Use this to determine where to place supporting infrastructure for minimum latency to the store. Compare against GCP regions on https://cloud.google.com/compute/docs/regions-zones
-     */
-    infrastructure_region?: string;
-    /**
      * Display phone number.
      */
     phone?: string;
@@ -484,17 +56,13 @@ export type StoreInformation = {
      * Email address for orders and fulfillment.
      */
     order_email?: string;
-    /**
-     * The URL of the favicon image associated with the website. This should be a valid URL pointing to an `.ico` or other supported icon format file.
-     */
-    favicon_url?: string;
     timezone?: Timezone;
     /**
      * Default language code.
      */
     language?: string;
     /**
-     * Default currency code.
+     * Default currency code
      */
     currency?: string;
     /**
@@ -536,7 +104,7 @@ export type StoreInformation = {
     /**
      * The symbol used to denote thousands.
      */
-    dimension_thousands_token?: string;
+    'dimension_thousands_token:'?: string;
     /**
      * Name of the BigCommerce plan to which this store is subscribed.
      */
@@ -546,80 +114,56 @@ export type StoreInformation = {
      */
     plan_level?: string;
     /**
-     * Whether the payment plan associated with the store is still in the trial phase.
-     */
-    plan_is_trial?: boolean;
-    /**
      * Industry, or vertical category, in which the business operates. (As selected from drop-down list during the store sign-up process.)
      */
     industry?: string;
-    /**
-     * Either an object describing the logo image, or an empty array.
-     */
     logo?: {
         url?: string;
-    } | Array<unknown>;
+    };
     /**
      * A Boolean value that indicates whether or not prices are entered with tax.
      */
     is_price_entered_with_tax?: boolean;
-    /**
-     * The numeric ID of the store. This is a different unique ID than the store hash.
-     */
-    store_id?: number;
-    /**
-     * The ID of the default channel. The ID of the first hosted storefront created on the store is `1`.
-     */
-    default_channel_id?: number;
-    /**
-     * The BigCommerce ID of the website associated with the default storefront.
-     */
-    default_site_id?: number;
     active_comparison_modules?: Array<unknown>;
     /**
-     * Describes some aspects of the storeʼs tech stack and configuration settings that affect the features available for the store to use.
+     * + `stencil_enabled`: `true` (boolean)
+     * + `sitewidehttps_enabled`: `false` (boolean)
+     * + `facebook_catalog_id` (string)
      */
     features?: {
+        /**
+         * What type of checkout is enabled on the store. Possible values returned are optimized, single (one page), single_customizable (one page for developers), klarna.
+         */
+        checkout_type?: string;
+        /**
+         * Id of the facebook by meta catalog. If there is none, it returns an empty string.
+         */
+        facebook_catalog_id?: string;
+        graphql_storefront_api_enabled?: boolean;
         /**
          * Indicates whether a store is using a Stencil theme.
          */
         stencil_enabled?: boolean;
         /**
-         * Indicates whether there is site-wide https.
+         * Indicates if there is sitewide https.
          */
         sitewidehttps_enabled?: boolean;
         /**
-         * The ID of the Facebook by Meta catalog. If there is none, this endpoint returns an empty string.
-         */
-        facebook_catalog_id?: string;
-        /**
-         * What type of checkout is enabled on the store. Possible values returned are optimized, single (one page), single_customizable (one page for developers), klarna.
-         */
-        checkout_type?: 'optimized' | 'single' | 'single_customizable' | 'klarna';
-        wishlists_enabled?: boolean;
-        /**
-         * Describes whether you can use the [GraphQL Storefront API](/graphql-storefront/reference) on this store.
-         */
-        graphql_storefront_api_enabled?: boolean;
-        /**
-         * Indicates whether the store is tracking the values of the cookie and privacy consent settings that the shopper consented to and configured.
-         */
-        shopper_consent_tracking_enabled?: boolean;
-        /**
-         * Indicates whether the storeʼs plan provides the possibility of using more than one storefront or sales channel. Internally, this value indicates whether the store has the MSF feature flag enabled.
+         * Indicates whether MSF feature flag is enabled on a store.
+         *
+         * Returns `true` when MSF feature flag is enabled.
+         * Returns `false` when MSF feature flag is disabled.
          */
         multi_storefront_enabled?: boolean;
-        storefront_limits?: {
-            /**
-             * Describes the number of storefronts active on the store. If `multi_storefront_enabled` is `false`, this value is `1`.
-             */
-            active?: number;
-            /**
-             * Describes the total number of storefronts associated with the store, including both active and inactive storefronts. The default varies based on store plan.
-             */
-            total_including_inactive?: number;
-        };
+        shopper_consent_tracking_enabled?: boolean;
+        wishlists_enabled?: boolean;
     };
+    account_uuid?: string;
+    default_channel_id?: number;
+    default_site_id?: number;
+    plan_is_trial?: boolean;
+    store_id?: number;
+    status?: string;
 };
 
 /**
@@ -627,7 +171,7 @@ export type StoreInformation = {
  */
 export type Timezone = {
     /**
-     * A string identifying the time zone, in the format `Continent/City`.
+     * a string identifying the time zone, in the format: /.
      */
     name?: string;
     /**
@@ -650,15 +194,15 @@ export type Timezone = {
  */
 export type DateFormat = {
     /**
-     * A string that defines dates’ display format, in the pattern `M jS Y`.
+     * string that defines dates’ display format, in the pattern: M jS Y
      */
     display?: string;
     /**
-     * A string that defines the CSV export format for orders, customers, and products, in the pattern `M jS Y`.
+     * string that defines the CSV export format for orders, customers, and products, in the pattern: M jS Y
      */
     export?: string;
     /**
-     * A string that defines dates’ extended-display format, in the pattern `M jS Y @ g:i A`.
+     * string that defines dates’ extended-display format, in the pattern: M jS Y @ g:i A.
      */
     extended_display?: string;
 };
@@ -672,431 +216,34 @@ export type TimeStampFull = {
     time?: number;
 };
 
-/**
- * Allows app partners to write custom data to various resources in the API.
- *
- */
-export type MetafieldWritable = MetafieldBaseWritable & {
-    /**
-     * The unique identifier for the metafield.
-     */
-    id?: string;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created?: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified?: string;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBaseWritable = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     *
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'store';
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
-};
-
-/**
- * Response meta
- *
- * Response metadata.
- */
-export type MetaCollectionOpenWritable = {
-    [key: string]: unknown;
-};
-
-export type ContentType = string;
-
-/**
- * Specifies the page number in a limited (paginated) list of products.
- *
- */
-export type PageParam = number;
-
-/**
- * The ID of the `Metafield`.
- *
- */
-export type MetafieldIdParam = number;
-
-/**
- * Filter based on a metafieldʼs key.
- */
-export type MetafieldKeyParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
- */
-export type MetafieldKeyInParam = Array<string>;
-
-/**
- * Filter based on a metafieldʼs namespaces.
- */
-export type MetafieldNamespaceParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter
- */
-export type MetafieldNamespaceInParam = Array<string>;
-
-/**
- * Controls the number of items per page in a limited (paginated) list of products.
- *
- */
-export type LimitParam = number;
-
-/**
- * Sort direction. Acceptable values are: `asc`, `desc`.
- *
- */
-export type DirectionParam = 'asc' | 'desc';
-
-/**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
- */
-export type Accept = string;
-
-export type GetStoreInformationData = {
+export type GetStoreData = {
     body?: never;
-    headers?: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept?: string;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/store';
 };
 
-export type GetStoreInformationResponses = {
-    200: StoreInformation;
+export type GetStoreResponses = {
+    200: unknown;
 };
 
-export type GetStoreInformationResponse = GetStoreInformationResponses[keyof GetStoreInformationResponses];
-
-export type DeleteStoreMetafieldsData = {
-    /**
-     * Metafields ID list.
-     */
-    body?: Array<number>;
-    path?: never;
-    query?: never;
-    url: '/store/metafields';
-};
-
-export type DeleteStoreMetafieldsResponses = {
-    /**
-     * Response object for metafields deletion with success.
-     *
-     */
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-
-export type DeleteStoreMetafieldsResponse = DeleteStoreMetafieldsResponses[keyof DeleteStoreMetafieldsResponses];
-
-export type GetStoreMetafieldsData = {
+export type GetTimeData = {
     body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         *
-         */
-        page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products.
-         *
-         */
-        limit?: number;
-        /**
-         * Filter based on a metafieldʼs key.
-         */
-        key?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
-         */
-        'key:in'?: Array<string>;
-        /**
-         * Filter based on a metafieldʼs namespaces.
-         */
-        namespace?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter
-         */
-        'namespace:in'?: Array<string>;
-        /**
-         * Sort direction. Acceptable values are: `asc`, `desc`.
-         *
-         */
-        direction?: 'asc' | 'desc';
-    };
-    url: '/store/metafields';
-};
-
-export type GetStoreMetafieldsResponses = {
-    /**
-     * List of `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponseBatch;
-};
-
-export type GetStoreMetafieldsResponse = GetStoreMetafieldsResponses[keyof GetStoreMetafieldsResponses];
-
-export type CreateStoresMetafieldsData = {
-    /**
-     * A `metafield` object.
-     */
-    body: Array<MetafieldBasePostPut>;
-    path?: never;
-    query?: never;
-    url: '/store/metafields';
-};
-
-export type CreateStoresMetafieldsErrors = {
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type CreateStoresMetafieldsError = CreateStoresMetafieldsErrors[keyof CreateStoresMetafieldsErrors];
-
-export type CreateStoresMetafieldsResponses = {
-    /**
-     * List of created `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponseBatchPostPut;
-};
-
-export type CreateStoresMetafieldsResponse = CreateStoresMetafieldsResponses[keyof CreateStoresMetafieldsResponses];
-
-export type UpdateStoreMetafieldsData = {
-    body?: Array<MetafieldBasePostPut & {
-        /**
-         * The ID of metafield to update.
-         *
-         */
-        id: number;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/store/metafields';
-};
-
-export type UpdateStoreMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type UpdateStoreMetafieldsError = UpdateStoreMetafieldsErrors[keyof UpdateStoreMetafieldsErrors];
-
-export type UpdateStoreMetafieldsResponses = {
-    /**
-     * Response payload for the BigCommerce API.
-     */
-    200: MetaFieldCollectionResponseBatchPostPut;
-};
-
-export type UpdateStoreMetafieldsResponse = UpdateStoreMetafieldsResponses[keyof UpdateStoreMetafieldsResponses];
-
-export type DeleteStoreMetafieldData = {
-    body?: never;
-    headers?: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept?: string;
-    };
-    path: {
-        /**
-         * The ID of the `Metafield`.
-         *
-         */
-        metafieldId: number;
-    };
-    query?: never;
-    url: '/store/metafields/{metafieldId}';
-};
-
-export type DeleteStoreMetafieldErrors = {
-    /**
-     * Not found (A metafield was not found with this query).
-     *
-     */
-    404: NotFound;
-};
-
-export type DeleteStoreMetafieldError = DeleteStoreMetafieldErrors[keyof DeleteStoreMetafieldErrors];
-
-export type DeleteStoreMetafieldResponses = {
-    /**
-     * An empty response.
-     *
-     */
-    204: void;
-};
-
-export type DeleteStoreMetafieldResponse = DeleteStoreMetafieldResponses[keyof DeleteStoreMetafieldResponses];
-
-export type GetStoreMetafieldData = {
-    body?: never;
-    headers?: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept?: string;
-    };
-    path: {
-        /**
-         * The ID of the `Metafield`.
-         *
-         */
-        metafieldId: number;
-    };
-    query?: never;
-    url: '/store/metafields/{metafieldId}';
-};
-
-export type GetStoreMetafieldErrors = {
-    /**
-     * Not found (A metafield was not found with this query).
-     *
-     */
-    404: NotFound;
-};
-
-export type GetStoreMetafieldError = GetStoreMetafieldErrors[keyof GetStoreMetafieldErrors];
-
-export type GetStoreMetafieldResponses = {
-    /**
-     * A `Metafield` object.
-     *
-     */
-    200: MetafieldResponse;
-};
-
-export type GetStoreMetafieldResponse = GetStoreMetafieldResponses[keyof GetStoreMetafieldResponses];
-
-export type UpdateStoreMetafieldData = {
-    /**
-     * A `Metafield` object.
-     *
-     */
-    body?: MetafieldBasePostPut;
-    headers?: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept?: string;
-        'Content-Type'?: string;
-    };
-    path: {
-        /**
-         * The ID of the `Metafield`.
-         *
-         */
-        metafieldId: number;
-    };
-    query?: never;
-    url: '/store/metafields/{metafieldId}';
-};
-
-export type UpdateStoreMetafieldErrors = {
-    /**
-     * The resource was not found.
-     *
-     */
-    404: NotFound;
-};
-
-export type UpdateStoreMetafieldError = UpdateStoreMetafieldErrors[keyof UpdateStoreMetafieldErrors];
-
-export type UpdateStoreMetafieldResponses = {
-    /**
-     * A metafield and metadata.
-     *
-     */
-    200: MetaFieldCollectionResponse;
-};
-
-export type UpdateStoreMetafieldResponse = UpdateStoreMetafieldResponses[keyof UpdateStoreMetafieldResponses];
-
-export type GetSystemTimestampData = {
-    body?: never;
-    headers?: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept?: string;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/time';
 };
 
-export type GetSystemTimestampResponses = {
+export type GetTimeResponses = {
     200: TimeStampFull;
 };
 
-export type GetSystemTimestampResponse = GetSystemTimestampResponses[keyof GetSystemTimestampResponses];
+export type GetTimeResponse = GetTimeResponses[keyof GetTimeResponses];

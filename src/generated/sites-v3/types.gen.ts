@@ -90,8 +90,6 @@ export type Site = {
     updated_at?: string;
     /**
      * Indicates whether a site is using a private/dedicated SSL or a shared SSL.
-     *
-     * @deprecated
      */
     ssl_status?: 'dedicated' | 'shared';
     /**
@@ -449,23 +447,6 @@ export type MetaOpen = {
     [key: string]: unknown;
 };
 
-export type Meta = {
-    pagination?: {
-        /**
-         * The number of items skipped before starting the set of items returned.
-         */
-        offset?: number;
-        /**
-         * The maximum number of items returned per page.
-         */
-        limit?: number;
-        /**
-         * The total number of items available across all pages.
-         */
-        total_items?: number;
-    };
-};
-
 /**
  * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
  */
@@ -497,13 +478,13 @@ export type GetSitesData = {
          */
         limit?: number;
         /**
-         * A comma-separated list that returns sites by channel ID.
+         * Filters returned sites by channel ID.
          */
-        'channel_id:in'?: Array<number>;
+        'channel_id:in'?: number;
         /**
-         * A comma-separated list that returns sites by their URL type, specified in the `data.urls` array.
+         * Filters sites returned in the `data.urls` array by their URL type.
          */
-        'url_type:in'?: Array<string>;
+        'url_type:in'?: string;
     };
     url: '/sites';
 };
@@ -511,13 +492,13 @@ export type GetSitesData = {
 export type GetSitesResponses = {
     200: {
         data?: Array<Site>;
-        meta?: Meta;
+        meta?: MetaCollection;
     };
 };
 
 export type GetSitesResponse = GetSitesResponses[keyof GetSitesResponses];
 
-export type CreateSiteData = {
+export type PostSiteData = {
     body: PostSite;
     headers: {
         /**
@@ -534,7 +515,7 @@ export type CreateSiteData = {
     url: '/sites';
 };
 
-export type CreateSiteErrors = {
+export type PostSiteErrors = {
     /**
      * Malformed request syntax. Typically need to fix the JSON
      * request body to resend successfully.
@@ -552,16 +533,16 @@ export type CreateSiteErrors = {
     504: ErrorFull;
 };
 
-export type CreateSiteError = CreateSiteErrors[keyof CreateSiteErrors];
+export type PostSiteError = PostSiteErrors[keyof PostSiteErrors];
 
-export type CreateSiteResponses = {
+export type PostSiteResponses = {
     201: {
         data?: Site;
-        meta?: MetaOpen;
+        meta?: MetaCollection;
     };
 };
 
-export type CreateSiteResponse = CreateSiteResponses[keyof CreateSiteResponses];
+export type PostSiteResponse = PostSiteResponses[keyof PostSiteResponses];
 
 export type DeleteSiteData = {
     body?: never;
@@ -579,17 +560,7 @@ export type DeleteSiteData = {
 };
 
 export type DeleteSiteResponses = {
-    /**
-     * No Content.
-     */
-    204: {
-        data?: {
-            [key: string]: unknown;
-        };
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    204: void;
 };
 
 export type DeleteSiteResponse = DeleteSiteResponses[keyof DeleteSiteResponses];
@@ -612,13 +583,13 @@ export type GetSiteData = {
 export type GetSiteResponses = {
     200: {
         data?: Site;
-        meta?: MetaOpen;
+        meta?: MetaCollection;
     };
 };
 
 export type GetSiteResponse = GetSiteResponses[keyof GetSiteResponses];
 
-export type UpdateSiteData = {
+export type PutSiteData = {
     body: PutSite;
     headers: {
         /**
@@ -637,16 +608,16 @@ export type UpdateSiteData = {
     url: '/sites/{site_id}';
 };
 
-export type UpdateSiteResponses = {
+export type PutSiteResponses = {
     200: {
         data?: Site;
-        meta?: MetaOpen;
+        meta?: MetaCollection;
     };
 };
 
-export type UpdateSiteResponse = UpdateSiteResponses[keyof UpdateSiteResponses];
+export type PutSiteResponse = PutSiteResponses[keyof PutSiteResponses];
 
-export type GetSiteRoutesData = {
+export type IndexSiteRoutesData = {
     body?: never;
     headers: {
         /**
@@ -674,16 +645,16 @@ export type GetSiteRoutesData = {
     url: '/sites/{site_id}/routes';
 };
 
-export type GetSiteRoutesResponses = {
+export type IndexSiteRoutesResponses = {
     200: {
         data?: Array<SiteRouteFull>;
         meta?: MetaCollection;
     };
 };
 
-export type GetSiteRoutesResponse = GetSiteRoutesResponses[keyof GetSiteRoutesResponses];
+export type IndexSiteRoutesResponse = IndexSiteRoutesResponses[keyof IndexSiteRoutesResponses];
 
-export type CreateSiteRouteData = {
+export type PostSiteRouteData = {
     body: SiteRouteBase;
     headers: {
         /**
@@ -702,7 +673,7 @@ export type CreateSiteRouteData = {
     url: '/sites/{site_id}/routes';
 };
 
-export type CreateSiteRouteErrors = {
+export type PostSiteRouteErrors = {
     422: {
         /**
          * General error message
@@ -721,19 +692,19 @@ export type CreateSiteRouteErrors = {
     502: ErrorFull;
 };
 
-export type CreateSiteRouteError = CreateSiteRouteErrors[keyof CreateSiteRouteErrors];
+export type PostSiteRouteError = PostSiteRouteErrors[keyof PostSiteRouteErrors];
 
-export type CreateSiteRouteResponses = {
+export type PostSiteRouteResponses = {
     201: {
         data?: SiteRouteFull;
         meta?: MetaOpen;
     };
 };
 
-export type CreateSiteRouteResponse = CreateSiteRouteResponses[keyof CreateSiteRouteResponses];
+export type PostSiteRouteResponse = PostSiteRouteResponses[keyof PostSiteRouteResponses];
 
-export type UpdateSiteRoutesData = {
-    body?: Array<SiteRouteFull>;
+export type PutSitesBySiteIdRoutesData = {
+    body?: SiteRouteFull;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -751,7 +722,7 @@ export type UpdateSiteRoutesData = {
     url: '/sites/{site_id}/routes';
 };
 
-export type UpdateSiteRoutesErrors = {
+export type PutSitesBySiteIdRoutesErrors = {
     422: {
         /**
          * The HTTP status code.
@@ -764,18 +735,18 @@ export type UpdateSiteRoutesErrors = {
     };
 };
 
-export type UpdateSiteRoutesError = UpdateSiteRoutesErrors[keyof UpdateSiteRoutesErrors];
+export type PutSitesBySiteIdRoutesError = PutSitesBySiteIdRoutesErrors[keyof PutSitesBySiteIdRoutesErrors];
 
-export type UpdateSiteRoutesResponses = {
+export type PutSitesBySiteIdRoutesResponses = {
     200: {
         data?: Array<SiteRouteFull>;
         meta?: MetaCollection;
     };
 };
 
-export type UpdateSiteRoutesResponse = UpdateSiteRoutesResponses[keyof UpdateSiteRoutesResponses];
+export type PutSitesBySiteIdRoutesResponse = PutSitesBySiteIdRoutesResponses[keyof PutSitesBySiteIdRoutesResponses];
 
-export type DeleteSiteRouteData = {
+export type DeleteRouteData = {
     body?: never;
     headers: {
         /**
@@ -791,11 +762,11 @@ export type DeleteSiteRouteData = {
     url: '/sites/{site_id}/routes/{route_id}';
 };
 
-export type DeleteSiteRouteResponses = {
+export type DeleteRouteResponses = {
     204: void;
 };
 
-export type DeleteSiteRouteResponse = DeleteSiteRouteResponses[keyof DeleteSiteRouteResponses];
+export type DeleteRouteResponse = DeleteRouteResponses[keyof DeleteRouteResponses];
 
 export type GetSiteRouteData = {
     body?: never;
@@ -822,7 +793,7 @@ export type GetSiteRouteResponses = {
 
 export type GetSiteRouteResponse = GetSiteRouteResponses[keyof GetSiteRouteResponses];
 
-export type UpdateSiteRouteData = {
+export type PutSiteRouteData = {
     body: SiteRoutesRouteBase;
     headers: {
         /**
@@ -842,16 +813,16 @@ export type UpdateSiteRouteData = {
     url: '/sites/{site_id}/routes/{route_id}';
 };
 
-export type UpdateSiteRouteResponses = {
+export type PutSiteRouteResponses = {
     201: {
         data?: SiteRouteFull;
         meta?: MetaOpen;
     };
 };
 
-export type UpdateSiteRouteResponse = UpdateSiteRouteResponses[keyof UpdateSiteRouteResponses];
+export type PutSiteRouteResponse = PutSiteRouteResponses[keyof PutSiteRouteResponses];
 
-export type GetSiteCertificateData = {
+export type GetSitesIdCertificateData = {
     body?: never;
     headers: {
         /**
@@ -866,16 +837,16 @@ export type GetSiteCertificateData = {
     url: '/sites/{site_id}/certificate';
 };
 
-export type GetSiteCertificateResponses = {
+export type GetSitesIdCertificateResponses = {
     /**
      * OK
      */
     200: CertificateResponse;
 };
 
-export type GetSiteCertificateResponse = GetSiteCertificateResponses[keyof GetSiteCertificateResponses];
+export type GetSitesIdCertificateResponse = GetSitesIdCertificateResponses[keyof GetSitesIdCertificateResponses];
 
-export type UpsertSiteCertificateData = {
+export type PutSiteIdCertificateData = {
     body?: InstallCertificateData;
     headers: {
         /**
@@ -894,14 +865,14 @@ export type UpsertSiteCertificateData = {
     url: '/sites/{site_id}/certificate';
 };
 
-export type UpsertSiteCertificateResponses = {
+export type PutSiteIdCertificateResponses = {
     /**
      * OK
      */
     200: EmptyResponse;
 };
 
-export type UpsertSiteCertificateResponse = UpsertSiteCertificateResponses[keyof UpsertSiteCertificateResponses];
+export type PutSiteIdCertificateResponse = PutSiteIdCertificateResponses[keyof PutSiteIdCertificateResponses];
 
 export type GetSitesCertificatesData = {
     body?: never;
@@ -914,9 +885,9 @@ export type GetSitesCertificatesData = {
     path?: never;
     query?: {
         /**
-         * A comma-separated list that filters certificates by one or more URLs.
+         * Query certificates by one or more URLs
          */
-        'urls:in'?: Array<string>;
+        'urls:in'?: string;
     };
     url: '/sites/certificates';
 };

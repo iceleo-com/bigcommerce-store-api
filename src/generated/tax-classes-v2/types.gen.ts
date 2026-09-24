@@ -36,7 +36,7 @@ export type Accept = string;
  */
 export type ContentType = string;
 
-export type GetTaxClassesData = {
+export type GetAllTaxClassesData = {
     body?: never;
     headers: {
         /**
@@ -58,13 +58,13 @@ export type GetTaxClassesData = {
     url: '/tax_classes';
 };
 
-export type GetTaxClassesResponses = {
+export type GetAllTaxClassesResponses = {
     200: Array<TaxClassFull>;
 };
 
-export type GetTaxClassesResponse = GetTaxClassesResponses[keyof GetTaxClassesResponses];
+export type GetAllTaxClassesResponse = GetAllTaxClassesResponses[keyof GetAllTaxClassesResponses];
 
-export type GetTaxClassData = {
+export type GetATaxClassData = {
     body?: never;
     headers: {
         /**
@@ -82,8 +82,8 @@ export type GetTaxClassData = {
     url: '/tax_classes/{id}';
 };
 
-export type GetTaxClassResponses = {
+export type GetATaxClassResponses = {
     200: TaxClassFull;
 };
 
-export type GetTaxClassResponse = GetTaxClassResponses[keyof GetTaxClassResponses];
+export type GetATaxClassResponse = GetATaxClassResponses[keyof GetATaxClassResponses];

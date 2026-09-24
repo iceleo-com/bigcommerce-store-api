@@ -32,9 +32,9 @@ export type RequestDocument = {
     };
     items: Array<RequestItem & {
         type: ItemType;
-        wrapping?: RequestItem & ({
+        wrapping?: (RequestItem & {
             type: WrappingType;
-        } | null);
+        }) | null;
     }>;
 };
 export type RequestQuote = {
@@ -44,7 +44,6 @@ export type RequestQuote = {
         customer_id: string;
         customer_group_id: string;
         taxability_code?: string;
-        tax_properties?: Array<RequestItemTaxProperty>;
     };
     transaction_date: string;
     documents: Array<RequestDocument>;
@@ -78,9 +77,9 @@ export type ResponseDocument = {
     external_id?: string;
     items: Array<ResponseItem & {
         type: ItemType;
-        wrapping?: ResponseItem & ({
+        wrapping?: (ResponseItem & {
             type: WrappingType;
-        } | null);
+        }) | null;
     }>;
     shipping: ResponseItem & {
         type: ShippingType;
@@ -107,35 +106,33 @@ export type SalesTax = {
     tax_class?: TaxClass;
     id?: string;
 };
-export type ItemType = 'item' | 'refund' | 'fee';
+export type ItemType = 'item' | 'refund';
 export type ShippingType = 'shipping';
 export type HandlingType = 'handling';
 export type WrappingType = 'wrapping';
-export type StoreHashHeader = string;
-export type IdQueryVoid = string;
-export type IdQueryAdjusted = string;
-export type EstimateTaxesData = {
+export type HeaderStorehash = string;
+export type EstimateData = {
     body: RequestQuote;
     headers: {
-        'X-Bc-Store-Hash': string;
+        'X-BC-Store-Hash': string;
     };
     path?: never;
     query?: never;
     url: '/estimate';
 };
-export type EstimateTaxesErrors = {
+export type EstimateErrors = {
     400: unknown;
     401: unknown;
     500: unknown;
 };
-export type EstimateTaxesResponses = {
+export type EstimateResponses = {
     200: ResponseQuote;
 };
-export type EstimateTaxesResponse = EstimateTaxesResponses[keyof EstimateTaxesResponses];
-export type VoidTaxQuoteData = {
+export type EstimateResponse = EstimateResponses[keyof EstimateResponses];
+export type VoidData = {
     body?: never;
     headers: {
-        'X-Bc-Store-Hash': string;
+        'X-BC-Store-Hash': string;
     };
     path?: never;
     query: {
@@ -143,36 +140,36 @@ export type VoidTaxQuoteData = {
     };
     url: '/void';
 };
-export type VoidTaxQuoteErrors = {
+export type VoidErrors = {
     400: unknown;
     401: unknown;
     500: unknown;
 };
-export type VoidTaxQuoteResponses = {
+export type VoidResponses = {
     200: unknown;
 };
-export type CommitTaxQuoteData = {
+export type CommitData = {
     body: RequestQuote;
     headers: {
-        'X-Bc-Store-Hash': string;
+        'X-BC-Store-Hash': string;
     };
     path?: never;
     query?: never;
     url: '/commit';
 };
-export type CommitTaxQuoteErrors = {
+export type CommitErrors = {
     400: unknown;
     401: unknown;
     500: unknown;
 };
-export type CommitTaxQuoteResponses = {
+export type CommitResponses = {
     200: ResponseQuote;
 };
-export type CommitTaxQuoteResponse = CommitTaxQuoteResponses[keyof CommitTaxQuoteResponses];
-export type AdjustTaxQuoteData = {
+export type CommitResponse = CommitResponses[keyof CommitResponses];
+export type AdjustData = {
     body?: RequestAdjust;
     headers: {
-        'X-Bc-Store-Hash': string;
+        'X-BC-Store-Hash': string;
     };
     path?: never;
     query: {
@@ -180,13 +177,13 @@ export type AdjustTaxQuoteData = {
     };
     url: '/adjust';
 };
-export type AdjustTaxQuoteErrors = {
+export type AdjustErrors = {
     400: unknown;
     401: unknown;
     500: ResponseQuote;
 };
-export type AdjustTaxQuoteError = AdjustTaxQuoteErrors[keyof AdjustTaxQuoteErrors];
-export type AdjustTaxQuoteResponses = {
-    200: ResponseQuote;
+export type AdjustError = AdjustErrors[keyof AdjustErrors];
+export type AdjustResponses = {
+    200: RequestAdjust;
 };
-export type AdjustTaxQuoteResponse = AdjustTaxQuoteResponses[keyof AdjustTaxQuoteResponses];
+export type AdjustResponse = AdjustResponses[keyof AdjustResponses];

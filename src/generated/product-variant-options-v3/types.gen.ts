@@ -313,28 +313,6 @@ export type ValueIdParam = number;
 export type OptionIdParam = number;
 
 /**
- * Specifies the page number in a limited (paginated) list of products.
- *
- */
-export type PageParam = number;
-
-/**
- * Controls the number of items per page in a limited (paginated) list of products.
- *
- */
-export type LimitParam = number;
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParam = Array<string>;
-
-/**
- * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
- */
-export type ExcludeFieldsParam = Array<string>;
-
-/**
  * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
  */
 export type Accept = string;
@@ -344,7 +322,7 @@ export type Accept = string;
  */
 export type ContentType = string;
 
-export type GetProductVariantOptionsData = {
+export type GetOptionsData = {
     body?: never;
     headers: {
         /**
@@ -362,27 +340,25 @@ export type GetProductVariantOptionsData = {
     query?: {
         /**
          * Specifies the page number in a limited (paginated) list of products.
-         *
          */
         page?: number;
         /**
          * Controls the number of items per page in a limited (paginated) list of products.
-         *
          */
         limit?: number;
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<string>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/options';
 };
 
-export type GetProductVariantOptionsErrors = {
+export type GetOptionsErrors = {
     /**
      * Not Found
      *
@@ -403,9 +379,9 @@ export type GetProductVariantOptionsErrors = {
     };
 };
 
-export type GetProductVariantOptionsError = GetProductVariantOptionsErrors[keyof GetProductVariantOptionsErrors];
+export type GetOptionsError = GetOptionsErrors[keyof GetOptionsErrors];
 
-export type GetProductVariantOptionsResponses = {
+export type GetOptionsResponses = {
     /**
      * Option Collection Response
      *
@@ -417,9 +393,9 @@ export type GetProductVariantOptionsResponses = {
     };
 };
 
-export type GetProductVariantOptionsResponse = GetProductVariantOptionsResponses[keyof GetProductVariantOptionsResponses];
+export type GetOptionsResponse = GetOptionsResponses[keyof GetOptionsResponses];
 
-export type CreateProductVariantOptionData = {
+export type CreateOptionData = {
     /**
      * Option Base
      *
@@ -633,7 +609,7 @@ export type CreateProductVariantOptionData = {
     url: '/catalog/products/{product_id}/options';
 };
 
-export type CreateProductVariantOptionErrors = {
+export type CreateOptionErrors = {
     /**
      * Error Response
      *
@@ -688,9 +664,9 @@ export type CreateProductVariantOptionErrors = {
     };
 };
 
-export type CreateProductVariantOptionError = CreateProductVariantOptionErrors[keyof CreateProductVariantOptionErrors];
+export type CreateOptionError = CreateOptionErrors[keyof CreateOptionErrors];
 
-export type CreateProductVariantOptionResponses = {
+export type CreateOptionResponses = {
     /**
      * Option Response
      */
@@ -907,9 +883,9 @@ export type CreateProductVariantOptionResponses = {
     };
 };
 
-export type CreateProductVariantOptionResponse = CreateProductVariantOptionResponses[keyof CreateProductVariantOptionResponses];
+export type CreateOptionResponse = CreateOptionResponses[keyof CreateOptionResponses];
 
-export type DeleteProductVariantOptionData = {
+export type DeleteOptionByIdData = {
     body?: never;
     headers: {
         /**
@@ -933,13 +909,13 @@ export type DeleteProductVariantOptionData = {
     url: '/catalog/products/{product_id}/options/{option_id}';
 };
 
-export type DeleteProductVariantOptionResponses = {
+export type DeleteOptionByIdResponses = {
     204: void;
 };
 
-export type DeleteProductVariantOptionResponse = DeleteProductVariantOptionResponses[keyof DeleteProductVariantOptionResponses];
+export type DeleteOptionByIdResponse = DeleteOptionByIdResponses[keyof DeleteOptionByIdResponses];
 
-export type GetProductVariantOptionData = {
+export type GetOptionByIdData = {
     body?: never;
     headers: {
         /**
@@ -963,16 +939,16 @@ export type GetProductVariantOptionData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<string>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/options/{option_id}';
 };
 
-export type GetProductVariantOptionErrors = {
+export type GetOptionByIdErrors = {
     /**
      * Not Found
      *
@@ -993,9 +969,9 @@ export type GetProductVariantOptionErrors = {
     };
 };
 
-export type GetProductVariantOptionError = GetProductVariantOptionErrors[keyof GetProductVariantOptionErrors];
+export type GetOptionByIdError = GetOptionByIdErrors[keyof GetOptionByIdErrors];
 
-export type GetProductVariantOptionResponses = {
+export type GetOptionByIdResponses = {
     /**
      * Option Response
      */
@@ -1005,9 +981,9 @@ export type GetProductVariantOptionResponses = {
     };
 };
 
-export type GetProductVariantOptionResponse = GetProductVariantOptionResponses[keyof GetProductVariantOptionResponses];
+export type GetOptionByIdResponse = GetOptionByIdResponses[keyof GetOptionByIdResponses];
 
-export type UpdateProductVariantOptionData = {
+export type UpdateOptionData = {
     /**
      * Option Base
      *
@@ -1231,7 +1207,7 @@ export type UpdateProductVariantOptionData = {
     url: '/catalog/products/{product_id}/options/{option_id}';
 };
 
-export type UpdateProductVariantOptionErrors = {
+export type UpdateOptionErrors = {
     /**
      * Error Response
      *
@@ -1286,9 +1262,9 @@ export type UpdateProductVariantOptionErrors = {
     };
 };
 
-export type UpdateProductVariantOptionError = UpdateProductVariantOptionErrors[keyof UpdateProductVariantOptionErrors];
+export type UpdateOptionError = UpdateOptionErrors[keyof UpdateOptionErrors];
 
-export type UpdateProductVariantOptionResponses = {
+export type UpdateOptionResponses = {
     /**
      * Option Response
      */
@@ -1498,9 +1474,9 @@ export type UpdateProductVariantOptionResponses = {
     };
 };
 
-export type UpdateProductVariantOptionResponse = UpdateProductVariantOptionResponses[keyof UpdateProductVariantOptionResponses];
+export type UpdateOptionResponse = UpdateOptionResponses[keyof UpdateOptionResponses];
 
-export type GetProductVariantOptionValuesData = {
+export type GetOptionValuesData = {
     body?: never;
     headers: {
         /**
@@ -1522,28 +1498,26 @@ export type GetProductVariantOptionValuesData = {
     };
     query?: {
         /**
+         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
+         */
+        include_fields?: string;
+        /**
+         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
+         */
+        exclude_fields?: string;
+        /**
          * Specifies the page number in a limited (paginated) list of products.
-         *
          */
         page?: number;
         /**
          * Controls the number of items per page in a limited (paginated) list of products.
-         *
          */
         limit?: number;
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<string>;
-        /**
-         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
-         */
-        exclude_fields?: Array<string>;
     };
     url: '/catalog/products/{product_id}/options/{option_id}/values';
 };
 
-export type GetProductVariantOptionValuesResponses = {
+export type GetOptionValuesResponses = {
     /**
      * Option Value Collection Response
      *
@@ -1587,9 +1561,9 @@ export type GetProductVariantOptionValuesResponses = {
     };
 };
 
-export type GetProductVariantOptionValuesResponse = GetProductVariantOptionValuesResponses[keyof GetProductVariantOptionValuesResponses];
+export type GetOptionValuesResponse = GetOptionValuesResponses[keyof GetOptionValuesResponses];
 
-export type CreateProductVariantOptionValueData = {
+export type CreateOptionValueData = {
     /**
      * Option Value Base
      *
@@ -1645,7 +1619,7 @@ export type CreateProductVariantOptionValueData = {
     url: '/catalog/products/{product_id}/options/{option_id}/values';
 };
 
-export type CreateProductVariantOptionValueErrors = {
+export type CreateOptionValueErrors = {
     /**
      * Error Response
      *
@@ -1674,9 +1648,9 @@ export type CreateProductVariantOptionValueErrors = {
     };
 };
 
-export type CreateProductVariantOptionValueError = CreateProductVariantOptionValueErrors[keyof CreateProductVariantOptionValueErrors];
+export type CreateOptionValueError = CreateOptionValueErrors[keyof CreateOptionValueErrors];
 
-export type CreateProductVariantOptionValueResponses = {
+export type CreateOptionValueResponses = {
     /**
      * Option Value Response
      */
@@ -1718,9 +1692,9 @@ export type CreateProductVariantOptionValueResponses = {
     };
 };
 
-export type CreateProductVariantOptionValueResponse = CreateProductVariantOptionValueResponses[keyof CreateProductVariantOptionValueResponses];
+export type CreateOptionValueResponse = CreateOptionValueResponses[keyof CreateOptionValueResponses];
 
-export type DeleteProductVariantOptionValueData = {
+export type DeleteOptionValueByIdData = {
     body?: never;
     headers: {
         /**
@@ -1749,13 +1723,13 @@ export type DeleteProductVariantOptionValueData = {
     url: '/catalog/products/{product_id}/options/{option_id}/values/{value_id}';
 };
 
-export type DeleteProductVariantOptionValueResponses = {
+export type DeleteOptionValueByIdResponses = {
     204: void;
 };
 
-export type DeleteProductVariantOptionValueResponse = DeleteProductVariantOptionValueResponses[keyof DeleteProductVariantOptionValueResponses];
+export type DeleteOptionValueByIdResponse = DeleteOptionValueByIdResponses[keyof DeleteOptionValueByIdResponses];
 
-export type GetProductVariantOptionValueData = {
+export type GetOptionValueByIdData = {
     body?: never;
     headers: {
         /**
@@ -1784,16 +1758,16 @@ export type GetProductVariantOptionValueData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<string>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/options/{option_id}/values/{value_id}';
 };
 
-export type GetProductVariantOptionValueErrors = {
+export type GetOptionValueByIdErrors = {
     /**
      * Not Found
      *
@@ -1814,9 +1788,9 @@ export type GetProductVariantOptionValueErrors = {
     };
 };
 
-export type GetProductVariantOptionValueError = GetProductVariantOptionValueErrors[keyof GetProductVariantOptionValueErrors];
+export type GetOptionValueByIdError = GetOptionValueByIdErrors[keyof GetOptionValueByIdErrors];
 
-export type GetProductVariantOptionValueResponses = {
+export type GetOptionValueByIdResponses = {
     /**
      * Option Value Response
      */
@@ -1858,9 +1832,9 @@ export type GetProductVariantOptionValueResponses = {
     };
 };
 
-export type GetProductVariantOptionValueResponse = GetProductVariantOptionValueResponses[keyof GetProductVariantOptionValueResponses];
+export type GetOptionValueByIdResponse = GetOptionValueByIdResponses[keyof GetOptionValueByIdResponses];
 
-export type UpdateProductVariantOptionValueData = {
+export type UpdateOptionValueData = {
     /**
      * Option Value Put
      *
@@ -1927,7 +1901,7 @@ export type UpdateProductVariantOptionValueData = {
     url: '/catalog/products/{product_id}/options/{option_id}/values/{value_id}';
 };
 
-export type UpdateProductVariantOptionValueErrors = {
+export type UpdateOptionValueErrors = {
     /**
      * No option(s) were found with this query.
      */
@@ -1960,9 +1934,9 @@ export type UpdateProductVariantOptionValueErrors = {
     };
 };
 
-export type UpdateProductVariantOptionValueError = UpdateProductVariantOptionValueErrors[keyof UpdateProductVariantOptionValueErrors];
+export type UpdateOptionValueError = UpdateOptionValueErrors[keyof UpdateOptionValueErrors];
 
-export type UpdateProductVariantOptionValueResponses = {
+export type UpdateOptionValueResponses = {
     /**
      * Option Value Response
      */
@@ -2004,4 +1978,4 @@ export type UpdateProductVariantOptionValueResponses = {
     };
 };
 
-export type UpdateProductVariantOptionValueResponse = UpdateProductVariantOptionValueResponses[keyof UpdateProductVariantOptionValueResponses];
+export type UpdateOptionValueResponse = UpdateOptionValueResponses[keyof UpdateOptionValueResponses];

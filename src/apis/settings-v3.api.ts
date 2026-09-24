@@ -15,13 +15,20 @@ export class SettingsV3Api {
      *
      * Returns a list of web analytics providers.
      */
-    getAnalyticsProviders(
-        query?: SettingsV3ApiSpecs.GetAnalyticsProvidersData['query'],
+    getSettingsAnalytics(
+        query?: SettingsV3ApiSpecs.GetSettingsAnalyticsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetAnalyticsProvidersResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsAnalyticsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/analytics',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getSettingsAnalytics` instead.
+     */
+    getAnalyticsProviders(...args: Parameters<SettingsV3Api['getSettingsAnalytics']>) {
+        return this.getSettingsAnalytics(...args);
     }
 
     /**
@@ -29,14 +36,21 @@ export class SettingsV3Api {
      *
      * Returns a single web analytics provider data for a default channel.
      */
-    getAnalyticsProvider(
-        id: SettingsV3ApiSpecs.GetAnalyticsProviderData['path']['id'],
-        query?: SettingsV3ApiSpecs.GetAnalyticsProviderData['query'],
+    getSettingsAnalyticsById(
+        id: SettingsV3ApiSpecs.GetSettingsAnalyticsByIdData['path']['id'],
+        query?: SettingsV3ApiSpecs.GetSettingsAnalyticsByIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetAnalyticsProviderResponses[200]>>,(RequestErrorResponse<400, Required<SettingsV3ApiSpecs.GetAnalyticsProviderErrors[400]>> | RequestErrorResponse<404, Required<SettingsV3ApiSpecs.GetAnalyticsProviderErrors[404]>>)>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsAnalyticsByIdResponses[200]>>,(RequestErrorResponse<400, Required<SettingsV3ApiSpecs.GetSettingsAnalyticsByIdErrors[400]>> | RequestErrorResponse<404, Required<SettingsV3ApiSpecs.GetSettingsAnalyticsByIdErrors[404]>>)>({
             path: `v3/settings/analytics/${id}`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getSettingsAnalyticsById` instead.
+     */
+    getAnalyticsProvider(...args: Parameters<SettingsV3Api['getSettingsAnalyticsById']>) {
+        return this.getSettingsAnalyticsById(...args);
     }
 
     /**
@@ -44,12 +58,12 @@ export class SettingsV3Api {
      *
      * Updates a single web analytics provider data for a default channel.
      */
-    updateAnalyticsProvider(
-        id: SettingsV3ApiSpecs.UpdateAnalyticsProviderData['path']['id'],
-        requestBody: SettingsV3ApiSpecs.UpdateAnalyticsProviderData['body'],
-        query?: SettingsV3ApiSpecs.UpdateAnalyticsProviderData['query'],
+    putSettingsAnalyticsById(
+        id: SettingsV3ApiSpecs.PutSettingsAnalyticsByIdData['path']['id'],
+        requestBody: SettingsV3ApiSpecs.PutSettingsAnalyticsByIdData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsAnalyticsByIdData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateAnalyticsProviderResponses[200]>>,(RequestErrorResponse<400, Required<SettingsV3ApiSpecs.UpdateAnalyticsProviderErrors[400]>> | RequestErrorResponse<404, Required<SettingsV3ApiSpecs.UpdateAnalyticsProviderErrors[404]>> | RequestErrorResponse<409, Required<SettingsV3ApiSpecs.UpdateAnalyticsProviderErrors[409]>> | RequestErrorResponse<422, Required<SettingsV3ApiSpecs.UpdateAnalyticsProviderErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsAnalyticsByIdResponses[200]>>,(RequestErrorResponse<400, Required<SettingsV3ApiSpecs.PutSettingsAnalyticsByIdErrors[400]>> | RequestErrorResponse<404, Required<SettingsV3ApiSpecs.PutSettingsAnalyticsByIdErrors[404]>> | RequestErrorResponse<409, Required<SettingsV3ApiSpecs.PutSettingsAnalyticsByIdErrors[409]>> | RequestErrorResponse<422, Required<SettingsV3ApiSpecs.PutSettingsAnalyticsByIdErrors[422]>>)>({
             path: `v3/settings/analytics/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -58,11 +72,18 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsAnalyticsById` instead.
+     */
+    updateAnalyticsProvider(...args: Parameters<SettingsV3Api['putSettingsAnalyticsById']>) {
+        return this.putSettingsAnalyticsById(...args);
+    }
+
+    /**
      * Get Catalog Settings
      *
      * Returns catalog settings.
 
-      - Channel ID can be used as a query parameter for getting channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for getting channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` indicates that a particular field has not been overridden on a channel level when channel level settings are requested and values are inherited from global level.
      */
@@ -80,15 +101,15 @@ export class SettingsV3Api {
      *
      * Updates catalog settings.
 
-      - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for updating channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` should be supplied to delete overrides per given channel and to inherit values from global level. Partial updates are not supported and all settings should be supplied with `null` value in order to delete overrides per channel.
      */
-    updateSettingsCatalog(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsCatalogData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsCatalogData['query'],
+    putSettingsCatalog(
+        requestBody: SettingsV3ApiSpecs.PutSettingsCatalogData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsCatalogData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsCatalogResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsCatalogResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/catalog',
             contentType: 'application/json',
             body: requestBody,
@@ -97,17 +118,31 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsCatalog` instead.
+     */
+    updateSettingsCatalog(...args: Parameters<SettingsV3Api['putSettingsCatalog']>) {
+        return this.putSettingsCatalog(...args);
+    }
+
+    /**
      * Get Transactional Email Settings
      *
      * Get global transactional email settings or channel specific overrides by `channel_id`.
      */
-    getSettingsEmailStatuses(
-        query?: SettingsV3ApiSpecs.GetSettingsEmailStatusesData['query'],
+    getSettingsEmailsEnabled(
+        query?: SettingsV3ApiSpecs.GetSettingsEmailsEnabledData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsEmailStatusesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsEmailsEnabledResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/email-statuses',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getSettingsEmailsEnabled` instead.
+     */
+    getSettingsEmailStatuses(...args: Parameters<SettingsV3Api['getSettingsEmailsEnabled']>) {
+        return this.getSettingsEmailsEnabled(...args);
     }
 
     /**
@@ -115,11 +150,11 @@ export class SettingsV3Api {
      *
      * Update global transactional email settings or create channel specific overrides by `channel_id`.
      */
-    updateSettingsEmailStatuses(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsEmailStatusesData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsEmailStatusesData['query'],
+    putSettingsTransactionalEmailsEnabled(
+        requestBody: SettingsV3ApiSpecs.PutSettingsTransactionalEmailsEnabledData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsTransactionalEmailsEnabledData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsEmailStatusesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsTransactionalEmailsEnabledResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/email-statuses',
             contentType: 'application/json',
             body: requestBody,
@@ -128,18 +163,24 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsTransactionalEmailsEnabled` instead.
+     */
+    updateSettingsEmailStatuses(...args: Parameters<SettingsV3Api['putSettingsTransactionalEmailsEnabled']>) {
+        return this.putSettingsTransactionalEmailsEnabled(...args);
+    }
+
+    /**
      * Create Favicon Image
      *
      * Uploads an image file to use as the storefront favicon. Supported MIME types include GIF, JPEG, and PNG. 
 
-       - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only.
-       - The uploaded image can be up to 10 MB. Larger files result in an error.
+       - Channel ID can be used as a query parameter for updating channel-specific setting. If omitted, you will interact with the global setting only.
      */
-    createSettingsFaviconImage(
-        requestBody: SettingsV3ApiSpecs.CreateSettingsFaviconImageData['body'],
-        query?: SettingsV3ApiSpecs.CreateSettingsFaviconImageData['query'],
+    postFaviconLogoImage(
+        requestBody: SettingsV3ApiSpecs.PostFaviconLogoImageData['body'],
+        query?: SettingsV3ApiSpecs.PostFaviconLogoImageData['query'],
     ) {
-        return this.request.post<RequestSuccessResponse<204, Required<SettingsV3ApiSpecs.CreateSettingsFaviconImageResponses[204]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.CreateSettingsFaviconImageErrors[422]>>>({
+        return this.request.post<RequestSuccessResponse<204, Required<SettingsV3ApiSpecs.PostFaviconLogoImageResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/favicon/image',
             contentType: 'multipart/form-data',
             body: requestBody,
@@ -148,10 +189,17 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `postFaviconLogoImage` instead.
+     */
+    createSettingsFaviconImage(...args: Parameters<SettingsV3Api['postFaviconLogoImage']>) {
+        return this.postFaviconLogoImage(...args);
+    }
+
+    /**
      * Get Inventory Notifications Settings
      *
      * Returns inventory notification settings. 
-     * `channel_id` can be used as a query parameter to get inventory notification settings per channel. If omitted, you will interact with the global settings only.
+     * `channel_id` can be used as a query parameter to get inventory notification settings per channel. If omitted, you will interact with the global setting only.
      */
     getSettingsInventoryNotifications(
         query?: SettingsV3ApiSpecs.GetSettingsInventoryNotificationsData['query'],
@@ -166,15 +214,15 @@ export class SettingsV3Api {
      * Update Inventory Notifications Settings
      *
      * Updates inventory notification settings. 
-     * `channel_id` can be used as a query parameter to get inventory notification settings per channel. If omitted, you will interact with the global settings only. 
+     * `channel_id` can be used as a query parameter to get inventory notification settings per channel. If omitted, you will interact with the global setting only. 
      * Supplying `null` settings values per channel will delete overrides per given channel and values will be inherited from global level. 
      * Partial updates are not supported within the given endpoint. In order to delete overrides per channel, `null` should be supplied for all the settings within the given endpoint.
      */
-    updateSettingsInventoryNotifications(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsInventoryNotificationsData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsInventoryNotificationsData['query'],
+    putSettingsInventoryNotifications(
+        requestBody: SettingsV3ApiSpecs.PutSettingsInventoryNotificationsData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsInventoryNotificationsData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsInventoryNotificationsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsInventoryNotificationsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/inventory/notifications',
             contentType: 'application/json',
             body: requestBody,
@@ -183,11 +231,18 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsInventoryNotifications` instead.
+     */
+    updateSettingsInventoryNotifications(...args: Parameters<SettingsV3Api['putSettingsInventoryNotifications']>) {
+        return this.putSettingsInventoryNotifications(...args);
+    }
+
+    /**
      * Get Store Logo Settings
      *
      * Returns store logo settings.
 
-      - Channel ID can be used as a query parameter for getting channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for getting channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` indicates that a particular field has not been overridden on a channel level when channel level settings are requested and values are inherited from global level.
      */
@@ -205,15 +260,15 @@ export class SettingsV3Api {
      *
      * Updates the logo type and logo text for a textual logo. To upload new images, use the dedicated image POST endpoints.
 
-      - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for updating channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` should be supplied to delete overrides per given channel and to inherit values from global level. Partial updates are not supported and all settings should be supplied with `null` value in order to delete overrides per channel.
      */
-    updateSettingsLogo(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsLogoData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsLogoData['query'],
+    putSettingsLogo(
+        requestBody: SettingsV3ApiSpecs.PutSettingsLogoData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsLogoData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsLogoResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsLogoResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/logo',
             contentType: 'application/json',
             body: requestBody,
@@ -222,17 +277,24 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsLogo` instead.
+     */
+    updateSettingsLogo(...args: Parameters<SettingsV3Api['putSettingsLogo']>) {
+        return this.putSettingsLogo(...args);
+    }
+
+    /**
      * Create Logo Image
      *
      * Uploads an image file to use as the storefront logo. Supported MIME types include GIF, JPEG, and PNG. 
 
-      - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only.
+      - Channel ID can be used as a query parameter for updating channel-specific setting. If omitted, you will interact with the global setting only.
      */
-    createSettingsLogoImage(
-        requestBody: SettingsV3ApiSpecs.CreateSettingsLogoImageData['body'],
-        query?: SettingsV3ApiSpecs.CreateSettingsLogoImageData['query'],
+    postSettingsLogoImage(
+        requestBody: SettingsV3ApiSpecs.PostSettingsLogoImageData['body'],
+        query?: SettingsV3ApiSpecs.PostSettingsLogoImageData['query'],
     ) {
-        return this.request.post<RequestSuccessResponse<204, Required<SettingsV3ApiSpecs.CreateSettingsLogoImageResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<204, Required<SettingsV3ApiSpecs.PostSettingsLogoImageResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/logo/image',
             contentType: 'multipart/form-data',
             body: requestBody,
@@ -241,15 +303,29 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `postSettingsLogoImage` instead.
+     */
+    createSettingsLogoImage(...args: Parameters<SettingsV3Api['postSettingsLogoImage']>) {
+        return this.postSettingsLogoImage(...args);
+    }
+
+    /**
      * Get Enabled Filters
      *
      * Returns a list of enabled default [Product Filtering](https://support.bigcommerce.com/s/article/Product-Filtering-Settings) filters. These filters will be used if a store does not have contextual overrides.
      */
-    getSettingsEnabledSearchFilters(
+    getEnabled(
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsEnabledSearchFiltersResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetEnabledResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/search/filters',
         });
+    }
+
+    /**
+     * @deprecated Use `getEnabled` instead.
+     */
+    getSettingsEnabledSearchFilters(...args: Parameters<SettingsV3Api['getEnabled']>) {
+        return this.getEnabled(...args);
     }
 
     /**
@@ -257,10 +333,10 @@ export class SettingsV3Api {
      *
      * Updates enabled default [Product Filtering](https://support.bigcommerce.com/s/article/Product-Filtering-Settings) filters.
      */
-    updateSettingsEnabledSearchFilters(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsEnabledSearchFiltersData['body'],
+    updateEnabled(
+        requestBody: SettingsV3ApiSpecs.UpdateEnabledData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsEnabledSearchFiltersResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateEnabledResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/search/filters',
             contentType: 'application/json',
             body: requestBody,
@@ -268,17 +344,31 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `updateEnabled` instead.
+     */
+    updateSettingsEnabledSearchFilters(...args: Parameters<SettingsV3Api['updateEnabled']>) {
+        return this.updateEnabled(...args);
+    }
+
+    /**
      * Get Available Filters
      *
      * Returns a list of filters available to power [Product Filtering](https://support.bigcommerce.com/s/article/Product-Filtering-Settings).
      */
-    getSettingsAvailableFilters(
-        query?: SettingsV3ApiSpecs.GetSettingsAvailableFiltersData['query'],
+    getAvailable(
+        query?: SettingsV3ApiSpecs.GetAvailableData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsAvailableFiltersResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetAvailableResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/search/filters/available',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getAvailable` instead.
+     */
+    getSettingsAvailableFilters(...args: Parameters<SettingsV3Api['getAvailable']>) {
+        return this.getAvailable(...args);
     }
 
     /**
@@ -292,13 +382,20 @@ export class SettingsV3Api {
 
      The order of the returned filters will match the sort order of the filters on the storefront.
      */
-    getSettingsFiltersContexts(
-        query?: SettingsV3ApiSpecs.GetSettingsFiltersContextsData['query'],
+    getContexts(
+        query?: SettingsV3ApiSpecs.GetContextsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsFiltersContextsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetContextsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/search/filters/contexts',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getContexts` instead.
+     */
+    getSettingsFiltersContexts(...args: Parameters<SettingsV3Api['getContexts']>) {
+        return this.getContexts(...args);
     }
 
     /**
@@ -312,10 +409,10 @@ export class SettingsV3Api {
 
      You can change the order of the filters on the live site by changing the order of the filters you send.
      */
-    upsertSettingsFiltersContexts(
-        requestBody: SettingsV3ApiSpecs.UpsertSettingsFiltersContextsData['body'],
+    upsertContexts(
+        requestBody: SettingsV3ApiSpecs.UpsertContextsData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpsertSettingsFiltersContextsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpsertContextsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/search/filters/contexts',
             contentType: 'application/json',
             body: requestBody,
@@ -323,17 +420,31 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `upsertContexts` instead.
+     */
+    upsertSettingsFiltersContexts(...args: Parameters<SettingsV3Api['upsertContexts']>) {
+        return this.upsertContexts(...args);
+    }
+
+    /**
      * Get Locale Settings
      *
      * Returns global locale settings.
-
-     For stores with Catalyst channels, the `shopper_language_selection_method` field is deprecated. Using this endpoint on those stores will return a warning about the deprecation. For additional information, refer to [Locale Configuration](/docs/store-operations/settings/locales).
      */
-    getSettingsLocale(
+    getSettingsStoreLocale(
+        query?: SettingsV3ApiSpecs.GetSettingsStoreLocaleData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsLocaleResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsStoreLocaleResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/store/locale',
+            query,
         });
+    }
+
+    /**
+     * @deprecated Use `getSettingsStoreLocale` instead.
+     */
+    getSettingsLocale(...args: Parameters<SettingsV3Api['getSettingsStoreLocale']>) {
+        return this.getSettingsStoreLocale(...args);
     }
 
     /**
@@ -341,16 +452,25 @@ export class SettingsV3Api {
      *
      * Updates global locale settings.
 
-     For stores with Catalyst channels, the `shopper_language_selection_method` field is deprecated. Using this endpoint on those stores will return a warning about the deprecation. For additional information, refer to [Locale Configuration](/docs/store-operations/settings/locales).
+     Set a channel override by using the `channel_id` query parameter. To remove a channel override, set `null` for a field. The field then inherits the global value.
      */
-    updateSettingsLocale(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsLocaleData['body'],
+    putSettingsStoreLocale(
+        requestBody: SettingsV3ApiSpecs.PutSettingsStoreLocaleData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsStoreLocaleData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsLocaleResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.UpdateSettingsLocaleErrors[422]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsStoreLocaleResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.PutSettingsStoreLocaleErrors[422]>>>({
             path: 'v3/settings/store/locale',
             contentType: 'application/json',
             body: requestBody,
+            query,
         });
+    }
+
+    /**
+     * @deprecated Use `putSettingsStoreLocale` instead.
+     */
+    updateSettingsLocale(...args: Parameters<SettingsV3Api['putSettingsStoreLocale']>) {
+        return this.putSettingsStoreLocale(...args);
     }
 
     /**
@@ -358,7 +478,7 @@ export class SettingsV3Api {
      *
      * Returns store profile settings.
 
-      - Channel ID can be used as a query parameter for getting channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for getting channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` indicates that a particular field has not been overridden on a channel level when channel level settings are requested and values are inherited from global level.
      */
@@ -376,15 +496,15 @@ export class SettingsV3Api {
      *
      * Updates store profile settings.
 
-      - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for updating channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` should be supplied to delete overrides per given channel and to inherit values from global level. Partial updates are not supported and all settings should be supplied with `null` value in order to delete overrides per channel.
      */
-    updateSettingsStoreProfile(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsStoreProfileData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsStoreProfileData['query'],
+    putSettingsStoreProfile(
+        requestBody: SettingsV3ApiSpecs.PutSettingsStoreProfileData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsStoreProfileData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStoreProfileResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.UpdateSettingsStoreProfileErrors[422]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsStoreProfileResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.PutSettingsStoreProfileErrors[422]>>>({
             path: 'v3/settings/store/profile',
             contentType: 'application/json',
             body: requestBody,
@@ -393,11 +513,18 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsStoreProfile` instead.
+     */
+    updateSettingsStoreProfile(...args: Parameters<SettingsV3Api['putSettingsStoreProfile']>) {
+        return this.putSettingsStoreProfile(...args);
+    }
+
+    /**
      * Get Storefront Category Settings
      *
      * Returns category settings.
 
-      - Channel ID can be used as a query parameter for getting channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for getting channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` indicates that a particular field has not been overridden on a channel level when channel level settings are requested and values are inherited from global level.
      */
@@ -415,15 +542,15 @@ export class SettingsV3Api {
      *
      * Updates category settings.
 
-      - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for updating channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` should be supplied to delete overrides per given channel and to inherit values from global level. Partial updates are not supported and all settings should be supplied with `null` value in order to delete overrides per channel.
      */
-    updateSettingsStorefrontCategory(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryData['query'],
+    putSettingsStorefrontCategory(
+        requestBody: SettingsV3ApiSpecs.PutSettingsStorefrontCategoryData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsStorefrontCategoryData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontCategoryErrors[422]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsStorefrontCategoryResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.PutSettingsStorefrontCategoryErrors[422]>>>({
             path: 'v3/settings/storefront/category',
             contentType: 'application/json',
             body: requestBody,
@@ -432,11 +559,18 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsStorefrontCategory` instead.
+     */
+    updateSettingsStorefrontCategory(...args: Parameters<SettingsV3Api['putSettingsStorefrontCategory']>) {
+        return this.putSettingsStorefrontCategory(...args);
+    }
+
+    /**
      * Get Storefront Product Settings
      *
      * Returns product settings.
 
-      - Channel ID can be used as a query parameter for getting channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for getting channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` indicates that a particular field has not been overridden on a channel level when channel level settings are requested and values are inherited from global level.
      */
@@ -454,15 +588,15 @@ export class SettingsV3Api {
      *
      * Updates product settings.
 
-      - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for updating channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` should be supplied to delete overrides per given channel and to inherit values from global level. Partial updates are not supported and all settings should be supplied with `null` value in order to delete overrides per channel.
      */
-    updateSettingsStorefrontProduct(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontProductData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontProductData['query'],
+    putSettingsStorefrontProduct(
+        requestBody: SettingsV3ApiSpecs.PutSettingsStorefrontProductData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsStorefrontProductData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontProductResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontProductErrors[422]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsStorefrontProductResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.PutSettingsStorefrontProductErrors[422]>>>({
             path: 'v3/settings/storefront/product',
             contentType: 'application/json',
             body: requestBody,
@@ -471,21 +605,35 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsStorefrontProduct` instead.
+     */
+    updateSettingsStorefrontProduct(...args: Parameters<SettingsV3Api['putSettingsStorefrontProduct']>) {
+        return this.putSettingsStorefrontProduct(...args);
+    }
+
+    /**
      * Get Robots.txt Settings
      *
      * Returns Robots.txt settings.
 
-      - Channel ID can be used as a query parameter for getting channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for getting channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` indicates that a particular field has not been overridden on a channel level when channel level settings are requested and values are inherited from global level.
      */
-    getSettingsRobotsTxt(
-        query?: SettingsV3ApiSpecs.GetSettingsRobotsTxtData['query'],
+    getSettingsStorefrontRobotstxt(
+        query?: SettingsV3ApiSpecs.GetSettingsStorefrontRobotstxtData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsRobotsTxtResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsStorefrontRobotstxtResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/robotstxt',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getSettingsStorefrontRobotstxt` instead.
+     */
+    getSettingsRobotsTxt(...args: Parameters<SettingsV3Api['getSettingsStorefrontRobotstxt']>) {
+        return this.getSettingsStorefrontRobotstxt(...args);
     }
 
     /**
@@ -493,15 +641,15 @@ export class SettingsV3Api {
      *
      * Updates Robots.txt settings.
 
-      - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for updating channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` should be supplied to delete overrides per given channel and to inherit values from global level. Partial updates are not supported and all settings should be supplied with `null` value in order to delete overrides per channel.
      */
-    updateSettingsRobotsTxt(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsRobotsTxtData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsRobotsTxtData['query'],
+    putSettingsStorefrontRobotstxt(
+        requestBody: SettingsV3ApiSpecs.PutSettingsStorefrontRobotstxtData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsStorefrontRobotstxtData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsRobotsTxtResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsStorefrontRobotstxtResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/robotstxt',
             contentType: 'application/json',
             body: requestBody,
@@ -510,11 +658,18 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsStorefrontRobotstxt` instead.
+     */
+    updateSettingsRobotsTxt(...args: Parameters<SettingsV3Api['putSettingsStorefrontRobotstxt']>) {
+        return this.putSettingsStorefrontRobotstxt(...args);
+    }
+
+    /**
      * Get Storefront Search Settings
      *
      * Returns search settings.
 
-      - Channel ID can be used as a query parameter for getting channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for getting channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` indicates that a particular field has not been overridden on a channel level when channel level settings are requested and values are inherited from global level.
      */
@@ -532,15 +687,15 @@ export class SettingsV3Api {
      *
      * Updates search settings.
 
-      - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for updating channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` should be supplied to delete overrides per given channel and to inherit values from global level. Partial updates are not supported and all settings should be supplied with `null` value in order to delete overrides per channel.
      */
-    updateSettingsStorefrontSearch(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontSearchData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontSearchData['query'],
+    putSettingsStorefrontSearch(
+        requestBody: SettingsV3ApiSpecs.PutSettingsStorefrontSearchData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsStorefrontSearchData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontSearchResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsStorefrontSearchResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/search',
             contentType: 'application/json',
             body: requestBody,
@@ -549,11 +704,18 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsStorefrontSearch` instead.
+     */
+    updateSettingsStorefrontSearch(...args: Parameters<SettingsV3Api['putSettingsStorefrontSearch']>) {
+        return this.putSettingsStorefrontSearch(...args);
+    }
+
+    /**
      * Get Storefront Security Settings
      *
      * Returns security settings.
 
-      - Channel ID can be used as a query parameter for getting channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for getting channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` indicates that a particular field has not been overridden on a channel level when channel level settings are requested and values are inherited from global level.
      */
@@ -571,15 +733,15 @@ export class SettingsV3Api {
      *
      * Updates security settings.
 
-      - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for updating channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` should be supplied to delete overrides per given channel and to inherit values from global level. Partial updates are not supported and all settings should be supplied with `null` value in order to delete overrides per channel.
      */
-    updateSettingsStorefrontSecurity(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontSecurityData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontSecurityData['query'],
+    putSettingsStorefrontSecurity(
+        requestBody: SettingsV3ApiSpecs.PutSettingsStorefrontSecurityData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsStorefrontSecurityData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontSecurityResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsStorefrontSecurityResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/security',
             contentType: 'application/json',
             body: requestBody,
@@ -588,11 +750,18 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsStorefrontSecurity` instead.
+     */
+    updateSettingsStorefrontSecurity(...args: Parameters<SettingsV3Api['putSettingsStorefrontSecurity']>) {
+        return this.putSettingsStorefrontSecurity(...args);
+    }
+
+    /**
      * Get Storefront SEO Settings
      *
      * Returns SEO settings.
 
-      - Channel ID can be used as a query parameter for getting channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for getting channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` indicates that a particular field has not been overridden on a channel level when channel level settings are requested and values are inherited from global level.
      */
@@ -610,17 +779,15 @@ export class SettingsV3Api {
      *
      * Updates SEO settings.
 
-      - You can use `channel_id` as a query parameter to update channel-specific settings. If omitted, you will only interact with the global settings. 
+      - Channel ID can be used as a query parameter for updating channel-specific setting. If omitted, you will interact with the global setting only. 
 
-      - You can use `channel_id` in the request body of a headless channel of this endpoint to control the `www_redirect` settings for the headless channel's unique checkout URL.
-
-      - `null` should be supplied to delete overrides per given channel and to inherit values from a global level. 
+      - `null` should be supplied to delete overrides per given channel and to inherit values from global level. Partial updates are not supported and all settings should be supplied with `null` value in order to delete overrides per channel.
      */
-    updateSettingsStorefrontSeo(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoData['query'],
+    putSettingsStorefrontSeo(
+        requestBody: SettingsV3ApiSpecs.PutSettingsStorefrontSeoData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsStorefrontSeoData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontSeoErrors[422]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsStorefrontSeoResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.PutSettingsStorefrontSeoErrors[422]>>>({
             path: 'v3/settings/storefront/seo',
             contentType: 'application/json',
             body: requestBody,
@@ -629,11 +796,18 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsStorefrontSeo` instead.
+     */
+    updateSettingsStorefrontSeo(...args: Parameters<SettingsV3Api['putSettingsStorefrontSeo']>) {
+        return this.putSettingsStorefrontSeo(...args);
+    }
+
+    /**
      * Get Storefront Status
      *
      * Returns storefront status-related settings. 
 
-      - Channel ID can be used as a query parameter for getting channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for getting channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` indicates that a particular field has not been overridden on a channel level when channel level settings are requested and values are inherited from global level.
      */
@@ -651,20 +825,27 @@ export class SettingsV3Api {
      *
      * Updates storefront status-related settings.
 
-      - Channel ID can be used as a query parameter for updating channel-specific settings. If omitted, you will interact with the global settings only. 
+      - Channel ID can be used as a query parameter for updating channel-specific setting. If omitted, you will interact with the global setting only. 
 
       - `null` should be supplied to delete overrides per given channel and to inherit values from global level. Partial updates are not supported and all settings should be supplied with `null` value in order to delete overrides per channel.
      */
-    updateSettingsStorefrontStatus(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsStorefrontStatusData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsStorefrontStatusData['query'],
+    putSettingsStorefrontStatus(
+        requestBody: SettingsV3ApiSpecs.PutSettingsStorefrontStatusData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsStorefrontStatusData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsStorefrontStatusResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsStorefrontStatusResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/storefront/status',
             contentType: 'application/json',
             body: requestBody,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `putSettingsStorefrontStatus` instead.
+     */
+    updateSettingsStorefrontStatus(...args: Parameters<SettingsV3Api['putSettingsStorefrontStatus']>) {
+        return this.putSettingsStorefrontStatus(...args);
     }
 
     /**
@@ -686,11 +867,11 @@ export class SettingsV3Api {
      *
      * Update inventory settings
      */
-    updateSettingsInventory(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsInventoryData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsInventoryData['query'],
+    putSettingsInventory(
+        requestBody: SettingsV3ApiSpecs.PutSettingsInventoryData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsInventoryData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsInventoryResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsInventoryResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/inventory',
             contentType: 'application/json',
             body: requestBody,
@@ -699,17 +880,31 @@ export class SettingsV3Api {
     }
 
     /**
+     * @deprecated Use `putSettingsInventory` instead.
+     */
+    updateSettingsInventory(...args: Parameters<SettingsV3Api['putSettingsInventory']>) {
+        return this.putSettingsInventory(...args);
+    }
+
+    /**
      * Get Units of Measurement Settings
      *
      * Get settings for [units of measurements](https://support.bigcommerce.com/s/article/Store-Settings?language=en_US#physical).
      */
-    getSettingsMeasurementUnits(
-        query?: SettingsV3ApiSpecs.GetSettingsMeasurementUnitsData['query'],
+    getSettingsStoreUnitsOfMeasurement(
+        query?: SettingsV3ApiSpecs.GetSettingsStoreUnitsOfMeasurementData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsMeasurementUnitsResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.GetSettingsMeasurementUnitsErrors[422]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.GetSettingsStoreUnitsOfMeasurementResponses[200]>>,RequestErrorResponse<422, Required<SettingsV3ApiSpecs.GetSettingsStoreUnitsOfMeasurementErrors[422]>>>({
             path: 'v3/settings/store/units-of-measurement',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getSettingsStoreUnitsOfMeasurement` instead.
+     */
+    getSettingsMeasurementUnits(...args: Parameters<SettingsV3Api['getSettingsStoreUnitsOfMeasurement']>) {
+        return this.getSettingsStoreUnitsOfMeasurement(...args);
     }
 
     /**
@@ -725,15 +920,22 @@ export class SettingsV3Api {
 
      The endpoint does not support 'null' as a value for global-level settings.
      */
-    updateSettingsMeasurementUnits(
-        requestBody: SettingsV3ApiSpecs.UpdateSettingsMeasurementUnitsData['body'],
-        query?: SettingsV3ApiSpecs.UpdateSettingsMeasurementUnitsData['query'],
+    putSettingsStoreUnitsOfMeasurement(
+        requestBody: SettingsV3ApiSpecs.PutSettingsStoreUnitsOfMeasurementData['body'],
+        query?: SettingsV3ApiSpecs.PutSettingsStoreUnitsOfMeasurementData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.UpdateSettingsMeasurementUnitsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SettingsV3ApiSpecs.PutSettingsStoreUnitsOfMeasurementResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/settings/store/units-of-measurement',
             contentType: 'application/json',
             body: requestBody,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `putSettingsStoreUnitsOfMeasurement` instead.
+     */
+    updateSettingsMeasurementUnits(...args: Parameters<SettingsV3Api['putSettingsStoreUnitsOfMeasurement']>) {
+        return this.putSettingsStoreUnitsOfMeasurement(...args);
     }
 }

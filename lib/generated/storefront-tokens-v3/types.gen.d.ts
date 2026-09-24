@@ -2,10 +2,13 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
 export type TokenPostImpersonation = {
+    channel_id: number;
     expires_at: number;
-} & Channels & Channel;
+};
 export type TokenPostSimple = {
-    allowed_cors_origins?: Array<string>;
+    allowed_cors_origins?: [
+        string
+    ];
 };
 export type TokenFull = {
     data?: TokenBase;
@@ -15,12 +18,6 @@ export type TokenFull = {
 };
 export type TokenBase = {
     token?: string;
-};
-export type Channel = {
-    channel_id?: number;
-};
-export type Channels = {
-    channel_ids?: Array<number>;
 };
 export type ErrorResponse = BaseError & {
     errors?: DetailedErrors;

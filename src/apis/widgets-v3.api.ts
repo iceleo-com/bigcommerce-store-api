@@ -29,7 +29,7 @@ export class WidgetsV3Api {
      *
      * Creates a **Widget Template**.
 
-     ***Note:*** *There is a limit of 1000 custom widget templates per channel, and a limit of 5000 across all channels.*
+     ***Note:*** *There is a limit of 1000 custom widget templates per store.*
 
      **Required Fields**
      * name

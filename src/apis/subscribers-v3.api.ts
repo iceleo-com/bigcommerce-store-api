@@ -48,7 +48,7 @@ export class SubscribersV3Api {
     /**
      * Delete Subscribers
      *
-     * By default, it deletes all subscribers. Use a filter to avoid deleting all subscribers in a store.
+     * By default, it deletes all *Subscribers*. A filter should be added to avoid deleting all subscribers in a store.
      */
     deleteSubscribers(
         query?: SubscribersV3ApiSpecs.DeleteSubscribersData['query'],
@@ -64,12 +64,19 @@ export class SubscribersV3Api {
      *
      * Returns a *Subscriber*.
      */
-    getSubscriber(
-        subscriberId: SubscribersV3ApiSpecs.GetSubscriberData['path']['subscriber_id'],
+    getSubscriberById(
+        subscriberId: SubscribersV3ApiSpecs.GetSubscriberByIdData['path']['subscriber_id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SubscribersV3ApiSpecs.GetSubscriberResponses[200]>>,RequestErrorResponse<404, Required<SubscribersV3ApiSpecs.GetSubscriberErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<SubscribersV3ApiSpecs.GetSubscriberByIdResponses[200]>>,RequestErrorResponse<404, Required<SubscribersV3ApiSpecs.GetSubscriberByIdErrors[404]>>>({
             path: `v3/customers/subscribers/${subscriberId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `getSubscriberById` instead.
+     */
+    getSubscriber(...args: Parameters<SubscribersV3Api['getSubscriberById']>) {
+        return this.getSubscriberById(...args);
     }
 
     /**
@@ -96,11 +103,18 @@ export class SubscribersV3Api {
      *
      * Deletes a *Subscriber*.
      */
-    deleteSubscriber(
-        subscriberId: SubscribersV3ApiSpecs.DeleteSubscriberData['path']['subscriber_id'],
+    deleteSubscriberById(
+        subscriberId: SubscribersV3ApiSpecs.DeleteSubscriberByIdData['path']['subscriber_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<SubscribersV3ApiSpecs.DeleteSubscriberResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<SubscribersV3ApiSpecs.DeleteSubscriberByIdResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/customers/subscribers/${subscriberId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteSubscriberById` instead.
+     */
+    deleteSubscriber(...args: Parameters<SubscribersV3Api['deleteSubscriberById']>) {
+        return this.deleteSubscriberById(...args);
     }
 }

@@ -2,11 +2,7 @@ openapi: '3.0.3'
 info:
   title: Tax Provider API
   version: '1.0'
-  description: |-
-    Use BigCommerce’s platform-to-platform Tax Provider API to integrate a tax calculation engine into the BigCommerce storefront and control panel. Supports [estimate](/docs/rest-contracts/tax#estimate-taxes), [adjust](/docs/rest-contracts/tax#adjust-tax-quote), [commit](/docs/rest-contracts/tax#commit-tax-quote), and [void](/docs/rest-contracts/tax#void-tax-quote) operations. For more information, see [Tax Provider API Overview](/docs/integrations/tax).
-    
-    > #### Note
-    > * [Document submission](/docs/integrations/tax#document-submission) operations are only triggered when the **Submit Order Data** provider setting is enabled.
+  description: 'Use BigCommerce’s platform-to-platform Tax Provider API to integrate a tax calculation engine into the BigCommerce storefront and control panel. Supports [estimate](/docs/rest-contracts/tax#estimate-taxes), [adjust](/docs/rest-contracts/tax#adjust-tax-quote), [commit](/docs/rest-contracts/tax#commit-tax-quote), and [void](/docs/rest-contracts/tax#void-tax-quote) operations. For more information, see [Tax Provider API Overview](/docs/integrations/tax).'
   termsOfService: 'https://www.bigcommerce.com/terms'
   contact:
     name: BigCommerce
@@ -23,14 +19,14 @@ servers:
 paths:
   /estimate:
     post:
-      summary: Estimate taxes
+      summary: Estimate Taxes
       tags:
         - Tax Provider
       description: |-
         Submit the quote request to retrieve an estimate from the enabled third-party tax provider. Estimates are not expected to be persisted by the tax provider.
 
         > Server URL
-        > - For supporting tax providers, the server URL contains the tax providerʼs profile field; for example, `your_profile.example.com`.
+        > - For supporting tax providers, the server URL contains the tax provider's profile field; for example, `your_profile.example.com`.
         > - The Try it feature is not currently supported for this endpoint.
 
         The following actions can trigger tax estimate requests multiple times during a standard checkout on a BigCommerce storefront, depending on the BigCommerce merchant’s settings.
@@ -52,9 +48,9 @@ paths:
         - Order refund.
         - Edit order.
         - Test connection feature in Tax Settings.
-      operationId: estimateTaxes
+      operationId: estimate
       parameters:
-        - $ref: '#/components/parameters/StoreHashHeader'
+        - $ref: '#/components/parameters/header-storehash'
       requestBody:
         content:
           application/json:
@@ -69,9 +65,6 @@ paths:
                     customer_id: '0'
                     customer_group_id: '0'
                     taxability_code: ''
-                    tax_properties:
-                      - code: 'property123'
-                        value: 'property-value'
                   transaction_date: '2019-08-13T03:17:37+00:00'
                   documents:
                     - id: 5d522b889d3d9
@@ -315,18 +308,23 @@ paths:
           description: Fallback Tax will be used for this transaction. General response that points to an error on the tax provider side. These types of errors should be promptly resolved by the tax provider.
   /void:
     post:
-      summary: Void tax quote
+      summary: Void Tax Quote
       description: |- 
-        Invalidate the persisted tax quote as identified by the given unique ID. Relevant to order cancellations, full refunds, or moving an order from a paid status to an unpaid status.
+        Invalidate the persisted tax quote as identified by the given unique ID. Relevant to order cancellations or when moving an order from a paid status to an unpaid status.
 
         > Server URL
-        > - For supporting tax providers, the server URL contains the tax providerʼs profile field; for example, `your_profile.example.com`.
+        > - For supporting tax providers, the server URL contains the tax provider's profile field; for example, `your_profile.example.com`.
         > - The Try it feature is not currently supported for this endpoint.
 
-      operationId: voidTaxQuote
+      operationId: void
       parameters:
-        - $ref: '#/components/parameters/IdQueryVoid'
-        - $ref: '#/components/parameters/StoreHashHeader'
+        - name: id
+          in: query
+          description: 'Unique ID identifying the existing, persisted Tax Quote that will be voided.'
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/header-storehash'
       responses:
         '200':
           description: OK
@@ -343,16 +341,14 @@ paths:
       summary: Commit Tax Quote
       description: |-
         Submit the quote request to be persisted by the enabled third-party tax provider. A commit operation is intended to be submitted once only, when the Order has been confirmed and paid.
-        
-        Merchants may adjust when commit operations occur by adjusting the document submission strategy in their store tax settings. The selected document submission strategy will adjust whether order status or payment status is used to determine if the order is paid. For more information, see the [Tax Settings API Reference](/docs/rest-management/tax-settings).
 
         > Server URL
-        > - For supporting tax providers, the server URL contains the tax providerʼs profile field; for example, `your_profile.example.com`.
+        > - For supporting tax providers, the server URL contains the tax provider's profile field; for example, `your_profile.example.com`.
         > - The Try it feature is not currently supported for this endpoint.
 
-      operationId: commitTaxQuote
+      operationId: commit
       parameters:
-        - $ref: '#/components/parameters/StoreHashHeader'
+        - $ref: '#/components/parameters/header-storehash'
       requestBody:
         content:
           application/json:
@@ -367,9 +363,6 @@ paths:
                     customer_id: '0'
                     customer_group_id: '0'
                     taxability_code: ''
-                    tax_properties:
-                      - code: 'property123'
-                        value: 'property-value'
                   transaction_date: '2019-08-13T03:40:15+00:00'
                   documents:
                     - id: shipping_14
@@ -621,114 +614,113 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/response-quote'
+                $ref: '#/components/schemas/request-adjust'
               examples:
-                response:
+                example-1:
                   value:
+                    adjust_description: string
+                    id: string
+                    currency_code: string
+                    customer:
+                      customer_id: string
+                      customer_group_id: '0'
+                      taxability_code: string
+                    transaction_date: '2019-08-24T14:15:22Z'
                     documents:
-                      - id: 5d522b889d3d9
-                        items:
-                          - id: 088c7465-e5b8-4624-a220-0d9faa82e7cb
-                            price:
-                              amount_inclusive: 675
-                              amount_exclusive: 450
-                              total_tax: 225
-                              tax_rate: 0.5
-                              sales_tax_summary:
-                                - name: Brutal Tax
-                                  rate: 0.5
-                                  amount: 225
-                                  tax_class:
-                                    class_id: '0'
-                                    name: Brutal Tax
-                                    code: US
-                                  id: Brutal Tax
-                            type: item
-                            wrapping:
-                              id: d2675662-6326-4a23-9107-ab71fa6a21a1
-                              price:
-                                amount_exclusive: 5
-                                amount_inclusive: 7.5
-                                sales_tax_summary:
-                                  - amount: 2.5
-                                    id: '1'
-                                    name: BRUTAL TAX
-                                    rate: 0.5
-                                    tax_class:
-                                      class_id: '6'
-                                      code: US
-                                      name: Wrapping
-                                tax_rate: 0.5
-                                total_tax: 2.5
-                              type: wrapping
-                          - id: d2675662-6326-4a23-9107-ab71fa6a21a1
-                            price:
-                              amount_inclusive: 300
-                              amount_exclusive: 200
-                              total_tax: 100
-                              tax_rate: 0.5
-                              sales_tax_summary:
-                                - name: Brutal Tax
-                                  rate: 0.5
-                                  amount: 100
-                                  tax_class:
-                                    class_id: '0'
-                                    name: Brutal Tax
-                                    code: US
-                                  id: Brutal Tax
-                            type: item
-                            wrapping:
-                              id: d2675662-6326-4a23-9107-ab71fa6a21a1
-                              price:
-                                amount_exclusive: 5
-                                amount_inclusive: 7.5
-                                sales_tax_summary:
-                                  - amount: 2.5
-                                    id: '1'
-                                    name: BRUTAL TAX
-                                    rate: 0.5
-                                    tax_class:
-                                      class_id: '6'
-                                      code: US
-                                      name: Wrapping
-                                tax_rate: 0.5
-                                total_tax: 2.5
-                              type: wrapping
+                      - id: string
+                        billing_address:
+                          line1: string
+                          line2: string
+                          city: Sydney
+                          region_name: New South Wales
+                          region_code: NSW
+                          country_name: Australia
+                          country_code: AU
+                          postal_code: '2007'
+                          company_name: string
+                          type: RESIDENTIAL
+                        destination_address:
+                          line1: string
+                          line2: string
+                          city: Sydney
+                          region_name: New South Wales
+                          region_code: NSW
+                          country_name: Australia
+                          country_code: AU
+                          postal_code: '2007'
+                          company_name: string
+                          type: RESIDENTIAL
+                        origin_address:
+                          line1: string
+                          line2: string
+                          city: Sydney
+                          region_name: New South Wales
+                          region_code: NSW
+                          country_name: Australia
+                          country_code: AU
+                          postal_code: '2007'
+                          company_name: string
+                          type: RESIDENTIAL
                         shipping:
-                          id: 5d522b889d3d9
+                          id: string
+                          item_code: Flat Rate
+                          item_reference: '12345678'
+                          name: string
                           price:
-                            amount_inclusive: 15
-                            amount_exclusive: 10
-                            total_tax: 5
-                            tax_rate: 0.5
-                            sales_tax_summary:
-                              - name: Brutal Tax
-                                rate: 0.5
-                                amount: 5
-                                tax_class:
-                                  class_id: '0'
-                                  name: Brutal Tax
-                                  code: US
-                                id: Brutal Tax
+                            amount: 0
+                            tax_inclusive: false
+                          quantity: 0
+                          tax_class:
+                            code: string
+                            class_id: string
+                            name: string
+                          tax_exempt: false
                           type: shipping
                         handling:
-                          id: 5d522b889d3d9
+                          id: string
+                          item_code: Flat Rate
+                          item_reference: '12345678'
+                          name: string
                           price:
-                            amount_inclusive: 0
-                            amount_exclusive: 0
-                            total_tax: 0
-                            tax_rate: 0.5
-                            sales_tax_summary:
-                              - name: Brutal Tax
-                                rate: 0.5
-                                amount: 0
-                                tax_class:
-                                  class_id: '0'
-                                  name: Brutal Tax
-                                  code: US
-                                id: Brutal Tax
+                            amount: 0
+                            tax_inclusive: false
+                          quantity: 0
+                          tax_class:
+                            code: string
+                            class_id: string
+                            name: string
+                          tax_exempt: false
                           type: handling
-                    id: 3f0c857e-2c55-443e-a89b-c3c4d8a29605
+                        items:
+                          - id: string
+                            item_code: Flat Rate
+                            item_reference: '12345678'
+                            name: string
+                            price:
+                              amount: 0
+                              tax_inclusive: false
+                            quantity: 0
+                            tax_class:
+                              code: string
+                              class_id: string
+                              name: string
+                            tax_exempt: false
+                            type: item
+                            wrapping:
+                              id: string
+                              item_code: Flat Rate
+                              item_reference: '12345678'
+                              name: string
+                              price:
+                                amount: 0
+                                tax_inclusive: false
+                              quantity: 0
+                              tax_class:
+                                code: string
+                                class_id: string
+                                name: string
+                              tax_exempt: false
+                              type: wrapping
         '400':
           description: General response that points to an issue with the incoming request that means a valid response is unable to be returned.
         '401':
@@ -851,20 +843,25 @@ paths:
       description: |-
         Replace the persisted tax quote (identified by the given unique ID) with the provided quote request (represented by the **AdjustRequest**).
 
-        Relevant for returns, partial refunds, and other Order modifications where there have been changes to the tax liabilities.
+        Relevant for partial refunds, full refunds, returns, and other Order modifications where there have been changes to the tax liabilities.
 
         The returned **Tax Quote** response is expected to be the same to a response returned by an equivalent response to **estimate** or **commit** methods.
 
         > Server URL
-        > - For supporting tax providers, the server URL contains the tax providerʼs profile field; for example, `your_profile.example.com`.
+        > - For supporting tax providers, the server URL contains the tax provider's profile field; for example, `your_profile.example.com`.
         > - The Try it feature is not currently supported for this endpoint.
         
-      operationId: adjustTaxQuote
+      operationId: adjust
       tags:
         - Tax Provider
       parameters:
-        - $ref: '#/components/parameters/StoreHashHeader'
-        - $ref: '#/components/parameters/IdQueryAdjusted'
+        - $ref: '#/components/parameters/header-storehash'
+        - in: query
+          name: id
+          required: true
+          description: 'Unique ID identifying the existing, persisted Tax Quote that will be adjusted.'
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -872,24 +869,10 @@ paths:
               $ref: '#/components/schemas/request-adjust'
 components:
   parameters:
-    StoreHashHeader:
-      name: X-Bc-Store-Hash
+    header-storehash:
+      name: X-BC-Store-Hash
       in: header
-      description: BigCommerce will send through the store hash as part of all tax provider operations. Each BigCommerce store on the platform has a unique store hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
-      required: true
-      schema:
-        type: string
-    IdQueryVoid:
-      name: id
-      in: query
-      description: Unique ID identifying the existing, persisted tax quote that will be voided.
-      required: true
-      schema:
-        type: string
-    IdQueryAdjusted:
-      name: id
-      in: query
-      description: Unique ID identifying the existing, persisted tax quote that will be adjusted.
+      description: BigCommerce will send through the Store Hash as part of all Tax Provider API operations. Each BigCommerce store on the platform has a unique Store Hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
       required: true
       schema:
         type: string
@@ -898,6 +881,7 @@ components:
       type: object
       description: An **ItemRequest** represents required information relating to completing tax calculations for a specific line item.
       title: ItemRequest
+      x-internal: false
       properties:
         id:
           type: string
@@ -934,11 +918,11 @@ components:
           $ref: '#/components/schemas/TaxClass'
         tax_exempt:
           type: boolean
-          description: 'Flag whether or not this item is always tax-exempt. For example, gift certificate purchases and order-level refunds are tax-exempt. Tax-exempt items are included in the request for auditing purposes. Tax-exempt items must have a tax amount of zero within the tax quote response.'
+          description: 'Flag whether or not this item is always tax-exempt. For example, gift certificate purchases and order-level refunds are tax-exempt. Tax-exempt items are included in the request for auditing purposes.'
           default: false
         tax_properties:
           type: array
-          description: Merchants may opt to include additional properties that a tax provider can choose to support, factoring these values into tax calculation. See [Tax Properties API](/docs/rest-management/tax-properties) for more information on configuring tax properties.
+          description: Merchants may opt to include additional properties that a tax provider can choose to support, factoring these values into tax calculation.
           items:
             $ref: '#/components/schemas/request-item-tax-property'
       required:
@@ -961,6 +945,7 @@ components:
       required:
         - code
         - value
+      x-internal: false
     request-document:
       type: object
       description: 'Each **DocumentRequest** represents an order or part of an order of items fulfilled from a single origin address to a single destination address. In addition to shipping and billing details, a document request includes the collection of items in the shipment, with tax-relevant information for each item. Multi-address orders, in which items ship to or from multiple addresses, require at least one **DocumentRequest** per combination of sender-recipient addresses. These are similar to "consignments" or "shipments" in other BigCommerce APIs.'
@@ -976,6 +961,7 @@ components:
         origin_address:
           $ref: '#/components/schemas/Address'
         shipping:
+          type: object
           description: Shipping line item present in each document request.
           allOf:
             - $ref: '#/components/schemas/request-item'
@@ -986,6 +972,7 @@ components:
               required:
                 - type
         handling:
+          type: object
           description: Handling line item present in each document request.
           allOf:
             - $ref: '#/components/schemas/request-item'
@@ -1006,14 +993,15 @@ components:
                   type:
                     $ref: '#/components/schemas/item_type'
                   wrapping:
+                    type: object
                     description: Optional gift wrapping for items in the consignment.
+                    nullable: true
                     allOf:
                       - $ref: '#/components/schemas/request-item'
                       - type: object
                         properties:
                           type:
                             $ref: '#/components/schemas/wrapping_type'
-                        nullable: true
                         required:
                           - type
                 required:
@@ -1025,6 +1013,7 @@ components:
         - shipping
         - handling
         - items
+      x-internal: false
     request-quote:
       type: object
       description: 'Each **QuoteRequest** represents an order. In addition to transaction details, it contains a `documents` array of one or more **DocumentRequest** objects, which represent distinct combinations of origin and fulfillment addresses and the tax-relevant contents of those consignments. This is similar to an "order" in other BigCommerce APIs.'
@@ -1053,15 +1042,10 @@ components:
             taxability_code:
               type: string
               description: 'If applicable, the tax exemption code of the shopper’s customer account. A taxability code is intended to apply to multiple customers. This code should match the exemption codes provided by the third-party integration.'
-            tax_properties:
-              type: array
-              description: Any tax property values that have been associated with this customer. See [Tax Properties API](/docs/rest-management/tax-properties) for more information on configuring tax properties.
-              items:
-                $ref: '#/components/schemas/request-item-tax-property'
         transaction_date:
           type: string
           format: date-time
-          description: ISO 8601 formatted date the shopper placed this order. Tax quotes are expected to reflect taxes applicable on this date. Dates will be provided in UTC.
+          description: ISO 8601 formatted date the shopper placed this order. Dates will be provided in UTC.
         documents:
           type: array
           description: 'One or more consignments containing items being purchased by the shopper, including shipping and handling fees that are charged for each consignment. Most orders will contain a single consignment (to a single shipping address), however the BigCommerce platform also supports "Multi-address orders" which allow shoppers to place a single order with items shipped to different addresses.'
@@ -1073,6 +1057,7 @@ components:
         - customer
         - transaction_date
         - documents
+      x-internal: false
     request-adjust:
       description: An **AdjustRequest** contains the same data as a standard **QuoteRequest** with added detail of the adjustment operation.
       allOf:
@@ -1083,6 +1068,7 @@ components:
               description: 'Specifies the reason for the adjustment operation, for auditing purposes. May be a custom, user-entered description.'
         - $ref: '#/components/schemas/request-quote'
       title: AdjustRequest
+      x-internal: false
     Address:
       type: object
       description: 'Requests may have partial Address data. For example, the BigCommerce Cart page has the "Estimate Shipping & Tax" feature which is only expected to supply Country, Region and Postal Code.'
@@ -1126,12 +1112,13 @@ components:
           enum:
             - RESIDENTIAL
             - COMMERCIAL
+      x-internal: false
     TaxClass:
       type: object
       properties:
         code:
           type: string
-          description: 'The provider-specific tax code for this item. Items can be classified with tax codes relevant to each tax provider, configured by the merchant, and assigned to their products within BigCommerce. A tax code is intended to apply to multiple products. This code should match the tax codes provided by the third-party integration.'
+          description: 'The provider-specific tax code for this item. Items can be classified with tax codes relevant to each Tax Provider, configured by the merchant, and assigned to their products within BigCommerce. A tax code is intended to apply to multiple products. This code should match the tax codes provided by the third-party integration.'
         class_id:
           type: string
           description: The ID of the tax class defined in the merchant’s BigCommerce store. May have a UUID value.
@@ -1142,12 +1129,13 @@ components:
         - code
         - class_id
         - name
+      x-internal: false
     response-quote:
       type: object
       properties:
         id:
           type: string
-          description: The unique identifier of the tax quote that was requested. This value must either match the ID of the requested quote or be an external ID on the tax provider’s system. This value will be used for future adjust and void operations.
+          description: The unique identifier of the tax quote that was requested. This must match the ID of the requested quote.
         documents:
           type: array
           description: 'Represents an order quote or part of an order quote of tax-relevant items fulfilled from a single origin address to a single destination address, including arrays of shipping and handling fee objects for each item. Most order quotes contain a single document; however, BigCommerce supports "multi-address orders", which may come from or go to distinct sets of addresses and thus require multiple documents per quote.'
@@ -1157,6 +1145,7 @@ components:
         - id
         - documents
       title: Quote
+      x-internal: false
     response-document:
       type: object
       title: Document
@@ -1178,19 +1167,21 @@ components:
                   type:
                     $ref: '#/components/schemas/item_type'
                   wrapping:
+                    type: object
                     description: Optional gift wrapping for items in the consignment.
+                    nullable: true
                     allOf:
                       - $ref: '#/components/schemas/response-item'
                       - type: object
                         properties:
                           type:
                             $ref: '#/components/schemas/wrapping_type'
-                        nullable: true
                         required: 
                           - type
                 required:
                   - type
         shipping:
+          type: object
           description: Shipping line item present in each document request.
           allOf:
             - $ref: '#/components/schemas/response-item'
@@ -1201,6 +1192,7 @@ components:
               required:
                 - type
         handling:
+          type: object
           description: Handling line item present in each document request.
           allOf:
             - $ref: '#/components/schemas/response-item'
@@ -1215,6 +1207,7 @@ components:
         - items
         - shipping
         - handling
+      x-internal: false
     response-item:
       type: object
       description: |-
@@ -1231,6 +1224,7 @@ components:
       required:
         - id
         - price
+      x-internal: false
     response-taxprice:
       type: object
       properties:
@@ -1259,6 +1253,7 @@ components:
         - tax_rate
         - sales_tax_summary
       title: TaxPrice
+      x-internal: false
     SalesTax:
       type: object
       properties:
@@ -1279,16 +1274,17 @@ components:
         id:
           type: string
           description: |-
-            Optional unique identifier for this sales tax, describing the relevant tax classification rule on the tax provider platform.
+            Optional unique identifier for this sales tax, describing the relevant tax classification rule on the Tax Provider platform.
 
             Supplying an identifier allows BigCommerce to group related taxes together from all items in the order.
 
-            This identifier is persisted by BigCommerce and may be desirable for auditing purposes between BigCommerce and the tax provider. Currently supports persisting integer values only (the string type indicates we may support UUID values in the future).
+            This identifier is persisted by BigCommerce and may be desirable for auditing purposes between BigCommerce and the Tax Provider. Currently supports persisting integer values only (the string type indicates we may support UUID values in the future).
           example: '1701'
       required:
         - name
         - rate
         - amount
+      x-internal: false
     item_type:
       type: string
       description: |-
@@ -1298,7 +1294,6 @@ components:
       enum:
         - item
         - refund
-        - fee
     shipping_type:
       type: string
       description: |-
@@ -1322,7 +1317,7 @@ components:
       type: http
       scheme: basic
       description: |-
-        The [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication) (developer.mozilla.org) credentials used to authenticate each API request to the tax provider from the associated store; set and update `username`, `password`, and optionally `profile`, using the [Update a Connection](/docs/rest-contracts/tax-app-connection#update-a-connection) request. `profile` is an optional field and will be used with supporting providers only.
+        The [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication) (developer.mozilla.org) credentials used to authenticate each API request to the Tax Provider from the associated store; set and update `username`, `password`, and optionally `profile`, using the [Update a Connection](/docs/rest-contracts/tax-app-connection#update-a-connection) request. `profile` is an optional field and will be used with supporting providers only.
         
         For more, see [developer-configured authentication](/docs/start/authentication#developer-configured-authentication) for Provider APIs.
 

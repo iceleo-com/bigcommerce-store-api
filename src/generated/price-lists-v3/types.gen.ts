@@ -55,24 +55,12 @@ export type AssignmentForPutResponse = {
     meta?: Meta;
 };
 
-export type PriceRecordBatchItem = {
-    /**
-     * The price list ID the price record is associated with.
-     */
-    price_list_id?: number;
-    /**
-     * The price list with which the price record is associated. Either `variant_id` or `sku` is required.
-     */
-    variant_id?: number;
-    /**
-     * The SKU for the variant with which this price record is associated. Either `sku` or `variant_id` is required.
-     */
-    sku?: string;
-    /**
-     * The 3-letter country code with which this price record is associated.
-     */
-    currency?: string;
-} & PriceRecordBase;
+export type PriceRecordCollectionPutWithPriceListId = Array<PriceRecordBatchItem>;
+
+/**
+ * The `Price Record` object used in batch create or update.
+ */
+export type PriceRecordBatchItem = Array<PriceRecordBase>;
 
 /**
  * Common Price Record properties.
@@ -124,12 +112,7 @@ export type BulkPricingTier = {
  * Empty object for Success case for Batch API.
  */
 export type SuccessBatchResponse = {
-    data?: {
-        [key: string]: unknown;
-    };
-    meta?: {
-        [key: string]: unknown;
-    };
+    [key: string]: unknown;
 };
 
 /**
@@ -211,7 +194,7 @@ export type AssignmentsForGetResponse = {
 /**
  * Collection Meta
  *
- * 'Contains data about paginating the response via cursors. If no pagination details are specified or if you only provide a limit, then both properties will be present. When a 'before' or 'after' cursor is provided, only the 'cursor_pagination' property will be present. When a 'page' parameter is provided, only the offset based 'pagination' property will be present.'
+ * Data related the response, including pagination and collection totals.
  */
 export type CollectionMeta = {
     /**
@@ -245,43 +228,24 @@ export type CollectionMeta = {
          *
          */
         total_pages?: number;
-    };
-    /**
-     * Cursor Pagination
-     */
-    cursor_pagination?: {
         /**
-         * Total number of items in the collection response.
-         */
-        count?: number;
-        /**
-         * The number of items that can be returned per page, determined by the limit parameter—whether explicitly set, defaulted, or capped at the maximum limit.
-         */
-        per_page?: number;
-        /**
-         * A string representing the starting point of the current page in the collection.
-         */
-        start_cursor?: string;
-        /**
-         * A string representing the ending point of the current page in the collection.
-         */
-        end_cursor?: string;
-        /**
-         * links
-         *
          * Pagination links for the previous and next parts of the whole collection.
+         *
          */
         links?: {
             /**
              * Link to the previous page returned in the response.
+             *
              */
             previous?: string;
             /**
              * Link to the current page returned in the response.
+             *
              */
             current?: string;
             /**
              * Link to the next page returned in the response.
+             *
              */
             next?: string;
         };
@@ -328,9 +292,9 @@ export type ErrorResponse = {
 export type CreateBatchPriceListAssignmentsRequest = Array<AssignmentsForRequest>;
 
 /**
- * Filter results by a comma-separated list of channel IDs.
+ * Filter results by a comma-separated list of `channel_id`s.
  */
-export type ChannelIdInParam = Array<number>;
+export type ChannelIdInParam = string;
 
 /**
  * The ID of the `Price List` requested.
@@ -368,7 +332,7 @@ export type FilterCustomerGroupIdParam = number;
  */
 export type FilterChannelIdParam = number;
 
-export type DeletePriceListsData = {
+export type DeletePriceListsByFilterData = {
     body?: never;
     headers: {
         /**
@@ -379,10 +343,10 @@ export type DeletePriceListsData = {
     path?: never;
     query?: {
         /**
-         * Filter by ID. Accepts multiple comma-separated values.
+         * Filter items by ID.
          *
          */
-        'id:in'?: Array<number>;
+        id?: number;
         /**
          * Filter items by name.
          *
@@ -392,10 +356,8 @@ export type DeletePriceListsData = {
     url: '/pricelists';
 };
 
-export type DeletePriceListsResponses = {
+export type DeletePriceListsByFilterResponses = {
     /**
-     * Delete Price Lists Response
-     *
      * `204 No Content`. The action has been performed and no further information will be supplied. `null` is returned.
      */
     204: {
@@ -403,9 +365,9 @@ export type DeletePriceListsResponses = {
     } | null;
 };
 
-export type DeletePriceListsResponse = DeletePriceListsResponses[keyof DeletePriceListsResponses];
+export type DeletePriceListsByFilterResponse = DeletePriceListsByFilterResponses[keyof DeletePriceListsByFilterResponses];
 
-export type GetPriceListsData = {
+export type GetPriceListCollectionData = {
     body?: never;
     headers: {
         /**
@@ -415,6 +377,11 @@ export type GetPriceListsData = {
     };
     path?: never;
     query?: {
+        /**
+         * Filter items by ID.
+         *
+         */
+        id?: number;
         /**
          * Filter items by name.
          *
@@ -434,19 +401,11 @@ export type GetPriceListsData = {
          */
         page?: number;
         /**
-         * Controls the number of items per page in a limited (paginated) list of products. If you provide only a limit, the API returns both paginations while applying that limit.
+         * Controls the number of items per page in a limited (paginated) list of products.
          */
         limit?: number;
-        /**
-         * A cursor that can be used for backwards pagination. Will fetch results before the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'after' query parameter.
-         */
-        before?: string;
-        /**
-         * A cursor that can be used for forwards pagination. Will fetch results after the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'before' query parameter.
-         */
-        after?: string;
         'id:in'?: Array<number>;
-        'name:like'?: string;
+        'name:like'?: Array<string>;
         'date_created:max'?: string;
         'date_created:min'?: string;
         'date_modified:max'?: string;
@@ -455,7 +414,7 @@ export type GetPriceListsData = {
     url: '/pricelists';
 };
 
-export type GetPriceListsResponses = {
+export type GetPriceListCollectionResponses = {
     /**
      * PriceList Collection Response
      *
@@ -495,7 +454,7 @@ export type GetPriceListsResponses = {
         /**
          * Collection Meta
          *
-         * 'Contains data about paginating the response via cursors. If no pagination details are specified or if you only provide a limit, then both properties will be present. When a 'before' or 'after' cursor is provided, only the 'cursor_pagination' property will be present. When a 'page' parameter is provided, only the offset based 'pagination' property will be present.'
+         * Data related to the response, including pagination and collection totals.
          */
         meta?: {
             /**
@@ -529,43 +488,24 @@ export type GetPriceListsResponses = {
                  *
                  */
                 total_pages?: number;
-            };
-            /**
-             * Cursor Pagination
-             */
-            cursor_pagination?: {
                 /**
-                 * Total number of items in the collection response.
-                 */
-                count?: number;
-                /**
-                 * The number of items that can be returned per page, determined by the limit parameter—whether explicitly set, defaulted, or capped at the maximum limit.
-                 */
-                per_page?: number;
-                /**
-                 * A string representing the starting point of the current page in the collection.
-                 */
-                start_cursor?: string;
-                /**
-                 * A string representing the ending point of the current page in the collection.
-                 */
-                end_cursor?: string;
-                /**
-                 * links
-                 *
                  * Pagination links for the previous and next parts of the whole collection.
+                 *
                  */
                 links?: {
                     /**
                      * Link to the previous page returned in the response.
+                     *
                      */
                     previous?: string;
                     /**
                      * Link to the current page returned in the response.
+                     *
                      */
                     current?: string;
                     /**
                      * Link to the next page returned in the response.
+                     *
                      */
                     next?: string;
                 };
@@ -574,7 +514,7 @@ export type GetPriceListsResponses = {
     };
 };
 
-export type GetPriceListsResponse = GetPriceListsResponses[keyof GetPriceListsResponses];
+export type GetPriceListCollectionResponse = GetPriceListCollectionResponses[keyof GetPriceListCollectionResponses];
 
 export type CreatePriceListData = {
     /**
@@ -755,7 +695,32 @@ export type GetPriceListData = {
          */
         price_list_id: number;
     };
-    query?: never;
+    query?: {
+        /**
+         * Filter items by ID.
+         */
+        id?: number;
+        /**
+         * Filter items by name.
+         */
+        name?: string;
+        /**
+         * Filter items by date_created.
+         */
+        date_created?: string;
+        /**
+         * Filter items by date_modified. For example `v3/catalog/products?date_last_imported:min=2022-06-15`
+         */
+        date_modified?: string;
+        /**
+         * Specifies the page number in a limited (paginated) list of products.
+         */
+        page?: number;
+        /**
+         * Specifies the number of items per page in a limited (paginated) list of products.
+         */
+        limit?: number;
+    };
     url: '/pricelists/{price_list_id}';
 };
 
@@ -967,8 +932,8 @@ export type UpdatePriceListResponses = {
 
 export type UpdatePriceListResponse = UpdatePriceListResponses[keyof UpdatePriceListResponses];
 
-export type UpsertPriceListsRecordsData = {
-    body: Array<PriceRecordBatchItem>;
+export type UpsertPriceListRecordsData = {
+    body: PriceRecordCollectionPutWithPriceListId;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -980,7 +945,7 @@ export type UpsertPriceListsRecordsData = {
     url: '/pricelists/records';
 };
 
-export type UpsertPriceListsRecordsErrors = {
+export type UpsertPriceListRecordsErrors = {
     /**
      * Error response for batch PUT of `Price Records`.  May include errors during partial update in non-strict mode.
      *
@@ -988,9 +953,9 @@ export type UpsertPriceListsRecordsErrors = {
     422: PriceRecordBatchErrorResponse;
 };
 
-export type UpsertPriceListsRecordsError = UpsertPriceListsRecordsErrors[keyof UpsertPriceListsRecordsErrors];
+export type UpsertPriceListRecordsError = UpsertPriceListRecordsErrors[keyof UpsertPriceListRecordsErrors];
 
-export type UpsertPriceListsRecordsResponses = {
+export type UpsertPriceListRecordsResponses = {
     /**
      * Success response for batch PUT of `Price Records`.
      *
@@ -998,9 +963,9 @@ export type UpsertPriceListsRecordsResponses = {
     200: SuccessBatchResponse;
 };
 
-export type UpsertPriceListsRecordsResponse = UpsertPriceListsRecordsResponses[keyof UpsertPriceListsRecordsResponses];
+export type UpsertPriceListRecordsResponse = UpsertPriceListRecordsResponses[keyof UpsertPriceListRecordsResponses];
 
-export type DeletePriceListRecordsData = {
+export type DeletePriceListRecordsByFilterData = {
     body?: never;
     headers: {
         /**
@@ -1017,22 +982,14 @@ export type DeletePriceListRecordsData = {
     };
     query?: {
         /**
-         * The 3-letter currency code with which this set of prices is associated.
+         * The ID of the `Variant` for which prices were requested.
          */
-        currency?: string;
-        /**
-         * A comma-separated list of IDs for one or more variants for which prices exist.
-         */
-        'variant_id:in'?: Array<number>;
-        /**
-         * A comma-separated list of SKUs for one or more variants for which prices exist.
-         */
-        'sku:in'?: Array<string>;
+        'variant_id:in'?: number;
     };
     url: '/pricelists/{price_list_id}/records';
 };
 
-export type DeletePriceListRecordsResponses = {
+export type DeletePriceListRecordsByFilterResponses = {
     /**
      * No Content
      *
@@ -1053,9 +1010,9 @@ export type DeletePriceListRecordsResponses = {
     };
 };
 
-export type DeletePriceListRecordsResponse = DeletePriceListRecordsResponses[keyof DeletePriceListRecordsResponses];
+export type DeletePriceListRecordsByFilterResponse = DeletePriceListRecordsByFilterResponses[keyof DeletePriceListRecordsByFilterResponses];
 
-export type GetPriceListRecordsData = {
+export type GetPriceListRecordCollectionData = {
     body?: never;
     headers: {
         /**
@@ -1072,14 +1029,14 @@ export type GetPriceListRecordsData = {
     };
     query?: {
         /**
-         * A comma-separated list of IDs for one or more variants for which prices were requested.
+         * The ID of the `Variant` for which prices were requested.
          */
-        'variant_id:in'?: Array<number>;
+        'variant_id:in'?: number;
         /**
-         * A comma-separated list of IDs for one or more products for which prices were requested.
+         * A comma-separated list of IDs of `Product`s for which prices were requested.
          *
          */
-        'product_id:in'?: Array<number>;
+        'product_id:in'?: string;
         /**
          * Filter items by currency.
          *
@@ -1090,17 +1047,9 @@ export type GetPriceListRecordsData = {
          */
         page?: number;
         /**
-         * Controls the number of items per page in a limited (paginated) list of products. If you provide only a limit, the API returns both paginations while applying that limit.
+         * Controls the number of items per page in a limited (paginated) list of products.
          */
         limit?: number;
-        /**
-         * A cursor that can be used for backwards pagination. Will fetch results before the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'after' query parameter.
-         */
-        before?: string;
-        /**
-         * A cursor that can be used for forwards pagination. Will fetch results after the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'before' query parameter.
-         */
-        after?: string;
         /**
          * Sub-resources to include on a price record, in a comma-separated list. Valid expansions currently include `bulk_pricing_tiers` and `sku`. Other values will be ignored.
          *
@@ -1165,7 +1114,7 @@ export type GetPriceListRecordsData = {
     url: '/pricelists/{price_list_id}/records';
 };
 
-export type GetPriceListRecordsErrors = {
+export type GetPriceListRecordCollectionErrors = {
     /**
      * Allowed number of requests exceeded.
      *
@@ -1173,9 +1122,9 @@ export type GetPriceListRecordsErrors = {
     429: ErrorResponse;
 };
 
-export type GetPriceListRecordsError = GetPriceListRecordsErrors[keyof GetPriceListRecordsErrors];
+export type GetPriceListRecordCollectionError = GetPriceListRecordCollectionErrors[keyof GetPriceListRecordCollectionErrors];
 
-export type GetPriceListRecordsResponses = {
+export type GetPriceListRecordCollectionResponses = {
     /**
      * PriceRecord Collection Response
      *
@@ -1254,15 +1203,15 @@ export type GetPriceListRecordsResponses = {
             map_price?: number;
             bulk_pricing_tiers?: Array<{
                 /**
-                 * The minimum quantity of associated variant in the cart needed to qualify for this tier's pricing.
+                 * The minimum quantity of associated variant in the cart needed to qualify for this tiers pricing.
                  *
                  */
                 quantity_min?: number;
                 /**
-                 * The maximum allowed quantity of associated variant in the cart to qualify for this tier's pricing. `null` indicates that there is no maximum allowed quantity for this tier.
+                 * The maximum allowed quantity of associated variant in the cart to qualify for this tiers pricing.
                  *
                  */
-                quantity_max?: number | null;
+                quantity_max?: number;
                 /**
                  * The type of adjustment that is made. Acceptable values: price – the adjustment amount per product; percent – the adjustment as a percentage of the original price; fixed – the adjusted absolute price of the product.
                  *
@@ -1283,7 +1232,7 @@ export type GetPriceListRecordsResponses = {
         /**
          * Collection Meta
          *
-         * 'Contains data about paginating the response via cursors. If no pagination details are specified or if you only provide a limit, then both properties will be present. When a 'before' or 'after' cursor is provided, only the 'cursor_pagination' property will be present. When a 'page' parameter is provided, only the offset based 'pagination' property will be present.'
+         * Data about the response, including pagination and collection totals.
          */
         meta?: {
             /**
@@ -1317,43 +1266,24 @@ export type GetPriceListRecordsResponses = {
                  *
                  */
                 total_pages?: number;
-            };
-            /**
-             * Cursor Pagination
-             */
-            cursor_pagination?: {
                 /**
-                 * Total number of items in the collection response.
-                 */
-                count?: number;
-                /**
-                 * The number of items that can be returned per page, determined by the limit parameter—whether explicitly set, defaulted, or capped at the maximum limit.
-                 */
-                per_page?: number;
-                /**
-                 * A string representing the starting point of the current page in the collection.
-                 */
-                start_cursor?: string;
-                /**
-                 * A string representing the ending point of the current page in the collection.
-                 */
-                end_cursor?: string;
-                /**
-                 * links
-                 *
                  * Pagination links for the previous and next parts of the whole collection.
+                 *
                  */
                 links?: {
                     /**
                      * Link to the previous page returned in the response.
+                     *
                      */
                     previous?: string;
                     /**
                      * Link to the current page returned in the response.
+                     *
                      */
                     current?: string;
                     /**
                      * Link to the next page returned in the response.
+                     *
                      */
                     next?: string;
                 };
@@ -1362,9 +1292,9 @@ export type GetPriceListRecordsResponses = {
     };
 };
 
-export type GetPriceListRecordsResponse = GetPriceListRecordsResponses[keyof GetPriceListRecordsResponses];
+export type GetPriceListRecordCollectionResponse = GetPriceListRecordCollectionResponses[keyof GetPriceListRecordCollectionResponses];
 
-export type UpsertPriceListRecordsData = {
+export type SetPriceListRecordCollectionData = {
     /**
      * PriceRecord Batch Item
      *
@@ -1456,7 +1386,7 @@ export type UpsertPriceListRecordsData = {
     url: '/pricelists/{price_list_id}/records';
 };
 
-export type UpsertPriceListRecordsErrors = {
+export type SetPriceListRecordCollectionErrors = {
     /**
      * PriceRecord Batch Error Response
      *
@@ -1506,9 +1436,9 @@ export type UpsertPriceListRecordsErrors = {
     429: ErrorResponse;
 };
 
-export type UpsertPriceListRecordsError = UpsertPriceListRecordsErrors[keyof UpsertPriceListRecordsErrors];
+export type SetPriceListRecordCollectionError = SetPriceListRecordCollectionErrors[keyof SetPriceListRecordCollectionErrors];
 
-export type UpsertPriceListRecordsResponses = {
+export type SetPriceListRecordCollectionResponses = {
     /**
      * Price Records response
      *
@@ -1524,7 +1454,7 @@ export type UpsertPriceListRecordsResponses = {
     };
 };
 
-export type UpsertPriceListRecordsResponse = UpsertPriceListRecordsResponses[keyof UpsertPriceListRecordsResponses];
+export type SetPriceListRecordCollectionResponse = SetPriceListRecordCollectionResponses[keyof SetPriceListRecordCollectionResponses];
 
 export type GetPriceListRecordsByVariantIdData = {
     body?: never;
@@ -1546,29 +1476,7 @@ export type GetPriceListRecordsByVariantIdData = {
          */
         variant_id: number;
     };
-    query?: {
-        /**
-         * Sub-resources to include on a price record, in a comma-separated list. Valid expansions currently include `bulk_pricing_tiers` and `sku`. Other values will be ignored.
-         *
-         */
-        include?: Array<'bulk_pricing_tiers' | 'sku'>;
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         */
-        page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products. If you provide only a limit, the API returns both paginations while applying that limit.
-         */
-        limit?: number;
-        /**
-         * A cursor that can be used for backwards pagination. Will fetch results before the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'after' query parameter.
-         */
-        before?: string;
-        /**
-         * A cursor that can be used for forwards pagination. Will fetch results after the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'before' query parameter.
-         */
-        after?: string;
-    };
+    query?: never;
     url: '/pricelists/{price_list_id}/records/{variant_id}';
 };
 
@@ -1690,7 +1598,7 @@ export type GetPriceListRecordsByVariantIdResponses = {
         /**
          * Collection Meta
          *
-         * 'Contains data about paginating the response via cursors. If no pagination details are specified or if you only provide a limit, then both properties will be present. When a 'before' or 'after' cursor is provided, only the 'cursor_pagination' property will be present. When a 'page' parameter is provided, only the offset based 'pagination' property will be present.'
+         * Data related to the response, including pagination and collection totals.
          */
         meta?: {
             /**
@@ -1724,45 +1632,24 @@ export type GetPriceListRecordsByVariantIdResponses = {
                  *
                  */
                 total_pages?: number;
-            };
-            /**
-             * Cursor Pagination
-             *
-             * Data about cursor pagination.
-             */
-            cursor_pagination?: {
                 /**
-                 * Total number of items in the collection response.
-                 */
-                count?: number;
-                /**
-                 * The number of items that can be returned per page, determined by the limit parameter—whether explicitly set, defaulted, or capped at the maximum limit.
-                 */
-                per_page?: number;
-                /**
-                 * A string representing the starting point of the current page in the collection.
-                 */
-                start_cursor?: string;
-                /**
-                 * A string representing the ending point of the current page in the collection.
-                 */
-                end_cursor?: string;
-                /**
-                 * links
-                 *
                  * Pagination links for the previous and next parts of the whole collection.
+                 *
                  */
                 links?: {
                     /**
                      * Link to the previous page returned in the response.
+                     *
                      */
                     previous?: string;
                     /**
                      * Link to the current page returned in the response.
+                     *
                      */
                     current?: string;
                     /**
                      * Link to the next page returned in the response.
+                     *
                      */
                     next?: string;
                 };
@@ -1835,6 +1722,7 @@ export type GetPriceListRecordData = {
     };
     query?: {
         /**
+         * Sub-resources to include on a price record, in a comma-separated list. Valid expansions currently include `bulk_pricing_tiers` and `sku`. Other values will be ignored.
          * Sub-resources to include on a price record, in a comma-separated list. Valid expansions currently include `bulk_pricing_tiers` and `sku`. Other values will be ignored.
          *
          */
@@ -2011,6 +1899,11 @@ export type SetPriceListRecordData = {
              */
             amount?: number;
         }>;
+        /**
+         * The SKU code associated with this `Price Record` if requested and it exists.
+         *
+         */
+        sku?: string;
     };
     headers: {
         /**
@@ -2168,6 +2061,11 @@ export type SetPriceListRecordResponses = {
              */
             variant_id?: number;
             /**
+             * The variant with which this price set is associated. Either `sku` or `variant_id` is required.
+             *
+             */
+            sku?: string;
+            /**
              * The 3-letter currency code with which this price set is associated.
              *
              */
@@ -2215,6 +2113,11 @@ export type SetPriceListRecordResponses = {
                  */
                 amount?: number;
             }>;
+            /**
+             * The SKU code associated with this `Price Record` if requested and it exists.
+             *
+             */
+            sku?: string;
         };
         meta?: Meta;
     };
@@ -2222,7 +2125,7 @@ export type SetPriceListRecordResponses = {
 
 export type SetPriceListRecordResponse = SetPriceListRecordResponses[keyof SetPriceListRecordResponses];
 
-export type DeletePriceListAssignmentsData = {
+export type DeletePriceListAssignmentsByFilterData = {
     body?: never;
     headers: {
         /**
@@ -2249,21 +2152,21 @@ export type DeletePriceListAssignmentsData = {
          */
         channel_id?: number;
         /**
-         * Filter results by a comma-separated list of channel IDs.
+         * Filter results by a comma-separated list of `channel_id`s.
          */
-        'channel_id:in'?: Array<number>;
+        'channel_id:in'?: string;
     };
     url: '/pricelists/assignments';
 };
 
-export type DeletePriceListAssignmentsResponses = {
+export type DeletePriceListAssignmentsByFilterResponses = {
     /**
      * No Content.
      */
     204: void;
 };
 
-export type DeletePriceListAssignmentsResponse = DeletePriceListAssignmentsResponses[keyof DeletePriceListAssignmentsResponses];
+export type DeletePriceListAssignmentsByFilterResponse = DeletePriceListAssignmentsByFilterResponses[keyof DeletePriceListAssignmentsByFilterResponses];
 
 export type GetListOfPriceListAssignmentsData = {
     body?: never;
@@ -2292,19 +2195,19 @@ export type GetListOfPriceListAssignmentsData = {
          */
         channel_id?: number;
         /**
-         * Filter items by a comma-separated list of IDs.
+         * Filter items by a comma-separated list of `id`s.
          */
         'id:in'?: Array<number>;
         /**
-         * Filter items by a comma-separated list of customer group IDs.
+         * Filter items by a comma-separated list of `customer_group_id`s.
          */
         'customer_group_id:in'?: Array<number>;
         /**
-         * Filter items by a comma-separated list of price list IDs.
+         * Filter items by a comma-separated list of `price_list_id`s.
          */
         'price_list_id:in'?: Array<number>;
         /**
-         * Filter items by a comma-separated list of channel IDs.
+         * Filter items by a comma-separated list of `channel_id`s.
          */
         'channel_id:in'?: Array<number>;
         /**
@@ -2312,17 +2215,9 @@ export type GetListOfPriceListAssignmentsData = {
          */
         page?: number;
         /**
-         * Controls the number of items per page in a limited (paginated) list of products. If you provide only a limit, the API returns both paginations while applying that limit.
+         * Controls the number of items per page in a limited (paginated) list of products.
          */
         limit?: number;
-        /**
-         * A cursor that can be used for backwards pagination. Will fetch results before the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'after' query parameter.
-         */
-        before?: string;
-        /**
-         * A cursor that can be used for forwards pagination. Will fetch results after the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'before' query parameter.
-         */
-        after?: string;
     };
     url: '/pricelists/assignments';
 };
@@ -2364,10 +2259,12 @@ export type CreatePriceListAssignmentsError = CreatePriceListAssignmentsErrors[k
 
 export type CreatePriceListAssignmentsResponses = {
     /**
-     * No content
+     * OK
      */
-    200: unknown;
+    200: SuccessBatchResponse;
 };
+
+export type CreatePriceListAssignmentsResponse = CreatePriceListAssignmentsResponses[keyof CreatePriceListAssignmentsResponses];
 
 export type UpsertPriceListAssignmentData = {
     body: AssignmentForPutRequest;

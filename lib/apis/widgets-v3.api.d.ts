@@ -11,15 +11,18 @@ export declare class WidgetsV3Api {
     }>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.ErrorBase>>>;
     createWidgetTemplate(requestBody: WidgetsV3ApiSpecs.CreateWidgetTemplateData['body']): Promise<RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.ErrorBase>> | RequestSuccessResponse<200, Required<{
         data?: WidgetsV3ApiSpecs.WidgetTemplateFull;
+    } & {
         meta?: WidgetsV3ApiSpecs.Meta;
     }>>>;
     previewWidget(uuid: WidgetsV3ApiSpecs.PreviewWidgetData['path']['uuid'], requestBody: WidgetsV3ApiSpecs.PreviewWidgetData['body']): Promise<RequestErrorResponse<404, Required<unknown>> | RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.WidgetTemplatePreviewResponse>>>;
     getWidgetTemplate(uuid: WidgetsV3ApiSpecs.GetWidgetTemplateData['path']['uuid'], query?: WidgetsV3ApiSpecs.GetWidgetTemplateData['query']): Promise<RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.ErrorBase>> | RequestSuccessResponse<200, Required<{
         data?: WidgetsV3ApiSpecs.WidgetTemplateFull;
+    } & {
         meta?: WidgetsV3ApiSpecs.Meta;
     }>> | RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.ErrorBase>>>;
     updateWidgetTemplate(uuid: WidgetsV3ApiSpecs.UpdateWidgetTemplateData['path']['uuid'], requestBody: WidgetsV3ApiSpecs.UpdateWidgetTemplateData['body']): Promise<RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.ErrorBase>> | RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.ErrorBase>> | RequestSuccessResponse<200, Required<{
         data?: WidgetsV3ApiSpecs.WidgetTemplateFull;
+    } & {
         meta?: WidgetsV3ApiSpecs.Meta;
     }>>>;
     deleteWidgetTemplate(uuid: WidgetsV3ApiSpecs.DeleteWidgetTemplateData['path']['uuid']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.ErrorBase>> | RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.ErrorBase>>>;

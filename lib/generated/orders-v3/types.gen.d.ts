@@ -184,7 +184,7 @@ export type NotFound = {
     status?: number;
     title?: string;
     type?: string;
-    errors?: Array<unknown>;
+    instance?: string;
 };
 export type Transaction = {
     event: 'purchase' | 'authorization' | 'capture' | 'refund' | 'void' | 'pending' | 'settled';
@@ -193,22 +193,23 @@ export type Transaction = {
     currency: string;
     gateway: '2checkout' | 'adyen' | 'amazon' | 'authorizenet' | 'bankdeposit' | 'braintree' | 'cheque' | 'cod' | 'custom' | 'firstdatagge4' | 'giftcertificate' | 'hps' | 'instore' | 'klarna' | 'migs' | 'moneyorder' | 'nmi' | 'paypalexpress' | 'paypalpaymentsprous' | 'paypalpaymentsprouk' | 'plugnpay' | 'qbmsv2' | 'securenet' | 'square' | 'storecredit' | 'stripe' | 'testgateway' | 'usaepay';
     gateway_transaction_id?: string;
+    date_created?: string;
     test?: boolean;
     status?: 'ok' | 'error';
     fraud_review?: boolean;
     reference_transaction_id?: number;
     offline?: {
         display_name?: string;
-    } | null;
+    };
     custom?: {
         payment_method?: string;
-    } | null;
+    };
     payment_method_id?: string;
 } & {
     id?: number;
     order_id?: string;
     date_created?: string;
-    payment_instrument_token?: string | null;
+    payment_instrument_token?: string;
     avs_result?: {
         code?: string;
         message?: string;
@@ -226,16 +227,10 @@ export type Transaction = {
         starting_balance?: number;
         remaining_balance?: number;
         status?: 'active' | 'pending' | 'disabled' | 'expired';
-    } | null;
+    };
     store_credit?: {
         remaining_balance?: number;
-    } | null;
-    custom_provider_field_result?: {
-        receipt_number?: string | null;
-        authorization_code?: string | null;
-        fraud_response?: string | null;
-        amount_received?: number | null;
-    } | null;
+    };
 };
 export type CreditCard = {
     card_type?: 'alelo' | 'alia' | 'american_express' | 'cabal' | 'carnet' | 'dankort' | 'diners_club' | 'discover' | 'elo' | 'forbrugsforeningen' | 'jcb' | 'maestro' | 'master' | 'naranja' | 'sodexo' | 'unionpay' | 'visa' | 'vr';
@@ -306,25 +301,21 @@ export type ErrorDetailedFull = {
     };
 };
 export type PostRefundQuotesRequest = Array<RefundQuotePost>;
-export type RefundQuotePost = RefundQuoteItemsRefund | RefundQuoteTaxAdjustmentAmount;
+export type RefundQuotePost = {
+    items: Array<ItemsRefund>;
+};
 export type RefundQuoteFull = {
     order_id?: number;
     total_refund_amount?: Amount;
     total_refund_tax_amount?: number;
-    order_level_refund_amount?: number;
     rounding?: number;
     adjustment?: AdjustmentAmount;
     tax_inclusive?: boolean;
     refund_methods?: Array<RefundMethod>;
 };
-export type RefundRequestPost = RefundRequestPostItems | RefundRequestPostTaxAdjustmentAmount;
-export type RefundRequestPostItems = {
+export type RefundRequestPost = {
     items: Array<ItemsRefund>;
     payments: Array<PaymentRequest>;
-    merchant_calculated_override?: MerchantOverride;
-};
-export type RefundRequestPostTaxAdjustmentAmount = {
-    tax_adjustment_amount: TaxAdjustmentAmount;
     merchant_calculated_override?: MerchantOverride;
 };
 export type RefundIdGet = {
@@ -346,7 +337,7 @@ export type RefundIdGet = {
             declined_message?: string;
         }>;
         items?: Array<{
-            item_type?: 'PRODUCT' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'ORDER' | 'FEE';
+            item_type?: 'PRODUCT' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'ORDER';
             item_id?: number;
             quantity?: number;
             requested_amount?: string | null;
@@ -361,7 +352,7 @@ export type FailedQuoteError = {
     status?: number;
     error?: string;
 };
-export type ItemsRefund = QuantityBoundItem | AmountBoundItem | TaxExemptItem | FeeItem;
+export type ItemsRefund = AmountBoundItem | QuantityBoundItem | TaxExemptItem;
 export type PaymentRequest = {
     provider_id?: string;
     amount?: number;
@@ -369,20 +360,9 @@ export type PaymentRequest = {
 };
 export type RefundMethod = Array<PaymentOption>;
 export type QuantityBoundItem = {
-    item_type: 'PRODUCT' | 'GIFT_WRAPPING';
-    item_id: number;
-    adjustments?: Array<RefundItemAdjustment>;
-    quantity: number;
-    reason?: string;
-};
-export type RefundItemAdjustment = {
-    amount?: number;
-    description?: string;
-};
-export type FeeItem = {
-    item_type?: 'FEE';
+    item_type?: 'ORDER' | 'PRODUCT' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'TAX';
     item_id?: number;
-    amount?: Amount;
+    quantity?: number;
     reason?: string;
 };
 export type TaxExemptItem = {
@@ -392,23 +372,15 @@ export type TaxExemptItem = {
     reason?: string;
 };
 export type AmountBoundItem = {
-    item_type: 'ORDER' | 'SHIPPING' | 'HANDLING' | 'TAX' | 'FEE';
-    item_id: number;
-    amount: Amount;
+    item_type?: 'PRODUCT' | 'ORDER' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'TAX';
+    item_id?: number;
+    amount?: Amount;
+    quantity?: number;
     reason?: string;
 };
 export type MerchantOverride = {
     total_amount: Amount;
     total_tax: number;
-};
-export type TaxAdjustmentAmount = number;
-export type RefundQuoteItemsRefund = {
-    items: Array<ItemsRefund>;
-    merchant_calculated_override?: MerchantOverride;
-};
-export type RefundQuoteTaxAdjustmentAmount = {
-    tax_adjustment_amount: TaxAdjustmentAmount;
-    merchant_calculated_override?: MerchantOverride;
 };
 export type Refund = {
     readonly id?: number;
@@ -423,11 +395,10 @@ export type Refund = {
     payments?: Array<RefundPayment>;
 };
 export type RefundItem = {
-    item_type?: 'PRODUCT' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'ORDER' | 'FEE';
+    item_type?: 'PRODUCT' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'ORDER';
     item_id?: number;
     reason?: string;
     quantity?: number;
-    adjustments?: Array<RefundItemAdjustment>;
     requested_amount?: Amount;
 };
 export type RefundPayment = {
@@ -437,7 +408,6 @@ export type RefundPayment = {
     offline?: boolean;
     is_declined?: boolean;
     declined_message?: string;
-    transaction_id?: string;
 };
 export type PaymentOption = {
     provider_id?: string;
@@ -458,15 +428,9 @@ export type MetaFieldCollectionResponse = {
     data?: Array<Metafield>;
     meta?: CollectionMeta;
 };
-export type MetaFieldCollectionResponsePostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<unknown>;
-    meta?: BatchOperationMeta;
-};
 export type MetafieldResponse = {
     data?: Metafield;
-    meta?: MetaEmptyFull;
-};
+} & Meta;
 export type MetafieldBase = {
     permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
     namespace?: string;
@@ -487,8 +451,8 @@ export type Metafield = MetafieldBase & {
     id?: number;
     date_created?: string;
     date_modified?: string;
-    readonly owner_client_id?: string;
 };
+export type MetafieldPost = MetafieldBasePost;
 export type MetafieldPut = MetafieldBasePost;
 export type GlobalOrderSettings = {
     notifications?: {
@@ -499,50 +463,6 @@ export type GlobalOrderSettings = {
             email_addresses?: Array<string>;
         };
     };
-};
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-export type WriteCollectionPartialSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
-export type WriteCollectionSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
-export type Total = number;
-export type Success = number;
-export type Failed = number;
-export type _Error = {
-    status?: number;
-    title?: string;
-    type?: string;
-    errors?: ErrorDetail;
-};
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-export type MetafieldPostBatch = MetafieldBasePost & {
-    resource_id: number;
-};
-export type MetafieldPutBatch = MetafieldBasePost & {
-    id: number;
-    resource_id?: number;
 };
 export type ChannelOrderSettings = {
     notifications?: {
@@ -573,6 +493,9 @@ export type BaseError = {
     title?: string;
     type?: string;
 };
+export type BetaDetailedErrors = {
+    [key: string]: unknown;
+};
 export type DetailedErrorsWritable = {
     [key: string]: unknown;
 };
@@ -594,7 +517,6 @@ export type RefundPaymentWritable = {
     offline?: boolean;
     is_declined?: boolean;
     declined_message?: string;
-    transaction_id?: string;
 };
 export type MetafieldBaseWritable = {
     permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
@@ -604,33 +526,16 @@ export type MetafieldBaseWritable = {
     description?: string;
     resource_type?: 'order' | 'brand' | 'product' | 'variant' | 'category';
 };
-export type MetafieldWritable = MetafieldBaseWritable & {
-    id?: number;
-    date_created?: string;
-    date_modified?: string;
-};
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
-};
 export type OrderIdParam = number;
 export type Accept = string;
 export type ContentType = string;
 export type PageParam = number;
-export type DateCreatedMin = string;
-export type DateCreatedMax = string;
-export type DateCreated = string;
-export type DateModifiedMin = string;
-export type DateModifiedMax = string;
-export type DateModified = string;
 export type MetafieldIdParam = number;
 export type MetafieldKeyParam = string;
-export type MetafieldKeyInParam = Array<string>;
 export type MetafieldNamespaceParam = string;
-export type MetafieldNamespaceInParam = Array<string>;
 export type LimitParam = number;
 export type DirectionParam = 'asc' | 'desc';
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-export type CaptureOrderPaymentData = {
+export type PaymentactioncaptureData = {
     body?: never;
     headers: {
         Accept: string;
@@ -642,7 +547,7 @@ export type CaptureOrderPaymentData = {
     query?: never;
     url: '/orders/{order_id}/payment_actions/capture';
 };
-export type CaptureOrderPaymentErrors = {
+export type PaymentactioncaptureErrors = {
     400: ErrorBase;
     404: ErrorBase;
     422: ErrorResponse;
@@ -650,14 +555,14 @@ export type CaptureOrderPaymentErrors = {
     503: ErrorBase;
     504: ErrorDetailedFull;
 };
-export type CaptureOrderPaymentError = CaptureOrderPaymentErrors[keyof CaptureOrderPaymentErrors];
-export type CaptureOrderPaymentResponses = {
+export type PaymentactioncaptureError = PaymentactioncaptureErrors[keyof PaymentactioncaptureErrors];
+export type PaymentactioncaptureResponses = {
     201: {
         [key: string]: unknown;
     };
 };
-export type CaptureOrderPaymentResponse = CaptureOrderPaymentResponses[keyof CaptureOrderPaymentResponses];
-export type VoidOrderPaymentData = {
+export type PaymentactioncaptureResponse = PaymentactioncaptureResponses[keyof PaymentactioncaptureResponses];
+export type PaymentactionvoidData = {
     body?: never;
     headers: {
         Accept: string;
@@ -669,7 +574,7 @@ export type VoidOrderPaymentData = {
     query?: never;
     url: '/orders/{order_id}/payment_actions/void';
 };
-export type VoidOrderPaymentErrors = {
+export type PaymentactionvoidErrors = {
     400: ErrorBase;
     404: ErrorBase;
     422: ErrorResponse;
@@ -677,14 +582,14 @@ export type VoidOrderPaymentErrors = {
     503: ErrorBase;
     504: ErrorDetailedFull;
 };
-export type VoidOrderPaymentError = VoidOrderPaymentErrors[keyof VoidOrderPaymentErrors];
-export type VoidOrderPaymentResponses = {
+export type PaymentactionvoidError = PaymentactionvoidErrors[keyof PaymentactionvoidErrors];
+export type PaymentactionvoidResponses = {
     201: {
         [key: string]: unknown;
     };
 };
-export type VoidOrderPaymentResponse = VoidOrderPaymentResponses[keyof VoidOrderPaymentResponses];
-export type GetOrderTransactionsData = {
+export type PaymentactionvoidResponse = PaymentactionvoidResponses[keyof PaymentactionvoidResponses];
+export type GetTransactionsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -695,21 +600,16 @@ export type GetOrderTransactionsData = {
     query?: never;
     url: '/orders/{order_id}/transactions';
 };
-export type GetOrderTransactionsErrors = {
+export type GetTransactionsErrors = {
     404: {
         status?: number;
         title?: string;
         type?: string;
         instance?: string;
     };
-    503: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
 };
-export type GetOrderTransactionsError = GetOrderTransactionsErrors[keyof GetOrderTransactionsErrors];
-export type GetOrderTransactionsResponses = {
+export type GetTransactionsError = GetTransactionsErrors[keyof GetTransactionsErrors];
+export type GetTransactionsResponses = {
     200: {
         data?: Array<Transaction>;
         meta?: MetaCollectionFull;
@@ -721,8 +621,8 @@ export type GetOrderTransactionsResponses = {
         instance?: string;
     };
 };
-export type GetOrderTransactionsResponse = GetOrderTransactionsResponses[keyof GetOrderTransactionsResponses];
-export type CreateOrderRefundQuotesData = {
+export type GetTransactionsResponse = GetTransactionsResponses[keyof GetTransactionsResponses];
+export type PostrefundquoteData = {
     body: RefundQuotePost;
     headers: {
         Accept: string;
@@ -734,18 +634,18 @@ export type CreateOrderRefundQuotesData = {
     query?: never;
     url: '/orders/{order_id}/payment_actions/refund_quotes';
 };
-export type CreateOrderRefundQuotesErrors = {
+export type PostrefundquoteErrors = {
     422: ErrorResponse;
 };
-export type CreateOrderRefundQuotesError = CreateOrderRefundQuotesErrors[keyof CreateOrderRefundQuotesErrors];
-export type CreateOrderRefundQuotesResponses = {
+export type PostrefundquoteError = PostrefundquoteErrors[keyof PostrefundquoteErrors];
+export type PostrefundquoteResponses = {
     201: {
         data?: RefundQuoteFull;
         meta?: MetaEmptyFull;
     };
 };
-export type CreateOrderRefundQuotesResponse = CreateOrderRefundQuotesResponses[keyof CreateOrderRefundQuotesResponses];
-export type GetOrderRefundsData = {
+export type PostrefundquoteResponse = PostrefundquoteResponses[keyof PostrefundquoteResponses];
+export type GetorderrefundsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -753,19 +653,17 @@ export type GetOrderRefundsData = {
     path: {
         order_id: number;
     };
-    query?: {
-        transaction_id?: string;
-    };
+    query?: never;
     url: '/orders/{order_id}/payment_actions/refunds';
 };
-export type GetOrderRefundsResponses = {
+export type GetorderrefundsResponses = {
     200: {
         data?: Array<Refund>;
         meta?: MetaEmptyFull;
     };
 };
-export type GetOrderRefundsResponse = GetOrderRefundsResponses[keyof GetOrderRefundsResponses];
-export type CreateOrderRefundData = {
+export type GetorderrefundsResponse = GetorderrefundsResponses[keyof GetorderrefundsResponses];
+export type PostrefundData = {
     body: RefundRequestPost;
     headers: {
         Accept: string;
@@ -774,12 +672,10 @@ export type CreateOrderRefundData = {
     path: {
         order_id: number;
     };
-    query?: {
-        transaction_id?: string;
-    };
+    query?: never;
     url: '/orders/{order_id}/payment_actions/refunds';
 };
-export type CreateOrderRefundErrors = {
+export type PostrefundErrors = {
     422: {
         data?: Array<ErrorResponse>;
     };
@@ -788,15 +684,15 @@ export type CreateOrderRefundErrors = {
         meta?: Meta;
     };
 };
-export type CreateOrderRefundError = CreateOrderRefundErrors[keyof CreateOrderRefundErrors];
-export type CreateOrderRefundResponses = {
+export type PostrefundError = PostrefundErrors[keyof PostrefundErrors];
+export type PostrefundResponses = {
     201: {
         data?: Refund;
         meta?: MetaEmptyFull;
     };
 };
-export type CreateOrderRefundResponse = CreateOrderRefundResponses[keyof CreateOrderRefundResponses];
-export type GetOrderRefundData = {
+export type PostrefundResponse = PostrefundResponses[keyof PostrefundResponses];
+export type RefundIdGetData = {
     body?: never;
     headers: {
         Accept: string;
@@ -807,11 +703,11 @@ export type GetOrderRefundData = {
     query?: never;
     url: '/orders/payment_actions/refunds/{refund_id}';
 };
-export type GetOrderRefundResponses = {
+export type RefundIdGetResponses = {
     200: RefundIdGet;
 };
-export type GetOrderRefundResponse = GetOrderRefundResponses[keyof GetOrderRefundResponses];
-export type GetOrdersRefundsData = {
+export type RefundIdGetResponse = RefundIdGetResponses[keyof RefundIdGetResponses];
+export type GetrefundsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -822,20 +718,49 @@ export type GetOrdersRefundsData = {
         'id:in'?: Array<number>;
         'created:min'?: string;
         'created:max'?: string;
-        transaction_id?: string;
         page?: number;
         limit?: number;
     };
     url: '/orders/payment_actions/refunds';
 };
-export type GetOrdersRefundsResponses = {
+export type GetrefundsResponses = {
     200: {
         data?: Array<Refund>;
         meta?: MetaEmptyFull;
     };
 };
-export type GetOrdersRefundsResponse = GetOrdersRefundsResponses[keyof GetOrdersRefundsResponses];
-export type GetOrderMetafieldsData = {
+export type GetrefundsResponse = GetrefundsResponses[keyof GetrefundsResponses];
+export type PostrefundquotesData = {
+    body: PostRefundQuotesRequest;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/orders/payment_actions/refund_quotes';
+};
+export type PostrefundquotesErrors = {
+    422: {
+        data?: Array<RefundQuoteFull>;
+        errors?: Array<FailedQuoteError>;
+        meta?: Meta;
+    };
+    503: {
+        data?: Array<RefundQuoteFull>;
+        errors?: Array<FailedQuoteError>;
+        meta?: Meta;
+    };
+};
+export type PostrefundquotesError = PostrefundquotesErrors[keyof PostrefundquotesErrors];
+export type PostrefundquotesResponses = {
+    201: {
+        data?: Array<RefundQuoteFull>;
+        errors?: Array<FailedQuoteError>;
+        meta?: Meta;
+    };
+};
+export type PostrefundquotesResponse = PostrefundquotesResponses[keyof PostrefundquotesResponses];
+export type GetOrderMetafieldsByOrderIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -852,12 +777,16 @@ export type GetOrderMetafieldsData = {
     };
     url: '/orders/{order_id}/metafields';
 };
-export type GetOrderMetafieldsResponses = {
+export type GetOrderMetafieldsByOrderIdErrors = {
+    404: NotFound;
+};
+export type GetOrderMetafieldsByOrderIdError = GetOrderMetafieldsByOrderIdErrors[keyof GetOrderMetafieldsByOrderIdErrors];
+export type GetOrderMetafieldsByOrderIdResponses = {
     200: MetaFieldCollectionResponse;
 };
-export type GetOrderMetafieldsResponse = GetOrderMetafieldsResponses[keyof GetOrderMetafieldsResponses];
+export type GetOrderMetafieldsByOrderIdResponse = GetOrderMetafieldsByOrderIdResponses[keyof GetOrderMetafieldsByOrderIdResponses];
 export type CreateOrderMetafieldData = {
-    body: MetafieldBasePost;
+    body: MetafieldPost;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -869,12 +798,6 @@ export type CreateOrderMetafieldData = {
     url: '/orders/{order_id}/metafields';
 };
 export type CreateOrderMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
     409: ErrorResponse;
     422: ErrorResponse;
 };
@@ -883,7 +806,7 @@ export type CreateOrderMetafieldResponses = {
     200: MetafieldResponse;
 };
 export type CreateOrderMetafieldResponse = CreateOrderMetafieldResponses[keyof CreateOrderMetafieldResponses];
-export type DeleteOrderMetafieldData = {
+export type DeleteOrderMetafieldByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -895,15 +818,11 @@ export type DeleteOrderMetafieldData = {
     query?: never;
     url: '/orders/{order_id}/metafields/{metafield_id}';
 };
-export type DeleteOrderMetafieldErrors = {
-    404: NotFound;
-};
-export type DeleteOrderMetafieldError = DeleteOrderMetafieldErrors[keyof DeleteOrderMetafieldErrors];
-export type DeleteOrderMetafieldResponses = {
+export type DeleteOrderMetafieldByIdResponses = {
     204: void;
 };
-export type DeleteOrderMetafieldResponse = DeleteOrderMetafieldResponses[keyof DeleteOrderMetafieldResponses];
-export type GetOrderMetafieldData = {
+export type DeleteOrderMetafieldByIdResponse = DeleteOrderMetafieldByIdResponses[keyof DeleteOrderMetafieldByIdResponses];
+export type GetOrderMetafieldByOrderIdAndMetafieldIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -915,14 +834,14 @@ export type GetOrderMetafieldData = {
     query?: never;
     url: '/orders/{order_id}/metafields/{metafield_id}';
 };
-export type GetOrderMetafieldErrors = {
+export type GetOrderMetafieldByOrderIdAndMetafieldIdErrors = {
     404: NotFound;
 };
-export type GetOrderMetafieldError = GetOrderMetafieldErrors[keyof GetOrderMetafieldErrors];
-export type GetOrderMetafieldResponses = {
+export type GetOrderMetafieldByOrderIdAndMetafieldIdError = GetOrderMetafieldByOrderIdAndMetafieldIdErrors[keyof GetOrderMetafieldByOrderIdAndMetafieldIdErrors];
+export type GetOrderMetafieldByOrderIdAndMetafieldIdResponses = {
     200: MetafieldResponse;
 };
-export type GetOrderMetafieldResponse = GetOrderMetafieldResponses[keyof GetOrderMetafieldResponses];
+export type GetOrderMetafieldByOrderIdAndMetafieldIdResponse = GetOrderMetafieldByOrderIdAndMetafieldIdResponses[keyof GetOrderMetafieldByOrderIdAndMetafieldIdResponses];
 export type UpdateOrderMetafieldData = {
     body: MetafieldPut;
     headers: {
@@ -937,12 +856,6 @@ export type UpdateOrderMetafieldData = {
     url: '/orders/{order_id}/metafields/{metafield_id}';
 };
 export type UpdateOrderMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
     404: NotFound;
 };
 export type UpdateOrderMetafieldError = UpdateOrderMetafieldErrors[keyof UpdateOrderMetafieldErrors];
@@ -985,7 +898,9 @@ export type UpdateGlobalOrderSettingsErrors = {
 };
 export type UpdateGlobalOrderSettingsError = UpdateGlobalOrderSettingsErrors[keyof UpdateGlobalOrderSettingsErrors];
 export type UpdateGlobalOrderSettingsResponses = {
-    200: GlobalOrderSettings & {
+    200: {
+        [key: string]: unknown;
+    } & GlobalOrderSettings & {
         meta?: MetaEmptyFull;
     };
 };
@@ -1034,92 +949,3 @@ export type UpdateChannelOrderSettingsResponses = {
     };
 };
 export type UpdateChannelOrderSettingsResponse = UpdateChannelOrderSettingsResponses[keyof UpdateChannelOrderSettingsResponses];
-export type DeleteOrdersMetafieldsData = {
-    body?: Array<number>;
-    path?: never;
-    query?: never;
-    url: '/orders/metafields';
-};
-export type DeleteOrdersMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-export type DeleteOrdersMetafieldsError = DeleteOrdersMetafieldsErrors[keyof DeleteOrdersMetafieldsErrors];
-export type DeleteOrdersMetafieldsResponses = {
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-export type DeleteOrdersMetafieldsResponse = DeleteOrdersMetafieldsResponses[keyof DeleteOrdersMetafieldsResponses];
-export type GetOrdersMetafieldsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        page?: number;
-        limit?: number;
-        key?: string;
-        'key:in'?: Array<string>;
-        namespace?: string;
-        'namespace:in'?: Array<string>;
-        direction?: 'asc' | 'desc';
-        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-        date_created?: string;
-        date_modified?: string;
-        'date_created:min'?: string;
-        'date_created:max'?: string;
-        'date_modified:min'?: string;
-        'date_modified:max'?: string;
-    };
-    url: '/orders/metafields';
-};
-export type GetOrdersMetafieldsResponses = {
-    200: MetaFieldCollectionResponse;
-};
-export type GetOrdersMetafieldsResponse = GetOrdersMetafieldsResponses[keyof GetOrdersMetafieldsResponses];
-export type CreateOrdersMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        resource_id: number;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/orders/metafields';
-};
-export type CreateOrdersMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-export type CreateOrdersMetafieldsError = CreateOrdersMetafieldsErrors[keyof CreateOrdersMetafieldsErrors];
-export type CreateOrdersMetafieldsResponses = {
-    200: MetaFieldCollectionResponsePostPut;
-};
-export type CreateOrdersMetafieldsResponse = CreateOrdersMetafieldsResponses[keyof CreateOrdersMetafieldsResponses];
-export type UpdateOrdersMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        id: number;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/orders/metafields';
-};
-export type UpdateOrdersMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-export type UpdateOrdersMetafieldsError = UpdateOrdersMetafieldsErrors[keyof UpdateOrdersMetafieldsErrors];
-export type UpdateOrdersMetafieldsResponses = {
-    200: MetaFieldCollectionResponsePostPut;
-};
-export type UpdateOrdersMetafieldsResponse = UpdateOrdersMetafieldsResponses[keyof UpdateOrdersMetafieldsResponses];

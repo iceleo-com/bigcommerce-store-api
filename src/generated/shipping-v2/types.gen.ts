@@ -154,7 +154,7 @@ export type ShippingMethodBase = {
     name?: string;
     type?: ShippingMethodType;
     /**
-     * Depends on the shipping method type. See the [supported settings object](#settings-objects).
+     * Depends on the shipping method type. See the [supported settings object](#supported-settings).
      */
     settings?: {
         /**
@@ -178,13 +178,9 @@ export type ShippingMethodBase = {
         percentage_surcharge?: number;
     };
     /**
-     * Whether or not this shipping method is a fallback method used when advanced shipping rules are unavailable.
+     * Whether or not this shipping zone is the fallback if all others are not valid for the order.
      */
     is_fallback?: boolean;
-    /**
-     * List of channels associated to a method. When creating a new method, all available channels are associated by default. (Optional)
-     */
-    channel_ids?: Array<number>;
 };
 
 /**
@@ -339,7 +335,7 @@ export type Accept = string;
  */
 export type ContentType = string;
 
-export type GetShippingZonesData = {
+export type GetAllShippingZonesData = {
     body?: never;
     headers: {
         /**
@@ -352,7 +348,7 @@ export type GetShippingZonesData = {
     url: '/shipping/zones';
 };
 
-export type GetShippingZonesResponses = {
+export type GetAllShippingZonesResponses = {
     200: Array<{
         /**
          * Zone ID
@@ -421,9 +417,9 @@ export type GetShippingZonesResponses = {
     }>;
 };
 
-export type GetShippingZonesResponse = GetShippingZonesResponses[keyof GetShippingZonesResponses];
+export type GetAllShippingZonesResponse = GetAllShippingZonesResponses[keyof GetAllShippingZonesResponses];
 
-export type CreateShippingZonesData = {
+export type CreateAShippingZonesData = {
     /**
      * Shipping Zone
      */
@@ -434,7 +430,7 @@ export type CreateShippingZonesData = {
         name: string;
         type: 'zip' | 'country' | 'state' | 'global';
         /**
-         * Array of zone locations. BigCommerce has a platform limit of 40000 `zip` type locations.
+         * Array of zone locations.
          */
         locations?: Array<{
             /**
@@ -504,11 +500,11 @@ export type CreateShippingZonesData = {
     url: '/shipping/zones';
 };
 
-export type CreateShippingZonesResponses = {
+export type CreateAShippingZonesResponses = {
     /**
      * Shipping Zone
      */
-    201: {
+    200: {
         /**
          * Zone ID.
          */
@@ -576,9 +572,9 @@ export type CreateShippingZonesResponses = {
     };
 };
 
-export type CreateShippingZonesResponse = CreateShippingZonesResponses[keyof CreateShippingZonesResponses];
+export type CreateAShippingZonesResponse = CreateAShippingZonesResponses[keyof CreateAShippingZonesResponses];
 
-export type DeleteShippingZoneData = {
+export type DeleteAShippingZoneData = {
     body?: never;
     headers: {
         /**
@@ -596,13 +592,13 @@ export type DeleteShippingZoneData = {
     url: '/shipping/zones/{id}';
 };
 
-export type DeleteShippingZoneResponses = {
+export type DeleteAShippingZoneResponses = {
     204: void;
 };
 
-export type DeleteShippingZoneResponse = DeleteShippingZoneResponses[keyof DeleteShippingZoneResponses];
+export type DeleteAShippingZoneResponse = DeleteAShippingZoneResponses[keyof DeleteAShippingZoneResponses];
 
-export type GetShippingZoneData = {
+export type GetAShippingZoneData = {
     body?: never;
     headers: {
         /**
@@ -620,7 +616,7 @@ export type GetShippingZoneData = {
     url: '/shipping/zones/{id}';
 };
 
-export type GetShippingZoneResponses = {
+export type GetAShippingZoneResponses = {
     /**
      * Shipping Zone
      */
@@ -692,9 +688,9 @@ export type GetShippingZoneResponses = {
     };
 };
 
-export type GetShippingZoneResponse = GetShippingZoneResponses[keyof GetShippingZoneResponses];
+export type GetAShippingZoneResponse = GetAShippingZoneResponses[keyof GetAShippingZoneResponses];
 
-export type UpdateShippingZoneData = {
+export type UpdateAShippingZoneData = {
     /**
      * Shipping Zone
      */
@@ -709,7 +705,7 @@ export type UpdateShippingZoneData = {
         name: string;
         type?: 'zip' | 'country' | 'state' | 'global';
         /**
-         * Array of zone locations. BigCommerce has a platform limit of 40000 `zip` type locations.
+         * Array of zone locations.
          */
         locations?: Array<{
             /**
@@ -784,7 +780,7 @@ export type UpdateShippingZoneData = {
     url: '/shipping/zones/{id}';
 };
 
-export type UpdateShippingZoneResponses = {
+export type UpdateAShippingZoneResponses = {
     /**
      * Shipping Zone
      */
@@ -856,9 +852,9 @@ export type UpdateShippingZoneResponses = {
     };
 };
 
-export type UpdateShippingZoneResponse = UpdateShippingZoneResponses[keyof UpdateShippingZoneResponses];
+export type UpdateAShippingZoneResponse = UpdateAShippingZoneResponses[keyof UpdateAShippingZoneResponses];
 
-export type GetShippingZoneMethodsData = {
+export type GetShippingMethodsZoneData = {
     body?: never;
     headers: {
         /**
@@ -876,13 +872,13 @@ export type GetShippingZoneMethodsData = {
     url: '/shipping/zones/{zone_id}/methods';
 };
 
-export type GetShippingZoneMethodsResponses = {
+export type GetShippingMethodsZoneResponses = {
     200: Array<ShippingMethodFull>;
 };
 
-export type GetShippingZoneMethodsResponse = GetShippingZoneMethodsResponses[keyof GetShippingZoneMethodsResponses];
+export type GetShippingMethodsZoneResponse = GetShippingMethodsZoneResponses[keyof GetShippingMethodsZoneResponses];
 
-export type CreateShippingMethodData = {
+export type CreateAShippingMethodData = {
     body: ShippingMethodBase;
     headers: {
         /**
@@ -904,13 +900,13 @@ export type CreateShippingMethodData = {
     url: '/shipping/zones/{zone_id}/methods';
 };
 
-export type CreateShippingMethodResponses = {
+export type CreateAShippingMethodResponses = {
     200: ShippingMethodFull;
 };
 
-export type CreateShippingMethodResponse = CreateShippingMethodResponses[keyof CreateShippingMethodResponses];
+export type CreateAShippingMethodResponse = CreateAShippingMethodResponses[keyof CreateAShippingMethodResponses];
 
-export type DeleteShippingMethodData = {
+export type DeleteAShippingMethodData = {
     body?: never;
     headers: {
         /**
@@ -932,13 +928,13 @@ export type DeleteShippingMethodData = {
     url: '/shipping/zones/{zone_id}/methods/{method_id}';
 };
 
-export type DeleteShippingMethodResponses = {
+export type DeleteAShippingMethodResponses = {
     204: void;
 };
 
-export type DeleteShippingMethodResponse = DeleteShippingMethodResponses[keyof DeleteShippingMethodResponses];
+export type DeleteAShippingMethodResponse = DeleteAShippingMethodResponses[keyof DeleteAShippingMethodResponses];
 
-export type GetShippingMethodData = {
+export type GetAShippingMethodData = {
     body?: never;
     headers: {
         /**
@@ -960,7 +956,7 @@ export type GetShippingMethodData = {
     url: '/shipping/zones/{zone_id}/methods/{method_id}';
 };
 
-export type GetShippingMethodResponses = {
+export type GetAShippingMethodResponses = {
     /**
      * Shipping Method
      */
@@ -975,7 +971,7 @@ export type GetShippingMethodResponses = {
         name?: string;
         type?: ShippingMethodType;
         /**
-         * Depends on the shipping method type. See the [supported settings object](#settings-objects).
+         * Depends on the shipping method type. See the [supported settings object](#supported-settings).
          */
         settings?: {
             [key: string]: unknown;
@@ -999,16 +995,12 @@ export type GetShippingMethodResponses = {
          * Whether or not this shipping zone is the fallback if all others are not valid for the order.
          */
         is_fallback?: boolean;
-        /**
-         * List of channels associated to a method. When creating a new method, all available channels are associated by default. (Optional)
-         */
-        channel_ids?: Array<number>;
     };
 };
 
-export type GetShippingMethodResponse = GetShippingMethodResponses[keyof GetShippingMethodResponses];
+export type GetAShippingMethodResponse = GetAShippingMethodResponses[keyof GetAShippingMethodResponses];
 
-export type UpdateShippingMethodData = {
+export type UpdateAShippingMethodData = {
     body: ShippingMethodBase;
     headers: {
         /**
@@ -1034,11 +1026,11 @@ export type UpdateShippingMethodData = {
     url: '/shipping/zones/{zone_id}/methods/{method_id}';
 };
 
-export type UpdateShippingMethodResponses = {
+export type UpdateAShippingMethodResponses = {
     200: ShippingMethodFull;
 };
 
-export type UpdateShippingMethodResponse = UpdateShippingMethodResponses[keyof UpdateShippingMethodResponses];
+export type UpdateAShippingMethodResponse = UpdateAShippingMethodResponses[keyof UpdateAShippingMethodResponses];
 
 export type DeleteCarrierConnectionData = {
     body: {
@@ -1078,7 +1070,7 @@ export type DeleteCarrierConnectionResponses = {
 
 export type DeleteCarrierConnectionResponse = DeleteCarrierConnectionResponses[keyof DeleteCarrierConnectionResponses];
 
-export type CreateCarrierConnectionData = {
+export type CreateACarrierConnectionData = {
     body?: CarrierConnection;
     headers: {
         /**
@@ -1095,7 +1087,7 @@ export type CreateCarrierConnectionData = {
     url: '/shipping/carrier/connection';
 };
 
-export type CreateCarrierConnectionErrors = {
+export type CreateACarrierConnectionErrors = {
     /**
      * Invalid requests will return a 400 response.
      *
@@ -1119,16 +1111,16 @@ export type CreateCarrierConnectionErrors = {
     400: unknown;
 };
 
-export type CreateCarrierConnectionResponses = {
+export type CreateACarrierConnectionResponses = {
     /**
      * Returns if request was successful.
      */
     204: void;
 };
 
-export type CreateCarrierConnectionResponse = CreateCarrierConnectionResponses[keyof CreateCarrierConnectionResponses];
+export type CreateACarrierConnectionResponse = CreateACarrierConnectionResponses[keyof CreateACarrierConnectionResponses];
 
-export type UpdateCarrierConnectionData = {
+export type UpdateACarrierConnectionData = {
     /**
      * The request body will vary by carrier. See [Create a Carrier Connection](/docs/rest-management/shipping-v2/shipping-carrier#create-a-carrier-connection).
      */
@@ -1148,7 +1140,7 @@ export type UpdateCarrierConnectionData = {
     url: '/shipping/carrier/connection';
 };
 
-export type UpdateCarrierConnectionErrors = {
+export type UpdateACarrierConnectionErrors = {
     /**
      * If a required field is not provided, the request will return a 400 response.
      *
@@ -1162,11 +1154,11 @@ export type UpdateCarrierConnectionErrors = {
     400: unknown;
 };
 
-export type UpdateCarrierConnectionResponses = {
+export type UpdateACarrierConnectionResponses = {
     /**
      * Returns if request was successful.
      */
     204: void;
 };
 
-export type UpdateCarrierConnectionResponse = UpdateCarrierConnectionResponses[keyof UpdateCarrierConnectionResponses];
+export type UpdateACarrierConnectionResponse = UpdateACarrierConnectionResponses[keyof UpdateACarrierConnectionResponses];

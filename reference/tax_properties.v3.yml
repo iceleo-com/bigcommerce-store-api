@@ -29,10 +29,9 @@ paths:
         - Tax Properties
       summary: Get Tax Properties
       description: Retrieve all tax properties defined in this store.
-      operationId: getTaxProperties
+      operationId: get-tax-properties
       parameters:
         - $ref: "#/components/parameters/idin"
-        - $ref: "#/components/parameters/typein"
       responses:
         "200":
           description: OK
@@ -55,7 +54,7 @@ paths:
       summary: Update Tax Properties
       description: Update one or more tax properties. Only fields specified will be
         adjusted.
-      operationId: updateTaxProperties
+      operationId: update-tax-properties
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -88,7 +87,7 @@ paths:
       summary: Create Tax Properties
       description: Create one or more tax properties. A **code** and a **display name**
         must be included when creating tax properties.
-      operationId: createTaxProperties
+      operationId: create-tax-properties
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -121,7 +120,7 @@ paths:
       summary: Delete Tax Properties
       description: Delete one or multiple tax properties. A tax property must have zero
         usages within product tax properties before you can delete it.
-      operationId: deleteTaxProperties
+      operationId: delete-tax-properties
       parameters:
         - $ref: "#/components/parameters/idin_required"
       responses:
@@ -140,7 +139,7 @@ paths:
       summary: Get Product Tax Properties
       description: Retrieve the tax properties that are associated with one or more
         products.
-      operationId: getProductsTaxProperties
+      operationId: get-product-tax-properties
       parameters:
         - $ref: "#/components/parameters/product_idin"
       responses:
@@ -166,7 +165,7 @@ paths:
       description: Update the tax properties associated with one or more products. This
         operation will be additive to any tax property values already associated
         with the product, overwriting any existing tax property values.
-      operationId: updateProductTaxProperties
+      operationId: update-product-tax-properties
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -205,7 +204,7 @@ paths:
         - Product Tax Properties
       summary: Delete Product Tax Properties
       description: Delete tax properties that are associated with one or more products.
-      operationId: deleteProductTaxProperties
+      operationId: delete-product-tax-properties
       parameters:
         - $ref: "#/components/parameters/product_idin"
       responses:
@@ -235,46 +234,26 @@ components:
       name: product_id:in
       in: query
       required: true
-      description: ID of product. To target multiple products, provide a comma-separated list of IDs such as `12,34,56`.
-      style: form
-      explode: false
+      description: ID of product. To target multiple products, provide a comma-separated
+        list of IDs such as `12,34,56`
       schema:
-        type: array
-        items:
-          type: integer
+        type: string
     idin:
       name: id:in
       in: query
       required: false
-      description: ID of tax property. To target multiple tax properties, provide a comma-separated list of IDs such as `12,34,56`.
-      style: form
-      explode: false
+      description: ID of tax property. To target multiple tax properties, provide a
+        comma-separated list of IDs such as `12,34,56`
       schema:
-        type: array
-        items:
-          type: integer
+        type: string
     idin_required:
       name: id:in
       in: query
       required: true
-      description: ID of tax property. To target multiple tax properties, provide a comma-separated list of IDs such as `12,34,56`.
-      style: form
-      explode: false
+      description: ID of tax property. To target multiple tax properties, provide a
+        comma-separated list of IDs such as `12,34,56`
       schema:
-        type: array
-        items:
-          type: integer
-    typein:
-      name: type:in
-      in: query
-      required: false
-      description: Filter result by the type of tax property. To target multiple types, provide a comma-separated list of types such as `customer,product`.
-      style: form
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
+        type: string
   securitySchemes:
     X-Auth-Token:
       name: X-Auth-Token
@@ -339,13 +318,6 @@ components:
           format: date-time
           example: 2022-07-21T19:33:57+00:00
           readOnly: true
-        type:
-          type: string
-          description: The type of entity that the tax property can be associated with.
-          enum:
-            - PRODUCT
-            - CUSTOMER
-          example: PRODUCT
     PropertyPOST:
       type: object
       properties:
@@ -366,18 +338,9 @@ components:
             This string will be displayed on the Products screen as a tooltip
             associated with the relevant field.
           example: Food Industry
-        type:
-          type: string
-          description: The type of entity that the tax property can be associated with.
-            Default
-          enum:
-            - PRODUCT
-            - CUSTOMER
-          example: PRODUCT
       required:
         - code
         - display_name
-        - type
     PropertyPUT:
       type: object
       properties:
@@ -415,8 +378,6 @@ components:
           example: 157
         tax_properties:
           type: object
-          properties: {}
-          additionalProperties: true
           description: A simple key-value pairing. The tax property must be defined to
             associate a value. These values will be sent to the active tax
             provider during Tax Provider API operations whenever the associated

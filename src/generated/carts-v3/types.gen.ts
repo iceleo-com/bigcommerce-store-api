@@ -35,7 +35,7 @@ export type CartUpdateRequest = {
         /**
          * The theme of the gift certificate.
          */
-        theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+        theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
         amount: number;
         quantity: number;
         /**
@@ -74,7 +74,7 @@ export type CartCreatePostData = {
         /**
          * The theme of the gift certificate.
          */
-        theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+        theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
         amount: number;
         quantity: number;
         /**
@@ -137,7 +137,7 @@ export type CartRequestData = {
         /**
          * The theme of the gift certificate.
          */
-        theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+        theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
         amount: number;
         quantity: number;
         /**
@@ -170,10 +170,6 @@ export type CartRequestData = {
  */
 export type CartUpdatePutRequestData = {
     customer_id?: number;
-    /**
-     * The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-     */
-    version?: number;
 };
 
 /**
@@ -212,7 +208,7 @@ export type LineItemGiftCertificateRequestData = {
     /**
      * The theme of the gift certificate.
      */
-    theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+    theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
     amount: number;
     quantity: number;
     /**
@@ -246,13 +242,13 @@ export type CartFull = {
      */
     id?: string;
     /**
+     * Bundled items will have the ID of their parent item.
+     */
+    parent_id?: string;
+    /**
      * ID of the customer to which the cart belongs.
      */
     customer_id?: number;
-    /**
-     * The channel ID. If no channel is specified, defaults to 1.
-     */
-    channel_id?: number;
     /**
      * The cart’s email. This is the same email that is used in the billing address.
      */
@@ -278,10 +274,6 @@ export type CartFull = {
      */
     discount_amount?: number;
     /**
-     * The entered value represents the order level manual discount.
-     */
-    manual_discount_amount?: number;
-    /**
      * Sum of cart line-item amounts minus cart-level discounts and coupons. This amount includes taxes (where applicable).
      */
     cart_amount?: number;
@@ -305,6 +297,10 @@ export type CartFull = {
      * Time when the cart was last updated.
      */
     updated_time?: string;
+    /**
+     * The channel ID. If no channel is specified, defaults to 1.
+     */
+    channel_id?: number;
     /**
      * Locale of the cart. Accepts strings of format `xx` or `xx-YY`. Uses the [ISO-639 standard](https://www.iso.org/iso-639-language-codes.html) format.
      */
@@ -335,10 +331,6 @@ export type CartFull = {
             text?: string;
         };
     };
-    /**
-     * The current version of the cart increments with each successful update. You can use it to enable optimistic concurrency control for subsequent updates.
-     */
-    version?: number;
 };
 
 /**
@@ -348,7 +340,7 @@ export type CartFull = {
  */
 export type Currency = {
     /**
-     * ISO-4217 currency code. (See: https://www.iso.org/iso-4217-currency-codes.html.)
+     * ISO-4217 currency code. (See: http://en.wikipedia.org/wiki/ISO_4217.)
      */
     code?: string;
 };
@@ -377,7 +369,7 @@ export type ItemGiftCertificate = {
     /**
      * The theme of the gift certificate.
      */
-    theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+    theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
     /**
      * Value must be between 1.00 and 1,000.00 in the store’s default currency.
      */
@@ -413,14 +405,14 @@ export type ItemGiftCertificateGet = {
      */
     name?: string;
     /**
-     * The theme of the gift certificate. The following options are available:`Birthday`, `Boy`, `Celebration`, `Christmas`, `General`, and `Girl`.
+     * The theme of the gift certificate. The following options are available:`birthday.html`, `boy.html`, `celebration.html`, `christmas.html`, `general.html`, and `girl.html`.
      */
     theme?: string;
     /**
      * Value must be between 1.00 and 1,000.00 in the store’s default currency.
      */
     amount?: number;
-    taxable?: boolean;
+    is_taxable?: boolean;
     /**
      * Contact Entity
      */
@@ -449,9 +441,6 @@ export type ContactEntity = {
     email?: string;
 };
 
-/**
- * Digital Item
- */
 export type ItemDigital = {
     /**
      * The line-item ID.
@@ -606,18 +595,11 @@ export type ItemDigital = {
     download_size?: string;
 };
 
-/**
- * Base Item
- */
 export type ItemDigitalGet = {
     /**
      * The line-item ID.
      */
     id?: string;
-    /**
-     * Bundled items will have the ID of their parent item.
-     */
-    parent_id?: string;
     /**
      * The ID of the variant. Required in the /PUT or /POST request if the product has variants.
      */
@@ -645,7 +627,7 @@ export type ItemDigitalGet = {
     /**
      * Boolean value that specifies whether the item is taxable.
      */
-    taxable?: boolean;
+    is_taxable?: boolean;
     /**
      * Image of the product or variant.
      */
@@ -722,17 +704,27 @@ export type ItemDigitalGet = {
      */
     extended_sale_price?: number;
     /**
-     * Whether or not a physical product requires shipping.
+     * The list of selected options for this product.
      */
-    is_require_shipping?: boolean;
-    /**
-     * Whether or not you can change or remove the item from the cart. Items that are immutable include those added automatically by promotions.
-     */
-    is_mutable?: boolean;
-    /**
-     * Whether or not a promotion added an additional item.
-     */
-    added_by_promotion?: boolean;
+    options?: Array<{
+        /**
+         * The product option name; for example, Color or Size.
+         */
+        name?: string;
+        /**
+         * The product option identifier.
+         */
+        nameId?: number;
+        /**
+         * The product option value; for example, Red or Medium.
+         */
+        value?: string;
+        /**
+         * The product option value identifier in number format.
+         */
+        valueId?: number;
+    }>;
+} & {
     /**
      * URLs to download all product files.
      */
@@ -909,7 +901,7 @@ export type BaseItem = {
      */
     sku?: string;
     /**
-     * The itemʼs product name.
+     * The item's product name.
      */
     name?: string;
     /**
@@ -1099,10 +1091,6 @@ export type AppliedCoupon = {
      * The discounted amount applied within a given context.
      */
     readonly discounted_amount?: number;
-    /**
-     * Display name of the coupon.
-     */
-    display_name?: string;
 };
 
 /**
@@ -1131,7 +1119,7 @@ export type GiftWrapping = {
 /**
  * Item Custom
  *
- * Add a custom item to the shopperʼs cart.
+ * Add a custom item to the shopper's cart.
  *
  * * Custom items are not added to the catalog.
  * * The price should be set to match the store settings for taxes.
@@ -1159,7 +1147,7 @@ export type ItemCustom = {
 /**
  * Item Custom
  *
- * Add a custom item to the shopperʼs cart.
+ * Add a custom item to the shopper's cart.
  *
  * * Custom items are not added to the catalog.
  * * The price should be set to match the store settings for taxes.
@@ -1182,14 +1170,6 @@ export type ItemCustomGet = {
      * Specifies the price of the item. This value can include or exclude tax, depending on the store setup.
      */
     list_price?: string;
-    /**
-     * List price of the item multiplied by the quantity.
-     */
-    extended_list_price?: number;
-    /**
-     * Image of the product or variant.
-     */
-    image_url?: string;
 };
 
 /**
@@ -1281,7 +1261,7 @@ export type CartLineItemUpdatePut = {
         /**
          * The theme of the gift certificate.
          */
-        theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+        theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
         amount: number;
         quantity: number;
         /**
@@ -1304,34 +1284,13 @@ export type CartLineItemUpdatePut = {
         message?: string;
     }>;
     custom_items?: CartPostCustomItem;
-    /**
-     * The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-     */
-    version?: number;
-};
-
-export type CartLineItemDelete = {
-    /**
-     * The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-     */
-    version?: number;
-};
-
-/**
- * Redirect_urls_Post
- */
-export type RedirectUrlsPost = {
-    query_params?: {
-        key?: string;
-        value?: string;
-    };
 };
 
 /**
  * Cart_Line_Item_Update_Post
  */
 export type CartLineItemUpdatePost = {
-    line_items?: Array<CartPostVariant> | Array<CartPostModifier>;
+    line_items?: unknown;
     gift_certificates?: Array<{
         /**
          * Given name for gift certificate line item.
@@ -1340,7 +1299,7 @@ export type CartLineItemUpdatePost = {
         /**
          * The theme of the gift certificate.
          */
-        theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+        theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
         amount: number;
         quantity: number;
         /**
@@ -1363,10 +1322,6 @@ export type CartLineItemUpdatePost = {
         message?: string;
     }>;
     custom_items?: CartPostCustomItem;
-    /**
-     * The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-     */
-    version?: number;
 };
 
 /**
@@ -1377,10 +1332,6 @@ export type CartPostCustomItem = Array<{
     name?: string;
     quantity?: number;
     list_price?: number;
-    /**
-     * Image of the product or variant.
-     */
-    image_url?: string;
 }>;
 
 /**
@@ -1445,10 +1396,6 @@ export type ItemPhysicalGet = {
      */
     id?: string;
     /**
-     * Bundled items will have the ID of their parent item.
-     */
-    parent_id?: string;
-    /**
      * The ID of the variant. Required in the /PUT or /POST request if the product has variants.
      */
     variant_id: number;
@@ -1465,6 +1412,24 @@ export type ItemPhysicalGet = {
      */
     name?: string;
     /**
+     * The weight is displayed here if the item has a custom dimension.
+     */
+    weight?: number;
+    dimensions?: {
+        /**
+         * The height is displayed here if the item has a custom dimension.
+         */
+        height?: number;
+        /**
+         * The width is displayed here if the item has a custom dimension.
+         */
+        width?: number;
+        /**
+         * The depth is displayed here if the item has a custom dimension.
+         */
+        depth?: number;
+    };
+    /**
      * The product URL.
      */
     url?: string;
@@ -1475,7 +1440,7 @@ export type ItemPhysicalGet = {
     /**
      * Boolean value that specifies whether the item is taxable.
      */
-    taxable?: boolean;
+    is_taxable?: boolean;
     /**
      * Image of the product or variant.
      */
@@ -1535,7 +1500,7 @@ export type ItemPhysicalGet = {
      */
     original_price?: number;
     /**
-     * The net item price before discounts and coupons are applied. BigCommerce derives an item’s list price from the product default price or, if applicable, the sale price configured in the admin panel. To enable v3 promotions at the product level, you must update the [promotion](https://support.bigcommerce.com/s/article/Store-Settings?language=en_US#promotion) settings in the control panel.
+     * The net item price before discounts and coupons are applied. BigCommerce derives an item’s list price from the product default price or, if applicable, the sale price configured in the admin panel.
      */
     list_price?: number;
     /**
@@ -1551,17 +1516,26 @@ export type ItemPhysicalGet = {
      */
     extended_sale_price?: number;
     /**
-     * Whether or not a physical product requires shipping.
+     * The list of selected options for this product.
      */
-    is_require_shipping?: boolean;
-    /**
-     * Whether or not you can change or remove the item from the cart. Items that are immutable include those added automatically by promotions.
-     */
-    is_mutable?: boolean;
-    /**
-     * Whether or not a promotion added an additional item.
-     */
-    added_by_promotion?: boolean;
+    options?: Array<{
+        /**
+         * The product option name; for example, Color or Size.
+         */
+        name?: string;
+        /**
+         * The product option identifier.
+         */
+        nameId?: number;
+        /**
+         * The product option value; for example, Red or Medium.
+         */
+        value?: string;
+        /**
+         * The product option value identifier in number format.
+         */
+        valueId?: number | string;
+    }>;
     /**
      * The gift wrapping details for this item.
      */
@@ -1597,7 +1571,7 @@ export type NotFound = {
  */
 export type MetafieldResponse = {
     data?: Metafield;
-};
+} & CollectionMeta;
 
 /**
  * Allows app partners to write custom data to various resources in the API.
@@ -1607,19 +1581,15 @@ export type Metafield = MetafieldBase & {
     /**
      * The unique identifier for the metafield.
      */
-    id?: string;
+    id?: number;
     /**
-     * Date and time of the metafieldʼs creation.
+     * Date and time of the metafield's creation.
      */
     date_created?: string;
     /**
      * Date and time when the metafield was last updated.
      */
     date_modified?: string;
-    /**
-     * Client ID for the metafieldʼs creator.
-     */
-    readonly owner_client_id?: string;
 };
 
 /**
@@ -1629,17 +1599,16 @@ export type Metafield = MetafieldBase & {
 export type MetafieldBase = {
     /**
      * Determines the visibility and writeability of the field by other API consumers.
-     *
      * | Value | Description |
      * | :--- | :--- |
      * | `app_only` | Private to the app that owns the field. |
      * | `read` | Visible to other API consumers. |
      * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
+     * | `read_and_sf_access` | Visible to other API consumers, including on storefront. |
+     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on storefront. |
      *
      */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
     /**
      * Namespace for the metafield, for organizational purposes.
      *
@@ -1673,20 +1642,25 @@ export type MetafieldBase = {
 };
 
 /**
+ * The model for a POST to create metafield.
+ *
+ */
+export type MetafieldPost = MetafieldBasePost;
+
+/**
  * Common Metafield properties.
  *
  */
 export type MetafieldBasePost = {
     /**
      * Determines the visibility and writeability of the field by other API consumers.
-     *
      * | Value | Description |
      * | :--- | :--- |
      * | `app_only` | Private to the app that owns the field. |
      * | `read` | Visible to other API consumers. |
      * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
+     * | `read_and_sf_access` | Visible to other API consumers, including on storefront. |
+     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on storefront. |
      *
      */
     permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
@@ -1718,139 +1692,7 @@ export type MetafieldBasePost = {
  */
 export type MetaFieldCollectionResponse = {
     data?: Metafield;
-    meta?: MetaCollectionOpen;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponseBatch = {
-    data?: Array<Metafield>;
     meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponseBatchPostPut = {
-    data?: Array<Metafield>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Error response payload for the BigCommerce API.
- *
- */
-export type _Error = {
-    /**
-     * The HTTP status code for the error.
-     *
-     */
-    status?: number;
-    /**
-     * The error title.
-     *
-     */
-    title?: string;
-    /**
-     * The error type.
-     *
-     */
-    type?: string;
-    errors?: ErrorDetail;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionPartialSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
 };
 
 /**
@@ -1988,29 +1830,6 @@ export type AppliedCouponWritable = {
      * The coupon code.
      */
     code: string;
-    /**
-     * Display name of the coupon.
-     */
-    display_name?: string;
-};
-
-/**
- * Allows app partners to write custom data to various resources in the API.
- *
- */
-export type MetafieldWritable = MetafieldBaseWritable & {
-    /**
-     * The unique identifier for the metafield.
-     */
-    id?: string;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created?: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified?: string;
 };
 
 /**
@@ -2020,17 +1839,16 @@ export type MetafieldWritable = MetafieldBaseWritable & {
 export type MetafieldBaseWritable = {
     /**
      * Determines the visibility and writeability of the field by other API consumers.
-     *
      * | Value | Description |
      * | :--- | :--- |
      * | `app_only` | Private to the app that owns the field. |
      * | `read` | Visible to other API consumers. |
      * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
+     * | `read_and_sf_access` | Visible to other API consumers, including on storefront. |
+     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on storefront. |
      *
      */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
     /**
      * Namespace for the metafield, for organizational purposes.
      *
@@ -2056,14 +1874,6 @@ export type MetafieldBaseWritable = {
      *
      */
     resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart';
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
 };
 
 /**
@@ -2098,7 +1908,7 @@ export type CartId2 = string;
  * * `line_items.digital_items.options`: The cart returns an abbreviated result. Use this to return digital items product options. To return the extended cart object, use in a /POST request.
  * * `promotions.banners`: Returns a list of eligible banners.
  */
-export type LineItems2 = Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options'>;
+export type LineItems2 = 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options';
 
 /**
  * Specifies the page number in a limited (paginated) list of products.
@@ -2113,24 +1923,14 @@ export type PageParam = number;
 export type MetafieldIdParam = number;
 
 /**
- * Filter based on a metafieldʼs key.
+ * Filter based on a metafield's key.
  */
 export type MetafieldKeyParam = string;
 
 /**
- * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
- */
-export type MetafieldKeyInParam = Array<string>;
-
-/**
- * Filter based on a metafieldʼs namespaces.
+ * Filter based on a metafield's key.
  */
 export type MetafieldNamespaceParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter
- */
-export type MetafieldNamespaceInParam = Array<string>;
 
 /**
  * Controls the number of items per page in a limited (paginated) list of products.
@@ -2139,50 +1939,12 @@ export type MetafieldNamespaceInParam = Array<string>;
 export type LimitParam = number;
 
 /**
- * 'Query parameter that lets you filter by the minimum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.'
- *
- */
-export type DateCreatedMin = string;
-
-/**
- * 'Query parameter that lets you filter by the maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.'
- *
- */
-export type DateCreatedMax = string;
-
-/**
- * 'Query parameter that lets you filter by the maximum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.'
- *
- */
-export type DateModifiedMax = string;
-
-/**
- * 'Query parameter that lets you filter by the minimum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.'
- *
- */
-export type DateModifiedMin = string;
-
-/**
  * Sort direction. Acceptable values are: `asc`, `desc`.
  *
  */
 export type DirectionParam = 'asc' | 'desc';
 
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-
-export type CreateCartData = {
-    /**
-     * **Examples:**
-     *
-     * 1. Creating a cart by adding a simple product (a product without option selections).
-     * 2. Creating a cart with a variant. This works when a product can be specified purely by a variant, without any other required options.
-     * 3. Creating a cart using a date option. The API supports timestamps, “option_value”: 1743570000, and dates as an object literal, “option_value”: {“day”:”01”, “month”:”02”, “year”:”2020”}.
-     * 4. Creating a cart with a variant, a checkbox, and a picklist modifier added.
-     * 5. Creating a cart using a custom item.
-     */
+export type CreateACartData = {
     body: CartCreatePostData;
     headers: {
         /**
@@ -2199,21 +1961,18 @@ export type CreateCartData = {
          * * `line_items.digital_items.options`: The cart returns an abbreviated result. Use this to return digital items product options. To return the extended cart object, use in a /POST request.
          * * `promotions.banners`: Returns a list of eligible banners.
          */
-        include?: Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners'>;
+        include?: 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners';
     };
     url: '/carts';
 };
 
-export type CreateCartResponses = {
-    201: {
-        data?: CartFull;
-        meta?: MetaCollectionOpen;
-    };
+export type CreateACartResponses = {
+    201: CartFull;
 };
 
-export type CreateCartResponse = CreateCartResponses[keyof CreateCartResponses];
+export type CreateACartResponse = CreateACartResponses[keyof CreateACartResponses];
 
-export type AddCartLineItemsData = {
+export type AddCartLineItemData = {
     body: CartLineItemUpdatePost;
     headers: {
         /**
@@ -2235,22 +1994,19 @@ export type AddCartLineItemsData = {
          * * `line_items.digital_items.options`: The cart returns an abbreviated result. Use this to return digital items product options. To return the extended cart object, use in a /POST request.
          * * `promotions.banners`: Returns a list of eligible banners.
          */
-        include?: Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners'>;
+        include?: 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners';
     };
     url: '/carts/{cartId}/items';
 };
 
-export type AddCartLineItemsResponses = {
-    201: {
-        data?: CartFull;
-        meta?: MetaCollectionOpen;
-    };
+export type AddCartLineItemResponses = {
+    201: CartFull;
 };
 
-export type AddCartLineItemsResponse = AddCartLineItemsResponses[keyof AddCartLineItemsResponses];
+export type AddCartLineItemResponse = AddCartLineItemResponses[keyof AddCartLineItemResponses];
 
 export type CreateCartRedirectUrlData = {
-    body?: RedirectUrlsPost;
+    body?: never;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -2282,7 +2038,7 @@ export type CreateCartRedirectUrlResponses = {
 export type CreateCartRedirectUrlResponse = CreateCartRedirectUrlResponses[keyof CreateCartRedirectUrlResponses];
 
 export type DeleteCartLineItemData = {
-    body?: CartLineItemDelete;
+    body?: never;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -2303,19 +2059,10 @@ export type DeleteCartLineItemData = {
          * * `line_items.digital_items.options`: The cart returns an abbreviated result. Use this to return digital items product options. To return the extended cart object, use in a /POST request.
          * * `promotions.banners`: Returns a list of eligible banners.
          */
-        include?: Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners'>;
+        include?: 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners';
     };
     url: '/carts/{cartId}/items/{itemId}';
 };
-
-export type DeleteCartLineItemErrors = {
-    /**
-     * Cart conflict
-     */
-    409: ErrorResponse;
-};
-
-export type DeleteCartLineItemError = DeleteCartLineItemErrors[keyof DeleteCartLineItemErrors];
 
 export type DeleteCartLineItemResponses = {
     /**
@@ -2353,30 +2100,18 @@ export type UpdateCartLineItemData = {
          * * `line_items.digital_items.options`: The cart returns an abbreviated result. Use this to return digital items product options. To return the extended cart object, use in a /POST request.
          * * `promotions.banners`: Returns a list of eligible banners.
          */
-        include?: Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners'>;
+        include?: 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners';
     };
     url: '/carts/{cartId}/items/{itemId}';
 };
 
-export type UpdateCartLineItemErrors = {
-    /**
-     * Cart conflict
-     */
-    409: ErrorResponse;
-};
-
-export type UpdateCartLineItemError = UpdateCartLineItemErrors[keyof UpdateCartLineItemErrors];
-
 export type UpdateCartLineItemResponses = {
-    200: {
-        data?: CartFull;
-        meta?: MetaCollectionOpen;
-    };
+    200: CartFull;
 };
 
 export type UpdateCartLineItemResponse = UpdateCartLineItemResponses[keyof UpdateCartLineItemResponses];
 
-export type DeleteCartData = {
+export type DeleteACartData = {
     body?: never;
     headers: {
         /**
@@ -2394,13 +2129,13 @@ export type DeleteCartData = {
     url: '/carts/{cartId}';
 };
 
-export type DeleteCartResponses = {
+export type DeleteACartResponses = {
     204: void;
 };
 
-export type DeleteCartResponse = DeleteCartResponses[keyof DeleteCartResponses];
+export type DeleteACartResponse = DeleteACartResponses[keyof DeleteACartResponses];
 
-export type GetCartData = {
+export type GetACartData = {
     body?: never;
     headers: {
         /**
@@ -2421,28 +2156,25 @@ export type GetCartData = {
          * * `line_items.digital_items.options`: The cart returns an abbreviated result. Use this to return digital items product options. To return the extended cart object, use in a /POST request.
          * * `promotions.banners`: Returns a list of eligible banners.
          */
-        include?: Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners'>;
+        include?: 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners';
     };
     url: '/carts/{cartId}';
 };
 
-export type GetCartErrors = {
+export type GetACartErrors = {
     /**
      * Cart not found.
      */
     404: unknown;
 };
 
-export type GetCartResponses = {
-    200: {
-        data?: CartFull;
-        meta?: MetaCollectionOpen;
-    };
+export type GetACartResponses = {
+    200: CartFull;
 };
 
-export type GetCartResponse = GetCartResponses[keyof GetCartResponses];
+export type GetACartResponse = GetACartResponses[keyof GetACartResponses];
 
-export type UpdateCartData = {
+export type UpdateACartData = {
     body: CartUpdatePutRequestData;
     headers: {
         /**
@@ -2464,28 +2196,16 @@ export type UpdateCartData = {
          * * `line_items.digital_items.options`: The cart returns an abbreviated result. Use this to return digital items product options. To return the extended cart object, use in a /POST request.
          * * `promotions.banners`: Returns a list of eligible banners.
          */
-        include?: Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners'>;
+        include?: 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners';
     };
     url: '/carts/{cartId}';
 };
 
-export type UpdateCartErrors = {
-    /**
-     * Cart conflict
-     */
-    409: ErrorResponse;
+export type UpdateACartResponses = {
+    201: CartFull;
 };
 
-export type UpdateCartError = UpdateCartErrors[keyof UpdateCartErrors];
-
-export type UpdateCartResponses = {
-    201: {
-        data?: CartFull;
-        meta?: MetaCollectionOpen;
-    };
-};
-
-export type UpdateCartResponse = UpdateCartResponses[keyof UpdateCartResponses];
+export type UpdateACartResponse = UpdateACartResponses[keyof UpdateACartResponses];
 
 export type GetGlobalCartSettingsData = {
     body?: never;
@@ -2571,13 +2291,6 @@ export type GetChannelCartSettingsData = {
     path: {
         /**
          * The channel ID of the settings overrides.
-         *
-         * ### OAuth scopes
-         *
-         * | UI Name | Permission | Parameter |
-         * |:--------|:-----------|:----------|
-         * |Information & Settings | modify | `store_v2_information`|
-         * |Information & Settings | read-only| `store_v2_information`|
          */
         channel_id: number;
     };
@@ -2615,13 +2328,6 @@ export type UpdateChannelCartSettingsData = {
     path: {
         /**
          * The channel ID of the settings overrides.
-         *
-         * ### OAuth scopes
-         *
-         * | UI Name | Permission | Parameter |
-         * |:--------|:-----------|:----------|
-         * |Information & Settings | modify | `store_v2_information`|
-         * |Information & Settings | read-only| `store_v2_information`|
          */
         channel_id: number;
     };
@@ -2657,7 +2363,7 @@ export type UpdateChannelCartSettingsResponses = {
 
 export type UpdateChannelCartSettingsResponse = UpdateChannelCartSettingsResponses[keyof UpdateChannelCartSettingsResponses];
 
-export type GetCartMetafieldsData = {
+export type GetAllCartMetafieldsData = {
     body?: never;
     headers: {
         /**
@@ -2683,11 +2389,11 @@ export type GetCartMetafieldsData = {
          */
         limit?: number;
         /**
-         * Filter based on a metafieldʼs key.
+         * Filter based on a metafield's key.
          */
         key?: string;
         /**
-         * Filter based on a metafieldʼs namespaces.
+         * Filter based on a metafield's key.
          */
         namespace?: string;
         /**
@@ -2699,7 +2405,22 @@ export type GetCartMetafieldsData = {
     url: '/carts/{cart_id}/metafields';
 };
 
-export type GetCartMetafieldsResponses = {
+export type GetAllCartMetafieldsErrors = {
+    /**
+     * The `Metafield` conflicts with another `Metafield`. This can be the result of duplicate unique key combinations of the app's client id, namespace, key, resource_type, and resource_id.
+     *
+     */
+    409: ErrorResponse;
+    /**
+     * The `Metafield` is not valid. This is the result of missing required fields or of invalid data. See the response for more details.
+     *
+     */
+    422: ErrorResponse;
+};
+
+export type GetAllCartMetafieldsError = GetAllCartMetafieldsErrors[keyof GetAllCartMetafieldsErrors];
+
+export type GetAllCartMetafieldsResponses = {
     /**
      * An array of metafields and metadata.
      *
@@ -2707,10 +2428,10 @@ export type GetCartMetafieldsResponses = {
     200: MetafieldResponse;
 };
 
-export type GetCartMetafieldsResponse = GetCartMetafieldsResponses[keyof GetCartMetafieldsResponses];
+export type GetAllCartMetafieldsResponse = GetAllCartMetafieldsResponses[keyof GetAllCartMetafieldsResponses];
 
-export type CreateCartMetafieldData = {
-    body: MetafieldBasePost;
+export type CreateCartMetafieldsByCartIdData = {
+    body: MetafieldPost;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -2728,27 +2449,17 @@ export type CreateCartMetafieldData = {
     url: '/carts/{cart_id}/metafields';
 };
 
-export type CreateCartMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
+export type CreateCartMetafieldsByCartIdErrors = {
     /**
-     * The `Metafield` conflicts with another `Metafield`. This can result from duplicate unique key combinations of the appʼs client id, namespace, key, resource_type, and resource_id.
+     * The resource was not found.
      *
      */
-    409: ErrorResponse;
-    /**
-     * The `Metafield` was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
-     */
-    422: ErrorResponse;
+    404: NotFound;
 };
 
-export type CreateCartMetafieldError = CreateCartMetafieldErrors[keyof CreateCartMetafieldErrors];
+export type CreateCartMetafieldsByCartIdError = CreateCartMetafieldsByCartIdErrors[keyof CreateCartMetafieldsByCartIdErrors];
 
-export type CreateCartMetafieldResponses = {
+export type CreateCartMetafieldsByCartIdResponses = {
     /**
      * A `Metafield` object.
      *
@@ -2756,9 +2467,9 @@ export type CreateCartMetafieldResponses = {
     200: MetaFieldCollectionResponse;
 };
 
-export type CreateCartMetafieldResponse = CreateCartMetafieldResponses[keyof CreateCartMetafieldResponses];
+export type CreateCartMetafieldsByCartIdResponse = CreateCartMetafieldsByCartIdResponses[keyof CreateCartMetafieldsByCartIdResponses];
 
-export type DeleteCartMetafieldData = {
+export type DeleteCartMetafieldByIdData = {
     body?: never;
     headers: {
         /**
@@ -2780,17 +2491,7 @@ export type DeleteCartMetafieldData = {
     url: '/carts/{cart_id}/metafields/{metafield_id}';
 };
 
-export type DeleteCartMetafieldErrors = {
-    /**
-     * Not found (A metafield was not found with this query)
-     *
-     */
-    404: NotFound;
-};
-
-export type DeleteCartMetafieldError = DeleteCartMetafieldErrors[keyof DeleteCartMetafieldErrors];
-
-export type DeleteCartMetafieldResponses = {
+export type DeleteCartMetafieldByIdResponses = {
     /**
      * An empty response.
      *
@@ -2798,9 +2499,9 @@ export type DeleteCartMetafieldResponses = {
     204: void;
 };
 
-export type DeleteCartMetafieldResponse = DeleteCartMetafieldResponses[keyof DeleteCartMetafieldResponses];
+export type DeleteCartMetafieldByIdResponse = DeleteCartMetafieldByIdResponses[keyof DeleteCartMetafieldByIdResponses];
 
-export type GetCartMetafieldData = {
+export type GetACartMetafieldData = {
     body?: never;
     headers: {
         /**
@@ -2830,11 +2531,11 @@ export type GetCartMetafieldData = {
          */
         limit?: number;
         /**
-         * Filter based on a metafieldʼs key.
+         * Filter based on a metafield's key.
          */
         key?: string;
         /**
-         * Filter based on a metafieldʼs namespaces.
+         * Filter based on a metafield's key.
          */
         namespace?: string;
         /**
@@ -2846,17 +2547,26 @@ export type GetCartMetafieldData = {
     url: '/carts/{cart_id}/metafields/{metafield_id}';
 };
 
-export type GetCartMetafieldErrors = {
+export type GetACartMetafieldErrors = {
     /**
-     * Not found (A metafield was not found with this query).
+     * The `Metafield` conflicts with another `Metafield`. This can be the result of duplicate unique key combinations of the app's client id, namespace, key, resource_type, and resource_id.
      *
      */
-    404: NotFound;
+    409: ErrorResponse;
+    /**
+     * The `Metafield` is not valid. This is the result of missing required fields or of invalid data. See the response for more details.
+     *
+     */
+    422: ErrorResponse;
+    /**
+     * Internal Server Error
+     */
+    500: unknown;
 };
 
-export type GetCartMetafieldError = GetCartMetafieldErrors[keyof GetCartMetafieldErrors];
+export type GetACartMetafieldError = GetACartMetafieldErrors[keyof GetACartMetafieldErrors];
 
-export type GetCartMetafieldResponses = {
+export type GetACartMetafieldResponses = {
     /**
      * A `Metafield` object.
      *
@@ -2864,14 +2574,14 @@ export type GetCartMetafieldResponses = {
     200: MetafieldResponse;
 };
 
-export type GetCartMetafieldResponse = GetCartMetafieldResponses[keyof GetCartMetafieldResponses];
+export type GetACartMetafieldResponse = GetACartMetafieldResponses[keyof GetACartMetafieldResponses];
 
-export type UpdateCartMetafieldData = {
+export type UpdateCartMetafieldsByCartIdData = {
     /**
      * A `Metafield` object.
      *
      */
-    body: MetafieldBasePost;
+    body: MetafieldPost;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -2893,215 +2603,22 @@ export type UpdateCartMetafieldData = {
     url: '/carts/{cart_id}/metafields/{metafield_id}';
 };
 
-export type UpdateCartMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
+export type UpdateCartMetafieldsByCartIdErrors = {
     /**
-     * Response object for metafields creation with partial success.
+     * The resource was not found.
      *
      */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
+    404: NotFound;
 };
 
-export type UpdateCartMetafieldError = UpdateCartMetafieldErrors[keyof UpdateCartMetafieldErrors];
+export type UpdateCartMetafieldsByCartIdError = UpdateCartMetafieldsByCartIdErrors[keyof UpdateCartMetafieldsByCartIdErrors];
 
-export type UpdateCartMetafieldResponses = {
+export type UpdateCartMetafieldsByCartIdResponses = {
     /**
-     * A `Metafield` and metadata.
+     * A metafield and metadata.
      *
      */
     200: MetaFieldCollectionResponse;
 };
 
-export type UpdateCartMetafieldResponse = UpdateCartMetafieldResponses[keyof UpdateCartMetafieldResponses];
-
-export type DeleteCartsMetafieldsData = {
-    /**
-     * List of metafield `id`s.
-     */
-    body?: Array<number>;
-    path?: never;
-    query?: never;
-    url: '/carts/metafields';
-};
-
-export type DeleteCartsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields deletion with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-
-export type DeleteCartsMetafieldsError = DeleteCartsMetafieldsErrors[keyof DeleteCartsMetafieldsErrors];
-
-export type DeleteCartsMetafieldsResponses = {
-    /**
-     * Response object for metafields deletion with success.
-     *
-     */
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-
-export type DeleteCartsMetafieldsResponse = DeleteCartsMetafieldsResponses[keyof DeleteCartsMetafieldsResponses];
-
-export type GetCartsMetafieldsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         *
-         */
-        page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products.
-         *
-         */
-        limit?: number;
-        /**
-         * Filter based on a metafieldʼs key.
-         */
-        key?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
-         */
-        'key:in'?: Array<string>;
-        /**
-         * Filter based on a metafieldʼs namespaces.
-         */
-        namespace?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter
-         */
-        'namespace:in'?: Array<string>;
-        /**
-         * Sort direction. Acceptable values are: `asc`, `desc`.
-         *
-         */
-        direction?: 'asc' | 'desc';
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-        /**
-         * 'Query parameter that lets you filter by the minimum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.'
-         *
-         */
-        'date_modified:min'?: string;
-        /**
-         * 'Query parameter that lets you filter by the maximum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.'
-         *
-         */
-        'date_modified:max'?: string;
-        /**
-         * 'Query parameter that lets you filter by the minimum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.'
-         *
-         */
-        'date_created:min'?: string;
-        /**
-         * 'Query parameter that lets you filter by the maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.'
-         *
-         */
-        'date_created:max'?: string;
-    };
-    url: '/carts/metafields';
-};
-
-export type GetCartsMetafieldsResponses = {
-    /**
-     * List of `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponseBatch;
-};
-
-export type GetCartsMetafieldsResponse = GetCartsMetafieldsResponses[keyof GetCartsMetafieldsResponses];
-
-export type CreateCartsMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        /**
-         * The ID for the cart with which the metafield is associated.
-         *
-         */
-        resource_id: string;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/carts/metafields';
-};
-
-export type CreateCartsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type CreateCartsMetafieldsError = CreateCartsMetafieldsErrors[keyof CreateCartsMetafieldsErrors];
-
-export type CreateCartsMetafieldsResponses = {
-    /**
-     * List of created `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponseBatchPostPut;
-};
-
-export type CreateCartsMetafieldsResponse = CreateCartsMetafieldsResponses[keyof CreateCartsMetafieldsResponses];
-
-export type UpdateCartsMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        /**
-         * The ID of metafield to update.
-         *
-         */
-        id: string;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/carts/metafields';
-};
-
-export type UpdateCartsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type UpdateCartsMetafieldsError = UpdateCartsMetafieldsErrors[keyof UpdateCartsMetafieldsErrors];
-
-export type UpdateCartsMetafieldsResponses = {
-    /**
-     * List of updated `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponseBatchPostPut;
-};
-
-export type UpdateCartsMetafieldsResponse = UpdateCartsMetafieldsResponses[keyof UpdateCartsMetafieldsResponses];
+export type UpdateCartMetafieldsByCartIdResponse = UpdateCartMetafieldsByCartIdResponses[keyof UpdateCartMetafieldsByCartIdResponses];

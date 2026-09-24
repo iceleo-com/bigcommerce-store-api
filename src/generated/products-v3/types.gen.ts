@@ -4,26 +4,6 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
 
-export type ModifierCondition = {
-    /**
-     * Use the [get all product modifiers](/docs/rest-catalog/product-modifiers#get-all-product-modifiers) endpoint to determine the `option_values` `id`. The `option_values` `id` is the `modifier_value_id`.
-     */
-    modifier_id?: number;
-    /**
-     * Use the [get all product modifiers](/docs/rest-catalog/product-modifiers#get-all-product-modifiers) endpoint to determine the `option_values` `option_id`. The `option_values` `option_id` is the same as the `modifier_id`.
-     */
-    modifier_value_id?: number;
-};
-
-export type VariantCondition = {
-    /**
-     * Use the [get all product variants](/docs/rest-catalog/product-variants#get-all-product-variants) endpoint to determine the variant `id`.
-     */
-    variant_id?: number;
-};
-
-export type ConditionsRequest = Array<ModifierCondition | VariantCondition>;
-
 /**
  * productModifier_Base
  *
@@ -177,25 +157,21 @@ export type ProductVariantBase = {
      */
     retail_price?: number | null;
     /**
-     * Minimum Advertised Price.
-     */
-    map_price?: number;
-    /**
      * This variant’s base weight on the storefront. If this value is null, the product’s default weight (set in the Product resource’s weight field) will be used as the base weight.
      */
     weight?: number | null;
     /**
-     * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default width (set in the Product resourceʼs `width` field) will be used as the base width.
+     * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default width (set in the Product resource's `width` field) will be used as the base width.
      *
      */
     width?: number | null;
     /**
-     * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default height (set in the Product resourceʼs `height` field) will be used as the base height.
+     * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default height (set in the Product resource's `height` field) will be used as the base height.
      *
      */
     height?: number | null;
     /**
-     * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default depth (set in the Product resourceʼs `depth` field) will be used as the base depth.
+     * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default depth (set in the Product resource's `depth` field) will be used as the base depth.
      *
      */
     depth?: number | null;
@@ -218,14 +194,9 @@ export type ProductVariantBase = {
      */
     purchasing_disabled_message?: string;
     /**
-     * The URL for an image displayed on the storefront when the conditions are applied. Limit of 8MB per file.
-     *
-     */
-    image_url?: string;
-    /**
      * The UPC code used in feeds for shopping comparison sites and external channel integrations.
      */
-    upc?: string;
+    upc?: string | null;
     /**
      * Inventory level for the variant, which is used when the product’s inventory_tracking is set to `variant`. The Catalog API returns the inventory for only the default location.
      *
@@ -255,21 +226,10 @@ export type ProductVariantBase = {
  * productVariant_Full
  */
 export type ProductVariantFull = ProductVariantBase & {
-    /**
-     * Product ID
-     */
-    product_id: number;
-    /**
-     * Variant ID
-     */
-    id: number;
-    /**
-     * A unique user-defined alphanumeric product code/stock keeping unit (SKU). The SKU is always unique regardless of the letter case for both products and variants.
-     */
+    product_id?: number;
     sku: string;
-    sku_id?: number;
     /**
-     * Array of option and option values IDs that make up this variant. Will be empty if the variant is the productʼs base variant.
+     * Array of option and option values IDs that make up this variant. Will be empty if the variant is the product's base variant.
      */
     option_values?: Array<ProductVariantOptionValueFull>;
     /**
@@ -308,17 +268,17 @@ export type ProductVariantPutProduct = {
      */
     weight?: number | null;
     /**
-     * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default width (set in the Product resourceʼs `width` field) will be used as the base width.
+     * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default width (set in the Product resource's `width` field) will be used as the base width.
      *
      */
     width?: number | null;
     /**
-     * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default height (set in the Product resourceʼs `height` field) will be used as the base height.
+     * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default height (set in the Product resource's `height` field) will be used as the base height.
      *
      */
     height?: number | null;
     /**
-     * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default depth (set in the Product resourceʼs `depth` field) will be used as the base depth.
+     * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default depth (set in the Product resource's `depth` field) will be used as the base depth.
      *
      */
     depth?: number | null;
@@ -343,7 +303,7 @@ export type ProductVariantPutProduct = {
     /**
      * The UPC code used in feeds for shopping comparison sites and external channel integrations.
      */
-    upc?: string;
+    upc?: string | null;
     /**
      * Inventory level for the variant, which is used when the product’s inventory_tracking is set to `variant`. The Catalog API returns the inventory for only the default location.
      *
@@ -378,23 +338,15 @@ export type ProductVariantPutProduct = {
  */
 export type ProductVariantOptionValueFull = {
     /**
-     * The option_value ID.
+     * The name of the option.
+     *
      */
-    id?: number;
+    option_display_name: string;
     /**
      * The label of the option value.
      *
      */
     label: string;
-    /**
-     * The option ID.
-     */
-    option_id?: number;
-    /**
-     * The name of the option.
-     *
-     */
-    option_display_name: string;
 };
 
 /**
@@ -463,12 +415,19 @@ export type ProductOptionOptionValueFull = ProductOptionOptionValueBase & {
  */
 export type ProductImageBase = {
     /**
-     * Flag for identifying whether the image is used as the productʼs thumbnail.
+     * The local path to the original image file uploaded to BigCommerce. Use image_url when creating a product.
+     *
+     * Must be sent as a `multipart/form-data` field in the request body. Limit of 8 MB per file.
+     *
+     */
+    image_file?: string;
+    /**
+     * Flag for identifying whether the image is used as the product's thumbnail.
      *
      */
     is_thumbnail?: boolean;
     /**
-     * The order in which the image will be displayed on the product page. Higher integers give the image a lower priority. When updating, if the image is given a lower priority, all images with a `sort_order` the same as or greater than the imageʼs new `sort_order` value will have their `sort_order`s reordered.
+     * The order in which the image will be displayed on the product page. Higher integers give the image a lower priority. When updating, if the image is given a lower priority, all images with a `sort_order` the same as or greater than the image's new `sort_order` value will have their `sort_order`s reordered.
      *
      */
     sort_order?: number;
@@ -478,30 +437,42 @@ export type ProductImageBase = {
      */
     description?: string;
     /**
-     * The date on which the product image was modified.
-     *
+     * Must be a fully qualified URL path, including protocol. Limit of 8MB per file.
      */
-    date_modified?: string;
+    image_url?: string;
 };
 
 /**
- * productImage_Post_Put
+ * productImage_Put
  *
- * The model for a POST or PUT to create  or update applicable Product Image fields.
+ * The model for a PUT to update applicable Product Image fields.
  */
-export type ProductImagePostPut = {
+export type ProductImagePut = {
     /**
      * The unique numeric identifier for the product with which the image is associated.
      *
      */
     product_id?: number;
     /**
-     * The URL for an image displayed on the storefront when the conditions are applied. Limit of 8MB per file.
-     *
-     * Cannot be used with `image_file`.
+     * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled.
      *
      */
-    image_url?: string;
+    readonly url_zoom?: string;
+    /**
+     * The standard URL for this image. By default, this is used for product-page images.
+     *
+     */
+    readonly url_standard?: string;
+    /**
+     * The thumbnail URL for this image. By default, this is the image size used on the category page and in side panels.
+     *
+     */
+    readonly url_thumbnail?: string;
+    /**
+     * The tiny URL for this image. By default, this is the image size used for thumbnails beneath the product image on a product page.
+     *
+     */
+    readonly url_tiny?: string;
 } & ProductImageBase;
 
 /**
@@ -522,7 +493,7 @@ export type ProductVideoBase = {
      */
     description?: string;
     /**
-     * The order in which the video will be displayed on the product page. Higher integers give the video a lower priority. When updating, if the video is given a lower priority, all videos with a `sort_order` the same as or greater than the videoʼs new `sort_order` value will have their `sort_order`s reordered.
+     * The order in which the video will be displayed on the product page. Higher integers give the video a lower priority. When updating, if the video is given a lower priority, all videos with a `sort_order` the same as or greater than the video's new `sort_order` value will have their `sort_order`s reordered.
      *
      */
     sort_order?: number;
@@ -561,19 +532,19 @@ export type ProductVideoFull = ProductVideoBase & {
     length?: string;
 };
 
-export type IncludeParamBase = Array<'bulk_pricing_rules' | 'reviews' | 'modifiers' | 'options' | 'parent_relations' | 'custom_fields' | 'channels' | 'videos'>;
-
 /**
  * product_Put
  *
  * The model for a PUT to update a product.
  */
-export type ProductPut = ProductBasePut;
+export type ProductPut = ProductBase & {
+    variants?: Array<ProductVariantPutProduct>;
+};
 
 /**
  * metafield_Base
  *
- * Metafield for products, categories, variants, and brands; the max number of metafields allowed on each is 250. For more information, see [Platform Limits](https://support.bigcommerce.com/s/article/Platform-Limits) in the Help Center.
+ * Metafield for products, categories, variants, and brands; the max number of metafields allowed on each is 50. For more information, see [Platform Limits](https://support.bigcommerce.com/s/article/Platform-Limits) in the Help Center.
  */
 export type MetafieldBase = {
     /**
@@ -582,7 +553,7 @@ export type MetafieldBase = {
      */
     key: string;
     /**
-     * The value of the field, for example: `1`, `blue`. You must enter a JSON formatted string for [ShipperHQ](/docs/store-operations/shipping/shipper-hq#shipperhq-object-properties) metafields. Required for POST.
+     * The value of the field, for example: `1`, `blue`. Required for POST.
      *
      */
     value: string;
@@ -632,7 +603,7 @@ export type ComplexRuleBase = {
      */
     sort_order?: number;
     /**
-     * Flag for determining whether the rule is to be used when adjusting a productʼs price, weight, image, or availabilty.
+     * Flag for determining whether the rule is to be used when adjusting a product's price, weight, image, or availabilty.
      *
      */
     enabled?: boolean;
@@ -753,7 +724,7 @@ export type ComplexRuleConditionBase = {
 /**
  * customUrl_Full
  *
- * The custom URL for the product on the storefront. If not provided in the POST request, the URL will be autogenerated from the product name.
+ * The custom URL for the product on the storefront.
  */
 export type CustomUrlFull = {
     /**
@@ -766,42 +737,12 @@ export type CustomUrlFull = {
      *
      */
     is_customized?: boolean;
-    /**
-     * Optional field. This field automatically creates a dynamic 301 redirect when a product URL change occurs with a PUT request. Existing dynamic redirects will automatically update to a new URL to avoid a loop.
-     *
-     */
-    create_redirect?: boolean;
-};
-
-/**
- * bulkPricingRule_Response
- */
-export type BulkPricingRuleResponse = {
-    /**
-     * The minimum inclusive quantity of a product to satisfy this rule. Must be greater than or equal to zero. For `fixed` rules, the minimum quantity canʼt be less than two.
-     * Required in /POST.
-     *
-     */
-    quantity_min?: number;
-    /**
-     * The maximum inclusive quantity of a product to satisfy this rule. Must be greater than the `quantity_min` value – unless this field has a value of 0 (zero), in which case there will be no maximum bound for this rule.
-     * Required in /POST.
-     */
-    quantity_max?: number;
-    /**
-     * The type of adjustment that is made. Values: `price` - the adjustment amount per product; `percent` - the adjustment as a percentage of the original price; `fixed` - the adjusted absolute price of the product.
-     * Required in /POST.
-     */
-    type?: 'price' | 'percent' | 'fixed';
-    /**
-     * You can express the adjustment type as either a fixed dollar amount or a percentage. Send a number; the response will return a number for `price` and `fixed` adjustments.
-     * Divide the adjustment percentage by 100 and send the result in string format. For example, represent 10% as “.10”. The response will return a float value for both `price` and `percentage` adjustments.
-     */
-    amount?: number | string;
 };
 
 /**
  * bulkPricingRule_Full
+ *
+ * Common Bulk Pricing Rule properties
  */
 export type BulkPricingRuleFull = {
     /**
@@ -947,12 +888,12 @@ export type ProductOptionConfigFull = {
      */
     product_list_adjusts_inventory?: boolean;
     /**
-     * (product_list, product_list_with_images) Flag to add the optional productʼs price to the main productʼs price.
+     * (product_list, product_list_with_images) Flag to add the optional product's price to the main product's price.
      *
      */
     product_list_adjusts_pricing?: boolean;
     /**
-     * (product_list, product_list_with_images) How to factor the optional productʼs weight and package dimensions into the shipping quote. Values: `none` - donʼt adjust; `weight` - use shipping weight only; `package` - use weight and dimensions.
+     * (product_list, product_list_with_images) How to factor the optional product's weight and package dimensions into the shipping quote. Values: `none` - don't adjust; `weight` - use shipping weight only; `package` - use weight and dimensions.
      *
      */
     product_list_shipping_calc?: 'none' | 'weight' | 'package';
@@ -1105,7 +1046,7 @@ export type ProductFull = {
      * ID of the product. Read-Only.
      */
     readonly id?: number;
-} & ProductBaseResponse & {
+} & ProductBase & {
     /**
      * The date on which the product was created.
      *
@@ -1138,6 +1079,7 @@ export type ProductFull = {
      * Legacy template setting which controls if the option set shows up to the side of or below the product image and description.
      */
     option_set_display?: string;
+    variants?: Array<ProductVariantFull>;
 };
 
 /**
@@ -1157,79 +1099,7 @@ export type ProductImageFull = ProductImageBase & {
      */
     product_id?: number;
     /**
-     * The URL for an image displayed on the storefront when the conditions are applied. Limit of 8MB per file.
-     *
-     * Cannot be used with `image_file`.
-     *
-     */
-    image_url?: string;
-    /**
-     * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled. You should provide an image smaller than 1280x1280; otherwise, the API returns a resized image.
-     *
-     */
-    readonly url_zoom?: string;
-    /**
-     * The standard URL for this image. By default, this is used for product-page images.
-     *
-     */
-    readonly url_standard?: string;
-    /**
-     * The thumbnail URL for this image. By default, this is the image size used on the category page and in side panels.
-     *
-     */
-    readonly url_thumbnail?: string;
-    /**
-     * The tiny URL for this image. By default, this is the image size used for thumbnails beneath the product image on a product page.
-     *
-     */
-    readonly url_tiny?: string;
-    /**
-     * The date on which the product image was modified.
-     *
-     */
-    date_modified?: string;
-};
-
-/**
- * productImage
- *
- * Common PrimaryImage properties.
- */
-export type PrimaryImageFull = {
-    /**
-     * The unique numeric ID of the image; increments sequentially.
-     *
-     */
-    id?: number;
-    /**
-     * The unique numeric identifier for the product with which the image is associated.
-     *
-     */
-    product_id?: number;
-    /**
-     * Flag for identifying whether the image is used as the productʼs thumbnail.
-     *
-     */
-    is_thumbnail?: boolean;
-    /**
-     * The order in which the image will be displayed on the product page. Higher integers give the image a lower priority. When updating, if the image is given a lower priority, all images with a `sort_order` the same as or greater than the imageʼs new `sort_order` value will have their `sort_order`s reordered.
-     *
-     */
-    sort_order?: number;
-    /**
-     * The description for the image.
-     *
-     */
-    description?: string;
-    /**
-     * The local path to the original image file uploaded to BigCommerce. Use image_url when creating a product.
-     *
-     * Must be sent as a `multipart/form-data` field in the request body. Limit of 8 MB per file.
-     *
-     */
-    image_file?: string;
-    /**
-     * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled. You should provide an image smaller than 1280x1280; otherwise, the API returns a resized image.
+     * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled.
      *
      */
     readonly url_zoom?: string;
@@ -1265,7 +1135,7 @@ export type ProductPutCollection = Array<{
      * Unique ID of the *Product*. Read-Only.
      */
     readonly id: number;
-} & ProductBasePut>;
+} & ProductBase>;
 
 /**
  * config_Full
@@ -1386,12 +1256,12 @@ export type ConfigFull = {
      */
     product_list_adjusts_inventory?: boolean;
     /**
-     * (product_list, product_list_with_images) Flag to add the optional productʼs price to the main productʼs price.
+     * (product_list, product_list_with_images) Flag to add the optional product's price to the main product's price.
      *
      */
     product_list_adjusts_pricing?: boolean;
     /**
-     * (product_list, product_list_with_images) How to factor the optional productʼs weight and package dimensions into the shipping quote. Values: `none` - donʼt adjust; `weight` - use shipping weight only; `package` - use weight and dimensions.
+     * (product_list, product_list_with_images) How to factor the optional product's weight and package dimensions into the shipping quote. Values: `none` - don't adjust; `weight` - use shipping weight only; `package` - use weight and dimensions.
      *
      */
     product_list_shipping_calc?: 'none' | 'weight' | 'package';
@@ -1423,12 +1293,14 @@ export type AdjustersFull = {
 };
 
 /**
- * product_Base_POST
+ * product_Base
  *
- * `Product` properties used in:
+ * Shared `Product` properties used in:
  * * `POST`
+ * * `PUT`
+ * * `GET`
  */
-export type ProductBasePost = {
+export type ProductBase = {
     /**
      * A unique product name.
      *
@@ -1440,7 +1312,7 @@ export type ProductBasePost = {
      */
     type: 'physical' | 'digital';
     /**
-     * A unique user-defined alphanumeric product code/stock keeping unit (SKU). The SKU is always unique regardless of the letter case for both products and variants.
+     * A unique user-defined alphanumeric product code/stock keeping unit (SKU).
      *
      */
     sku?: string;
@@ -1485,7 +1357,7 @@ export type ProductBasePost = {
      */
     retail_price?: number;
     /**
-     * If entered, the sale price will be used instead of value in the price field when calculating the productʼs cost.
+     * If entered, the sale price will be used instead of value in the price field when calculating the product's cost.
      *
      */
     sale_price?: number;
@@ -1499,12 +1371,12 @@ export type ProductBasePost = {
      */
     tax_class_id?: number;
     /**
-     * Tax Codes, such as AvaTax System Tax Codes, identify products and services that fall into special sales-tax categories. By using these codes, merchants who subscribe to a tax provider integration, such as BigCommerceʼs Avalara Premium, can calculate sales taxes more accurately. Stores without a tax provider will ignore the code when calculating sales tax. Do not pass more than one code. The codes are case-sensitive. For details, please see the tax providerʼs documentation.
+     * Tax Codes, such as AvaTax System Tax Codes, identify products and services that fall into special sales-tax categories. By using these codes, merchants who subscribe to a tax provider integration, such as BigCommerce's Avalara Premium, can calculate sales taxes more accurately. Stores without a tax provider will ignore the code when calculating sales tax. Do not pass more than one code. The codes are case-sensitive. For details, please see the tax provider's documentation.
      *
      */
     product_tax_code?: string;
     /**
-     * An array of IDs for the categories to which this product belongs. You will overwrite all product categories when updating a product and supplying an array of categories. The limit is 1,000 ID values. When you enable the catalog V2 product experience in the control panel, you must include the categories array in the request body.
+     * An array of IDs for the categories to which this product belongs. When updating a product, if an array of categories is supplied, all product categories will be overwritten. Does not accept more than 1,000 ID values.
      *
      */
     categories?: Array<number>;
@@ -1526,7 +1398,7 @@ export type ProductBasePost = {
      */
     inventory_level?: number;
     /**
-     * Inventory warning level for the product. When the productʼs inventory level drops below the warning level, the store owner will be informed. Simple inventory tracking must be enabled (see the `inventory_tracking` field) for this to take any effect.
+     * Inventory warning level for the product. When the product's inventory level drops below the warning level, the store owner will be informed. Simple inventory tracking must be enabled (see the `inventory_tracking` field) for this to take any effect.
      *
      */
     inventory_warning_level?: number;
@@ -1591,7 +1463,7 @@ export type ProductBasePost = {
      */
     availability_description?: string;
     /**
-     * Availability of the product. (Corresponds to the productʼs [Purchasability](https://support.bigcommerce.com/s/article/Adding-Products-v3?language=en_US#sections) section in the control panel.) Supported values: `available` - the product is available for purchase; `disabled` - the product is listed on the storefront, but cannot be purchased; `preorder` - the product is listed for pre-orders.
+     * Availability of the product. (Corresponds to the product's [Purchasability](https://support.bigcommerce.com/s/article/Adding-Products-v3?language=en_US#sections) section in the control panel.) Supported values: `available` - the product is available for purchase; `disabled` - the product is listed on the storefront, but cannot be purchased; `preorder` - the product is listed for pre-orders.
      *
      */
     availability?: 'available' | 'disabled' | 'preorder';
@@ -1615,7 +1487,7 @@ export type ProductBasePost = {
      */
     sort_order?: number;
     /**
-     * The product condition. Will be shown on the product page if the `is_condition_shown` fieldʼs value is `true`. Possible values: `New`, `Used`, `Refurbished`.
+     * The product condition. Will be shown on the product page if the `is_condition_shown` field's value is `true`. Possible values: `New`, `Used`, `Refurbished`.
      *
      */
     condition?: 'New' | 'Used' | 'Refurbished';
@@ -1640,12 +1512,12 @@ export type ProductBasePost = {
      */
     page_title?: string;
     /**
-     * Custom meta keywords for the product page. If not defined, the storeʼs default keywords will be used.
+     * Custom meta keywords for the product page. If not defined, the store's default keywords will be used.
      *
      */
     meta_keywords?: Array<string>;
     /**
-     * Custom meta description for the product page. If not defined, the storeʼs default meta description will be used.
+     * Custom meta description for the product page. If not defined, the store's default meta description will be used.
      *
      */
     meta_description?: string;
@@ -1657,7 +1529,7 @@ export type ProductBasePost = {
      */
     view_count?: number;
     /**
-     * Pre-order release date. See the `availability` field for details on setting a productʼs availability to accept pre-orders.
+     * Pre-order release date. See the `availability` field for details on setting a product's availability to accept pre-orders.
      *
      */
     preorder_release_date?: string | null;
@@ -1674,7 +1546,7 @@ export type ProductBasePost = {
      */
     is_preorder_only?: boolean;
     /**
-     * False by default, indicating that this productʼs price should be shown on the product page. If set to `true`, the price is hidden. (NOTE: To successfully set `is_price_hidden` to `true`, the `availability` value must be `disabled`.)
+     * False by default, indicating that this product's price should be shown on the product page. If set to `true`, the price is hidden. (NOTE: To successfully set `is_price_hidden` to `true`, the `availability` value must be `disabled`.)
      *
      */
     is_price_hidden?: boolean;
@@ -1723,10 +1595,6 @@ export type ProductBasePost = {
      */
     mpn?: string;
     /**
-     * the date when the Product had been imported
-     */
-    date_last_imported?: string;
-    /**
      * The total (cumulative) rating for the product.
      *
      */
@@ -1742,7 +1610,7 @@ export type ProductBasePost = {
      */
     total_sold?: number;
     /**
-     * 200 maximum custom fields per product. 255 maximum characters per custom field.
+     * 200 maximum custom fields per product. 255 maximum characters per custom field. The default rate limit for this endpoint is 40 concurrent requests.
      */
     custom_fields?: Array<ProductCustomFieldPut>;
     bulk_pricing_rules?: Array<{
@@ -1752,685 +1620,8 @@ export type ProductBasePost = {
         readonly id: number;
     } & BulkPricingRuleFull>;
     images?: Array<ProductImageFull>;
-    /**
-     * The Catalog API integrates with third-party YouTube.
-     * The [YouTube Terms of Service](https://www.youtube.com/t/terms) and [Google Privacy Policy](https://policies.google.com/privacy) apply, as indicated in our [Privacy Policy](https://www.bigcommerce.com/privacy/) and [Terms of Service](https://www.bigcommerce.com/terms/).
-     *
-     */
     videos?: Array<ProductVideoFull>;
     variants?: Array<ProductVariantFull>;
-};
-
-/**
- * product_Base_PUT
- *
- * `Product` properties used in:
- * * `PUT`
- */
-export type ProductBasePut = {
-    /**
-     * A unique product name.
-     *
-     */
-    name?: string;
-    /**
-     * The product type. One of: `physical` - a physical stock unit, `digital` - a digital download.
-     *
-     */
-    type?: 'physical' | 'digital';
-    /**
-     * A unique user-defined alphanumeric product code/stock keeping unit (SKU). The SKU is always unique regardless of the letter case for both products and variants.
-     *
-     */
-    sku?: string;
-    /**
-     * The product description, which can include HTML formatting.
-     *
-     */
-    description?: string;
-    /**
-     * Weight of the product, which can be used when calculating shipping costs. This is based on the unit set on the store.
-     *
-     */
-    weight?: number;
-    /**
-     * Width of the product, which can be used when calculating shipping costs.
-     *
-     */
-    width?: number;
-    /**
-     * Depth of the product, which can be used when calculating shipping costs.
-     *
-     */
-    depth?: number;
-    /**
-     * Height of the product, which can be used when calculating shipping costs.
-     *
-     */
-    height?: number;
-    /**
-     * The price of the product. The price should include or exclude tax, based on the store settings.
-     *
-     */
-    price?: number;
-    /**
-     * The cost price of the product. Stored for reference only; it is not used or displayed anywhere on the store.
-     *
-     */
-    cost_price?: number;
-    /**
-     * The retail cost of the product. If entered, the retail cost price will be shown on the product page.
-     *
-     */
-    retail_price?: number;
-    /**
-     * If entered, the sale price will be used instead of value in the price field when calculating the productʼs cost.
-     *
-     */
-    sale_price?: number;
-    /**
-     * Minimum Advertised Price
-     */
-    map_price?: number;
-    /**
-     * The ID of the tax class applied to the product. (NOTE: Value ignored if automatic tax is enabled.)
-     *
-     */
-    tax_class_id?: number;
-    /**
-     * Tax Codes, such as AvaTax System Tax Codes, identify products and services that fall into special sales-tax categories. By using these codes, merchants who subscribe to a tax provider integration, such as BigCommerceʼs Avalara Premium, can calculate sales taxes more accurately. Stores without a tax provider will ignore the code when calculating sales tax. Do not pass more than one code. The codes are case-sensitive. For details, please see the tax providerʼs documentation.
-     *
-     */
-    product_tax_code?: string;
-    /**
-     * An array of IDs for the categories to which this product belongs. When updating a product, if an array of categories is supplied, all product categories will be overwritten. Does not accept more than 1,000 ID values.
-     *
-     */
-    categories?: Array<number>;
-    /**
-     * You can add a product to an existing brand during a product /PUT or /POST. Use either the `brand_id` or the `brand_name` field. The response body can include `brand_id`.
-     *
-     */
-    brand_id?: number;
-    /**
-     * You can create the brand during a product PUT or POST request. If the brand already exists, the product /PUT or /POST request adds the product to the brand. If not, the product /PUT or /POST request creates the brand and then adds the product to the brand. Brand name is not case-sensitive; "Common Good" and "Common good" are the same. Use either the `brand_id` or the `brand_name` field. The response body does not include `brand_name`.
-     */
-    brand_name?: string;
-    /**
-     * Current inventory level of the product. You must track inventory by _product_ for this to take effect (see the `inventory_tracking` field). The Catalog API returns the inventory for only the default location.
-     *
-     * The inventory for a product cannot exceed 2,147,483,647 in the catalog. If you exceed the limit, the store sets the inventory level to the limit.
-     *
-     * The Catalog API handles limits in a different way than the Inventory API. For more information, see [Limit handling](/docs/store-operations/catalog/inventory-adjustments#limit-handling-in-inventory-versus-catalog-api).
-     */
-    inventory_level?: number;
-    /**
-     * Inventory warning level for the product. When the productʼs inventory level drops below the warning level, the store owner will be informed. Simple inventory tracking must be enabled (see the `inventory_tracking` field) for this to take any effect.
-     *
-     */
-    inventory_warning_level?: number;
-    /**
-     * The type of inventory tracking for the product. Values are: `none` - inventory levels will not be tracked; `product` - inventory levels will be tracked using the `inventory_level` and `inventory_warning_level` fields; `variant` - inventory levels will be tracked based on variants, which maintain their own warning levels and inventory levels.
-     *
-     */
-    inventory_tracking?: 'none' | 'product' | 'variant';
-    /**
-     * A fixed shipping cost for the product. If defined, this value will be used during checkout instead of normal shipping-cost calculation.
-     *
-     */
-    fixed_cost_shipping_price?: number;
-    /**
-     * Flag used to indicate whether the product has free shipping. If `true`, the shipping cost for the product will be zero.
-     *
-     */
-    is_free_shipping?: boolean;
-    /**
-     * Flag to determine whether the product should be displayed to customers browsing the store. If `true`, the product will be displayed. If `false`, the product will be hidden from view.
-     *
-     */
-    is_visible?: boolean;
-    /**
-     * Flag to determine whether the product should be included in the `featured products` panel when viewing the store.
-     *
-     */
-    is_featured?: boolean;
-    /**
-     * An array of IDs for the related products.
-     *
-     */
-    related_products?: Array<number>;
-    /**
-     * Warranty information displayed on the product page. Can include HTML formatting.
-     *
-     */
-    warranty?: string;
-    /**
-     * The BIN picking number for the product.
-     *
-     */
-    bin_picking_number?: string;
-    /**
-     * The layout template file used to render this product category. This field is writable only for stores with a Blueprint theme applied. For stores with a Stencil theme applied, see [Custom Template Associations](/docs/rest-content/custom-template-associations).
-     *
-     */
-    layout_file?: string;
-    /**
-     * The product UPC code, which is used in feeds for shopping comparison sites and external channel integrations.
-     *
-     */
-    upc?: string;
-    /**
-     * A comma-separated list of keywords that can be used to locate the product when searching the store.
-     *
-     */
-    search_keywords?: string;
-    /**
-     * Availability text displayed on the checkout page, under the product title. Tells the customer how long it will normally take to ship this product, such as: 'Usually ships in 24 hours.'
-     *
-     */
-    availability_description?: string;
-    /**
-     * Availability of the product. (Corresponds to the productʼs [Purchasability](https://support.bigcommerce.com/s/article/Adding-Products-v3?language=en_US#sections) section in the control panel.) Supported values: `available` - the product is available for purchase; `disabled` - the product is listed on the storefront, but cannot be purchased; `preorder` - the product is listed for pre-orders.
-     *
-     */
-    availability?: 'available' | 'disabled' | 'preorder';
-    /**
-     * Type of gift-wrapping options. Values: `any` - allow any gift-wrapping options in the store; `none` - disallow gift-wrapping on the product; `list` – provide a list of IDs in the `gift_wrapping_options_list` field.
-     *
-     * Always included in the response body; not applicable for the `include_fields` and `exclude_fields` query parameters.
-     *
-     */
-    gift_wrapping_options_type?: 'any' | 'none' | 'list';
-    /**
-     * A list of gift-wrapping option IDs.
-     *
-     * Always included in the response body; not applicable for the `include_fields` and `exclude_fields` query parameters.
-     *
-     */
-    gift_wrapping_options_list?: Array<number>;
-    /**
-     * Priority to give this product when included in product lists on category pages and in search results. Lower integers will place the product closer to the top of the results.
-     *
-     */
-    sort_order?: number;
-    /**
-     * The product condition. Will be shown on the product page if the `is_condition_shown` fieldʼs value is `true`. Possible values: `New`, `Used`, `Refurbished`.
-     *
-     */
-    condition?: 'New' | 'Used' | 'Refurbished';
-    /**
-     * Flag used to determine whether the product condition is shown to the customer on the product page.
-     *
-     */
-    is_condition_shown?: boolean;
-    /**
-     * The minimum quantity an order must contain, to be eligible to purchase this product.
-     *
-     */
-    order_quantity_minimum?: number;
-    /**
-     * The maximum quantity an order can contain when purchasing the product.
-     *
-     */
-    order_quantity_maximum?: number;
-    /**
-     * Custom title for the product page. If not defined, the product name will be used as the meta title.
-     *
-     */
-    page_title?: string;
-    /**
-     * Custom meta keywords for the product page. If not defined, the storeʼs default keywords will be used.
-     *
-     */
-    meta_keywords?: Array<string>;
-    /**
-     * Custom meta description for the product page. If not defined, the storeʼs default meta description will be used.
-     *
-     */
-    meta_description?: string;
-    /**
-     * The number of times the product has been viewed.
-     *
-     *
-     * @deprecated
-     */
-    view_count?: number;
-    /**
-     * Pre-order release date. See the `availability` field for details on setting a productʼs availability to accept pre-orders.
-     *
-     */
-    preorder_release_date?: string | null;
-    /**
-     * Custom expected-date message to display on the product page. If undefined, the message defaults to the storewide setting. Can contain the `%%DATE%%` placeholder, which will be substituted for the release date.
-     *
-     */
-    preorder_message?: string;
-    /**
-     * If set to true then on the preorder release date the preorder status will automatically be removed.
-     * If set to false, then on the release date the preorder status **will not** be removed. It will need to be changed manually either in the
-     * control panel or using the API. Using the API set `availability` to `available`.
-     *
-     */
-    is_preorder_only?: boolean;
-    /**
-     * False by default, indicating that this productʼs price should be shown on the product page. If set to `true`, the price is hidden. (NOTE: To successfully set `is_price_hidden` to `true`, the `availability` value must be `disabled`.)
-     *
-     */
-    is_price_hidden?: boolean;
-    /**
-     * By default, an empty string. If `is_price_hidden` is `true`, the value of `price_hidden_label` is displayed instead of the price. (NOTE: To successfully set a non-empty string value with `is_price_hidden` set to `true`, the `availability` value must be `disabled`.)
-     *
-     */
-    price_hidden_label?: string;
-    custom_url?: CustomUrlFull;
-    /**
-     * Type of product, defaults to `product`.
-     *
-     */
-    open_graph_type?: 'product' | 'album' | 'book' | 'drink' | 'food' | 'game' | 'movie' | 'song' | 'tv_show';
-    /**
-     * Title of the product, if not specified the product name will be used instead.
-     *
-     */
-    open_graph_title?: string;
-    /**
-     * Description to use for the product, if not specified then the meta_description will be used instead.
-     *
-     */
-    open_graph_description?: string;
-    /**
-     * Flag to determine if product description or open graph description is used.
-     *
-     */
-    open_graph_use_meta_description?: boolean;
-    /**
-     * Flag to determine if product name or open graph name is used.
-     *
-     */
-    open_graph_use_product_name?: boolean;
-    /**
-     * Flag to determine if product image or open graph image is used.
-     *
-     */
-    open_graph_use_image?: boolean;
-    /**
-     * Global Trade Item Number
-     */
-    gtin?: string;
-    /**
-     * Manufacturer Part Number
-     */
-    mpn?: string;
-    /**
-     * the date when the Product had been imported
-     */
-    date_last_imported?: string;
-    /**
-     * The total (cumulative) rating for the product.
-     *
-     */
-    reviews_rating_sum?: number;
-    /**
-     * The number of times the product has been rated.
-     *
-     */
-    reviews_count?: number;
-    /**
-     * The total quantity of this product sold.
-     *
-     */
-    total_sold?: number;
-    /**
-     * 200 maximum custom fields per product. 255 maximum characters per custom field.
-     */
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<{
-        /**
-         * Unique ID of the *Bulk Pricing Rule*. Read-Only.
-         */
-        readonly id: number;
-    } & BulkPricingRuleFull>;
-    images?: Array<ProductImageFull>;
-    /**
-     * The Catalog API integrates with third-party YouTube.
-     * The [YouTube Terms of Service](https://www.youtube.com/t/terms) and [Google Privacy Policy](https://policies.google.com/privacy) apply, as indicated in our [Privacy Policy](https://www.bigcommerce.com/privacy/) and [Terms of Service](https://www.bigcommerce.com/terms/).
-     *
-     */
-    videos?: Array<ProductVideoFull>;
-};
-
-/**
- * product_Base_response
- *
- * Base Product response
- */
-export type ProductBaseResponse = {
-    /**
-     * A unique product name.
-     *
-     */
-    name?: string;
-    /**
-     * The product type. One of: `physical` - a physical stock unit, `digital` - a digital download.
-     *
-     */
-    type?: 'physical' | 'digital';
-    /**
-     * A unique user-defined alphanumeric product code/stock keeping unit (SKU).
-     *
-     */
-    sku?: string;
-    /**
-     * The product description, which can include HTML formatting.
-     *
-     */
-    description?: string;
-    /**
-     * Weight of the product, which can be used when calculating shipping costs. This is based on the unit set on the store
-     *
-     */
-    weight?: number;
-    /**
-     * Width of the product, which can be used when calculating shipping costs.
-     *
-     */
-    width?: number;
-    /**
-     * Depth of the product, which can be used when calculating shipping costs.
-     *
-     */
-    depth?: number;
-    /**
-     * Height of the product, which can be used when calculating shipping costs.
-     *
-     */
-    height?: number;
-    /**
-     * The price of the product. The price should include or exclude tax, based on the store settings.
-     *
-     */
-    price?: number;
-    /**
-     * The cost price of the product. Stored for reference only; it is not used or displayed anywhere on the store.
-     *
-     */
-    cost_price?: number;
-    /**
-     * The retail cost of the product. If entered, the retail cost price will be shown on the product page.
-     *
-     */
-    retail_price?: number;
-    /**
-     * If entered, the sale price will be used instead of value in the price field when calculating the productʼs cost.
-     *
-     */
-    sale_price?: number;
-    /**
-     * Minimum Advertised Price
-     */
-    map_price?: number;
-    /**
-     * The ID of the tax class applied to the product. (NOTE: Value ignored if automatic tax is enabled.)
-     *
-     */
-    tax_class_id?: number;
-    /**
-     * Tax Codes, such as AvaTax System Tax Codes, identify products and services that fall into special sales-tax categories. By using these codes, merchants who subscribe to a tax provider integration, such as BigCommerceʼs Avalara Premium, can calculate sales taxes more accurately. Stores without a tax provider will ignore the code when calculating sales tax. Do not pass more than one code. The codes are case-sensitive. For details, please see the tax providerʼs documentation.
-     *
-     */
-    product_tax_code?: string;
-    /**
-     * An array of IDs for the categories to which this product belongs. When updating a product, if an array of categories is supplied, all product categories will be overwritten. Does not accept more than 1,000 ID values.
-     *
-     */
-    categories?: Array<number>;
-    /**
-     * You can add a product to an existing brand during a product /PUT or /POST use the `brand_id` field. The response body can include `brand_id'.
-     *
-     */
-    brand_id?: number;
-    /**
-     * Current inventory level of the product. You must track inventory by _product_ for this to take effect (see the `inventory_tracking` field). The Catalog API returns the inventory for only the default location.
-     *
-     * The inventory for a product cannot exceed 2,147,483,647 in the catalog. If you exceed the limit, the store sets the inventory level to the limit.
-     *
-     * The Catalog API handles limits in a different way than the Inventory API. For more information, see [Limit handling](/docs/store-operations/catalog/inventory-adjustments#limit-handling-in-inventory-versus-catalog-api).
-     */
-    inventory_level?: number;
-    /**
-     * Inventory warning level for the product. When the productʼs inventory level drops below the warning level, the store owner will be informed. Simple inventory tracking must be enabled (see the `inventory_tracking` field) for this to take any effect.
-     *
-     */
-    inventory_warning_level?: number;
-    /**
-     * The type of inventory tracking for the product. Values are: `none` - inventory levels will not be tracked; `product` - inventory levels will be tracked using the `inventory_level` and `inventory_warning_level` fields; `variant` - inventory levels will be tracked based on variants, which maintain their own warning levels and inventory levels.
-     *
-     */
-    inventory_tracking?: 'none' | 'product' | 'variant';
-    /**
-     * A fixed shipping cost for the product. If defined, this value will be used during checkout instead of normal shipping-cost calculation.
-     *
-     */
-    fixed_cost_shipping_price?: number;
-    /**
-     * Flag used to indicate whether the product has free shipping. If `true`, the shipping cost for the product will be zero.
-     *
-     */
-    is_free_shipping?: boolean;
-    /**
-     * Flag to determine whether the product should be displayed to customers browsing the store. If `true`, the product will be displayed. If `false`, the product will be hidden from view.
-     *
-     */
-    is_visible?: boolean;
-    /**
-     * Flag to determine whether the product should be included in the `featured products` panel when viewing the store.
-     *
-     */
-    is_featured?: boolean;
-    /**
-     * An array of IDs for the related products.
-     *
-     */
-    related_products?: Array<number>;
-    /**
-     * Warranty information displayed on the product page. Can include HTML formatting.
-     *
-     */
-    warranty?: string;
-    /**
-     * The BIN picking number for the product.
-     *
-     */
-    bin_picking_number?: string;
-    /**
-     * The layout template file used to render this product category. This field is writable only for stores with a Blueprint theme applied. For stores with a Stencil theme applied, see [Custom Template Associations](/docs/rest-content/custom-template-associations).
-     *
-     */
-    layout_file?: string;
-    /**
-     * The product UPC code, which is used in feeds for shopping comparison sites and external channel integrations.
-     *
-     */
-    upc?: string;
-    /**
-     * A comma-separated list of keywords that can be used to locate the product when searching the store.
-     *
-     */
-    search_keywords?: string;
-    /**
-     * Availability text displayed on the checkout page, under the product title. Tells the customer how long it will normally take to ship this product, such as: 'Usually ships in 24 hours.'
-     *
-     */
-    availability_description?: string;
-    /**
-     * Availability of the product. (Corresponds to the productʼs [Purchasability](https://support.bigcommerce.com/s/article/Adding-Products-v3?language=en_US#sections) section in the control panel.) Supported values: `available` - the product is available for purchase; `disabled` - the product is listed on the storefront, but cannot be purchased; `preorder` - the product is listed for pre-orders.
-     *
-     */
-    availability?: 'available' | 'disabled' | 'preorder';
-    /**
-     * Type of gift-wrapping options. Values: `any` - allow any gift-wrapping options in the store; `none` - disallow gift-wrapping on the product; `list` – provide a list of IDs in the `gift_wrapping_options_list` field.
-     *
-     * Always included in the response body; not applicable for the `include_fields` and `exclude_fields` query parameters.
-     *
-     */
-    gift_wrapping_options_type?: 'any' | 'none' | 'list';
-    /**
-     * A list of gift-wrapping option IDs.
-     *
-     * Always included in the response body; not applicable for the `include_fields` and `exclude_fields` query parameters.
-     *
-     */
-    gift_wrapping_options_list?: Array<number>;
-    /**
-     * Priority to give this product when included in product lists on category pages and in search results. Lower integers will place the product closer to the top of the results.
-     *
-     */
-    sort_order?: number;
-    /**
-     * The product condition. Will be shown on the product page if the `is_condition_shown` fieldʼs value is `true`. Possible values: `New`, `Used`, `Refurbished`.
-     *
-     */
-    condition?: 'New' | 'Used' | 'Refurbished';
-    /**
-     * Flag used to determine whether the product condition is shown to the customer on the product page.
-     *
-     */
-    is_condition_shown?: boolean;
-    /**
-     * The minimum quantity an order must contain, to be eligible to purchase this product.
-     *
-     */
-    order_quantity_minimum?: number;
-    /**
-     * The maximum quantity an order can contain when purchasing the product.
-     *
-     */
-    order_quantity_maximum?: number;
-    /**
-     * Custom title for the product page. If not defined, the product name will be used as the meta title.
-     *
-     */
-    page_title?: string;
-    /**
-     * Custom meta keywords for the product page. If not defined, the storeʼs default keywords will be used.
-     *
-     */
-    meta_keywords?: Array<string>;
-    /**
-     * Custom meta description for the product page. If not defined, the storeʼs default meta description will be used.
-     *
-     */
-    meta_description?: string;
-    /**
-     * The number of times the product has been viewed.
-     *
-     *
-     * @deprecated
-     */
-    view_count?: number;
-    /**
-     * Pre-order release date. See the `availability` field for details on setting a productʼs availability to accept pre-orders.
-     *
-     */
-    preorder_release_date?: string | null;
-    /**
-     * Custom expected-date message to display on the product page. If undefined, the message defaults to the storewide setting. Can contain the `%%DATE%%` placeholder, which will be substituted for the release date.
-     *
-     */
-    preorder_message?: string;
-    /**
-     * If set to true then on the preorder release date the preorder status will automatically be removed.
-     * If set to false, then on the release date the preorder status **will not** be removed. It will need to be changed manually either in the
-     * control panel or using the API. Using the API set `availability` to `available`.
-     *
-     */
-    is_preorder_only?: boolean;
-    /**
-     * False by default, indicating that this productʼs price should be shown on the product page. If set to `true`, the price is hidden. (NOTE: To successfully set `is_price_hidden` to `true`, the `availability` value must be `disabled`.)
-     *
-     */
-    is_price_hidden?: boolean;
-    /**
-     * By default, an empty string. If `is_price_hidden` is `true`, the value of `price_hidden_label` is displayed instead of the price. (NOTE: To successfully set a non-empty string value with `is_price_hidden` set to `true`, the `availability` value must be `disabled`.)
-     *
-     */
-    price_hidden_label?: string;
-    custom_url?: CustomUrlFull;
-    /**
-     * Type of product, defaults to `product`.
-     *
-     */
-    open_graph_type?: 'product' | 'album' | 'book' | 'drink' | 'food' | 'game' | 'movie' | 'song' | 'tv_show';
-    /**
-     * Title of the product, if not specified the product name will be used instead.
-     *
-     */
-    open_graph_title?: string;
-    /**
-     * Description to use for the product, if not specified then the meta_description will be used instead.
-     *
-     */
-    open_graph_description?: string;
-    /**
-     * Flag to determine if product description or open graph description is used.
-     *
-     */
-    open_graph_use_meta_description?: boolean;
-    /**
-     * Flag to determine if product name or open graph name is used.
-     *
-     */
-    open_graph_use_product_name?: boolean;
-    /**
-     * Flag to determine if product image or open graph image is used.
-     *
-     */
-    open_graph_use_image?: boolean;
-    /**
-     * Global Trade Item Number
-     */
-    gtin?: string;
-    /**
-     * Manufacturer Part Number
-     */
-    mpn?: string;
-    /**
-     * the date when the Product had been imported
-     */
-    date_last_imported?: string;
-    /**
-     * The total (cumulative) rating for the product.
-     *
-     */
-    reviews_rating_sum?: number;
-    /**
-     * The number of times the product has been rated.
-     *
-     */
-    reviews_count?: number;
-    /**
-     * The total quantity of this product sold.
-     *
-     */
-    total_sold?: number;
-    /**
-     * 200 maximum custom fields per product. 255 maximum characters per custom field.
-     */
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<{
-        /**
-         * Unique ID of the *Bulk Pricing Rule*. Read-Only.
-         */
-        readonly id: number;
-    } & BulkPricingRuleFull>;
-    images?: Array<ProductImageFull>;
-    primary_image?: PrimaryImageFull;
-    /**
-     * The Catalog API integrates with third-party YouTube.
-     * The [YouTube Terms of Service](https://www.youtube.com/t/terms) and [Google Privacy Policy](https://policies.google.com/privacy) apply, as indicated in our [Privacy Policy](https://www.bigcommerce.com/privacy/) and [Terms of Service](https://www.bigcommerce.com/terms/).
-     *
-     */
-    videos?: Array<ProductVideoFull>;
 };
 
 /**
@@ -2453,7 +1644,7 @@ export type MetafieldFull = {
      */
     resource_id?: number;
     /**
-     * Date and time of the metafieldʼs creation. Read-Only.
+     * Date and time of the metafield's creation. Read-Only.
      *
      */
     readonly date_created?: string;
@@ -2462,10 +1653,6 @@ export type MetafieldFull = {
      *
      */
     readonly date_modified?: string;
-    /**
-     * ID of metafield's creator
-     */
-    owner_client_id?: string;
 };
 
 /**
@@ -2506,9 +1693,8 @@ export type MetaPaginationObject = {
         current_page?: number;
         total_pages?: number;
         links?: {
-            previous?: string;
-            current?: string;
             next?: string;
+            current?: string;
         };
     };
 };
@@ -2551,600 +1737,17 @@ export type Beta5ErrorResponse = BaseError & {
 };
 
 /**
- * Common Metafield properties.
+ * productImage_Put
  *
+ * The model for a PUT to update applicable Product Image fields.
  */
-export type Metafield = {
+export type ProductImagePutWritable = {
     /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
+     * The unique numeric identifier for the product with which the image is associated.
      *
      */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description: string;
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    /**
-     * The unique identifier for the resource with which the metafield is associated.
-     *
-     */
-    readonly resource_id: number;
-    /**
-     * The unique identifier for the metafield.
-     */
-    id: number;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified: string;
-    /**
-     * Client ID for the metafieldʼs creator.
-     */
-    readonly owner_client_id?: string;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponse = {
-    data?: Array<Metafield>;
-    meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePostPut = {
-    data?: Array<Metafield>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionPartialSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Total number of items in the result set.
- *
- */
-export type Total = number;
-
-/**
- * Total number of items that were successfully deleted.
- *
- */
-export type Success = number;
-
-/**
- * Total number of items that failed to be deleted.
- *
- */
-export type Failed = number;
-
-/**
- * Error response payload for the BigCommerce API.
- *
- */
-export type _Error = {
-    /**
-     * The HTTP status code for the error.
-     *
-     */
-    status?: number;
-    /**
-     * The error title.
-     *
-     */
-    title?: string;
-    /**
-     * The error type.
-     *
-     */
-    type?: string;
-    errors?: ErrorDetail;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-
-/**
- * Collection Meta
- *
- * Data about the response, including pagination and collection totals.
- */
-export type CollectionMeta = {
-    /**
-     * Pagination
-     *
-     * Data about the response, including pagination and collection totals.
-     */
-    pagination?: {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    };
-    [key: string]: unknown | {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    } | undefined;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBasePost = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBasePut = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-};
-
-/**
- * Product Custom Field Data
- *
- * Gets custom fields associated with a product. These allow you to specify additional information that will appear on the product’s page, such as a book’s ISBN or a DVD’s release date.
- */
-export type CustomFieldData = {
-    /**
-     * The unique numeric ID of the custom field increments sequentially. Read-Only.
-     */
-    id?: number;
-    /**
-     * The name of the field, shown on the storefront, orders, etc. This field is a requirement for /POST requests.
-     *
-     */
-    name?: string;
-    /**
-     * The value of the field, shown on the storefront, orders, etc. This field is a requirement for /POST requests.
-     *
-     */
-    value?: string;
-};
-
-/**
- * Custom Field Post
- *
- * Payload for POST request to create custom fields associated with a product.
- */
-export type CustomFieldPost = {
-    /**
-     * The name of the field, shown on the storefront, orders, etc. This field is a requirement for /POST requests.
-     *
-     */
-    name: string;
-    /**
-     * The value of the field, shown on the storefront, orders, etc. This field is a requirement for /POST requests.
-     *
-     */
-    value: string;
-};
-
-/**
- * Custom Field Put
- *
- * Payload for PUT request to update custom fields associated with a product.
- */
-export type CustomFieldPut = {
-    /**
-     * The value of the field, shown on the storefront, orders, etc. This field is a requirement for /POST requests.
-     *
-     */
-    name?: string;
-    /**
-     * The value of the field, shown on the storefront, orders, etc. This field is a requirement for /POST requests.
-     *
-     */
-    value?: string;
-};
-
-/**
- * metaCollectionFull
- *
- * Data about the response, including pagination and collection totals.
- */
-export type MetaCollectionFull2 = {
-    /**
-     * Data about the response, including pagination and collection totals.
-     */
-    pagination?: {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    };
-};
-
-/**
- * Response meta
- *
- * Response metadata.
- */
-export type MetaEmptyFull2 = {
-    [key: string]: unknown;
-};
-
-/**
- * Error Response
- */
-export type GeneralErrorWithErrors = {
-    /**
-     * The HTTP status code.
-     */
-    status: number;
-    /**
-     * The error title describes the particular error.
-     */
-    title: string;
-    type: string;
-    /**
-     * Detailed Errors
-     */
-    errors: {
-        [key: string]: unknown;
-    };
-};
-
-/**
- * Error Response
- */
-export type GeneralError = {
-    /**
-     * The HTTP status code.
-     */
-    status: number;
-    /**
-     * The error title describes the particular error.
-     */
-    title: string;
-    type: string;
-    /**
-     * The custom code of the error.
-     */
-    code?: number;
-};
-
-/**
- * Error Response
- */
-export type MethodNotAllowedError = {
-    /**
-     * The HTTP status code.
-     */
-    status: number;
-    /**
-     * The error title describes the particular error.
-     */
-    title: string;
-    type: string;
-    /**
-     * Detailed Errors
-     *
-     * The detailed title describes the particular error.
-     */
-    detail: string;
-};
-
-/**
- * product_Put
- *
- * The model for a PUT to update a product.
- */
-export type ProductPutWritable = ProductBasePutWritable;
+    product_id?: number;
+} & ProductImageBase;
 
 /**
  * Response meta
@@ -3167,7 +1770,7 @@ export type DetailedErrorsWritable = {
 /**
  * product_Full
  */
-export type ProductFullWritable = ProductBaseResponseWritable & {
+export type ProductFullWritable = ProductBaseWritable & {
     /**
      * The date on which the product was created.
      *
@@ -3200,6 +1803,7 @@ export type ProductFullWritable = ProductBaseResponseWritable & {
      * Legacy template setting which controls if the option set shows up to the side of or below the product image and description.
      */
     option_set_display?: string;
+    variants?: Array<ProductVariantFull>;
 };
 
 /**
@@ -3219,58 +1823,6 @@ export type ProductImageFullWritable = ProductImageBase & {
      */
     product_id?: number;
     /**
-     * The URL for an image displayed on the storefront when the conditions are applied. Limit of 8MB per file.
-     *
-     * Cannot be used with `image_file`.
-     *
-     */
-    image_url?: string;
-    /**
-     * The date on which the product image was modified.
-     *
-     */
-    date_modified?: string;
-};
-
-/**
- * productImage
- *
- * Common PrimaryImage properties.
- */
-export type PrimaryImageFullWritable = {
-    /**
-     * The unique numeric ID of the image; increments sequentially.
-     *
-     */
-    id?: number;
-    /**
-     * The unique numeric identifier for the product with which the image is associated.
-     *
-     */
-    product_id?: number;
-    /**
-     * Flag for identifying whether the image is used as the productʼs thumbnail.
-     *
-     */
-    is_thumbnail?: boolean;
-    /**
-     * The order in which the image will be displayed on the product page. Higher integers give the image a lower priority. When updating, if the image is given a lower priority, all images with a `sort_order` the same as or greater than the imageʼs new `sort_order` value will have their `sort_order`s reordered.
-     *
-     */
-    sort_order?: number;
-    /**
-     * The description for the image.
-     *
-     */
-    description?: string;
-    /**
-     * The local path to the original image file uploaded to BigCommerce. Use image_url when creating a product.
-     *
-     * Must be sent as a `multipart/form-data` field in the request body. Limit of 8 MB per file.
-     *
-     */
-    image_file?: string;
-    /**
      * The date on which the product image was modified.
      *
      */
@@ -3282,15 +1834,17 @@ export type PrimaryImageFullWritable = {
  *
  * The model for batch updating products.
  */
-export type ProductPutCollectionWritable = Array<ProductBasePutWritable>;
+export type ProductPutCollectionWritable = Array<ProductBaseWritable>;
 
 /**
- * product_Base_POST
+ * product_Base
  *
- * `Product` properties used in:
+ * Shared `Product` properties used in:
  * * `POST`
+ * * `PUT`
+ * * `GET`
  */
-export type ProductBasePostWritable = {
+export type ProductBaseWritable = {
     /**
      * A unique product name.
      *
@@ -3302,7 +1856,7 @@ export type ProductBasePostWritable = {
      */
     type: 'physical' | 'digital';
     /**
-     * A unique user-defined alphanumeric product code/stock keeping unit (SKU). The SKU is always unique regardless of the letter case for both products and variants.
+     * A unique user-defined alphanumeric product code/stock keeping unit (SKU).
      *
      */
     sku?: string;
@@ -3347,7 +1901,7 @@ export type ProductBasePostWritable = {
      */
     retail_price?: number;
     /**
-     * If entered, the sale price will be used instead of value in the price field when calculating the productʼs cost.
+     * If entered, the sale price will be used instead of value in the price field when calculating the product's cost.
      *
      */
     sale_price?: number;
@@ -3361,12 +1915,12 @@ export type ProductBasePostWritable = {
      */
     tax_class_id?: number;
     /**
-     * Tax Codes, such as AvaTax System Tax Codes, identify products and services that fall into special sales-tax categories. By using these codes, merchants who subscribe to a tax provider integration, such as BigCommerceʼs Avalara Premium, can calculate sales taxes more accurately. Stores without a tax provider will ignore the code when calculating sales tax. Do not pass more than one code. The codes are case-sensitive. For details, please see the tax providerʼs documentation.
+     * Tax Codes, such as AvaTax System Tax Codes, identify products and services that fall into special sales-tax categories. By using these codes, merchants who subscribe to a tax provider integration, such as BigCommerce's Avalara Premium, can calculate sales taxes more accurately. Stores without a tax provider will ignore the code when calculating sales tax. Do not pass more than one code. The codes are case-sensitive. For details, please see the tax provider's documentation.
      *
      */
     product_tax_code?: string;
     /**
-     * An array of IDs for the categories to which this product belongs. You will overwrite all product categories when updating a product and supplying an array of categories. The limit is 1,000 ID values. When you enable the catalog V2 product experience in the control panel, you must include the categories array in the request body.
+     * An array of IDs for the categories to which this product belongs. When updating a product, if an array of categories is supplied, all product categories will be overwritten. Does not accept more than 1,000 ID values.
      *
      */
     categories?: Array<number>;
@@ -3388,7 +1942,7 @@ export type ProductBasePostWritable = {
      */
     inventory_level?: number;
     /**
-     * Inventory warning level for the product. When the productʼs inventory level drops below the warning level, the store owner will be informed. Simple inventory tracking must be enabled (see the `inventory_tracking` field) for this to take any effect.
+     * Inventory warning level for the product. When the product's inventory level drops below the warning level, the store owner will be informed. Simple inventory tracking must be enabled (see the `inventory_tracking` field) for this to take any effect.
      *
      */
     inventory_warning_level?: number;
@@ -3453,7 +2007,7 @@ export type ProductBasePostWritable = {
      */
     availability_description?: string;
     /**
-     * Availability of the product. (Corresponds to the productʼs [Purchasability](https://support.bigcommerce.com/s/article/Adding-Products-v3?language=en_US#sections) section in the control panel.) Supported values: `available` - the product is available for purchase; `disabled` - the product is listed on the storefront, but cannot be purchased; `preorder` - the product is listed for pre-orders.
+     * Availability of the product. (Corresponds to the product's [Purchasability](https://support.bigcommerce.com/s/article/Adding-Products-v3?language=en_US#sections) section in the control panel.) Supported values: `available` - the product is available for purchase; `disabled` - the product is listed on the storefront, but cannot be purchased; `preorder` - the product is listed for pre-orders.
      *
      */
     availability?: 'available' | 'disabled' | 'preorder';
@@ -3477,7 +2031,7 @@ export type ProductBasePostWritable = {
      */
     sort_order?: number;
     /**
-     * The product condition. Will be shown on the product page if the `is_condition_shown` fieldʼs value is `true`. Possible values: `New`, `Used`, `Refurbished`.
+     * The product condition. Will be shown on the product page if the `is_condition_shown` field's value is `true`. Possible values: `New`, `Used`, `Refurbished`.
      *
      */
     condition?: 'New' | 'Used' | 'Refurbished';
@@ -3502,12 +2056,12 @@ export type ProductBasePostWritable = {
      */
     page_title?: string;
     /**
-     * Custom meta keywords for the product page. If not defined, the storeʼs default keywords will be used.
+     * Custom meta keywords for the product page. If not defined, the store's default keywords will be used.
      *
      */
     meta_keywords?: Array<string>;
     /**
-     * Custom meta description for the product page. If not defined, the storeʼs default meta description will be used.
+     * Custom meta description for the product page. If not defined, the store's default meta description will be used.
      *
      */
     meta_description?: string;
@@ -3519,7 +2073,7 @@ export type ProductBasePostWritable = {
      */
     view_count?: number;
     /**
-     * Pre-order release date. See the `availability` field for details on setting a productʼs availability to accept pre-orders.
+     * Pre-order release date. See the `availability` field for details on setting a product's availability to accept pre-orders.
      *
      */
     preorder_release_date?: string | null;
@@ -3536,7 +2090,7 @@ export type ProductBasePostWritable = {
      */
     is_preorder_only?: boolean;
     /**
-     * False by default, indicating that this productʼs price should be shown on the product page. If set to `true`, the price is hidden. (NOTE: To successfully set `is_price_hidden` to `true`, the `availability` value must be `disabled`.)
+     * False by default, indicating that this product's price should be shown on the product page. If set to `true`, the price is hidden. (NOTE: To successfully set `is_price_hidden` to `true`, the `availability` value must be `disabled`.)
      *
      */
     is_price_hidden?: boolean;
@@ -3585,10 +2139,6 @@ export type ProductBasePostWritable = {
      */
     mpn?: string;
     /**
-     * the date when the Product had been imported
-     */
-    date_last_imported?: string;
-    /**
      * The total (cumulative) rating for the product.
      *
      */
@@ -3604,680 +2154,13 @@ export type ProductBasePostWritable = {
      */
     total_sold?: number;
     /**
-     * 200 maximum custom fields per product. 255 maximum characters per custom field.
+     * 200 maximum custom fields per product. 255 maximum characters per custom field. The default rate limit for this endpoint is 40 concurrent requests.
      */
     custom_fields?: Array<ProductCustomFieldPut>;
     bulk_pricing_rules?: Array<BulkPricingRuleFull>;
     images?: Array<ProductImageFullWritable>;
-    /**
-     * The Catalog API integrates with third-party YouTube.
-     * The [YouTube Terms of Service](https://www.youtube.com/t/terms) and [Google Privacy Policy](https://policies.google.com/privacy) apply, as indicated in our [Privacy Policy](https://www.bigcommerce.com/privacy/) and [Terms of Service](https://www.bigcommerce.com/terms/).
-     *
-     */
     videos?: Array<ProductVideoFull>;
     variants?: Array<ProductVariantFull>;
-};
-
-/**
- * product_Base_PUT
- *
- * `Product` properties used in:
- * * `PUT`
- */
-export type ProductBasePutWritable = {
-    /**
-     * A unique product name.
-     *
-     */
-    name?: string;
-    /**
-     * The product type. One of: `physical` - a physical stock unit, `digital` - a digital download.
-     *
-     */
-    type?: 'physical' | 'digital';
-    /**
-     * A unique user-defined alphanumeric product code/stock keeping unit (SKU). The SKU is always unique regardless of the letter case for both products and variants.
-     *
-     */
-    sku?: string;
-    /**
-     * The product description, which can include HTML formatting.
-     *
-     */
-    description?: string;
-    /**
-     * Weight of the product, which can be used when calculating shipping costs. This is based on the unit set on the store.
-     *
-     */
-    weight?: number;
-    /**
-     * Width of the product, which can be used when calculating shipping costs.
-     *
-     */
-    width?: number;
-    /**
-     * Depth of the product, which can be used when calculating shipping costs.
-     *
-     */
-    depth?: number;
-    /**
-     * Height of the product, which can be used when calculating shipping costs.
-     *
-     */
-    height?: number;
-    /**
-     * The price of the product. The price should include or exclude tax, based on the store settings.
-     *
-     */
-    price?: number;
-    /**
-     * The cost price of the product. Stored for reference only; it is not used or displayed anywhere on the store.
-     *
-     */
-    cost_price?: number;
-    /**
-     * The retail cost of the product. If entered, the retail cost price will be shown on the product page.
-     *
-     */
-    retail_price?: number;
-    /**
-     * If entered, the sale price will be used instead of value in the price field when calculating the productʼs cost.
-     *
-     */
-    sale_price?: number;
-    /**
-     * Minimum Advertised Price
-     */
-    map_price?: number;
-    /**
-     * The ID of the tax class applied to the product. (NOTE: Value ignored if automatic tax is enabled.)
-     *
-     */
-    tax_class_id?: number;
-    /**
-     * Tax Codes, such as AvaTax System Tax Codes, identify products and services that fall into special sales-tax categories. By using these codes, merchants who subscribe to a tax provider integration, such as BigCommerceʼs Avalara Premium, can calculate sales taxes more accurately. Stores without a tax provider will ignore the code when calculating sales tax. Do not pass more than one code. The codes are case-sensitive. For details, please see the tax providerʼs documentation.
-     *
-     */
-    product_tax_code?: string;
-    /**
-     * An array of IDs for the categories to which this product belongs. When updating a product, if an array of categories is supplied, all product categories will be overwritten. Does not accept more than 1,000 ID values.
-     *
-     */
-    categories?: Array<number>;
-    /**
-     * You can add a product to an existing brand during a product /PUT or /POST. Use either the `brand_id` or the `brand_name` field. The response body can include `brand_id`.
-     *
-     */
-    brand_id?: number;
-    /**
-     * You can create the brand during a product PUT or POST request. If the brand already exists, the product /PUT or /POST request adds the product to the brand. If not, the product /PUT or /POST request creates the brand and then adds the product to the brand. Brand name is not case-sensitive; "Common Good" and "Common good" are the same. Use either the `brand_id` or the `brand_name` field. The response body does not include `brand_name`.
-     */
-    brand_name?: string;
-    /**
-     * Current inventory level of the product. You must track inventory by _product_ for this to take effect (see the `inventory_tracking` field). The Catalog API returns the inventory for only the default location.
-     *
-     * The inventory for a product cannot exceed 2,147,483,647 in the catalog. If you exceed the limit, the store sets the inventory level to the limit.
-     *
-     * The Catalog API handles limits in a different way than the Inventory API. For more information, see [Limit handling](/docs/store-operations/catalog/inventory-adjustments#limit-handling-in-inventory-versus-catalog-api).
-     */
-    inventory_level?: number;
-    /**
-     * Inventory warning level for the product. When the productʼs inventory level drops below the warning level, the store owner will be informed. Simple inventory tracking must be enabled (see the `inventory_tracking` field) for this to take any effect.
-     *
-     */
-    inventory_warning_level?: number;
-    /**
-     * The type of inventory tracking for the product. Values are: `none` - inventory levels will not be tracked; `product` - inventory levels will be tracked using the `inventory_level` and `inventory_warning_level` fields; `variant` - inventory levels will be tracked based on variants, which maintain their own warning levels and inventory levels.
-     *
-     */
-    inventory_tracking?: 'none' | 'product' | 'variant';
-    /**
-     * A fixed shipping cost for the product. If defined, this value will be used during checkout instead of normal shipping-cost calculation.
-     *
-     */
-    fixed_cost_shipping_price?: number;
-    /**
-     * Flag used to indicate whether the product has free shipping. If `true`, the shipping cost for the product will be zero.
-     *
-     */
-    is_free_shipping?: boolean;
-    /**
-     * Flag to determine whether the product should be displayed to customers browsing the store. If `true`, the product will be displayed. If `false`, the product will be hidden from view.
-     *
-     */
-    is_visible?: boolean;
-    /**
-     * Flag to determine whether the product should be included in the `featured products` panel when viewing the store.
-     *
-     */
-    is_featured?: boolean;
-    /**
-     * An array of IDs for the related products.
-     *
-     */
-    related_products?: Array<number>;
-    /**
-     * Warranty information displayed on the product page. Can include HTML formatting.
-     *
-     */
-    warranty?: string;
-    /**
-     * The BIN picking number for the product.
-     *
-     */
-    bin_picking_number?: string;
-    /**
-     * The layout template file used to render this product category. This field is writable only for stores with a Blueprint theme applied. For stores with a Stencil theme applied, see [Custom Template Associations](/docs/rest-content/custom-template-associations).
-     *
-     */
-    layout_file?: string;
-    /**
-     * The product UPC code, which is used in feeds for shopping comparison sites and external channel integrations.
-     *
-     */
-    upc?: string;
-    /**
-     * A comma-separated list of keywords that can be used to locate the product when searching the store.
-     *
-     */
-    search_keywords?: string;
-    /**
-     * Availability text displayed on the checkout page, under the product title. Tells the customer how long it will normally take to ship this product, such as: 'Usually ships in 24 hours.'
-     *
-     */
-    availability_description?: string;
-    /**
-     * Availability of the product. (Corresponds to the productʼs [Purchasability](https://support.bigcommerce.com/s/article/Adding-Products-v3?language=en_US#sections) section in the control panel.) Supported values: `available` - the product is available for purchase; `disabled` - the product is listed on the storefront, but cannot be purchased; `preorder` - the product is listed for pre-orders.
-     *
-     */
-    availability?: 'available' | 'disabled' | 'preorder';
-    /**
-     * Type of gift-wrapping options. Values: `any` - allow any gift-wrapping options in the store; `none` - disallow gift-wrapping on the product; `list` – provide a list of IDs in the `gift_wrapping_options_list` field.
-     *
-     * Always included in the response body; not applicable for the `include_fields` and `exclude_fields` query parameters.
-     *
-     */
-    gift_wrapping_options_type?: 'any' | 'none' | 'list';
-    /**
-     * A list of gift-wrapping option IDs.
-     *
-     * Always included in the response body; not applicable for the `include_fields` and `exclude_fields` query parameters.
-     *
-     */
-    gift_wrapping_options_list?: Array<number>;
-    /**
-     * Priority to give this product when included in product lists on category pages and in search results. Lower integers will place the product closer to the top of the results.
-     *
-     */
-    sort_order?: number;
-    /**
-     * The product condition. Will be shown on the product page if the `is_condition_shown` fieldʼs value is `true`. Possible values: `New`, `Used`, `Refurbished`.
-     *
-     */
-    condition?: 'New' | 'Used' | 'Refurbished';
-    /**
-     * Flag used to determine whether the product condition is shown to the customer on the product page.
-     *
-     */
-    is_condition_shown?: boolean;
-    /**
-     * The minimum quantity an order must contain, to be eligible to purchase this product.
-     *
-     */
-    order_quantity_minimum?: number;
-    /**
-     * The maximum quantity an order can contain when purchasing the product.
-     *
-     */
-    order_quantity_maximum?: number;
-    /**
-     * Custom title for the product page. If not defined, the product name will be used as the meta title.
-     *
-     */
-    page_title?: string;
-    /**
-     * Custom meta keywords for the product page. If not defined, the storeʼs default keywords will be used.
-     *
-     */
-    meta_keywords?: Array<string>;
-    /**
-     * Custom meta description for the product page. If not defined, the storeʼs default meta description will be used.
-     *
-     */
-    meta_description?: string;
-    /**
-     * The number of times the product has been viewed.
-     *
-     *
-     * @deprecated
-     */
-    view_count?: number;
-    /**
-     * Pre-order release date. See the `availability` field for details on setting a productʼs availability to accept pre-orders.
-     *
-     */
-    preorder_release_date?: string | null;
-    /**
-     * Custom expected-date message to display on the product page. If undefined, the message defaults to the storewide setting. Can contain the `%%DATE%%` placeholder, which will be substituted for the release date.
-     *
-     */
-    preorder_message?: string;
-    /**
-     * If set to true then on the preorder release date the preorder status will automatically be removed.
-     * If set to false, then on the release date the preorder status **will not** be removed. It will need to be changed manually either in the
-     * control panel or using the API. Using the API set `availability` to `available`.
-     *
-     */
-    is_preorder_only?: boolean;
-    /**
-     * False by default, indicating that this productʼs price should be shown on the product page. If set to `true`, the price is hidden. (NOTE: To successfully set `is_price_hidden` to `true`, the `availability` value must be `disabled`.)
-     *
-     */
-    is_price_hidden?: boolean;
-    /**
-     * By default, an empty string. If `is_price_hidden` is `true`, the value of `price_hidden_label` is displayed instead of the price. (NOTE: To successfully set a non-empty string value with `is_price_hidden` set to `true`, the `availability` value must be `disabled`.)
-     *
-     */
-    price_hidden_label?: string;
-    custom_url?: CustomUrlFull;
-    /**
-     * Type of product, defaults to `product`.
-     *
-     */
-    open_graph_type?: 'product' | 'album' | 'book' | 'drink' | 'food' | 'game' | 'movie' | 'song' | 'tv_show';
-    /**
-     * Title of the product, if not specified the product name will be used instead.
-     *
-     */
-    open_graph_title?: string;
-    /**
-     * Description to use for the product, if not specified then the meta_description will be used instead.
-     *
-     */
-    open_graph_description?: string;
-    /**
-     * Flag to determine if product description or open graph description is used.
-     *
-     */
-    open_graph_use_meta_description?: boolean;
-    /**
-     * Flag to determine if product name or open graph name is used.
-     *
-     */
-    open_graph_use_product_name?: boolean;
-    /**
-     * Flag to determine if product image or open graph image is used.
-     *
-     */
-    open_graph_use_image?: boolean;
-    /**
-     * Global Trade Item Number
-     */
-    gtin?: string;
-    /**
-     * Manufacturer Part Number
-     */
-    mpn?: string;
-    /**
-     * the date when the Product had been imported
-     */
-    date_last_imported?: string;
-    /**
-     * The total (cumulative) rating for the product.
-     *
-     */
-    reviews_rating_sum?: number;
-    /**
-     * The number of times the product has been rated.
-     *
-     */
-    reviews_count?: number;
-    /**
-     * The total quantity of this product sold.
-     *
-     */
-    total_sold?: number;
-    /**
-     * 200 maximum custom fields per product. 255 maximum characters per custom field.
-     */
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<BulkPricingRuleFull>;
-    images?: Array<ProductImageFullWritable>;
-    /**
-     * The Catalog API integrates with third-party YouTube.
-     * The [YouTube Terms of Service](https://www.youtube.com/t/terms) and [Google Privacy Policy](https://policies.google.com/privacy) apply, as indicated in our [Privacy Policy](https://www.bigcommerce.com/privacy/) and [Terms of Service](https://www.bigcommerce.com/terms/).
-     *
-     */
-    videos?: Array<ProductVideoFull>;
-};
-
-/**
- * product_Base_response
- *
- * Base Product response
- */
-export type ProductBaseResponseWritable = {
-    /**
-     * A unique product name.
-     *
-     */
-    name?: string;
-    /**
-     * The product type. One of: `physical` - a physical stock unit, `digital` - a digital download.
-     *
-     */
-    type?: 'physical' | 'digital';
-    /**
-     * A unique user-defined alphanumeric product code/stock keeping unit (SKU).
-     *
-     */
-    sku?: string;
-    /**
-     * The product description, which can include HTML formatting.
-     *
-     */
-    description?: string;
-    /**
-     * Weight of the product, which can be used when calculating shipping costs. This is based on the unit set on the store
-     *
-     */
-    weight?: number;
-    /**
-     * Width of the product, which can be used when calculating shipping costs.
-     *
-     */
-    width?: number;
-    /**
-     * Depth of the product, which can be used when calculating shipping costs.
-     *
-     */
-    depth?: number;
-    /**
-     * Height of the product, which can be used when calculating shipping costs.
-     *
-     */
-    height?: number;
-    /**
-     * The price of the product. The price should include or exclude tax, based on the store settings.
-     *
-     */
-    price?: number;
-    /**
-     * The cost price of the product. Stored for reference only; it is not used or displayed anywhere on the store.
-     *
-     */
-    cost_price?: number;
-    /**
-     * The retail cost of the product. If entered, the retail cost price will be shown on the product page.
-     *
-     */
-    retail_price?: number;
-    /**
-     * If entered, the sale price will be used instead of value in the price field when calculating the productʼs cost.
-     *
-     */
-    sale_price?: number;
-    /**
-     * Minimum Advertised Price
-     */
-    map_price?: number;
-    /**
-     * The ID of the tax class applied to the product. (NOTE: Value ignored if automatic tax is enabled.)
-     *
-     */
-    tax_class_id?: number;
-    /**
-     * Tax Codes, such as AvaTax System Tax Codes, identify products and services that fall into special sales-tax categories. By using these codes, merchants who subscribe to a tax provider integration, such as BigCommerceʼs Avalara Premium, can calculate sales taxes more accurately. Stores without a tax provider will ignore the code when calculating sales tax. Do not pass more than one code. The codes are case-sensitive. For details, please see the tax providerʼs documentation.
-     *
-     */
-    product_tax_code?: string;
-    /**
-     * An array of IDs for the categories to which this product belongs. When updating a product, if an array of categories is supplied, all product categories will be overwritten. Does not accept more than 1,000 ID values.
-     *
-     */
-    categories?: Array<number>;
-    /**
-     * You can add a product to an existing brand during a product /PUT or /POST use the `brand_id` field. The response body can include `brand_id'.
-     *
-     */
-    brand_id?: number;
-    /**
-     * Current inventory level of the product. You must track inventory by _product_ for this to take effect (see the `inventory_tracking` field). The Catalog API returns the inventory for only the default location.
-     *
-     * The inventory for a product cannot exceed 2,147,483,647 in the catalog. If you exceed the limit, the store sets the inventory level to the limit.
-     *
-     * The Catalog API handles limits in a different way than the Inventory API. For more information, see [Limit handling](/docs/store-operations/catalog/inventory-adjustments#limit-handling-in-inventory-versus-catalog-api).
-     */
-    inventory_level?: number;
-    /**
-     * Inventory warning level for the product. When the productʼs inventory level drops below the warning level, the store owner will be informed. Simple inventory tracking must be enabled (see the `inventory_tracking` field) for this to take any effect.
-     *
-     */
-    inventory_warning_level?: number;
-    /**
-     * The type of inventory tracking for the product. Values are: `none` - inventory levels will not be tracked; `product` - inventory levels will be tracked using the `inventory_level` and `inventory_warning_level` fields; `variant` - inventory levels will be tracked based on variants, which maintain their own warning levels and inventory levels.
-     *
-     */
-    inventory_tracking?: 'none' | 'product' | 'variant';
-    /**
-     * A fixed shipping cost for the product. If defined, this value will be used during checkout instead of normal shipping-cost calculation.
-     *
-     */
-    fixed_cost_shipping_price?: number;
-    /**
-     * Flag used to indicate whether the product has free shipping. If `true`, the shipping cost for the product will be zero.
-     *
-     */
-    is_free_shipping?: boolean;
-    /**
-     * Flag to determine whether the product should be displayed to customers browsing the store. If `true`, the product will be displayed. If `false`, the product will be hidden from view.
-     *
-     */
-    is_visible?: boolean;
-    /**
-     * Flag to determine whether the product should be included in the `featured products` panel when viewing the store.
-     *
-     */
-    is_featured?: boolean;
-    /**
-     * An array of IDs for the related products.
-     *
-     */
-    related_products?: Array<number>;
-    /**
-     * Warranty information displayed on the product page. Can include HTML formatting.
-     *
-     */
-    warranty?: string;
-    /**
-     * The BIN picking number for the product.
-     *
-     */
-    bin_picking_number?: string;
-    /**
-     * The layout template file used to render this product category. This field is writable only for stores with a Blueprint theme applied. For stores with a Stencil theme applied, see [Custom Template Associations](/docs/rest-content/custom-template-associations).
-     *
-     */
-    layout_file?: string;
-    /**
-     * The product UPC code, which is used in feeds for shopping comparison sites and external channel integrations.
-     *
-     */
-    upc?: string;
-    /**
-     * A comma-separated list of keywords that can be used to locate the product when searching the store.
-     *
-     */
-    search_keywords?: string;
-    /**
-     * Availability text displayed on the checkout page, under the product title. Tells the customer how long it will normally take to ship this product, such as: 'Usually ships in 24 hours.'
-     *
-     */
-    availability_description?: string;
-    /**
-     * Availability of the product. (Corresponds to the productʼs [Purchasability](https://support.bigcommerce.com/s/article/Adding-Products-v3?language=en_US#sections) section in the control panel.) Supported values: `available` - the product is available for purchase; `disabled` - the product is listed on the storefront, but cannot be purchased; `preorder` - the product is listed for pre-orders.
-     *
-     */
-    availability?: 'available' | 'disabled' | 'preorder';
-    /**
-     * Type of gift-wrapping options. Values: `any` - allow any gift-wrapping options in the store; `none` - disallow gift-wrapping on the product; `list` – provide a list of IDs in the `gift_wrapping_options_list` field.
-     *
-     * Always included in the response body; not applicable for the `include_fields` and `exclude_fields` query parameters.
-     *
-     */
-    gift_wrapping_options_type?: 'any' | 'none' | 'list';
-    /**
-     * A list of gift-wrapping option IDs.
-     *
-     * Always included in the response body; not applicable for the `include_fields` and `exclude_fields` query parameters.
-     *
-     */
-    gift_wrapping_options_list?: Array<number>;
-    /**
-     * Priority to give this product when included in product lists on category pages and in search results. Lower integers will place the product closer to the top of the results.
-     *
-     */
-    sort_order?: number;
-    /**
-     * The product condition. Will be shown on the product page if the `is_condition_shown` fieldʼs value is `true`. Possible values: `New`, `Used`, `Refurbished`.
-     *
-     */
-    condition?: 'New' | 'Used' | 'Refurbished';
-    /**
-     * Flag used to determine whether the product condition is shown to the customer on the product page.
-     *
-     */
-    is_condition_shown?: boolean;
-    /**
-     * The minimum quantity an order must contain, to be eligible to purchase this product.
-     *
-     */
-    order_quantity_minimum?: number;
-    /**
-     * The maximum quantity an order can contain when purchasing the product.
-     *
-     */
-    order_quantity_maximum?: number;
-    /**
-     * Custom title for the product page. If not defined, the product name will be used as the meta title.
-     *
-     */
-    page_title?: string;
-    /**
-     * Custom meta keywords for the product page. If not defined, the storeʼs default keywords will be used.
-     *
-     */
-    meta_keywords?: Array<string>;
-    /**
-     * Custom meta description for the product page. If not defined, the storeʼs default meta description will be used.
-     *
-     */
-    meta_description?: string;
-    /**
-     * The number of times the product has been viewed.
-     *
-     *
-     * @deprecated
-     */
-    view_count?: number;
-    /**
-     * Pre-order release date. See the `availability` field for details on setting a productʼs availability to accept pre-orders.
-     *
-     */
-    preorder_release_date?: string | null;
-    /**
-     * Custom expected-date message to display on the product page. If undefined, the message defaults to the storewide setting. Can contain the `%%DATE%%` placeholder, which will be substituted for the release date.
-     *
-     */
-    preorder_message?: string;
-    /**
-     * If set to true then on the preorder release date the preorder status will automatically be removed.
-     * If set to false, then on the release date the preorder status **will not** be removed. It will need to be changed manually either in the
-     * control panel or using the API. Using the API set `availability` to `available`.
-     *
-     */
-    is_preorder_only?: boolean;
-    /**
-     * False by default, indicating that this productʼs price should be shown on the product page. If set to `true`, the price is hidden. (NOTE: To successfully set `is_price_hidden` to `true`, the `availability` value must be `disabled`.)
-     *
-     */
-    is_price_hidden?: boolean;
-    /**
-     * By default, an empty string. If `is_price_hidden` is `true`, the value of `price_hidden_label` is displayed instead of the price. (NOTE: To successfully set a non-empty string value with `is_price_hidden` set to `true`, the `availability` value must be `disabled`.)
-     *
-     */
-    price_hidden_label?: string;
-    custom_url?: CustomUrlFull;
-    /**
-     * Type of product, defaults to `product`.
-     *
-     */
-    open_graph_type?: 'product' | 'album' | 'book' | 'drink' | 'food' | 'game' | 'movie' | 'song' | 'tv_show';
-    /**
-     * Title of the product, if not specified the product name will be used instead.
-     *
-     */
-    open_graph_title?: string;
-    /**
-     * Description to use for the product, if not specified then the meta_description will be used instead.
-     *
-     */
-    open_graph_description?: string;
-    /**
-     * Flag to determine if product description or open graph description is used.
-     *
-     */
-    open_graph_use_meta_description?: boolean;
-    /**
-     * Flag to determine if product name or open graph name is used.
-     *
-     */
-    open_graph_use_product_name?: boolean;
-    /**
-     * Flag to determine if product image or open graph image is used.
-     *
-     */
-    open_graph_use_image?: boolean;
-    /**
-     * Global Trade Item Number
-     */
-    gtin?: string;
-    /**
-     * Manufacturer Part Number
-     */
-    mpn?: string;
-    /**
-     * the date when the Product had been imported
-     */
-    date_last_imported?: string;
-    /**
-     * The total (cumulative) rating for the product.
-     *
-     */
-    reviews_rating_sum?: number;
-    /**
-     * The number of times the product has been rated.
-     *
-     */
-    reviews_count?: number;
-    /**
-     * The total quantity of this product sold.
-     *
-     */
-    total_sold?: number;
-    /**
-     * 200 maximum custom fields per product. 255 maximum characters per custom field.
-     */
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<BulkPricingRuleFull>;
-    images?: Array<ProductImageFullWritable>;
-    primary_image?: PrimaryImageFullWritable;
-    /**
-     * The Catalog API integrates with third-party YouTube.
-     * The [YouTube Terms of Service](https://www.youtube.com/t/terms) and [Google Privacy Policy](https://policies.google.com/privacy) apply, as indicated in our [Privacy Policy](https://www.bigcommerce.com/privacy/) and [Terms of Service](https://www.bigcommerce.com/terms/).
-     *
-     */
-    videos?: Array<ProductVideoFull>;
 };
 
 /**
@@ -4294,86 +2177,9 @@ export type MetafieldFullWritable = MetafieldBase & {
      *
      */
     resource_id?: number;
-    /**
-     * ID of metafield's creator
-     */
-    owner_client_id?: string;
 };
 
 export type Beta5DetailedErrorsWritable = {
-    [key: string]: unknown;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldWritable = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description: string;
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    /**
-     * The unique identifier for the metafield.
-     */
-    id: number;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified: string;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
-};
-
-/**
- * Response meta
- *
- * Response metadata.
- */
-export type MetaEmptyFullWritable2 = {
     [key: string]: unknown;
 };
 
@@ -4434,319 +2240,6 @@ export type Accept = string;
  */
 export type ContentType = string;
 
-/**
- * Specifies the page number in a limited (paginated) list of products.
- *
- */
-export type PageParam = number;
-
-/**
- * Filter based on a metafieldʼs key.
- */
-export type MetafieldKeyParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
- */
-export type MetafieldKeyInParam = Array<string>;
-
-/**
- * Filter based on a metafieldʼs namespaces.
- */
-export type MetafieldNamespaceParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter.
- */
-export type MetafieldNamespaceInParam = Array<string>;
-
-/**
- * Controls the number of items per page in a limited (paginated) list of products.
- *
- */
-export type LimitParam = number;
-
-/**
- * 'Query parameter that lets you filter by the minimum date created, ffor example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.'
- *
- */
-export type DateCreatedMin = string;
-
-/**
- * 'Query parameter that lets you filter by the maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.'
- *
- */
-export type DateCreatedMax = string;
-
-/**
- * 'Query parameter that lets you filter by the maximum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.'
- *
- */
-export type DateModifiedMax = string;
-
-/**
- * 'Query parameter that lets you filter by the minimum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.'
- *
- */
-export type DateModifiedMin = string;
-
-/**
- * Sort direction. Acceptable values are: `asc`, `desc`.
- *
- */
-export type DirectionParam = 'asc' | 'desc';
-
-/**
- * Field name to sort by. Note: Since ID increments when new products are added, you can use the ID value to sort by product create date.
- *
- */
-export type SortParam = 'id' | 'name' | 'sku' | 'price' | 'date_modified' | 'date_last_imported' | 'inventory_level' | 'is_visible' | 'total_sold' | 'calculated_price';
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsBulkPricingParam = Array<'quantity_min' | 'quantity_max' | 'type' | 'amount'>;
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParam = Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'resource_id:in' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-
-/**
- * Sub-resources to include on a product, in a comma-separated list. If `options` or `modifiers` is used, results are limited to 10 per page. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsEnumParam = Array<'variants' | 'images' | 'custom_fields' | 'bulk_pricing_rules' | 'primary_image' | 'modifiers' | 'options' | 'videos'>;
-
-/**
- * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
- */
-export type ExcludeFieldsParam = Array<string>;
-
-/**
- * Pass a comma-separated list to filter by one or more product IDs.
- */
-export type IdInParam = Array<number>;
-
-/**
- * Pass a comma-separated list to exclude one or more product IDs.
- */
-export type IdNotInParam = Array<number>;
-
-/**
- * Pass a comma-separated list to filter by one or more product IDs.
- */
-export type ProductIdInParam = Array<number>;
-
-/**
- * Pass a comma-separated list to filter by one or more category IDs.
- */
-export type CategoryIdInParam = Array<number>;
-
-/**
- * A comma-separated list of category IDs. Returns a list of products that are in all the categories specified.
- */
-export type CategoriesInParam = Array<number>;
-
-/**
- * Pass a comma-separated list to filter by one or more channel IDs.
- */
-export type ChannelIdInParam = Array<number>;
-
-/**
- * A comma-separated list of sub-resources to return with a product object.
- * When you specify `options` or `modifiers`, results are limited to 10 per page.
- */
-export type IncludeParamGetProducts = IncludeParamBase;
-
-/**
- * A comma-separated list of sub-resources to return with a product object.
- */
-export type IncludeParamGetProduct = IncludeParamBase;
-
-export type IdMinParam = number;
-
-export type IdMaxParam = number;
-
-export type IdGreaterParam = number;
-
-export type IdLessParam = number;
-
-/**
- * Filter items by name.
- *
- */
-export type NameParam = string;
-
-/**
- * Filter items by Manufacturer Part Number (MPN).
- *
- */
-export type MpnParam = string;
-
-/**
- * Filter items by UPC.
- *
- */
-export type UpcParam = string;
-
-/**
- * Filter items by price.
- *
- */
-export type PriceParam = number;
-
-/**
- * Filter items by weight.
- *
- */
-export type WeightParam = number;
-
-/**
- * Filter items by condition.
- *
- */
-export type ConditionParam = 'new' | 'used' | 'refurbished';
-
-/**
- * Filter items by brand ID.
- *
- */
-export type BrandIdParam = number;
-
-/**
- * Filter items by `date_modified`.
- */
-export type DateModifiedParam = string;
-
-/**
- * Filter items by `date_modified`. If the `date modified:max` does not include hours, minutes and seconds, the API automatically adds the current time of the request to the date. For example, `date_modified:max=2025-01-15` or `date_modified:max=2025-01-15T00:03:17Z`.
- */
-export type DateModifiedMaxParam = string;
-
-/**
- * Filter items by `date_modified`. If the `date modified:min` does not include hours, minutes and seconds, the API automatically adds the current time of the request to the date. For example, `date_modified:min=2025-01-15` or `date_modified:min=2025-01-15T00:03:17Z`.
- */
-export type DateModifiedMinParam = string;
-
-/**
- * Filter items by date_last_imported.
- */
-export type DateLastImportedParam = string;
-
-/**
- * Filter products by specifying a date they were NOT last imported. For example, `date_last_imported:not=2015-08-21T22%3A53%3A23%2B00%3A00`.
- */
-export type DateLastImportedNotParam = string;
-
-/**
- * Filter items by date_last_imported. For example, `date_last_imported:max=2015-08-21T22%3A53%3A23%2B00%3A00`.
- */
-export type DateLastImportedMaxParam = string;
-
-/**
- * Filter items by date_last_imported. For example, `date_last_imported:min=2015-08-21T22%3A53%3A23%2B00%3A00`.
- */
-export type DateLastImportedMinParam = string;
-
-/**
- * Filter items based on whether the product is currently visible on the storefront.
- */
-export type IsVisibleParam = boolean;
-
-/**
- * Filter items by is_featured. `1` for true, `0` for false.
- */
-export type IsFeaturedParam = 1 | 0;
-
-/**
- * Filter items by is_free_shipping. `1` for true, `0` for false.
- */
-export type IsFreeShippingParam = number;
-
-/**
- * Filter items by inventory_level.
- *
- */
-export type InventoryLevelParam = number;
-
-/**
- * A comma-separated list of inventory levels. Returns a list of all products that have any of the listed inventory amounts.
- */
-export type InventoryLevelInParam = Array<number>;
-
-/**
- * A comma-separated list of inventory levels. Returns a list of all products that have inventory amounts other than those specified.
- */
-export type InventoryLevelNotInParam = Array<number>;
-
-export type InventoryLevelMinParam = number;
-
-export type InventoryLevelMaxParam = number;
-
-export type InventoryLevelGreaterParam = number;
-
-export type InventoryLevelLessParam = number;
-
-/**
- * Filter items by inventory_low. Values: 1, 0.
- *
- */
-export type InventoryLowParam = number;
-
-/**
- * Filter items by out_of_stock. To enable the filter, pass `out_of_stock`=`1`.
- *
- */
-export type OutOfStockParam = number;
-
-/**
- * Filter items by total_sold.
- *
- */
-export type TotalSoldParam = number;
-
-/**
- * Filter items by type.
- */
-export type ProductTypeParam = 'digital' | 'physical';
-
-/**
- * Filter items by categories.
- * If a product is in more than one category, using this query will not return the product. Instead use `categories:in=12`.
- */
-export type CategoriesParam = number;
-
-/**
- * Filter items by keywords found in the `name`, `description`, or `sku` fields, or in the brand name.
- */
-export type KeywordParam = string;
-
-/**
- * Set context used by the search algorithm to return results targeted towards the specified group. Use `merchant` to help merchants search their own catalog. Use `shopper` to return shopper-facing search results.
- */
-export type KeywordContextParam = 'shopper' | 'merchant';
-
-/**
- * Filter items by availability. Values are: available, disabled, preorder.
- *
- */
-export type AvailabilityParam = 'available' | 'disabled' | 'preorder';
-
-/**
- * Filter items by main SKU. To filter by variant SKU, see [Get all variants](/docs/rest-catalog/product-variants#get-all-product-variants).
- */
-export type SkuParam = string;
-
-/**
- * A comma-separated list of SKUs. Returns a list of products with those SKUs.
- */
-export type SkuInParam = Array<string>;
-
 export type DeleteProductsData = {
     body?: never;
     headers: {
@@ -4763,7 +2256,8 @@ export type DeleteProductsData = {
          */
         name?: string;
         /**
-         * Filter items by main SKU. To filter by variant SKU, see [Get all variants](/docs/rest-catalog/product-variants#get-all-product-variants).
+         * Filter items by SKU.
+         *
          */
         sku?: string;
         /**
@@ -4782,28 +2276,29 @@ export type DeleteProductsData = {
          */
         condition?: 'new' | 'used' | 'refurbished';
         /**
-         * Filter items by brand ID.
+         * Filter items by brand_id.
          *
          */
         brand_id?: number;
         /**
-         * Filter items by `date_modified`.
+         * Filter items by date_modified. For example `v3/catalog/products?date_modified:min=2018-06-15`
          */
         date_modified?: string;
         /**
-         * Filter items by date_last_imported.
+         * Filter items by date_last_imported. For example `v3/catalog/products?date_last_imported:min=2018-06-15`
          */
         date_last_imported?: string;
         /**
-         * Filter items based on whether the product is currently visible on the storefront.
+         * Filter items by if visible on the storefront.
          */
         is_visible?: boolean;
         /**
-         * Filter items by is_featured. `1` for true, `0` for false.
+         * Filter items by is_featured.
+         *
          */
-        is_featured?: 1 | 0;
+        is_featured?: number;
         /**
-         * Pass a comma-separated list to filter by one or more product IDs.
+         * Filter by product ID(s).
          */
         'id:in'?: Array<number>;
         /**
@@ -4817,7 +2312,7 @@ export type DeleteProductsData = {
          */
         total_sold?: number;
         /**
-         * Filter items by type.
+         * Filter items by type: `physical` or `digital`.
          */
         type?: 'digital' | 'physical';
         /**
@@ -4827,6 +2322,7 @@ export type DeleteProductsData = {
         categories?: number;
         /**
          * Filter items by keywords found in the `name`, `description`, or `sku` fields, or in the brand name.
+         *
          */
         keyword?: string;
     };
@@ -4850,73 +2346,21 @@ export type GetProductsData = {
     path?: never;
     query?: {
         /**
-         * Filter items by product ID.
+         * Filter items by ID.
          *
          */
         id?: number;
-        /**
-         * Pass a comma-separated list to filter by one or more product IDs.
-         */
         'id:in'?: Array<number>;
-        /**
-         * Pass a comma-separated list to filter by one or more channel IDs.
-         */
-        'channel_id:in'?: Array<number>;
-        /**
-         * Pass a comma-separated list to exclude one or more product IDs.
-         */
         'id:not_in'?: Array<number>;
-        /**
-         * A comma-separated list of sub-resources to return with a product object.
-         * When you specify `options` or `modifiers`, results are limited to 10 per page.
-         */
-        include?: IncludeParamBase;
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        /**
-         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
-         */
-        exclude_fields?: Array<string>;
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         *
-         */
-        page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products.
-         *
-         */
-        limit?: number;
-        /**
-         * Sort direction. Acceptable values are: `asc`, `desc`.
-         *
-         */
-        direction?: 'asc' | 'desc';
-        /**
-         * Field name to sort by. Note: Since ID increments when new products are added, you can use the ID value to sort by product create date.
-         *
-         */
-        sort?: 'id' | 'name' | 'sku' | 'price' | 'date_modified' | 'date_last_imported' | 'inventory_level' | 'is_visible' | 'total_sold' | 'calculated_price';
-        /**
-         * A comma-separated list of category IDs. Returns a list of products that are in all the categories specified.
-         */
-        'categories:in'?: Array<number>;
-        'id:min'?: number;
-        'id:max'?: number;
-        'id:greater'?: number;
-        'id:less'?: number;
+        'id:min'?: Array<number>;
+        'id:max'?: Array<number>;
+        'id:greater'?: Array<number>;
+        'id:less'?: Array<number>;
         /**
          * Filter items by name.
          *
          */
         name?: string;
-        /**
-         * Filter items by Manufacturer Part Number (MPN).
-         *
-         */
-        mpn?: string;
         /**
          * Filter items by UPC.
          *
@@ -4938,7 +2382,7 @@ export type GetProductsData = {
          */
         condition?: 'new' | 'used' | 'refurbished';
         /**
-         * Filter items by brand ID.
+         * Filter items by brand_id.
          *
          */
         brand_id?: number;
@@ -4947,11 +2391,11 @@ export type GetProductsData = {
          */
         date_modified?: string;
         /**
-         * Filter items by `date_modified`. If the `date modified:max` does not include hours, minutes and seconds, the API automatically adds the current time of the request to the date. For example, `date_modified:max=2025-01-15` or `date_modified:max=2025-01-15T00:03:17Z`.
+         * Filter items by `date_modified`. For example, `date_modified:max=2020-06-15`.
          */
         'date_modified:max'?: string;
         /**
-         * Filter items by `date_modified`. If the `date modified:min` does not include hours, minutes and seconds, the API automatically adds the current time of the request to the date. For example, `date_modified:min=2025-01-15` or `date_modified:min=2025-01-15T00:03:17Z`.
+         * Filter items by `date_modified`. For example, `date_modified:min=2018-06-15`.
          */
         'date_modified:min'?: string;
         /**
@@ -4959,15 +2403,11 @@ export type GetProductsData = {
          */
         date_last_imported?: string;
         /**
-         * Filter products by specifying a date they were NOT last imported. For example, `date_last_imported:not=2015-08-21T22%3A53%3A23%2B00%3A00`.
-         */
-        'date_last_imported:not'?: string;
-        /**
-         * Filter items by date_last_imported. For example, `date_last_imported:max=2015-08-21T22%3A53%3A23%2B00%3A00`.
+         * Filter items by date_last_imported. For example, `date_last_imported:max=2020-06-15`.
          */
         'date_last_imported:max'?: string;
         /**
-         * Filter items by date_last_imported. For example, `date_last_imported:min=2015-08-21T22%3A53%3A23%2B00%3A00`.
+         * Filter items by date_last_imported. For example, `date_last_imported:min=2018-06-15`.
          */
         'date_last_imported:min'?: string;
         /**
@@ -4987,14 +2427,8 @@ export type GetProductsData = {
          *
          */
         inventory_level?: number;
-        /**
-         * A comma-separated list of inventory levels. Returns a list of all products that have any of the listed inventory amounts.
-         */
-        'inventory_level:in'?: Array<number>;
-        /**
-         * A comma-separated list of inventory levels. Returns a list of all products that have inventory amounts other than those specified.
-         */
-        'inventory_level:not_in'?: Array<number>;
+        'inventory_level:in'?: number;
+        'inventory_level:not_in'?: number;
         'inventory_level:min'?: number;
         'inventory_level:max'?: number;
         'inventory_level:greater'?: number;
@@ -5024,7 +2458,7 @@ export type GetProductsData = {
          */
         categories?: number;
         /**
-         * Filter items by keywords found in the `name`, `description`, or `sku` fields, or in the brand name.
+         * Filter items by keywords found in the `name` or `sku` fields
          */
         keyword?: string;
         /**
@@ -5032,16 +2466,65 @@ export type GetProductsData = {
          */
         keyword_context?: 'shopper' | 'merchant';
         /**
+         * Filter items by status.
+         *
+         */
+        status?: number;
+        /**
+         * Sub-resources to include on a product, in a comma-separated list. If `options` or `modifiers` is used, results are limited to 10 per page.
+         *
+         * **Note:** The following sub-resources include:
+         * * variants
+         * * images
+         * * custom_fields
+         * * bulk_pricing_rules
+         * * primary_images
+         * * modifiers
+         * * options
+         * * videos
+         */
+        include?: Array<'variants' | 'images' | 'custom_fields' | 'bulk_pricing_rules' | 'primary_image' | 'modifiers' | 'options' | 'videos'>;
+        /**
+         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
+         */
+        include_fields?: string;
+        /**
+         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
+         */
+        exclude_fields?: string;
+        /**
          * Filter items by availability. Values are: available, disabled, preorder.
          *
          */
         availability?: 'available' | 'disabled' | 'preorder';
         /**
-         * Filter items by main SKU. To filter by variant SKU, see [Get all variants](/docs/rest-catalog/product-variants#get-all-product-variants).
+         * Specifies the page number in a limited (paginated) list of products.
+         */
+        page?: number;
+        /**
+         * Controls the number of items per page in a limited (paginated) list of products. The default product limit is 50 with a maximum limit of 250.
+         */
+        limit?: number;
+        /**
+         * Sort direction. Acceptable values are: `asc`, `desc`.
+         *
+         */
+        direction?: 'asc' | 'desc';
+        /**
+         * Field name to sort by. Note: Since `id` increments when new products are added, you can use that field to sort by product create date.
+         *
+         */
+        sort?: 'id' | 'name' | 'sku' | 'price' | 'date_modified' | 'date_last_imported' | 'inventory_level' | 'is_visible' | 'total_sold';
+        /**
+         * Filter items by categories. Use for products in multiple categories. For example, `categories:in=12`.
+         */
+        'categories:in'?: number;
+        /**
+         * Filter items by main SKU. To filter by variant SKU, see [Get All Variants](/docs/rest-catalog/product-variants#get-all-product-variants).
          */
         sku?: string;
         /**
-         * A comma-separated list of SKUs. Returns a list of products with those SKUs.
+         * Filter items by SKU.
          */
         'sku:in'?: Array<string>;
     };
@@ -5049,16 +2532,8 @@ export type GetProductsData = {
 };
 
 export type GetProductsResponses = {
-    /**
-     * Get All Products Response
-     */
     200: {
-        data?: Array<ProductFull & {
-            /**
-             * The channels to which the product is assigned. This field only appears in the response if you include `channels` in the `include` query parameter.
-             */
-            channels?: Array<number>;
-        }>;
+        data?: Array<ProductFull>;
         meta?: MetaCollectionFull;
     };
 };
@@ -5066,7 +2541,7 @@ export type GetProductsResponses = {
 export type GetProductsResponse = GetProductsResponses[keyof GetProductsResponses];
 
 export type CreateProductData = {
-    body: ProductBasePostWritable;
+    body: ProductBaseWritable;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -5082,7 +2557,7 @@ export type CreateProductData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
     };
     url: '/catalog/products';
 };
@@ -5091,7 +2566,7 @@ export type CreateProductErrors = {
     /**
      * Error Response
      *
-     * `Product` conflicted with another product. This is the result of duplicate unique values, such as name or SKU; a missing or invalid `category_id`, `brand_id`, or `tax_class id`; or a conflicting `bulk_pricing_rule` or `custom_url`.
+     * `Product` was in conflict with another product. This is the result of duplicate unique values, such as name or SKU; a missing or invalid `category_id`, `brand_id`, or `tax_class id`; or a conflicting `bulk_pricing_rule`.
      *
      */
     409: {
@@ -5153,13 +2628,9 @@ export type CreateProductResponses = {
         meta?: MetaEmptyFull;
     };
     /**
-     * Multi-status. Typically indicates that a partial failure has occurred, such as when a POST or PUT request is successful, but saving one of the attributes has failed.
+     * Multi-status. The product information was updated successfully, but the inventory data failed to update.
      *
-     * For example, the product information was updated successfully, but the inventory data failed to update or saving the URL failed.
-     *
-     * If inventory data failed to update, verify that the inventory-related updates are well-formed and correct; for example, that they donʼt result in negative stock levels. Then consider updating the inventory data again.
-     *
-     * If the URL failed to update, check that the URL uses Latin letters, is no more than 255 characters, and is not taken by any other entity.
+     * Verify that the inventory-related updates are well-formed and correct; for example, that they donʼt result in negative stock levels. Then consider updating the inventory data again.
      */
     207: {
         data?: Array<ProductFull>;
@@ -5187,7 +2658,7 @@ export type UpdateProductsData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
     };
     url: '/catalog/products';
 };
@@ -5228,23 +2699,14 @@ export type UpdateProductsErrors = {
 export type UpdateProductsError = UpdateProductsErrors[keyof UpdateProductsErrors];
 
 export type UpdateProductsResponses = {
-    /**
-     * Update Products (Batch) Success Response
-     */
     200: {
         data?: Array<ProductFull>;
-        meta?: unknown;
+        meta?: MetaCollectionFull;
     };
     /**
-     * Update Products (Batch) Multi-status Response
+     * Multi-status. The product information was updated successfully, but the inventory data failed to update.
      *
-     * Multi-status. Typically indicates that a partial failure has occurred, such as when a POST or PUT request is successful, but saving one of the attributes has failed.
-     *
-     * For example, the product information was updated successfully, but the inventory data failed to update or saving the URL failed.
-     *
-     * If inventory data failed to update, verify that the inventory-related updates are well-formed and correct; for example, that they donʼt result in negative stock levels. Then consider updating the inventory data again.
-     *
-     * If the URL failed to update, check that the URL uses Latin letters, is no more than 255 characters, and is not taken by any other entity.
+     * Verify that the inventory-related updates are well-formed and correct; for example, that they donʼt result in negative stock levels. Then consider updating the inventory data again.
      */
     207: {
         data?: Array<ProductFull>;
@@ -5255,7 +2717,7 @@ export type UpdateProductsResponses = {
 
 export type UpdateProductsResponse = UpdateProductsResponses[keyof UpdateProductsResponses];
 
-export type DeleteProductData = {
+export type DeleteProductByIdData = {
     body?: never;
     headers: {
         /**
@@ -5274,13 +2736,13 @@ export type DeleteProductData = {
     url: '/catalog/products/{product_id}';
 };
 
-export type DeleteProductResponses = {
+export type DeleteProductByIdResponses = {
     204: void;
 };
 
-export type DeleteProductResponse = DeleteProductResponses[keyof DeleteProductResponses];
+export type DeleteProductByIdResponse = DeleteProductByIdResponses[keyof DeleteProductByIdResponses];
 
-export type GetProductData = {
+export type GetProductByIdData = {
     body?: never;
     headers: {
         /**
@@ -5297,22 +2759,22 @@ export type GetProductData = {
     };
     query?: {
         /**
-         * A comma-separated list of sub-resources to return with a product object.
+         * Sub-resources to include on a product, in a comma-separated list. If `options` or `modifiers` is used, results are limited to 10 per page.
          */
-        include?: IncludeParamBase;
+        include?: Array<'variants' | 'images' | 'custom_fields' | 'bulk_pricing_rules' | 'primary_image' | 'modifiers' | 'options' | 'videos'>;
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}';
 };
 
-export type GetProductErrors = {
+export type GetProductByIdErrors = {
     /**
      * Not Found
      *
@@ -5333,27 +2795,22 @@ export type GetProductErrors = {
     };
 };
 
-export type GetProductError = GetProductErrors[keyof GetProductErrors];
+export type GetProductByIdError = GetProductByIdErrors[keyof GetProductByIdErrors];
 
-export type GetProductResponses = {
+export type GetProductByIdResponses = {
     /**
      * Product Response
      */
     200: {
-        data?: ProductFull & {
-            /**
-             * The channels to which the product is assigned. This field only appears in the response if you include `channels` in the `include` query parameter.
-             */
-            channels?: Array<number>;
-        };
+        data?: ProductFull;
         meta?: MetaEmptyFull;
     };
 };
 
-export type GetProductResponse = GetProductResponses[keyof GetProductResponses];
+export type GetProductByIdResponse = GetProductByIdResponses[keyof GetProductByIdResponses];
 
 export type UpdateProductData = {
-    body: ProductPutWritable;
+    body: ProductPut;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -5373,14 +2830,9 @@ export type UpdateProductData = {
     };
     query?: {
         /**
-         * A comma-separated list of sub-resources to return with a product object.
-         * When you specify `options` or `modifiers`, results are limited to 10 per page.
+         * Sub-resources to include on a product, in a comma-separated list. If `options` or `modifiers` is used, results are limited to 10 per page. The ID and the specified fields will be returned.
          */
-        include?: IncludeParamBase;
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: 'variants' | 'images' | 'custom_fields' | 'bulk_pricing_rules' | 'primary_image' | 'modifiers' | 'options' | 'videos';
     };
     url: '/catalog/products/{product_id}';
 };
@@ -5475,13 +2927,9 @@ export type UpdateProductResponses = {
         [key: string]: unknown;
     };
     /**
-     * Multi-status. Typically indicates that a partial failure has occurred, such as when a POST or PUT request is successful, but saving one of the attributes has failed.
+     * Multi-status. The product information was updated successfully, but the inventory data failed to update.
      *
-     * For example, the product information was updated successfully, but the inventory data failed to update or saving the URL failed.
-     *
-     * If inventory data failed to update, verify that the inventory-related updates are well-formed and correct; for example, that they donʼt result in negative stock levels. Then consider updating the inventory data again.
-     *
-     * If the URL failed to update, check that the URL uses Latin letters, is no more than 255 characters, and is not taken by any other entity.
+     * Verify that the inventory-related updates are well-formed and correct; for example, that they donʼt result in negative stock levels. Then consider updating the inventory data again.
      */
     207: {
         data?: ProductFull;
@@ -5510,22 +2958,20 @@ export type GetProductImagesData = {
     query?: {
         /**
          * Specifies the page number in a limited (paginated) list of products.
-         *
          */
         page?: number;
         /**
          * Controls the number of items per page in a limited (paginated) list of products.
-         *
          */
         limit?: number;
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/images';
 };
@@ -5579,12 +3025,75 @@ export type CreateProductImageData = {
      *
      * The model for a POST to create an image on a product.
      */
-    body: ProductImagePostPut;
+    body: {
+        /**
+         * The unique numeric identifier for the product with which the image is associated.
+         *
+         */
+        product_id?: number;
+        /**
+         * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled.
+         *
+         */
+        readonly url_zoom?: string;
+        /**
+         * The standard URL for this image. By default, this is used for product-page images.
+         *
+         */
+        readonly url_standard?: string;
+        /**
+         * The thumbnail URL for this image. By default, this is the image size used on the category page and in side panels.
+         *
+         */
+        readonly url_thumbnail?: string;
+        /**
+         * The tiny URL for this image. By default, this is the image size used for thumbnails beneath the product image on a product page.
+         *
+         */
+        readonly url_tiny?: string;
+        /**
+         * The date on which the product image was modified.
+         *
+         */
+        date_modified?: string;
+        /**
+         * Flag for identifying whether the image is used as the product's thumbnail.
+         *
+         */
+        is_thumbnail?: boolean;
+        /**
+         * The order in which the image will be displayed on the product page. Higher integers give the image a lower priority. When updating, if the image is given a lower priority, all images with a `sort_order` the same as or greater than the image's new `sort_order` value will have their `sort_order`s reordered.
+         *
+         */
+        sort_order?: number;
+        /**
+         * The description for the image.
+         *
+         */
+        description?: string;
+    } & {
+        /**
+         * Must be a fully qualified URL path, including protocol. Limit of 8MB per file.
+         *
+         */
+        image_url?: string;
+        /**
+         * The local path to the original image file uploaded to BigCommerce. A `multipart/form-data` media type.
+         *
+         * Must be sent as a `multipart/form-data` field in the request body. Limit of 8 MB per file.
+         *
+         */
+        image_file?: string;
+    };
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+         */
+        'Content-Type': string;
     };
     path: {
         /**
@@ -5633,7 +3142,7 @@ export type CreateProductImageError = CreateProductImageErrors[keyof CreateProdu
 
 export type CreateProductImageResponses = {
     /**
-     * application/json
+     * Product Image Response
      *
      * Response payload for the BigCommerce API.
      *
@@ -5654,7 +3163,7 @@ export type CreateProductImageResponses = {
              */
             product_id?: number;
             /**
-             * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled. You should provide an image smaller than 1280x1280; otherwise, the API returns a resized image.
+             * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled.
              *
              */
             readonly url_zoom?: string;
@@ -5679,12 +3188,12 @@ export type CreateProductImageResponses = {
              */
             date_modified?: string;
             /**
-             * Flag for identifying whether the image is used as the productʼs thumbnail.
+             * Flag for identifying whether the image is used as the product's thumbnail.
              *
              */
             is_thumbnail?: boolean;
             /**
-             * The order in which the image will be displayed on the product page. Higher integers give the image a lower priority. When updating, if the image is given a lower priority, all images with a `sort_order` the same as or greater than the imageʼs new `sort_order` value will have their `sort_order`s reordered.
+             * The order in which the image will be displayed on the product page. Higher integers give the image a lower priority. When updating, if the image is given a lower priority, all images with a `sort_order` the same as or greater than the image's new `sort_order` value will have their `sort_order`s reordered.
              *
              */
             sort_order?: number;
@@ -5693,12 +3202,7 @@ export type CreateProductImageResponses = {
              *
              */
             description?: string;
-            /**
-             * Must be a fully qualified URL path, including protocol. Limit of 8MB per file.
-             *
-             */
-            image_url?: string;
-        } | {
+        } & {
             /**
              * The unique numeric ID of the image; increments sequentially.
              *
@@ -5717,7 +3221,7 @@ export type CreateProductImageResponses = {
              */
             image_file?: string;
             /**
-             * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled. You should provide an image smaller than 1280x1280; otherwise, the API returns a resized image.
+             * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled.
              *
              */
             readonly url_zoom?: string;
@@ -5742,20 +3246,10 @@ export type CreateProductImageResponses = {
              */
             date_modified?: string;
             /**
-             * Flag for identifying whether the image is used as the productʼs thumbnail.
-             *
+             * Publically available URL.
+             * Use the image_url when creating a product.
              */
-            is_thumbnail?: boolean;
-            /**
-             * The order in which the image will be displayed on the product page. Higher integers give the image a lower priority. When updating, if the image is given a lower priority, all images with a `sort_order` the same as or greater than the imageʼs new `sort_order` value will have their `sort_order`s reordered.
-             *
-             */
-            sort_order?: number;
-            /**
-             * The description for the image.
-             *
-             */
-            description?: string;
+            image_url?: string;
         };
         meta?: MetaEmptyFull;
     };
@@ -5793,7 +3287,7 @@ export type DeleteProductImageResponses = {
 
 export type DeleteProductImageResponse = DeleteProductImageResponses[keyof DeleteProductImageResponses];
 
-export type GetProductImageData = {
+export type GetProductImageByIdData = {
     body?: never;
     headers: {
         /**
@@ -5817,16 +3311,16 @@ export type GetProductImageData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/images/{image_id}';
 };
 
-export type GetProductImageErrors = {
+export type GetProductImageByIdErrors = {
     /**
      * Not Found
      *
@@ -5847,9 +3341,9 @@ export type GetProductImageErrors = {
     };
 };
 
-export type GetProductImageError = GetProductImageErrors[keyof GetProductImageErrors];
+export type GetProductImageByIdError = GetProductImageByIdErrors[keyof GetProductImageByIdErrors];
 
-export type GetProductImageResponses = {
+export type GetProductImageByIdResponses = {
     /**
      * Product Image Response
      *
@@ -5862,15 +3356,10 @@ export type GetProductImageResponses = {
     };
 };
 
-export type GetProductImageResponse = GetProductImageResponses[keyof GetProductImageResponses];
+export type GetProductImageByIdResponse = GetProductImageByIdResponses[keyof GetProductImageByIdResponses];
 
 export type UpdateProductImageData = {
-    /**
-     * application/json
-     *
-     * The model for a POST or PUT to create or update an image on a product.
-     */
-    body: ProductImagePostPut;
+    body: ProductImagePutWritable;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -5922,17 +3411,13 @@ export type UpdateProductImageErrors = {
         type?: string;
         instance?: string;
     };
-    /**
-     * Product image was not valid. This is the result of missing required fields or invalid data. See the response for more details.
-     */
-    422: ErrorResponse422;
 };
 
 export type UpdateProductImageError = UpdateProductImageErrors[keyof UpdateProductImageErrors];
 
 export type UpdateProductImageResponses = {
     /**
-     * application/json
+     * Product Image Response
      *
      * Response payload for the BigCommerce API.
      *
@@ -5953,7 +3438,7 @@ export type UpdateProductImageResponses = {
              */
             product_id?: number;
             /**
-             * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled. You should provide an image smaller than 1280x1280; otherwise, the API returns a resized image.
+             * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled.
              *
              */
             readonly url_zoom?: string;
@@ -5978,12 +3463,12 @@ export type UpdateProductImageResponses = {
              */
             date_modified?: string;
             /**
-             * Flag for identifying whether the image is used as the productʼs thumbnail.
+             * Flag for identifying whether the image is used as the product's thumbnail.
              *
              */
             is_thumbnail?: boolean;
             /**
-             * The order in which the image will be displayed on the product page. Higher integers give the image a lower priority. When updating, if the image is given a lower priority, all images with a `sort_order` the same as or greater than the imageʼs new `sort_order` value will have their `sort_order`s reordered.
+             * The order in which the image will be displayed on the product page. Higher integers give the image a lower priority. When updating, if the image is given a lower priority, all images with a `sort_order` the same as or greater than the image's new `sort_order` value will have their `sort_order`s reordered.
              *
              */
             sort_order?: number;
@@ -5992,12 +3477,7 @@ export type UpdateProductImageResponses = {
              *
              */
             description?: string;
-            /**
-             * Must be a fully qualified URL path, including protocol. Limit of 8MB per file.
-             *
-             */
-            image_url?: string;
-        } | {
+        } & {
             /**
              * The unique numeric ID of the image; increments sequentially.
              *
@@ -6010,13 +3490,13 @@ export type UpdateProductImageResponses = {
             product_id?: number;
             /**
              * The local path to the original image file uploaded to BigCommerce. Use image_url when creating a product.
-             * A `multipart/form-data` media type.
              *
-             * Must be sent as a multipart/form-data field in the request body. Limit of 8 MB per file.
+             * Must be sent as a `multipart/form-data` field in the request body. Limit of 8 MB per file.
+             *
              */
             image_file?: string;
             /**
-             * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled. You should provide an image smaller than 1280x1280; otherwise, the API returns a resized image.
+             * The zoom URL for this image. By default, this is used as the zoom image on product pages when zoom images are enabled.
              *
              */
             readonly url_zoom?: string;
@@ -6041,20 +3521,10 @@ export type UpdateProductImageResponses = {
              */
             date_modified?: string;
             /**
-             * Flag for identifying whether the image is used as the productʼs thumbnail.
-             *
+             * Publically available URL.
+             * Use the image_url when creating a product.
              */
-            is_thumbnail?: boolean;
-            /**
-             * The order in which the image will be displayed on the product page. Higher integers give the image a lower priority. When updating, if the image is given a lower priority, all images with a `sort_order` the same as or greater than the imageʼs new `sort_order` value will have their `sort_order`s reordered.
-             *
-             */
-            sort_order?: number;
-            /**
-             * The description for the image.
-             *
-             */
-            description?: string;
+            image_url?: string;
         };
         meta?: MetaEmptyFull;
     };
@@ -6087,19 +3557,17 @@ export type GetProductVideosData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
         /**
          * Specifies the page number in a limited (paginated) list of products.
-         *
          */
         page?: number;
         /**
          * Controls the number of items per page in a limited (paginated) list of products.
-         *
          */
         limit?: number;
     };
@@ -6137,7 +3605,7 @@ export type CreateProductVideoData = {
          */
         description?: string;
         /**
-         * The order in which the video will be displayed on the product page. Higher integers give the video a lower priority. When updating, if the video is given a lower priority, all videos with a `sort_order` the same as or greater than the videoʼs new `sort_order` value will have their `sort_order`s reordered.
+         * The order in which the video will be displayed on the product page. Higher integers give the video a lower priority. When updating, if the video is given a lower priority, all videos with a `sort_order` the same as or greater than the video's new `sort_order` value will have their `sort_order`s reordered.
          *
          */
         sort_order?: number;
@@ -6223,7 +3691,7 @@ export type CreateProductVideoResponses = {
              */
             description?: string;
             /**
-             * The order in which the video will be displayed on the product page. Higher integers give the video a lower priority. When updating, if the video is given a lower priority, all videos with a `sort_order` the same as or greater than the videoʼs new `sort_order` value will have their `sort_order`s reordered.
+             * The order in which the video will be displayed on the product page. Higher integers give the video a lower priority. When updating, if the video is given a lower priority, all videos with a `sort_order` the same as or greater than the video's new `sort_order` value will have their `sort_order`s reordered.
              *
              */
             sort_order?: number;
@@ -6289,7 +3757,7 @@ export type DeleteProductVideoResponses = {
 
 export type DeleteProductVideoResponse = DeleteProductVideoResponses[keyof DeleteProductVideoResponses];
 
-export type GetProductVideoData = {
+export type GetProductVideoByIdData = {
     body?: never;
     headers: {
         /**
@@ -6312,16 +3780,16 @@ export type GetProductVideoData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/videos/{id}';
 };
 
-export type GetProductVideoErrors = {
+export type GetProductVideoByIdErrors = {
     /**
      * Not Found
      *
@@ -6342,9 +3810,9 @@ export type GetProductVideoErrors = {
     };
 };
 
-export type GetProductVideoError = GetProductVideoErrors[keyof GetProductVideoErrors];
+export type GetProductVideoByIdError = GetProductVideoByIdErrors[keyof GetProductVideoByIdErrors];
 
-export type GetProductVideoResponses = {
+export type GetProductVideoByIdResponses = {
     /**
      * Product Video Response
      *
@@ -6357,7 +3825,7 @@ export type GetProductVideoResponses = {
     };
 };
 
-export type GetProductVideoResponse = GetProductVideoResponses[keyof GetProductVideoResponses];
+export type GetProductVideoByIdResponse = GetProductVideoByIdResponses[keyof GetProductVideoByIdResponses];
 
 export type UpdateProductVideoData = {
     /**
@@ -6378,7 +3846,7 @@ export type UpdateProductVideoData = {
          */
         description?: string;
         /**
-         * The order in which the video will be displayed on the product page. Higher integers give the video a lower priority. When updating, if the video is given a lower priority, all videos with a `sort_order` the same as or greater than the videoʼs new `sort_order` value will have their `sort_order`s reordered.
+         * The order in which the video will be displayed on the product page. Higher integers give the video a lower priority. When updating, if the video is given a lower priority, all videos with a `sort_order` the same as or greater than the video's new `sort_order` value will have their `sort_order`s reordered.
          *
          */
         sort_order?: number;
@@ -6468,7 +3936,7 @@ export type UpdateProductVideoResponses = {
              */
             description?: string;
             /**
-             * The order in which the video will be displayed on the product page. Higher integers give the video a lower priority. When updating, if the video is given a lower priority, all videos with a `sort_order` the same as or greater than the videoʼs new `sort_order` value will have their `sort_order`s reordered.
+             * The order in which the video will be displayed on the product page. Higher integers give the video a lower priority. When updating, if the video is given a lower priority, all videos with a `sort_order` the same as or greater than the video's new `sort_order` value will have their `sort_order`s reordered.
              *
              */
             sort_order?: number;
@@ -6505,7 +3973,7 @@ export type UpdateProductVideoResponses = {
 
 export type UpdateProductVideoResponse = UpdateProductVideoResponses[keyof UpdateProductVideoResponses];
 
-export type GetProductComplexRulesData = {
+export type GetComplexRulesData = {
     body?: never;
     headers: {
         /**
@@ -6524,26 +3992,24 @@ export type GetProductComplexRulesData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
         /**
          * Specifies the page number in a limited (paginated) list of products.
-         *
          */
         page?: number;
         /**
          * Controls the number of items per page in a limited (paginated) list of products.
-         *
          */
         limit?: number;
     };
     url: '/catalog/products/{product_id}/complex-rules';
 };
 
-export type GetProductComplexRulesResponses = {
+export type GetComplexRulesResponses = {
     /**
      * Complex Rule Collection Response
      *
@@ -6555,9 +4021,9 @@ export type GetProductComplexRulesResponses = {
     };
 };
 
-export type GetProductComplexRulesResponse = GetProductComplexRulesResponses[keyof GetProductComplexRulesResponses];
+export type GetComplexRulesResponse = GetComplexRulesResponses[keyof GetComplexRulesResponses];
 
-export type CreateProductComplexRuleData = {
+export type CreateComplexRuleData = {
     /**
      * Complex Rule
      *
@@ -6565,12 +4031,17 @@ export type CreateProductComplexRuleData = {
      */
     body: {
         /**
+         * The unique numeric ID of the product with which the rule is associated; increments sequentially.
+         *
+         */
+        product_id?: number | null;
+        /**
          * The priority to give this rule when making adjustments to the product properties.
          *
          */
         sort_order?: number;
         /**
-         * Flag for determining whether the rule is to be used when adjusting a productʼs price, weight, image, or availabilty.
+         * Flag for determining whether the rule is to be used when adjusting a product's price, weight, image, or availabilty.
          *
          */
         enabled?: boolean;
@@ -6633,7 +4104,23 @@ export type CreateProductComplexRuleData = {
              */
             adjuster_value?: number;
         };
-        conditions?: ConditionsRequest;
+        conditions?: Array<{
+            /**
+             * The unique numeric ID of the modifier with which the rule condition is associated.
+             * Required in /POST.
+             */
+            modifier_id: number | null;
+            /**
+             * The unique numeric ID of the modifier value with which the rule condition is associated.
+             * Required in /POST.
+             */
+            modifier_value_id: number | null;
+            /**
+             * The unique numeric ID of the variant with which the rule condition is associated.
+             * Required in /POST.
+             */
+            variant_id: number | null;
+        }>;
     };
     headers: {
         /**
@@ -6656,7 +4143,7 @@ export type CreateProductComplexRuleData = {
     url: '/catalog/products/{product_id}/complex-rules';
 };
 
-export type CreateProductComplexRuleErrors = {
+export type CreateComplexRuleErrors = {
     /**
      * Error Response
      *
@@ -6711,12 +4198,9 @@ export type CreateProductComplexRuleErrors = {
     };
 };
 
-export type CreateProductComplexRuleError = CreateProductComplexRuleErrors[keyof CreateProductComplexRuleErrors];
+export type CreateComplexRuleError = CreateComplexRuleErrors[keyof CreateComplexRuleErrors];
 
-export type CreateProductComplexRuleResponses = {
-    /**
-     * Complex Rule Create Response
-     */
+export type CreateComplexRuleResponses = {
     200: {
         /**
          * Complex Rule
@@ -6740,7 +4224,7 @@ export type CreateProductComplexRuleResponses = {
              */
             sort_order?: number;
             /**
-             * Flag for determining whether the rule is to be used when adjusting a productʼs price, weight, image, or availabilty.
+             * Flag for determining whether the rule is to be used when adjusting a product's price, weight, image, or availabilty.
              *
              */
             enabled?: boolean;
@@ -6840,9 +4324,9 @@ export type CreateProductComplexRuleResponses = {
     };
 };
 
-export type CreateProductComplexRuleResponse = CreateProductComplexRuleResponses[keyof CreateProductComplexRuleResponses];
+export type CreateComplexRuleResponse = CreateComplexRuleResponses[keyof CreateComplexRuleResponses];
 
-export type DeleteProductComplexRuleData = {
+export type DeleteComplexRuleByIdData = {
     body?: never;
     headers: {
         /**
@@ -6866,13 +4350,13 @@ export type DeleteProductComplexRuleData = {
     url: '/catalog/products/{product_id}/complex-rules/{complex_rule_id}';
 };
 
-export type DeleteProductComplexRuleResponses = {
+export type DeleteComplexRuleByIdResponses = {
     204: void;
 };
 
-export type DeleteProductComplexRuleResponse = DeleteProductComplexRuleResponses[keyof DeleteProductComplexRuleResponses];
+export type DeleteComplexRuleByIdResponse = DeleteComplexRuleByIdResponses[keyof DeleteComplexRuleByIdResponses];
 
-export type GetProductComplexRuleData = {
+export type GetComplexRuleByIdData = {
     body?: never;
     headers: {
         /**
@@ -6896,16 +4380,16 @@ export type GetProductComplexRuleData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/complex-rules/{complex_rule_id}';
 };
 
-export type GetProductComplexRuleErrors = {
+export type GetComplexRuleByIdErrors = {
     /**
      * Not Found
      *
@@ -6926,12 +4410,9 @@ export type GetProductComplexRuleErrors = {
     };
 };
 
-export type GetProductComplexRuleError = GetProductComplexRuleErrors[keyof GetProductComplexRuleErrors];
+export type GetComplexRuleByIdError = GetComplexRuleByIdErrors[keyof GetComplexRuleByIdErrors];
 
-export type GetProductComplexRuleResponses = {
-    /**
-     * Product Complex Rule Response
-     */
+export type GetComplexRuleByIdResponses = {
     200: {
         /**
          * Complex Rule
@@ -6955,7 +4436,7 @@ export type GetProductComplexRuleResponses = {
              */
             sort_order?: number;
             /**
-             * Flag for determining whether the rule is to be used when adjusting a productʼs price, weight, image, or availabilty.
+             * Flag for determining whether the rule is to be used when adjusting a product's price, weight, image, or availabilty.
              *
              */
             enabled?: boolean;
@@ -7055,9 +4536,9 @@ export type GetProductComplexRuleResponses = {
     };
 };
 
-export type GetProductComplexRuleResponse = GetProductComplexRuleResponses[keyof GetProductComplexRuleResponses];
+export type GetComplexRuleByIdResponse = GetComplexRuleByIdResponses[keyof GetComplexRuleByIdResponses];
 
-export type UpdateProductComplexRuleData = {
+export type UpdateComplexRuleData = {
     /**
      * Complex Rule
      *
@@ -7065,12 +4546,17 @@ export type UpdateProductComplexRuleData = {
      */
     body: {
         /**
+         * The unique numeric ID of the product with which the rule is associated; increments sequentially.
+         *
+         */
+        product_id?: number | null;
+        /**
          * The priority to give this rule when making adjustments to the product properties.
          *
          */
         sort_order?: number;
         /**
-         * Flag for determining whether the rule is to be used when adjusting a productʼs price, weight, image, or availabilty.
+         * Flag for determining whether the rule is to be used when adjusting a product's price, weight, image, or availabilty.
          *
          */
         enabled?: boolean;
@@ -7177,7 +4663,7 @@ export type UpdateProductComplexRuleData = {
     url: '/catalog/products/{product_id}/complex-rules/{complex_rule_id}';
 };
 
-export type UpdateProductComplexRuleErrors = {
+export type UpdateComplexRuleErrors = {
     /**
      * Error Response
      *
@@ -7232,12 +4718,9 @@ export type UpdateProductComplexRuleErrors = {
     };
 };
 
-export type UpdateProductComplexRuleError = UpdateProductComplexRuleErrors[keyof UpdateProductComplexRuleErrors];
+export type UpdateComplexRuleError = UpdateComplexRuleErrors[keyof UpdateComplexRuleErrors];
 
-export type UpdateProductComplexRuleResponses = {
-    /**
-     * Update Product Complex Rule Response
-     */
+export type UpdateComplexRuleResponses = {
     200: {
         /**
          * Complex Rule
@@ -7261,7 +4744,7 @@ export type UpdateProductComplexRuleResponses = {
              */
             sort_order?: number;
             /**
-             * Flag for determining whether the rule is to be used when adjusting a productʼs price, weight, image, or availabilty.
+             * Flag for determining whether the rule is to be used when adjusting a product's price, weight, image, or availabilty.
              *
              */
             enabled?: boolean;
@@ -7361,10 +4844,16 @@ export type UpdateProductComplexRuleResponses = {
     };
 };
 
-export type UpdateProductComplexRuleResponse = UpdateProductComplexRuleResponses[keyof UpdateProductComplexRuleResponses];
+export type UpdateComplexRuleResponse = UpdateComplexRuleResponses[keyof UpdateComplexRuleResponses];
 
-export type GetProductCustomFieldsData = {
+export type GetCustomFieldsData = {
     body?: never;
+    headers: {
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+         */
+        Accept: string;
+    };
     path: {
         /**
          * The ID of the `Product` to which the resource belongs.
@@ -7376,281 +4865,66 @@ export type GetProductCustomFieldsData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
         /**
          * Specifies the page number in a limited (paginated) list of products.
-         *
          */
         page?: number;
         /**
          * Controls the number of items per page in a limited (paginated) list of products.
-         *
          */
         limit?: number;
     };
     url: '/catalog/products/{product_id}/custom-fields';
 };
 
-export type GetProductCustomFieldsErrors = {
-    /**
-     * 401 Unauthorized
-     */
-    401: string;
-    /**
-     * General Error
-     */
-    403: GeneralErrorWithErrors;
-    /**
-     * General Error.
-     */
-    404: GeneralError;
-    /**
-     * 405 Method Not Allowed
-     */
-    405: MethodNotAllowedError;
-};
-
-export type GetProductCustomFieldsError = GetProductCustomFieldsErrors[keyof GetProductCustomFieldsErrors];
-
-export type GetProductCustomFieldsResponses = {
-    /**
-     * Gets array of Custom fields.
-     */
+export type GetCustomFieldsResponses = {
     200: {
-        data?: Array<CustomFieldData>;
-        meta?: MetaCollectionFull2;
+        data?: Array<{
+            /**
+             * The unique numeric ID of the custom field; increments sequentially.
+             * Read-Only
+             */
+            id?: number;
+            /**
+             * The name of the field, shown on the storefront, orders, etc. Required for /POST
+             *
+             */
+            name: string;
+            /**
+             * The name of the field, shown on the storefront, orders, etc. Required for /POST
+             *
+             */
+            value: string;
+        }>;
+        meta?: MetaCollectionFull;
     };
 };
 
-export type GetProductCustomFieldsResponse = GetProductCustomFieldsResponses[keyof GetProductCustomFieldsResponses];
+export type GetCustomFieldsResponse = GetCustomFieldsResponses[keyof GetCustomFieldsResponses];
 
-export type CreateProductCustomFieldData = {
-    body: CustomFieldPost;
-    path: {
+export type CreateCustomFieldData = {
+    /**
+     * Custom Field
+     *
+     * Gets custom fields associated with a product. These allow you to specify additional information that will appear on the product’s page, such as a book’s ISBN or a DVD’s release date.
+     */
+    body: {
         /**
-         * The ID of the `Product` to which the resource belongs.
+         * The name of the field, shown on the storefront, orders, etc. Required for /POST
          *
          */
-        product_id: number;
-    };
-    query?: never;
-    url: '/catalog/products/{product_id}/custom-fields';
-};
-
-export type CreateProductCustomFieldErrors = {
-    /**
-     * 401 Unauthorized
-     */
-    401: string;
-    /**
-     * General Error
-     */
-    403: GeneralErrorWithErrors;
-    /**
-     * General Error.
-     */
-    404: GeneralError;
-    /**
-     * 405 Method Not Allowed
-     */
-    405: MethodNotAllowedError;
-    /**
-     * 415 Unsupported Media Type
-     */
-    415: string;
-    /**
-     * General Error.
-     */
-    422: GeneralError;
-};
-
-export type CreateProductCustomFieldError = CreateProductCustomFieldErrors[keyof CreateProductCustomFieldErrors];
-
-export type CreateProductCustomFieldResponses = {
-    /**
-     * Gets Custom field.
-     */
-    200: {
-        data?: CustomFieldData;
-        meta?: MetaEmptyFull2;
-    };
-};
-
-export type CreateProductCustomFieldResponse = CreateProductCustomFieldResponses[keyof CreateProductCustomFieldResponses];
-
-export type DeleteProductCustomFieldData = {
-    body?: never;
-    path: {
+        name: string;
         /**
-         * The ID of the `Product` to which the resource belongs.
+         * The name of the field, shown on the storefront, orders, etc. Required for /POST
          *
          */
-        product_id: number;
-        /**
-         * The ID of the `CustomField`.
-         *
-         */
-        custom_field_id: number;
+        value: string;
     };
-    query?: never;
-    url: '/catalog/products/{product_id}/custom-fields/{custom_field_id}';
-};
-
-export type DeleteProductCustomFieldErrors = {
-    /**
-     * 401 Unauthorized
-     */
-    401: string;
-    /**
-     * General Error
-     */
-    403: GeneralErrorWithErrors;
-    /**
-     * General Error.
-     */
-    404: GeneralError;
-    /**
-     * 405 Method Not Allowed
-     */
-    405: MethodNotAllowedError;
-};
-
-export type DeleteProductCustomFieldError = DeleteProductCustomFieldErrors[keyof DeleteProductCustomFieldErrors];
-
-export type DeleteProductCustomFieldResponses = {
-    /**
-     * 204 No Content
-     */
-    204: void;
-};
-
-export type DeleteProductCustomFieldResponse = DeleteProductCustomFieldResponses[keyof DeleteProductCustomFieldResponses];
-
-export type GetProductCustomFieldData = {
-    body?: never;
-    path: {
-        /**
-         * The ID of the `Product` to which the resource belongs.
-         *
-         */
-        product_id: number;
-        /**
-         * The ID of the `CustomField`.
-         *
-         */
-        custom_field_id: number;
-    };
-    query?: {
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        /**
-         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
-         */
-        exclude_fields?: Array<string>;
-    };
-    url: '/catalog/products/{product_id}/custom-fields/{custom_field_id}';
-};
-
-export type GetProductCustomFieldErrors = {
-    /**
-     * 401 Unauthorized
-     */
-    401: string;
-    /**
-     * General Error
-     */
-    403: GeneralErrorWithErrors;
-    /**
-     * General Error.
-     */
-    404: GeneralError;
-    /**
-     * 405 Method Not Allowed
-     */
-    405: MethodNotAllowedError;
-};
-
-export type GetProductCustomFieldError = GetProductCustomFieldErrors[keyof GetProductCustomFieldErrors];
-
-export type GetProductCustomFieldResponses = {
-    /**
-     * Gets Custom field.
-     */
-    200: {
-        data?: CustomFieldData;
-        meta?: MetaEmptyFull2;
-    };
-};
-
-export type GetProductCustomFieldResponse = GetProductCustomFieldResponses[keyof GetProductCustomFieldResponses];
-
-export type UpdateProductCustomFieldData = {
-    body: CustomFieldPut;
-    path: {
-        /**
-         * The ID of the `Product` to which the resource belongs.
-         *
-         */
-        product_id: number;
-        /**
-         * The ID of the `CustomField`.
-         *
-         */
-        custom_field_id: number;
-    };
-    query?: never;
-    url: '/catalog/products/{product_id}/custom-fields/{custom_field_id}';
-};
-
-export type UpdateProductCustomFieldErrors = {
-    /**
-     * 401 Unauthorized
-     */
-    401: string;
-    /**
-     * General Error
-     */
-    403: GeneralErrorWithErrors;
-    /**
-     * General Error.
-     */
-    404: GeneralError;
-    /**
-     * 405 Method Not Allowed
-     */
-    405: MethodNotAllowedError;
-    /**
-     * 415 Unsupported Media Type
-     */
-    415: string;
-    /**
-     * General Error.
-     */
-    422: GeneralError;
-};
-
-export type UpdateProductCustomFieldError = UpdateProductCustomFieldErrors[keyof UpdateProductCustomFieldErrors];
-
-export type UpdateProductCustomFieldResponses = {
-    /**
-     * Gets Custom field.
-     */
-    200: {
-        data?: CustomFieldData;
-        meta?: MetaEmptyFull2;
-    };
-};
-
-export type UpdateProductCustomFieldResponse = UpdateProductCustomFieldResponses[keyof UpdateProductCustomFieldResponses];
-
-export type GetAllBulkPricingRulesData = {
-    body?: never;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -7668,35 +4942,410 @@ export type GetAllBulkPricingRulesData = {
          */
         product_id: number;
     };
+    query?: never;
+    url: '/catalog/products/{product_id}/custom-fields';
+};
+
+export type CreateCustomFieldErrors = {
+    /**
+     * Not Found
+     *
+     * Error payload for the BigCommerce API.
+     */
+    404: {
+        /**
+         * 404 HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         */
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+    /**
+     * Error Response
+     *
+     * The `CustomField` was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
+     *
+     */
+    422: {
+        /**
+         * Detailed Errors
+         */
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        /**
+         * The HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         *
+         */
+        title?: string;
+        type?: string;
+    };
+};
+
+export type CreateCustomFieldError = CreateCustomFieldErrors[keyof CreateCustomFieldErrors];
+
+export type CreateCustomFieldResponses = {
+    200: {
+        /**
+         * Custom Field
+         *
+         * Gets custom fields associated with a product. These allow you to specify additional information that will appear on the product’s page, such as a book’s ISBN or a DVD’s release date.
+         */
+        data?: {
+            /**
+             * The unique numeric ID of the custom field; increments sequentially.
+             * Read-Only
+             */
+            id?: number;
+            /**
+             * The name of the field, shown on the storefront, orders, etc. Required for /POST
+             *
+             */
+            name: string;
+            /**
+             * The name of the field, shown on the storefront, orders, etc. Required for /POST
+             *
+             */
+            value: string;
+        };
+        meta?: MetaEmptyFull;
+    };
+};
+
+export type CreateCustomFieldResponse = CreateCustomFieldResponses[keyof CreateCustomFieldResponses];
+
+export type DeleteCustomFieldByIdData = {
+    body?: never;
+    headers: {
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+         */
+        Accept: string;
+    };
+    path: {
+        /**
+         * The ID of the `Product` to which the resource belongs.
+         *
+         */
+        product_id: number;
+        /**
+         * The ID of the `CustomField`.
+         *
+         */
+        custom_field_id: number;
+    };
+    query?: never;
+    url: '/catalog/products/{product_id}/custom-fields/{custom_field_id}';
+};
+
+export type DeleteCustomFieldByIdErrors = {
+    /**
+     * Not Found
+     *
+     * Error payload for the BigCommerce API.
+     */
+    404: {
+        /**
+         * 404 HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         */
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+
+export type DeleteCustomFieldByIdError = DeleteCustomFieldByIdErrors[keyof DeleteCustomFieldByIdErrors];
+
+export type DeleteCustomFieldByIdResponses = {
+    /**
+     * `204 No Content`. Action has been enacted and no further information is to be supplied. `null` is returned.
+     */
+    204: void;
+};
+
+export type DeleteCustomFieldByIdResponse = DeleteCustomFieldByIdResponses[keyof DeleteCustomFieldByIdResponses];
+
+export type GetCustomFieldByIdData = {
+    body?: never;
+    headers: {
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+         */
+        Accept: string;
+    };
+    path: {
+        /**
+         * The ID of the `Product` to which the resource belongs.
+         *
+         */
+        product_id: number;
+        /**
+         * The ID of the `CustomField`.
+         *
+         */
+        custom_field_id: number;
+    };
     query?: {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'quantity_min' | 'quantity_max' | 'type' | 'amount'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
+    };
+    url: '/catalog/products/{product_id}/custom-fields/{custom_field_id}';
+};
+
+export type GetCustomFieldByIdErrors = {
+    /**
+     * Not Found
+     *
+     * Error payload for the BigCommerce API.
+     */
+    404: {
+        /**
+         * 404 HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         */
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+
+export type GetCustomFieldByIdError = GetCustomFieldByIdErrors[keyof GetCustomFieldByIdErrors];
+
+export type GetCustomFieldByIdResponses = {
+    200: {
+        data?: ProductCustomFieldBase;
+        meta?: MetaEmptyFull;
+    };
+};
+
+export type GetCustomFieldByIdResponse = GetCustomFieldByIdResponses[keyof GetCustomFieldByIdResponses];
+
+export type UpdateCustomFieldData = {
+    /**
+     * Custom Field
+     *
+     * Gets custom fields associated with a product. These allow you to specify additional information that will appear on the product’s page, such as a book’s ISBN or a DVD’s release date.
+     */
+    body: {
+        /**
+         * The unique numeric ID of the custom field; increments sequentially.
+         * Read-Only
+         */
+        id?: number;
+        /**
+         * The name of the field, shown on the storefront, orders, etc. Required for /POST
+         *
+         */
+        name: string;
+        /**
+         * The name of the field, shown on the storefront, orders, etc. Required for /POST
+         *
+         */
+        value: string;
+    };
+    headers: {
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+         */
+        Accept: string;
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+         */
+        'Content-Type': string;
+    };
+    path: {
+        /**
+         * The ID of the `Product` to which the resource belongs.
+         *
+         */
+        product_id: number;
+        /**
+         * The ID of the `CustomField`.
+         *
+         */
+        custom_field_id: number;
+    };
+    query?: never;
+    url: '/catalog/products/{product_id}/custom-fields/{custom_field_id}';
+};
+
+export type UpdateCustomFieldErrors = {
+    /**
+     * Not Found
+     *
+     * Error payload for the BigCommerce API.
+     */
+    404: {
+        /**
+         * 404 HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         */
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+    /**
+     * Error Response
+     *
+     * The `CustomField` was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
+     *
+     */
+    422: {
+        /**
+         * Detailed Errors
+         */
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        /**
+         * The HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         *
+         */
+        title?: string;
+        type?: string;
+    };
+};
+
+export type UpdateCustomFieldError = UpdateCustomFieldErrors[keyof UpdateCustomFieldErrors];
+
+export type UpdateCustomFieldResponses = {
+    200: {
+        /**
+         * Custom Field
+         *
+         * Gets custom fields associated with a product. These allow you to specify additional information that will appear on the product’s page, such as a book’s ISBN or a DVD’s release date.
+         */
+        data?: {
+            /**
+             * The unique numeric ID of the custom field; increments sequentially.
+             * Read-Only
+             */
+            id?: number;
+            /**
+             * The name of the field, shown on the storefront, orders, etc. Required for /POST
+             *
+             */
+            name: string;
+            /**
+             * The name of the field, shown on the storefront, orders, etc. Required for /POST
+             *
+             */
+            value: string;
+        };
+        meta?: MetaEmptyFull;
+    };
+};
+
+export type UpdateCustomFieldResponse = UpdateCustomFieldResponses[keyof UpdateCustomFieldResponses];
+
+export type GetBulkPricingRulesData = {
+    body?: never;
+    headers: {
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+         */
+        Accept: string;
+    };
+    path: {
+        /**
+         * The ID of the `Product` to which the resource belongs.
+         *
+         */
+        product_id: number;
+    };
+    query?: {
+        /**
+         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
+         */
+        include_fields?: string;
+        /**
+         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
+         */
+        exclude_fields?: string;
+        /**
+         * Specifies the page number in a limited (paginated) list of products.
+         */
+        page?: number;
+        /**
+         * Controls the number of items per page in a limited (paginated) list of products.
+         */
+        limit?: number;
     };
     url: '/catalog/products/{product_id}/bulk-pricing-rules';
 };
 
-export type GetAllBulkPricingRulesResponses = {
+export type GetBulkPricingRulesErrors = {
     /**
-     * Get All Bulk Pricing Rules Response
+     * Not Found
+     *
+     * Error payload for the BigCommerce API.
      */
+    404: {
+        /**
+         * 404 HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         */
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+
+export type GetBulkPricingRulesError = GetBulkPricingRulesErrors[keyof GetBulkPricingRulesErrors];
+
+export type GetBulkPricingRulesResponses = {
     200: {
-        data?: {
+        data?: Array<{
             /**
              * Unique ID of the *Bulk Pricing Rule*. Read-Only.
              */
-            readonly id?: number;
-        } & BulkPricingRuleResponse;
+            readonly id: number;
+        } & BulkPricingRuleFull>;
         meta?: MetaCollectionFull;
     };
 };
 
-export type GetAllBulkPricingRulesResponse = GetAllBulkPricingRulesResponses[keyof GetAllBulkPricingRulesResponses];
+export type GetBulkPricingRulesResponse = GetBulkPricingRulesResponses[keyof GetBulkPricingRulesResponses];
 
 export type CreateBulkPricingRuleData = {
     body: BulkPricingRuleFull;
@@ -7717,28 +5366,116 @@ export type CreateBulkPricingRuleData = {
          */
         product_id: number;
     };
-    query?: never;
+    query?: {
+        /**
+         * Specifies the page number in a limited (paginated) list of products.
+         */
+        page?: number;
+        /**
+         * Controls the number of items per page in a limited (paginated) list of products.
+         */
+        limit?: number;
+    };
     url: '/catalog/products/{product_id}/bulk-pricing-rules';
 };
 
-export type CreateBulkPricingRuleResponses = {
+export type CreateBulkPricingRuleErrors = {
     /**
-     * Create Bulk Pricing Rule Response
+     * Not Found
+     *
+     * Error payload for the BigCommerce API.
      */
+    404: {
+        /**
+         * 404 HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         */
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+    /**
+     * Error Response
+     *
+     * The `BulkPricingRule` was in conflict with another bulk pricing rule. This is the result of quantity range overlapping with existing bulk pricing rules.
+     *
+     */
+    409: {
+        /**
+         * Detailed Errors
+         */
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        /**
+         * The HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         *
+         */
+        title?: string;
+        type?: string;
+    };
+    /**
+     * Error Response
+     *
+     * The `BulkPricingRule` was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
+     *
+     */
+    422: {
+        /**
+         * Detailed Errors
+         */
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        /**
+         * The HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         *
+         */
+        title?: string;
+        type?: string;
+    };
+};
+
+export type CreateBulkPricingRuleError = CreateBulkPricingRuleErrors[keyof CreateBulkPricingRuleErrors];
+
+export type CreateBulkPricingRuleResponses = {
     200: {
         data?: {
             /**
              * Unique ID of the *Bulk Pricing Rule*. Read-Only.
              */
-            readonly id?: number;
-        } & BulkPricingRuleResponse;
-        meta?: MetaEmptyFull;
+            readonly id: number;
+        } & BulkPricingRuleFull;
+        /**
+         * Meta
+         *
+         * Empty meta object; may be used later.
+         */
+        meta?: {
+            [key: string]: unknown;
+        };
     };
 };
 
 export type CreateBulkPricingRuleResponse = CreateBulkPricingRuleResponses[keyof CreateBulkPricingRuleResponses];
 
-export type DeleteBulkPricingRuleData = {
+export type DeleteBulkPricingRuleByIdData = {
     body?: never;
     headers: {
         /**
@@ -7762,7 +5499,7 @@ export type DeleteBulkPricingRuleData = {
     url: '/catalog/products/{product_id}/bulk-pricing-rules/{bulk_pricing_rule_id}';
 };
 
-export type DeleteBulkPricingRuleErrors = {
+export type DeleteBulkPricingRuleByIdErrors = {
     /**
      * Not Found
      *
@@ -7783,15 +5520,15 @@ export type DeleteBulkPricingRuleErrors = {
     };
 };
 
-export type DeleteBulkPricingRuleError = DeleteBulkPricingRuleErrors[keyof DeleteBulkPricingRuleErrors];
+export type DeleteBulkPricingRuleByIdError = DeleteBulkPricingRuleByIdErrors[keyof DeleteBulkPricingRuleByIdErrors];
 
-export type DeleteBulkPricingRuleResponses = {
+export type DeleteBulkPricingRuleByIdResponses = {
     204: void;
 };
 
-export type DeleteBulkPricingRuleResponse = DeleteBulkPricingRuleResponses[keyof DeleteBulkPricingRuleResponses];
+export type DeleteBulkPricingRuleByIdResponse = DeleteBulkPricingRuleByIdResponses[keyof DeleteBulkPricingRuleByIdResponses];
 
-export type GetBulkPricingRuleData = {
+export type GetBulkPricingRuleByIdData = {
     body?: never;
     headers: {
         /**
@@ -7815,16 +5552,16 @@ export type GetBulkPricingRuleData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'quantity_min' | 'quantity_max' | 'type' | 'amount'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/bulk-pricing-rules/{bulk_pricing_rule_id}';
 };
 
-export type GetBulkPricingRuleErrors = {
+export type GetBulkPricingRuleByIdErrors = {
     /**
      * Not Found
      *
@@ -7845,24 +5582,21 @@ export type GetBulkPricingRuleErrors = {
     };
 };
 
-export type GetBulkPricingRuleError = GetBulkPricingRuleErrors[keyof GetBulkPricingRuleErrors];
+export type GetBulkPricingRuleByIdError = GetBulkPricingRuleByIdErrors[keyof GetBulkPricingRuleByIdErrors];
 
-export type GetBulkPricingRuleResponses = {
-    /**
-     * Get Bulk Pricing Rule Response
-     */
+export type GetBulkPricingRuleByIdResponses = {
     200: {
         data?: {
             /**
              * Unique ID of the *Bulk Pricing Rule*. Read-Only.
              */
             readonly id: number;
-        } & BulkPricingRuleResponse;
+        } & BulkPricingRuleFull;
         meta?: MetaEmptyFull;
     };
 };
 
-export type GetBulkPricingRuleResponse = GetBulkPricingRuleResponses[keyof GetBulkPricingRuleResponses];
+export type GetBulkPricingRuleByIdResponse = GetBulkPricingRuleByIdResponses[keyof GetBulkPricingRuleByIdResponses];
 
 export type UpdateBulkPricingRuleData = {
     body: {
@@ -7973,23 +5707,46 @@ export type UpdateBulkPricingRuleErrors = {
 export type UpdateBulkPricingRuleError = UpdateBulkPricingRuleErrors[keyof UpdateBulkPricingRuleErrors];
 
 export type UpdateBulkPricingRuleResponses = {
-    /**
-     * Update Bulk Pricing Rule Response
-     */
     200: {
+        /**
+         * Bulk Pricing Rule
+         *
+         * Common BulkPricingRule properties
+         */
         data?: {
             /**
              * Unique ID of the *Bulk Pricing Rule*. Read-Only.
              */
             readonly id?: number;
-        } & BulkPricingRuleResponse;
+            /**
+             * The minimum inclusive quantity of a product to satisfy this rule. Must be greater than or equal to zero.
+             * Required in /POST.
+             *
+             */
+            quantity_min: number;
+            /**
+             * The maximum inclusive quantity of a product to satisfy this rule. Must be greater than the `quantity_min` value – unless this field has a value of 0 (zero), in which case there will be no maximum bound for this rule.
+             * Required in /POST.
+             */
+            quantity_max: number;
+            /**
+             * The type of adjustment that is made. Values: `price` - the adjustment amount per product; `percent` - the adjustment as a percentage of the original price; `fixed` - the adjusted absolute price of the product.
+             * Required in /POST.
+             */
+            type: 'price' | 'percent' | 'fixed';
+            /**
+             * The discount can be a fixed dollar amount or a percentage. For a fixed dollar amount enter it as an integer and the response will return as an integer. For percentage enter the amount as the percentage divided by 100 using string format. For example 10% percent would be “.10”. The response will return as an integer.
+             * Required in /POST.
+             */
+            amount: number;
+        };
         meta?: MetaEmptyFull;
     };
 };
 
 export type UpdateBulkPricingRuleResponse = UpdateBulkPricingRuleResponses[keyof UpdateBulkPricingRuleResponses];
 
-export type GetProductMetafieldsData = {
+export type GetProductMetafieldsByProductIdData = {
     body?: never;
     headers: {
         /**
@@ -8007,35 +5764,57 @@ export type GetProductMetafieldsData = {
     query?: {
         /**
          * Specifies the page number in a limited (paginated) list of products.
-         *
          */
         page?: number;
         /**
          * Controls the number of items per page in a limited (paginated) list of products.
-         *
          */
         limit?: number;
         /**
-         * Filter based on a metafieldʼs key.
+         * Filter based on a metafield's key.
+         *
          */
         key?: string;
         /**
-         * Filter based on a metafieldʼs namespaces.
+         * Filter based on a metafield's namespace.
          */
         namespace?: string;
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/metafields';
 };
 
-export type GetProductMetafieldsResponses = {
+export type GetProductMetafieldsByProductIdErrors = {
+    /**
+     * Not Found
+     *
+     * Error payload for the BigCommerce API.
+     */
+    404: {
+        /**
+         * 404 HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         */
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+
+export type GetProductMetafieldsByProductIdError = GetProductMetafieldsByProductIdErrors[keyof GetProductMetafieldsByProductIdErrors];
+
+export type GetProductMetafieldsByProductIdResponses = {
     /**
      * Meta Field Collection Response
      */
@@ -8045,7 +5824,7 @@ export type GetProductMetafieldsResponses = {
     };
 };
 
-export type GetProductMetafieldsResponse = GetProductMetafieldsResponses[keyof GetProductMetafieldsResponses];
+export type GetProductMetafieldsByProductIdResponse = GetProductMetafieldsByProductIdResponses[keyof GetProductMetafieldsByProductIdResponses];
 
 export type CreateProductMetafieldData = {
     body: MetafieldBase;
@@ -8071,16 +5850,10 @@ export type CreateProductMetafieldData = {
 };
 
 export type CreateProductMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
     /**
      * Error Response
      *
-     * The `Metafield` was in conflict with another `Metafield`. This can be the result of duplicate unique key combinations of the appʼs client ID, namespace, key, resource_type, and resource_id.
+     * The `Metafield` was in conflict with another `Metafield`. This can be the result of duplicate unique key combinations of the app's client ID, namespace, key, resource_type, and resource_id.
      *
      */
     409: {
@@ -8143,7 +5916,7 @@ export type CreateProductMetafieldResponses = {
 
 export type CreateProductMetafieldResponse = CreateProductMetafieldResponses[keyof CreateProductMetafieldResponses];
 
-export type DeleteProductMetafieldData = {
+export type DeleteProductMetafieldByIdData = {
     body?: never;
     headers: {
         /**
@@ -8167,36 +5940,13 @@ export type DeleteProductMetafieldData = {
     url: '/catalog/products/{product_id}/metafields/{metafield_id}';
 };
 
-export type DeleteProductMetafieldErrors = {
-    /**
-     * Not Found
-     *
-     * Error payload for the BigCommerce API.
-     */
-    404: {
-        /**
-         * 404 HTTP status code.
-         *
-         */
-        status?: number;
-        /**
-         * The error title describing the particular error.
-         */
-        title?: string;
-        type?: string;
-        instance?: string;
-    };
-};
-
-export type DeleteProductMetafieldError = DeleteProductMetafieldErrors[keyof DeleteProductMetafieldErrors];
-
-export type DeleteProductMetafieldResponses = {
+export type DeleteProductMetafieldByIdResponses = {
     204: void;
 };
 
-export type DeleteProductMetafieldResponse = DeleteProductMetafieldResponses[keyof DeleteProductMetafieldResponses];
+export type DeleteProductMetafieldByIdResponse = DeleteProductMetafieldByIdResponses[keyof DeleteProductMetafieldByIdResponses];
 
-export type GetProductMetafieldData = {
+export type GetProductMetafieldByProductIdData = {
     body?: never;
     headers: {
         /**
@@ -8220,16 +5970,16 @@ export type GetProductMetafieldData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/metafields/{metafield_id}';
 };
 
-export type GetProductMetafieldErrors = {
+export type GetProductMetafieldByProductIdErrors = {
     /**
      * Not Found
      *
@@ -8250,9 +6000,9 @@ export type GetProductMetafieldErrors = {
     };
 };
 
-export type GetProductMetafieldError = GetProductMetafieldErrors[keyof GetProductMetafieldErrors];
+export type GetProductMetafieldByProductIdError = GetProductMetafieldByProductIdErrors[keyof GetProductMetafieldByProductIdErrors];
 
-export type GetProductMetafieldResponses = {
+export type GetProductMetafieldByProductIdResponses = {
     /**
      * Metafield Response
      */
@@ -8262,7 +6012,7 @@ export type GetProductMetafieldResponses = {
     };
 };
 
-export type GetProductMetafieldResponse = GetProductMetafieldResponses[keyof GetProductMetafieldResponses];
+export type GetProductMetafieldByProductIdResponse = GetProductMetafieldByProductIdResponses[keyof GetProductMetafieldByProductIdResponses];
 
 export type UpdateProductMetafieldData = {
     body: MetafieldBase;
@@ -8293,12 +6043,6 @@ export type UpdateProductMetafieldData = {
 };
 
 export type UpdateProductMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
     /**
      * Not Found
      *
@@ -8352,25 +6096,23 @@ export type GetProductReviewsData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
         /**
          * Specifies the page number in a limited (paginated) list of products.
-         *
          */
         page?: number;
         /**
          * Controls the number of items per page in a limited (paginated) list of products.
-         *
          */
         limit?: number;
         /**
          * Filter items by status. `1` for approved, `0` for pending.
          */
-        status?: 0 | 1;
+        status?: number;
     };
     url: '/catalog/products/{product_id}/reviews';
 };
@@ -8448,6 +6190,11 @@ export type GetProductReviewsResponses = {
              *
              */
             id?: number;
+            /**
+             * The unique numeric identifier for the product with which the review is associated.
+             *
+             */
+            product_id?: number;
             /**
              * Date the product review was created.
              *
@@ -8609,6 +6356,11 @@ export type CreateProductReviewResponses = {
              */
             id?: number;
             /**
+             * The unique numeric identifier for the product with which the review is associated.
+             *
+             */
+            product_id?: number;
+            /**
              * Date the product review was created.
              *
              */
@@ -8655,7 +6407,7 @@ export type DeleteProductReviewResponses = {
 
 export type DeleteProductReviewResponse = DeleteProductReviewResponses[keyof DeleteProductReviewResponses];
 
-export type GetProductReviewData = {
+export type GetProductReviewByIdData = {
     body?: never;
     headers: {
         /**
@@ -8679,16 +6431,16 @@ export type GetProductReviewData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/reviews/{review_id}';
 };
 
-export type GetProductReviewErrors = {
+export type GetProductReviewByIdErrors = {
     /**
      * Not Found
      *
@@ -8709,9 +6461,9 @@ export type GetProductReviewErrors = {
     };
 };
 
-export type GetProductReviewError = GetProductReviewErrors[keyof GetProductReviewErrors];
+export type GetProductReviewByIdError = GetProductReviewByIdErrors[keyof GetProductReviewByIdErrors];
 
-export type GetProductReviewResponses = {
+export type GetProductReviewByIdResponses = {
     /**
      * Product Review Response
      *
@@ -8779,7 +6531,7 @@ export type GetProductReviewResponses = {
     };
 };
 
-export type GetProductReviewResponse = GetProductReviewResponses[keyof GetProductReviewResponses];
+export type GetProductReviewByIdResponse = GetProductReviewByIdResponses[keyof GetProductReviewByIdResponses];
 
 export type UpdateProductReviewData = {
     /**
@@ -8925,6 +6677,11 @@ export type UpdateProductReviewResponses = {
              */
             id?: number;
             /**
+             * The unique numeric identifier for the product with which the review is associated.
+             *
+             */
+            product_id?: number;
+            /**
              * Date the product review was created.
              *
              */
@@ -8951,14 +6708,8 @@ export type DeleteProductsChannelAssignmentsData = {
     };
     path?: never;
     query?: {
-        /**
-         * Pass a comma-separated list to filter by one or more product IDs.
-         */
-        'product_id:in'?: Array<number>;
-        /**
-         * Pass a comma-separated list to filter by one or more channel IDs.
-         */
-        'channel_id:in'?: Array<number>;
+        'product_id:in'?: string;
+        'channel_id:in'?: string;
     };
     url: '/catalog/products/channel-assignments';
 };
@@ -8991,32 +6742,16 @@ export type GetProductsChannelAssignmentsData = {
     };
     path?: never;
     query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         *
-         */
         page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products.
-         *
-         */
         limit?: number;
-        /**
-         * Pass a comma-separated list to filter by one or more product IDs.
-         */
-        'product_id:in'?: Array<number>;
-        /**
-         * Pass a comma-separated list to filter by one or more channel IDs.
-         */
-        'channel_id:in'?: Array<number>;
+        'product_id:in'?: string;
+        'channel_id:in'?: string;
     };
     url: '/catalog/products/channel-assignments';
 };
 
 export type GetProductsChannelAssignmentsResponses = {
     /**
-     * Get Products Channel Assignments Response
-     *
      * Collection of channel assignments.
      */
     200: {
@@ -9072,14 +6807,8 @@ export type DeleteProductsCategoryAssignmentsData = {
     };
     path?: never;
     query?: {
-        /**
-         * Pass a comma-separated list to filter by one or more product IDs.
-         */
-        'product_id:in'?: Array<number>;
-        /**
-         * Pass a comma-separated list to filter by one or more category IDs.
-         */
-        'category_id:in'?: Array<number>;
+        'product_id:in'?: string;
+        'category_id:in'?: string;
     };
     url: '/catalog/products/category-assignments';
 };
@@ -9112,32 +6841,16 @@ export type GetProductsCategoryAssignmentsData = {
     };
     path?: never;
     query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         *
-         */
         page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products.
-         *
-         */
         limit?: number;
-        /**
-         * Pass a comma-separated list to filter by one or more product IDs.
-         */
-        'product_id:in'?: Array<number>;
-        /**
-         * Pass a comma-separated list to filter by one or more category IDs.
-         */
-        'category_id:in'?: Array<number>;
+        'product_id:in'?: string;
+        'category_id:in'?: string;
     };
     url: '/catalog/products/category-assignments';
 };
 
 export type GetProductsCategoryAssignmentsResponses = {
     /**
-     * Get Products Category Assignments Response
-     *
      * Collection of category assignments.
      */
     200: {
@@ -9213,7 +6926,7 @@ export type GetCatalogSummaryResponses = {
              */
             inventory_count?: number;
             /**
-             * Total value of storeʼs inventory.
+             * Total value of store's inventory.
              *
              */
             inventory_value?: number;
@@ -9251,190 +6964,3 @@ export type GetCatalogSummaryResponses = {
 };
 
 export type GetCatalogSummaryResponse = GetCatalogSummaryResponses[keyof GetCatalogSummaryResponses];
-
-export type DeleteProductsMetafieldsData = {
-    /**
-     * List of metafield IDs.
-     */
-    body?: Array<number>;
-    path?: never;
-    query?: never;
-    url: '/catalog/products/metafields';
-};
-
-export type DeleteProductsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields deletion with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-
-export type DeleteProductsMetafieldsError = DeleteProductsMetafieldsErrors[keyof DeleteProductsMetafieldsErrors];
-
-export type DeleteProductsMetafieldsResponses = {
-    /**
-     * Response object for metafields deletion with success.
-     *
-     */
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-
-export type DeleteProductsMetafieldsResponse = DeleteProductsMetafieldsResponses[keyof DeleteProductsMetafieldsResponses];
-
-export type GetProductsMetafieldsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         *
-         */
-        page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products.
-         *
-         */
-        limit?: number;
-        /**
-         * Filter based on a metafieldʼs key.
-         */
-        key?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
-         */
-        'key:in'?: Array<string>;
-        /**
-         * Filter based on a metafieldʼs namespaces.
-         */
-        namespace?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter.
-         */
-        'namespace:in'?: Array<string>;
-        /**
-         * Sort direction. Acceptable values are: `asc`, `desc`.
-         *
-         */
-        direction?: 'asc' | 'desc';
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<'resource_id' | 'resource_id:in' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-        /**
-         * 'Query parameter that lets you filter by the minimum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.'
-         *
-         */
-        'date_modified:min'?: string;
-        /**
-         * 'Query parameter that lets you filter by the maximum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.'
-         *
-         */
-        'date_modified:max'?: string;
-        /**
-         * 'Query parameter that lets you filter by the minimum date created, ffor example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.'
-         *
-         */
-        'date_created:min'?: string;
-        /**
-         * 'Query parameter that lets you filter by the maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.'
-         *
-         */
-        'date_created:max'?: string;
-    };
-    url: '/catalog/products/metafields';
-};
-
-export type GetProductsMetafieldsResponses = {
-    /**
-     * List of `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponse;
-};
-
-export type GetProductsMetafieldsResponse = GetProductsMetafieldsResponses[keyof GetProductsMetafieldsResponses];
-
-export type CreateProductsMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        /**
-         * The ID for the product with which the metafield is associated.
-         *
-         */
-        resource_id: number;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/catalog/products/metafields';
-};
-
-export type CreateProductsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type CreateProductsMetafieldsError = CreateProductsMetafieldsErrors[keyof CreateProductsMetafieldsErrors];
-
-export type CreateProductsMetafieldsResponses = {
-    /**
-     * List of created `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponsePostPut;
-};
-
-export type CreateProductsMetafieldsResponse = CreateProductsMetafieldsResponses[keyof CreateProductsMetafieldsResponses];
-
-export type UpdateProductsMetafieldsData = {
-    body?: Array<MetafieldBasePut & {
-        /**
-         * The ID of metafield to update.
-         *
-         */
-        id: number;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/catalog/products/metafields';
-};
-
-export type UpdateProductsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type UpdateProductsMetafieldsError = UpdateProductsMetafieldsErrors[keyof UpdateProductsMetafieldsErrors];
-
-export type UpdateProductsMetafieldsResponses = {
-    /**
-     * List of updated `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponsePostPut;
-};
-
-export type UpdateProductsMetafieldsResponse = UpdateProductsMetafieldsResponses[keyof UpdateProductsMetafieldsResponses];

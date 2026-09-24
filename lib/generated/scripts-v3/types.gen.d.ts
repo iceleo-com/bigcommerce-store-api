@@ -94,7 +94,6 @@ export type ScriptBase = {
     consent_category?: 'essential' | 'functional' | 'analytics' | 'targeting';
     enabled?: boolean;
     channel_id?: number;
-    integrity_hashes?: Array<string>;
 };
 export type FilterWidgetTemplateUuidParam = string;
 export type FilterWidgetTemplateKindParam = string;
@@ -102,8 +101,8 @@ export type PlacementUuid = string;
 export type WidgetUuid = string;
 export type ScriptUuid = string;
 export type FilterWidgetUuidParam = string;
-export type FilterIncludeFieldsParam = Array<string>;
-export type FilterExcludeFieldsParam = Array<string>;
+export type FilterIncludeFieldsParam = string;
+export type FilterExcludeFieldsParam = string;
 export type PageParam = number;
 export type LimitParam = number;
 export type ScriptsSortKeyParam = 'name' | 'description' | 'date_created' | 'date_modified';
@@ -124,7 +123,7 @@ export type GetScriptsData = {
         limit?: number;
         sort?: 'name' | 'description' | 'date_created' | 'date_modified';
         direction?: 'asc' | 'desc';
-        'channel_id:in'?: Array<number>;
+        'channel_id:in'?: Array<unknown>;
     };
     url: '/content/scripts';
 };

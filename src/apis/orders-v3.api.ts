@@ -18,12 +18,19 @@ export class OrdersV3Api {
      * `store_v2_orders`
      * `store_v2_transactions`
      */
-    captureOrderPayment(
-        orderId: OrdersV3ApiSpecs.CaptureOrderPaymentData['path']['order_id'],
+    paymentactioncapture(
+        orderId: OrdersV3ApiSpecs.PaymentactioncaptureData['path']['order_id'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.CaptureOrderPaymentResponses[201]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.CaptureOrderPaymentErrors[400]>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.CaptureOrderPaymentErrors[404]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.CaptureOrderPaymentErrors[422]>> | RequestErrorResponse<502, Required<OrdersV3ApiSpecs.CaptureOrderPaymentErrors[502]>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.CaptureOrderPaymentErrors[503]>> | RequestErrorResponse<504, Required<OrdersV3ApiSpecs.CaptureOrderPaymentErrors[504]>>)>({
+        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.PaymentactioncaptureResponses[201]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.PaymentactioncaptureErrors[400]>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.PaymentactioncaptureErrors[404]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.PaymentactioncaptureErrors[422]>> | RequestErrorResponse<502, Required<OrdersV3ApiSpecs.PaymentactioncaptureErrors[502]>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.PaymentactioncaptureErrors[503]>> | RequestErrorResponse<504, Required<OrdersV3ApiSpecs.PaymentactioncaptureErrors[504]>>)>({
             path: `v3/orders/${orderId}/payment_actions/capture`,
         });
+    }
+
+    /**
+     * @deprecated Use `paymentactioncapture` instead.
+     */
+    captureOrderPayment(...args: Parameters<OrdersV3Api['paymentactioncapture']>) {
+        return this.paymentactioncapture(...args);
     }
 
     /**
@@ -35,18 +42,25 @@ export class OrdersV3Api {
      * `store_v2_orders`
      * `store_v2_transactions`
      */
-    voidOrderPayment(
-        orderId: OrdersV3ApiSpecs.VoidOrderPaymentData['path']['order_id'],
+    paymentactionvoid(
+        orderId: OrdersV3ApiSpecs.PaymentactionvoidData['path']['order_id'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.VoidOrderPaymentResponses[201]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.VoidOrderPaymentErrors[400]>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.VoidOrderPaymentErrors[404]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.VoidOrderPaymentErrors[422]>> | RequestErrorResponse<502, Required<OrdersV3ApiSpecs.VoidOrderPaymentErrors[502]>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.VoidOrderPaymentErrors[503]>> | RequestErrorResponse<504, Required<OrdersV3ApiSpecs.VoidOrderPaymentErrors[504]>>)>({
+        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.PaymentactionvoidResponses[201]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.PaymentactionvoidErrors[400]>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.PaymentactionvoidErrors[404]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.PaymentactionvoidErrors[422]>> | RequestErrorResponse<502, Required<OrdersV3ApiSpecs.PaymentactionvoidErrors[502]>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.PaymentactionvoidErrors[503]>> | RequestErrorResponse<504, Required<OrdersV3ApiSpecs.PaymentactionvoidErrors[504]>>)>({
             path: `v3/orders/${orderId}/payment_actions/void`,
         });
     }
 
     /**
+     * @deprecated Use `paymentactionvoid` instead.
+     */
+    voidOrderPayment(...args: Parameters<OrdersV3Api['paymentactionvoid']>) {
+        return this.paymentactionvoid(...args);
+    }
+
+    /**
      * Get Transactions
      *
-     * Returns an **orderʼs** transactions.
+     * Returns an **order's** transactions.
 
      **Usage Notes**
      * Depending on the payment method, different information will be available (not all payment gateways return full card or fraud detail).
@@ -55,12 +69,19 @@ export class OrdersV3Api {
      * `store_v2_transactions_read_only`
      * `store_v2_transactions`
      */
-    getOrderTransactions(
-        orderId: OrdersV3ApiSpecs.GetOrderTransactionsData['path']['order_id'],
+    getTransactions(
+        orderId: OrdersV3ApiSpecs.GetTransactionsData['path']['order_id'],
     ) {
-        return this.request.get<(RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrderTransactionsResponses[200]>> | RequestSuccessResponse<204, Required<OrdersV3ApiSpecs.GetOrderTransactionsResponses[204]>>),(RequestErrorResponse<404, Required<OrdersV3ApiSpecs.GetOrderTransactionsErrors[404]>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.GetOrderTransactionsErrors[503]>>)>({
+        return this.request.get<(RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetTransactionsResponses[200]>> | RequestSuccessResponse<204, Required<OrdersV3ApiSpecs.GetTransactionsResponses[204]>>),RequestErrorResponse<404, Required<OrdersV3ApiSpecs.GetTransactionsErrors[404]>>>({
             path: `v3/orders/${orderId}/transactions`,
         });
+    }
+
+    /**
+     * @deprecated Use `getTransactions` instead.
+     */
+    getOrderTransactions(...args: Parameters<OrdersV3Api['getTransactions']>) {
+        return this.getTransactions(...args);
     }
 
     /**
@@ -70,21 +91,27 @@ export class OrdersV3Api {
 
      Requires at least one of the following scopes:
      * `store_v2_orders`
-     * `store_v2_transactions`   
+     * `store_v2_transactions`
 
-     **Notes:**
-     * Create a refund quote before performing a refund request to best avoid a `422` error. Check the refund quote's response body for the `refund_methods` array. The `amount` given in the array must match the `amount` used in the refund request body.
-     * Order refunds should be processed sequentially. Processing multiple concurrent refunds on the same order is not yet supported.
+     **Note:**
+     Order refunds are processed consecutively. Processing synchronous refunds on an order are not yet supported.
      */
-    createOrderRefundQuotes(
-        orderId: OrdersV3ApiSpecs.CreateOrderRefundQuotesData['path']['order_id'],
-        requestBody: OrdersV3ApiSpecs.CreateOrderRefundQuotesData['body'],
+    postrefundquote(
+        orderId: OrdersV3ApiSpecs.PostrefundquoteData['path']['order_id'],
+        requestBody: OrdersV3ApiSpecs.PostrefundquoteData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.CreateOrderRefundQuotesResponses[201]>>,RequestErrorResponse<422, Required<OrdersV3ApiSpecs.CreateOrderRefundQuotesErrors[422]>>>({
+        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.PostrefundquoteResponses[201]>>,RequestErrorResponse<422, Required<OrdersV3ApiSpecs.PostrefundquoteErrors[422]>>>({
             path: `v3/orders/${orderId}/payment_actions/refund_quotes`,
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `postrefundquote` instead.
+     */
+    createOrderRefundQuotes(...args: Parameters<OrdersV3Api['postrefundquote']>) {
+        return this.postrefundquote(...args);
     }
 
     /**
@@ -98,14 +125,19 @@ export class OrdersV3Api {
      * `store_v2_orders_read_only`
      * `store_v2_orders`
      */
-    getOrderRefunds(
-        orderId: OrdersV3ApiSpecs.GetOrderRefundsData['path']['order_id'],
-        query?: OrdersV3ApiSpecs.GetOrderRefundsData['query'],
+    getorderrefunds(
+        orderId: OrdersV3ApiSpecs.GetorderrefundsData['path']['order_id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrderRefundsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetorderrefundsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/orders/${orderId}/payment_actions/refunds`,
-            query,
         });
+    }
+
+    /**
+     * @deprecated Use `getorderrefunds` instead.
+     */
+    getOrderRefunds(...args: Parameters<OrdersV3Api['getorderrefunds']>) {
+        return this.getorderrefunds(...args);
     }
 
     /**
@@ -118,19 +150,24 @@ export class OrdersV3Api {
      * `store_v2_transactions`
 
      **Note:**
-     Order refunds should be processed sequentially. Processing multiple concurrent refunds on the same order are not yet supported.
+     Order refunds are processed consecutively. Processing synchronous refunds on an order are not yet supported.
      */
-    createOrderRefund(
-        orderId: OrdersV3ApiSpecs.CreateOrderRefundData['path']['order_id'],
-        requestBody: OrdersV3ApiSpecs.CreateOrderRefundData['body'],
-        query?: OrdersV3ApiSpecs.CreateOrderRefundData['query'],
+    postrefund(
+        orderId: OrdersV3ApiSpecs.PostrefundData['path']['order_id'],
+        requestBody: OrdersV3ApiSpecs.PostrefundData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.CreateOrderRefundResponses[201]>>,(RequestErrorResponse<422, Required<OrdersV3ApiSpecs.CreateOrderRefundErrors[422]>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.CreateOrderRefundErrors[503]>>)>({
+        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.PostrefundResponses[201]>>,(RequestErrorResponse<422, Required<OrdersV3ApiSpecs.PostrefundErrors[422]>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.PostrefundErrors[503]>>)>({
             path: `v3/orders/${orderId}/payment_actions/refunds`,
             contentType: 'application/json',
             body: requestBody,
-            query,
         });
+    }
+
+    /**
+     * @deprecated Use `postrefund` instead.
+     */
+    createOrderRefund(...args: Parameters<OrdersV3Api['postrefund']>) {
+        return this.postrefund(...args);
     }
 
     /**
@@ -138,12 +175,19 @@ export class OrdersV3Api {
      *
      * Returns a refund by refund ID.
      */
-    getOrderRefund(
-        refundId: OrdersV3ApiSpecs.GetOrderRefundData['path']['refund_id'],
+    refundIdget(
+        refundId: OrdersV3ApiSpecs.RefundIdGetData['path']['refund_id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrderRefundResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.RefundIdGetResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/orders/payment_actions/refunds/${refundId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `refundIdget` instead.
+     */
+    getOrderRefund(...args: Parameters<OrdersV3Api['refundIdget']>) {
+        return this.refundIdget(...args);
     }
 
     /**
@@ -157,31 +201,66 @@ export class OrdersV3Api {
      * `store_v2_orders_read_only`
      * `store_v2_orders`
      */
-    getOrdersRefunds(
-        query?: OrdersV3ApiSpecs.GetOrdersRefundsData['query'],
+    getrefunds(
+        query?: OrdersV3ApiSpecs.GetrefundsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrdersRefundsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetrefundsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/orders/payment_actions/refunds',
             query,
         });
     }
 
     /**
-     * Get Order Metafields
+     * @deprecated Use `getrefunds` instead.
+     */
+    getOrdersRefunds(...args: Parameters<OrdersV3Api['getrefunds']>) {
+        return this.getrefunds(...args);
+    }
+
+    /**
+     * Create Refund Quotes - BATCH
+     *
+     * Calculate the tax amount, total refund amount and get available payment options for an order refund by providing items and costs or quantities to refund.
+
+     This endpoint will accept a batch of one or more.
+
+     Requires at least one of the following scopes:
+     * `store_v2_orders`
+     * `store_v2_transactions`
+     */
+    postrefundquotes(
+        requestBody: OrdersV3ApiSpecs.PostrefundquotesData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.PostrefundquotesResponses[201]>>,(RequestErrorResponse<422, Required<OrdersV3ApiSpecs.PostrefundquotesErrors[422]>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.PostrefundquotesErrors[503]>>)>({
+            path: 'v3/orders/payment_actions/refund_quotes',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Get Metafields
      *
      * Gets a `Metafield` object list, by `order_id`.
 
      The maximum number of metafields allowed on each order, product, category, variant, or brand is 250 per client ID.
 
      */
-    getOrderMetafields(
-        orderId: OrdersV3ApiSpecs.GetOrderMetafieldsData['path']['order_id'],
-        query?: OrdersV3ApiSpecs.GetOrderMetafieldsData['query'],
+    getOrderMetafieldsByOrderId(
+        orderId: OrdersV3ApiSpecs.GetOrderMetafieldsByOrderIdData['path']['order_id'],
+        query?: OrdersV3ApiSpecs.GetOrderMetafieldsByOrderIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrderMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrderMetafieldsByOrderIdResponses[200]>>,RequestErrorResponse<404, Required<OrdersV3ApiSpecs.GetOrderMetafieldsByOrderIdErrors[404]>>>({
             path: `v3/orders/${orderId}/metafields`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getOrderMetafieldsByOrderId` instead.
+     */
+    getOrderMetafields(...args: Parameters<OrdersV3Api['getOrderMetafieldsByOrderId']>) {
+        return this.getOrderMetafieldsByOrderId(...args);
     }
 
     /**
@@ -195,7 +274,7 @@ export class OrdersV3Api {
         orderId: OrdersV3ApiSpecs.CreateOrderMetafieldData['path']['order_id'],
         requestBody: OrdersV3ApiSpecs.CreateOrderMetafieldData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.CreateOrderMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.CreateOrderMetafieldErrors[400]>> | RequestErrorResponse<409, Required<OrdersV3ApiSpecs.CreateOrderMetafieldErrors[409]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.CreateOrderMetafieldErrors[422]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.CreateOrderMetafieldResponses[200]>>,(RequestErrorResponse<409, Required<OrdersV3ApiSpecs.CreateOrderMetafieldErrors[409]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.CreateOrderMetafieldErrors[422]>>)>({
             path: `v3/orders/${orderId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
@@ -208,13 +287,20 @@ export class OrdersV3Api {
      * Gets a `Metafield`, by `order_id`.
 
      */
-    getOrderMetafield(
-        orderId: OrdersV3ApiSpecs.GetOrderMetafieldData['path']['order_id'],
-        metafieldId: OrdersV3ApiSpecs.GetOrderMetafieldData['path']['metafield_id'],
+    getOrderMetafieldByOrderIdAndMetafieldId(
+        orderId: OrdersV3ApiSpecs.GetOrderMetafieldByOrderIdAndMetafieldIdData['path']['order_id'],
+        metafieldId: OrdersV3ApiSpecs.GetOrderMetafieldByOrderIdAndMetafieldIdData['path']['metafield_id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrderMetafieldResponses[200]>>,RequestErrorResponse<404, Required<OrdersV3ApiSpecs.GetOrderMetafieldErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrderMetafieldByOrderIdAndMetafieldIdResponses[200]>>,RequestErrorResponse<404, Required<OrdersV3ApiSpecs.GetOrderMetafieldByOrderIdAndMetafieldIdErrors[404]>>>({
             path: `v3/orders/${orderId}/metafields/${metafieldId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `getOrderMetafieldByOrderIdAndMetafieldId` instead.
+     */
+    getOrderMetafield(...args: Parameters<OrdersV3Api['getOrderMetafieldByOrderIdAndMetafieldId']>) {
+        return this.getOrderMetafieldByOrderIdAndMetafieldId(...args);
     }
 
     /**
@@ -222,14 +308,14 @@ export class OrdersV3Api {
      *
      * Updates a `Metafield` object.
 
-     The maximum number of metafields allowed on each order, product, category, variant, or brand is 250 per client ID.
+     The maxiumum number of metafields allowed on each order, product, category, variant, or brand is 250 per client ID.
      */
     updateOrderMetafield(
         orderId: OrdersV3ApiSpecs.UpdateOrderMetafieldData['path']['order_id'],
         metafieldId: OrdersV3ApiSpecs.UpdateOrderMetafieldData['path']['metafield_id'],
         requestBody: OrdersV3ApiSpecs.UpdateOrderMetafieldData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.UpdateOrderMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.UpdateOrderMetafieldErrors[400]>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.UpdateOrderMetafieldErrors[404]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.UpdateOrderMetafieldResponses[200]>>,RequestErrorResponse<404, Required<OrdersV3ApiSpecs.UpdateOrderMetafieldErrors[404]>>>({
             path: `v3/orders/${orderId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -242,13 +328,20 @@ export class OrdersV3Api {
      * Deletes a `Metafield`.
 
      */
-    deleteOrderMetafield(
-        orderId: OrdersV3ApiSpecs.DeleteOrderMetafieldData['path']['order_id'],
-        metafieldId: OrdersV3ApiSpecs.DeleteOrderMetafieldData['path']['metafield_id'],
+    deleteOrderMetafieldById(
+        orderId: OrdersV3ApiSpecs.DeleteOrderMetafieldByIdData['path']['order_id'],
+        metafieldId: OrdersV3ApiSpecs.DeleteOrderMetafieldByIdData['path']['metafield_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<OrdersV3ApiSpecs.DeleteOrderMetafieldResponses[204]>>,RequestErrorResponse<404, Required<OrdersV3ApiSpecs.DeleteOrderMetafieldErrors[404]>>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<OrdersV3ApiSpecs.DeleteOrderMetafieldByIdResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/orders/${orderId}/metafields/${metafieldId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteOrderMetafieldById` instead.
+     */
+    deleteOrderMetafield(...args: Parameters<OrdersV3Api['deleteOrderMetafieldById']>) {
+        return this.deleteOrderMetafieldById(...args);
     }
 
     /**
@@ -304,65 +397,6 @@ export class OrdersV3Api {
     ) {
         return this.request.put<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.UpdateChannelOrderSettingsResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.UpdateChannelOrderSettingsErrors[400]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.UpdateChannelOrderSettingsErrors[422]>>)>({
             path: `v3/orders/settings/channels/${channelId}`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Get All Order Metafields
-     *
-     * Get all order metafields.
-     */
-    getOrdersMetafields(
-        query?: OrdersV3ApiSpecs.GetOrdersMetafieldsData['query'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GetOrdersMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: 'v3/orders/metafields',
-            query,
-        });
-    }
-
-    /**
-     * Create multiple Metafields
-     *
-     * Create multiple metafields.
-     */
-    createOrdersMetafields(
-        requestBody: OrdersV3ApiSpecs.CreateOrdersMetafieldsData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.CreateOrdersMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.CreateOrdersMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.CreateOrdersMetafieldsErrors[422]>>)>({
-            path: 'v3/orders/metafields',
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Update multiple Metafields
-     *
-     * Update multiple metafields.
-     */
-    updateOrdersMetafields(
-        requestBody: OrdersV3ApiSpecs.UpdateOrdersMetafieldsData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.UpdateOrdersMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.UpdateOrdersMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.UpdateOrdersMetafieldsErrors[422]>>)>({
-            path: 'v3/orders/metafields',
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Delete Multiple Metafields
-     *
-     * Delete all order metafields.
-     */
-    deleteOrdersMetafields(
-        requestBody: OrdersV3ApiSpecs.DeleteOrdersMetafieldsData['body'],
-    ) {
-        return this.request.delete<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.DeleteOrdersMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<OrdersV3ApiSpecs.DeleteOrdersMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.DeleteOrdersMetafieldsErrors[422]>>)>({
-            path: 'v3/orders/metafields',
             contentType: 'application/json',
             body: requestBody,
         });

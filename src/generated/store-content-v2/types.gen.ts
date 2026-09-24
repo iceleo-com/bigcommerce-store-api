@@ -9,9 +9,9 @@ export type ClientOptions = {
  */
 export type BlogPostFull = {
     /**
-     * ID of this blog post. READ-ONLY.
+     * ID of this blog post. (READ-ONLY)
      */
-    readonly id?: number;
+    id?: number;
 } & BlogPostBaseRes;
 
 /**
@@ -47,9 +47,9 @@ export type FormField = {
  */
 export type PageFull = {
     /**
-     * ID of the page. Read-Only.
+     * ID of the page.
      */
-    readonly id?: number;
+    id?: number;
 } & PageBaseRes;
 
 /**
@@ -66,9 +66,9 @@ export type Redirect = {
     path: string;
     forward: Forward;
     /**
-     * URL of the redirect. READ-ONLY.
+     * URL of the redirect. READ-ONLY
      */
-    readonly url?: string;
+    url?: string;
 };
 
 /**
@@ -92,7 +92,7 @@ export type CustomerFull = {
     /**
      * Unique numeric ID of this customer. This is a READ-ONLY field; do not set or modify its value in a POST or PUT request.
      */
-    readonly id?: number;
+    id?: number;
     /**
      * Not returned in any responses, but accepts up to two fields allowing you to set the customer’s password. If a password is not supplied, it is generated automatically. For further information about using this object, please see the Customers resource documentation.
      */
@@ -124,12 +124,12 @@ export type CustomerFull = {
     /**
      * Date on which the customer registered from the storefront or was created in the control panel. This is a READ-ONLY field; do not set or modify its value in a POST or PUT request.
      */
-    readonly date_created?: string;
+    date_created?: string;
     /**
      * Date on which the customer updated their details in the storefront or was updated in the control panel. This is a READ-ONLY field; do not set or modify its value in a POST or PUT request.
      *
      */
-    readonly date_modified?: string;
+    date_modified?: string;
     /**
      * The amount of credit the customer has. (Float, Float as String, Integer)
      */
@@ -154,12 +154,12 @@ export type CustomerFull = {
      * Records whether the customer would like to receive marketing content from this store. READ-ONLY.This is a READ-ONLY field; do not set or modify its value in a POST or PUT request.
      *
      */
-    readonly accepts_marketing?: boolean;
+    accepts_marketing?: boolean;
     addresses?: Addresses;
     /**
      * Array of custom fields. This is a READ-ONLY field; do not set or modify its value in a POST or PUT request.
      */
-    readonly form_fields?: Array<FormField>;
+    form_fields?: Array<FormField>;
     /**
      * Force a password change on next login.
      */
@@ -177,9 +177,9 @@ export type CategoryAccessLevel = {
      */
     type?: 'all' | 'specific' | 'none';
     /**
-     * A comma-separated list of category IDs. Should be supplied only if `type` is `specific`.
+     * Is an array of category IDs and should be supplied only if `type` is specific.
      */
-    categories?: Array<number>;
+    categories?: Array<string>;
 };
 
 /**
@@ -187,8 +187,7 @@ export type CategoryAccessLevel = {
  */
 export type TimeZone = {
     /**
-     * A string identifying the time zone, in the format: `<Continent-name>/<City-name>`.
-     *
+     * A string identifying the time zone, in the format: <Continent-name>/<City-name>.
      */
     name?: string;
     /**
@@ -262,7 +261,7 @@ export type BlogPostBasePost = {
      */
     tags?: Array<string>;
     /**
-     * Whether the blog post is published. If you want the post to be or remain published following the request, you must set the field explicitly to true, even if the blog post was already published prior to the request.
+     * Whether the blog post is published.
      */
     is_published?: boolean;
     /**
@@ -278,7 +277,7 @@ export type BlogPostBasePost = {
      */
     author?: string;
     /**
-     * Local path to a thumbnail uploaded to `/product_images/` using [WebDAV](https://support.bigcommerce.com/s/article/File-Access-WebDAV).
+     * Local path to a thumbnail uploaded to `/product_images/` via [WebDav](https://support.bigcommerce.com/s/article/File-Access-WebDAV).
      */
     thumbnail_path?: string;
     published_date?: string;
@@ -297,9 +296,9 @@ export type BlogPostBase = {
      */
     url?: string;
     /**
-     * URL to preview the blog post. READ-ONLY.
+     * URL to preview the blog post. (READ-ONLY)
      */
-    readonly preview_url?: string;
+    preview_url?: string;
     /**
      * Text body of the blog post.
      */
@@ -309,11 +308,11 @@ export type BlogPostBase = {
      */
     tags?: Array<string>;
     /**
-     * Summary of the blog post. READ-ONLY.
+     * Summary of the blog post. (READ-ONLY)
      */
-    readonly summary?: string;
+    summary?: string;
     /**
-     * Whether the blog post is published. If you want the post to be or remain published following the request, you must set the field explicitly to true, even if the blog post was already published prior to the request.
+     * Whether the blog post is published.
      */
     is_published?: boolean;
     published_date?: PublishedDate;
@@ -334,7 +333,7 @@ export type BlogPostBase = {
      */
     author?: string;
     /**
-     * Local path to a thumbnail uploaded to `/product_images/` using [WebDAV](https://support.bigcommerce.com/s/article/File-Access-WebDAV).
+     * Local path to a thumbnail uploaded to `/product_images/` via [WebDav](https://support.bigcommerce.com/s/article/File-Access-WebDAV).
      */
     thumbnail_path?: string;
 };
@@ -354,9 +353,9 @@ export type BlogPostBaseRes = {
      */
     url?: string;
     /**
-     * URL to preview the blog post. READ-ONLY.
+     * URL to preview the blog post. (READ-ONLY)
      */
-    readonly preview_url?: string;
+    preview_url?: string;
     /**
      * Text body of the blog post.
      */
@@ -366,11 +365,11 @@ export type BlogPostBaseRes = {
      */
     tags?: Array<string>;
     /**
-     * Summary of the blog post. READ-ONLY.
+     * Summary of the blog post. (READ-ONLY)
      */
-    readonly summary?: string;
+    summary?: string;
     /**
-     * Whether the blog post is published. If you want the post to be or remain published following the request, you must set the field explicitly to true, even if the blog post was already published prior to the request.
+     * Whether the blog post is published.
      */
     is_published?: boolean;
     published_date?: PublishedDate;
@@ -391,7 +390,7 @@ export type BlogPostBaseRes = {
      */
     author?: string | null;
     /**
-     * Local path to a thumbnail uploaded to `/product_images/` using [WebDAV](https://support.bigcommerce.com/s/article/File-Access-WebDAV).
+     * Local path to a thumbnail uploaded to `/product_images/` via [WebDav](https://support.bigcommerce.com/s/article/File-Access-WebDAV).
      */
     thumbnail_path?: string | null;
 };
@@ -412,88 +411,93 @@ export type Authentication = {
 };
 
 /**
+ * customer_Base
+ */
+export type CustomerBase = {
+    [key: string]: unknown;
+};
+
+/**
  * page_Base
  */
 export type PageBase = {
-    /**
-     * channel ID
-     */
-    channel_id?: number;
-    /**
-     * Page name, as displayed on the storefront.
-     */
-    name: string;
-    /**
-     * Text specified for this page’s `<title>` element. If empty, the value of the name property is used.
-     */
-    meta_title?: string;
-    /**
-     * HTML or variable that populates this page’s `<body>` element, in default/desktop view. Required in POST if page type is `raw`.
-     */
-    body: string;
-    /**
-     * If true, this page appears in the storefront’s navigation menu.
-     */
-    is_visible?: boolean;
     /**
      * ID of any parent Web page.
      */
     parent_id?: number;
     /**
-     * Order in which this page should display on the storefront. (Lower integers specify earlier display.)
-     */
-    sort_order?: number;
-    /**
-     * Comma-separated list of SEO-relevant keywords to include in the page’s `<meta/>` element.
-     */
-    meta_keywords?: string;
-    /**
      * `page`: free-text page
      * `link`: link to another web address
-     * `contact_form`: When the store’s contact form is used
+     * `rss_feed`: syndicated content from an RSS feed
+     * `contact_form`: When the store's contact form is used.
+     *
      *
      */
-    type: 'page' | 'contact_form' | 'raw' | 'link';
-    /**
-     * Description contained within this page’s `<meta/>` element.
-     */
-    meta_description?: string;
-    /**
-     * If true, this page is the storefront’s home page.
-     */
-    is_homepage?: boolean;
-    /**
-     * If true, this page is for customers only.
-     */
-    is_customers_only?: boolean;
-    /**
-     * Comma-separated list of keywords that shoppers can use to locate this page when searching the store.
-     */
-    search_keywords?: string;
-    /**
-     * If true, this page has a mobile version. (For Blueprint themes only)
-     */
-    has_mobile_version?: boolean;
-    /**
-     * HTML to use for this page’s body when viewed in the mobile template (deprecated - Blueprint themes only).
-     */
-    mobile_body?: string;
+    type: 'page' | 'rss_feed' | 'contact_form' | 'raw' | 'link';
     /**
      * Where the page’s type is a contact form: object whose members are the fields enabled (in the control panel) for storefront display. Possible members are:`fullname`: full name of the customer submitting the form; `phone`: customer’s phone number, as submitted on the form; `companyname`: customer’s submitted company name; `orderno`: customer’s submitted order number; `rma`: customer’s submitted RMA (Return Merchandise Authorization) number.
      */
     contact_fields?: string;
     /**
-     * Where the page’s type is a contact form, the email address that receives messages sent using the form.
+     * Where the page’s type is a contact form: email address that receives messages sent via the form.
      */
     email?: string;
+    /**
+     * Page name, as displayed on the storefront.
+     */
+    name: string;
     /**
      * Relative URL on the storefront for this page.
      */
     url?: string;
     /**
+     * Description contained within this page’s `<meta/>` element.
+     */
+    meta_description?: string;
+    /**
+     * HTML or variable that populates this page’s `<body>` element, in default/desktop view. Required in POST if page type is `raw`.
+     */
+    body: string;
+    /**
+     * HTML to use for this page's body when viewed in the mobile template (deprecated).
+     */
+    mobile_body?: string;
+    /**
+     * If true, this page has a mobile version.
+     */
+    has_mobile_version?: boolean;
+    /**
+     * If true, this page appears in the storefront’s navigation menu.
+     */
+    is_visible?: boolean;
+    /**
+     * If true, this page is the storefront’s home page.
+     */
+    is_homepage?: boolean;
+    /**
+     * Text specified for this page’s `<title>` element. (If empty, the value of the name property is used.)
+     */
+    meta_title?: string;
+    /**
      * Layout template for this page. This field is writable only for stores with a Blueprint theme applied.
      */
     layout_file?: string;
+    /**
+     * Order in which this page should display on the storefront. (Lower integers specify earlier display.)
+     */
+    sort_order?: number;
+    /**
+     * Comma-separated list of keywords that shoppers can use to locate this page when searching the store.
+     */
+    search_keywords?: string;
+    /**
+     * Comma-separated list of SEO-relevant keywords to include in the page’s `<meta/>` element.
+     */
+    meta_keywords?: string;
+    /**
+     * If page type is `rss_feed` then this field is visible. Required in POST required for `rss page` type.
+     */
+    feed?: string;
     /**
      * If page type is `link` this field is returned. Required in  POST to create a `link` page.
      */
@@ -506,269 +510,87 @@ export type PageBase = {
  */
 export type PageBaseRes = {
     /**
-     * Channel ID.
+     * ID of any parent Web page.
      */
-    channel_id?: number;
+    parent_id?: number;
+    /**
+     * `page`: free-text page
+     * `link`: link to another web address
+     * `rss_feed`: syndicated content from an RSS feed
+     * `contact_form`: When the store's contact form is used.
+     *
+     *
+     */
+    type?: 'page' | 'rss_feed' | 'contact_form' | 'raw' | 'link';
+    /**
+     * Where the page’s type is a contact form: object whose members are the fields enabled (in the control panel) for storefront display. Possible members are:`fullname`: full name of the customer submitting the form; `phone`: customer’s phone number, as submitted on the form; `companyname`: customer’s submitted company name; `orderno`: customer’s submitted order number; `rma`: customer’s submitted RMA (Return Merchandise Authorization) number.
+     */
+    contact_fields?: string;
+    /**
+     * Where the page’s type is a contact form: email address that receives messages sent via the form.
+     */
+    email?: string;
     /**
      * Page name, as displayed on the storefront.
      */
     name?: string;
     /**
-     * Text specified for this page's `<title>` element. If empty, the value of the name property is used.
+     * Relative URL on the storefront for this page.
      */
-    meta_title?: string;
+    url?: string;
     /**
-     * Where the page’s type is a contact form, the email address that receives messages sent using the form.
+     * Description contained within this page’s `<meta/>` element.
      */
-    email?: string;
+    meta_description?: string;
     /**
      * HTML or variable that populates this page’s `<body>` element, in default/desktop view. Required in POST if page type is `raw`.
      */
     body?: string;
     /**
-     * If true, this page appears in the storefront navigation menu.
+     * HTML to use for this page's body when viewed in the mobile template (deprecated).
+     */
+    mobile_body?: string;
+    /**
+     * If true, this page has a mobile version.
+     */
+    has_mobile_version?: boolean;
+    /**
+     * If true, this page appears in the storefront’s navigation menu.
      */
     is_visible?: boolean;
-    /**
-     * ID of any parent Web page.
-     */
-    parent_id?: number;
-    /**
-     * Order in which this page should display on the storefront. (Lower integers specify earlier display.)
-     */
-    sort_order?: number;
-    /**
-     * Comma-separated list of SEO-relevant keywords to include in the page's `<meta/>` element.
-     */
-    meta_keywords?: string;
-    /**
-     * `page`: free-text page
-     * `link`: link to another web address
-     * `contact_form`: When the store’s contact form is used
-     *
-     */
-    type?: 'page' | 'contact_form' | 'raw' | 'link';
-    /**
-     * Where the page’s type is a contact form - object whose members are the fields enabled (in the control panel) for storefront display. Possible members are:`fullname` - full name of the customer submitting the form; `phone` - customer’s phone number, as submitted on the form; `companyname`- customer’s submitted company name; `orderno`- customer’s submitted order number; `rma` - customer’s submitted RMA (Return Merchandise Authorization) number.
-     */
-    contact_fields?: string;
-    /**
-     * Description contained within this page’s `<meta/>` element. HTML to use for this page’s body when viewed in the mobile template.
-     */
-    meta_description?: string;
     /**
      * If true, this page is the storefront’s home page.
      */
     is_homepage?: boolean;
     /**
+     * Text specified for this page’s `<title>` element. (If empty, the value of the name property is used.)
+     */
+    meta_title?: string;
+    /**
      * Layout template for this page. This field is writable only for stores with a Blueprint theme applied.
      */
     layout_file?: string;
     /**
-     * If true, this page is for customers only.
+     * Order in which this page should display on the storefront. (Lower integers specify earlier display.)
      */
-    is_customers_only?: boolean;
+    sort_order?: number;
     /**
      * Comma-separated list of keywords that shoppers can use to locate this page when searching the store.
      */
     search_keywords?: string;
     /**
-     * If true, this page has a mobile version. (For Blueprint themes only)
-     */
-    has_mobile_version?: boolean;
-    /**
-     * HTML to use for this page’s body when viewed in the mobile template (deprecated - Blueprint only).
-     */
-    mobile_body?: string;
-    content_type?: 'application/json' | 'text/javascript' | 'text/html';
-    /**
-     * Relative URL on the storefront for this page.
-     */
-    url?: string;
-    /**
-     * If page type is `link`, this field is returned.
-     */
-    link?: string;
-};
-
-/**
- * blogPost_Full
- */
-export type BlogPostFullWritable = BlogPostBaseResWritable;
-
-/**
- * page_Full
- */
-export type PageFullWritable = PageBaseRes;
-
-/**
- * redirect
- */
-export type RedirectWritable = {
-    /**
-     * Numeric ID of the redirect.
-     */
-    id?: number;
-    /**
-     * The path from which to redirect.
-     */
-    path: string;
-    forward: Forward;
-};
-
-/**
- * customer_Full
- */
-export type CustomerFullWritable = {
-    /**
-     * Not returned in any responses, but accepts up to two fields allowing you to set the customer’s password. If a password is not supplied, it is generated automatically. For further information about using this object, please see the Customers resource documentation.
-     */
-    _authentication?: {
-        force_reset?: string;
-        password?: string;
-        password_confirmation?: string;
-    };
-    /**
-     * The name of the company for which the customer works.
-     */
-    company?: string;
-    /**
-     * First name of the customer.
-     */
-    first_name: string;
-    /**
-     * Last name of the customer.
-     */
-    last_name: string;
-    /**
-     * Email address of the customer.
-     */
-    email: string;
-    /**
-     * Phone number of the customer.
-     */
-    phone?: string;
-    /**
-     * The amount of credit the customer has. (Float, Float as String, Integer)
-     */
-    store_credit?: string;
-    /**
-     * The customer’s IP address when they signed up.
-     */
-    registration_ip_address?: string;
-    /**
-     * The group to which the customer belongs.
-     */
-    customer_group_id?: number;
-    /**
-     * Store-owner notes on the customer.
-     */
-    notes?: string;
-    /**
-     * If applicable, the tax-exempt category of the shopperʼs customer account. You can apply a tax-exempt category to multiple customers. This code should match the exemption codes provided by the third-party integration.
-     */
-    tax_exempt_category?: string;
-    addresses?: Addresses;
-    /**
-     * Force a password change on next login.
-     */
-    reset_pass_on_login?: boolean;
-};
-
-/**
- * blogPost_Base
- */
-export type BlogPostBaseWritable = {
-    /**
-     * Title of this blog post.
-     */
-    title: string;
-    /**
-     * URL for the public blog post.
-     */
-    url?: string;
-    /**
-     * Text body of the blog post.
-     */
-    body: string;
-    /**
-     * Tags to characterize the blog post.
-     */
-    tags?: Array<string>;
-    /**
-     * Whether the blog post is published. If you want the post to be or remain published following the request, you must set the field explicitly to true, even if the blog post was already published prior to the request.
-     */
-    is_published?: boolean;
-    published_date?: PublishedDate;
-    /**
-     * Published date in `ISO 8601` format.
-     */
-    published_date_iso8601?: string;
-    /**
-     * Description text for this blog post’s `<meta/>` element.
-     */
-    meta_description?: string;
-    /**
-     * Keywords for this blog post’s `<meta/>` element.
+     * Comma-separated list of SEO-relevant keywords to include in the page’s `<meta/>` element.
      */
     meta_keywords?: string;
     /**
-     * Name of the blog post’s author.
+     * If page type is `rss_feed` then this field is visible.
      */
-    author?: string;
+    feed?: string;
     /**
-     * Local path to a thumbnail uploaded to `/product_images/` using [WebDAV](https://support.bigcommerce.com/s/article/File-Access-WebDAV).
+     * If page type is `link` this field is returned.
      */
-    thumbnail_path?: string;
-};
-
-/**
- * blogPost_Base_Res
- *
- * blog post base response
- */
-export type BlogPostBaseResWritable = {
-    /**
-     * Title of this blog post.
-     */
-    title?: string;
-    /**
-     * URL for the public blog post.
-     */
-    url?: string;
-    /**
-     * Text body of the blog post.
-     */
-    body?: string;
-    /**
-     * Tags to characterize the blog post.
-     */
-    tags?: Array<string>;
-    /**
-     * Whether the blog post is published. If you want the post to be or remain published following the request, you must set the field explicitly to true, even if the blog post was already published prior to the request.
-     */
-    is_published?: boolean;
-    published_date?: PublishedDate;
-    /**
-     * Published date in `ISO 8601` format.
-     */
-    published_date_iso8601?: string;
-    /**
-     * Description text for this blog post’s `<meta/>` element.
-     */
-    meta_description?: string | null;
-    /**
-     * Keywords for this blog post’s `<meta/>` element.
-     */
-    meta_keywords?: string | null;
-    /**
-     * Name of the blog post’s author.
-     */
-    author?: string | null;
-    /**
-     * Local path to a thumbnail uploaded to `/product_images/` using [WebDAV](https://support.bigcommerce.com/s/article/File-Access-WebDAV).
-     */
-    thumbnail_path?: string | null;
+    link?: string;
+    content_type?: 'application/json' | 'text/javascript' | 'text/html';
 };
 
 /**
@@ -781,7 +603,7 @@ export type Accept = string;
  */
 export type ContentType = string;
 
-export type GetBlogTagsData = {
+export type GetAllBlogTagsData = {
     body?: never;
     headers: {
         /**
@@ -794,13 +616,13 @@ export type GetBlogTagsData = {
     url: '/blog/tags';
 };
 
-export type GetBlogTagsResponses = {
+export type GetAllBlogTagsResponses = {
     200: Array<BlogTags>;
 };
 
-export type GetBlogTagsResponse = GetBlogTagsResponses[keyof GetBlogTagsResponses];
+export type GetAllBlogTagsResponse = GetAllBlogTagsResponses[keyof GetAllBlogTagsResponses];
 
-export type DeleteBlogPostsData = {
+export type DeleteAllBlogPostsData = {
     body?: never;
     headers: {
         /**
@@ -822,13 +644,13 @@ export type DeleteBlogPostsData = {
     url: '/blog/posts';
 };
 
-export type DeleteBlogPostsResponses = {
+export type DeleteAllBlogPostsResponses = {
     204: void;
 };
 
-export type DeleteBlogPostsResponse = DeleteBlogPostsResponses[keyof DeleteBlogPostsResponses];
+export type DeleteAllBlogPostsResponse = DeleteAllBlogPostsResponses[keyof DeleteAllBlogPostsResponses];
 
-export type GetBlogPostsData = {
+export type GetAllBlogPostsData = {
     body?: never;
     headers: {
         /**
@@ -841,7 +663,7 @@ export type GetBlogPostsData = {
         /**
          * Filter param.
          */
-        is_published?: boolean;
+        is_published?: string;
         /**
          * Filter param. Value must be URL encoded.
          */
@@ -866,13 +688,13 @@ export type GetBlogPostsData = {
     url: '/blog/posts';
 };
 
-export type GetBlogPostsResponses = {
+export type GetAllBlogPostsResponses = {
     200: Array<BlogPostFull>;
 };
 
-export type GetBlogPostsResponse = GetBlogPostsResponses[keyof GetBlogPostsResponses];
+export type GetAllBlogPostsResponse = GetAllBlogPostsResponses[keyof GetAllBlogPostsResponses];
 
-export type CreateBlogPostsData = {
+export type CreateABlogPostsData = {
     body: BlogPostBasePost;
     headers: {
         /**
@@ -889,19 +711,19 @@ export type CreateBlogPostsData = {
     url: '/blog/posts';
 };
 
-export type CreateBlogPostsResponses = {
+export type CreateABlogPostsResponses = {
     200: BlogPostBaseRes;
     /**
-     * Multiple operations have taken place and the status for each operation can be viewed in the body of the response. Typically indicates that a partial failure has occurred, such as when a `POST` or `PUT` request is successful, but saving the URL has failed.
+     * Multiple operations have taken place and the status for each operation can be viewed in the body of the response. Typically indicates that a partial failure has occured, such as when a `POST` or `PUT` request is successful, but saving the URL has failed.
      */
     207: {
         [key: string]: unknown;
     };
 };
 
-export type CreateBlogPostsResponse = CreateBlogPostsResponses[keyof CreateBlogPostsResponses];
+export type CreateABlogPostsResponse = CreateABlogPostsResponses[keyof CreateABlogPostsResponses];
 
-export type DeleteBlogPostData = {
+export type DeleteABlogPostData = {
     body?: never;
     headers: {
         /**
@@ -919,13 +741,13 @@ export type DeleteBlogPostData = {
     url: '/blog/posts/{id}';
 };
 
-export type DeleteBlogPostResponses = {
+export type DeleteABlogPostResponses = {
     204: void;
 };
 
-export type DeleteBlogPostResponse = DeleteBlogPostResponses[keyof DeleteBlogPostResponses];
+export type DeleteABlogPostResponse = DeleteABlogPostResponses[keyof DeleteABlogPostResponses];
 
-export type GetBlogPostData = {
+export type GetABlogPostData = {
     body?: never;
     headers: {
         /**
@@ -943,13 +765,13 @@ export type GetBlogPostData = {
     url: '/blog/posts/{id}';
 };
 
-export type GetBlogPostResponses = {
+export type GetABlogPostResponses = {
     200: BlogPostFull;
 };
 
-export type GetBlogPostResponse = GetBlogPostResponses[keyof GetBlogPostResponses];
+export type GetABlogPostResponse = GetABlogPostResponses[keyof GetABlogPostResponses];
 
-export type UpdateBlogPostData = {
+export type UpdateABlogPostData = {
     body: BlogPostBasePost;
     headers: {
         /**
@@ -971,7 +793,7 @@ export type UpdateBlogPostData = {
     url: '/blog/posts/{id}';
 };
 
-export type UpdateBlogPostResponses = {
+export type UpdateABlogPostResponses = {
     200: BlogPostBaseRes;
     /**
      * Multiple operations have taken place and the status for each operation can be viewed in the body of the response. Typically indicates that a partial failure has occurred, such as when a `POST` or `PUT` request is successful, but saving the URL has failed.
@@ -981,9 +803,9 @@ export type UpdateBlogPostResponses = {
     };
 };
 
-export type UpdateBlogPostResponse = UpdateBlogPostResponses[keyof UpdateBlogPostResponses];
+export type UpdateABlogPostResponse = UpdateABlogPostResponses[keyof UpdateABlogPostResponses];
 
-export type GetBlogPostsCountData = {
+export type GetACountOfAllBlogPostsData = {
     body?: never;
     headers: {
         /**
@@ -996,13 +818,13 @@ export type GetBlogPostsCountData = {
     url: '/blog/posts/count';
 };
 
-export type GetBlogPostsCountResponses = {
+export type GetACountOfAllBlogPostsResponses = {
     200: CountResponse;
 };
 
-export type GetBlogPostsCountResponse = GetBlogPostsCountResponses[keyof GetBlogPostsCountResponses];
+export type GetACountOfAllBlogPostsResponse = GetACountOfAllBlogPostsResponses[keyof GetACountOfAllBlogPostsResponses];
 
-export type GetPagesData = {
+export type GetAllPagesData = {
     body?: never;
     headers: {
         /**
@@ -1024,13 +846,13 @@ export type GetPagesData = {
     url: '/pages';
 };
 
-export type GetPagesResponses = {
+export type GetAllPagesResponses = {
     200: Array<PageFull>;
 };
 
-export type GetPagesResponse = GetPagesResponses[keyof GetPagesResponses];
+export type GetAllPagesResponse = GetAllPagesResponses[keyof GetAllPagesResponses];
 
-export type CreatePageData = {
+export type CreateAPageData = {
     body: PageBase;
     headers: {
         /**
@@ -1047,7 +869,7 @@ export type CreatePageData = {
     url: '/pages';
 };
 
-export type CreatePageResponses = {
+export type CreateAPageResponses = {
     200: PageFull;
     /**
      * Multiple operations have taken place and the status for each operation can be viewed in the body of the response. Typically indicates that a partial failure has occurred, such as when a `POST` or `PUT` request is successful, but saving the URL has failed.
@@ -1057,9 +879,9 @@ export type CreatePageResponses = {
     };
 };
 
-export type CreatePageResponse = CreatePageResponses[keyof CreatePageResponses];
+export type CreateAPageResponse = CreateAPageResponses[keyof CreateAPageResponses];
 
-export type DeletePageData = {
+export type DeleteAPageData = {
     body?: never;
     headers: {
         /**
@@ -1077,13 +899,13 @@ export type DeletePageData = {
     url: '/pages/{id}';
 };
 
-export type DeletePageResponses = {
+export type DeleteAPageResponses = {
     204: void;
 };
 
-export type DeletePageResponse = DeletePageResponses[keyof DeletePageResponses];
+export type DeleteAPageResponse = DeleteAPageResponses[keyof DeleteAPageResponses];
 
-export type GetPageData = {
+export type GetAPageData = {
     body?: never;
     headers: {
         /**
@@ -1101,14 +923,14 @@ export type GetPageData = {
     url: '/pages/{id}';
 };
 
-export type GetPageResponses = {
+export type GetAPageResponses = {
     200: PageFull;
 };
 
-export type GetPageResponse = GetPageResponses[keyof GetPageResponses];
+export type GetAPageResponse = GetAPageResponses[keyof GetAPageResponses];
 
-export type UpdatePageData = {
-    body?: PageFullWritable;
+export type UpdateAPageData = {
+    body?: PageBase;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -1129,8 +951,8 @@ export type UpdatePageData = {
     url: '/pages/{id}';
 };
 
-export type UpdatePageResponses = {
-    200: PageFull;
+export type UpdateAPageResponses = {
+    200: PageBase;
     /**
      * Multiple operations have taken place and the status for each operation can be viewed in the body of the response. Typically indicates that a partial failure has occurred, such as when a `POST` or `PUT` request is successful, but saving the URL has failed.
      */
@@ -1139,9 +961,9 @@ export type UpdatePageResponses = {
     };
 };
 
-export type UpdatePageResponse = UpdatePageResponses[keyof UpdatePageResponses];
+export type UpdateAPageResponse = UpdateAPageResponses[keyof UpdateAPageResponses];
 
-export type DeleteRedirectsData = {
+export type DeleteAllRedirectsData = {
     body?: never;
     headers: {
         /**
@@ -1154,13 +976,13 @@ export type DeleteRedirectsData = {
     url: '/redirects';
 };
 
-export type DeleteRedirectsResponses = {
+export type DeleteAllRedirectsResponses = {
     204: void;
 };
 
-export type DeleteRedirectsResponse = DeleteRedirectsResponses[keyof DeleteRedirectsResponses];
+export type DeleteAllRedirectsResponse = DeleteAllRedirectsResponses[keyof DeleteAllRedirectsResponses];
 
-export type GetRedirectsData = {
+export type GetAListofRedirectsData = {
     body?: never;
     headers: {
         /**
@@ -1182,14 +1004,14 @@ export type GetRedirectsData = {
     url: '/redirects';
 };
 
-export type GetRedirectsResponses = {
+export type GetAListofRedirectsResponses = {
     200: Array<Redirect>;
 };
 
-export type GetRedirectsResponse = GetRedirectsResponses[keyof GetRedirectsResponses];
+export type GetAListofRedirectsResponse = GetAListofRedirectsResponses[keyof GetAListofRedirectsResponses];
 
-export type CreateRedirectData = {
-    body: RedirectWritable;
+export type CreateARedirectData = {
+    body: Redirect;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -1205,13 +1027,13 @@ export type CreateRedirectData = {
     url: '/redirects';
 };
 
-export type CreateRedirectResponses = {
+export type CreateARedirectResponses = {
     200: Redirect;
 };
 
-export type CreateRedirectResponse = CreateRedirectResponses[keyof CreateRedirectResponses];
+export type CreateARedirectResponse = CreateARedirectResponses[keyof CreateARedirectResponses];
 
-export type DeleteRedirectData = {
+export type DeleteARedirectData = {
     body?: never;
     headers: {
         /**
@@ -1229,13 +1051,13 @@ export type DeleteRedirectData = {
     url: '/redirects/{id}';
 };
 
-export type DeleteRedirectResponses = {
+export type DeleteARedirectResponses = {
     204: void;
 };
 
-export type DeleteRedirectResponse = DeleteRedirectResponses[keyof DeleteRedirectResponses];
+export type DeleteARedirectResponse = DeleteARedirectResponses[keyof DeleteARedirectResponses];
 
-export type GetRedirectData = {
+export type GetARedirectUrlData = {
     body?: never;
     headers: {
         /**
@@ -1253,13 +1075,13 @@ export type GetRedirectData = {
     url: '/redirects/{id}';
 };
 
-export type GetRedirectResponses = {
+export type GetARedirectUrlResponses = {
     200: Redirect;
 };
 
-export type GetRedirectResponse = GetRedirectResponses[keyof GetRedirectResponses];
+export type GetARedirectUrlResponse = GetARedirectUrlResponses[keyof GetARedirectUrlResponses];
 
-export type UpdateRedirectData = {
+export type UpdateARedirectUrlData = {
     /**
      * Redirect
      */
@@ -1284,9 +1106,9 @@ export type UpdateRedirectData = {
             ref?: string;
         };
         /**
-         * URL of the redirect. READ-ONLY.
+         * URL of the redirect. READ-ONLY
          */
-        readonly url?: string;
+        url?: string;
     };
     headers: {
         /**
@@ -1308,13 +1130,13 @@ export type UpdateRedirectData = {
     url: '/redirects/{id}';
 };
 
-export type UpdateRedirectResponses = {
+export type UpdateARedirectUrlResponses = {
     200: Redirect;
 };
 
-export type UpdateRedirectResponse = UpdateRedirectResponses[keyof UpdateRedirectResponses];
+export type UpdateARedirectUrlResponse = UpdateARedirectUrlResponses[keyof UpdateARedirectUrlResponses];
 
-export type GetRedirectsCountData = {
+export type GetACountOfRedirectsData = {
     body?: never;
     headers: {
         /**
@@ -1327,8 +1149,8 @@ export type GetRedirectsCountData = {
     url: '/redirects/count';
 };
 
-export type GetRedirectsCountResponses = {
+export type GetACountOfRedirectsResponses = {
     200: CountResponse;
 };
 
-export type GetRedirectsCountResponse = GetRedirectsCountResponses[keyof GetRedirectsCountResponses];
+export type GetACountOfRedirectsResponse = GetACountOfRedirectsResponses[keyof GetACountOfRedirectsResponses];

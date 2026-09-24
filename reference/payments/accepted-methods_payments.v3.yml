@@ -67,11 +67,24 @@ paths:
       summary: Get Accepted Payment Methods
       tags:
         - Methods 
-      operationId: getPaymentMethods
+      operationId: PaymentsMethodsGet
       deprecated: false
       parameters:
-        - $ref: '#/components/parameters/OrderIdQuery'
-        - $ref: '#/components/parameters/CheckoutIdQuery'
+        - name: order_id
+          in: query
+          description: Identifier for the order
+          schema:
+            type: integer
+            format: int32
+            exclusiveMinimum: false
+            exclusiveMaximum: false
+        - name: checkout_id
+          in: query
+          description: Identifier for the checkout (same as the cart ID)
+          schema:
+            type: string
+            exclusiveMinimum: false
+            exclusiveMaximum: false
       responses:
         '200':
           $ref: '#/components/responses/paymentsMethods_Resp'
@@ -102,7 +115,6 @@ paths:
                     format: int32
                   errors:
                     type: object
-                    properties: {}
                     additionalProperties:
                       type: string
                 required:
@@ -136,7 +148,6 @@ paths:
                     format: int32
                   errors:
                     type: object
-                    properties: {}
                     additionalProperties:
                       type: string
                 required:
@@ -170,7 +181,6 @@ paths:
                     format: int32
                   errors:
                     type: object
-                    properties: {}
                     additionalProperties:
                       type: string
                 required:
@@ -204,7 +214,6 @@ paths:
                     format: int32
                   errors:
                     type: object
-                    properties: {}
                     additionalProperties:
                       type: string
                 required:
@@ -238,7 +247,6 @@ paths:
                     format: int32
                   errors:
                     type: object
-                    properties: {}
                     additionalProperties:
                       type: string
                 required:
@@ -255,23 +263,6 @@ components:
       schema:
         type: string
         default: 'application/json'
-    OrderIdQuery:
-      name: order_id
-      in: query
-      description: The ID of the subject order.
-      schema:
-        type: integer
-        format: int32
-        exclusiveMinimum: false
-        exclusiveMaximum: false
-    CheckoutIdQuery:
-      name: checkout_id
-      in: query
-      description: The ID of the subject checkout; identical to the cart ID.
-      schema:
-        type: string
-        exclusiveMinimum: false
-        exclusiveMaximum: false
   schemas:
     paymentMethodStoredInstrument:
       title: paymentMethodStoredInstrument

@@ -5,20 +5,6 @@ export type ClientOptions = {
 };
 
 /**
- * Standard Shipping Provider
- *
- * An enum identifying one of several core shipping providers.
- */
-export type ShippingProviderStandard = 'auspost' | 'canadapost' | 'endicia' | 'usps' | 'fedex' | 'ups' | 'upsready' | 'upsonline' | 'shipperhq' | 'royalmail' | '';
-
-/**
- * Custom Shipping Provider
- *
- * A string identifying the shipping provider. Some shipping providers may not be listed in the preceding enum list. In addition, if the carrier is a [third-party Shipping Provider](/docs/integrations/shipping), the string takes the form `carrier_{your_carrier_id}`.
- */
-export type ShippingProviderCustom = string;
-
-/**
  * order_Resp
  *
  * Order object returned in responses.
@@ -113,17 +99,17 @@ export type OrderProducts = {
     /**
      * Type of product.
      */
-    type?: 'physical' | 'digital' | 'giftcertificate';
+    type?: 'physical' | 'digital';
     /**
      * The product’s base price. (Float, Float-As-String, Integer)
      */
     base_price?: string;
     /**
-     * The product’s price excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The product’s price excluding tax. (Float, Float-As-String, Integer)
      */
     price_ex_tax?: string;
     /**
-     * The product’s price including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The product’s price including tax. (Float, Float-As-String, Integer)
      */
     price_inc_tax?: string;
     /**
@@ -142,11 +128,11 @@ export type OrderProducts = {
      */
     base_total?: string;
     /**
-     * Total base price excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * Total base price excluding tax. (Float, Float-As-String, Integer)
      */
     total_ex_tax?: string;
     /**
-     * Total base price including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * Total base price including tax. (Float, Float-As-String, Integer)
      */
     total_inc_tax?: string;
     /**
@@ -168,30 +154,18 @@ export type OrderProducts = {
     base_cost_price?: string;
     /**
      * The product’s cost price including tax. (Float, Float-As-String, Integer)
-     * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes. The value can't be negative.
+     * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes.
      */
     cost_price_inc_tax?: string;
     /**
      * The product cost price excluding tax. (Float, Float-As-String, Integer)
-     * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes. The value can't be negative.
+     * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes.
      */
     cost_price_ex_tax?: string;
     /**
-     * Weight of the product. The value can't be negative. (Float, Float-As-String, Integer)
+     * Weight of the product. (Float, Float-As-String, Integer)
      */
     weight?: number | string;
-    /**
-     * Product width. The value can't be negative.
-     */
-    width?: string;
-    /**
-     * Product height. The value can't be negative.
-     */
-    height?: string;
-    /**
-     * Product depth. The value can't be negative.
-     */
-    depth?: string;
     /**
      * Tax applied to the product’s cost price. (Float, Float-As-String, Integer)
      * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes. Read Only
@@ -210,29 +184,25 @@ export type OrderProducts = {
      *
      * @deprecated
      */
-    refund_amount?: string;
+    refunded_amount?: string;
     /**
      * Numeric ID for the refund.
      */
     return_id?: number;
     /**
-     * ID of the gift wrapping option.
-     */
-    wrapping_id?: number;
-    /**
      * Name of gift-wrapping option.
      */
     wrapping_name?: string | null;
     /**
-     * The value of the base wrapping cost. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the base wrapping cost. (Float, Float-As-String, Integer)
      */
     base_wrapping_cost?: string | number;
     /**
-     * The value of the wrapping cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the wrapping cost, excluding tax. (Float, Float-As-String, Integer)
      */
     wrapping_cost_ex_tax?: string;
     /**
-     * The value of the wrapping cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the wrapping cost, including tax. (Float, Float-As-String, Integer)
      */
     wrapping_cost_inc_tax?: string;
     /**
@@ -299,13 +269,6 @@ export type OrderProducts = {
      * Array of product option objects.
      */
     product_options?: Array<OrderProductOptions>;
-    /**
-     * Available for only [Catalog V2 stores](/docs/store-operations/catalog/migration).
-     */
-    configurable_fields?: Array<{
-        name?: string;
-        value?: string;
-    }>;
     /**
      * Universal Product Code. Can be written to for custom products and catalog products.
      */
@@ -384,15 +347,15 @@ export type OrderShippingAddress = {
      */
     cost_tax_class_id?: number;
     /**
-     * The base handling charge. The value can't be negative. (Float, Float-As-String, Integer)
+     * The base handling charge. (Float, Float-As-String, Integer)
      */
     base_handling_cost?: string;
     /**
-     * The handling charge, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The handling charge, excluding tax. (Float, Float-As-String, Integer)
      */
     handling_cost_ex_tax?: string;
     /**
-     * The handling charge, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The handling charge, including tax. (Float, Float-As-String, Integer)
      */
     handling_cost_inc_tax?: string;
     handling_cost_tax?: string;
@@ -410,12 +373,7 @@ export type OrderShippingAddress = {
     shipping_zone_name?: string;
     form_fields?: Array<FormFields>;
     shipping_quotes?: ShippingQuotesResource;
-} & ShippingAddressBase & {
-    /**
-     * Text code identifying the BigCommerce shipping module selected by the customer.
-     */
-    shipping_method?: string;
-};
+} & ShippingAddressBase;
 
 /**
  * orderTaxes_Base
@@ -434,19 +392,13 @@ export type OrderTaxesBase = {
      */
     order_address_id?: number;
     /**
-     * The unique numeric identifier of the tax rate. This field has been deprecated, use sales_tax_id instead.
-     *
-     * @deprecated
+     * The unique numeric identifier of the tax rate.
      */
     tax_rate_id?: number;
     /**
-     * A unique identifier for the applied tax rate. This may be a third-party tax provider's identifier.
+     * The unique numeric identifier of the tax class object. NOTE: Will be 0 if automatic tax was enabled, or if the default tax class was used.
      */
-    sales_tax_id?: string;
-    /**
-     * A unique numeric identifier for the tax class. If not provided or null, the default fee tax class from the control panel is used.
-     */
-    tax_class_id?: number | null;
+    tax_class_id?: number;
     /**
      * The name of the tax class object.
      */
@@ -471,10 +423,6 @@ export type OrderTaxesBase = {
      * (Float, Float-As-String, Integer)
      */
     line_amount?: string;
-    /**
-     * The ID of the order pickup method object (which contains pickup location details) associated with the order.
-     */
-    order_pickup_method_id?: number;
     /**
      * If the `line_item_type` is `item` or `handling` then this field will be the order product id. Otherwise the field will return as null.
      */
@@ -514,24 +462,23 @@ export type OrderShipment = {
      */
     tracking_number?: string;
     /**
-     * Shipping cost for the merchant.
-     */
-    merchant_shipping_cost?: string;
-    /**
      * Additional information to describe the method of shipment (ex. Standard, Ship by Weight, Custom Shipment). Can be used for live quotes from certain shipping providers.
      * If different from `shipping_provider`, `shipping_method` should correspond to `tracking_carrier`.
      */
     shipping_method?: string;
-    shipping_provider?: ShippingProviderStandard | ShippingProviderCustom;
+    /**
+     * Enum of the BigCommerce shipping-carrier integration/module.
+     */
+    shipping_provider?: 'auspost' | 'canadapost' | 'carrier_{your_carrier_id} (only used if the carrier is a [third-party Shipping Provider](/docs/integrations/shipping))' | 'endicia' | 'usps' | 'fedex' | 'ups' | 'upsready' | 'upsonline' | 'shipperhq' | '';
     /**
      * Tracking Carrier
      *
      * Tracking carrier for the shipment.
-     * Acceptable values for `tracking_carrier` include an empty string (`""`) or one of the valid [tracking-carrier values](https://www.aftership.com/docs/tracking/others/supported-couriers).
+     * Acceptable values for `tracking_carrier` include an empty string (`""`) or one of the valid [tracking-carrier values](https://github.com/bigcommerce/dev-docs/blob/master/assets/csv/tracking_carrier_values.csv).
      */
     tracking_carrier?: string;
     /**
-     * The custom tracking link supplied on POST or PUT shipments. For the link to one of our integrated providers or Aftership tracking link, see the `generated_tracking_link` property.
+     * The custom tracking link supplied on POST or PUT shipments. For the auto-generated tracking link see the `generated_tracking_link` property.
      */
     tracking_link?: string;
     /**
@@ -553,7 +500,7 @@ export type OrderShipment = {
      */
     readonly shipping_provider_display_name?: string;
     /**
-     * The link to one of our integrated providers or Aftership tracking link that is generated using the combination of either the `tracking_number` and `shipping_provider` or `tracking_number` and `tracking_carrier`. This will be empty if the custom `tracking_link` value is provided.
+     * The tracking link that is generated using the combination of either the `tracking_number` and `shipping_provider` or `tracking_number` and `tracking_carrier`. This will be empty if the custom `tracking_link` value is provided.
      */
     generated_tracking_link?: string;
 };
@@ -568,20 +515,6 @@ export type OrderConsignmentsResource = {
     readonly url?: string;
     /**
      * Path where you can use a GET request to get the order consignments.
-     */
-    readonly resource?: string;
-};
-
-/**
- * orderFees_Resource
- */
-export type OrderFeesResource = {
-    /**
-     * URL where you can use a GET request to get the order fees.
-     */
-    readonly url?: string;
-    /**
-     * Path where you can use a GET request to get the order fees.
      */
     readonly resource?: string;
 };
@@ -781,9 +714,7 @@ export type ShippingQuotesBase = {
     /**
      * This can vary based on the shipping provider. Manual shipping methods such as fixed will return an empty array. Shipping providers such as UPS will return an object with the shipping information. Since the shipping quote is tied to a shipping address only one quote will return in the response.
      */
-    shipping_provider_quote?: Array<{
-        [key: string]: unknown;
-    }>;
+    shipping_provider_quote?: Array<unknown>;
     /**
      * Code of the shipping provider.
      */
@@ -819,25 +750,24 @@ export type OrderShipmentPost = {
      */
     tracking_number?: string;
     /**
-     * The custom tracking link supplied on POST or PUT shipments. For the link to one of our integrated providers or Aftership tracking link see the `generated_tracking_link` property.
+     * The custom tracking link supplied on POST or PUT shipments. For the auto-generated tracking link see the `generated_tracking_link` property.
      */
     tracking_link?: string;
-    /**
-     * Shipping cost for the merchant.
-     */
-    merchant_shipping_cost?: string;
     /**
      * Additional information to describe the method of shipment (ex. Standard, Ship by Weight, Custom Shipment). Can be used for live quotes from certain shipping providers.
      * If different from `shipping_provider`, `shipping_method` should correspond to `tracking_carrier`.
      *
      */
     shipping_method?: string;
-    shipping_provider?: ShippingProviderStandard | ShippingProviderCustom;
+    /**
+     * Enum of the BigCommerce shipping-carrier integration/module.
+     */
+    shipping_provider?: 'auspost' | 'canadapost' | 'carrier_{your_carrier_id} (only used if the carrier is a [third-party Shipping Provider](/docs/integrations/shipping))' | 'endicia' | 'usps' | 'fedex' | 'ups' | 'upsready' | 'upsonline' | 'shipperhq';
     /**
      * Tracking Carrier
      *
      * Tracking carrier for the shipment.
-     * Acceptable values for `tracking_carrier` include an empty string (`""`) or one of the valid [tracking-carrier values](https://www.aftership.com/docs/tracking/others/supported-couriers).
+     * Acceptable values for `tracking_carrier` include an empty string (`""`) or one of the valid [tracking-carrier values](https://github.com/bigcommerce/dev-docs/blob/master/assets/csv/tracking_carrier_values.csv).
      */
     tracking_carrier?: string;
     /**
@@ -866,25 +796,24 @@ export type OrderShipmentPut = {
      */
     tracking_number?: string;
     /**
-     * Shipping cost for the merchant.
-     */
-    merchant_shipping_cost?: string;
-    /**
      * Additional information to describe the method of shipment (ex. Standard, Ship by Weight, Custom Shipment). Can be used for live quotes from certain shipping providers.
      * If different from `shipping_provider`, `shipping_method` should correspond to `tracking_carrier`.
      *
      */
     shipping_method?: string;
-    shipping_provider?: ShippingProviderStandard | ShippingProviderCustom;
+    /**
+     * Enum of the BigCommerce shipping-carrier integration/module.
+     */
+    shipping_provider?: 'auspost' | 'canadapost' | 'carrier_{your_carrier_id} (only used if the carrier is a [third-party Shipping Provider](/docs/integrations/shipping))' | 'endicia' | 'usps' | 'fedex' | 'ups' | 'upsready' | 'upsonline' | 'shipperhq';
     /**
      * Tracking Carrier
      *
      * Tracking carrier for the shipment.
-     * Acceptable values for `tracking_carrier` include an empty string (`""`) or one of the valid [tracking-carrier values](https://www.aftership.com/docs/tracking/others/supported-couriers).
+     * Acceptable values for `tracking_carrier` include an empty string (`""`) or one of the valid [tracking-carrier values](https://github.com/bigcommerce/dev-docs/blob/master/assets/csv/tracking_carrier_values.csv).
      */
     tracking_carrier?: string;
     /**
-     * The custom tracking link supplied on POST or PUT shipments. For the link to one of our integrated providers or Aftership tracking link see the `generated_tracking_link` property.
+     * The custom tracking link supplied on POST or PUT shipments. For the auto-generated tracking link see the `generated_tracking_link` property.
      */
     tracking_link?: string;
     /**
@@ -940,19 +869,20 @@ export type OrdersCountStatus = OrderStatusBase & {
  */
 export type OrderShared = {
     /**
-     * The value of the base handling cost. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the base handling cost. (Float, Float-As-String, Integer)
      */
     base_handling_cost?: string;
     /**
-     * The value of the base shipping cost. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the base shipping cost. (Float, Float-As-String, Integer)
      */
     base_shipping_cost?: string;
     /**
-     * The value of the base wrapping cost expressed as a floating point number to four decimal places in string format. The value can't be negative.
+     * The value of the base wrapping cost expressed as a floating point number to four decimal places in string format.
      */
     base_wrapping_cost?: string;
+    billing_address?: BillingAddressBase;
     /**
-     * Shows where the order originated. The channel_id defaults to 1. The value must match the ID of a valid and enabled channel. If the ID refers to a non-existing or disconnected channel, the POST and PUT `/v2/orders` endpoints return a validation error.
+     * Shows where the order originated. The channel_id will default to 1.
      */
     channel_id?: number;
     customer_id?: number;
@@ -961,23 +891,17 @@ export type OrderShared = {
      */
     customer_message?: string;
     /**
-     * The date the order was created, formatted in the RFC-2822 standard. You set this attribute on Order creation (POST) to support the migration of historical orders. If you do not provide a value, then it will default to the current date/time. e.g., `Tue, 20 Nov 2012 00:00:00 +0000`. This date time is always in UTC in the api response.
+     * The date the order was created, formatted in the RFC-2822 standard. You set this attribute on Order creation (POST) to support the migration of historical orders. If you do not provide a value, then it will default to the current date/time. e.g., `Tue, 20 Nov 2012 00:00:00 +0000`.
      */
     date_created?: string;
     /**
-     * Amount of discount for this transaction. The value can't be negative. (Float, Float-As-String, Integer)
+     * The currency code of the transactional currency the shopper pays in; writeable when multi-currency is enabled.
+     */
+    default_currency_code?: string;
+    /**
+     * Amount of discount for this transaction. (Float, Float-As-String, Integer)
      */
     discount_amount?: string;
-    /**
-     * The `order_source` reflects the origin of the order. It will indicate whether the order was created by one of the following:
-     * * storefront
-     * * control panel
-     * * manual order
-     * * /v2/orders API
-     * * Checkout API
-     * * or by an integration with an external platform such as Facebook by Meta or Amazon.
-     */
-    order_source?: string;
     /**
      * If the order was placed through eBay, the eBay order number will be included. Otherwise, the value will be `0`.
      */
@@ -1006,11 +930,11 @@ export type OrderShared = {
      */
     geoip_country_iso2?: string;
     /**
-     * The value of the handling cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the handling cost, excluding tax. (Float, Float-As-String, Integer)
      */
     handling_cost_ex_tax?: string;
     /**
-     * The value of the handling cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the handling cost, including tax. (Float, Float-As-String, Integer)
      */
     handling_cost_inc_tax?: string;
     /**
@@ -1026,6 +950,10 @@ export type OrderShared = {
      */
     ip_address_v6?: string;
     /**
+     * Indicates whether the order was deleted (archived). Set to to true, to archive an order.
+     */
+    is_deleted?: boolean;
+    /**
      * The number of items that have been shipped.
      */
     items_shipped?: number;
@@ -1038,25 +966,23 @@ export type OrderShared = {
      */
     order_is_digital?: boolean;
     /**
-     * The payment method for this order. For example, `Manual`, `Credit Card`, `cash`, `Test Payment Gateway`, etc.
+     * The payment method for this order. Can be one of the following: `Manual`, `Credit Card`, `cash`, `Test Payment Gateway`, etc.
      */
-    payment_method?: string;
+    payment_method?: 'Credit Card' | 'Cash' | 'Test Payment Gateway' | 'Manual';
     /**
      * The external Transaction ID/Payment ID within this order’s payment provider (if a payment provider was used).
      */
     payment_provider_id?: string | number;
     /**
-     * The amount refunded from this transaction; always returns `0`. The value can't be negative. (Float, Float-As-String, Integer)
+     * The amount refunded from this transaction; always returns `0`. (Float, Float-As-String, Integer)
      */
     refunded_amount?: string;
     /**
-     * The value of shipping cost, excluding tax. When specified in a POST or PUT request, the field `shipping_cost_inc_tax` is also required. The value can't be negative (Float, Float-As-String, Integer)
-     *
+     * The value of shipping cost, excluding tax. (Float, Float-As-String, Integer)
      */
     shipping_cost_ex_tax?: string;
     /**
-     * The value of shipping cost, including tax. When specified in a POST or PUT request, the field `shipping_cost_ex_tax` is also required. The value can't be negative. (Float, Float-As-String, Integer)
-     *
+     * The value of shipping cost, including tax. (Float, Float-As-String, Integer)
      */
     shipping_cost_inc_tax?: string;
     /**
@@ -1068,15 +994,14 @@ export type OrderShared = {
      */
     status_id?: number;
     /**
-     * Override value for subtotal excluding tax. The value can't be negative. If specified, the field `subtotal_inc_tax` is also required. (Float, Float-As-String, Integer)
+     * Override value for subtotal excluding tax. If specified, the field `subtotal_inc_tax` is also required. (Float, Float-As-String, Integer)
      */
     subtotal_ex_tax?: string;
     /**
-     * Override value for subtotal including tax. The value can't be negative. If specified, the field `subtotal_ex_tax` is also required. (Float, Float-As-String, Integer)
+     * Override value for subtotal including tax. If specified, the field `subtotal_ex_tax` is also required. (Float, Float-As-String, Integer)
      */
     subtotal_inc_tax?: string;
     /**
-     * Read-only.
      * BasicTaxProvider - Tax is set to manual and order is created in the store.
      *
      * AvaTaxProvider - Tax is set to automatic and order is created in the store. Used for Avalara.
@@ -1084,14 +1009,9 @@ export type OrderShared = {
      * "" (empty string) - The order is created with the API, or the tax provider is unknown.
      *
      */
-    tax_provider_id?: string;
+    tax_provider_id?: 'BasicTaxProvider' | 'AvaTaxProvider' | '';
     /**
-     * The customer’s locale. The supported formats are:
-     * - 2-char lowercase characters. e.g., `en`
-     * - 3-char lowercase characters. e.g., `asa`
-     * - 5-char the language code is 2 lowercase characters and the region code is 2 uppercase characters, with `-` in the middle. e.g., `en-US`
-     * - 6-char the language code is 2 lowercase character and the region code is three digit number, with `-` in the middle. e.g., `es-419`
-     *
+     * The customer’s locale.
      */
     customer_locale?: string;
     /**
@@ -1099,19 +1019,19 @@ export type OrderShared = {
      */
     external_order_id?: string;
     /**
-     * Override value for the total, excluding tax. If specified, the field `total_inc_tax` is also required. The value can't be negative. (Float, Float-As-String, Integer)
+     * Override value for the total, excluding tax. If specified, the field `total_inc_tax` is also required. (Float, Float-As-String, Integer)
      */
     total_ex_tax?: string;
     /**
-     * Override value for the total, including tax. If specified, the field `total_ex_tax` is also required. The value can't be negative. (Float, Float-As-String, Integer)
+     * Override value for the total, including tax. If specified, the field `total_ex_tax` is also required. (Float, Float-As-String, Integer)
      */
     total_inc_tax?: string;
     /**
-     * The value of the wrapping cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the wrapping cost, excluding tax. (Float, Float-As-String, Integer)
      */
     wrapping_cost_ex_tax?: string;
     /**
-     * The value of the wrapping cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the wrapping cost, including tax. (Float, Float-As-String, Integer)
      */
     wrapping_cost_inc_tax?: string;
 };
@@ -1173,6 +1093,10 @@ export type ShippingAddressBase = {
      * Recipient’s email address.
      */
     email?: string;
+    /**
+     * Text code identifying the BigCommerce shipping module selected by the customer.
+     */
+    shipping_method?: string;
 };
 
 /**
@@ -1186,12 +1110,11 @@ export type OrderRespOnly = {
      */
     id?: number;
     /**
-     * A read-only value representing the last modification of the order. Do not attempt to modify or set this value in a POST or PUT request. RFC-2822. This date time is always in UTC in the api response.
+     * A read-only value representing the last modification of the order. Do not attempt to modify or set this value in a POST or PUT request. RFC-2822
      */
     date_modified?: string;
     /**
-     * A read-only value representing the date when the order is fully shipped. Do not attempt to modify or set this value in a POST or PUT request. RFC-2822
-     *
+     * A read-only value representing the date of shipment. Do not attempt to modify or set this value in a POST or PUT request. RFC-2822
      */
     date_shipped?: string;
     /**
@@ -1237,7 +1160,7 @@ export type OrderRespOnly = {
     /**
      * A read-only value. Do not attempt to set or modify this value in a POST or PUT request.
      */
-    payment_status?: 'authorized' | 'captured' | 'capture pending' | 'declined' | 'held for review' | 'paid' | 'partially refunded' | 'pending' | 'refunded' | 'void' | 'void pending' | '';
+    payment_status?: 'authorized' | 'captured' | 'capture pending' | 'declined' | 'held for review' | 'paid' | 'partially refunded' | 'pending' | 'refunded' | 'void' | 'void pending';
     /**
      * Represents the store credit that the shopper has redeemed on this individual order. This is a read-only value. Do not pass in a POST or PUT request. (Float, Float-As-String, Integer)
      */
@@ -1283,31 +1206,14 @@ export type OrderRespOnly = {
      */
     shipping_address_count?: number;
     /**
-     * Indicates whether the order is deleted/archived. When set to true in a PUT request, it has the same result as the DELETE an order request.
-     */
-    is_deleted?: boolean;
-    /**
-     * Total tax amount for the order
-     */
-    total_tax?: string;
-    /**
-     * Indicate whether the order's base prices include tax.
-     *
-     * If true, the base prices are inclusive of tax, and the values of `subtotal_inc_tax`, `shipping_cost_inc_tax`, `handling_cost_inc_tax`, `wrapping_cost_inc_tax` and `total_inc_tax` are not estimated but actual values and can be reliable for accounting purposes.
-     *
-     * If false, the base prices are exclusive of tax, and the values of `subtotal_ex_tax`, `shipping_cost_ex_tax`, `handling_cost_ex_tax`, `wrapping_cost_ex_tax` and `total_ex_tax` are not estimated but actual values and can be reliable for accounting purposes.
-     */
-    is_tax_inclusive_pricing?: boolean;
-    /**
      * Indicates whether the shopper has selected an opt-in check box (on the checkout page) to receive emails. A read-only value. Do not pass in a POST or PUT.
      */
     is_email_opt_in?: boolean;
     /**
-     * Reflects the origin of the order. It can affect the order’s icon and source as defined in the control panel listing.
-     * Allowed values: `www` (Desktop) | `iphone` (Iphone) | `ipad` (Ipad) | `android` (Android) | `mobile` (Mobile) | `manual` (manual order) | `external` (Orders API) | `checkout_api` (Checkout API) | `buybutton` (Buy Button) | `amazon` (Amazon) | `ebay` (Ebay) | `facebookshop` (Facebook Shop) | `facebookcheckout` (Facebook Checkout) | `facebookmarketplace` (Facebook Marketplace) | `pinterest` (Pinterest) | `socialshop` (Social Shop)
+     * Orders submitted from the storeʼs website will include a `www` value. Orders submitted with the Checkout API will be set to `checkout_api`.
      */
     order_source?: string;
-    consignments?: OrderConsignmentsResource | OrderConsignmentGet;
+    consignments?: OrderConsignmentsResource;
     products?: ProductsResource;
     shipping_addresses?: ShippingAddressesResource;
     coupons?: CouponsResource;
@@ -1315,8 +1221,9 @@ export type OrderRespOnly = {
      * The status ID of the order.
      */
     status_id?: number;
-    billing_address?: BillingAddressResp;
-    fees?: OrderFeesResource | Array<OrderFeesResp>;
+    billing_address?: {
+        form_fields?: Array<FormFields>;
+    };
 };
 
 /**
@@ -1408,12 +1315,12 @@ export type OrderRemoveProductPut = {
     product_options?: Array<{
         /**
          * The product’s cost price including tax. (Float, Float-As-String, Integer)
-         * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes. The value can't be negative.
+         * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes.
          */
         cost_price_inc_tax?: string;
         /**
          * The products cost price excluding tax. (Float, Float-As-String, Integer)
-         * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes. Read Only. The value can't be negative.
+         * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes. Read Only.
          */
         readonly price_ex_tax?: string;
     }>;
@@ -1494,7 +1401,7 @@ export type OrderCatalogProductPost = {
     price_ex_tax?: number;
     upc?: string;
     /**
-     * Products `variant_id`. PUT or POST. This field is not available for custom products.
+     * ""
      */
     variant_id?: number;
     /**
@@ -1507,11 +1414,11 @@ export type OrderCatalogProductPost = {
     wrapping_name?: string;
     wrapping_message?: string;
     /**
-     * When provided, this value should be equal to `wrapping_cost_ex_tax` times quantity to accurately reflect wrapping cost per unit. The value can't be negative.
+     * When provided, this value should be equal to `wrapping_cost_ex_tax` times quantity to accurately reflect wrapping cost per unit.
      */
     wrapping_cost_ex_tax?: number;
     /**
-     * When provided, this value should be equal to `wrapping_cost_inc_tax` times quantity to accurately reflect wrapping cost per unit. The value can't be negative.
+     * When provided, this value should be equal to `wrapping_cost_inc_tax` times quantity to accurately reflect wrapping cost per unit.
      */
     wrapping_cost_inc_tax?: number;
 };
@@ -1554,20 +1461,20 @@ export type OrderCustomProductPost = {
 
 export type OrderPut = {
     /**
-     * The value of the base handling cost. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the base handling cost. (Float, Float-As-String, Integer)
      */
     base_handling_cost?: string;
     /**
-     * The value of the base shipping cost. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the base shipping cost. (Float, Float-As-String, Integer)
      */
     base_shipping_cost?: string;
     /**
-     * The value of the base wrapping cost expressed as a floating point number to four decimal places in string format. The value can't be negative.
+     * The value of the base wrapping cost expressed as a floating point number to four decimal places in string format.
      */
     base_wrapping_cost?: string;
     billing_address?: BillingAddressPut;
     /**
-     * Shows where the order originated. The channel_id defaults to 1. The value must match the ID of a valid and enabled channel. If the ID refers to a non-existing or disconnected channel, the POST and PUT `/v2/orders` endpoints return a validation error.
+     * Shows where the order originated. The channel_id will default to 1.
      */
     channel_id?: number;
     consignments?: OrderConsignmentPut;
@@ -1585,19 +1492,9 @@ export type OrderPut = {
      */
     readonly default_currency_code?: string;
     /**
-     * Amount of discount for this transaction. The value can't be negative. (Float, Float-As-String, Integer)
+     * Amount of discount for this transaction. (Float, Float-As-String, Integer)
      */
     discount_amount?: string;
-    /**
-     * The `order_source` reflects the origin of the order. It will indicate whether the order was created by one of the following:
-     * * storefront
-     * * control panel
-     * * manual order
-     * * /v2/orders API
-     * * Checkout API
-     * * or by an integration with an external platform such as Facebook by Meta or Amazon.
-     */
-    order_source?: string;
     /**
      * If the order was placed through eBay, the eBay order number will be included. Otherwise, the value will be `0`.
      */
@@ -1613,7 +1510,7 @@ export type OrderPut = {
     /**
      * This value identifies an external system that generated the order and submitted it to BigCommerce with the Orders API.
      * * When supplying the value, we recommend combining the type of system and vendor, e.g., ERP (Acumatica) or POS (Square).
-     * * If you are migrating historical orders processed on another eCommerce platform to BigCommerce, supply the following code as the value: M-MIG. This code will exclude historical orders from the store’s GMV/order count, which factors into pricing. Also, this code will not affect the `total_sold` on products for imported orders.
+     * * If you are migrating historical orders processed on another eCommerce platform to BigCommerce, supply the following code as the value: M-MIG. This code will exclude historical orders from the store’s GMV/order count, which factors into pricing.
      * * If you do not provide a value, then it will default to null.
      */
     external_source?: string | null;
@@ -1626,11 +1523,11 @@ export type OrderPut = {
      */
     geoip_country_iso2?: string;
     /**
-     * The value of the handling cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the handling cost, excluding tax. (Float, Float-As-String, Integer)
      */
     handling_cost_ex_tax?: string;
     /**
-     * The value of the handling cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the handling cost, including tax. (Float, Float-As-String, Integer)
      */
     handling_cost_inc_tax?: string;
     /**
@@ -1646,6 +1543,10 @@ export type OrderPut = {
      */
     ip_address_v6?: string;
     /**
+     * Indicates whether the order was deleted (archived). Set to to true, to archive an order.
+     */
+    is_deleted?: boolean;
+    /**
      * The number of items that have been shipped.
      */
     items_shipped?: number;
@@ -1658,7 +1559,7 @@ export type OrderPut = {
      */
     order_is_digital?: boolean;
     /**
-     * The payment method for this order. For example, `Manual`, `Credit Card`, `Cash`,`Test Payment Gateway`, etc.
+     * The payment method for this order. Can be one of the following: `Manual`, `Credit Card`, `Cash`,`Test Payment Gateway`, etc.
      */
     payment_method?: string;
     /**
@@ -1667,15 +1568,15 @@ export type OrderPut = {
     payment_provider_id?: string | number;
     products?: Array<OrderCatalogProductPut | OrderCustomProductPut | OrderRemoveProductPut>;
     /**
-     * The amount refunded from this transaction; always returns `0`. The value can't be negative. (Float, Float-As-String, Integer)
+     * The amount refunded from this transaction; always returns `0`. (Float, Float-As-String, Integer)
      */
     refunded_amount?: string;
     /**
-     * The value of shipping cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of shipping cost, excluding tax. (Float, Float-As-String, Integer)
      */
     shipping_cost_ex_tax?: string;
     /**
-     * The value of shipping cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of shipping cost, including tax. (Float, Float-As-String, Integer)
      */
     shipping_cost_inc_tax?: string;
     /**
@@ -1690,15 +1591,14 @@ export type OrderPut = {
      */
     status_id?: number;
     /**
-     * Override value for subtotal excluding tax. The value can't be negative. If specified, the field `subtotal_inc_tax` is also required. (Float, Float-As-String, Integer)
+     * Override value for subtotal excluding tax. If specified, the field `subtotal_inc_tax` is also required. (Float, Float-As-String, Integer)
      */
     subtotal_ex_tax?: string;
     /**
-     * Override value for subtotal including tax. The value can't be negative. If specified, the field `subtotal_ex_tax` is also required. (Float, Float-As-String, Integer)
+     * Override value for subtotal including tax. If specified, the field `subtotal_ex_tax` is also required. (Float, Float-As-String, Integer)
      */
     subtotal_inc_tax?: string;
     /**
-     * Read-only.
      * BasicTaxProvider - Tax is set to manual and order is created in the store.
      *
      * AvaTaxProvider - Tax is set to automatic and order is created in the store. Used for Avalara.
@@ -1706,14 +1606,9 @@ export type OrderPut = {
      * "" (empty string) - The order is created with the API, or the tax provider is unknown.
      *
      */
-    tax_provider_id?: string;
+    tax_provider_id?: 'BasicTaxProvider' | 'AvaTaxProvider' | '';
     /**
-     * The customer’s locale. The supported formats are:
-     * - 2-char lowercase characters. e.g., `en`
-     * - 3-char lowercase characters. e.g., `asa`
-     * - 5-char the language code is 2 lowercase characters and the region code is 2 uppercase characters, with `-` in the middle. e.g., `en-US`
-     * - 6-char the language code is 2 lowercase character and the region code is three digit number, with `-` in the middle. e.g., `es-419`
-     *
+     * The customer’s locale.
      */
     customer_locale?: string;
     /**
@@ -1721,22 +1616,21 @@ export type OrderPut = {
      */
     external_order_id?: string | null;
     /**
-     * Override value for the total, excluding tax. If specified, the field `total_inc_tax` is also required. The value can't be negative. (Float, Float-As-String, Integer)
+     * Override value for the total, excluding tax. If specified, the field `total_inc_tax` is also required. (Float, Float-As-String, Integer)
      */
     total_ex_tax?: string;
     /**
-     * Override value for the total, including tax. If specified, the field `total_ex_tax` is also required. The value can't be negative. (Float, Float-As-String, Integer)
+     * Override value for the total, including tax. If specified, the field `total_ex_tax` is also required. (Float, Float-As-String, Integer)
      */
     total_inc_tax?: string;
     /**
-     * The value of the wrapping cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the wrapping cost, excluding tax. (Float, Float-As-String, Integer)
      */
     wrapping_cost_ex_tax?: string;
     /**
-     * The value of the wrapping cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the wrapping cost, including tax. (Float, Float-As-String, Integer)
      */
     wrapping_cost_inc_tax?: string;
-    fees?: Array<OrderFeesPut>;
 };
 
 /**
@@ -1745,36 +1639,16 @@ export type OrderPut = {
  * Products and Billing address only required for POST operation.
  */
 export type OrderPost = {
-    billing_address?: BillingAddressBase;
-    /**
-     * The currency code of the transactional currency the shopper pays in is writable when multi-currency is enabled.
-     */
-    default_currency_code?: string;
     products?: Array<OrderCatalogProductPost | OrderCustomProductPost>;
-    shipping_addresses?: Array<ShippingAddressBase & {
-        /**
-         * Text code identifying the BigCommerce shipping module selected by the customer.
-         */
-        shipping_method?: string;
-    }>;
+    shipping_addresses?: Array<ShippingAddressBase>;
     consignments?: OrderConsignmentPost;
-    fees?: Array<OrderFeesPost>;
 } & OrderShared;
 
 export type ShippingAddressPut = ShippingAddressBase & {
-    /**
-     * Text code identifying the BigCommerce shipping module selected by the customer.
-     */
-    shipping_method?: string;
-} & {
     form_fields?: Array<FormFields>;
 };
 
 export type BillingAddressPut = BillingAddressBase & {
-    form_fields?: Array<FormFields>;
-};
-
-export type BillingAddressResp = BillingAddressBase & {
     form_fields?: Array<FormFields>;
 };
 
@@ -1899,7 +1773,7 @@ export type GiftCertificateConsignmentGet = {
      * The recipient email of the gift certificate.
      */
     recipient_email?: string;
-    line_items?: Array<ProductsResource> | Array<OrderProducts>;
+    line_items?: Array<ProductsResource>;
 };
 
 export type PickupConsignmentGet = {
@@ -1913,7 +1787,7 @@ export type PickupConsignmentGet = {
     pickup_method_id?: number;
 } & PickupConsignmentBase & {
     location?: PickupConsignmentLocationGet;
-    line_items?: Array<ProductsResource> | Array<OrderProducts>;
+    line_items?: Array<ProductsResource>;
 };
 
 export type PickupConsignmentLocationGet = {
@@ -1929,7 +1803,7 @@ export type ShippingConsignmentGet = {
      */
     id?: number;
 } & ShippingConsignmentBase & {
-    line_items?: Array<ProductsResource> | Array<OrderProducts>;
+    line_items?: Array<ProductsResource>;
     /**
      * The total number of items in the order.
      */
@@ -1963,15 +1837,15 @@ export type ShippingConsignmentGet = {
      */
     cost_tax_class_id?: number;
     /**
-     * The base handling charge. The value can't be negative.
+     * The base handling charge.
      */
     base_handling_cost?: number;
     /**
-     * The handling charge, excluding tax. The value can't be negative.
+     * The handling charge, excluding tax.
      */
     handling_cost_ex_tax?: number;
     /**
-     * The handling charge, including tax. The value can't be negative.
+     * The handling charge, including tax.
      */
     handling_cost_inc_tax?: number;
     handling_cost_tax?: number;
@@ -2043,133 +1917,7 @@ export type DigitalConsignmentGet = {
      * The recipient email of the digital consignment.
      */
     recipient_email?: string;
-    line_items?: Array<ProductsResource> | Array<OrderProducts>;
-};
-
-/**
- * orderFees_Resp
- */
-export type OrderFeesResp = {
-    /**
-     * The unique numeric identifier of the fees object.
-     */
-    id?: number;
-    /**
-     * The type of the fee.
-     */
-    type?: 'custom_fee';
-    /**
-     * The display name of the fee targeting customers.
-     */
-    display_name_customer?: string;
-    /**
-     * The display name of the fee targeting shoppers.
-     */
-    display_name_merchant?: string;
-    /**
-     * The source of the request.
-     */
-    source?: string;
-    /**
-     * The base fee cost value. (Float, Float-As-String, Integer)
-     */
-    base_cost?: string | number;
-    /**
-     * The fee cost value excluding tax. (Float, Float-As-String, Integer)
-     */
-    cost_ex_tax?: string | number;
-    /**
-     * The fee cost value including tax. (Float, Float-As-String, Integer)
-     */
-    cost_inc_tax?: string | number;
-    /**
-     * The tax amount on the fee cost. (Float, Float-As-String, Integer)
-     */
-    cost_tax?: string | number;
-    /**
-     * A unique numeric identifier for the tax class. If not persisted or null, the default fee tax class from the control panel is used.
-     */
-    tax_class_id?: number | null;
-};
-
-/**
- * orderFees_Post
- */
-export type OrderFeesPost = {
-    /**
-     * The type of the fee.
-     */
-    type?: 'custom_fee';
-    /**
-     * The display name of the fee targeting customers.
-     */
-    display_name_customer?: string;
-    /**
-     * The display name of the fee targeting shoppers. NOTE - At least one of the following fields (display_name_customer, display_name_merchant) must be included in the request.
-     */
-    display_name_merchant?: string;
-    /**
-     * The source of the request.
-     */
-    source?: string;
-    /**
-     * The fee cost value excluding tax. (Float, Float-As-String, Integer)
-     */
-    cost_ex_tax?: string | number;
-    /**
-     * The fee cost value including tax. (Float, Float-As-String, Integer)
-     */
-    cost_inc_tax?: string | number;
-    /**
-     * The tax amount on the fee cost. (Float, Float-As-String, Integer) NOTE - At least two of the following fields (cost_ex_tax, cost_inc_tax, and cost_tax) must be included in the request.
-     */
-    cost_tax?: string | number;
-    /**
-     * A unique numeric identifier for the tax class. If not provided or null, the default fee tax class from the control panel is used.
-     */
-    tax_class_id?: number | null;
-};
-
-/**
- * orderFees_Put
- */
-export type OrderFeesPut = {
-    /**
-     * The unique numeric identifier of the fees object.
-     */
-    id?: number;
-    /**
-     * The type of the fee.
-     */
-    type?: 'custom_fee';
-    /**
-     * The display name of the fee targeting customers.
-     */
-    display_name_customer?: string;
-    /**
-     * The display name of the fee targeting shoppers. NOTE - At least one of the following fields (display_name_customer, display_name_merchant) must be included in the request.
-     */
-    display_name_merchant?: string;
-    /**
-     * The source of the request.
-     */
-    source?: string;
-    /**
-     * The fee cost value excluding tax. (Float, Float-As-String, Integer)
-     */
-    cost_ex_tax?: string | number;
-    /**
-     * The fee cost value including tax. (Float, Float-As-String, Integer)
-     */
-    cost_inc_tax?: string | number;
-    /**
-     * The tax amount on the fee cost. (Float, Float-As-String, Integer) NOTE - At least two of the following fields (cost_ex_tax, cost_inc_tax, and cost_tax) must be included in the request.
-     */
-    cost_tax?: string | number;
-    /**
-     * A unique numeric identifier for the tax class. If not provided or null, the default fee tax class from the control panel is used.
-     */
-    tax_class_id?: number | null;
+    line_items?: Array<ProductsResource>;
 };
 
 /**
@@ -2207,17 +1955,17 @@ export type OrderProductsWritable = {
     /**
      * Type of product.
      */
-    type?: 'physical' | 'digital' | 'giftcertificate';
+    type?: 'physical' | 'digital';
     /**
      * The product’s base price. (Float, Float-As-String, Integer)
      */
     base_price?: string;
     /**
-     * The product’s price excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The product’s price excluding tax. (Float, Float-As-String, Integer)
      */
     price_ex_tax?: string;
     /**
-     * The product’s price including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The product’s price including tax. (Float, Float-As-String, Integer)
      */
     price_inc_tax?: string;
     /**
@@ -2236,11 +1984,11 @@ export type OrderProductsWritable = {
      */
     base_total?: string;
     /**
-     * Total base price excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * Total base price excluding tax. (Float, Float-As-String, Integer)
      */
     total_ex_tax?: string;
     /**
-     * Total base price including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * Total base price including tax. (Float, Float-As-String, Integer)
      */
     total_inc_tax?: string;
     /**
@@ -2262,30 +2010,18 @@ export type OrderProductsWritable = {
     base_cost_price?: string;
     /**
      * The product’s cost price including tax. (Float, Float-As-String, Integer)
-     * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes. The value can't be negative.
+     * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes.
      */
     cost_price_inc_tax?: string;
     /**
      * The product cost price excluding tax. (Float, Float-As-String, Integer)
-     * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes. The value can't be negative.
+     * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes.
      */
     cost_price_ex_tax?: string;
     /**
-     * Weight of the product. The value can't be negative. (Float, Float-As-String, Integer)
+     * Weight of the product. (Float, Float-As-String, Integer)
      */
     weight?: number | string;
-    /**
-     * Product width. The value can't be negative.
-     */
-    width?: string;
-    /**
-     * Product height. The value can't be negative.
-     */
-    height?: string;
-    /**
-     * Product depth. The value can't be negative.
-     */
-    depth?: string;
     /**
      * Tax applied to the product’s cost price. (Float, Float-As-String, Integer)
      * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes. Read Only
@@ -2304,29 +2040,25 @@ export type OrderProductsWritable = {
      *
      * @deprecated
      */
-    refund_amount?: string;
+    refunded_amount?: string;
     /**
      * Numeric ID for the refund.
      */
     return_id?: number;
     /**
-     * ID of the gift wrapping option.
-     */
-    wrapping_id?: number;
-    /**
      * Name of gift-wrapping option.
      */
     wrapping_name?: string | null;
     /**
-     * The value of the base wrapping cost. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the base wrapping cost. (Float, Float-As-String, Integer)
      */
     base_wrapping_cost?: string | number;
     /**
-     * The value of the wrapping cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the wrapping cost, excluding tax. (Float, Float-As-String, Integer)
      */
     wrapping_cost_ex_tax?: string;
     /**
-     * The value of the wrapping cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the wrapping cost, including tax. (Float, Float-As-String, Integer)
      */
     wrapping_cost_inc_tax?: string;
     /**
@@ -2389,13 +2121,6 @@ export type OrderProductsWritable = {
      * Array of product option objects.
      */
     product_options?: Array<OrderProductOptions>;
-    /**
-     * Available for only [Catalog V2 stores](/docs/store-operations/catalog/migration).
-     */
-    configurable_fields?: Array<{
-        name?: string;
-        value?: string;
-    }>;
     /**
      * Universal Product Code. Can be written to for custom products and catalog products.
      */
@@ -2467,15 +2192,15 @@ export type OrderShippingAddressWritable = {
      */
     cost_tax_class_id?: number;
     /**
-     * The base handling charge. The value can't be negative. (Float, Float-As-String, Integer)
+     * The base handling charge. (Float, Float-As-String, Integer)
      */
     base_handling_cost?: string;
     /**
-     * The handling charge, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The handling charge, excluding tax. (Float, Float-As-String, Integer)
      */
     handling_cost_ex_tax?: string;
     /**
-     * The handling charge, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The handling charge, including tax. (Float, Float-As-String, Integer)
      */
     handling_cost_inc_tax?: string;
     handling_cost_tax?: string;
@@ -2492,12 +2217,7 @@ export type OrderShippingAddressWritable = {
      */
     shipping_zone_name?: string;
     form_fields?: Array<FormFields>;
-} & ShippingAddressBase & {
-    /**
-     * Text code identifying the BigCommerce shipping module selected by the customer.
-     */
-    shipping_method?: string;
-};
+} & ShippingAddressBase;
 
 /**
  * orderShipment
@@ -2528,24 +2248,23 @@ export type OrderShipmentWritable = {
      */
     tracking_number?: string;
     /**
-     * Shipping cost for the merchant.
-     */
-    merchant_shipping_cost?: string;
-    /**
      * Additional information to describe the method of shipment (ex. Standard, Ship by Weight, Custom Shipment). Can be used for live quotes from certain shipping providers.
      * If different from `shipping_provider`, `shipping_method` should correspond to `tracking_carrier`.
      */
     shipping_method?: string;
-    shipping_provider?: ShippingProviderStandard | ShippingProviderCustom;
+    /**
+     * Enum of the BigCommerce shipping-carrier integration/module.
+     */
+    shipping_provider?: 'auspost' | 'canadapost' | 'carrier_{your_carrier_id} (only used if the carrier is a [third-party Shipping Provider](/docs/integrations/shipping))' | 'endicia' | 'usps' | 'fedex' | 'ups' | 'upsready' | 'upsonline' | 'shipperhq' | '';
     /**
      * Tracking Carrier
      *
      * Tracking carrier for the shipment.
-     * Acceptable values for `tracking_carrier` include an empty string (`""`) or one of the valid [tracking-carrier values](https://www.aftership.com/docs/tracking/others/supported-couriers).
+     * Acceptable values for `tracking_carrier` include an empty string (`""`) or one of the valid [tracking-carrier values](https://github.com/bigcommerce/dev-docs/blob/master/assets/csv/tracking_carrier_values.csv).
      */
     tracking_carrier?: string;
     /**
-     * The custom tracking link supplied on POST or PUT shipments. For the link to one of our integrated providers or Aftership tracking link, see the `generated_tracking_link` property.
+     * The custom tracking link supplied on POST or PUT shipments. For the auto-generated tracking link see the `generated_tracking_link` property.
      */
     tracking_link?: string;
     /**
@@ -2563,7 +2282,7 @@ export type OrderShipmentWritable = {
         quantity?: number;
     }>;
     /**
-     * The link to one of our integrated providers or Aftership tracking link that is generated using the combination of either the `tracking_number` and `shipping_provider` or `tracking_number` and `tracking_carrier`. This will be empty if the custom `tracking_link` value is provided.
+     * The tracking link that is generated using the combination of either the `tracking_number` and `shipping_provider` or `tracking_number` and `tracking_carrier`. This will be empty if the custom `tracking_link` value is provided.
      */
     generated_tracking_link?: string;
 };
@@ -2575,19 +2294,20 @@ export type OrderShipmentWritable = {
  */
 export type OrderSharedWritable = {
     /**
-     * The value of the base handling cost. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the base handling cost. (Float, Float-As-String, Integer)
      */
     base_handling_cost?: string;
     /**
-     * The value of the base shipping cost. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the base shipping cost. (Float, Float-As-String, Integer)
      */
     base_shipping_cost?: string;
     /**
-     * The value of the base wrapping cost expressed as a floating point number to four decimal places in string format. The value can't be negative.
+     * The value of the base wrapping cost expressed as a floating point number to four decimal places in string format.
      */
     base_wrapping_cost?: string;
+    billing_address?: BillingAddressBase;
     /**
-     * Shows where the order originated. The channel_id defaults to 1. The value must match the ID of a valid and enabled channel. If the ID refers to a non-existing or disconnected channel, the POST and PUT `/v2/orders` endpoints return a validation error.
+     * Shows where the order originated. The channel_id will default to 1.
      */
     channel_id?: number;
     customer_id?: number;
@@ -2596,23 +2316,17 @@ export type OrderSharedWritable = {
      */
     customer_message?: string;
     /**
-     * The date the order was created, formatted in the RFC-2822 standard. You set this attribute on Order creation (POST) to support the migration of historical orders. If you do not provide a value, then it will default to the current date/time. e.g., `Tue, 20 Nov 2012 00:00:00 +0000`. This date time is always in UTC in the api response.
+     * The date the order was created, formatted in the RFC-2822 standard. You set this attribute on Order creation (POST) to support the migration of historical orders. If you do not provide a value, then it will default to the current date/time. e.g., `Tue, 20 Nov 2012 00:00:00 +0000`.
      */
     date_created?: string;
     /**
-     * Amount of discount for this transaction. The value can't be negative. (Float, Float-As-String, Integer)
+     * The currency code of the transactional currency the shopper pays in; writeable when multi-currency is enabled.
+     */
+    default_currency_code?: string;
+    /**
+     * Amount of discount for this transaction. (Float, Float-As-String, Integer)
      */
     discount_amount?: string;
-    /**
-     * The `order_source` reflects the origin of the order. It will indicate whether the order was created by one of the following:
-     * * storefront
-     * * control panel
-     * * manual order
-     * * /v2/orders API
-     * * Checkout API
-     * * or by an integration with an external platform such as Facebook by Meta or Amazon.
-     */
-    order_source?: string;
     /**
      * If the order was placed through eBay, the eBay order number will be included. Otherwise, the value will be `0`.
      */
@@ -2637,11 +2351,11 @@ export type OrderSharedWritable = {
      */
     geoip_country_iso2?: string;
     /**
-     * The value of the handling cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the handling cost, excluding tax. (Float, Float-As-String, Integer)
      */
     handling_cost_ex_tax?: string;
     /**
-     * The value of the handling cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the handling cost, including tax. (Float, Float-As-String, Integer)
      */
     handling_cost_inc_tax?: string;
     /**
@@ -2657,6 +2371,10 @@ export type OrderSharedWritable = {
      */
     ip_address_v6?: string;
     /**
+     * Indicates whether the order was deleted (archived). Set to to true, to archive an order.
+     */
+    is_deleted?: boolean;
+    /**
      * The number of items that have been shipped.
      */
     items_shipped?: number;
@@ -2669,25 +2387,23 @@ export type OrderSharedWritable = {
      */
     order_is_digital?: boolean;
     /**
-     * The payment method for this order. For example, `Manual`, `Credit Card`, `cash`, `Test Payment Gateway`, etc.
+     * The payment method for this order. Can be one of the following: `Manual`, `Credit Card`, `cash`, `Test Payment Gateway`, etc.
      */
-    payment_method?: string;
+    payment_method?: 'Credit Card' | 'Cash' | 'Test Payment Gateway' | 'Manual';
     /**
      * The external Transaction ID/Payment ID within this order’s payment provider (if a payment provider was used).
      */
     payment_provider_id?: string | number;
     /**
-     * The amount refunded from this transaction; always returns `0`. The value can't be negative. (Float, Float-As-String, Integer)
+     * The amount refunded from this transaction; always returns `0`. (Float, Float-As-String, Integer)
      */
     refunded_amount?: string;
     /**
-     * The value of shipping cost, excluding tax. When specified in a POST or PUT request, the field `shipping_cost_inc_tax` is also required. The value can't be negative (Float, Float-As-String, Integer)
-     *
+     * The value of shipping cost, excluding tax. (Float, Float-As-String, Integer)
      */
     shipping_cost_ex_tax?: string;
     /**
-     * The value of shipping cost, including tax. When specified in a POST or PUT request, the field `shipping_cost_ex_tax` is also required. The value can't be negative. (Float, Float-As-String, Integer)
-     *
+     * The value of shipping cost, including tax. (Float, Float-As-String, Integer)
      */
     shipping_cost_inc_tax?: string;
     /**
@@ -2699,15 +2415,14 @@ export type OrderSharedWritable = {
      */
     status_id?: number;
     /**
-     * Override value for subtotal excluding tax. The value can't be negative. If specified, the field `subtotal_inc_tax` is also required. (Float, Float-As-String, Integer)
+     * Override value for subtotal excluding tax. If specified, the field `subtotal_inc_tax` is also required. (Float, Float-As-String, Integer)
      */
     subtotal_ex_tax?: string;
     /**
-     * Override value for subtotal including tax. The value can't be negative. If specified, the field `subtotal_ex_tax` is also required. (Float, Float-As-String, Integer)
+     * Override value for subtotal including tax. If specified, the field `subtotal_ex_tax` is also required. (Float, Float-As-String, Integer)
      */
     subtotal_inc_tax?: string;
     /**
-     * Read-only.
      * BasicTaxProvider - Tax is set to manual and order is created in the store.
      *
      * AvaTaxProvider - Tax is set to automatic and order is created in the store. Used for Avalara.
@@ -2715,14 +2430,9 @@ export type OrderSharedWritable = {
      * "" (empty string) - The order is created with the API, or the tax provider is unknown.
      *
      */
-    tax_provider_id?: string;
+    tax_provider_id?: 'BasicTaxProvider' | 'AvaTaxProvider' | '';
     /**
-     * The customer’s locale. The supported formats are:
-     * - 2-char lowercase characters. e.g., `en`
-     * - 3-char lowercase characters. e.g., `asa`
-     * - 5-char the language code is 2 lowercase characters and the region code is 2 uppercase characters, with `-` in the middle. e.g., `en-US`
-     * - 6-char the language code is 2 lowercase character and the region code is three digit number, with `-` in the middle. e.g., `es-419`
-     *
+     * The customer’s locale.
      */
     customer_locale?: string;
     /**
@@ -2730,19 +2440,19 @@ export type OrderSharedWritable = {
      */
     external_order_id?: string;
     /**
-     * Override value for the total, excluding tax. If specified, the field `total_inc_tax` is also required. The value can't be negative. (Float, Float-As-String, Integer)
+     * Override value for the total, excluding tax. If specified, the field `total_inc_tax` is also required. (Float, Float-As-String, Integer)
      */
     total_ex_tax?: string;
     /**
-     * Override value for the total, including tax. If specified, the field `total_ex_tax` is also required. The value can't be negative. (Float, Float-As-String, Integer)
+     * Override value for the total, including tax. If specified, the field `total_ex_tax` is also required. (Float, Float-As-String, Integer)
      */
     total_inc_tax?: string;
     /**
-     * The value of the wrapping cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the wrapping cost, excluding tax. (Float, Float-As-String, Integer)
      */
     wrapping_cost_ex_tax?: string;
     /**
-     * The value of the wrapping cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the wrapping cost, including tax. (Float, Float-As-String, Integer)
      */
     wrapping_cost_inc_tax?: string;
 };
@@ -2758,12 +2468,11 @@ export type OrderRespOnlyWritable = {
      */
     id?: number;
     /**
-     * A read-only value representing the last modification of the order. Do not attempt to modify or set this value in a POST or PUT request. RFC-2822. This date time is always in UTC in the api response.
+     * A read-only value representing the last modification of the order. Do not attempt to modify or set this value in a POST or PUT request. RFC-2822
      */
     date_modified?: string;
     /**
-     * A read-only value representing the date when the order is fully shipped. Do not attempt to modify or set this value in a POST or PUT request. RFC-2822
-     *
+     * A read-only value representing the date of shipment. Do not attempt to modify or set this value in a POST or PUT request. RFC-2822
      */
     date_shipped?: string;
     /**
@@ -2809,7 +2518,7 @@ export type OrderRespOnlyWritable = {
     /**
      * A read-only value. Do not attempt to set or modify this value in a POST or PUT request.
      */
-    payment_status?: 'authorized' | 'captured' | 'capture pending' | 'declined' | 'held for review' | 'paid' | 'partially refunded' | 'pending' | 'refunded' | 'void' | 'void pending' | '';
+    payment_status?: 'authorized' | 'captured' | 'capture pending' | 'declined' | 'held for review' | 'paid' | 'partially refunded' | 'pending' | 'refunded' | 'void' | 'void pending';
     /**
      * Represents the store credit that the shopper has redeemed on this individual order. This is a read-only value. Do not pass in a POST or PUT request. (Float, Float-As-String, Integer)
      */
@@ -2855,37 +2564,20 @@ export type OrderRespOnlyWritable = {
      */
     shipping_address_count?: number;
     /**
-     * Indicates whether the order is deleted/archived. When set to true in a PUT request, it has the same result as the DELETE an order request.
-     */
-    is_deleted?: boolean;
-    /**
-     * Total tax amount for the order
-     */
-    total_tax?: string;
-    /**
-     * Indicate whether the order's base prices include tax.
-     *
-     * If true, the base prices are inclusive of tax, and the values of `subtotal_inc_tax`, `shipping_cost_inc_tax`, `handling_cost_inc_tax`, `wrapping_cost_inc_tax` and `total_inc_tax` are not estimated but actual values and can be reliable for accounting purposes.
-     *
-     * If false, the base prices are exclusive of tax, and the values of `subtotal_ex_tax`, `shipping_cost_ex_tax`, `handling_cost_ex_tax`, `wrapping_cost_ex_tax` and `total_ex_tax` are not estimated but actual values and can be reliable for accounting purposes.
-     */
-    is_tax_inclusive_pricing?: boolean;
-    /**
      * Indicates whether the shopper has selected an opt-in check box (on the checkout page) to receive emails. A read-only value. Do not pass in a POST or PUT.
      */
     is_email_opt_in?: boolean;
     /**
-     * Reflects the origin of the order. It can affect the order’s icon and source as defined in the control panel listing.
-     * Allowed values: `www` (Desktop) | `iphone` (Iphone) | `ipad` (Ipad) | `android` (Android) | `mobile` (Mobile) | `manual` (manual order) | `external` (Orders API) | `checkout_api` (Checkout API) | `buybutton` (Buy Button) | `amazon` (Amazon) | `ebay` (Ebay) | `facebookshop` (Facebook Shop) | `facebookcheckout` (Facebook Checkout) | `facebookmarketplace` (Facebook Marketplace) | `pinterest` (Pinterest) | `socialshop` (Social Shop)
+     * Orders submitted from the storeʼs website will include a `www` value. Orders submitted with the Checkout API will be set to `checkout_api`.
      */
     order_source?: string;
-    consignments?: OrderConsignmentGet;
     /**
      * The status ID of the order.
      */
     status_id?: number;
-    billing_address?: BillingAddressResp;
-    fees?: Array<OrderFeesResp>;
+    billing_address?: {
+        form_fields?: Array<FormFields>;
+    };
 };
 
 /**
@@ -2910,7 +2602,7 @@ export type OrderRemoveProductPutWritable = {
     product_options?: Array<{
         /**
          * The product’s cost price including tax. (Float, Float-As-String, Integer)
-         * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes. The value can't be negative.
+         * The cost of your products to you; this is never shown to customers, but can be used for accounting purposes.
          */
         cost_price_inc_tax?: string;
     }>;
@@ -2918,20 +2610,20 @@ export type OrderRemoveProductPutWritable = {
 
 export type OrderPutWritable = {
     /**
-     * The value of the base handling cost. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the base handling cost. (Float, Float-As-String, Integer)
      */
     base_handling_cost?: string;
     /**
-     * The value of the base shipping cost. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the base shipping cost. (Float, Float-As-String, Integer)
      */
     base_shipping_cost?: string;
     /**
-     * The value of the base wrapping cost expressed as a floating point number to four decimal places in string format. The value can't be negative.
+     * The value of the base wrapping cost expressed as a floating point number to four decimal places in string format.
      */
     base_wrapping_cost?: string;
     billing_address?: BillingAddressPut;
     /**
-     * Shows where the order originated. The channel_id defaults to 1. The value must match the ID of a valid and enabled channel. If the ID refers to a non-existing or disconnected channel, the POST and PUT `/v2/orders` endpoints return a validation error.
+     * Shows where the order originated. The channel_id will default to 1.
      */
     channel_id?: number;
     consignments?: OrderConsignmentPut;
@@ -2945,19 +2637,9 @@ export type OrderPutWritable = {
      */
     date_created?: string;
     /**
-     * Amount of discount for this transaction. The value can't be negative. (Float, Float-As-String, Integer)
+     * Amount of discount for this transaction. (Float, Float-As-String, Integer)
      */
     discount_amount?: string;
-    /**
-     * The `order_source` reflects the origin of the order. It will indicate whether the order was created by one of the following:
-     * * storefront
-     * * control panel
-     * * manual order
-     * * /v2/orders API
-     * * Checkout API
-     * * or by an integration with an external platform such as Facebook by Meta or Amazon.
-     */
-    order_source?: string;
     /**
      * If the order was placed through eBay, the eBay order number will be included. Otherwise, the value will be `0`.
      */
@@ -2969,7 +2651,7 @@ export type OrderPutWritable = {
     /**
      * This value identifies an external system that generated the order and submitted it to BigCommerce with the Orders API.
      * * When supplying the value, we recommend combining the type of system and vendor, e.g., ERP (Acumatica) or POS (Square).
-     * * If you are migrating historical orders processed on another eCommerce platform to BigCommerce, supply the following code as the value: M-MIG. This code will exclude historical orders from the store’s GMV/order count, which factors into pricing. Also, this code will not affect the `total_sold` on products for imported orders.
+     * * If you are migrating historical orders processed on another eCommerce platform to BigCommerce, supply the following code as the value: M-MIG. This code will exclude historical orders from the store’s GMV/order count, which factors into pricing.
      * * If you do not provide a value, then it will default to null.
      */
     external_source?: string | null;
@@ -2982,11 +2664,11 @@ export type OrderPutWritable = {
      */
     geoip_country_iso2?: string;
     /**
-     * The value of the handling cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the handling cost, excluding tax. (Float, Float-As-String, Integer)
      */
     handling_cost_ex_tax?: string;
     /**
-     * The value of the handling cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the handling cost, including tax. (Float, Float-As-String, Integer)
      */
     handling_cost_inc_tax?: string;
     /**
@@ -3002,6 +2684,10 @@ export type OrderPutWritable = {
      */
     ip_address_v6?: string;
     /**
+     * Indicates whether the order was deleted (archived). Set to to true, to archive an order.
+     */
+    is_deleted?: boolean;
+    /**
      * The number of items that have been shipped.
      */
     items_shipped?: number;
@@ -3014,7 +2700,7 @@ export type OrderPutWritable = {
      */
     order_is_digital?: boolean;
     /**
-     * The payment method for this order. For example, `Manual`, `Credit Card`, `Cash`,`Test Payment Gateway`, etc.
+     * The payment method for this order. Can be one of the following: `Manual`, `Credit Card`, `Cash`,`Test Payment Gateway`, etc.
      */
     payment_method?: string;
     /**
@@ -3023,15 +2709,15 @@ export type OrderPutWritable = {
     payment_provider_id?: string | number;
     products?: Array<OrderCatalogProductPut | OrderCustomProductPut | OrderRemoveProductPutWritable>;
     /**
-     * The amount refunded from this transaction; always returns `0`. The value can't be negative. (Float, Float-As-String, Integer)
+     * The amount refunded from this transaction; always returns `0`. (Float, Float-As-String, Integer)
      */
     refunded_amount?: string;
     /**
-     * The value of shipping cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of shipping cost, excluding tax. (Float, Float-As-String, Integer)
      */
     shipping_cost_ex_tax?: string;
     /**
-     * The value of shipping cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of shipping cost, including tax. (Float, Float-As-String, Integer)
      */
     shipping_cost_inc_tax?: string;
     /**
@@ -3046,15 +2732,14 @@ export type OrderPutWritable = {
      */
     status_id?: number;
     /**
-     * Override value for subtotal excluding tax. The value can't be negative. If specified, the field `subtotal_inc_tax` is also required. (Float, Float-As-String, Integer)
+     * Override value for subtotal excluding tax. If specified, the field `subtotal_inc_tax` is also required. (Float, Float-As-String, Integer)
      */
     subtotal_ex_tax?: string;
     /**
-     * Override value for subtotal including tax. The value can't be negative. If specified, the field `subtotal_ex_tax` is also required. (Float, Float-As-String, Integer)
+     * Override value for subtotal including tax. If specified, the field `subtotal_ex_tax` is also required. (Float, Float-As-String, Integer)
      */
     subtotal_inc_tax?: string;
     /**
-     * Read-only.
      * BasicTaxProvider - Tax is set to manual and order is created in the store.
      *
      * AvaTaxProvider - Tax is set to automatic and order is created in the store. Used for Avalara.
@@ -3062,14 +2747,9 @@ export type OrderPutWritable = {
      * "" (empty string) - The order is created with the API, or the tax provider is unknown.
      *
      */
-    tax_provider_id?: string;
+    tax_provider_id?: 'BasicTaxProvider' | 'AvaTaxProvider' | '';
     /**
-     * The customer’s locale. The supported formats are:
-     * - 2-char lowercase characters. e.g., `en`
-     * - 3-char lowercase characters. e.g., `asa`
-     * - 5-char the language code is 2 lowercase characters and the region code is 2 uppercase characters, with `-` in the middle. e.g., `en-US`
-     * - 6-char the language code is 2 lowercase character and the region code is three digit number, with `-` in the middle. e.g., `es-419`
-     *
+     * The customer’s locale.
      */
     customer_locale?: string;
     /**
@@ -3077,44 +2757,21 @@ export type OrderPutWritable = {
      */
     external_order_id?: string | null;
     /**
-     * Override value for the total, excluding tax. If specified, the field `total_inc_tax` is also required. The value can't be negative. (Float, Float-As-String, Integer)
+     * Override value for the total, excluding tax. If specified, the field `total_inc_tax` is also required. (Float, Float-As-String, Integer)
      */
     total_ex_tax?: string;
     /**
-     * Override value for the total, including tax. If specified, the field `total_ex_tax` is also required. The value can't be negative. (Float, Float-As-String, Integer)
+     * Override value for the total, including tax. If specified, the field `total_ex_tax` is also required. (Float, Float-As-String, Integer)
      */
     total_inc_tax?: string;
     /**
-     * The value of the wrapping cost, excluding tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the wrapping cost, excluding tax. (Float, Float-As-String, Integer)
      */
     wrapping_cost_ex_tax?: string;
     /**
-     * The value of the wrapping cost, including tax. The value can't be negative. (Float, Float-As-String, Integer)
+     * The value of the wrapping cost, including tax. (Float, Float-As-String, Integer)
      */
     wrapping_cost_inc_tax?: string;
-    fees?: Array<OrderFeesPut>;
-};
-
-export type GiftCertificateConsignmentGetWritable = {
-    /**
-     * The recipient email of the gift certificate.
-     */
-    recipient_email?: string;
-    line_items?: Array<unknown> | Array<OrderProductsWritable>;
-};
-
-export type PickupConsignmentGetWritable = {
-    /**
-     * The ID of the pickup consignment to update.
-     */
-    id?: number;
-    /**
-     * ID of the pickup method.
-     */
-    pickup_method_id?: number;
-} & PickupConsignmentBase & {
-    location?: PickupConsignmentLocationGet;
-    line_items?: Array<unknown> | Array<OrderProductsWritable>;
 };
 
 export type ShippingConsignmentGetWritable = {
@@ -3123,7 +2780,7 @@ export type ShippingConsignmentGetWritable = {
      */
     id?: number;
 } & ShippingConsignmentBase & {
-    line_items?: Array<unknown> | Array<OrderProductsWritable>;
+    line_items?: Array<unknown>;
     /**
      * The total number of items in the order.
      */
@@ -3157,15 +2814,15 @@ export type ShippingConsignmentGetWritable = {
      */
     cost_tax_class_id?: number;
     /**
-     * The base handling charge. The value can't be negative.
+     * The base handling charge.
      */
     base_handling_cost?: number;
     /**
-     * The handling charge, excluding tax. The value can't be negative.
+     * The handling charge, excluding tax.
      */
     handling_cost_ex_tax?: number;
     /**
-     * The handling charge, including tax. The value can't be negative.
+     * The handling charge, including tax.
      */
     handling_cost_inc_tax?: number;
     handling_cost_tax?: number;
@@ -3183,14 +2840,6 @@ export type ShippingConsignmentGetWritable = {
     shipping_zone_name?: string;
 };
 
-export type DigitalConsignmentGetWritable = {
-    /**
-     * The recipient email of the digital consignment.
-     */
-    recipient_email?: string;
-    line_items?: Array<unknown> | Array<OrderProductsWritable>;
-};
-
 /**
  * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
  */
@@ -3200,11 +2849,6 @@ export type Accept = string;
  * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
  */
 export type ContentType = string;
-
-/**
- * The order ID in another system, such as the Amazon Order ID if this is an Amazon order. After setting it, you can update this field using a POST or PUT request.
- */
-export type ExternalOrderId = string;
 
 /**
  * The minimum order ID.
@@ -3252,9 +2896,14 @@ export type StatusIdPath = number;
 export type CartId = string;
 
 /**
- * The display name of the payment method used on the order. For example, `Manual`, `Credit Card`, `cash`, `Test Payment Gateway`, etc.'
+ * If the order was deleted or archived.
  */
-export type PaymentMethod = string;
+export type IsDeleted = boolean;
+
+/**
+ * The display name of the payment method used on the order.
+ */
+export type PaymentMethod = 'Manual' | 'Cash on Delivery' | 'Credit Card' | 'Test Payment Gateway' | 'Pay In Store';
 
 /**
  * Minimum date the order was created in RFC-2822 or ISO-8601.
@@ -3313,7 +2962,7 @@ export type Sort = 'id' | 'customer_id' | 'date_created' | 'date_modified' | 'st
 export type Status = 'read' | 'unread';
 
 /**
- * Whether the message is [flagged](https://support.bigcommerce.com/s/article/Communicating-with-Customers#Messages).
+ * If the message is [flagged](https://support.bigcommerce.com/s/article/Communicating-with-Customers#Messages).
  */
 export type IsFlagged = boolean;
 
@@ -3338,7 +2987,7 @@ export type ShippingAddressIdPath = number;
 export type ShipmentIdPath = number;
 
 /**
- * The channel ID of the sales channel the shopper used to place the order.
+ * The Channel ID of the Order.
  */
 export type ChannelId = number;
 
@@ -3348,18 +2997,13 @@ export type ChannelId = number;
 export type ShippingConsignmentId = number;
 
 /**
- * Should be specified along with `include=consignments` or `include=consignments.line_items` to return consignments in the supported object structure. The default array structure provided is legacy and may not be supported in the future.
+ * * `consignments` - include the response returned from the request to the `/orders/{order_id}/consignments` endpoint.
+ *
+ * * `consignments.line_items` - include the response returned from the request to the `/orders/{order_id}/products` endpoint in consignments. This implies `include=consignments`.
  */
-export type ConsignmentStructure = 'object';
+export type OrderIncludes = 'consignments' | 'consignments.line_items';
 
-/**
- * * `consignments` - include the response returned from the request to the `/orders/{order_id}/consignments` endpoint. Current default array structure is legacy and will be deprecated from **1 Feb 2026**. Specify `consignment_structure=object` as a request parameter when including consignments.
- * * `consignments.line_items` - include the response returned from the request to the `/orders/{order_id}/products` endpoint in consignments. This will also includes the resources associated with `include=consignments`. Current default array structure is legacy and will be deprecated from **1 Feb 2026**. Specify `consignment_structure=object` as a request parameter when including consignments.
- * * `fees` - include the response returned from the request to the `/orders/{order_id}/fees` endpoint.
- */
-export type OrderIncludes = Array<'consignments' | 'consignments.line_items' | 'fees'>;
-
-export type DeleteOrderData = {
+export type DeleteAnOrderData = {
     body?: never;
     headers: {
         /**
@@ -3377,13 +3021,13 @@ export type DeleteOrderData = {
     url: '/orders/{order_id}';
 };
 
-export type DeleteOrderResponses = {
+export type DeleteAnOrderResponses = {
     204: void;
 };
 
-export type DeleteOrderResponse = DeleteOrderResponses[keyof DeleteOrderResponses];
+export type DeleteAnOrderResponse = DeleteAnOrderResponses[keyof DeleteAnOrderResponses];
 
-export type GetOrderData = {
+export type GetAnOrderData = {
     body?: never;
     headers: {
         /**
@@ -3399,37 +3043,33 @@ export type GetOrderData = {
     };
     query?: {
         /**
-         * * `consignments` - include the response returned from the request to the `/orders/{order_id}/consignments` endpoint. Current default array structure is legacy and will be deprecated from **1 Feb 2026**. Specify `consignment_structure=object` as a request parameter when including consignments.
-         * * `consignments.line_items` - include the response returned from the request to the `/orders/{order_id}/products` endpoint in consignments. This will also includes the resources associated with `include=consignments`. Current default array structure is legacy and will be deprecated from **1 Feb 2026**. Specify `consignment_structure=object` as a request parameter when including consignments.
-         * * `fees` - include the response returned from the request to the `/orders/{order_id}/fees` endpoint.
+         * * `consignments` - include the response returned from the request to the `/orders/{order_id}/consignments` endpoint.
+         *
+         * * `consignments.line_items` - include the response returned from the request to the `/orders/{order_id}/products` endpoint in consignments. This implies `include=consignments`.
          */
-        include?: Array<'consignments' | 'consignments.line_items' | 'fees'>;
-        /**
-         * Should be specified along with `include=consignments` or `include=consignments.line_items` to return consignments in the supported object structure. The default array structure provided is legacy and may not be supported in the future.
-         */
-        consignment_structure?: 'object';
+        include?: 'consignments' | 'consignments.line_items';
     };
     url: '/orders/{order_id}';
 };
 
-export type GetOrderErrors = {
+export type GetAnOrderErrors = {
     /**
      * The requested resource was not found.
      */
     404: unknown;
 };
 
-export type GetOrderResponses = {
+export type GetAnOrderResponses = {
     /**
      * Order Response.
      */
     200: OrderResp;
 };
 
-export type GetOrderResponse = GetOrderResponses[keyof GetOrderResponses];
+export type GetAnOrderResponse = GetAnOrderResponses[keyof GetAnOrderResponses];
 
-export type UpdateOrderData = {
-    body?: OrderPutWritable;
+export type UpdateAnOrderData = {
+    body: OrderPutWritable;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -3450,16 +3090,16 @@ export type UpdateOrderData = {
     url: '/orders/{order_id}';
 };
 
-export type UpdateOrderResponses = {
+export type UpdateAnOrderResponses = {
     /**
      * Order Response.
      */
     200: OrderResp;
 };
 
-export type UpdateOrderResponse = UpdateOrderResponses[keyof UpdateOrderResponses];
+export type UpdateAnOrderResponse = UpdateAnOrderResponses[keyof UpdateAnOrderResponses];
 
-export type GetOrdersCountData = {
+export type GetCountOrderData = {
     body?: never;
     headers: {
         /**
@@ -3468,97 +3108,20 @@ export type GetOrdersCountData = {
         Accept: string;
     };
     path?: never;
-    query?: {
-        /**
-         * The minimum order ID.
-         */
-        min_id?: number;
-        /**
-         * The maximum order ID.
-         */
-        max_id?: number;
-        /**
-         * The minimum order total in floating point format. eg. 12.50
-         */
-        min_total?: number;
-        /**
-         * The maximum order total in floating point format. eg. 12.50
-         */
-        max_total?: number;
-        /**
-         * Customer ID.
-         */
-        customer_id?: number;
-        /**
-         * The email of the customer.
-         */
-        email?: string;
-        /**
-         * The status ID of the order. You can get the status id from the `/orders` endpoints.
-         */
-        status_id?: number;
-        /**
-         * The cart ID of the order.
-         */
-        cart_id?: string;
-        /**
-         * The display name of the payment method used on the order. For example, `Manual`, `Credit Card`, `cash`, `Test Payment Gateway`, etc.'
-         */
-        payment_method?: string;
-        /**
-         * Minimum date the order was created in RFC-2822 or ISO-8601.
-         *
-         * RFC-2822: `Thu, 20 Apr 2017 11:32:00 -0400`
-         *
-         * ISO-8601: `2017-04-20T11:32:00.000-04:00`
-         */
-        min_date_created?: string;
-        /**
-         * Maximum date the order was created in RFC-2822 or ISO-8601.
-         *
-         * RFC-2822: `Thu, 20 Apr 2017 11:32:00 -0400`
-         *
-         * ISO-8601: `2017-04-20T11:32:00.000-04:00`
-         */
-        max_date_created?: string;
-        /**
-         * Minimum date the order was modified in RFC-2822 or ISO-8601.
-         *
-         * RFC-2822: `Thu, 20 Apr 2017 11:32:00 -0400`
-         *
-         * ISO-8601: `2017-04-20T11:32:00.000-04:00`
-         */
-        min_date_modified?: string;
-        /**
-         * Maximum date the order was modified in RFC-2822 or ISO-8601.
-         *
-         * RFC-2822: `Thu, 20 Apr 2017 11:32:00 -0400`
-         *
-         * ISO-8601: `2017-04-20T11:32:00.000-04:00`
-         */
-        max_date_modified?: string;
-        /**
-         * The channel ID of the sales channel the shopper used to place the order.
-         */
-        channel_id?: number;
-        /**
-         * The order ID in another system, such as the Amazon Order ID if this is an Amazon order. After setting it, you can update this field using a POST or PUT request.
-         */
-        external_order_id?: string;
-    };
+    query?: never;
     url: '/orders/count';
 };
 
-export type GetOrdersCountResponses = {
+export type GetCountOrderResponses = {
     /**
      * Order Counter response collection.
      */
     200: OrdersCountFull;
 };
 
-export type GetOrdersCountResponse = GetOrdersCountResponses[keyof GetOrdersCountResponses];
+export type GetCountOrderResponse = GetCountOrderResponses[keyof GetCountOrderResponses];
 
-export type DeleteOrdersData = {
+export type DeleteAllOrdersData = {
     body?: never;
     headers: {
         /**
@@ -3576,13 +3139,13 @@ export type DeleteOrdersData = {
     url: '/orders';
 };
 
-export type DeleteOrdersResponses = {
+export type DeleteAllOrdersResponses = {
     204: void;
 };
 
-export type DeleteOrdersResponse = DeleteOrdersResponses[keyof DeleteOrdersResponses];
+export type DeleteAllOrdersResponse = DeleteAllOrdersResponses[keyof DeleteAllOrdersResponses];
 
-export type GetOrdersData = {
+export type GetAllOrdersData = {
     body?: never;
     headers: {
         /**
@@ -3625,9 +3188,9 @@ export type GetOrdersData = {
          */
         cart_id?: string;
         /**
-         * The display name of the payment method used on the order. For example, `Manual`, `Credit Card`, `cash`, `Test Payment Gateway`, etc.'
+         * The display name of the payment method used on the order.
          */
-        payment_method?: string;
+        payment_method?: 'Manual' | 'Cash on Delivery' | 'Credit Card' | 'Test Payment Gateway' | 'Pay In Store';
         /**
          * Minimum date the order was created in RFC-2822 or ISO-8601.
          *
@@ -3673,34 +3236,30 @@ export type GetOrdersData = {
          */
         sort?: 'id' | 'customer_id' | 'date_created' | 'date_modified' | 'status_id' | 'channel_id' | 'external_id';
         /**
-         * The channel ID of the sales channel the shopper used to place the order.
+         * If the order was deleted or archived.
+         */
+        is_deleted?: boolean;
+        /**
+         * The Channel ID of the Order.
          */
         channel_id?: number;
         /**
-         * * `consignments` - include the response returned from the request to the `/orders/{order_id}/consignments` endpoint. Current default array structure is legacy and will be deprecated from **1 Feb 2026**. Specify `consignment_structure=object` as a request parameter when including consignments.
-         * * `consignments.line_items` - include the response returned from the request to the `/orders/{order_id}/products` endpoint in consignments. This will also includes the resources associated with `include=consignments`. Current default array structure is legacy and will be deprecated from **1 Feb 2026**. Specify `consignment_structure=object` as a request parameter when including consignments.
-         * * `fees` - include the response returned from the request to the `/orders/{order_id}/fees` endpoint.
+         * * `consignments` - include the response returned from the request to the `/orders/{order_id}/consignments` endpoint.
+         *
+         * * `consignments.line_items` - include the response returned from the request to the `/orders/{order_id}/products` endpoint in consignments. This implies `include=consignments`.
          */
-        include?: Array<'consignments' | 'consignments.line_items' | 'fees'>;
-        /**
-         * Should be specified along with `include=consignments` or `include=consignments.line_items` to return consignments in the supported object structure. The default array structure provided is legacy and may not be supported in the future.
-         */
-        consignment_structure?: 'object';
-        /**
-         * The order ID in another system, such as the Amazon Order ID if this is an Amazon order. After setting it, you can update this field using a POST or PUT request.
-         */
-        external_order_id?: string;
+        include?: 'consignments' | 'consignments.line_items';
     };
     url: '/orders';
 };
 
-export type GetOrdersResponses = {
+export type GetAllOrdersResponses = {
     200: Array<OrderResp>;
 };
 
-export type GetOrdersResponse = GetOrdersResponses[keyof GetOrdersResponses];
+export type GetAllOrdersResponse = GetAllOrdersResponses[keyof GetAllOrdersResponses];
 
-export type CreateOrderData = {
+export type CreateAnOrderData = {
     body: OrderPost;
     headers: {
         /**
@@ -3715,29 +3274,25 @@ export type CreateOrderData = {
     path?: never;
     query?: {
         /**
-         * * `consignments` - include the response returned from the request to the `/orders/{order_id}/consignments` endpoint. Current default array structure is legacy and will be deprecated from **1 Feb 2026**. Specify `consignment_structure=object` as a request parameter when including consignments.
-         * * `consignments.line_items` - include the response returned from the request to the `/orders/{order_id}/products` endpoint in consignments. This will also includes the resources associated with `include=consignments`. Current default array structure is legacy and will be deprecated from **1 Feb 2026**. Specify `consignment_structure=object` as a request parameter when including consignments.
-         * * `fees` - include the response returned from the request to the `/orders/{order_id}/fees` endpoint.
+         * * `consignments` - include the response returned from the request to the `/orders/{order_id}/consignments` endpoint.
+         *
+         * * `consignments.line_items` - include the response returned from the request to the `/orders/{order_id}/products` endpoint in consignments. This implies `include=consignments`.
          */
-        include?: Array<'consignments' | 'consignments.line_items' | 'fees'>;
-        /**
-         * Should be specified along with `include=consignments` or `include=consignments.line_items` to return consignments in the supported object structure. The default array structure provided is legacy and may not be supported in the future.
-         */
-        consignment_structure?: 'object';
+        include?: 'consignments' | 'consignments.line_items';
     };
     url: '/orders';
 };
 
-export type CreateOrderResponses = {
+export type CreateAnOrderResponses = {
     /**
      * Order Response.
      */
     200: OrderResp;
 };
 
-export type CreateOrderResponse = CreateOrderResponses[keyof CreateOrderResponses];
+export type CreateAnOrderResponse = CreateAnOrderResponses[keyof CreateAnOrderResponses];
 
-export type GetOrderCouponsData = {
+export type GetAllOrderCouponsData = {
     body?: never;
     headers: {
         /**
@@ -3764,13 +3319,13 @@ export type GetOrderCouponsData = {
     url: '/orders/{order_id}/coupons';
 };
 
-export type GetOrderCouponsResponses = {
+export type GetAllOrderCouponsResponses = {
     200: Array<OrderCouponsBase>;
 };
 
-export type GetOrderCouponsResponse = GetOrderCouponsResponses[keyof GetOrderCouponsResponses];
+export type GetAllOrderCouponsResponse = GetAllOrderCouponsResponses[keyof GetAllOrderCouponsResponses];
 
-export type GetOrderProductsData = {
+export type GetAllOrderProductsData = {
     body?: never;
     headers: {
         /**
@@ -3801,13 +3356,13 @@ export type GetOrderProductsData = {
     url: '/orders/{order_id}/products';
 };
 
-export type GetOrderProductsResponses = {
+export type GetAllOrderProductsResponses = {
     200: Array<OrderProducts>;
 };
 
-export type GetOrderProductsResponse = GetOrderProductsResponses[keyof GetOrderProductsResponses];
+export type GetAllOrderProductsResponse = GetAllOrderProductsResponses[keyof GetAllOrderProductsResponses];
 
-export type GetOrderShippingAddressesData = {
+export type GetAllShippingAddressesData = {
     body?: never;
     headers: {
         /**
@@ -3834,13 +3389,13 @@ export type GetOrderShippingAddressesData = {
     url: '/orders/{order_id}/shipping_addresses';
 };
 
-export type GetOrderShippingAddressesResponses = {
+export type GetAllShippingAddressesResponses = {
     200: Array<OrderShippingAddress>;
 };
 
-export type GetOrderShippingAddressesResponse = GetOrderShippingAddressesResponses[keyof GetOrderShippingAddressesResponses];
+export type GetAllShippingAddressesResponse = GetAllShippingAddressesResponses[keyof GetAllShippingAddressesResponses];
 
-export type GetOrderStatusesData = {
+export type GetOrderStatusData = {
     body?: never;
     headers: {
         /**
@@ -3853,16 +3408,16 @@ export type GetOrderStatusesData = {
     url: '/order_statuses';
 };
 
-export type GetOrderStatusesResponses = {
+export type GetOrderStatusResponses = {
     /**
      * Get All Order Status Collection Response.
      */
     200: Array<OrderStatusBase>;
 };
 
-export type GetOrderStatusesResponse = GetOrderStatusesResponses[keyof GetOrderStatusesResponses];
+export type GetOrderStatusResponse = GetOrderStatusResponses[keyof GetOrderStatusResponses];
 
-export type GetOrderStatusesStatusData = {
+export type GetAOrderStatusData = {
     body?: never;
     headers: {
         /**
@@ -3880,11 +3435,11 @@ export type GetOrderStatusesStatusData = {
     url: '/order_statuses/{status_id}';
 };
 
-export type GetOrderStatusesStatusResponses = {
+export type GetAOrderStatusResponses = {
     200: OrderStatusBase;
 };
 
-export type GetOrderStatusesStatusResponse = GetOrderStatusesStatusResponses[keyof GetOrderStatusesStatusResponses];
+export type GetAOrderStatusResponse = GetAOrderStatusResponses[keyof GetAOrderStatusResponses];
 
 export type GetOrderTaxesData = {
     body?: never;
@@ -3923,7 +3478,7 @@ export type GetOrderTaxesResponses = {
 
 export type GetOrderTaxesResponse = GetOrderTaxesResponses[keyof GetOrderTaxesResponses];
 
-export type DeleteOrderShipmentsData = {
+export type DeleteAllOrderShipmentsData = {
     body?: never;
     headers: {
         /**
@@ -3941,13 +3496,13 @@ export type DeleteOrderShipmentsData = {
     url: '/orders/{order_id}/shipments';
 };
 
-export type DeleteOrderShipmentsResponses = {
+export type DeleteAllOrderShipmentsResponses = {
     204: void;
 };
 
-export type DeleteOrderShipmentsResponse = DeleteOrderShipmentsResponses[keyof DeleteOrderShipmentsResponses];
+export type DeleteAllOrderShipmentsResponse = DeleteAllOrderShipmentsResponses[keyof DeleteAllOrderShipmentsResponses];
 
-export type GetOrderShipmentsData = {
+export type GetAllOrderShipmentsData = {
     body?: never;
     headers: {
         /**
@@ -3974,15 +3529,11 @@ export type GetOrderShipmentsData = {
     url: '/orders/{order_id}/shipments';
 };
 
-export type GetOrderShipmentsResponses = {
+export type GetAllOrderShipmentsResponses = {
     200: Array<OrderShipment>;
-    /**
-     * No Content (No shipments exist)
-     */
-    204: void;
 };
 
-export type GetOrderShipmentsResponse = GetOrderShipmentsResponses[keyof GetOrderShipmentsResponses];
+export type GetAllOrderShipmentsResponse = GetAllOrderShipmentsResponses[keyof GetAllOrderShipmentsResponses];
 
 export type CreateOrderShipmentsData = {
     body: OrderShipmentPost;
@@ -4012,7 +3563,7 @@ export type CreateOrderShipmentsResponses = {
 
 export type CreateOrderShipmentsResponse = CreateOrderShipmentsResponses[keyof CreateOrderShipmentsResponses];
 
-export type GetOrderShipmentsCountData = {
+export type GetCountShipmentsData = {
     body?: never;
     headers: {
         /**
@@ -4030,11 +3581,11 @@ export type GetOrderShipmentsCountData = {
     url: '/orders/{order_id}/shipments/count';
 };
 
-export type GetOrderShipmentsCountResponses = {
+export type GetCountShipmentsResponses = {
     200: OrderCount;
 };
 
-export type GetOrderShipmentsCountResponse = GetOrderShipmentsCountResponses[keyof GetOrderShipmentsCountResponses];
+export type GetCountShipmentsResponse = GetCountShipmentsResponses[keyof GetCountShipmentsResponses];
 
 export type DeleteOrderShipmentData = {
     body?: never;
@@ -4168,7 +3719,7 @@ export type GetOrderMessagesData = {
          */
         max_date_created?: string;
         /**
-         * Whether the message is [flagged](https://support.bigcommerce.com/s/article/Communicating-with-Customers#Messages).
+         * If the message is [flagged](https://support.bigcommerce.com/s/article/Communicating-with-Customers#Messages).
          */
         is_flagged?: boolean;
         /**
@@ -4193,7 +3744,7 @@ export type GetOrderMessagesResponses = {
 
 export type GetOrderMessagesResponse = GetOrderMessagesResponses[keyof GetOrderMessagesResponses];
 
-export type GetOrderProductData = {
+export type GetAnOrderProductData = {
     body?: never;
     headers: {
         /**
@@ -4215,13 +3766,13 @@ export type GetOrderProductData = {
     url: '/orders/{order_id}/products/{product_id}';
 };
 
-export type GetOrderProductResponses = {
+export type GetAnOrderProductResponses = {
     200: OrderProducts;
 };
 
-export type GetOrderProductResponse = GetOrderProductResponses[keyof GetOrderProductResponses];
+export type GetAnOrderProductResponse = GetAnOrderProductResponses[keyof GetAnOrderProductResponses];
 
-export type GetOrderShippingAddressData = {
+export type GetAShippingAddressData = {
     body?: never;
     headers: {
         /**
@@ -4243,13 +3794,13 @@ export type GetOrderShippingAddressData = {
     url: '/orders/{order_id}/shipping_addresses/{id}';
 };
 
-export type GetOrderShippingAddressResponses = {
+export type GetAShippingAddressResponses = {
     200: OrderShippingAddress;
 };
 
-export type GetOrderShippingAddressResponse = GetOrderShippingAddressResponses[keyof GetOrderShippingAddressResponses];
+export type GetAShippingAddressResponse = GetAShippingAddressResponses[keyof GetAShippingAddressResponses];
 
-export type UpdateOrderShippingAddressData = {
+export type UpdateAShippingAddressData = {
     body?: ShippingAddressPut;
     headers: {
         /**
@@ -4275,7 +3826,7 @@ export type UpdateOrderShippingAddressData = {
     url: '/orders/{order_id}/shipping_addresses/{id}';
 };
 
-export type UpdateOrderShippingAddressErrors = {
+export type UpdateAShippingAddressErrors = {
     /**
      * Bad Request
      */
@@ -4292,18 +3843,18 @@ export type UpdateOrderShippingAddressErrors = {
     }>;
 };
 
-export type UpdateOrderShippingAddressError = UpdateOrderShippingAddressErrors[keyof UpdateOrderShippingAddressErrors];
+export type UpdateAShippingAddressError = UpdateAShippingAddressErrors[keyof UpdateAShippingAddressErrors];
 
-export type UpdateOrderShippingAddressResponses = {
+export type UpdateAShippingAddressResponses = {
     /**
      * OK
      */
     200: OrderShippingAddress;
 };
 
-export type UpdateOrderShippingAddressResponse = UpdateOrderShippingAddressResponses[keyof UpdateOrderShippingAddressResponses];
+export type UpdateAShippingAddressResponse = UpdateAShippingAddressResponses[keyof UpdateAShippingAddressResponses];
 
-export type GetOrderShippingAddressShippingQuotesData = {
+export type GetShippingQuotesData = {
     body?: never;
     headers: {
         /**
@@ -4325,16 +3876,16 @@ export type GetOrderShippingAddressShippingQuotesData = {
     url: '/orders/{order_id}/shipping_addresses/{shipping_address_id}/shipping_quotes';
 };
 
-export type GetOrderShippingAddressShippingQuotesResponses = {
+export type GetShippingQuotesResponses = {
     /**
      * This response can vary depending on the shipping provider.
      */
     200: ShippingQuotesBase;
 };
 
-export type GetOrderShippingAddressShippingQuotesResponse = GetOrderShippingAddressShippingQuotesResponses[keyof GetOrderShippingAddressShippingQuotesResponses];
+export type GetShippingQuotesResponse = GetShippingQuotesResponses[keyof GetShippingQuotesResponses];
 
-export type GetOrderConsignmentsData = {
+export type GetOrdersOrderIdConsignmentsData = {
     body?: never;
     path: {
         /**
@@ -4346,12 +3897,12 @@ export type GetOrderConsignmentsData = {
         /**
          * * `consignments.line_items` - include the response returned from the request to the `/orders/{order_id}/products` endpoint in consignments.
          */
-        include?: Array<'consignments.line_items'>;
+        include?: 'consignments.line_items';
     };
     url: '/orders/{order_id}/consignments';
 };
 
-export type GetOrderConsignmentsErrors = {
+export type GetOrdersOrderIdConsignmentsErrors = {
     /**
      * Not Found
      */
@@ -4361,18 +3912,18 @@ export type GetOrderConsignmentsErrors = {
     }>;
 };
 
-export type GetOrderConsignmentsError = GetOrderConsignmentsErrors[keyof GetOrderConsignmentsErrors];
+export type GetOrdersOrderIdConsignmentsError = GetOrdersOrderIdConsignmentsErrors[keyof GetOrdersOrderIdConsignmentsErrors];
 
-export type GetOrderConsignmentsResponses = {
+export type GetOrdersOrderIdConsignmentsResponses = {
     /**
      * OK
      */
     200: OrderConsignmentGet;
 };
 
-export type GetOrderConsignmentsResponse = GetOrderConsignmentsResponses[keyof GetOrderConsignmentsResponses];
+export type GetOrdersOrderIdConsignmentsResponse = GetOrdersOrderIdConsignmentsResponses[keyof GetOrdersOrderIdConsignmentsResponses];
 
-export type GetOrderConsignmentShippingQuotesData = {
+export type GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesData = {
     body?: never;
     path: {
         /**
@@ -4388,7 +3939,7 @@ export type GetOrderConsignmentShippingQuotesData = {
     url: '/orders/{order_id}/consignments/shipping/{shipping_consignment_id}/shipping_quotes';
 };
 
-export type GetOrderConsignmentShippingQuotesErrors = {
+export type GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesErrors = {
     /**
      * Not Found
      */
@@ -4398,46 +3949,13 @@ export type GetOrderConsignmentShippingQuotesErrors = {
     }>;
 };
 
-export type GetOrderConsignmentShippingQuotesError = GetOrderConsignmentShippingQuotesErrors[keyof GetOrderConsignmentShippingQuotesErrors];
+export type GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesError = GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesErrors[keyof GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesErrors];
 
-export type GetOrderConsignmentShippingQuotesResponses = {
+export type GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesResponses = {
     /**
      * OK
      */
     200: ShippingQuotesBase;
 };
 
-export type GetOrderConsignmentShippingQuotesResponse = GetOrderConsignmentShippingQuotesResponses[keyof GetOrderConsignmentShippingQuotesResponses];
-
-export type GetOrderFeesData = {
-    body?: never;
-    path: {
-        /**
-         * ID of the order.
-         */
-        order_id: number;
-    };
-    query?: never;
-    url: '/orders/{order_id}/fees';
-};
-
-export type GetOrderFeesErrors = {
-    /**
-     * Not Found
-     */
-    404: Array<{
-        status?: number;
-        message?: string;
-    }>;
-};
-
-export type GetOrderFeesError = GetOrderFeesErrors[keyof GetOrderFeesErrors];
-
-export type GetOrderFeesResponses = {
-    /**
-     * OK
-     */
-    200: OrderFeesResp;
-};
-
-export type GetOrderFeesResponse = GetOrderFeesResponses[keyof GetOrderFeesResponses];
+export type GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesResponse = GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesResponses[keyof GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesResponses];

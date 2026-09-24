@@ -7,7 +7,7 @@ export type ClientOptions = {
 /**
  * Response meta
  *
- * Response metadata
+ * Response metadata.
  */
 export type MetaEmptyFull = {
     [key: string]: unknown;
@@ -18,12 +18,12 @@ export type MetaEmptyFull = {
  */
 export type ErrorFull = {
     /**
-     * The HTTP status code
+     * The HTTP status code.
      *
      */
     status?: number;
     /**
-     * The error title describing the particular error
+     * The error title describing the particular error.
      *
      */
     title?: string;
@@ -47,7 +47,7 @@ export type ErrorDetailedFull = {
  */
 export type AbandonedCartInfoFull = {
     /**
-     * The `cart_id` of the abandoned cart. Can be used to display the abandoned cart to the customer using storefront cart or server-to-server cart APIs
+     * The `cart_id` of the abandoned cart. Can be used to display the abandoned cart to the customer using storefront cart or server-to-server cart APIs.
      */
     cart_id?: string;
 };
@@ -65,7 +65,7 @@ export type AbandonedCartSettings = {
      */
     email_customer_until_cart_is_recovered?: boolean;
     /**
-     * Indicates whether or not a customer should receive abandoned cart emails based on their consent. By default customers will not receive emails
+     * Indicates whether or not a customer should receive abandoned cart emails based on their consent. By default customers will not receive emails.
      */
     marketing_emails_require_customer_consent?: boolean;
     /**
@@ -173,13 +173,14 @@ export type ContentType = string;
 
 export type GetGlobalAbandonedCartSettingsData = {
     body?: never;
-    path?: never;
-    query?: {
+    headers: {
         /**
-         * How many pages to return
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
-        pagination?: number;
+        Accept: string;
     };
+    path?: never;
+    query?: never;
     url: '/abandoned-carts/settings';
 };
 
@@ -205,13 +206,13 @@ export type UpdateGlobalAbandonedCartSettingsData = {
     body: GlobalAbandonedCartSettingsRequest;
     headers: {
         /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
-        /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+         */
+        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -242,6 +243,12 @@ export type UpdateGlobalAbandonedCartSettingsResponse = UpdateGlobalAbandonedCar
 
 export type GetChannelAbandonedCartSettingsData = {
     body?: never;
+    headers: {
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+         */
+        Accept: string;
+    };
     path: {
         /**
          * The channel ID of the settings overrides
@@ -274,13 +281,13 @@ export type UpdateChannelAbandonedCartSettingsData = {
     body: ChannelAbandonedCartSettingsRequest;
     headers: {
         /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
-        /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+         */
+        'Content-Type': string;
     };
     path: {
         /**

@@ -81,6 +81,11 @@ async function main() {
     const generatedPath = path.join(basePath, 'src/generated');
     const apisPath = path.join(basePath, 'src/apis');
 
+    // old method name -> new method name, per API file, kept as deprecated aliases
+    const legacyAliases = JSON.parse(
+        fs.readFileSync(path.join(basePath, 'scripts/legacy-aliases.json'), 'utf8'),
+    );
+
     const v2Apis = [];
     const v3Apis = [];
 
@@ -202,13 +207,10 @@ async function main() {
                         console.log(httpMethodDetails);
                     }
 
-                    if (typeof httpMethodDetails.operationId !== 'string') {
-                        continue;
-                    }
-
                     const methodSpecs = specs.paths[path][httpMethod] || {};
 
-                    const operationId = camelCase(httpMethodDetails.operationId);
+                    // hey-api derives `id` from the method and path when the spec has no operationId
+                    const operationId = camelCase(httpMethodDetails.operationId || httpMethodDetails.id);
 
                     console.log(`  - ${operationId}`);
 
@@ -314,11 +316,11 @@ async function main() {
 
                     properties.push({
                         name: operationId,
-                        summary: httpMethodDetails.summary
+                        summary: (httpMethodDetails.summary || '')
                             .replace(/[\r\n]/gm, "\n     ")
                             .replace(/[\r\n]\s+$/gm, "\n")
                             .replace(/\*\//g, '*\\/'),
-                        description: httpMethodDetails.description
+                        description: (httpMethodDetails.description || '')
                             .replace(/[\r\n]/gm, "\n     ")
                             .replace(/[\r\n]\s+$/gm, "\n")
                             .replace(/\*\//g, '*\\/'),
@@ -331,6 +333,19 @@ async function main() {
                         successResponses,
                         errorResponses,
                     });
+                }
+            }
+
+            const propertyNames = properties.map((property) => property.name);
+            for (const [aliasName, targetName] of Object.entries(legacyAliases[fileName] || {})) {
+                const target = properties.find((property) => property.name === targetName);
+
+                if (!target) {
+                    console.warn(`  ! legacy alias ${aliasName} skipped: ${targetName} not found`);
+                } else if (propertyNames.includes(aliasName)) {
+                    console.warn(`  ! legacy alias ${aliasName} skipped: name is already in use`);
+                } else {
+                    target.aliases = [...(target.aliases || []), aliasName];
                 }
             }
 

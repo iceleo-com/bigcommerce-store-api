@@ -59,7 +59,7 @@ export type MetafieldBase = {
      */
     resource_id?: number;
     /**
-     * Date and time of the metafieldʼs creation. Read-Only.
+     * Date and time of the metafield's creation. Read-Only.
      *
      */
     date_created?: string;
@@ -70,464 +70,9 @@ export type MetafieldBase = {
     date_modified?: string;
 };
 
-/**
- * Common Metafield properties.
- *
- */
-export type Metafield = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description: string;
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    /**
-     * The unique identifier for the resource with which the metafield is associated.
-     *
-     */
-    readonly resource_id: number;
-    /**
-     * The unique identifier for the metafield.
-     */
-    id: number;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified: string;
-    /**
-     * Client ID for the metafieldʼs creator.
-     */
-    readonly owner_client_id?: string;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponse = {
-    data?: Array<Metafield>;
-    meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePostPut = {
-    data?: Array<Metafield>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionPartialSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Total number of items in the result set.
- *
- */
-export type Total = number;
-
-/**
- * Total number of items that were successfully deleted.
- *
- */
-export type Success = number;
-
-/**
- * Total number of items that failed to be deleted.
- *
- */
-export type Failed = number;
-
-/**
- * Error response payload for the BigCommerce API.
- *
- */
-export type _Error = {
-    /**
-     * The HTTP status code for the error.
-     *
-     */
-    status?: number;
-    /**
-     * The error title describing the particular error.
-     *
-     */
-    title?: string;
-    /**
-     * The error type.
-     *
-     */
-    type?: string;
-    errors?: ErrorDetail;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-
-export type ErrorResponse = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-    errors?: {
-        [key: string]: unknown;
-    };
-};
-
-/**
- * Collection Meta
- *
- * Data about the response, including pagination and collection totals.
- */
-export type CollectionMeta = {
-    /**
-     * Pagination
-     *
-     * Data about the response, including pagination and collection totals.
-     */
-    pagination?: {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    };
-    [key: string]: unknown | {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    } | undefined;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBasePost = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-};
-
-/**
- * The model for a POST to create metafield.
- *
- */
-export type MetafieldPost = MetafieldBasePost & {
-    /**
-     * The ID for the resource with which the metafield is associated.
-     *
-     */
-    resource_id: number;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBasePut = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-};
-
-/**
- * The model for a PUT to create metafield.
- *
- */
-export type MetafieldPut = MetafieldBasePut & {
-    /**
-     * The ID of metafield to update.
-     *
-     */
-    id: number;
-};
-
-/**
- * Not Found
- *
- * Error payload for the BigCommerce API.
- */
-export type NotFound = {
-    /**
-     * 404 HTTP status code.
-     *
-     */
-    status?: number;
-    /**
-     * The error title describing the particular error.
-     */
-    title?: string;
-    type?: string;
-    instance?: string;
-};
-
 export type PutCheckoutUrl = {
     /**
-     * Unique site checkout URL. It must be valid and a sub-domain of the primary channel URL. Note: The API will change all URLs using the HTTP protocol to HTTPS.
+     * Unique site checkout URL. Must be valid and a sub-domain of primary channel URL.
      */
     url?: string;
 };
@@ -538,7 +83,7 @@ export type PutCheckoutUrl = {
 export type ChannelIdForListing = number;
 
 /**
- * The ID of the channel listing that has been created, returned, or updated. In a 422 error, you may receive a response that references the `group_id`. The `group_id` in the Invalid Listing ID example refers to the `listing_id`. Please use `listing_id` instead of `group_id` in the request payload.
+ * The ID of the channel listing that has been created, returned, or updated.
  */
 export type ListingId = number;
 
@@ -568,7 +113,7 @@ export type IsListableFromUi = boolean;
 export type IsVisible = boolean;
 
 /**
- * The status of the channel; channel `type`, `platform`, and `status` must be a [valid combination](/docs/rest-management/channels#status). `terminated` is not valid for `PUT` or `POST` requests. `deleted` is not valid for `POST` requests. `prelaunch` is not valid for `PUT` requests.
+ * The status of the channel; channel `type`, `platform`, and `status` must be a [valid combination](/docs/rest-management/channels#status). `terminated` is not valid for `PUT` or `POST` requests. `deleted` is not valid for `POST` requests.
  */
 export type ChannelStatus = 'active' | 'prelaunch' | 'inactive' | 'connected' | 'disconnected' | 'archived' | 'deleted' | 'terminated';
 
@@ -603,12 +148,12 @@ export type ChannelDateModified = string;
 export type IconUrl = string;
 
 /**
- * Currencies that are enabled for the specified channel in [ISO 4217](https://www.iso.org/iso-4217-currency-codes.html) three character alphabetic format.
+ * Currencies that are enabled for the specified channel in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three character alphabetic format.
  */
 export type EnabledCurrencies = Array<string>;
 
 /**
- * Default currency for the channel in [ISO 4217](https://www.iso.org/iso-4217-currency-codes.html) three character alphabetic format. Will be used on storefront when other currencies cannot.
+ * Default currency for the channel in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) three character alphabetic format. Will be used on storefront when other currencies cannot.
  */
 export type DefaultCurrency = string;
 
@@ -663,6 +208,40 @@ export type ListingState = 'active' | 'disabled' | 'error' | 'pending' | 'pendin
 export type VariantState = 'active' | 'disabled' | 'error' | 'pending' | 'pending_disable' | 'pending_delete' | 'queued' | 'rejected' | 'submitted' | 'deleted';
 
 /**
+ * Optional channel configuration object.
+ */
+export type ChannelConfigMeta = {
+    /**
+     * A [channel app](/docs/integrations/channels#channel-apps) config object for optionally configuring the channelʼs user interface in the control panel.
+     */
+    app?: {
+        /**
+         * The unique `id` given to an app registered in [DevTools](https://devtools.bigcommerce.com/); used to create links to the app in channel manager. `app.id` is optional; however, if youʼre building an app that creates or manages a channel, we recommend including it to ensure the user interface in the control panel works properly. Select partners who are promoted in the Channel Manager must build an app, and include the app ID in the create channel request. [Learn how to find an Appʼs ID](/docs/integrations/apps/guide/id).
+         */
+        id?: number;
+        /**
+         * Sections are now deprecated under config_meta. The new /channel-menus endpoints should be used instead. If set, when the app is loaded within the control panel, the navigation `sections` will be directly embedded in the control panel navigation.
+         *
+         * @deprecated
+         */
+        sections?: Array<{
+            /**
+             * The title of the navigation section.
+             *
+             * @deprecated
+             */
+            title?: string;
+            /**
+             * The value that will be passed to the app's iFrame in the URL and will allow the app to display the appropriate section within the app iFrame in the control panel.
+             *
+             * @deprecated
+             */
+            query_path?: string;
+        }>;
+    };
+};
+
+/**
  * Details about currency assignments for a specific channel.
  */
 export type CurrencyNotRequiredWithChannelId = {
@@ -689,6 +268,7 @@ export type CurrencyRequiredWithoutChannelId = {
 };
 
 export type CreateChannelReq = {
+    config_meta?: ChannelConfigMeta;
     external_id?: ExternalId;
     is_listable_from_ui?: IsListableFromUi;
     is_visible?: IsVisible;
@@ -699,6 +279,7 @@ export type CreateChannelReq = {
 };
 
 export type UpdateChannelReq = {
+    config_meta?: ChannelConfigMeta;
     external_id?: ExternalId;
     is_listable_from_ui?: IsListableFromUi;
     is_visible?: IsVisible;
@@ -767,15 +348,10 @@ export type ChannelProductVariantFull = {
 };
 
 export type ChannelWithoutCurrencies = {
+    config_meta?: ChannelConfigMeta;
     id: ChannelId;
     external_id?: ExternalId;
     is_listable_from_ui?: IsListableFromUi;
-    /**
-     * This deprecated field was originally used to enable or disable a channel. Use the `status` field instead of `is_enabled`. If the channel status is `prelaunch`, `active`, or `connected`, then `is_enabled` will be `true`. If the status is `inactive`, `disconnected`, `archived`, `deleted`, or `terminated`, then `is_enabled` will be false.
-     *
-     * @deprecated
-     */
-    is_enabled?: boolean;
     is_visible?: IsVisible;
     status?: ChannelStatus;
     name: ChannelName;
@@ -787,15 +363,10 @@ export type ChannelWithoutCurrencies = {
 };
 
 export type ChannelWithCurrencies = {
+    config_meta?: ChannelConfigMeta;
     id?: ChannelId;
     external_id?: ExternalId;
     is_listable_from_ui?: IsListableFromUi;
-    /**
-     * This deprecated field was originally used to enable or disable a channel. Use the `status` field instead of `is_enabled`. If the channel status is `prelaunch`, `active`, or `connected`, then `is_enabled` will be `true`. If the status is `inactive`, `disconnected`, `archived`, `deleted`, or `terminated`, then `is_enabled` will be `false`.
-     *
-     * @deprecated
-     */
-    is_enabled?: boolean;
     is_visible?: IsVisible;
     status?: ChannelStatus;
     name?: ChannelName;
@@ -808,7 +379,7 @@ export type ChannelWithCurrencies = {
 };
 
 /**
- * Details about the Channelʼs relationship to Themes.
+ * Details about the Channel's relationship to Themes.
  */
 export type ActiveTheme = {
     /**
@@ -845,7 +416,7 @@ export type Listing = {
 /**
  * List of channel-specific control panel menu navigation items and corresponding settings pages an app developer can choose to enable for the subject channel. Protected settings override any settings set in those UI sections at the storewide level. Learn more in the [Building Storefront Channels](/docs/integrations/channels/guide/storefronts#protected-ui-sections) tutorial.
  */
-export type BigCommerceProtectedAppSections = Array<'overview' | 'storefront_settings' | 'localization' | 'carousel' | 'script_manager' | 'currencies' | 'payments' | 'checkout' | 'domains' | 'notifications' | 'social' | 'pages' | 'data_solutions'>;
+export type BigCommerceProtectedAppSections = Array<'storefront_settings' | 'social' | 'carousel' | 'domains' | 'currencies' | 'notifications'>;
 
 export type ChannelMenusPost = {
     bigcommerce_protected_app_sections?: BigCommerceProtectedAppSections;
@@ -862,6 +433,27 @@ export type CustomAppSections = Array<{
      */
     query_path?: string;
 }>;
+
+export type _Error = {
+    /**
+     * The HTTP status code.
+     */
+    status?: number;
+    /**
+     * The error title describing the particular error.
+     */
+    title?: string;
+    /**
+     * Link to a list of BigCommerce API status codes.
+     */
+    type?: string;
+    /**
+     * Provides more details to errors.
+     */
+    errors?: {
+        [key: string]: unknown;
+    };
+};
 
 /**
  * Data about the response, including pagination.
@@ -982,9 +574,6 @@ export type PaginationPartial = {
 };
 
 export type Site = {
-    /**
-     * The ID of the site.
-     */
     id?: number;
     /**
      * The fully qualified URL (including host and scheme) where this site is hosted. All URLs generated for this site will be appended to this.
@@ -1024,7 +613,7 @@ export type Url = {
     /**
      * URL type
      */
-    type?: 'checkout' | 'primary' | 'canonical';
+    type?: 'primary' | 'canonical' | 'checkout';
     /**
      * The date-time that this URL was created, formatted as an [RFC-3339](https://www.ietf.org/rfc/rfc3339.txt) string.
      */
@@ -1116,7 +705,7 @@ export type SiteFull = {
  *
  * Metafield for products, categories, variants, and brands. The max number of metafields allowed on each product, category, variant, or brand is 250. For more information, see [Platform Limits](https://support.bigcommerce.com/s/article/Platform-Limits) in the Help Center.
  */
-export type MetafieldPost2 = {
+export type MetafieldPost = {
     /**
      * Namespace for the metafield, for organizational purposes. This is set by the developer.
      */
@@ -1155,7 +744,7 @@ export type MetafieldPost2 = {
  *
  * Metafield for products, categories, variants, and brands. The max number of metafields allowed on each product, category, variant, or brand 250. For more information, see [Platform Limits](https://support.bigcommerce.com/s/article/Platform-Limits) in the Help Center.
  */
-export type MetafieldPut2 = {
+export type MetafieldPut = {
     /**
      * Namespace for the metafield, for organizational purposes.
      */
@@ -1190,79 +779,6 @@ export type MetafieldPut2 = {
 };
 
 /**
- * Common Metafield properties.
- *
- */
-export type MetafieldWritable = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description: string;
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    /**
-     * The unique identifier for the metafield.
-     */
-    id: number;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified: string;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
-};
-
-/**
- * Empty meta response.
- *
- * Response metadata.
- */
-export type EmptyMetaWritable = {
-    [key: string]: unknown;
-};
-
-/**
  * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
  */
 export type Accept = string;
@@ -1285,25 +801,15 @@ export type PageParam = number;
 export type MetafieldIdParam = number;
 
 /**
- * Filter based on a metafieldʼs key.
+ * Filter based on a metafield's key.
  *
  */
 export type MetafieldKeyParam = string;
 
 /**
- * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
- */
-export type MetafieldKeyInParam = Array<string>;
-
-/**
- * Filter based on a metafieldʼs namespace.
+ * Filter based on a metafield's namespace.
  */
 export type MetafieldNamespaceParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter.
- */
-export type MetafieldNamespaceInParam = Array<string>;
 
 /**
  * Controls the number of items per page in a limited (paginated) list of products.
@@ -1312,7 +818,7 @@ export type MetafieldNamespaceInParam = Array<string>;
 export type LimitParam = number;
 
 /**
- * Sort direction. Acceptable values are: `asc`, `desc`.
+ * Sort direction.
  */
 export type DirectionParam = 'asc' | 'desc';
 
@@ -1320,11 +826,6 @@ export type DirectionParam = 'asc' | 'desc';
  * Channels subresources that can be included in the response.
  */
 export type Include = 'currencies';
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
 
 /**
  * Filter items based on whether the channel is currently available for integration. Setting this query parameter to `true` will return channels with the status of `prelaunch`, `active` , `inactive`, and `connected`. Setting this query parameter to `false` will return channels with the status of `disconnected`, `archived`, `deleted`, and `terminated`.
@@ -1347,32 +848,32 @@ export type TypeIn = Array<'marketplace' | 'marketing' | 'pos' | 'storefront'>;
 export type PlatformIn = Array<string>;
 
 /**
- * Filter items by date created. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`.
+ * Filter items by date_created. For example, `date_created=2019-09-04T00:00:00`, `date_created=2019-09-04`, or `date_created=1567573200`
  */
 export type DateCreated = string;
 
 /**
- * Filter items by minimum date created. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields created after this date.
+ * Filter items by minimum date_created. For example, `date_created:min=2019-09-04T00:00:00`, `date_created:min=2019-09-04`, or `date_created:min=1567573200`
  */
 export type DateCreatedMin = string;
 
 /**
- * Filter items by maximum date created. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields created before this date.
+ * Filter items by maximum date_created. For example, `date_created:max=2019-09-04T00:00:00`, `date_created:max=2019-09-04`, or `date_created:max=1567573200`
  */
 export type DateCreatedMax = string;
 
 /**
- * Filter items by date modified. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`.
+ * Filter items by date_modified. For example, `date_modified=2019-09-04T00:00:00`, `date_modified=2019-09-04`, or `date_modified=1567573200`
  */
 export type DateModified = string;
 
 /**
- * Filter items by minimum date modified. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields modified after this date.
+ * Filter items by minimum date_modified. For example, `date_modified:min=2019-09-04T00:00:00`, `date_modified:min=2019-09-04`, or `date_modified:min=1567573200`
  */
 export type DateModifiedMin = string;
 
 /**
- * Filter items by maximum date modified. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields modified before this date.
+ * Filter items by maximum date_modified. For example, `date_modified:max=2019-09-04T00:00:00`, `date_modified:max=2019-09-04`, or `date_modified:max=1567573200`
  */
 export type DateModifiedMax = string;
 
@@ -1406,7 +907,7 @@ export type ChannelIdPathParam = number;
  */
 export type ListingIdPathParam = number;
 
-export type GetChannelsData = {
+export type ListChannelsData = {
     body?: never;
     headers: {
         /**
@@ -1437,27 +938,27 @@ export type GetChannelsData = {
          */
         'platform:in'?: Array<string>;
         /**
-         * Filter items by date created. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`.
+         * Filter items by date_created. For example, `date_created=2019-09-04T00:00:00`, `date_created=2019-09-04`, or `date_created=1567573200`
          */
         date_created?: string;
         /**
-         * Filter items by minimum date created. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields created after this date.
+         * Filter items by minimum date_created. For example, `date_created:min=2019-09-04T00:00:00`, `date_created:min=2019-09-04`, or `date_created:min=1567573200`
          */
         'date_created:min'?: string;
         /**
-         * Filter items by maximum date created. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields created before this date.
+         * Filter items by maximum date_created. For example, `date_created:max=2019-09-04T00:00:00`, `date_created:max=2019-09-04`, or `date_created:max=1567573200`
          */
         'date_created:max'?: string;
         /**
-         * Filter items by date modified. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`.
+         * Filter items by date_modified. For example, `date_modified=2019-09-04T00:00:00`, `date_modified=2019-09-04`, or `date_modified=1567573200`
          */
         date_modified?: string;
         /**
-         * Filter items by minimum date modified. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields modified after this date.
+         * Filter items by minimum date_modified. For example, `date_modified:min=2019-09-04T00:00:00`, `date_modified:min=2019-09-04`, or `date_modified:min=1567573200`
          */
         'date_modified:min'?: string;
         /**
-         * Filter items by maximum date modified. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields modified before this date.
+         * Filter items by maximum date_modified. For example, `date_modified:max=2019-09-04T00:00:00`, `date_modified:max=2019-09-04`, or `date_modified:max=1567573200`
          */
         'date_modified:max'?: string;
         /**
@@ -1472,23 +973,23 @@ export type GetChannelsData = {
     url: '/channels';
 };
 
-export type GetChannelsErrors = {
+export type ListChannelsErrors = {
     /**
      * Invalid value is provided to the query parameter(s).
      */
     422: _Error;
 };
 
-export type GetChannelsError = GetChannelsErrors[keyof GetChannelsErrors];
+export type ListChannelsError = ListChannelsErrors[keyof ListChannelsErrors];
 
-export type GetChannelsResponses = {
+export type ListChannelsResponses = {
     200: {
         data: Array<ChannelWithoutCurrencies>;
         meta: MetaWithFullPagination;
     };
 };
 
-export type GetChannelsResponse = GetChannelsResponses[keyof GetChannelsResponses];
+export type ListChannelsResponse = ListChannelsResponses[keyof ListChannelsResponses];
 
 export type CreateChannelData = {
     body: CreateChannelReq;
@@ -1650,7 +1151,7 @@ export type GetChannelActiveThemeResponses = {
 
 export type GetChannelActiveThemeResponse = GetChannelActiveThemeResponses[keyof GetChannelActiveThemeResponses];
 
-export type GetAllCurrencyAssignmentsData = {
+export type ListAllCurrencyAssignmentsData = {
     body?: never;
     headers: {
         /**
@@ -1663,14 +1164,14 @@ export type GetAllCurrencyAssignmentsData = {
     url: '/channels/currency-assignments';
 };
 
-export type GetAllCurrencyAssignmentsResponses = {
+export type ListAllCurrencyAssignmentsResponses = {
     200: {
         data?: Array<CurrencyNotRequiredWithChannelId>;
         meta?: EmptyMeta;
     };
 };
 
-export type GetAllCurrencyAssignmentsResponse = GetAllCurrencyAssignmentsResponses[keyof GetAllCurrencyAssignmentsResponses];
+export type ListAllCurrencyAssignmentsResponse = ListAllCurrencyAssignmentsResponses[keyof ListAllCurrencyAssignmentsResponses];
 
 export type CreateMultipleChannelsCurrencyAssignmentsData = {
     body: UpsertMultipleChannelsCurrencyAssignmentsReq;
@@ -1894,7 +1395,7 @@ export type UpdateSingleChannelCurrencyAssignmentsResponses = {
 
 export type UpdateSingleChannelCurrencyAssignmentsResponse = UpdateSingleChannelCurrencyAssignmentsResponses[keyof UpdateSingleChannelCurrencyAssignmentsResponses];
 
-export type GetChannelListingsData = {
+export type ListChannelListingsData = {
     body?: never;
     headers: {
         /**
@@ -1922,34 +1423,34 @@ export type GetChannelListingsData = {
          */
         'product_id:in'?: Array<number>;
         /**
-         * Filter items by date created. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`.
+         * Filter items by date_created. For example, `date_created=2019-09-04T00:00:00`, `date_created=2019-09-04`, or `date_created=1567573200`
          */
         date_created?: string;
         /**
-         * Filter items by minimum date created. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields created after this date.
+         * Filter items by minimum date_created. For example, `date_created:min=2019-09-04T00:00:00`, `date_created:min=2019-09-04`, or `date_created:min=1567573200`
          */
         'date_created:min'?: string;
         /**
-         * Filter items by maximum date created. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields created before this date.
+         * Filter items by maximum date_created. For example, `date_created:max=2019-09-04T00:00:00`, `date_created:max=2019-09-04`, or `date_created:max=1567573200`
          */
         'date_created:max'?: string;
         /**
-         * Filter items by date modified. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`.
+         * Filter items by date_modified. For example, `date_modified=2019-09-04T00:00:00`, `date_modified=2019-09-04`, or `date_modified=1567573200`
          */
         date_modified?: string;
         /**
-         * Filter items by minimum date modified. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields modified after this date.
+         * Filter items by minimum date_modified. For example, `date_modified:min=2019-09-04T00:00:00`, `date_modified:min=2019-09-04`, or `date_modified:min=1567573200`
          */
         'date_modified:min'?: string;
         /**
-         * Filter items by maximum date modified. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields modified before this date.
+         * Filter items by maximum date_modified. For example, `date_modified:max=2019-09-04T00:00:00`, `date_modified:max=2019-09-04`, or `date_modified:max=1567573200`
          */
         'date_modified:max'?: string;
     };
     url: '/channels/{channel_id}/listings';
 };
 
-export type GetChannelListingsErrors = {
+export type ListChannelListingsErrors = {
     /**
      * Invalid channel ID is provided.
      */
@@ -1960,16 +1461,16 @@ export type GetChannelListingsErrors = {
     422: _Error;
 };
 
-export type GetChannelListingsError = GetChannelListingsErrors[keyof GetChannelListingsErrors];
+export type ListChannelListingsError = ListChannelListingsErrors[keyof ListChannelListingsErrors];
 
-export type GetChannelListingsResponses = {
+export type ListChannelListingsResponses = {
     200: {
         data?: Array<Listing>;
         meta?: MetaWithPartialPagination;
     };
 };
 
-export type GetChannelListingsResponse = GetChannelListingsResponses[keyof GetChannelListingsResponses];
+export type ListChannelListingsResponse = ListChannelListingsResponses[keyof ListChannelListingsResponses];
 
 export type CreateChannelListingsData = {
     body: CreateMultipleListingsReq;
@@ -2123,7 +1624,7 @@ export type DeleteCheckoutUrlResponses = {
 
 export type DeleteCheckoutUrlResponse = DeleteCheckoutUrlResponses[keyof DeleteCheckoutUrlResponses];
 
-export type UpdateCheckoutUrlData = {
+export type PutCheckoutUrlData = {
     body?: PutCheckoutUrl;
     headers: {
         /**
@@ -2145,7 +1646,7 @@ export type UpdateCheckoutUrlData = {
     url: '/channels/{channel_id}/site/checkout-url';
 };
 
-export type UpdateCheckoutUrlErrors = {
+export type PutCheckoutUrlErrors = {
     /**
      * Unprocessable Entity. Your checkout and storefront must be within the same main domain like `example.com` and `subdomain.example.com`
      */
@@ -2159,16 +1660,16 @@ export type UpdateCheckoutUrlErrors = {
     };
 };
 
-export type UpdateCheckoutUrlError = UpdateCheckoutUrlErrors[keyof UpdateCheckoutUrlErrors];
+export type PutCheckoutUrlError = PutCheckoutUrlErrors[keyof PutCheckoutUrlErrors];
 
-export type UpdateCheckoutUrlResponses = {
+export type PutCheckoutUrlResponses = {
     /**
      * OK
      */
     200: Site;
 };
 
-export type UpdateCheckoutUrlResponse = UpdateCheckoutUrlResponses[keyof UpdateCheckoutUrlResponses];
+export type PutCheckoutUrlResponse = PutCheckoutUrlResponses[keyof PutCheckoutUrlResponses];
 
 export type DeleteChannelSiteData = {
     body?: never;
@@ -2223,7 +1724,7 @@ export type GetChannelSiteResponses = {
 
 export type GetChannelSiteResponse = GetChannelSiteResponses[keyof GetChannelSiteResponses];
 
-export type CreateChannelSiteData = {
+export type PostChannelSiteData = {
     body?: SitePost;
     headers: {
         /**
@@ -2245,16 +1746,16 @@ export type CreateChannelSiteData = {
     url: '/channels/{channel_id}/site';
 };
 
-export type CreateChannelSiteResponses = {
+export type PostChannelSiteResponses = {
     200: {
         data?: Site;
         meta?: EmptyMeta;
     };
 };
 
-export type CreateChannelSiteResponse = CreateChannelSiteResponses[keyof CreateChannelSiteResponses];
+export type PostChannelSiteResponse = PostChannelSiteResponses[keyof PostChannelSiteResponses];
 
-export type UpdateChannelSiteData = {
+export type PutChannelSiteData = {
     body?: SitePut;
     headers: {
         /**
@@ -2276,14 +1777,14 @@ export type UpdateChannelSiteData = {
     url: '/channels/{channel_id}/site';
 };
 
-export type UpdateChannelSiteResponses = {
+export type PutChannelSiteResponses = {
     200: {
         data?: Site;
         meta?: EmptyMeta;
     };
 };
 
-export type UpdateChannelSiteResponse = UpdateChannelSiteResponses[keyof UpdateChannelSiteResponses];
+export type PutChannelSiteResponse = PutChannelSiteResponses[keyof PutChannelSiteResponses];
 
 export type DeleteChannelMenusData = {
     body?: never;
@@ -2342,7 +1843,7 @@ export type GetChannelMenusResponses = {
 
 export type GetChannelMenusResponse = GetChannelMenusResponses[keyof GetChannelMenusResponses];
 
-export type CreateChannelMenusData = {
+export type PostChannelMenusData = {
     body?: ChannelMenusPost;
     headers: {
         /**
@@ -2364,17 +1865,7 @@ export type CreateChannelMenusData = {
     url: '/channels/{channel_id}/channel-menus';
 };
 
-export type CreateChannelMenusErrors = {
-    /**
-     * Unprocessable entity (The following fields are invalid.)
-     *
-     */
-    422: ErrorResponse;
-};
-
-export type CreateChannelMenusError = CreateChannelMenusErrors[keyof CreateChannelMenusErrors];
-
-export type CreateChannelMenusResponses = {
+export type PostChannelMenusResponses = {
     200: {
         data?: {
             bigcommerce_protected_app_sections?: BigCommerceProtectedAppSections;
@@ -2384,9 +1875,9 @@ export type CreateChannelMenusResponses = {
     };
 };
 
-export type CreateChannelMenusResponse = CreateChannelMenusResponses[keyof CreateChannelMenusResponses];
+export type PostChannelMenusResponse = PostChannelMenusResponses[keyof PostChannelMenusResponses];
 
-export type GetChannelMetafieldsData = {
+export type GetChannelsChannelIdMetafieldsData = {
     body?: never;
     headers: {
         /**
@@ -2412,23 +1903,23 @@ export type GetChannelMetafieldsData = {
          */
         limit?: number;
         /**
-         * Filter based on a metafieldʼs key.
+         * Filter based on a metafield's key.
          *
          */
         key?: string;
         /**
-         * Filter based on a metafieldʼs namespace.
+         * Filter based on a metafield's namespace.
          */
         namespace?: string;
         /**
-         * Sort direction. Acceptable values are: `asc`, `desc`.
+         * Sort direction.
          */
         direction?: 'asc' | 'desc';
     };
     url: '/channels/{channel_id}/metafields';
 };
 
-export type GetChannelMetafieldsResponses = {
+export type GetChannelsChannelIdMetafieldsResponses = {
     /**
      * Metafield for products, categories, variants, and brands. The max number of metafields allowed on each product, category, variant, or brand is 250. For more information, see [Platform Limits](https://support.bigcommerce.com/s/article/Platform-Limits) in the Help Center.
      */
@@ -2479,7 +1970,7 @@ export type GetChannelMetafieldsResponses = {
          */
         resource_id?: number;
         /**
-         * Date and time of the metafieldʼs creation. Read-Only.
+         * Date and time of the metafield's creation. Read-Only.
          *
          */
         date_created?: string;
@@ -2491,10 +1982,10 @@ export type GetChannelMetafieldsResponses = {
     };
 };
 
-export type GetChannelMetafieldsResponse = GetChannelMetafieldsResponses[keyof GetChannelMetafieldsResponses];
+export type GetChannelsChannelIdMetafieldsResponse = GetChannelsChannelIdMetafieldsResponses[keyof GetChannelsChannelIdMetafieldsResponses];
 
-export type CreateChannelMetafieldData = {
-    body?: MetafieldPost2;
+export type PostChannelsChannelIdMetafieldsData = {
+    body?: MetafieldPost;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -2515,28 +2006,7 @@ export type CreateChannelMetafieldData = {
     url: '/channels/{channel_id}/metafields';
 };
 
-export type CreateChannelMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * The `Metafield` conflicts with another `Metafield`. This can result from duplicate unique key combinations of the appʼs client id, namespace, key, resource_type, and resource_id.
-     *
-     */
-    409: ErrorResponse;
-    /**
-     * The `Metafield` was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
-     *
-     */
-    422: ErrorResponse;
-};
-
-export type CreateChannelMetafieldError = CreateChannelMetafieldErrors[keyof CreateChannelMetafieldErrors];
-
-export type CreateChannelMetafieldResponses = {
+export type PostChannelsChannelIdMetafieldsResponses = {
     /**
      * Metafield for products, categories, variants, and brands. The max number of metafields allowed on each product, category, variant, or brand is 250. For more information, see [Platform Limits](https://support.bigcommerce.com/s/article/Platform-Limits) in the Help Center.
      */
@@ -2587,7 +2057,7 @@ export type CreateChannelMetafieldResponses = {
          */
         resource_id?: number;
         /**
-         * Date and time of the metafieldʼs creation. Read-Only.
+         * Date and time of the metafield's creation. Read-Only.
          *
          */
         date_created?: string;
@@ -2599,9 +2069,9 @@ export type CreateChannelMetafieldResponses = {
     };
 };
 
-export type CreateChannelMetafieldResponse = CreateChannelMetafieldResponses[keyof CreateChannelMetafieldResponses];
+export type PostChannelsChannelIdMetafieldsResponse = PostChannelsChannelIdMetafieldsResponses[keyof PostChannelsChannelIdMetafieldsResponses];
 
-export type DeleteChannelMetafieldData = {
+export type DeleteChannelsChannelIdMetafieldsMetafieldIdData = {
     body?: never;
     headers: {
         /**
@@ -2620,26 +2090,16 @@ export type DeleteChannelMetafieldData = {
     url: '/channels/{channel_id}/metafields/{metafield_id}';
 };
 
-export type DeleteChannelMetafieldErrors = {
-    /**
-     * Not found (A metafield was not found with this query).
-     *
-     */
-    404: NotFound;
-};
-
-export type DeleteChannelMetafieldError = DeleteChannelMetafieldErrors[keyof DeleteChannelMetafieldErrors];
-
-export type DeleteChannelMetafieldResponses = {
+export type DeleteChannelsChannelIdMetafieldsMetafieldIdResponses = {
     /**
      * No Content
      */
     204: void;
 };
 
-export type DeleteChannelMetafieldResponse = DeleteChannelMetafieldResponses[keyof DeleteChannelMetafieldResponses];
+export type DeleteChannelsChannelIdMetafieldsMetafieldIdResponse = DeleteChannelsChannelIdMetafieldsMetafieldIdResponses[keyof DeleteChannelsChannelIdMetafieldsMetafieldIdResponses];
 
-export type GetChannelMetafieldData = {
+export type GetChannelsChannelIdMetafieldsMetafieldIdData = {
     body?: never;
     headers: {
         /**
@@ -2658,17 +2118,7 @@ export type GetChannelMetafieldData = {
     url: '/channels/{channel_id}/metafields/{metafield_id}';
 };
 
-export type GetChannelMetafieldErrors = {
-    /**
-     * Not found (A metafield was not found with this query).
-     *
-     */
-    404: NotFound;
-};
-
-export type GetChannelMetafieldError = GetChannelMetafieldErrors[keyof GetChannelMetafieldErrors];
-
-export type GetChannelMetafieldResponses = {
+export type GetChannelsChannelIdMetafieldsMetafieldIdResponses = {
     /**
      * Metafield for products, categories, variants, and brands. The max number of metafields allowed on each product, category, variant, or brand is 250. For more information, see [Platform Limits](https://support.bigcommerce.com/s/article/Platform-Limits) in the Help Center.
      */
@@ -2719,7 +2169,7 @@ export type GetChannelMetafieldResponses = {
          */
         resource_id?: number;
         /**
-         * Date and time of the metafieldʼs creation. Read-Only.
+         * Date and time of the metafield's creation. Read-Only.
          *
          */
         date_created?: string;
@@ -2731,10 +2181,10 @@ export type GetChannelMetafieldResponses = {
     };
 };
 
-export type GetChannelMetafieldResponse = GetChannelMetafieldResponses[keyof GetChannelMetafieldResponses];
+export type GetChannelsChannelIdMetafieldsMetafieldIdResponse = GetChannelsChannelIdMetafieldsMetafieldIdResponses[keyof GetChannelsChannelIdMetafieldsMetafieldIdResponses];
 
-export type UpdateChannelMetafieldData = {
-    body?: MetafieldPut2;
+export type PutChannelsChannelIdMetafieldsMetafieldIdData = {
+    body?: MetafieldPut;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -2756,23 +2206,7 @@ export type UpdateChannelMetafieldData = {
     url: '/channels/{channel_id}/metafields/{metafield_id}';
 };
 
-export type UpdateChannelMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Not found (A metafield was not found with this query).
-     *
-     */
-    404: NotFound;
-};
-
-export type UpdateChannelMetafieldError = UpdateChannelMetafieldErrors[keyof UpdateChannelMetafieldErrors];
-
-export type UpdateChannelMetafieldResponses = {
+export type PutChannelsChannelIdMetafieldsMetafieldIdResponses = {
     /**
      * Metafield for products, categories, variants, and brands. The max number of metafields allowed on each product, category, variant, or brand is 250. For more information, see [Platform Limits](https://support.bigcommerce.com/s/article/Platform-Limits) in the Help Center.
      */
@@ -2823,7 +2257,7 @@ export type UpdateChannelMetafieldResponses = {
          */
         resource_id?: number;
         /**
-         * Date and time of the metafieldʼs creation. Read-Only.
+         * Date and time of the metafield's creation. Read-Only.
          *
          */
         date_created?: string;
@@ -2835,174 +2269,4 @@ export type UpdateChannelMetafieldResponses = {
     };
 };
 
-export type UpdateChannelMetafieldResponse = UpdateChannelMetafieldResponses[keyof UpdateChannelMetafieldResponses];
-
-export type DeleteChannelsMetafieldsData = {
-    /**
-     * List of metafield IDs.
-     */
-    body?: Array<number>;
-    path?: never;
-    query?: never;
-    url: '/channels/metafields';
-};
-
-export type DeleteChannelsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields deletion with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-
-export type DeleteChannelsMetafieldsError = DeleteChannelsMetafieldsErrors[keyof DeleteChannelsMetafieldsErrors];
-
-export type DeleteChannelsMetafieldsResponses = {
-    /**
-     * Response object for metafields deletion with success.
-     *
-     */
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-
-export type DeleteChannelsMetafieldsResponse = DeleteChannelsMetafieldsResponses[keyof DeleteChannelsMetafieldsResponses];
-
-export type GetChannelsMetafieldsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         *
-         */
-        page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products.
-         *
-         */
-        limit?: number;
-        /**
-         * Filter based on a metafieldʼs key.
-         *
-         */
-        key?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
-         */
-        'key:in'?: Array<string>;
-        /**
-         * Filter based on a metafieldʼs namespace.
-         */
-        namespace?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter.
-         */
-        'namespace:in'?: Array<string>;
-        /**
-         * Sort direction. Acceptable values are: `asc`, `desc`.
-         */
-        direction?: 'asc' | 'desc';
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-        /**
-         * Filter items by minimum date modified. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields modified after this date.
-         */
-        'date_modified:min'?: string;
-        /**
-         * Filter items by maximum date modified. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields modified before this date.
-         */
-        'date_modified:max'?: string;
-        /**
-         * Filter items by minimum date created. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields created after this date.
-         */
-        'date_created:min'?: string;
-        /**
-         * Filter items by maximum date created. For example, `date_created=2024-05-14T09:34:00` or `date_created=2024-05-14`. Returns metafields created before this date.
-         */
-        'date_created:max'?: string;
-    };
-    url: '/channels/metafields';
-};
-
-export type GetChannelsMetafieldsResponses = {
-    /**
-     * List of `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponse;
-};
-
-export type GetChannelsMetafieldsResponse = GetChannelsMetafieldsResponses[keyof GetChannelsMetafieldsResponses];
-
-export type CreateChannelsMetafieldsData = {
-    body?: Array<MetafieldPost>;
-    path?: never;
-    query?: never;
-    url: '/channels/metafields';
-};
-
-export type CreateChannelsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Unprocessable entity (The following fields are invalid.)
-     */
-    422: ErrorResponse;
-};
-
-export type CreateChannelsMetafieldsError = CreateChannelsMetafieldsErrors[keyof CreateChannelsMetafieldsErrors];
-
-export type CreateChannelsMetafieldsResponses = {
-    /**
-     * List of created `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponsePostPut;
-};
-
-export type CreateChannelsMetafieldsResponse = CreateChannelsMetafieldsResponses[keyof CreateChannelsMetafieldsResponses];
-
-export type UpdateChannelsMetafieldsData = {
-    body?: Array<MetafieldPut>;
-    path?: never;
-    query?: never;
-    url: '/channels/metafields';
-};
-
-export type UpdateChannelsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type UpdateChannelsMetafieldsError = UpdateChannelsMetafieldsErrors[keyof UpdateChannelsMetafieldsErrors];
-
-export type UpdateChannelsMetafieldsResponses = {
-    /**
-     * List of updated `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponsePostPut;
-};
-
-export type UpdateChannelsMetafieldsResponse = UpdateChannelsMetafieldsResponses[keyof UpdateChannelsMetafieldsResponses];
+export type PutChannelsChannelIdMetafieldsMetafieldIdResponse = PutChannelsChannelIdMetafieldsMetafieldIdResponses[keyof PutChannelsChannelIdMetafieldsMetafieldIdResponses];

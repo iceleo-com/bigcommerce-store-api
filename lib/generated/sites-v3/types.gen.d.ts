@@ -151,13 +151,6 @@ export type GetCertificatesResponse = {
 export type MetaOpen = {
     [key: string]: unknown;
 };
-export type Meta = {
-    pagination?: {
-        offset?: number;
-        limit?: number;
-        total_items?: number;
-    };
-};
 export type Accept = string;
 export type ContentType = string;
 export type SiteIdPathParam = number;
@@ -170,19 +163,19 @@ export type GetSitesData = {
     query?: {
         page?: number;
         limit?: number;
-        'channel_id:in'?: Array<number>;
-        'url_type:in'?: Array<string>;
+        'channel_id:in'?: number;
+        'url_type:in'?: string;
     };
     url: '/sites';
 };
 export type GetSitesResponses = {
     200: {
         data?: Array<Site>;
-        meta?: Meta;
+        meta?: MetaCollection;
     };
 };
 export type GetSitesResponse = GetSitesResponses[keyof GetSitesResponses];
-export type CreateSiteData = {
+export type PostSiteData = {
     body: PostSite;
     headers: {
         Accept: string;
@@ -192,21 +185,21 @@ export type CreateSiteData = {
     query?: never;
     url: '/sites';
 };
-export type CreateSiteErrors = {
+export type PostSiteErrors = {
     400: ErrorFull;
     403: ErrorFull;
     404: ErrorFull;
     502: unknown;
     504: ErrorFull;
 };
-export type CreateSiteError = CreateSiteErrors[keyof CreateSiteErrors];
-export type CreateSiteResponses = {
+export type PostSiteError = PostSiteErrors[keyof PostSiteErrors];
+export type PostSiteResponses = {
     201: {
         data?: Site;
-        meta?: MetaOpen;
+        meta?: MetaCollection;
     };
 };
-export type CreateSiteResponse = CreateSiteResponses[keyof CreateSiteResponses];
+export type PostSiteResponse = PostSiteResponses[keyof PostSiteResponses];
 export type DeleteSiteData = {
     body?: never;
     headers: {
@@ -219,14 +212,7 @@ export type DeleteSiteData = {
     url: '/sites/{site_id}';
 };
 export type DeleteSiteResponses = {
-    204: {
-        data?: {
-            [key: string]: unknown;
-        };
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    204: void;
 };
 export type DeleteSiteResponse = DeleteSiteResponses[keyof DeleteSiteResponses];
 export type GetSiteData = {
@@ -243,11 +229,11 @@ export type GetSiteData = {
 export type GetSiteResponses = {
     200: {
         data?: Site;
-        meta?: MetaOpen;
+        meta?: MetaCollection;
     };
 };
 export type GetSiteResponse = GetSiteResponses[keyof GetSiteResponses];
-export type UpdateSiteData = {
+export type PutSiteData = {
     body: PutSite;
     headers: {
         Accept: string;
@@ -259,14 +245,14 @@ export type UpdateSiteData = {
     query?: never;
     url: '/sites/{site_id}';
 };
-export type UpdateSiteResponses = {
+export type PutSiteResponses = {
     200: {
         data?: Site;
-        meta?: MetaOpen;
+        meta?: MetaCollection;
     };
 };
-export type UpdateSiteResponse = UpdateSiteResponses[keyof UpdateSiteResponses];
-export type GetSiteRoutesData = {
+export type PutSiteResponse = PutSiteResponses[keyof PutSiteResponses];
+export type IndexSiteRoutesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -281,14 +267,14 @@ export type GetSiteRoutesData = {
     };
     url: '/sites/{site_id}/routes';
 };
-export type GetSiteRoutesResponses = {
+export type IndexSiteRoutesResponses = {
     200: {
         data?: Array<SiteRouteFull>;
         meta?: MetaCollection;
     };
 };
-export type GetSiteRoutesResponse = GetSiteRoutesResponses[keyof GetSiteRoutesResponses];
-export type CreateSiteRouteData = {
+export type IndexSiteRoutesResponse = IndexSiteRoutesResponses[keyof IndexSiteRoutesResponses];
+export type PostSiteRouteData = {
     body: SiteRouteBase;
     headers: {
         Accept: string;
@@ -300,7 +286,7 @@ export type CreateSiteRouteData = {
     query?: never;
     url: '/sites/{site_id}/routes';
 };
-export type CreateSiteRouteErrors = {
+export type PostSiteRouteErrors = {
     422: {
         title?: string;
         status?: string;
@@ -309,16 +295,16 @@ export type CreateSiteRouteErrors = {
     };
     502: ErrorFull;
 };
-export type CreateSiteRouteError = CreateSiteRouteErrors[keyof CreateSiteRouteErrors];
-export type CreateSiteRouteResponses = {
+export type PostSiteRouteError = PostSiteRouteErrors[keyof PostSiteRouteErrors];
+export type PostSiteRouteResponses = {
     201: {
         data?: SiteRouteFull;
         meta?: MetaOpen;
     };
 };
-export type CreateSiteRouteResponse = CreateSiteRouteResponses[keyof CreateSiteRouteResponses];
-export type UpdateSiteRoutesData = {
-    body?: Array<SiteRouteFull>;
+export type PostSiteRouteResponse = PostSiteRouteResponses[keyof PostSiteRouteResponses];
+export type PutSitesBySiteIdRoutesData = {
+    body?: SiteRouteFull;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -329,7 +315,7 @@ export type UpdateSiteRoutesData = {
     query?: never;
     url: '/sites/{site_id}/routes';
 };
-export type UpdateSiteRoutesErrors = {
+export type PutSitesBySiteIdRoutesErrors = {
     422: {
         status?: number;
         title?: string;
@@ -338,15 +324,15 @@ export type UpdateSiteRoutesErrors = {
         type?: string;
     };
 };
-export type UpdateSiteRoutesError = UpdateSiteRoutesErrors[keyof UpdateSiteRoutesErrors];
-export type UpdateSiteRoutesResponses = {
+export type PutSitesBySiteIdRoutesError = PutSitesBySiteIdRoutesErrors[keyof PutSitesBySiteIdRoutesErrors];
+export type PutSitesBySiteIdRoutesResponses = {
     200: {
         data?: Array<SiteRouteFull>;
         meta?: MetaCollection;
     };
 };
-export type UpdateSiteRoutesResponse = UpdateSiteRoutesResponses[keyof UpdateSiteRoutesResponses];
-export type DeleteSiteRouteData = {
+export type PutSitesBySiteIdRoutesResponse = PutSitesBySiteIdRoutesResponses[keyof PutSitesBySiteIdRoutesResponses];
+export type DeleteRouteData = {
     body?: never;
     headers: {
         Accept: string;
@@ -358,10 +344,10 @@ export type DeleteSiteRouteData = {
     query?: never;
     url: '/sites/{site_id}/routes/{route_id}';
 };
-export type DeleteSiteRouteResponses = {
+export type DeleteRouteResponses = {
     204: void;
 };
-export type DeleteSiteRouteResponse = DeleteSiteRouteResponses[keyof DeleteSiteRouteResponses];
+export type DeleteRouteResponse = DeleteRouteResponses[keyof DeleteRouteResponses];
 export type GetSiteRouteData = {
     body?: never;
     headers: {
@@ -381,7 +367,7 @@ export type GetSiteRouteResponses = {
     };
 };
 export type GetSiteRouteResponse = GetSiteRouteResponses[keyof GetSiteRouteResponses];
-export type UpdateSiteRouteData = {
+export type PutSiteRouteData = {
     body: SiteRoutesRouteBase;
     headers: {
         Accept: string;
@@ -394,14 +380,14 @@ export type UpdateSiteRouteData = {
     query?: never;
     url: '/sites/{site_id}/routes/{route_id}';
 };
-export type UpdateSiteRouteResponses = {
+export type PutSiteRouteResponses = {
     201: {
         data?: SiteRouteFull;
         meta?: MetaOpen;
     };
 };
-export type UpdateSiteRouteResponse = UpdateSiteRouteResponses[keyof UpdateSiteRouteResponses];
-export type GetSiteCertificateData = {
+export type PutSiteRouteResponse = PutSiteRouteResponses[keyof PutSiteRouteResponses];
+export type GetSitesIdCertificateData = {
     body?: never;
     headers: {
         Accept: string;
@@ -412,11 +398,11 @@ export type GetSiteCertificateData = {
     query?: never;
     url: '/sites/{site_id}/certificate';
 };
-export type GetSiteCertificateResponses = {
+export type GetSitesIdCertificateResponses = {
     200: CertificateResponse;
 };
-export type GetSiteCertificateResponse = GetSiteCertificateResponses[keyof GetSiteCertificateResponses];
-export type UpsertSiteCertificateData = {
+export type GetSitesIdCertificateResponse = GetSitesIdCertificateResponses[keyof GetSitesIdCertificateResponses];
+export type PutSiteIdCertificateData = {
     body?: InstallCertificateData;
     headers: {
         Accept: string;
@@ -428,10 +414,10 @@ export type UpsertSiteCertificateData = {
     query?: never;
     url: '/sites/{site_id}/certificate';
 };
-export type UpsertSiteCertificateResponses = {
+export type PutSiteIdCertificateResponses = {
     200: EmptyResponse;
 };
-export type UpsertSiteCertificateResponse = UpsertSiteCertificateResponses[keyof UpsertSiteCertificateResponses];
+export type PutSiteIdCertificateResponse = PutSiteIdCertificateResponses[keyof PutSiteIdCertificateResponses];
 export type GetSitesCertificatesData = {
     body?: never;
     headers: {
@@ -439,7 +425,7 @@ export type GetSitesCertificatesData = {
     };
     path?: never;
     query?: {
-        'urls:in'?: Array<string>;
+        'urls:in'?: string;
     };
     url: '/sites/certificates';
 };

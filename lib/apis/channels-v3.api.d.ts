@@ -5,7 +5,11 @@ export * as ChannelsV3ApiSpecs from '../generated/channels-v3';
 export declare class ChannelsV3Api {
     private readonly request;
     constructor(request: RequestService);
-    getChannels(query?: ChannelsV3ApiSpecs.GetChannelsData['query']): Promise<RequestSuccessResponse<200, Required<{
+    listChannels(query?: ChannelsV3ApiSpecs.ListChannelsData['query']): Promise<RequestSuccessResponse<200, Required<{
+        data: Array<ChannelsV3ApiSpecs.ChannelWithoutCurrencies>;
+        meta: ChannelsV3ApiSpecs.MetaWithFullPagination;
+    }>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs._Error>>>;
+    getChannels(...args: Parameters<ChannelsV3Api['listChannels']>): Promise<RequestSuccessResponse<200, Required<{
         data: Array<ChannelsV3ApiSpecs.ChannelWithoutCurrencies>;
         meta: ChannelsV3ApiSpecs.MetaWithFullPagination;
     }>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs._Error>>>;
@@ -25,7 +29,11 @@ export declare class ChannelsV3Api {
         data?: ChannelsV3ApiSpecs.ActiveTheme;
         meta?: ChannelsV3ApiSpecs.EmptyMeta;
     }>>>;
-    getAllCurrencyAssignments(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+    listAllCurrencyAssignments(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: Array<ChannelsV3ApiSpecs.CurrencyNotRequiredWithChannelId>;
+        meta?: ChannelsV3ApiSpecs.EmptyMeta;
+    }>>>;
+    getAllCurrencyAssignments(...args: Parameters<ChannelsV3Api['listAllCurrencyAssignments']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
         data?: Array<ChannelsV3ApiSpecs.CurrencyNotRequiredWithChannelId>;
         meta?: ChannelsV3ApiSpecs.EmptyMeta;
     }>>>;
@@ -53,7 +61,11 @@ export declare class ChannelsV3Api {
         data?: ChannelsV3ApiSpecs.ChannelId;
         meta?: ChannelsV3ApiSpecs.EmptyMeta;
     }>>>;
-    getChannelListings(channelId: ChannelsV3ApiSpecs.GetChannelListingsData['path']['channel_id'], query?: ChannelsV3ApiSpecs.GetChannelListingsData['query']): Promise<RequestErrorResponse<422, Required<ChannelsV3ApiSpecs._Error>> | RequestSuccessResponse<200, Required<{
+    listChannelListings(channelId: ChannelsV3ApiSpecs.ListChannelListingsData['path']['channel_id'], query?: ChannelsV3ApiSpecs.ListChannelListingsData['query']): Promise<RequestErrorResponse<422, Required<ChannelsV3ApiSpecs._Error>> | RequestSuccessResponse<200, Required<{
+        data?: Array<ChannelsV3ApiSpecs.Listing>;
+        meta?: ChannelsV3ApiSpecs.MetaWithPartialPagination;
+    }>> | RequestErrorResponse<400, Required<ChannelsV3ApiSpecs._Error>>>;
+    getChannelListings(...args: Parameters<ChannelsV3Api['listChannelListings']>): Promise<RequestErrorResponse<422, Required<ChannelsV3ApiSpecs._Error>> | RequestSuccessResponse<200, Required<{
         data?: Array<ChannelsV3ApiSpecs.Listing>;
         meta?: ChannelsV3ApiSpecs.MetaWithPartialPagination;
     }>> | RequestErrorResponse<400, Required<ChannelsV3ApiSpecs._Error>>>;
@@ -69,7 +81,15 @@ export declare class ChannelsV3Api {
         data?: ChannelsV3ApiSpecs.Listing;
         meta?: ChannelsV3ApiSpecs.EmptyMeta;
     }>>>;
-    updateCheckoutUrl(channelId: ChannelsV3ApiSpecs.UpdateCheckoutUrlData['path']['channel_id'], requestBody: ChannelsV3ApiSpecs.UpdateCheckoutUrlData['body']): Promise<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.Site>> | RequestErrorResponse<422, Required<{
+    putCheckoutUrl(channelId: ChannelsV3ApiSpecs.PutCheckoutUrlData['path']['channel_id'], requestBody: ChannelsV3ApiSpecs.PutCheckoutUrlData['body']): Promise<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.Site>> | RequestErrorResponse<422, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        errors?: {
+            [key: string]: unknown;
+        };
+    }>>>;
+    updateCheckoutUrl(...args: Parameters<ChannelsV3Api['putCheckoutUrl']>): Promise<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.Site>> | RequestErrorResponse<422, Required<{
         status?: number;
         title?: string;
         type?: string;
@@ -87,11 +107,19 @@ export declare class ChannelsV3Api {
         data?: ChannelsV3ApiSpecs.Site;
         meta?: ChannelsV3ApiSpecs.EmptyMeta;
     }>>>;
-    createChannelSite(channelId: ChannelsV3ApiSpecs.CreateChannelSiteData['path']['channel_id'], requestBody: ChannelsV3ApiSpecs.CreateChannelSiteData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+    postChannelSite(channelId: ChannelsV3ApiSpecs.PostChannelSiteData['path']['channel_id'], requestBody: ChannelsV3ApiSpecs.PostChannelSiteData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
         data?: ChannelsV3ApiSpecs.Site;
         meta?: ChannelsV3ApiSpecs.EmptyMeta;
     }>>>;
-    updateChannelSite(channelId: ChannelsV3ApiSpecs.UpdateChannelSiteData['path']['channel_id'], requestBody: ChannelsV3ApiSpecs.UpdateChannelSiteData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+    createChannelSite(...args: Parameters<ChannelsV3Api['postChannelSite']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: ChannelsV3ApiSpecs.Site;
+        meta?: ChannelsV3ApiSpecs.EmptyMeta;
+    }>>>;
+    putChannelSite(channelId: ChannelsV3ApiSpecs.PutChannelSiteData['path']['channel_id'], requestBody: ChannelsV3ApiSpecs.PutChannelSiteData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: ChannelsV3ApiSpecs.Site;
+        meta?: ChannelsV3ApiSpecs.EmptyMeta;
+    }>>>;
+    updateChannelSite(...args: Parameters<ChannelsV3Api['putChannelSite']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
         data?: ChannelsV3ApiSpecs.Site;
         meta?: ChannelsV3ApiSpecs.EmptyMeta;
     }>>>;
@@ -105,18 +133,25 @@ export declare class ChannelsV3Api {
         };
         meta?: ChannelsV3ApiSpecs.EmptyMeta;
     }>>>;
-    createChannelMenus(channelId: ChannelsV3ApiSpecs.CreateChannelMenusData['path']['channel_id'], requestBody: ChannelsV3ApiSpecs.CreateChannelMenusData['body']): Promise<RequestSuccessResponse<200, Required<{
+    postChannelMenus(channelId: ChannelsV3ApiSpecs.PostChannelMenusData['path']['channel_id'], requestBody: ChannelsV3ApiSpecs.PostChannelMenusData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
         data?: {
             bigcommerce_protected_app_sections?: ChannelsV3ApiSpecs.BigCommerceProtectedAppSections;
             custom_app_sections?: ChannelsV3ApiSpecs.CustomAppSections;
         };
         meta?: ChannelsV3ApiSpecs.EmptyMeta;
-    }>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.ErrorResponse>>>;
+    }>>>;
+    createChannelMenus(...args: Parameters<ChannelsV3Api['postChannelMenus']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: {
+            bigcommerce_protected_app_sections?: ChannelsV3ApiSpecs.BigCommerceProtectedAppSections;
+            custom_app_sections?: ChannelsV3ApiSpecs.CustomAppSections;
+        };
+        meta?: ChannelsV3ApiSpecs.EmptyMeta;
+    }>>>;
     deleteChannelMenus(channelId: ChannelsV3ApiSpecs.DeleteChannelMenusData['path']['channel_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
         data?: number;
         meta?: ChannelsV3ApiSpecs.EmptyMeta;
     }>>>;
-    getChannelMetafields(channelId: ChannelsV3ApiSpecs.GetChannelMetafieldsData['path']['channel_id'], query?: ChannelsV3ApiSpecs.GetChannelMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+    getChannelsChannelIdMetafields(channelId: ChannelsV3ApiSpecs.GetChannelsChannelIdMetafieldsData['path']['channel_id'], query?: ChannelsV3ApiSpecs.GetChannelsChannelIdMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
         id?: number;
         permission_set?: "app_only" | "read" | "write" | "read_and_sf_access" | "write_and_sf_access";
         namespace?: string;
@@ -128,7 +163,7 @@ export declare class ChannelsV3Api {
         date_created?: string;
         date_modified?: string;
     }>>>;
-    createChannelMetafield(channelId: ChannelsV3ApiSpecs.CreateChannelMetafieldData['path']['channel_id'], requestBody: ChannelsV3ApiSpecs.CreateChannelMetafieldData['body']): Promise<RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<{
+    getChannelMetafields(...args: Parameters<ChannelsV3Api['getChannelsChannelIdMetafields']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
         id?: number;
         permission_set?: "app_only" | "read" | "write" | "read_and_sf_access" | "write_and_sf_access";
         namespace?: string;
@@ -139,59 +174,79 @@ export declare class ChannelsV3Api {
         resource_id?: number;
         date_created?: string;
         date_modified?: string;
-    }>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>> | RequestErrorResponse<409, Required<ChannelsV3ApiSpecs.ErrorResponse>>>;
-    getChannelMetafield(channelId: ChannelsV3ApiSpecs.GetChannelMetafieldData['path']['channel_id'], metafieldId: ChannelsV3ApiSpecs.GetChannelMetafieldData['path']['metafield_id']): Promise<RequestSuccessResponse<200, Required<{
-        id?: number;
-        permission_set?: "app_only" | "read" | "write" | "read_and_sf_access" | "write_and_sf_access";
-        namespace?: string;
-        key?: string;
-        value?: string;
-        description?: string;
-        resource_type?: "category" | "brand" | "product" | "variant";
-        resource_id?: number;
-        date_created?: string;
-        date_modified?: string;
-    }>> | RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.NotFound>>>;
-    updateChannelMetafield(channelId: ChannelsV3ApiSpecs.UpdateChannelMetafieldData['path']['channel_id'], metafieldId: ChannelsV3ApiSpecs.UpdateChannelMetafieldData['path']['metafield_id'], requestBody: ChannelsV3ApiSpecs.UpdateChannelMetafieldData['body']): Promise<RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.NotFound>> | RequestSuccessResponse<200, Required<{
-        id?: number;
-        permission_set?: "app_only" | "read" | "write" | "read_and_sf_access" | "write_and_sf_access";
-        namespace?: string;
-        key?: string;
-        value?: string;
-        description?: string;
-        resource_type?: "category" | "brand" | "product" | "variant";
-        resource_id?: number;
-        date_created?: string;
-        date_modified?: string;
-    }>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
     }>>>;
-    deleteChannelMetafield(channelId: ChannelsV3ApiSpecs.DeleteChannelMetafieldData['path']['channel_id'], metafieldId: ChannelsV3ApiSpecs.DeleteChannelMetafieldData['path']['metafield_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.NotFound>>>;
-    getChannelsMetafields(query?: ChannelsV3ApiSpecs.GetChannelsMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.MetaFieldCollectionResponse>>>;
-    createChannelsMetafields(requestBody: ChannelsV3ApiSpecs.CreateChannelsMetafieldsData['body']): Promise<RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.MetaFieldCollectionResponsePostPut>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
+    postChannelsChannelIdMetafields(channelId: ChannelsV3ApiSpecs.PostChannelsChannelIdMetafieldsData['path']['channel_id'], requestBody: ChannelsV3ApiSpecs.PostChannelsChannelIdMetafieldsData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        id?: number;
+        permission_set?: "app_only" | "read" | "write" | "read_and_sf_access" | "write_and_sf_access";
+        namespace?: string;
+        key?: string;
+        value?: string;
+        description?: string;
+        resource_type?: "category" | "brand" | "product" | "variant";
+        resource_id?: number;
+        date_created?: string;
+        date_modified?: string;
     }>>>;
-    updateChannelsMetafields(requestBody: ChannelsV3ApiSpecs.UpdateChannelsMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.MetaFieldCollectionResponsePostPut>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>>>;
-    deleteChannelsMetafields(requestBody: ChannelsV3ApiSpecs.DeleteChannelsMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.MetaFieldCollectionDeleteResponseSuccess>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessDelete>>>;
+    createChannelMetafield(...args: Parameters<ChannelsV3Api['postChannelsChannelIdMetafields']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        id?: number;
+        permission_set?: "app_only" | "read" | "write" | "read_and_sf_access" | "write_and_sf_access";
+        namespace?: string;
+        key?: string;
+        value?: string;
+        description?: string;
+        resource_type?: "category" | "brand" | "product" | "variant";
+        resource_id?: number;
+        date_created?: string;
+        date_modified?: string;
+    }>>>;
+    getChannelsChannelIdMetafieldsMetafieldId(channelId: ChannelsV3ApiSpecs.GetChannelsChannelIdMetafieldsMetafieldIdData['path']['channel_id'], metafieldId: ChannelsV3ApiSpecs.GetChannelsChannelIdMetafieldsMetafieldIdData['path']['metafield_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        id?: number;
+        permission_set?: "app_only" | "read" | "write" | "read_and_sf_access" | "write_and_sf_access";
+        namespace?: string;
+        key?: string;
+        value?: string;
+        description?: string;
+        resource_type?: "category" | "brand" | "product" | "variant";
+        resource_id?: number;
+        date_created?: string;
+        date_modified?: string;
+    }>>>;
+    getChannelMetafield(...args: Parameters<ChannelsV3Api['getChannelsChannelIdMetafieldsMetafieldId']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        id?: number;
+        permission_set?: "app_only" | "read" | "write" | "read_and_sf_access" | "write_and_sf_access";
+        namespace?: string;
+        key?: string;
+        value?: string;
+        description?: string;
+        resource_type?: "category" | "brand" | "product" | "variant";
+        resource_id?: number;
+        date_created?: string;
+        date_modified?: string;
+    }>>>;
+    putChannelsChannelIdMetafieldsMetafieldId(channelId: ChannelsV3ApiSpecs.PutChannelsChannelIdMetafieldsMetafieldIdData['path']['channel_id'], metafieldId: ChannelsV3ApiSpecs.PutChannelsChannelIdMetafieldsMetafieldIdData['path']['metafield_id'], requestBody: ChannelsV3ApiSpecs.PutChannelsChannelIdMetafieldsMetafieldIdData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        id?: number;
+        permission_set?: "app_only" | "read" | "write" | "read_and_sf_access" | "write_and_sf_access";
+        namespace?: string;
+        key?: string;
+        value?: string;
+        description?: string;
+        resource_type?: "category" | "brand" | "product" | "variant";
+        resource_id?: number;
+        date_created?: string;
+        date_modified?: string;
+    }>>>;
+    updateChannelMetafield(...args: Parameters<ChannelsV3Api['putChannelsChannelIdMetafieldsMetafieldId']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        id?: number;
+        permission_set?: "app_only" | "read" | "write" | "read_and_sf_access" | "write_and_sf_access";
+        namespace?: string;
+        key?: string;
+        value?: string;
+        description?: string;
+        resource_type?: "category" | "brand" | "product" | "variant";
+        resource_id?: number;
+        date_created?: string;
+        date_modified?: string;
+    }>>>;
+    deleteChannelsChannelIdMetafieldsMetafieldId(channelId: ChannelsV3ApiSpecs.DeleteChannelsChannelIdMetafieldsMetafieldIdData['path']['channel_id'], metafieldId: ChannelsV3ApiSpecs.DeleteChannelsChannelIdMetafieldsMetafieldIdData['path']['metafield_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteChannelMetafield(...args: Parameters<ChannelsV3Api['deleteChannelsChannelIdMetafieldsMetafieldId']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
 }

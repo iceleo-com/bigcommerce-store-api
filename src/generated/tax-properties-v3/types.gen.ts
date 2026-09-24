@@ -29,10 +29,6 @@ export type Property = {
      * Datetime.
      */
     readonly updated_at?: string;
-    /**
-     * The type of entity that the tax property can be associated with.
-     */
-    type?: 'PRODUCT' | 'CUSTOMER';
 };
 
 export type PropertyPost = {
@@ -48,10 +44,6 @@ export type PropertyPost = {
      * Additional detail about this tax property may help guide merchants. This string will be displayed on the Products screen as a tooltip associated with the relevant field.
      */
     description?: string;
-    /**
-     * The type of entity that the tax property can be associated with. Default
-     */
-    type: 'PRODUCT' | 'CUSTOMER';
 };
 
 export type PropertyPut = {
@@ -111,10 +103,6 @@ export type PropertyWritable = {
      * Optional. Additional detail about this tax property may help guide merchants. This string will be displayed on the Products screen as a tooltip associated with the relevant field.
      */
     description?: string;
-    /**
-     * The type of entity that the tax property can be associated with.
-     */
-    type?: 'PRODUCT' | 'CUSTOMER';
 };
 
 /**
@@ -137,24 +125,19 @@ export type Accept = string;
 export type ContentType = string;
 
 /**
- * ID of product. To target multiple products, provide a comma-separated list of IDs such as `12,34,56`.
+ * ID of product. To target multiple products, provide a comma-separated list of IDs such as `12,34,56`
  */
-export type ProductIdin = Array<number>;
+export type ProductIdin = string;
 
 /**
- * ID of tax property. To target multiple tax properties, provide a comma-separated list of IDs such as `12,34,56`.
+ * ID of tax property. To target multiple tax properties, provide a comma-separated list of IDs such as `12,34,56`
  */
-export type Idin = Array<number>;
+export type Idin = string;
 
 /**
- * ID of tax property. To target multiple tax properties, provide a comma-separated list of IDs such as `12,34,56`.
+ * ID of tax property. To target multiple tax properties, provide a comma-separated list of IDs such as `12,34,56`
  */
-export type IdinRequired = Array<number>;
-
-/**
- * Filter result by the type of tax property. To target multiple types, provide a comma-separated list of types such as `customer,product`.
- */
-export type Typein = Array<string>;
+export type IdinRequired = string;
 
 export type DeleteTaxPropertiesData = {
     body?: never;
@@ -167,9 +150,9 @@ export type DeleteTaxPropertiesData = {
     path?: never;
     query: {
         /**
-         * ID of tax property. To target multiple tax properties, provide a comma-separated list of IDs such as `12,34,56`.
+         * ID of tax property. To target multiple tax properties, provide a comma-separated list of IDs such as `12,34,56`
          */
-        'id:in': Array<number>;
+        'id:in': string;
     };
     url: '/tax/properties';
 };
@@ -205,13 +188,9 @@ export type GetTaxPropertiesData = {
     path?: never;
     query?: {
         /**
-         * ID of tax property. To target multiple tax properties, provide a comma-separated list of IDs such as `12,34,56`.
+         * ID of tax property. To target multiple tax properties, provide a comma-separated list of IDs such as `12,34,56`
          */
-        'id:in'?: Array<number>;
-        /**
-         * Filter result by the type of tax property. To target multiple types, provide a comma-separated list of types such as `customer,product`.
-         */
-        'type:in'?: Array<string>;
+        'id:in'?: string;
     };
     url: '/tax/properties';
 };
@@ -318,9 +297,9 @@ export type DeleteProductTaxPropertiesData = {
     path?: never;
     query: {
         /**
-         * ID of product. To target multiple products, provide a comma-separated list of IDs such as `12,34,56`.
+         * ID of product. To target multiple products, provide a comma-separated list of IDs such as `12,34,56`
          */
-        'product_id:in': Array<number>;
+        'product_id:in': string;
     };
     url: '/tax/products/properties';
 };
@@ -341,7 +320,7 @@ export type DeleteProductTaxPropertiesResponses = {
 
 export type DeleteProductTaxPropertiesResponse = DeleteProductTaxPropertiesResponses[keyof DeleteProductTaxPropertiesResponses];
 
-export type GetProductsTaxPropertiesData = {
+export type GetProductTaxPropertiesData = {
     body?: never;
     headers: {
         /**
@@ -352,21 +331,21 @@ export type GetProductsTaxPropertiesData = {
     path?: never;
     query: {
         /**
-         * ID of product. To target multiple products, provide a comma-separated list of IDs such as `12,34,56`.
+         * ID of product. To target multiple products, provide a comma-separated list of IDs such as `12,34,56`
          */
-        'product_id:in': Array<number>;
+        'product_id:in': string;
     };
     url: '/tax/products/properties';
 };
 
-export type GetProductsTaxPropertiesErrors = {
+export type GetProductTaxPropertiesErrors = {
     /**
      * Request parameters invalid
      */
     400: unknown;
 };
 
-export type GetProductsTaxPropertiesResponses = {
+export type GetProductTaxPropertiesResponses = {
     /**
      * OK
      */
@@ -376,7 +355,7 @@ export type GetProductsTaxPropertiesResponses = {
     };
 };
 
-export type GetProductsTaxPropertiesResponse = GetProductsTaxPropertiesResponses[keyof GetProductsTaxPropertiesResponses];
+export type GetProductTaxPropertiesResponse = GetProductTaxPropertiesResponses[keyof GetProductTaxPropertiesResponses];
 
 export type UpdateProductTaxPropertiesData = {
     body: Array<ProductTaxProperty>;

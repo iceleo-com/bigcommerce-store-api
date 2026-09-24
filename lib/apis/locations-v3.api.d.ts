@@ -12,7 +12,7 @@ export declare class LocationsV3Api {
     createLocations(requestBody: LocationsV3ApiSpecs.CreateLocationsData['body']): Promise<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.SimpleTransactionResponse>> | RequestErrorResponse<422, Required<LocationsV3ApiSpecs.ErrorResponse>>>;
     updateLocations(requestBody: LocationsV3ApiSpecs.UpdateLocationsData['body']): Promise<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.SimpleTransactionResponse>> | RequestErrorResponse<422, Required<LocationsV3ApiSpecs.ErrorResponse>>>;
     deleteLocations(query?: LocationsV3ApiSpecs.DeleteLocationsData['query']): Promise<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.SimpleTransactionResponse>> | RequestErrorResponse<422, Required<LocationsV3ApiSpecs.ErrorResponse>> | RequestErrorResponse<404, Required<LocationsV3ApiSpecs.ErrorResponse>>>;
-    getLocationMetafields(locationId: LocationsV3ApiSpecs.GetLocationMetafieldsData['path']['location_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+    getLocationMetafields(locationId: LocationsV3ApiSpecs.GetLocationMetafieldsData['path']['location_id'], query?: LocationsV3ApiSpecs.GetLocationMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
         data?: Array<LocationsV3ApiSpecs.Metafield>;
         meta?: {
             pagination?: {

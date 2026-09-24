@@ -1,14 +1,6 @@
 export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
-export type ModifierCondition = {
-    modifier_id?: number;
-    modifier_value_id?: number;
-};
-export type VariantCondition = {
-    variant_id?: number;
-};
-export type ConditionsRequest = Array<ModifierCondition | VariantCondition>;
 export type ProductModifierBase = {
     type: 'date' | 'checkbox' | 'file' | 'text' | 'multi_line_text' | 'numbers_only_text' | 'radio_buttons' | 'rectangles' | 'dropdown' | 'product_list' | 'product_list_with_images' | 'swatch';
     required: boolean;
@@ -49,7 +41,6 @@ export type ProductVariantBase = {
     price?: number | null;
     sale_price?: number | null;
     retail_price?: number | null;
-    map_price?: number;
     weight?: number | null;
     width?: number | null;
     height?: number | null;
@@ -58,8 +49,7 @@ export type ProductVariantBase = {
     fixed_cost_shipping_price?: number | null;
     purchasing_disabled?: boolean;
     purchasing_disabled_message?: string;
-    image_url?: string;
-    upc?: string;
+    upc?: string | null;
     inventory_level?: number | null;
     inventory_warning_level?: number | null;
     bin_picking_number?: string | null;
@@ -67,10 +57,8 @@ export type ProductVariantBase = {
     gtin?: string;
 };
 export type ProductVariantFull = ProductVariantBase & {
-    product_id: number;
-    id: number;
+    product_id?: number;
     sku: string;
-    sku_id?: number;
     option_values?: Array<ProductVariantOptionValueFull>;
     calculated_price?: number;
     calculated_weight?: number;
@@ -88,7 +76,7 @@ export type ProductVariantPutProduct = {
     fixed_cost_shipping_price?: number | null;
     purchasing_disabled?: boolean;
     purchasing_disabled_message?: string;
-    upc?: string;
+    upc?: string | null;
     inventory_level?: number | null;
     inventory_warning_level?: number | null;
     bin_picking_number?: string | null;
@@ -97,10 +85,8 @@ export type ProductVariantPutProduct = {
     sku?: string;
 };
 export type ProductVariantOptionValueFull = {
-    id?: number;
-    label: string;
-    option_id?: number;
     option_display_name: string;
+    label: string;
 };
 export type ProductVariantOptionValueBase = {
     id?: number;
@@ -118,14 +104,18 @@ export type ProductOptionOptionValueFull = ProductOptionOptionValueBase & {
     id?: number;
 };
 export type ProductImageBase = {
+    image_file?: string;
     is_thumbnail?: boolean;
     sort_order?: number;
     description?: string;
-    date_modified?: string;
-};
-export type ProductImagePostPut = {
-    product_id?: number;
     image_url?: string;
+};
+export type ProductImagePut = {
+    product_id?: number;
+    readonly url_zoom?: string;
+    readonly url_standard?: string;
+    readonly url_thumbnail?: string;
+    readonly url_tiny?: string;
 } & ProductImageBase;
 export type ProductVideoBase = {
     title?: string;
@@ -139,8 +129,9 @@ export type ProductVideoFull = ProductVideoBase & {
     product_id?: number;
     length?: string;
 };
-export type IncludeParamBase = Array<'bulk_pricing_rules' | 'reviews' | 'modifiers' | 'options' | 'parent_relations' | 'custom_fields' | 'channels' | 'videos'>;
-export type ProductPut = ProductBasePut;
+export type ProductPut = ProductBase & {
+    variants?: Array<ProductVariantPutProduct>;
+};
 export type MetafieldBase = {
     key: string;
     value: string;
@@ -183,13 +174,6 @@ export type ComplexRuleConditionBase = {
 export type CustomUrlFull = {
     url?: string;
     is_customized?: boolean;
-    create_redirect?: boolean;
-};
-export type BulkPricingRuleResponse = {
-    quantity_min?: number;
-    quantity_max?: number;
-    type?: 'price' | 'percent' | 'fixed';
-    amount?: number | string;
 };
 export type BulkPricingRuleFull = {
     quantity_min: number;
@@ -262,7 +246,7 @@ export type DetailedErrors = {
 };
 export type ProductFull = {
     readonly id?: number;
-} & ProductBaseResponse & {
+} & ProductBase & {
     date_created?: string;
     date_modified?: string;
     base_variant_id?: number;
@@ -272,24 +256,11 @@ export type ProductFull = {
     map_price?: number;
     option_set_id?: number;
     option_set_display?: string;
+    variants?: Array<ProductVariantFull>;
 };
 export type ProductImageFull = ProductImageBase & {
     id?: number;
     product_id?: number;
-    image_url?: string;
-    readonly url_zoom?: string;
-    readonly url_standard?: string;
-    readonly url_thumbnail?: string;
-    readonly url_tiny?: string;
-    date_modified?: string;
-};
-export type PrimaryImageFull = {
-    id?: number;
-    product_id?: number;
-    is_thumbnail?: boolean;
-    sort_order?: number;
-    description?: string;
-    image_file?: string;
     readonly url_zoom?: string;
     readonly url_standard?: string;
     readonly url_thumbnail?: string;
@@ -298,7 +269,7 @@ export type PrimaryImageFull = {
 };
 export type ProductPutCollection = Array<{
     readonly id: number;
-} & ProductBasePut>;
+} & ProductBase>;
 export type ConfigFull = {
     default_value?: string;
     checked_by_default?: boolean;
@@ -334,7 +305,7 @@ export type AdjustersFull = {
         message?: string;
     };
 };
-export type ProductBasePost = {
+export type ProductBase = {
     name: string;
     type: 'physical' | 'digital';
     sku?: string;
@@ -393,7 +364,6 @@ export type ProductBasePost = {
     open_graph_use_image?: boolean;
     gtin?: string;
     mpn?: string;
-    date_last_imported?: string;
     reviews_rating_sum?: number;
     reviews_count?: number;
     total_sold?: number;
@@ -405,146 +375,6 @@ export type ProductBasePost = {
     videos?: Array<ProductVideoFull>;
     variants?: Array<ProductVariantFull>;
 };
-export type ProductBasePut = {
-    name?: string;
-    type?: 'physical' | 'digital';
-    sku?: string;
-    description?: string;
-    weight?: number;
-    width?: number;
-    depth?: number;
-    height?: number;
-    price?: number;
-    cost_price?: number;
-    retail_price?: number;
-    sale_price?: number;
-    map_price?: number;
-    tax_class_id?: number;
-    product_tax_code?: string;
-    categories?: Array<number>;
-    brand_id?: number;
-    brand_name?: string;
-    inventory_level?: number;
-    inventory_warning_level?: number;
-    inventory_tracking?: 'none' | 'product' | 'variant';
-    fixed_cost_shipping_price?: number;
-    is_free_shipping?: boolean;
-    is_visible?: boolean;
-    is_featured?: boolean;
-    related_products?: Array<number>;
-    warranty?: string;
-    bin_picking_number?: string;
-    layout_file?: string;
-    upc?: string;
-    search_keywords?: string;
-    availability_description?: string;
-    availability?: 'available' | 'disabled' | 'preorder';
-    gift_wrapping_options_type?: 'any' | 'none' | 'list';
-    gift_wrapping_options_list?: Array<number>;
-    sort_order?: number;
-    condition?: 'New' | 'Used' | 'Refurbished';
-    is_condition_shown?: boolean;
-    order_quantity_minimum?: number;
-    order_quantity_maximum?: number;
-    page_title?: string;
-    meta_keywords?: Array<string>;
-    meta_description?: string;
-    view_count?: number;
-    preorder_release_date?: string | null;
-    preorder_message?: string;
-    is_preorder_only?: boolean;
-    is_price_hidden?: boolean;
-    price_hidden_label?: string;
-    custom_url?: CustomUrlFull;
-    open_graph_type?: 'product' | 'album' | 'book' | 'drink' | 'food' | 'game' | 'movie' | 'song' | 'tv_show';
-    open_graph_title?: string;
-    open_graph_description?: string;
-    open_graph_use_meta_description?: boolean;
-    open_graph_use_product_name?: boolean;
-    open_graph_use_image?: boolean;
-    gtin?: string;
-    mpn?: string;
-    date_last_imported?: string;
-    reviews_rating_sum?: number;
-    reviews_count?: number;
-    total_sold?: number;
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<{
-        readonly id: number;
-    } & BulkPricingRuleFull>;
-    images?: Array<ProductImageFull>;
-    videos?: Array<ProductVideoFull>;
-};
-export type ProductBaseResponse = {
-    name?: string;
-    type?: 'physical' | 'digital';
-    sku?: string;
-    description?: string;
-    weight?: number;
-    width?: number;
-    depth?: number;
-    height?: number;
-    price?: number;
-    cost_price?: number;
-    retail_price?: number;
-    sale_price?: number;
-    map_price?: number;
-    tax_class_id?: number;
-    product_tax_code?: string;
-    categories?: Array<number>;
-    brand_id?: number;
-    inventory_level?: number;
-    inventory_warning_level?: number;
-    inventory_tracking?: 'none' | 'product' | 'variant';
-    fixed_cost_shipping_price?: number;
-    is_free_shipping?: boolean;
-    is_visible?: boolean;
-    is_featured?: boolean;
-    related_products?: Array<number>;
-    warranty?: string;
-    bin_picking_number?: string;
-    layout_file?: string;
-    upc?: string;
-    search_keywords?: string;
-    availability_description?: string;
-    availability?: 'available' | 'disabled' | 'preorder';
-    gift_wrapping_options_type?: 'any' | 'none' | 'list';
-    gift_wrapping_options_list?: Array<number>;
-    sort_order?: number;
-    condition?: 'New' | 'Used' | 'Refurbished';
-    is_condition_shown?: boolean;
-    order_quantity_minimum?: number;
-    order_quantity_maximum?: number;
-    page_title?: string;
-    meta_keywords?: Array<string>;
-    meta_description?: string;
-    view_count?: number;
-    preorder_release_date?: string | null;
-    preorder_message?: string;
-    is_preorder_only?: boolean;
-    is_price_hidden?: boolean;
-    price_hidden_label?: string;
-    custom_url?: CustomUrlFull;
-    open_graph_type?: 'product' | 'album' | 'book' | 'drink' | 'food' | 'game' | 'movie' | 'song' | 'tv_show';
-    open_graph_title?: string;
-    open_graph_description?: string;
-    open_graph_use_meta_description?: boolean;
-    open_graph_use_product_name?: boolean;
-    open_graph_use_image?: boolean;
-    gtin?: string;
-    mpn?: string;
-    date_last_imported?: string;
-    reviews_rating_sum?: number;
-    reviews_count?: number;
-    total_sold?: number;
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<{
-        readonly id: number;
-    } & BulkPricingRuleFull>;
-    images?: Array<ProductImageFull>;
-    primary_image?: PrimaryImageFull;
-    videos?: Array<ProductVideoFull>;
-};
 export type MetafieldFull = {
     readonly id?: number;
 } & MetafieldBase & {
@@ -552,7 +382,6 @@ export type MetafieldFull = {
     resource_id?: number;
     readonly date_created?: string;
     readonly date_modified?: string;
-    owner_client_id?: string;
 };
 export type ErrorResponse409 = {
     code?: number;
@@ -578,9 +407,8 @@ export type MetaPaginationObject = {
         current_page?: number;
         total_pages?: number;
         links?: {
-            previous?: string;
-            current?: string;
             next?: string;
+            current?: string;
         };
     };
 };
@@ -604,163 +432,16 @@ export type Beta5DetailedErrors = {
 export type Beta5ErrorResponse = BaseError & {
     errors?: Beta5DetailedErrors;
 };
-export type Metafield = {
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace: string;
-    key: string;
-    value: string;
-    description: string;
-    resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    readonly resource_id: number;
-    id: number;
-    date_created: string;
-    date_modified: string;
-    readonly owner_client_id?: string;
-};
-export type MetaFieldCollectionResponse = {
-    data?: Array<Metafield>;
-    meta?: CollectionMeta;
-};
-export type MetaFieldCollectionResponsePostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-export type WriteCollectionPartialSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
-export type WriteCollectionSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
-export type Total = number;
-export type Success = number;
-export type Failed = number;
-export type _Error = {
-    status?: number;
-    title?: string;
-    type?: string;
-    errors?: ErrorDetail;
-};
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-export type CollectionMeta = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    };
-    [key: string]: unknown | {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    } | undefined;
-};
-export type MetafieldBasePost = {
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace: string;
-    key: string;
-    value: string;
-    description?: string;
-};
-export type MetafieldBasePut = {
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace?: string;
-    key?: string;
-    value?: string;
-    description?: string;
-};
-export type CustomFieldData = {
-    id?: number;
-    name?: string;
-    value?: string;
-};
-export type CustomFieldPost = {
-    name: string;
-    value: string;
-};
-export type CustomFieldPut = {
-    name?: string;
-    value?: string;
-};
-export type MetaCollectionFull2 = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    };
-};
-export type MetaEmptyFull2 = {
-    [key: string]: unknown;
-};
-export type GeneralErrorWithErrors = {
-    status: number;
-    title: string;
-    type: string;
-    errors: {
-        [key: string]: unknown;
-    };
-};
-export type GeneralError = {
-    status: number;
-    title: string;
-    type: string;
-    code?: number;
-};
-export type MethodNotAllowedError = {
-    status: number;
-    title: string;
-    type: string;
-    detail: string;
-};
-export type ProductPutWritable = ProductBasePutWritable;
+export type ProductImagePutWritable = {
+    product_id?: number;
+} & ProductImageBase;
 export type MetaEmptyFullWritable = {
     [key: string]: unknown;
 };
 export type DetailedErrorsWritable = {
     [key: string]: unknown;
 };
-export type ProductFullWritable = ProductBaseResponseWritable & {
+export type ProductFullWritable = ProductBaseWritable & {
     date_created?: string;
     date_modified?: string;
     base_variant_id?: number;
@@ -770,24 +451,15 @@ export type ProductFullWritable = ProductBaseResponseWritable & {
     map_price?: number;
     option_set_id?: number;
     option_set_display?: string;
+    variants?: Array<ProductVariantFull>;
 };
 export type ProductImageFullWritable = ProductImageBase & {
     id?: number;
     product_id?: number;
-    image_url?: string;
     date_modified?: string;
 };
-export type PrimaryImageFullWritable = {
-    id?: number;
-    product_id?: number;
-    is_thumbnail?: boolean;
-    sort_order?: number;
-    description?: string;
-    image_file?: string;
-    date_modified?: string;
-};
-export type ProductPutCollectionWritable = Array<ProductBasePutWritable>;
-export type ProductBasePostWritable = {
+export type ProductPutCollectionWritable = Array<ProductBaseWritable>;
+export type ProductBaseWritable = {
     name: string;
     type: 'physical' | 'digital';
     sku?: string;
@@ -846,7 +518,6 @@ export type ProductBasePostWritable = {
     open_graph_use_image?: boolean;
     gtin?: string;
     mpn?: string;
-    date_last_imported?: string;
     reviews_rating_sum?: number;
     reviews_count?: number;
     total_sold?: number;
@@ -856,165 +527,11 @@ export type ProductBasePostWritable = {
     videos?: Array<ProductVideoFull>;
     variants?: Array<ProductVariantFull>;
 };
-export type ProductBasePutWritable = {
-    name?: string;
-    type?: 'physical' | 'digital';
-    sku?: string;
-    description?: string;
-    weight?: number;
-    width?: number;
-    depth?: number;
-    height?: number;
-    price?: number;
-    cost_price?: number;
-    retail_price?: number;
-    sale_price?: number;
-    map_price?: number;
-    tax_class_id?: number;
-    product_tax_code?: string;
-    categories?: Array<number>;
-    brand_id?: number;
-    brand_name?: string;
-    inventory_level?: number;
-    inventory_warning_level?: number;
-    inventory_tracking?: 'none' | 'product' | 'variant';
-    fixed_cost_shipping_price?: number;
-    is_free_shipping?: boolean;
-    is_visible?: boolean;
-    is_featured?: boolean;
-    related_products?: Array<number>;
-    warranty?: string;
-    bin_picking_number?: string;
-    layout_file?: string;
-    upc?: string;
-    search_keywords?: string;
-    availability_description?: string;
-    availability?: 'available' | 'disabled' | 'preorder';
-    gift_wrapping_options_type?: 'any' | 'none' | 'list';
-    gift_wrapping_options_list?: Array<number>;
-    sort_order?: number;
-    condition?: 'New' | 'Used' | 'Refurbished';
-    is_condition_shown?: boolean;
-    order_quantity_minimum?: number;
-    order_quantity_maximum?: number;
-    page_title?: string;
-    meta_keywords?: Array<string>;
-    meta_description?: string;
-    view_count?: number;
-    preorder_release_date?: string | null;
-    preorder_message?: string;
-    is_preorder_only?: boolean;
-    is_price_hidden?: boolean;
-    price_hidden_label?: string;
-    custom_url?: CustomUrlFull;
-    open_graph_type?: 'product' | 'album' | 'book' | 'drink' | 'food' | 'game' | 'movie' | 'song' | 'tv_show';
-    open_graph_title?: string;
-    open_graph_description?: string;
-    open_graph_use_meta_description?: boolean;
-    open_graph_use_product_name?: boolean;
-    open_graph_use_image?: boolean;
-    gtin?: string;
-    mpn?: string;
-    date_last_imported?: string;
-    reviews_rating_sum?: number;
-    reviews_count?: number;
-    total_sold?: number;
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<BulkPricingRuleFull>;
-    images?: Array<ProductImageFullWritable>;
-    videos?: Array<ProductVideoFull>;
-};
-export type ProductBaseResponseWritable = {
-    name?: string;
-    type?: 'physical' | 'digital';
-    sku?: string;
-    description?: string;
-    weight?: number;
-    width?: number;
-    depth?: number;
-    height?: number;
-    price?: number;
-    cost_price?: number;
-    retail_price?: number;
-    sale_price?: number;
-    map_price?: number;
-    tax_class_id?: number;
-    product_tax_code?: string;
-    categories?: Array<number>;
-    brand_id?: number;
-    inventory_level?: number;
-    inventory_warning_level?: number;
-    inventory_tracking?: 'none' | 'product' | 'variant';
-    fixed_cost_shipping_price?: number;
-    is_free_shipping?: boolean;
-    is_visible?: boolean;
-    is_featured?: boolean;
-    related_products?: Array<number>;
-    warranty?: string;
-    bin_picking_number?: string;
-    layout_file?: string;
-    upc?: string;
-    search_keywords?: string;
-    availability_description?: string;
-    availability?: 'available' | 'disabled' | 'preorder';
-    gift_wrapping_options_type?: 'any' | 'none' | 'list';
-    gift_wrapping_options_list?: Array<number>;
-    sort_order?: number;
-    condition?: 'New' | 'Used' | 'Refurbished';
-    is_condition_shown?: boolean;
-    order_quantity_minimum?: number;
-    order_quantity_maximum?: number;
-    page_title?: string;
-    meta_keywords?: Array<string>;
-    meta_description?: string;
-    view_count?: number;
-    preorder_release_date?: string | null;
-    preorder_message?: string;
-    is_preorder_only?: boolean;
-    is_price_hidden?: boolean;
-    price_hidden_label?: string;
-    custom_url?: CustomUrlFull;
-    open_graph_type?: 'product' | 'album' | 'book' | 'drink' | 'food' | 'game' | 'movie' | 'song' | 'tv_show';
-    open_graph_title?: string;
-    open_graph_description?: string;
-    open_graph_use_meta_description?: boolean;
-    open_graph_use_product_name?: boolean;
-    open_graph_use_image?: boolean;
-    gtin?: string;
-    mpn?: string;
-    date_last_imported?: string;
-    reviews_rating_sum?: number;
-    reviews_count?: number;
-    total_sold?: number;
-    custom_fields?: Array<ProductCustomFieldPut>;
-    bulk_pricing_rules?: Array<BulkPricingRuleFull>;
-    images?: Array<ProductImageFullWritable>;
-    primary_image?: PrimaryImageFullWritable;
-    videos?: Array<ProductVideoFull>;
-};
 export type MetafieldFullWritable = MetafieldBase & {
     resource_type?: 'category' | 'brand' | 'product' | 'variant';
     resource_id?: number;
-    owner_client_id?: string;
 };
 export type Beta5DetailedErrorsWritable = {
-    [key: string]: unknown;
-};
-export type MetafieldWritable = {
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace: string;
-    key: string;
-    value: string;
-    description: string;
-    resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    id: number;
-    date_created: string;
-    date_modified: string;
-};
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
-};
-export type MetaEmptyFullWritable2 = {
     [key: string]: unknown;
 };
 export type ProductIdParam = number;
@@ -1027,69 +544,6 @@ export type CustomFieldIdParam = number;
 export type BulkPricingRuleIdParam = number;
 export type Accept = string;
 export type ContentType = string;
-export type PageParam = number;
-export type MetafieldKeyParam = string;
-export type MetafieldKeyInParam = Array<string>;
-export type MetafieldNamespaceParam = string;
-export type MetafieldNamespaceInParam = Array<string>;
-export type LimitParam = number;
-export type DateCreatedMin = string;
-export type DateCreatedMax = string;
-export type DateModifiedMax = string;
-export type DateModifiedMin = string;
-export type DirectionParam = 'asc' | 'desc';
-export type SortParam = 'id' | 'name' | 'sku' | 'price' | 'date_modified' | 'date_last_imported' | 'inventory_level' | 'is_visible' | 'total_sold' | 'calculated_price';
-export type IncludeFieldsBulkPricingParam = Array<'quantity_min' | 'quantity_max' | 'type' | 'amount'>;
-export type IncludeFieldsParam = Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'resource_id:in' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-export type IncludeFieldsEnumParam = Array<'variants' | 'images' | 'custom_fields' | 'bulk_pricing_rules' | 'primary_image' | 'modifiers' | 'options' | 'videos'>;
-export type ExcludeFieldsParam = Array<string>;
-export type IdInParam = Array<number>;
-export type IdNotInParam = Array<number>;
-export type ProductIdInParam = Array<number>;
-export type CategoryIdInParam = Array<number>;
-export type CategoriesInParam = Array<number>;
-export type ChannelIdInParam = Array<number>;
-export type IncludeParamGetProducts = IncludeParamBase;
-export type IncludeParamGetProduct = IncludeParamBase;
-export type IdMinParam = number;
-export type IdMaxParam = number;
-export type IdGreaterParam = number;
-export type IdLessParam = number;
-export type NameParam = string;
-export type MpnParam = string;
-export type UpcParam = string;
-export type PriceParam = number;
-export type WeightParam = number;
-export type ConditionParam = 'new' | 'used' | 'refurbished';
-export type BrandIdParam = number;
-export type DateModifiedParam = string;
-export type DateModifiedMaxParam = string;
-export type DateModifiedMinParam = string;
-export type DateLastImportedParam = string;
-export type DateLastImportedNotParam = string;
-export type DateLastImportedMaxParam = string;
-export type DateLastImportedMinParam = string;
-export type IsVisibleParam = boolean;
-export type IsFeaturedParam = 1 | 0;
-export type IsFreeShippingParam = number;
-export type InventoryLevelParam = number;
-export type InventoryLevelInParam = Array<number>;
-export type InventoryLevelNotInParam = Array<number>;
-export type InventoryLevelMinParam = number;
-export type InventoryLevelMaxParam = number;
-export type InventoryLevelGreaterParam = number;
-export type InventoryLevelLessParam = number;
-export type InventoryLowParam = number;
-export type OutOfStockParam = number;
-export type TotalSoldParam = number;
-export type ProductTypeParam = 'digital' | 'physical';
-export type CategoriesParam = number;
-export type KeywordParam = string;
-export type KeywordContextParam = 'shopper' | 'merchant';
-export type AvailabilityParam = 'available' | 'disabled' | 'preorder';
-export type SkuParam = string;
-export type SkuInParam = Array<string>;
 export type DeleteProductsData = {
     body?: never;
     headers: {
@@ -1106,7 +560,7 @@ export type DeleteProductsData = {
         date_modified?: string;
         date_last_imported?: string;
         is_visible?: boolean;
-        is_featured?: 1 | 0;
+        is_featured?: number;
         'id:in'?: Array<number>;
         inventory_level?: number;
         total_sold?: number;
@@ -1129,22 +583,12 @@ export type GetProductsData = {
     query?: {
         id?: number;
         'id:in'?: Array<number>;
-        'channel_id:in'?: Array<number>;
         'id:not_in'?: Array<number>;
-        include?: IncludeParamBase;
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
-        page?: number;
-        limit?: number;
-        direction?: 'asc' | 'desc';
-        sort?: 'id' | 'name' | 'sku' | 'price' | 'date_modified' | 'date_last_imported' | 'inventory_level' | 'is_visible' | 'total_sold' | 'calculated_price';
-        'categories:in'?: Array<number>;
-        'id:min'?: number;
-        'id:max'?: number;
-        'id:greater'?: number;
-        'id:less'?: number;
+        'id:min'?: Array<number>;
+        'id:max'?: Array<number>;
+        'id:greater'?: Array<number>;
+        'id:less'?: Array<number>;
         name?: string;
-        mpn?: string;
         upc?: string;
         price?: number;
         weight?: number;
@@ -1154,15 +598,14 @@ export type GetProductsData = {
         'date_modified:max'?: string;
         'date_modified:min'?: string;
         date_last_imported?: string;
-        'date_last_imported:not'?: string;
         'date_last_imported:max'?: string;
         'date_last_imported:min'?: string;
         is_visible?: boolean;
         is_featured?: 1 | 0;
         is_free_shipping?: number;
         inventory_level?: number;
-        'inventory_level:in'?: Array<number>;
-        'inventory_level:not_in'?: Array<number>;
+        'inventory_level:in'?: number;
+        'inventory_level:not_in'?: number;
         'inventory_level:min'?: number;
         'inventory_level:max'?: number;
         'inventory_level:greater'?: number;
@@ -1174,7 +617,16 @@ export type GetProductsData = {
         categories?: number;
         keyword?: string;
         keyword_context?: 'shopper' | 'merchant';
+        status?: number;
+        include?: Array<'variants' | 'images' | 'custom_fields' | 'bulk_pricing_rules' | 'primary_image' | 'modifiers' | 'options' | 'videos'>;
+        include_fields?: string;
+        exclude_fields?: string;
         availability?: 'available' | 'disabled' | 'preorder';
+        page?: number;
+        limit?: number;
+        direction?: 'asc' | 'desc';
+        sort?: 'id' | 'name' | 'sku' | 'price' | 'date_modified' | 'date_last_imported' | 'inventory_level' | 'is_visible' | 'total_sold';
+        'categories:in'?: number;
         sku?: string;
         'sku:in'?: Array<string>;
     };
@@ -1182,22 +634,20 @@ export type GetProductsData = {
 };
 export type GetProductsResponses = {
     200: {
-        data?: Array<ProductFull & {
-            channels?: Array<number>;
-        }>;
+        data?: Array<ProductFull>;
         meta?: MetaCollectionFull;
     };
 };
 export type GetProductsResponse = GetProductsResponses[keyof GetProductsResponses];
 export type CreateProductData = {
-    body: ProductBasePostWritable;
+    body: ProductBaseWritable;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
     path?: never;
     query?: {
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
     };
     url: '/catalog/products';
 };
@@ -1242,7 +692,7 @@ export type UpdateProductsData = {
     };
     path?: never;
     query?: {
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: string;
     };
     url: '/catalog/products';
 };
@@ -1261,7 +711,7 @@ export type UpdateProductsError = UpdateProductsErrors[keyof UpdateProductsError
 export type UpdateProductsResponses = {
     200: {
         data?: Array<ProductFull>;
-        meta?: unknown;
+        meta?: MetaCollectionFull;
     };
     207: {
         data?: Array<ProductFull>;
@@ -1270,7 +720,7 @@ export type UpdateProductsResponses = {
     };
 };
 export type UpdateProductsResponse = UpdateProductsResponses[keyof UpdateProductsResponses];
-export type DeleteProductData = {
+export type DeleteProductByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1281,11 +731,11 @@ export type DeleteProductData = {
     query?: never;
     url: '/catalog/products/{product_id}';
 };
-export type DeleteProductResponses = {
+export type DeleteProductByIdResponses = {
     204: void;
 };
-export type DeleteProductResponse = DeleteProductResponses[keyof DeleteProductResponses];
-export type GetProductData = {
+export type DeleteProductByIdResponse = DeleteProductByIdResponses[keyof DeleteProductByIdResponses];
+export type GetProductByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1294,13 +744,13 @@ export type GetProductData = {
         product_id: number;
     };
     query?: {
-        include?: IncludeParamBase;
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
+        include?: Array<'variants' | 'images' | 'custom_fields' | 'bulk_pricing_rules' | 'primary_image' | 'modifiers' | 'options' | 'videos'>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}';
 };
-export type GetProductErrors = {
+export type GetProductByIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -1308,18 +758,16 @@ export type GetProductErrors = {
         instance?: string;
     };
 };
-export type GetProductError = GetProductErrors[keyof GetProductErrors];
-export type GetProductResponses = {
+export type GetProductByIdError = GetProductByIdErrors[keyof GetProductByIdErrors];
+export type GetProductByIdResponses = {
     200: {
-        data?: ProductFull & {
-            channels?: Array<number>;
-        };
+        data?: ProductFull;
         meta?: MetaEmptyFull;
     };
 };
-export type GetProductResponse = GetProductResponses[keyof GetProductResponses];
+export type GetProductByIdResponse = GetProductByIdResponses[keyof GetProductByIdResponses];
 export type UpdateProductData = {
-    body: ProductPutWritable;
+    body: ProductPut;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -1328,8 +776,7 @@ export type UpdateProductData = {
         product_id: number;
     };
     query?: {
-        include?: IncludeParamBase;
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
+        include_fields?: 'variants' | 'images' | 'custom_fields' | 'bulk_pricing_rules' | 'primary_image' | 'modifiers' | 'options' | 'videos';
     };
     url: '/catalog/products/{product_id}';
 };
@@ -1386,8 +833,8 @@ export type GetProductImagesData = {
     query?: {
         page?: number;
         limit?: number;
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/images';
 };
@@ -1409,9 +856,23 @@ export type GetProductImagesResponses = {
 };
 export type GetProductImagesResponse = GetProductImagesResponses[keyof GetProductImagesResponses];
 export type CreateProductImageData = {
-    body: ProductImagePostPut;
+    body: {
+        product_id?: number;
+        readonly url_zoom?: string;
+        readonly url_standard?: string;
+        readonly url_thumbnail?: string;
+        readonly url_tiny?: string;
+        date_modified?: string;
+        is_thumbnail?: boolean;
+        sort_order?: number;
+        description?: string;
+    } & {
+        image_url?: string;
+        image_file?: string;
+    };
     headers: {
         Accept: string;
+        'Content-Type': string;
     };
     path: {
         product_id: number;
@@ -1449,8 +910,7 @@ export type CreateProductImageResponses = {
             is_thumbnail?: boolean;
             sort_order?: number;
             description?: string;
-            image_url?: string;
-        } | {
+        } & {
             id?: number;
             product_id?: number;
             image_file?: string;
@@ -1459,9 +919,7 @@ export type CreateProductImageResponses = {
             readonly url_thumbnail?: string;
             readonly url_tiny?: string;
             date_modified?: string;
-            is_thumbnail?: boolean;
-            sort_order?: number;
-            description?: string;
+            image_url?: string;
         };
         meta?: MetaEmptyFull;
     };
@@ -1483,7 +941,7 @@ export type DeleteProductImageResponses = {
     204: void;
 };
 export type DeleteProductImageResponse = DeleteProductImageResponses[keyof DeleteProductImageResponses];
-export type GetProductImageData = {
+export type GetProductImageByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1493,12 +951,12 @@ export type GetProductImageData = {
         image_id: number;
     };
     query?: {
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/images/{image_id}';
 };
-export type GetProductImageErrors = {
+export type GetProductImageByIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -1506,16 +964,16 @@ export type GetProductImageErrors = {
         instance?: string;
     };
 };
-export type GetProductImageError = GetProductImageErrors[keyof GetProductImageErrors];
-export type GetProductImageResponses = {
+export type GetProductImageByIdError = GetProductImageByIdErrors[keyof GetProductImageByIdErrors];
+export type GetProductImageByIdResponses = {
     200: {
         data?: ProductImageFull;
         meta?: MetaEmptyFull;
     };
 };
-export type GetProductImageResponse = GetProductImageResponses[keyof GetProductImageResponses];
+export type GetProductImageByIdResponse = GetProductImageByIdResponses[keyof GetProductImageByIdResponses];
 export type UpdateProductImageData = {
-    body: ProductImagePostPut;
+    body: ProductImagePutWritable;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -1537,7 +995,6 @@ export type UpdateProductImageErrors = {
         type?: string;
         instance?: string;
     };
-    422: ErrorResponse422;
 };
 export type UpdateProductImageError = UpdateProductImageErrors[keyof UpdateProductImageErrors];
 export type UpdateProductImageResponses = {
@@ -1553,8 +1010,7 @@ export type UpdateProductImageResponses = {
             is_thumbnail?: boolean;
             sort_order?: number;
             description?: string;
-            image_url?: string;
-        } | {
+        } & {
             id?: number;
             product_id?: number;
             image_file?: string;
@@ -1563,9 +1019,7 @@ export type UpdateProductImageResponses = {
             readonly url_thumbnail?: string;
             readonly url_tiny?: string;
             date_modified?: string;
-            is_thumbnail?: boolean;
-            sort_order?: number;
-            description?: string;
+            image_url?: string;
         };
         meta?: MetaEmptyFull;
     };
@@ -1583,8 +1037,8 @@ export type GetProductVideosData = {
         product_id: number;
     };
     query?: {
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
         page?: number;
         limit?: number;
     };
@@ -1658,7 +1112,7 @@ export type DeleteProductVideoResponses = {
     204: void;
 };
 export type DeleteProductVideoResponse = DeleteProductVideoResponses[keyof DeleteProductVideoResponses];
-export type GetProductVideoData = {
+export type GetProductVideoByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1668,12 +1122,12 @@ export type GetProductVideoData = {
         id: number;
     };
     query?: {
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/videos/{id}';
 };
-export type GetProductVideoErrors = {
+export type GetProductVideoByIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -1681,14 +1135,14 @@ export type GetProductVideoErrors = {
         instance?: string;
     };
 };
-export type GetProductVideoError = GetProductVideoErrors[keyof GetProductVideoErrors];
-export type GetProductVideoResponses = {
+export type GetProductVideoByIdError = GetProductVideoByIdErrors[keyof GetProductVideoByIdErrors];
+export type GetProductVideoByIdResponses = {
     200: {
         data?: ProductVideoFull;
         meta?: MetaEmptyFull;
     };
 };
-export type GetProductVideoResponse = GetProductVideoResponses[keyof GetProductVideoResponses];
+export type GetProductVideoByIdResponse = GetProductVideoByIdResponses[keyof GetProductVideoByIdResponses];
 export type UpdateProductVideoData = {
     body: {
         title?: string;
@@ -1735,7 +1189,7 @@ export type UpdateProductVideoResponses = {
     };
 };
 export type UpdateProductVideoResponse = UpdateProductVideoResponses[keyof UpdateProductVideoResponses];
-export type GetProductComplexRulesData = {
+export type GetComplexRulesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1744,22 +1198,23 @@ export type GetProductComplexRulesData = {
         product_id: number;
     };
     query?: {
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
         page?: number;
         limit?: number;
     };
     url: '/catalog/products/{product_id}/complex-rules';
 };
-export type GetProductComplexRulesResponses = {
+export type GetComplexRulesResponses = {
     200: {
         data?: Array<ComplexRuleBase>;
         meta?: MetaCollectionFull;
     };
 };
-export type GetProductComplexRulesResponse = GetProductComplexRulesResponses[keyof GetProductComplexRulesResponses];
-export type CreateProductComplexRuleData = {
+export type GetComplexRulesResponse = GetComplexRulesResponses[keyof GetComplexRulesResponses];
+export type CreateComplexRuleData = {
     body: {
+        product_id?: number | null;
         sort_order?: number;
         enabled?: boolean;
         stop?: boolean;
@@ -1775,7 +1230,11 @@ export type CreateProductComplexRuleData = {
             adjuster?: 'relative' | 'percentage';
             adjuster_value?: number;
         };
-        conditions?: ConditionsRequest;
+        conditions?: Array<{
+            modifier_id: number | null;
+            modifier_value_id: number | null;
+            variant_id: number | null;
+        }>;
     };
     headers: {
         Accept: string;
@@ -1787,7 +1246,7 @@ export type CreateProductComplexRuleData = {
     query?: never;
     url: '/catalog/products/{product_id}/complex-rules';
 };
-export type CreateProductComplexRuleErrors = {
+export type CreateComplexRuleErrors = {
     409: {
         errors?: {
             [key: string]: unknown;
@@ -1807,8 +1266,8 @@ export type CreateProductComplexRuleErrors = {
         type?: string;
     };
 };
-export type CreateProductComplexRuleError = CreateProductComplexRuleErrors[keyof CreateProductComplexRuleErrors];
-export type CreateProductComplexRuleResponses = {
+export type CreateComplexRuleError = CreateComplexRuleErrors[keyof CreateComplexRuleErrors];
+export type CreateComplexRuleResponses = {
     200: {
         data?: {
             id?: number;
@@ -1840,8 +1299,8 @@ export type CreateProductComplexRuleResponses = {
         meta?: MetaEmptyFull;
     };
 };
-export type CreateProductComplexRuleResponse = CreateProductComplexRuleResponses[keyof CreateProductComplexRuleResponses];
-export type DeleteProductComplexRuleData = {
+export type CreateComplexRuleResponse = CreateComplexRuleResponses[keyof CreateComplexRuleResponses];
+export type DeleteComplexRuleByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1853,11 +1312,11 @@ export type DeleteProductComplexRuleData = {
     query?: never;
     url: '/catalog/products/{product_id}/complex-rules/{complex_rule_id}';
 };
-export type DeleteProductComplexRuleResponses = {
+export type DeleteComplexRuleByIdResponses = {
     204: void;
 };
-export type DeleteProductComplexRuleResponse = DeleteProductComplexRuleResponses[keyof DeleteProductComplexRuleResponses];
-export type GetProductComplexRuleData = {
+export type DeleteComplexRuleByIdResponse = DeleteComplexRuleByIdResponses[keyof DeleteComplexRuleByIdResponses];
+export type GetComplexRuleByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1867,12 +1326,12 @@ export type GetProductComplexRuleData = {
         complex_rule_id: number;
     };
     query?: {
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/complex-rules/{complex_rule_id}';
 };
-export type GetProductComplexRuleErrors = {
+export type GetComplexRuleByIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -1880,8 +1339,8 @@ export type GetProductComplexRuleErrors = {
         instance?: string;
     };
 };
-export type GetProductComplexRuleError = GetProductComplexRuleErrors[keyof GetProductComplexRuleErrors];
-export type GetProductComplexRuleResponses = {
+export type GetComplexRuleByIdError = GetComplexRuleByIdErrors[keyof GetComplexRuleByIdErrors];
+export type GetComplexRuleByIdResponses = {
     200: {
         data?: {
             id?: number;
@@ -1913,9 +1372,10 @@ export type GetProductComplexRuleResponses = {
         meta?: MetaEmptyFull;
     };
 };
-export type GetProductComplexRuleResponse = GetProductComplexRuleResponses[keyof GetProductComplexRuleResponses];
-export type UpdateProductComplexRuleData = {
+export type GetComplexRuleByIdResponse = GetComplexRuleByIdResponses[keyof GetComplexRuleByIdResponses];
+export type UpdateComplexRuleData = {
     body: {
+        product_id?: number | null;
         sort_order?: number;
         enabled?: boolean;
         stop?: boolean;
@@ -1948,7 +1408,7 @@ export type UpdateProductComplexRuleData = {
     query?: never;
     url: '/catalog/products/{product_id}/complex-rules/{complex_rule_id}';
 };
-export type UpdateProductComplexRuleErrors = {
+export type UpdateComplexRuleErrors = {
     409: {
         errors?: {
             [key: string]: unknown;
@@ -1968,8 +1428,8 @@ export type UpdateProductComplexRuleErrors = {
         type?: string;
     };
 };
-export type UpdateProductComplexRuleError = UpdateProductComplexRuleErrors[keyof UpdateProductComplexRuleErrors];
-export type UpdateProductComplexRuleResponses = {
+export type UpdateComplexRuleError = UpdateComplexRuleErrors[keyof UpdateComplexRuleErrors];
+export type UpdateComplexRuleResponses = {
     200: {
         data?: {
             id?: number;
@@ -2001,131 +1461,39 @@ export type UpdateProductComplexRuleResponses = {
         meta?: MetaEmptyFull;
     };
 };
-export type UpdateProductComplexRuleResponse = UpdateProductComplexRuleResponses[keyof UpdateProductComplexRuleResponses];
-export type GetProductCustomFieldsData = {
+export type UpdateComplexRuleResponse = UpdateComplexRuleResponses[keyof UpdateComplexRuleResponses];
+export type GetCustomFieldsData = {
     body?: never;
+    headers: {
+        Accept: string;
+    };
     path: {
         product_id: number;
     };
     query?: {
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
         page?: number;
         limit?: number;
     };
     url: '/catalog/products/{product_id}/custom-fields';
 };
-export type GetProductCustomFieldsErrors = {
-    401: string;
-    403: GeneralErrorWithErrors;
-    404: GeneralError;
-    405: MethodNotAllowedError;
-};
-export type GetProductCustomFieldsError = GetProductCustomFieldsErrors[keyof GetProductCustomFieldsErrors];
-export type GetProductCustomFieldsResponses = {
+export type GetCustomFieldsResponses = {
     200: {
-        data?: Array<CustomFieldData>;
-        meta?: MetaCollectionFull2;
+        data?: Array<{
+            id?: number;
+            name: string;
+            value: string;
+        }>;
+        meta?: MetaCollectionFull;
     };
 };
-export type GetProductCustomFieldsResponse = GetProductCustomFieldsResponses[keyof GetProductCustomFieldsResponses];
-export type CreateProductCustomFieldData = {
-    body: CustomFieldPost;
-    path: {
-        product_id: number;
+export type GetCustomFieldsResponse = GetCustomFieldsResponses[keyof GetCustomFieldsResponses];
+export type CreateCustomFieldData = {
+    body: {
+        name: string;
+        value: string;
     };
-    query?: never;
-    url: '/catalog/products/{product_id}/custom-fields';
-};
-export type CreateProductCustomFieldErrors = {
-    401: string;
-    403: GeneralErrorWithErrors;
-    404: GeneralError;
-    405: MethodNotAllowedError;
-    415: string;
-    422: GeneralError;
-};
-export type CreateProductCustomFieldError = CreateProductCustomFieldErrors[keyof CreateProductCustomFieldErrors];
-export type CreateProductCustomFieldResponses = {
-    200: {
-        data?: CustomFieldData;
-        meta?: MetaEmptyFull2;
-    };
-};
-export type CreateProductCustomFieldResponse = CreateProductCustomFieldResponses[keyof CreateProductCustomFieldResponses];
-export type DeleteProductCustomFieldData = {
-    body?: never;
-    path: {
-        product_id: number;
-        custom_field_id: number;
-    };
-    query?: never;
-    url: '/catalog/products/{product_id}/custom-fields/{custom_field_id}';
-};
-export type DeleteProductCustomFieldErrors = {
-    401: string;
-    403: GeneralErrorWithErrors;
-    404: GeneralError;
-    405: MethodNotAllowedError;
-};
-export type DeleteProductCustomFieldError = DeleteProductCustomFieldErrors[keyof DeleteProductCustomFieldErrors];
-export type DeleteProductCustomFieldResponses = {
-    204: void;
-};
-export type DeleteProductCustomFieldResponse = DeleteProductCustomFieldResponses[keyof DeleteProductCustomFieldResponses];
-export type GetProductCustomFieldData = {
-    body?: never;
-    path: {
-        product_id: number;
-        custom_field_id: number;
-    };
-    query?: {
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
-    };
-    url: '/catalog/products/{product_id}/custom-fields/{custom_field_id}';
-};
-export type GetProductCustomFieldErrors = {
-    401: string;
-    403: GeneralErrorWithErrors;
-    404: GeneralError;
-    405: MethodNotAllowedError;
-};
-export type GetProductCustomFieldError = GetProductCustomFieldErrors[keyof GetProductCustomFieldErrors];
-export type GetProductCustomFieldResponses = {
-    200: {
-        data?: CustomFieldData;
-        meta?: MetaEmptyFull2;
-    };
-};
-export type GetProductCustomFieldResponse = GetProductCustomFieldResponses[keyof GetProductCustomFieldResponses];
-export type UpdateProductCustomFieldData = {
-    body: CustomFieldPut;
-    path: {
-        product_id: number;
-        custom_field_id: number;
-    };
-    query?: never;
-    url: '/catalog/products/{product_id}/custom-fields/{custom_field_id}';
-};
-export type UpdateProductCustomFieldErrors = {
-    401: string;
-    403: GeneralErrorWithErrors;
-    404: GeneralError;
-    405: MethodNotAllowedError;
-    415: string;
-    422: GeneralError;
-};
-export type UpdateProductCustomFieldError = UpdateProductCustomFieldErrors[keyof UpdateProductCustomFieldErrors];
-export type UpdateProductCustomFieldResponses = {
-    200: {
-        data?: CustomFieldData;
-        meta?: MetaEmptyFull2;
-    };
-};
-export type UpdateProductCustomFieldResponse = UpdateProductCustomFieldResponses[keyof UpdateProductCustomFieldResponses];
-export type GetAllBulkPricingRulesData = {
-    body?: never;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -2133,21 +1501,174 @@ export type GetAllBulkPricingRulesData = {
     path: {
         product_id: number;
     };
+    query?: never;
+    url: '/catalog/products/{product_id}/custom-fields';
+};
+export type CreateCustomFieldErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type CreateCustomFieldError = CreateCustomFieldErrors[keyof CreateCustomFieldErrors];
+export type CreateCustomFieldResponses = {
+    200: {
+        data?: {
+            id?: number;
+            name: string;
+            value: string;
+        };
+        meta?: MetaEmptyFull;
+    };
+};
+export type CreateCustomFieldResponse = CreateCustomFieldResponses[keyof CreateCustomFieldResponses];
+export type DeleteCustomFieldByIdData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        product_id: number;
+        custom_field_id: number;
+    };
+    query?: never;
+    url: '/catalog/products/{product_id}/custom-fields/{custom_field_id}';
+};
+export type DeleteCustomFieldByIdErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+export type DeleteCustomFieldByIdError = DeleteCustomFieldByIdErrors[keyof DeleteCustomFieldByIdErrors];
+export type DeleteCustomFieldByIdResponses = {
+    204: void;
+};
+export type DeleteCustomFieldByIdResponse = DeleteCustomFieldByIdResponses[keyof DeleteCustomFieldByIdResponses];
+export type GetCustomFieldByIdData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        product_id: number;
+        custom_field_id: number;
+    };
     query?: {
-        include_fields?: Array<'quantity_min' | 'quantity_max' | 'type' | 'amount'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
+    };
+    url: '/catalog/products/{product_id}/custom-fields/{custom_field_id}';
+};
+export type GetCustomFieldByIdErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+export type GetCustomFieldByIdError = GetCustomFieldByIdErrors[keyof GetCustomFieldByIdErrors];
+export type GetCustomFieldByIdResponses = {
+    200: {
+        data?: ProductCustomFieldBase;
+        meta?: MetaEmptyFull;
+    };
+};
+export type GetCustomFieldByIdResponse = GetCustomFieldByIdResponses[keyof GetCustomFieldByIdResponses];
+export type UpdateCustomFieldData = {
+    body: {
+        id?: number;
+        name: string;
+        value: string;
+    };
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path: {
+        product_id: number;
+        custom_field_id: number;
+    };
+    query?: never;
+    url: '/catalog/products/{product_id}/custom-fields/{custom_field_id}';
+};
+export type UpdateCustomFieldErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type UpdateCustomFieldError = UpdateCustomFieldErrors[keyof UpdateCustomFieldErrors];
+export type UpdateCustomFieldResponses = {
+    200: {
+        data?: {
+            id?: number;
+            name: string;
+            value: string;
+        };
+        meta?: MetaEmptyFull;
+    };
+};
+export type UpdateCustomFieldResponse = UpdateCustomFieldResponses[keyof UpdateCustomFieldResponses];
+export type GetBulkPricingRulesData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        product_id: number;
+    };
+    query?: {
+        include_fields?: string;
+        exclude_fields?: string;
+        page?: number;
+        limit?: number;
     };
     url: '/catalog/products/{product_id}/bulk-pricing-rules';
 };
-export type GetAllBulkPricingRulesResponses = {
+export type GetBulkPricingRulesErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+export type GetBulkPricingRulesError = GetBulkPricingRulesErrors[keyof GetBulkPricingRulesErrors];
+export type GetBulkPricingRulesResponses = {
     200: {
-        data?: {
-            readonly id?: number;
-        } & BulkPricingRuleResponse;
+        data?: Array<{
+            readonly id: number;
+        } & BulkPricingRuleFull>;
         meta?: MetaCollectionFull;
     };
 };
-export type GetAllBulkPricingRulesResponse = GetAllBulkPricingRulesResponses[keyof GetAllBulkPricingRulesResponses];
+export type GetBulkPricingRulesResponse = GetBulkPricingRulesResponses[keyof GetBulkPricingRulesResponses];
 export type CreateBulkPricingRuleData = {
     body: BulkPricingRuleFull;
     headers: {
@@ -2157,19 +1678,51 @@ export type CreateBulkPricingRuleData = {
     path: {
         product_id: number;
     };
-    query?: never;
+    query?: {
+        page?: number;
+        limit?: number;
+    };
     url: '/catalog/products/{product_id}/bulk-pricing-rules';
 };
+export type CreateBulkPricingRuleErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+    409: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+    422: {
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    };
+};
+export type CreateBulkPricingRuleError = CreateBulkPricingRuleErrors[keyof CreateBulkPricingRuleErrors];
 export type CreateBulkPricingRuleResponses = {
     200: {
         data?: {
-            readonly id?: number;
-        } & BulkPricingRuleResponse;
-        meta?: MetaEmptyFull;
+            readonly id: number;
+        } & BulkPricingRuleFull;
+        meta?: {
+            [key: string]: unknown;
+        };
     };
 };
 export type CreateBulkPricingRuleResponse = CreateBulkPricingRuleResponses[keyof CreateBulkPricingRuleResponses];
-export type DeleteBulkPricingRuleData = {
+export type DeleteBulkPricingRuleByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -2181,7 +1734,7 @@ export type DeleteBulkPricingRuleData = {
     query?: never;
     url: '/catalog/products/{product_id}/bulk-pricing-rules/{bulk_pricing_rule_id}';
 };
-export type DeleteBulkPricingRuleErrors = {
+export type DeleteBulkPricingRuleByIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -2189,12 +1742,12 @@ export type DeleteBulkPricingRuleErrors = {
         instance?: string;
     };
 };
-export type DeleteBulkPricingRuleError = DeleteBulkPricingRuleErrors[keyof DeleteBulkPricingRuleErrors];
-export type DeleteBulkPricingRuleResponses = {
+export type DeleteBulkPricingRuleByIdError = DeleteBulkPricingRuleByIdErrors[keyof DeleteBulkPricingRuleByIdErrors];
+export type DeleteBulkPricingRuleByIdResponses = {
     204: void;
 };
-export type DeleteBulkPricingRuleResponse = DeleteBulkPricingRuleResponses[keyof DeleteBulkPricingRuleResponses];
-export type GetBulkPricingRuleData = {
+export type DeleteBulkPricingRuleByIdResponse = DeleteBulkPricingRuleByIdResponses[keyof DeleteBulkPricingRuleByIdResponses];
+export type GetBulkPricingRuleByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -2204,12 +1757,12 @@ export type GetBulkPricingRuleData = {
         bulk_pricing_rule_id: number;
     };
     query?: {
-        include_fields?: Array<'quantity_min' | 'quantity_max' | 'type' | 'amount'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/bulk-pricing-rules/{bulk_pricing_rule_id}';
 };
-export type GetBulkPricingRuleErrors = {
+export type GetBulkPricingRuleByIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -2217,16 +1770,16 @@ export type GetBulkPricingRuleErrors = {
         instance?: string;
     };
 };
-export type GetBulkPricingRuleError = GetBulkPricingRuleErrors[keyof GetBulkPricingRuleErrors];
-export type GetBulkPricingRuleResponses = {
+export type GetBulkPricingRuleByIdError = GetBulkPricingRuleByIdErrors[keyof GetBulkPricingRuleByIdErrors];
+export type GetBulkPricingRuleByIdResponses = {
     200: {
         data?: {
             readonly id: number;
-        } & BulkPricingRuleResponse;
+        } & BulkPricingRuleFull;
         meta?: MetaEmptyFull;
     };
 };
-export type GetBulkPricingRuleResponse = GetBulkPricingRuleResponses[keyof GetBulkPricingRuleResponses];
+export type GetBulkPricingRuleByIdResponse = GetBulkPricingRuleByIdResponses[keyof GetBulkPricingRuleByIdResponses];
 export type UpdateBulkPricingRuleData = {
     body: {
         readonly id: number;
@@ -2273,12 +1826,16 @@ export type UpdateBulkPricingRuleResponses = {
     200: {
         data?: {
             readonly id?: number;
-        } & BulkPricingRuleResponse;
+            quantity_min: number;
+            quantity_max: number;
+            type: 'price' | 'percent' | 'fixed';
+            amount: number;
+        };
         meta?: MetaEmptyFull;
     };
 };
 export type UpdateBulkPricingRuleResponse = UpdateBulkPricingRuleResponses[keyof UpdateBulkPricingRuleResponses];
-export type GetProductMetafieldsData = {
+export type GetProductMetafieldsByProductIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -2291,18 +1848,27 @@ export type GetProductMetafieldsData = {
         limit?: number;
         key?: string;
         namespace?: string;
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/metafields';
 };
-export type GetProductMetafieldsResponses = {
+export type GetProductMetafieldsByProductIdErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+export type GetProductMetafieldsByProductIdError = GetProductMetafieldsByProductIdErrors[keyof GetProductMetafieldsByProductIdErrors];
+export type GetProductMetafieldsByProductIdResponses = {
     200: {
         data?: Array<MetafieldFull>;
         meta?: MetaCollectionFull;
     };
 };
-export type GetProductMetafieldsResponse = GetProductMetafieldsResponses[keyof GetProductMetafieldsResponses];
+export type GetProductMetafieldsByProductIdResponse = GetProductMetafieldsByProductIdResponses[keyof GetProductMetafieldsByProductIdResponses];
 export type CreateProductMetafieldData = {
     body: MetafieldBase;
     headers: {
@@ -2316,12 +1882,6 @@ export type CreateProductMetafieldData = {
     url: '/catalog/products/{product_id}/metafields';
 };
 export type CreateProductMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
     409: {
         errors?: {
             [key: string]: unknown;
@@ -2349,7 +1909,7 @@ export type CreateProductMetafieldResponses = {
     };
 };
 export type CreateProductMetafieldResponse = CreateProductMetafieldResponses[keyof CreateProductMetafieldResponses];
-export type DeleteProductMetafieldData = {
+export type DeleteProductMetafieldByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -2361,20 +1921,11 @@ export type DeleteProductMetafieldData = {
     query?: never;
     url: '/catalog/products/{product_id}/metafields/{metafield_id}';
 };
-export type DeleteProductMetafieldErrors = {
-    404: {
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    };
-};
-export type DeleteProductMetafieldError = DeleteProductMetafieldErrors[keyof DeleteProductMetafieldErrors];
-export type DeleteProductMetafieldResponses = {
+export type DeleteProductMetafieldByIdResponses = {
     204: void;
 };
-export type DeleteProductMetafieldResponse = DeleteProductMetafieldResponses[keyof DeleteProductMetafieldResponses];
-export type GetProductMetafieldData = {
+export type DeleteProductMetafieldByIdResponse = DeleteProductMetafieldByIdResponses[keyof DeleteProductMetafieldByIdResponses];
+export type GetProductMetafieldByProductIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -2384,12 +1935,12 @@ export type GetProductMetafieldData = {
         metafield_id: number;
     };
     query?: {
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/metafields/{metafield_id}';
 };
-export type GetProductMetafieldErrors = {
+export type GetProductMetafieldByProductIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -2397,14 +1948,14 @@ export type GetProductMetafieldErrors = {
         instance?: string;
     };
 };
-export type GetProductMetafieldError = GetProductMetafieldErrors[keyof GetProductMetafieldErrors];
-export type GetProductMetafieldResponses = {
+export type GetProductMetafieldByProductIdError = GetProductMetafieldByProductIdErrors[keyof GetProductMetafieldByProductIdErrors];
+export type GetProductMetafieldByProductIdResponses = {
     200: {
         data?: MetafieldFull;
         meta?: MetaEmptyFull;
     };
 };
-export type GetProductMetafieldResponse = GetProductMetafieldResponses[keyof GetProductMetafieldResponses];
+export type GetProductMetafieldByProductIdResponse = GetProductMetafieldByProductIdResponses[keyof GetProductMetafieldByProductIdResponses];
 export type UpdateProductMetafieldData = {
     body: MetafieldBase;
     headers: {
@@ -2419,12 +1970,6 @@ export type UpdateProductMetafieldData = {
     url: '/catalog/products/{product_id}/metafields/{metafield_id}';
 };
 export type UpdateProductMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
     404: {
         status?: number;
         title?: string;
@@ -2449,11 +1994,11 @@ export type GetProductReviewsData = {
         product_id: number;
     };
     query?: {
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
         page?: number;
         limit?: number;
-        status?: 0 | 1;
+        status?: number;
     };
     url: '/catalog/products/{product_id}/reviews';
 };
@@ -2478,6 +2023,7 @@ export type GetProductReviewsResponses = {
             date_reviewed: string;
         } & {
             id?: number;
+            product_id?: number;
             date_created?: string;
             date_modified?: string;
         }>;
@@ -2527,6 +2073,7 @@ export type CreateProductReviewResponses = {
             date_reviewed: string;
         } & {
             id?: number;
+            product_id?: number;
             date_created?: string;
             date_modified?: string;
         };
@@ -2550,7 +2097,7 @@ export type DeleteProductReviewResponses = {
     204: void;
 };
 export type DeleteProductReviewResponse = DeleteProductReviewResponses[keyof DeleteProductReviewResponses];
-export type GetProductReviewData = {
+export type GetProductReviewByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -2560,12 +2107,12 @@ export type GetProductReviewData = {
         review_id: number;
     };
     query?: {
-        include_fields?: Array<'name' | 'type' | 'sku' | 'description' | 'weight' | 'width' | 'depth' | 'height' | 'price' | 'cost_price' | 'retail_price' | 'sale_price' | 'map_price' | 'tax_class_id' | 'product_tax_code' | 'calculated_price' | 'categories' | 'brand_id' | 'option_set_id' | 'option_set_display' | 'inventory_level' | 'inventory_warning_level' | 'inventory_tracking' | 'reviews_rating_sum' | 'reviews_count' | 'total_sold' | 'fixed_cost_shipping_price' | 'is_free_shipping' | 'is_visible' | 'is_featured' | 'related_products' | 'warranty' | 'bin_picking_number' | 'layout_file' | 'upc' | 'mpn' | 'gtin' | 'date_last_imported' | 'search_keywords' | 'availability' | 'availability_description' | 'condition' | 'is_condition_shown' | 'order_quantity_minimum' | 'order_quantity_maximum' | 'page_title' | 'meta_keywords' | 'meta_description' | 'date_created' | 'date_modified' | 'view_count' | 'preorder_release_date' | 'preorder_message' | 'is_preorder_only' | 'is_price_hidden' | 'price_hidden_label' | 'custom_url' | 'base_variant_id' | 'open_graph_type' | 'open_graph_title' | 'open_graph_description' | 'open_graph_use_meta_description' | 'open_graph_use_product_name' | 'open_graph_use_image'>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/reviews/{review_id}';
 };
-export type GetProductReviewErrors = {
+export type GetProductReviewByIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -2573,8 +2120,8 @@ export type GetProductReviewErrors = {
         instance?: string;
     };
 };
-export type GetProductReviewError = GetProductReviewErrors[keyof GetProductReviewErrors];
-export type GetProductReviewResponses = {
+export type GetProductReviewByIdError = GetProductReviewByIdErrors[keyof GetProductReviewByIdErrors];
+export type GetProductReviewByIdResponses = {
     200: {
         data?: {
             title: string;
@@ -2592,7 +2139,7 @@ export type GetProductReviewResponses = {
         meta?: MetaEmptyFull;
     };
 };
-export type GetProductReviewResponse = GetProductReviewResponses[keyof GetProductReviewResponses];
+export type GetProductReviewByIdResponse = GetProductReviewByIdResponses[keyof GetProductReviewByIdResponses];
 export type UpdateProductReviewData = {
     body: {
         title: string;
@@ -2635,6 +2182,7 @@ export type UpdateProductReviewResponses = {
             date_reviewed: string;
         } & {
             id?: number;
+            product_id?: number;
             date_created?: string;
             date_modified?: string;
         };
@@ -2649,8 +2197,8 @@ export type DeleteProductsChannelAssignmentsData = {
     };
     path?: never;
     query?: {
-        'product_id:in'?: Array<number>;
-        'channel_id:in'?: Array<number>;
+        'product_id:in'?: string;
+        'channel_id:in'?: string;
     };
     url: '/catalog/products/channel-assignments';
 };
@@ -2671,8 +2219,8 @@ export type GetProductsChannelAssignmentsData = {
     query?: {
         page?: number;
         limit?: number;
-        'product_id:in'?: Array<number>;
-        'channel_id:in'?: Array<number>;
+        'product_id:in'?: string;
+        'channel_id:in'?: string;
     };
     url: '/catalog/products/channel-assignments';
 };
@@ -2708,8 +2256,8 @@ export type DeleteProductsCategoryAssignmentsData = {
     };
     path?: never;
     query?: {
-        'product_id:in'?: Array<number>;
-        'category_id:in'?: Array<number>;
+        'product_id:in'?: string;
+        'category_id:in'?: string;
     };
     url: '/catalog/products/category-assignments';
 };
@@ -2730,8 +2278,8 @@ export type GetProductsCategoryAssignmentsData = {
     query?: {
         page?: number;
         limit?: number;
-        'product_id:in'?: Array<number>;
-        'category_id:in'?: Array<number>;
+        'product_id:in'?: string;
+        'category_id:in'?: string;
     };
     url: '/catalog/products/category-assignments';
 };
@@ -2787,90 +2335,3 @@ export type GetCatalogSummaryResponses = {
     };
 };
 export type GetCatalogSummaryResponse = GetCatalogSummaryResponses[keyof GetCatalogSummaryResponses];
-export type DeleteProductsMetafieldsData = {
-    body?: Array<number>;
-    path?: never;
-    query?: never;
-    url: '/catalog/products/metafields';
-};
-export type DeleteProductsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-export type DeleteProductsMetafieldsError = DeleteProductsMetafieldsErrors[keyof DeleteProductsMetafieldsErrors];
-export type DeleteProductsMetafieldsResponses = {
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-export type DeleteProductsMetafieldsResponse = DeleteProductsMetafieldsResponses[keyof DeleteProductsMetafieldsResponses];
-export type GetProductsMetafieldsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        page?: number;
-        limit?: number;
-        key?: string;
-        'key:in'?: Array<string>;
-        namespace?: string;
-        'namespace:in'?: Array<string>;
-        direction?: 'asc' | 'desc';
-        include_fields?: Array<'resource_id' | 'resource_id:in' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-        'date_modified:min'?: string;
-        'date_modified:max'?: string;
-        'date_created:min'?: string;
-        'date_created:max'?: string;
-    };
-    url: '/catalog/products/metafields';
-};
-export type GetProductsMetafieldsResponses = {
-    200: MetaFieldCollectionResponse;
-};
-export type GetProductsMetafieldsResponse = GetProductsMetafieldsResponses[keyof GetProductsMetafieldsResponses];
-export type CreateProductsMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        resource_id: number;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/catalog/products/metafields';
-};
-export type CreateProductsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-export type CreateProductsMetafieldsError = CreateProductsMetafieldsErrors[keyof CreateProductsMetafieldsErrors];
-export type CreateProductsMetafieldsResponses = {
-    200: MetaFieldCollectionResponsePostPut;
-};
-export type CreateProductsMetafieldsResponse = CreateProductsMetafieldsResponses[keyof CreateProductsMetafieldsResponses];
-export type UpdateProductsMetafieldsData = {
-    body?: Array<MetafieldBasePut & {
-        id: number;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/catalog/products/metafields';
-};
-export type UpdateProductsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-export type UpdateProductsMetafieldsError = UpdateProductsMetafieldsErrors[keyof UpdateProductsMetafieldsErrors];
-export type UpdateProductsMetafieldsResponses = {
-    200: MetaFieldCollectionResponsePostPut;
-};
-export type UpdateProductsMetafieldsResponse = UpdateProductsMetafieldsResponses[keyof UpdateProductsMetafieldsResponses];

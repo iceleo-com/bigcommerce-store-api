@@ -5,7 +5,10 @@ export * as CustomerLoginApiSpecs from '../generated/customer-login';
 export declare class CustomerLoginApi {
     private readonly request;
     constructor(request: RequestService);
-    getCustomerLogin(storeDomain: string, jwtToken: CustomerLoginApiSpecs.GetCustomerLoginData['path']['jwt_token']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+    getLoginTokenByJwtToken(storeDomain: string, jwtToken: CustomerLoginApiSpecs.GetLoginTokenByJwtTokenData['path']['jwt_token']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        [key: string]: unknown;
+    }>>>;
+    getCustomerLogin(...args: Parameters<CustomerLoginApi['getLoginTokenByJwtToken']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
         [key: string]: unknown;
     }>>>;
 }

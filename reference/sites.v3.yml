@@ -5,11 +5,6 @@ info:
   description: |-
     Create and manage [sites](#sites) and [routes](#routes) for [headless storefront](https://support.bigcommerce.com/s/article/The-Headless-Approach#what-mean) sales [channels](/docs/rest-management/channels).
 
-    **Note:** For the "urls" object, we no longer modify the `www` prefix of the primary URL. The API returns URLs exactly as the customer enters them, similar to the "url" field.
-    
-    * If the customer saves a URL with `www`, the API returns it with `www`.
-    * If the customer saves a URL without `www`, the API returns it without `www`.
-    
     ## [Sites](/docs/rest-management/sites)
 
     Sites link [headless storefronts](/docs/storefront/headless) to sales [channels](/docs/rest-management/channels). To [create a site](/docs/rest-management/sites#create-a-site), send a `POST` request to `/stores/{{STORE_HASH}}/v3/sites`.
@@ -143,7 +138,7 @@ paths:
       - $ref: '#/components/parameters/Accept'
     post:
       summary: Create a Site
-      operationId: createSite
+      operationId: post-site
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -178,7 +173,6 @@ paths:
           $ref: '#/components/responses/site_RespCollection'
       summary: Get Sites
       description: 'Get sites linked to a [headless storefront](/docs/storefront/headless) sales channels.'
-      operationId: getSites
       tags:
         - Sites
       parameters:
@@ -193,24 +187,16 @@ paths:
           schema:
             type: integer
         - schema:
-            type: array
-            items: 
-              type: integer
-              example: 1
-          style: form
-          explode: false
+            type: integer
+            example: 1
           in: query
           name: 'channel_id:in'
-          description: A comma-separated list that returns sites by channel ID.
+          description: Filters returned sites by channel ID.
         - schema:
-            type: array
-            items:
-              type: string
-          style: form
-          explode: false
+            type: string
           in: query
           name: 'url_type:in'
-          description: A comma-separated list that returns sites by their URL type, specified in the `data.urls` array.
+          description: Filters sites returned in the `data.urls` array by their URL type.
   '/sites/{site_id}':
     get:
       summary: Get a Site
@@ -223,7 +209,7 @@ paths:
       description: 'Get a site with site ID `{site_id}`.'
     put:
       summary: Update a Site
-      operationId: updateSite
+      operationId: putSite
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -246,21 +232,10 @@ paths:
       operationId: deleteSite
       responses:
         '204':
-          description: No Content.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties: {}
-                  meta: 
-                    type: object
-                    properties: {}
+          description: ''
       tags:
         - Sites
-      description: 'Delete a site with site ID `{site_id}`. Remove the URL set for a given site ID.'
+      description: 'Delete a site with site ID `{site_id}`.'
     parameters:
       - $ref: '#/components/parameters/Accept'
       - name: site_id
@@ -278,7 +253,7 @@ paths:
           type: integer
     get:
       summary: Get a Site’s Routes
-      operationId: getSiteRoutes
+      operationId: index-site-routes
       parameters:
         - name: type
           in: query
@@ -333,7 +308,7 @@ paths:
       description: Get a site’s routes.
     post:
       summary: Create a Site Route
-      operationId: createSiteRoute
+      operationId: post-site-route
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -410,16 +385,13 @@ paths:
         ## Usage Notes
         * `id` is required when updating an existing route.
       summary: Update a Site’s Routes
-      operationId: updateSiteRoutes
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/siteRoute_Full'
+              $ref: '#/components/schemas/siteRoute_Full'
         x-examples:
           application/json:
             - id: 1
@@ -435,7 +407,7 @@ paths:
   '/sites/{site_id}/routes/{route_id}':
     get:
       summary: Get a Site Route
-      operationId: getSiteRoute
+      operationId: get-site-route
       responses:
         '200':
           description: ''
@@ -462,7 +434,7 @@ paths:
       description: Get a site’s route.
     put:
       summary: Update a Site Route
-      operationId: updateSiteRoute
+      operationId: put-site-route
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -485,7 +457,7 @@ paths:
         Update a site’s route.
     delete:
       summary: Delete a Site Route
-      operationId: deleteSiteRoute
+      operationId: delete-route
       responses:
         '204':
           description: ''
@@ -513,11 +485,11 @@ paths:
           type: integer
         required: true
     get:
-      summary: Get a Site’s SSL TLS Certificate Information
+      summary: Get a Site’s SSL/TLS Certificate Information
       description: Obtain information about a site’s SSL/TLS certificate.
       tags:
         - Site Certificate
-      operationId: getSiteCertificate
+      operationId: getSitesIdCertificate
       responses:
         '200':
           description: OK
@@ -527,8 +499,8 @@ paths:
                 $ref: '#/components/schemas/CertificateResponse'
               examples: {}
     put:
-      summary: Upsert a Site’s SSL TLS Certificate Information
-      operationId: upsertSiteCertificate
+      summary: Upsert a Site’s SSL/TLS Certificate Information
+      operationId: putSiteIdCertificate
       parameters:
         - $ref: '#/components/parameters/ContentType'
       tags:
@@ -571,18 +543,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetCertificatesResponse'
-      operationId: getSitesCertificates
+      operationId: get-sites-certificates
       description: Return all SSL certificates connected to domains within a store.
       parameters:
         - schema:
-            type: array
-            items:
-              type: string
-          style: form
-          explode: false
+            type: string
           in: query
           name: 'urls:in'
-          description: A comma-separated list that filters certificates by one or more URLs.
+          description: Query certificates by one or more URLs
 components:
   schemas:
     _metaCollection:
@@ -673,7 +641,6 @@ components:
           example: '2022-01-04T04:15:50.000Z'
         ssl_status:
           type: string
-          deprecated: true
           enum:
             - dedicated
             - shared
@@ -738,8 +705,6 @@ components:
       x-internal: false
     _errors:
       type: object
-      properties: {}
-      additionalProperties: true
       description: The keys and values in an errors object will vary depending on the error received.
       title: _errors
       x-internal: false
@@ -1079,21 +1044,6 @@ components:
       properties: {}
       additionalProperties: true
       description: Response metadata.
-    Meta: 
-      type: object
-      properties:
-        pagination:
-          type: object
-          properties:
-            offset:
-              type: integer
-              description: The number of items skipped before starting the set of items returned. 
-            limit:
-              type: integer
-              description: The maximum number of items returned per page.
-            total_items:
-              type: integer
-              description: The total number of items available across all pages. 
   responses:
     502_GatewayError:
       description: 'If something happens during the request that causes it to fail, a 502 response will be returned. A new request should be made; however, it could fail.'
@@ -1181,7 +1131,7 @@ components:
               data:
                 $ref: '#/components/schemas/_site'
               meta:
-                $ref: '#/components/schemas/MetaOpen'
+                $ref: '#/components/schemas/_metaCollection'
           examples:
             Example:
               value:
@@ -1191,6 +1141,7 @@ components:
                   channel_id: 234
                   created_at: '2018-01-04T04:15:50.000Z'
                   updated_at: '2018-01-04T04:15:50.000Z'
+                  ssl_status: dedicated
                   urls:
                     - url: 'https://example.com'
                       type: primary
@@ -1205,7 +1156,11 @@ components:
                       created_at: '2020-11-03T19:26:12Z'
                       updated_at: '2021-08-31T21:46:50Z'
                   is_checkout_url_customized: true
-                meta: {}
+                meta:
+                  pagination:
+                    offset: 0
+                    limit: 50
+                    total_items: 1
     BulkErrorResponse:
       description: ''
       content:
@@ -1264,7 +1219,7 @@ components:
                 items:
                   $ref: '#/components/schemas/_site'
               meta:
-                $ref: '#/components/schemas/Meta'
+                $ref: '#/components/schemas/_metaCollection'
           examples: {}
     siteRoute_Resp:
       description: ''

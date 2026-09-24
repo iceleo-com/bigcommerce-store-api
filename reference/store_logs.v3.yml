@@ -22,7 +22,7 @@ paths:
       description: 'Get system logs '
       tags:
         - System Logs
-      operationId: getStoreSystemLogs
+      operationId: get-sites
       responses:
         '200':
           description: The request completed successfully.
@@ -38,21 +38,19 @@ paths:
                   meta:
                     $ref: '#/components/schemas/IndexMeta'
       parameters:
-        - name: limit
-          in: query
-          schema:
+        - schema:
             type: integer
             default: 50
-          description: Query parameter that lets you return the number of results displayed per page.
-        - name: page
           in: query
-          schema:
+          name: limit
+          description: Query parameter that lets you return the number of results displayed per page.
+        - schema:
             type: integer
             default: 1
-          description: Query parameter that lets you specify the starting page in which results are returned.
-        - name: type
           in: query
-          schema:
+          name: page
+          description: Query parameter that lets you specify the starting page in which results are returned.
+        - schema:
             type: string
             enum: 
               - general
@@ -63,15 +61,15 @@ paths:
               - emailintegration
               - ordersettings
               - design
+          in: query
+          name: type
           description: Query parameter that lets you filter the results by log type.
-        - name: 'type:not'
-          in: query
-          schema:
+        - schema:
             type: string
-          description: Query parameter that lets you exclude a log type from the results.
-        - name: module
           in: query
-          schema:
+          name: 'type:not'
+          description: Query parameter that lets you exclude a log type from the results.
+        - schema:
             type: string
             enum:
               - export+only
@@ -79,53 +77,49 @@ paths:
               - theme+download
               - order+status
               - optimized+checkout
+          in: query
+          name: module
           description: Query parameter that lets you filter the results by module.
-        - name: 'module:not'
-          in: query
-          schema:
+        - schema:
             type: string
-          description: Query parameter that lets you exclude a log module from the results.
-        - name: severity
           in: query
-          schema:
+          name: 'module:not'
+          description: Query parameter that lets you exclude a log module from the results.
+        - schema:
             type: integer
             enum:
               - 1
               - 2
               - 3
               - 4
+          in: query
+          name: severity
           description: 'Query parameter that lets you filter results by severity level, as an integer. The following values are possible: Success = 1, Notice = 2, Warning = 3, Error = 4'
-        - name: 'severity:min'
-          in: query
-          schema:
+        - schema:
             type: integer
+          in: query
+          name: 'severity:min'
           description: 'Query parameter that lets you filter by minimum severity, as an integer.'
-        - name: 'severity:max'
-          in: query
-          schema:
+        - schema:
             type: integer
+          in: query
+          name: 'severity:max'
           description: 'Query parameter that lets you filter by maximum severity, as an integer.'
-        - name: 'id:in'
-          in: query
-          schema:
-            type: array
-            items:
-              type: integer
-          style: form
-          explode: false
-          description: 'A comma-separated list of log IDs by which to filter. For example, `?id:in=3,4,6`.'
-        - name: 'sort'
-          in: query
-          schema:
+        - schema:
             type: string
-            enum: ['date_created','type']
-          description: 'The log key by which to sort results. If left blank, results will be reported in order of creation. This parameter is case-sensitive.'
-        - name: 'direction'
           in: query
-          schema:
+          name: 'id:in'
+          description: 'Query parameter that lets you filter by a list of log IDs, as a CSV. For example ?id:in=3,4,6'
+        - schema:
             type: string
-            enum: ['asc','desc']
-          description: 'The direction in which to sort results. Defaults to ascending (`asc`). This parameter is case-sensitive.'
+          in: query
+          name: 'date_created:min'
+          description: 'Query parameter that lets you filter by the minimum date created in [Unix time](https://www.unixtimestamp.com/), for example, `?date_created:min=1657688400`. Returns logs created after this date.'
+        - schema:
+            type: string
+          in: query
+          name: 'date_created:max'
+          description: 'Query parameter that lets you filter by the maximum date created in [Unix time](https://www.unixtimestamp.com/), for example, `?date_created:min=1658379600`. Returns logs created before this date.'
     parameters: []
 components:
   schemas:
@@ -189,7 +183,6 @@ components:
           type: string
     DetailedErrors:
       type: object
-      properties: {}
       additionalProperties:
         type: string
     SystemLog:

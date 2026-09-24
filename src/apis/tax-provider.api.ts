@@ -11,12 +11,12 @@ export class TaxProviderApi {
     }
 
     /**
-     * Estimate taxes
+     * Estimate Taxes
      *
      * Submit the quote request to retrieve an estimate from the enabled third-party tax provider. Estimates are not expected to be persisted by the tax provider.
 
      > Server URL
-     > - For supporting tax providers, the server URL contains the tax providerʼs profile field; for example, `your_profile.example.com`.
+     > - For supporting tax providers, the server URL contains the tax provider's profile field; for example, `your_profile.example.com`.
      > - The Try it feature is not currently supported for this endpoint.
 
      The following actions can trigger tax estimate requests multiple times during a standard checkout on a BigCommerce storefront, depending on the BigCommerce merchant’s settings.
@@ -39,10 +39,10 @@ export class TaxProviderApi {
      - Edit order.
      - Test connection feature in Tax Settings.
      */
-    estimateTaxes(
-        requestBody: TaxProviderApiSpecs.EstimateTaxesData['body'],
+    estimate(
+        requestBody: TaxProviderApiSpecs.EstimateData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<TaxProviderApiSpecs.EstimateTaxesResponses[200]>>,(RequestErrorResponse<400, Required<TaxProviderApiSpecs.EstimateTaxesErrors[400]>> | RequestErrorResponse<401, Required<TaxProviderApiSpecs.EstimateTaxesErrors[401]>> | RequestErrorResponse<500, Required<TaxProviderApiSpecs.EstimateTaxesErrors[500]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<TaxProviderApiSpecs.EstimateResponses[200]>>,(RequestErrorResponse<400, Required<TaxProviderApiSpecs.EstimateErrors[400]>> | RequestErrorResponse<401, Required<TaxProviderApiSpecs.EstimateErrors[401]>> | RequestErrorResponse<500, Required<TaxProviderApiSpecs.EstimateErrors[500]>>)>({
             path: 'https://{app_domain}/estimate',
             contentType: 'application/json',
             body: requestBody,
@@ -50,21 +50,35 @@ export class TaxProviderApi {
     }
 
     /**
-     * Void tax quote
+     * @deprecated Use `estimate` instead.
+     */
+    estimateTaxes(...args: Parameters<TaxProviderApi['estimate']>) {
+        return this.estimate(...args);
+    }
+
+    /**
+     * Void Tax Quote
      *
-     * Invalidate the persisted tax quote as identified by the given unique ID. Relevant to order cancellations, full refunds, or moving an order from a paid status to an unpaid status.
+     * Invalidate the persisted tax quote as identified by the given unique ID. Relevant to order cancellations or when moving an order from a paid status to an unpaid status.
 
      > Server URL
-     > - For supporting tax providers, the server URL contains the tax providerʼs profile field; for example, `your_profile.example.com`.
+     > - For supporting tax providers, the server URL contains the tax provider's profile field; for example, `your_profile.example.com`.
      > - The Try it feature is not currently supported for this endpoint.
      */
-    voidTaxQuote(
-        query?: TaxProviderApiSpecs.VoidTaxQuoteData['query'],
+    void(
+        query?: TaxProviderApiSpecs.VoidData['query'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<TaxProviderApiSpecs.VoidTaxQuoteResponses[200]>>,(RequestErrorResponse<400, Required<TaxProviderApiSpecs.VoidTaxQuoteErrors[400]>> | RequestErrorResponse<401, Required<TaxProviderApiSpecs.VoidTaxQuoteErrors[401]>> | RequestErrorResponse<500, Required<TaxProviderApiSpecs.VoidTaxQuoteErrors[500]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<TaxProviderApiSpecs.VoidResponses[200]>>,(RequestErrorResponse<400, Required<TaxProviderApiSpecs.VoidErrors[400]>> | RequestErrorResponse<401, Required<TaxProviderApiSpecs.VoidErrors[401]>> | RequestErrorResponse<500, Required<TaxProviderApiSpecs.VoidErrors[500]>>)>({
             path: 'https://{app_domain}/void',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `void` instead.
+     */
+    voidTaxQuote(...args: Parameters<TaxProviderApi['void']>) {
+        return this.void(...args);
     }
 
     /**
@@ -72,16 +86,14 @@ export class TaxProviderApi {
      *
      * Submit the quote request to be persisted by the enabled third-party tax provider. A commit operation is intended to be submitted once only, when the Order has been confirmed and paid.
 
-     Merchants may adjust when commit operations occur by adjusting the document submission strategy in their store tax settings. The selected document submission strategy will adjust whether order status or payment status is used to determine if the order is paid. For more information, see the [Tax Settings API Reference](/docs/rest-management/tax-settings).
-
      > Server URL
-     > - For supporting tax providers, the server URL contains the tax providerʼs profile field; for example, `your_profile.example.com`.
+     > - For supporting tax providers, the server URL contains the tax provider's profile field; for example, `your_profile.example.com`.
      > - The Try it feature is not currently supported for this endpoint.
      */
-    commitTaxQuote(
-        requestBody: TaxProviderApiSpecs.CommitTaxQuoteData['body'],
+    commit(
+        requestBody: TaxProviderApiSpecs.CommitData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<TaxProviderApiSpecs.CommitTaxQuoteResponses[200]>>,(RequestErrorResponse<400, Required<TaxProviderApiSpecs.CommitTaxQuoteErrors[400]>> | RequestErrorResponse<401, Required<TaxProviderApiSpecs.CommitTaxQuoteErrors[401]>> | RequestErrorResponse<500, Required<TaxProviderApiSpecs.CommitTaxQuoteErrors[500]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<TaxProviderApiSpecs.CommitResponses[200]>>,(RequestErrorResponse<400, Required<TaxProviderApiSpecs.CommitErrors[400]>> | RequestErrorResponse<401, Required<TaxProviderApiSpecs.CommitErrors[401]>> | RequestErrorResponse<500, Required<TaxProviderApiSpecs.CommitErrors[500]>>)>({
             path: 'https://{app_domain}/commit',
             contentType: 'application/json',
             body: requestBody,
@@ -89,27 +101,41 @@ export class TaxProviderApi {
     }
 
     /**
+     * @deprecated Use `commit` instead.
+     */
+    commitTaxQuote(...args: Parameters<TaxProviderApi['commit']>) {
+        return this.commit(...args);
+    }
+
+    /**
      * Adjust Tax Quote
      *
      * Replace the persisted tax quote (identified by the given unique ID) with the provided quote request (represented by the **AdjustRequest**).
 
-     Relevant for returns, partial refunds, and other Order modifications where there have been changes to the tax liabilities.
+     Relevant for partial refunds, full refunds, returns, and other Order modifications where there have been changes to the tax liabilities.
 
      The returned **Tax Quote** response is expected to be the same to a response returned by an equivalent response to **estimate** or **commit** methods.
 
      > Server URL
-     > - For supporting tax providers, the server URL contains the tax providerʼs profile field; for example, `your_profile.example.com`.
+     > - For supporting tax providers, the server URL contains the tax provider's profile field; for example, `your_profile.example.com`.
      > - The Try it feature is not currently supported for this endpoint.
      */
-    adjustTaxQuote(
-        requestBody: TaxProviderApiSpecs.AdjustTaxQuoteData['body'],
-        query?: TaxProviderApiSpecs.AdjustTaxQuoteData['query'],
+    adjust(
+        requestBody: TaxProviderApiSpecs.AdjustData['body'],
+        query?: TaxProviderApiSpecs.AdjustData['query'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<TaxProviderApiSpecs.AdjustTaxQuoteResponses[200]>>,(RequestErrorResponse<400, Required<TaxProviderApiSpecs.AdjustTaxQuoteErrors[400]>> | RequestErrorResponse<401, Required<TaxProviderApiSpecs.AdjustTaxQuoteErrors[401]>> | RequestErrorResponse<500, Required<TaxProviderApiSpecs.AdjustTaxQuoteErrors[500]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<TaxProviderApiSpecs.AdjustResponses[200]>>,(RequestErrorResponse<400, Required<TaxProviderApiSpecs.AdjustErrors[400]>> | RequestErrorResponse<401, Required<TaxProviderApiSpecs.AdjustErrors[401]>> | RequestErrorResponse<500, Required<TaxProviderApiSpecs.AdjustErrors[500]>>)>({
             path: 'https://{app_domain}/adjust',
             contentType: 'application/json',
             body: requestBody,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `adjust` instead.
+     */
+    adjustTaxQuote(...args: Parameters<TaxProviderApi['adjust']>) {
+        return this.adjust(...args);
     }
 }

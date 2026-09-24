@@ -5,7 +5,7 @@ export * as StorefrontTokensV3ApiSpecs from '../generated/storefront-tokens-v3';
 export declare class StorefrontTokensV3Api {
     private readonly request;
     constructor(request: RequestService);
-    createToken(requestBody: StorefrontTokensV3ApiSpecs.CreateTokenData['body']): Promise<RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<StorefrontTokensV3ApiSpecs.TokenFull>> | RequestErrorResponse<401, Required<unknown>> | RequestErrorResponse<403, Required<unknown>>>;
-    revokeToken(): Promise<RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<unknown>> | RequestErrorResponse<401, Required<unknown>> | RequestErrorResponse<403, Required<unknown>>>;
-    createTokenWithCustomerImpersonation(requestBody: StorefrontTokensV3ApiSpecs.CreateTokenWithCustomerImpersonationData['body']): Promise<RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<StorefrontTokensV3ApiSpecs.TokenFull>> | RequestErrorResponse<401, Required<unknown>> | RequestErrorResponse<403, Required<unknown>>>;
+    createToken(requestBody: StorefrontTokensV3ApiSpecs.CreateTokenData['body']): Promise<RequestSuccessResponse<200, Required<StorefrontTokensV3ApiSpecs.TokenFull>> | RequestErrorResponse<401, Required<unknown>> | RequestErrorResponse<403, Required<unknown>> | RequestErrorResponse<422, Required<unknown>>>;
+    revokeToken(): Promise<RequestSuccessResponse<200, Required<unknown>> | RequestErrorResponse<401, Required<unknown>> | RequestErrorResponse<403, Required<unknown>> | RequestErrorResponse<422, Required<unknown>>>;
+    createTokenWithCustomerImpersonation(requestBody: StorefrontTokensV3ApiSpecs.CreateTokenWithCustomerImpersonationData['body']): Promise<RequestSuccessResponse<200, Required<StorefrontTokensV3ApiSpecs.TokenFull>> | RequestErrorResponse<401, Required<unknown>> | RequestErrorResponse<403, Required<unknown>> | RequestErrorResponse<422, Required<unknown>>>;
 }

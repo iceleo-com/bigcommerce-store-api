@@ -48,6 +48,7 @@ import { SettingsV3Api } from './apis/settings-v3.api';
 import { ShippingV3Api } from './apis/shipping-v3.api';
 import { ShippingProviderApi } from './apis/shipping-provider.api';
 import { SitesV3Api } from './apis/sites-v3.api';
+import { StoreInformationV3Api } from './apis/store-information-v3.api';
 import { StoreLogsV3Api } from './apis/store-logs-v3.api';
 import { StorefrontTokensV3Api } from './apis/storefront-tokens-v3.api';
 import { SubscribersV3Api } from './apis/subscribers-v3.api';
@@ -111,6 +112,7 @@ export * from './apis/settings-v3.api';
 export * from './apis/shipping-v3.api';
 export * from './apis/shipping-provider.api';
 export * from './apis/sites-v3.api';
+export * from './apis/store-information-v3.api';
 export * from './apis/store-logs-v3.api';
 export * from './apis/storefront-tokens-v3.api';
 export * from './apis/subscribers-v3.api';
@@ -188,6 +190,7 @@ class BigCommerceStoreApi {
         readonly shipping: ShippingV3Api;
         readonly shippingProvider: ShippingProviderApi;
         readonly sites: SitesV3Api;
+        readonly storeInformation: StoreInformationV3Api;
         readonly storeLogs: StoreLogsV3Api;
         readonly storefrontTokens: StorefrontTokensV3Api;
         readonly subscribers: SubscribersV3Api;
@@ -259,6 +262,7 @@ class BigCommerceStoreApi {
             shipping: new ShippingV3Api(this.request),
             shippingProvider: new ShippingProviderApi(this.request),
             sites: new SitesV3Api(this.request),
+            storeInformation: new StoreInformationV3Api(this.request),
             storeLogs: new StoreLogsV3Api(this.request),
             storefrontTokens: new StorefrontTokensV3Api(this.request),
             subscribers: new SubscribersV3Api(this.request),

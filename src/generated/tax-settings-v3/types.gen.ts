@@ -14,9 +14,9 @@ export type TaxSettings = {
      */
     price_display_settings?: {
         /**
-         * Whether to show prices as tax inclusive or tax exclusive in the BigCommerce control panel, or use the order's tax zone for price display.
+         * Whether to show prices as tax inclusive or tax exclusive in the BigCommerce control panel.
          */
-        control_panel_price_display_strategy?: 'ZONE' | 'INCLUSIVE' | 'EXCLUSIVE';
+        show_inclusive_in_control_panel?: boolean;
         /**
          * Whether to show prices as tax inclusive or tax exclusive across all invoices, or use the shopperʼs tax zone for price display on invoices.
          */
@@ -42,10 +42,6 @@ export type TaxSettings = {
      * ID for the tax zone a store uses when subtracting store tax. This setting applies only if a merchant enters tax-inclusive prices and subtracts store tax before tax calculation.
      */
     store_tax_zone_id?: number;
-    /**
-     * This setting determines whether BigCommerce submits tax documents to third-party tax providers when orders are created or when payments are captured online.
-     */
-    document_submission_strategy?: 'ON_PAYMENT_CAPTURE' | 'ON_ORDER_CREATION';
 };
 
 /**
@@ -92,7 +88,7 @@ export type GetTaxSettingsResponses = {
 
 export type GetTaxSettingsResponse = GetTaxSettingsResponses[keyof GetTaxSettingsResponses];
 
-export type UpdateTaxSettingsData = {
+export type SetTaxSettingsData = {
     body: TaxSettings;
     headers: {
         /**
@@ -109,14 +105,14 @@ export type UpdateTaxSettingsData = {
     url: '/tax/settings';
 };
 
-export type UpdateTaxSettingsErrors = {
+export type SetTaxSettingsErrors = {
     /**
      * The request body does not meet the specification.
      */
     422: unknown;
 };
 
-export type UpdateTaxSettingsResponses = {
+export type SetTaxSettingsResponses = {
     /**
      * OK
      */
@@ -126,4 +122,4 @@ export type UpdateTaxSettingsResponses = {
     };
 };
 
-export type UpdateTaxSettingsResponse = UpdateTaxSettingsResponses[keyof UpdateTaxSettingsResponses];
+export type SetTaxSettingsResponse = SetTaxSettingsResponses[keyof SetTaxSettingsResponses];

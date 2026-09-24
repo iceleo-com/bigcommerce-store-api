@@ -7,7 +7,7 @@ export type Order = {
 };
 export type Accept = string;
 export type ContentType = string;
-export type CreatePaymentAccessTokenData = {
+export type PaymentsAccessTokensPostData = {
     body: {
         order: Order;
     };
@@ -19,7 +19,7 @@ export type CreatePaymentAccessTokenData = {
     query?: never;
     url: '/payments/access_tokens';
 };
-export type CreatePaymentAccessTokenErrors = {
+export type PaymentsAccessTokensPostErrors = {
     400: {
         status: number;
         title: string;
@@ -81,8 +81,8 @@ export type CreatePaymentAccessTokenErrors = {
         };
     };
 };
-export type CreatePaymentAccessTokenError = CreatePaymentAccessTokenErrors[keyof CreatePaymentAccessTokenErrors];
-export type CreatePaymentAccessTokenResponses = {
+export type PaymentsAccessTokensPostError = PaymentsAccessTokensPostErrors[keyof PaymentsAccessTokensPostErrors];
+export type PaymentsAccessTokensPostResponses = {
     201: {
         data?: {
             id: string;
@@ -92,4 +92,4 @@ export type CreatePaymentAccessTokenResponses = {
         };
     };
 };
-export type CreatePaymentAccessTokenResponse = CreatePaymentAccessTokenResponses[keyof CreatePaymentAccessTokenResponses];
+export type PaymentsAccessTokensPostResponse = PaymentsAccessTokensPostResponses[keyof PaymentsAccessTokensPostResponses];

@@ -21,10 +21,6 @@ export type StoredPayPalAccount = {
     type?: 'stored_paypal_account';
     token?: string;
 };
-export type StoredBankAccount = {
-    type?: 'stored_bank_account';
-    token?: string;
-};
 export type GiftCertificate = {
     type?: string;
     gift_certificate_code?: string;
@@ -43,9 +39,9 @@ export type TokenizedCard = {
 export type AcceptPaymentResponse = 'application/vnd.bc.v1+json';
 export type ContentType = string;
 export type PaymentsPostData = {
-    body?: {
+    body: {
         payment: {
-            instrument: Card | StoredCard | StoredPayPalAccount | GiftCertificate | StoreCredit | TokenizedCard | StoredBankAccount;
+            instrument: Card | StoredCard | StoredPayPalAccount | GiftCertificate | StoreCredit | TokenizedCard;
             payment_method_id: string;
             save_instrument?: boolean;
         };

@@ -39,13 +39,15 @@ info:
     - Bulk pricing Tiers can additionally be associated with a price record to indicate different pricing as the quantity in the cart increases.
     - If a variant has a Price Record, any existing product-level bulk pricing will not apply to the cart. For variants without Price Records, any existing product bulk pricing will apply.
     - [Price Lists Records](/docs/rest-management/price-lists/price-lists-records) accepts bulk upsert. You can only do one bulk upsert at a time. Running more than one bulk upsert in parallel on the **same store** will cause a `429` error and the request will fail.
-    - There are webhooks available for Price Lists assignments. The price list assignment webhook fires when a price list assignment is assigned, reassigned, or unassigned. Note that since Price Lists **do not** directly relate to products, neither product nor SKU webhooks are going to fire for corresponding changes, such as pricing.
+    - There are webhooks available for Price Lists assignments. The price list assignment webhook fires when a price list assignment is assigned, reassigned, or unassigned. Note that since Price Lists directly relate to products, neither product nor SKU webhooks are going to fire for corresponding changes, such as pricing.
 
     ## Additional information
 
     ### Webhooks
     
     * [Price list assignments](/docs/integrations/webhooks/events/channels#price-list-assignments)
+    * [Products](/docs/integrations/webhooks/events#products)
+    * [SKU](/docs/integrations/webhooks/events#sku)
     ### Related endpoints
     * [Get All Price Lists](/docs/rest-management/price-lists#get-all-price-lists)
   termsOfService: 'https://www.bigcommerce.com/terms'
@@ -76,8 +78,14 @@ paths:
         - Price Lists
       summary: Get All Price Lists
       description: Returns a list of *Price Lists*. Optional parameters can be passed in.
-      operationId: getPriceLists
+      operationId: getPriceListCollection
       parameters:
+        - name: id
+          in: query
+          description: |
+            Filter items by ID.
+          schema:
+            type: integer
         - name: name
           in: query
           description: |
@@ -104,19 +112,9 @@ paths:
             type: integer
         - name: limit
           in: query
-          description: Controls the number of items per page in a limited (paginated) list of products. If you provide only a limit, the API returns both paginations while applying that limit.
+          description: Controls the number of items per page in a limited (paginated) list of products.
           schema:
             type: integer
-        - name: before
-          in: query
-          description: A cursor that can be used for backwards pagination. Will fetch results before the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'after' query parameter.
-          schema:
-            type: string
-        - name: after
-          in: query
-          description: A cursor that can be used for forwards pagination. Will fetch results after the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'before' query parameter.
-          schema:
-            type: string
         - name: 'id:in'
           in: query
           style: form
@@ -127,8 +125,12 @@ paths:
               type: integer
         - name: 'name:like'
           in: query
+          style: form
+          explode: false
           schema:
-            type: string
+            type: array
+            items:
+              type: string
         - name: 'date_created:max'
           in: query
           schema:
@@ -158,6 +160,7 @@ paths:
                     type: array
                     items:
                       title: Price List
+                      type: object
                       allOf:
                         - type: object
                           properties:
@@ -228,41 +231,26 @@ paths:
                             description: |
                               The total number of pages in the collection.
                             example: 1
-                        description: 'Data related to the response, including pagination and collection totals.'
-                      cursor_pagination:
-                        title: Cursor Pagination
-                        type: object
-                        properties:
-                          count:
-                            description: Total number of items in the collection response.
-                            type: integer
-                            format: int32
-                          per_page:
-                            description: The number of items that can be returned per page, determined by the limit parameter—whether explicitly set, defaulted, or capped at the maximum limit.
-                            type: integer
-                            format: int32
-                          start_cursor:
-                            description: A string representing the starting point of the current page in the collection.
-                            type: string
-                          end_cursor:
-                            description: A string representing the ending point of the current page in the collection.
-                            type: string
-                          links: 
-                            title: links
-                            description: Pagination links for the previous and next parts of the whole collection.
+                          links:
                             type: object
                             properties:
                               previous:
-                                description: Link to the previous page returned in the response.
                                 type: string
+                                description: |
+                                  Link to the previous page returned in the response.
                               current:
-                                description: Link to the current page returned in the response.
                                 type: string
+                                description: |
+                                  Link to the current page returned in the response.
+                                example: '?page=1&limit=50'
                               next:
-                                description: Link to the next page returned in the response.
                                 type: string
-                    description: |-
-                     'Contains data about paginating the response via cursors. If no pagination details are specified or if you only provide a limit, then both properties will be present. When a 'before' or 'after' cursor is provided, only the 'cursor_pagination' property will be present. When a 'page' parameter is provided, only the offset based 'pagination' property will be present.'
+                                description: |
+                                  Link to the next page returned in the response.
+                            description: |
+                              Pagination links for the previous and next parts of the whole collection.
+                        description: 'Data related to the response, including pagination and collection totals.'
+                    description: 'Data related to the response, including pagination and collection totals.'
                 description: Get All PriceLists.
               example:
                 data:
@@ -288,12 +276,6 @@ paths:
                     per_page: 50
                     current_page: 1
                     total_pages: 1
-                  cursor_pagination:
-                    count: 8
-                    per_page: 50
-                    start_cursor: "Nw=="
-                    end_cursor: "MTQ="
-                    links: {}
     post:
       tags:
         - Price Lists
@@ -342,6 +324,7 @@ paths:
                 properties:
                   data:
                     title: Price List
+                    type: object
                     allOf:
                       - type: object
                         properties:
@@ -452,18 +435,14 @@ paths:
         - Price Lists
       summary: Delete All Price Lists
       description: Deletes a *Price List*. All associated price records are also removed. Optional parameters can be passed in.
-      operationId: deletePriceLists
+      operationId: deletePriceListsByFilter
       parameters:
-        - name: id:in
+        - name: id
           in: query
           description: |
-            Filter by ID. Accepts multiple comma-separated values.
-          style: form
-          explode: false
+            Filter items by ID.
           schema:
-            type: array
-            items:
-              type: integer
+            type: integer
         - name: name
           in: query
           description: |
@@ -476,10 +455,7 @@ paths:
           content:
             application/json:
               schema:
-                title: Delete Price Lists Response
                 type: object
-                properties: {}
-                additionalProperties: true
                 nullable: true
   '/pricelists/{price_list_id}':
     parameters:
@@ -496,6 +472,38 @@ paths:
           description: |
             The ID of the `Price List` requested.
           required: true
+          schema:
+            type: integer
+        - name: id
+          in: query
+          description: Filter items by ID.
+          schema:
+            type: integer
+        - name: name
+          in: query
+          description: Filter items by name.
+          schema:
+            type: string
+        - name: date_created
+          in: query
+          description: Filter items by date_created.
+          schema:
+            type: string
+            format: date-time
+        - name: date_modified
+          in: query
+          description: 'Filter items by date_modified. For example `v3/catalog/products?date_last_imported:min=2022-06-15`'
+          schema:
+            type: string
+            format: date-time
+        - name: page
+          in: query
+          description: Specifies the page number in a limited (paginated) list of products.
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: Specifies the number of items per page in a limited (paginated) list of products.
           schema:
             type: integer
       responses:
@@ -609,6 +617,7 @@ paths:
                 properties:
                   data:
                     title: Price List
+                    type: object
                     allOf:
                       - type: object
                         properties:
@@ -763,14 +772,12 @@ paths:
         - Price Lists Records
       summary: Create Batch of Price Lists Records
       description: Creates a batch of `Price Lists Records`; may include price list records from more than one price list.  Concurrency limit of 1.
-      operationId: upsertPriceListsRecords
+      operationId: UpsertPriceListRecords
       requestBody: 
         content: 
           application/json:
             schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/PriceRecordBatchItem'
+              $ref: '#/components/schemas/PriceRecordCollectionPutWithPriceListId'
         required: true
       responses:
         '200':
@@ -801,7 +808,7 @@ paths:
         **Notes**
         * Supports up to 10 simultaneous GET requests. Running more than the allowed number of requests concurrently on the same store will result in a `429` status error and your additional requests will fail.
         * Store Pricelist Records data to reduce the number of calls and maximize performance.
-      operationId: getPriceListRecords
+      operationId: getPriceListRecordCollection
       parameters:
         - name: price_list_id
           in: path
@@ -812,23 +819,15 @@ paths:
             type: integer
         - name: 'variant_id:in'
           in: query
-          description: A comma-separated list of IDs for one or more variants for which prices were requested.
-          style: form
-          explode: false
+          description: The ID of the `Variant` for which prices were requested.
           schema:
-            type: array
-            items:
-              type: integer
+            type: integer
         - name: 'product_id:in'
           in: query
           description: |
-            A comma-separated list of IDs for one or more products for which prices were requested.
-          style: form
-          explode: false
+            A comma-separated list of IDs of `Product`s for which prices were requested.
           schema:
-            type: array
-            items:
-              type: integer
+            type: string
         - name: currency
           in: query
           description: |
@@ -843,24 +842,13 @@ paths:
             type: integer
         - name: limit
           in: query
-          description: Controls the number of items per page in a limited (paginated) list of products. If you provide only a limit, the API returns both paginations while applying that limit.
+          description: Controls the number of items per page in a limited (paginated) list of products.
           schema:
             type: integer
-        - name: before
-          in: query
-          description: A cursor that can be used for backwards pagination. Will fetch results before the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'after' query parameter.
-          schema:
-            type: string
-        - name: after
-          in: query
-          description: A cursor that can be used for forwards pagination. Will fetch results after the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'before' query parameter.
-          schema:
-            type: string
         - name: include
           in: query
           description: |
             Sub-resources to include on a price record, in a comma-separated list. Valid expansions currently include `bulk_pricing_tiers` and `sku`. Other values will be ignored.
-          style: form
           explode: false
           schema:
             type: array
@@ -1003,6 +991,7 @@ paths:
                     type: array
                     items:
                       title: Price Record
+                      type: object
                       description: The Price Record object.
                       allOf:
                         - type: object
@@ -1033,29 +1022,31 @@ paths:
                               example: 158
                               readOnly: true
                         - title: Price Record Identifiers
-                          description: Price Record object used in batch create or update.
                           type: object
-                          properties:
-                            price_list_id:
-                              type: integer
-                              description: |
-                                The Price List with which this price set is associated.
-                              example: 2
-                            variant_id:
-                              type: integer
-                              description: |
-                                The variant with which this price set is associated. Either `variant_id` or `sku` is required.
-                              example: 325
-                            sku:
-                              type: string
-                              description: |
-                                The variant with which this price set is associated. Either `sku` or `variant_id` is required.
-                            currency:
-                              type: string
-                              description: |
-                                The 3-letter currency code with which this price set is associated.
-                              format: ISO-4217
-                              example: usd
+                          description: Price Record object used in batch create or update.
+                          allOf:
+                            - type: object
+                              properties:
+                                price_list_id:
+                                  type: integer
+                                  description: |
+                                    The Price List with which this price set is associated.
+                                  example: 2
+                                variant_id:
+                                  type: integer
+                                  description: |
+                                    The variant with which this price set is associated. Either `variant_id` or `sku` is required.
+                                  example: 325
+                                sku:
+                                  type: string
+                                  description: |
+                                    The variant with which this price set is associated. Either `sku` or `variant_id` is required.
+                                currency:
+                                  type: string
+                                  description: |
+                                    The 3-letter currency code with which this price set is associated.
+                                  format: ISO-4217
+                                  example: usd
                         - title: PriceRecord Base
                           type: object
                           properties:
@@ -1091,13 +1082,12 @@ paths:
                                   quantity_min:
                                     type: integer
                                     description: |
-                                      The minimum quantity of associated variant in the cart needed to qualify for this tier's pricing.
+                                      The minimum quantity of associated variant in the cart needed to qualify for this tiers pricing.
                                     example: 1
                                   quantity_max:
                                     type: integer
-                                    nullable: true
                                     description: |
-                                      The maximum allowed quantity of associated variant in the cart to qualify for this tier's pricing. `null` indicates that there is no maximum allowed quantity for this tier.
+                                      The maximum allowed quantity of associated variant in the cart to qualify for this tiers pricing.
                                     example: 10
                                   type:
                                     type: string
@@ -1153,41 +1143,26 @@ paths:
                             description: |
                               The total number of pages in the collection.
                             example: 1
-                        description: 'Data about the response, including pagination and collection totals.'
-                      cursor_pagination:
-                        title: Cursor Pagination
-                        type: object
-                        properties:
-                          count:
-                            description: Total number of items in the collection response.
-                            type: integer
-                            format: int32
-                          per_page:
-                            description: The number of items that can be returned per page, determined by the limit parameter—whether explicitly set, defaulted, or capped at the maximum limit.
-                            type: integer
-                            format: int32
-                          start_cursor:
-                            description: A string representing the starting point of the current page in the collection.
-                            type: string
-                          end_cursor:
-                            description: A string representing the ending point of the current page in the collection.
-                            type: string
-                          links: 
-                            title: links
-                            description: Pagination links for the previous and next parts of the whole collection.
+                          links:
                             type: object
                             properties:
                               previous:
-                                description: Link to the previous page returned in the response.
                                 type: string
+                                description: |
+                                  Link to the previous page returned in the response.
                               current:
-                                description: Link to the current page returned in the response.
                                 type: string
+                                description: |
+                                  Link to the current page returned in the response.
+                                example: '?page=1&limit=50'
                               next:
-                                description: Link to the next page returned in the response.
                                 type: string
-                    description: |-
-                      'Contains data about paginating the response via cursors. If no pagination details are specified or if you only provide a limit, then both properties will be present. When a 'before' or 'after' cursor is provided, only the 'cursor_pagination' property will be present. When a 'page' parameter is provided, only the offset based 'pagination' property will be present.'
+                                description: |
+                                  Link to the next page returned in the response.
+                            description: |
+                              Pagination links for the previous and next parts of the whole collection.
+                        description: 'Data about the response, including pagination and collection totals.'
+                    description: 'Data about the response, including pagination and collection totals.'
                 description: |-
                   PriceRecord Collection Response returns for:
                   * Get All PriceList Records
@@ -1429,12 +1404,6 @@ paths:
                     per_page: 50
                     current_page: 1
                     total_pages: 1
-                  cursor_pagination:
-                    count: 1
-                    per_page: 50
-                    start_cursor: "MTUsMjEx"
-                    end_cursor: "MTUsMjEx"
-                    links: {}
         '429':
           description: |
             Allowed number of requests exceeded.
@@ -1456,15 +1425,13 @@ paths:
       summary: Upsert Price List Records
       description: |-
         Creates or updates *Price List Records*. 
-
         **Required Fields**
         * currency
-
         **Notes**
         * Batch requests support up to 1,000 items per request.
         * Up to 2 concurrent batch upsert requests are supported with this API. Running more than the allowed concurrent requests in parallel on the **same store** will cause a `429` error, and your additional requests will fail. You are encouraged to run requests sequentially with as many records per request as possible to maximize performance.
         * When updating a product with variants, or multiple SKUs, don't include records for the parent product SKU.
-      operationId: upsertPriceListRecords
+      operationId: setPriceListRecordCollection
       parameters:
         - name: price_list_id
           in: path
@@ -1484,8 +1451,7 @@ paths:
                 title: PriceRecord Batch Item
                 description: Price Record object used in batch create or update.
                 allOf:
-                  - type: object
-                    properties:
+                  - properties:
                       variant_id:
                         type: integer
                         description: |
@@ -1503,7 +1469,6 @@ paths:
                         format: ISO-4217
                         example: usd
                   - title: PriceRecord Base
-                    type: object
                     description: Common Price Record properties.
                     properties:
                       price:
@@ -1571,6 +1536,7 @@ paths:
                         description: |
                           The SKU code associated with this `Price Record` if requested and it exists.
                         example: SMB-123
+                type: object
         required: true
         description: ''
       responses:
@@ -1604,29 +1570,31 @@ paths:
                       properties:
                         data:
                           title: Price Record Identifiers
-                          description: Price Record object used in batch create or update.
                           type: object
-                          properties:
-                            price_list_id:
-                              type: integer
-                              description: |
-                                The Price List with which this price set is associated.
-                              example: 2
-                            variant_id:
-                              type: integer
-                              description: |
-                                The variant ID with which this price set is associated. Either `variant_id` or `sku` is required.
-                              example: 325
-                            sku:
-                              type: string
-                              description: |
-                                The variant with which this price set is associated. Either `sku` or `variant_id` is required.
-                            currency:
-                              type: string
-                              description: |
-                                The 3-letter currency code with which this price set is associated.
-                              format: ISO-4217
-                              example: usd
+                          description: Price Record object used in batch create or update.
+                          allOf:
+                            - type: object
+                              properties:
+                                price_list_id:
+                                  type: integer
+                                  description: |
+                                    The Price List with which this price set is associated.
+                                  example: 2
+                                variant_id:
+                                  type: integer
+                                  description: |
+                                    The variant ID with which this price set is associated. Either `variant_id` or `sku` is required.
+                                  example: 325
+                                sku:
+                                  type: string
+                                  description: |
+                                    The variant with which this price set is associated. Either `sku` or `variant_id` is required.
+                                currency:
+                                  type: string
+                                  description: |
+                                    The 3-letter currency code with which this price set is associated.
+                                  format: ISO-4217
+                                  example: usd
                         field_errors:
                           title: Detailed Errors
                           type: object
@@ -1654,7 +1622,7 @@ paths:
         - Price Lists Records
       summary: Delete a Price List Record
       description: Deletes a *Price List Record*. Deleting the records does not delete the Price List. Optional parameters can be passed in.
-      operationId: deletePriceListRecords
+      operationId: deletePriceListRecordsByFilter
       parameters:
         - name: price_list_id
           in: path
@@ -1663,29 +1631,11 @@ paths:
           required: true
           schema:
             type: integer
-        - name: 'currency'
-          in: query
-          description: The 3-letter currency code with which this set of prices is associated.
-          schema:
-            type: string
         - name: 'variant_id:in'
           in: query
-          description: A comma-separated list of IDs for one or more variants for which prices exist.
-          style: form
-          explode: false
+          description: The ID of the `Variant` for which prices were requested.
           schema:
-            type: array
-            items:
-              type: integer
-        - name: 'sku:in'
-          in: query
-          description: A comma-separated list of SKUs for one or more variants for which prices exist.
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
+            type: integer
       responses:
         '204':
           description: ''
@@ -1736,39 +1686,6 @@ paths:
           required: true
           schema:
             type: integer
-        - name: include
-          in: query
-          description: |
-            Sub-resources to include on a price record, in a comma-separated list. Valid expansions currently include `bulk_pricing_tiers` and `sku`. Other values will be ignored.
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - bulk_pricing_tiers
-                - sku
-        - name: page
-          in: query
-          description: Specifies the page number in a limited (paginated) list of products.
-          schema:
-            type: integer
-        - name: limit
-          in: query
-          description: Controls the number of items per page in a limited (paginated) list of products. If you provide only a limit, the API returns both paginations while applying that limit.
-          schema:
-            type: integer
-        - name: before
-          in: query
-          description: A cursor that can be used for backwards pagination. Will fetch results before the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'after' query parameter.
-          schema:
-            type: string
-        - name: after
-          in: query
-          description: A cursor that can be used for forwards pagination. Will fetch results after the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'before' query parameter.
-          schema:
-            type: string
       responses:
         '200':
           description: ''
@@ -1788,8 +1705,7 @@ paths:
                       title: Price Record
                       description: The Price Record object.
                       allOf:
-                        - type: object
-                          properties:
+                        - properties:
                             calculated_price:
                               type: number
                               description: |
@@ -1817,7 +1733,6 @@ paths:
                               readOnly: true
                         - title: Price Record Identifiers
                           description: Price Record object used in batch create or update.
-                          type: object
                           properties:
                             price_list_id:
                               type: integer
@@ -1840,7 +1755,6 @@ paths:
                               example: usd
                         - title: PriceRecord Base
                           description: Common Price Record properties.
-                          type: object
                           properties:
                             price:
                               type: number
@@ -1907,11 +1821,11 @@ paths:
                               description: |
                                 The SKU code associated with this `Price Record` if requested and it exists.
                               example: SMB-123
+                      type: object
                   meta:
                     title: Collection Meta
                     type: object
-                    description: |-
-                      'Contains data about paginating the response via cursors. If no pagination details are specified or if you only provide a limit, then both properties will be present. When a 'before' or 'after' cursor is provided, only the 'cursor_pagination' property will be present. When a 'page' parameter is provided, only the offset based 'pagination' property will be present.'
+                    description: 'Data related to the response, including pagination and collection totals.'
                     properties:
                       pagination:
                         title: Pagination
@@ -1943,39 +1857,24 @@ paths:
                             description: |
                               The total number of pages in the collection.
                             example: 1
-                      cursor_pagination:
-                        title: Cursor Pagination
-                        description: Data about cursor pagination.
-                        type: object
-                        properties:
-                          count:
-                            description: Total number of items in the collection response.
-                            type: integer
-                            format: int32
-                          per_page:
-                            description: The number of items that can be returned per page, determined by the limit parameter—whether explicitly set, defaulted, or capped at the maximum limit.
-                            type: integer
-                            format: int32
-                          start_cursor:
-                            description: A string representing the starting point of the current page in the collection.
-                            type: string
-                          end_cursor:
-                            description: A string representing the ending point of the current page in the collection.
-                            type: string
                           links:
-                            title: links
-                            description: Pagination links for the previous and next parts of the whole collection.
                             type: object
+                            description: |
+                              Pagination links for the previous and next parts of the whole collection.
                             properties:
                               previous:
-                                description: Link to the previous page returned in the response.
                                 type: string
+                                description: |
+                                  Link to the previous page returned in the response.
                               current:
-                                description: Link to the current page returned in the response.
                                 type: string
+                                description: |
+                                  Link to the current page returned in the response.
+                                example: '?page=1&limit=50'
                               next:
-                                description: Link to the next page returned in the response.
                                 type: string
+                                description: |
+                                  Link to the next page returned in the response.
         '429':
           description: |
             Allowed number of requests exceeded.
@@ -2030,7 +1929,7 @@ paths:
           in: query
           description: |
             Sub-resources to include on a price record, in a comma-separated list. Valid expansions currently include `bulk_pricing_tiers` and `sku`. Other values will be ignored.
-          style: form
+            Sub-resources to include on a price record, in a comma-separated list. Valid expansions currently include `bulk_pricing_tiers` and `sku`. Other values will be ignored.
           explode: false
           schema:
             type: array
@@ -2050,6 +1949,7 @@ paths:
                 properties:
                   data:
                     title: Price Record
+                    type: object
                     description: The Price Record object.
                     allOf:
                       - type: object
@@ -2082,27 +1982,29 @@ paths:
                       - title: Price Record Identifiers
                         type: object
                         description: Price Record object used in batch create or update requests.
-                        properties:
-                          price_list_id:
-                            type: integer
-                            description: |
-                              The Price List with which this price set is associated.
-                            example: 2
-                          variant_id:
-                            type: integer
-                            description: |
-                              The variant with which this price set is associated. Either `variant_id` or `sku` is required.
-                            example: 325
-                          sku:
-                            type: string
-                            description: |
-                              The variant with which this price set is associated. Either `sku` or `variant_id` is required.
-                          currency:
-                            type: string
-                            description: |
-                              The 3-letter currency code with which this price set is associated.
-                            format: ISO-4217
-                            example: usd
+                        allOf:
+                          - type: object
+                            properties:
+                              price_list_id:
+                                type: integer
+                                description: |
+                                  The Price List with which this price set is associated.
+                                example: 2
+                              variant_id:
+                                type: integer
+                                description: |
+                                  The variant with which this price set is associated. Either `variant_id` or `sku` is required.
+                                example: 325
+                              sku:
+                                type: string
+                                description: |
+                                  The variant with which this price set is associated. Either `sku` or `variant_id` is required.
+                              currency:
+                                type: string
+                                description: |
+                                  The 3-letter currency code with which this price set is associated.
+                                format: ISO-4217
+                                example: usd
                       - title: PriceRecord Base
                         type: object
                         properties:
@@ -2182,6 +2084,13 @@ paths:
                   date_modified: '2022-09-18T13:18:15Z'
                   currency: eur
                   product_id: 185
+                meta:
+                  pagination:
+                    total: 1
+                    count: 1
+                    per_page: 50
+                    current_page: 1
+                    total_pages: 1
         '429':
           description: |
             Allowed number of requests exceeded.
@@ -2293,6 +2202,11 @@ paths:
                               The price adjustment amount. This value along with the type will decide the price per variant for the pricing tier.
                             format: double
                             example: 3
+                    sku:
+                      type: string
+                      description: |
+                        The SKU code associated with this `Price Record` if requested and it exists.
+                      example: SMB-123
                   description: Common Price Record properties.
         required: true
       responses:
@@ -2307,8 +2221,7 @@ paths:
                   data:
                     description: The Price Record object.
                     allOf:
-                      - type: object
-                        properties:
+                      - properties:
                           calculated_price:
                             type: number
                             format: double
@@ -2335,7 +2248,8 @@ paths:
                             example: 158
                             readOnly: true
                       - description: Price Record object used in a batch create or update request.
-                        properties:
+                        allOf:
+                          - properties:
                               price_list_id:
                                 type: integer
                                 description: |
@@ -2346,6 +2260,10 @@ paths:
                                 description: |
                                   The variant with which this price set is associated. Either `variant_id` or `sku` is required.
                                 example: 325
+                              sku:
+                                type: string
+                                description: |
+                                  The variant with which this price set is associated. Either `sku` or `variant_id` is required.
                               currency:
                                 type: string
                                 format: ISO-4217
@@ -2412,7 +2330,13 @@ paths:
                                   description: |
                                     The price adjustment amount. This value along with the type will decide the price per variant for the pricing tier.
                                   example: 3
+                          sku:
+                            type: string
+                            description: |
+                              The SKU code associated with this `Price Record` if requested and it exists.
+                            example: SMB-123
                     title: Price Record
+                    type: object
                   meta:
                     $ref: '#/components/schemas/Meta'
                 title: Price Record Response
@@ -2573,7 +2497,7 @@ paths:
         - Price Lists Assignments
       summary: Get Price List Assignments
       description: Fetches an array of `Price List Assignments` matching a particular Customer Group and Price List and Channel.
-      operationId: getListOfPriceListAssignments
+      operationId: GetListOfPriceListAssignments
       parameters:
         - name: id
           in: query
@@ -2597,7 +2521,7 @@ paths:
             type: integer
         - name: 'id:in'
           in: query
-          description: Filter items by a comma-separated list of IDs.
+          description: Filter items by a comma-separated list of `id`s.
           style: form
           explode: false
           schema:
@@ -2606,7 +2530,7 @@ paths:
               type: integer
         - name: 'customer_group_id:in'
           in: query
-          description: Filter items by a comma-separated list of customer group IDs.
+          description: Filter items by a comma-separated list of `customer_group_id`s.
           style: form
           explode: false
           schema:
@@ -2615,7 +2539,7 @@ paths:
               type: integer
         - name: 'price_list_id:in'
           in: query
-          description: Filter items by a comma-separated list of price list IDs.
+          description: Filter items by a comma-separated list of `price_list_id`s.
           style: form
           explode: false
           schema:
@@ -2624,7 +2548,7 @@ paths:
               type: integer
         - name: 'channel_id:in'
           in: query
-          description: Filter items by a comma-separated list of channel IDs.
+          description: Filter items by a comma-separated list of `channel_id`s.
           style: form
           explode: false
           schema:
@@ -2633,24 +2557,14 @@ paths:
               type: integer
         - name: page
           in: query
-          description: Specifies the page number in a limited (paginated) list of products. 
+          description: Specifies the page number in a limited (paginated) list of products.
           schema:
             type: integer
         - name: limit
           in: query
-          description: Controls the number of items per page in a limited (paginated) list of products. If you provide only a limit, the API returns both paginations while applying that limit.
+          description: Controls the number of items per page in a limited (paginated) list of products.
           schema:
             type: integer
-        - name: before
-          in: query
-          description: A cursor that can be used for backwards pagination. Will fetch results before the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'after' query parameter.
-          schema:
-            type: string
-        - name: after
-          in: query
-          description: A cursor that can be used for forwards pagination. Will fetch results after the position corresponding to the cursor. Cannot be used with the 'page' query parameter. Cannot be used with the 'before' query parameter.
-          schema:
-            type: string
       responses:
         '200':
           description: An array of price list assignments and metadata.
@@ -2665,7 +2579,7 @@ paths:
         Creates a batch of `Price List Assignments`. 
         **Note:** The batch limit for `Price List Assignments` is 25.
       summary: Create Price List Assignments
-      operationId: createPriceListAssignments
+      operationId: CreatePriceListAssignments
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -2676,7 +2590,11 @@ paths:
         required: true
       responses:
         '200':
-          description: No content
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessBatchResponse'
         '422':
           description: Error response. Includes the errors for each reference ID.
           content:
@@ -2688,7 +2606,7 @@ paths:
         - Price Lists Assignments
       summary: Delete Price List Assignments
       description: 'Deletes one or more `Price List Assignments` objects from BigCommerce using a query parameter. You must use at least one query parameter. '
-      operationId: deletePriceListAssignments
+      operationId: deletePriceListAssignmentsByFilter
       parameters:
         - $ref: '#/components/parameters/FilterAssignmentIdParam'
         - $ref: '#/components/parameters/FilterPriceListIdParam'
@@ -2733,13 +2651,9 @@ components:
     ChannelIdInParam:
       in: query
       name: 'channel_id:in'
-      description: Filter results by a comma-separated list of channel IDs.
-      style: form
-      explode: false
+      description: Filter results by a comma-separated list of `channel_id`s.
       schema:
-        type: array
-        items:
-          type: integer
+        type: string
     PriceListIdParam:
       schema:
         type: integer
@@ -2859,51 +2773,50 @@ components:
               example: 2
         meta:
           $ref: '#/components/schemas/Meta'
+    PriceRecordCollectionPutWithPriceListId:
+      type: array
+      items:
+        $ref: '#/components/schemas/PriceRecordBatchItem'
     PriceRecordBatchItem:
+      description: The `Price Record` object used in batch create or update.
       allOf:
-        - type: object
-          properties:
-            price_list_id:
-              type: integer
-              description: The price list ID the price record is associated with.
-              example: 1
-            variant_id:
-              type: integer
-              description: The price list with which the price record is associated. Either `variant_id` or `sku` is required.
-              example: 5
-            sku:
-              type: string
-              description: The SKU for the variant with which this price record is associated. Either `sku` or `variant_id` is required.
-              example: SKU-001
-            currency:
-              type: string
-              description: The 3-letter country code with which this price record is associated.
-              format: ISO:4217
-              example: usd
-        -  $ref: '#/components/schemas/PriceRecordBase'
+      - type: array
+        items:
+          $ref: '#/components/schemas/PriceRecordBase'
+        properties:
+          price_list_id:
+            type: integer
+            description: The price list ID the price record is associated with.
+          variant_id:
+            type: integer
+            description: The price list with which the price record is associated. Either `variant_id` or `sku` is required.
+          sku:
+            type: string
+            description: The SKU for the variant with which this price record is associated.  Either `sku` or `variant_id` is required.
+          currency:
+            type: string
+            description: The 3-letter country code with which this price record is associated.
+            format: ISO:4217
     PriceRecordBase:
       type: object
       properties: 
         price: 
           type: number
           description: The list price for the variant mapped in a Price List. Overrides any existing or Catalog list price for the variant/product. If empty, the sale price will be treated as not being set on this variant.
+        
           format: double
-          example: 0
         sale_price:
           type: number
           description: The sale price for the variant mapped in a Price List. Overrides any existing or Catalog sale price for the variant/product. If empty, the sale price will be treated as not being set on this variant.
           format: double
-          example: 0
         retail_price:
           type: number
           description: The retail price for the variant mapped in a Price List. Overrides any existing or Catalog retail price for the variant/product.  If empty, the retail price will be treated as not being set on this variant.
           format: double
-          example: 0
         map_price:
           type: number
           description: The MAP (Minimum Advertised Price) for the variant mapped in a Price List. Overrides any existing or Catalog MAP price for the variant/product. If empty, the `map_ price` will be treated as not being set on this variant.
           format: double
-          example: 0
         bulk_pricing_tiers:
           type: array
           items:
@@ -2915,11 +2828,9 @@ components:
         quantity_min:
           type: integer
           description: The cart's minimum quantity of associated variants needed to qualify for this tier's pricing.
-          example: 1
         quantity_max:
           type: integer
           description: The cart's maximum allowed quantity of associated variants to qualify for this tier's pricing.
-          example: 10
         type:
           type: string
           description: |- 
@@ -2932,26 +2843,13 @@ components:
             - fixed
             - price
             - percent
-          example: fixed
         amount:
           type: number
           description: The price adjustment amount. This value and the type will decide the price per variant for the pricing tier.
           format: double
-          example: 0
     SuccessBatchResponse: 
       type: object
       description: Empty object for Success case for Batch API.
-      properties:
-        data:
-          type: object
-          properties: {}
-          additionalProperties: true
-          example: {}
-        meta:
-          type: object
-          properties: {}
-          additionalProperties: true
-          example: {}
     PriceRecordBatchErrorResponse:
       type: object
       properties: 
@@ -2963,23 +2861,24 @@ components:
     PriceRecordIdentifiers:
       type: object
       description: The `Price Record` object used in batch create or update.
-      properties:
-        price_list_id:
-          type: integer
-          description: The Price List with which this price record is associated.
-        variant_id:
-          type: integer
-          description:  The variant with which this price record is associated. Either `variant_id` or `sku` is required.
-        sku: 
-          type: string
-          description: The variant with which this price record is associated. Either `sku` or `variant_id` is required.
-        currency:
-          type: string
-          description: The 3-letter currency code with which this price set is associated.
-          format: ISO-4217
+      allOf:
+      - type: object
+        properties:
+          price_list_id:
+            type: integer
+            description: The Price List with which this price record is associated.
+          variant_id:
+            type: integer
+            description:  The variant with which this price record is associated. Either `variant_id` or `sku` is required.
+          sku: 
+            type: string
+            description: The variant with which this price record is associated. Either `sku` or `variant_id` is required.
+          currency:
+            type: string
+            description: The 3-letter currency code with which this price set is associated.
+            format: ISO-4217
     DetailedErrors:
       type: object
-      properties: {}
       additionalProperties:
         type: string
     PriceListAssignmentsBatchErrorResponse:
@@ -3039,8 +2938,7 @@ components:
       x-internal: false
     CollectionMeta:
       type: object
-      description: |-
-        'Contains data about paginating the response via cursors. If no pagination details are specified or if you only provide a limit, then both properties will be present. When a 'before' or 'after' cursor is provided, only the 'cursor_pagination' property will be present. When a 'page' parameter is provided, only the offset based 'pagination' property will be present.'
+      description: 'Data related the response, including pagination and collection totals.'
       properties:
         pagination:
           type: object
@@ -3072,38 +2970,24 @@ components:
               description: |
                 The total number of pages in the collection.
               example: 1
-        cursor_pagination:
-          title: Cursor Pagination
-          type: object
-          properties:
-            count:
-              description: Total number of items in the collection response.
-              type: integer
-              format: int32
-            per_page:
-              description: The number of items that can be returned per page, determined by the limit parameter—whether explicitly set, defaulted, or capped at the maximum limit.
-              type: integer
-              format: int32
-            start_cursor:
-              description: A string representing the starting point of the current page in the collection.
-              type: string
-            end_cursor:
-              description: A string representing the ending point of the current page in the collection.
-              type: string
-            links: 
-              title: links
-              description: Pagination links for the previous and next parts of the whole collection.
+            links:
               type: object
+              description: |
+                Pagination links for the previous and next parts of the whole collection.
               properties:
-                  previous:
-                    description: Link to the previous page returned in the response.
-                    type: string
-                  current:
-                    description: Link to the current page returned in the response.
-                    type: string
-                  next:
-                    description: Link to the next page returned in the response.
-                    type: string
+                previous:
+                  type: string
+                  description: |
+                    Link to the previous page returned in the response.
+                current:
+                  type: string
+                  description: |
+                    Link to the current page returned in the response.
+                  example: '?page=1&limit=50'
+                next:
+                  type: string
+                  description: |
+                    Link to the next page returned in the response.
       title: Collection Meta
       x-internal: false
     Meta:

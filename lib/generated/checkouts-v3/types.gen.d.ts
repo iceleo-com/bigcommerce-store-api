@@ -10,7 +10,6 @@ export type Checkout = {
         currency?: {
             code?: string;
         };
-        tax_included?: boolean;
         base_amount?: number;
         channel_id?: number;
         discount_amount?: number;
@@ -21,7 +20,6 @@ export type Checkout = {
             id?: number;
             coupon_type?: string;
             discounted_amount?: number;
-            display_name?: string;
         }>;
         discounts?: Array<{
             id?: string;
@@ -39,7 +37,7 @@ export type Checkout = {
                 is_taxable?: boolean;
                 image_url?: string;
                 discounts?: Array<{
-                    id?: string | number;
+                    id?: number;
                     discounted_amount?: number;
                 }>;
                 discount_amount?: number;
@@ -49,11 +47,8 @@ export type Checkout = {
                 sale_price?: number;
                 extended_list_price?: number;
                 extended_sale_price?: number;
-                comparison_price?: number;
-                extended_comparison_price?: number;
                 is_require_shipping?: boolean;
                 is_mutable?: boolean;
-                added_by_promotion?: boolean;
                 parent_id?: number | null;
                 gift_wrapping?: {
                     name?: string;
@@ -73,7 +68,6 @@ export type Checkout = {
                 url?: string;
                 is_mutable?: boolean;
                 is_require_shipping?: boolean;
-                added_by_promotion?: boolean;
                 is_taxable?: boolean;
                 image_url?: string;
                 discounts?: Array<{
@@ -87,8 +81,6 @@ export type Checkout = {
                 sale_price?: number;
                 extended_list_price?: number;
                 extended_sale_price?: number;
-                comparison_price?: number;
-                extended_comparison_price?: number;
             }>;
             gift_certificates: Array<{
                 theme: string;
@@ -141,9 +133,6 @@ export type Checkout = {
     };
     consignments?: Array<{
         id?: string;
-        shippingAddress?: {
-            [key: string]: unknown;
-        };
         address?: {
             first_name?: string;
             last_name?: string;
@@ -201,7 +190,6 @@ export type Checkout = {
         amount?: number;
     }>;
     coupons?: Array<AppliedCoupon>;
-    fees?: Array<CheckoutFee>;
     order_id?: string | null;
     shipping_cost_total_inc_tax?: number;
     shipping_cost_total_ex_tax?: number;
@@ -222,28 +210,15 @@ export type Checkout = {
             text?: string;
         }>;
     }>;
-    version?: number;
 };
 export type CheckoutPut = {
     customer_message: string;
-    version?: number;
 };
 export type AppliedCoupon = {
     code: string;
     id?: number;
     coupon_type?: string;
-    display_name?: string;
     discounted_amount?: number;
-};
-export type CheckoutFee = {
-    id?: string;
-    type?: 'custom_fee';
-    name?: string;
-    display_name?: string;
-    cost_inc_tax?: number;
-    cost_ex_tax?: number;
-    source?: string;
-    tax_class_id?: number | null;
 };
 export type AddressProperties = {
     first_name?: string;
@@ -262,7 +237,6 @@ export type AddressProperties = {
         field_id?: string;
         field_value?: string;
     }>;
-    version?: number;
 };
 export type CreateConsignmentRequest = Array<{
     address?: {
@@ -273,10 +247,10 @@ export type CreateConsignmentRequest = Array<{
         address1?: string;
         address2?: string;
         city?: string;
-        state_or_province: string;
+        state_or_province?: string;
         state_or_province_code?: string;
         country_code: string;
-        postal_code: string;
+        postal_code?: string;
         phone?: string;
         custom_fields?: Array<{
             field_id: string;
@@ -290,11 +264,7 @@ export type CreateConsignmentRequest = Array<{
     pickup_option?: {
         pickup_method_id?: number;
     };
-    version?: number;
 }>;
-export type DeleteConsignmentRequest = {
-    version?: number;
-};
 export type UpdateConsignmentRequest = {
     address?: {
         first_name?: string;
@@ -322,38 +292,9 @@ export type UpdateConsignmentRequest = {
     pickup_option?: {
         pickup_method_id?: number;
     };
-    custom_shipping?: {
-        price?: number;
-        description?: string;
-    };
-    version?: number;
 };
 export type CouponCodeRequest = {
     coupon_code?: string;
-    version?: number;
-};
-export type BaseFee = {
-    type: 'custom_fee';
-    name: string;
-    display_name: string;
-    cost: number;
-    source: string;
-    tax_class_id?: number;
-};
-export type FeeWithId = BaseFee & {
-    id: string;
-};
-export type AddFeesRequest = {
-    fees: Array<BaseFee>;
-};
-export type UpdateFeesRequest = {
-    fees: Array<FeeWithId>;
-};
-export type DeleteFeesRequest = {
-    ids: Array<string>;
-};
-export type DeleteCouponCodeRequest = {
-    version?: number;
 };
 export type Order = {
     id?: number;
@@ -363,28 +304,12 @@ export type CheckoutsSettings = {
     order_confirmation_use_custom_checkout_script?: boolean;
     custom_order_confirmation_script_url?: string;
     custom_checkout_supports_uco_settings?: boolean;
-    custom_checkout_sri_hash?: string;
-    custom_order_confirmation_sri_hash?: string;
 };
-export type ChannelCheckoutsSettings = {
-    checkout_type?: string;
-    guest_checkout_type?: string;
-    guest_checkout_for_existing_accounts?: string;
-    policy_consent?: string;
-    order_confirmation_contact_email?: string;
-    is_order_terms_and_conditions_enabled?: boolean;
-    order_terms_and_conditions_type?: string;
-    order_terms_and_conditions_link?: string;
-    order_terms_and_conditions_textarea?: string;
-    should_redirect_to_storefront_for_auth?: boolean;
-} & CheckoutsSettings;
 export type CheckoutsSettingsRequest = {
     custom_checkout_script_url?: string;
     order_confirmation_use_custom_checkout_script?: boolean;
     custom_order_confirmation_script_url?: string;
     custom_checkout_supports_uco_settings?: boolean;
-    custom_checkout_sri_hash?: string;
-    custom_order_confirmation_sri_hash?: string;
 };
 export type PickupOption = {
     pickup_method_id?: number;
@@ -401,7 +326,6 @@ export type CheckoutWritable = {
         currency?: {
             code?: string;
         };
-        tax_included?: boolean;
         base_amount?: number;
         channel_id?: number;
         discount_amount?: number;
@@ -412,7 +336,6 @@ export type CheckoutWritable = {
             id?: number;
             coupon_type?: string;
             discounted_amount?: number;
-            display_name?: string;
         }>;
         discounts?: Array<{
             id?: string;
@@ -430,7 +353,7 @@ export type CheckoutWritable = {
                 is_taxable?: boolean;
                 image_url?: string;
                 discounts?: Array<{
-                    id?: string | number;
+                    id?: number;
                     discounted_amount?: number;
                 }>;
                 discount_amount?: number;
@@ -440,11 +363,8 @@ export type CheckoutWritable = {
                 sale_price?: number;
                 extended_list_price?: number;
                 extended_sale_price?: number;
-                comparison_price?: number;
-                extended_comparison_price?: number;
                 is_require_shipping?: boolean;
                 is_mutable?: boolean;
-                added_by_promotion?: boolean;
                 parent_id?: number | null;
                 gift_wrapping?: {
                     name?: string;
@@ -464,7 +384,6 @@ export type CheckoutWritable = {
                 url?: string;
                 is_mutable?: boolean;
                 is_require_shipping?: boolean;
-                added_by_promotion?: boolean;
                 is_taxable?: boolean;
                 image_url?: string;
                 discounts?: Array<{
@@ -478,8 +397,6 @@ export type CheckoutWritable = {
                 sale_price?: number;
                 extended_list_price?: number;
                 extended_sale_price?: number;
-                comparison_price?: number;
-                extended_comparison_price?: number;
             }>;
             gift_certificates: Array<{
                 theme: string;
@@ -532,9 +449,6 @@ export type CheckoutWritable = {
     };
     consignments?: Array<{
         id?: string;
-        shippingAddress?: {
-            [key: string]: unknown;
-        };
         address?: {
             first_name?: string;
             last_name?: string;
@@ -590,7 +504,6 @@ export type CheckoutWritable = {
         amount?: number;
     }>;
     coupons?: Array<AppliedCoupon>;
-    fees?: Array<CheckoutFee>;
     order_id?: string | null;
     shipping_cost_total_inc_tax?: number;
     shipping_cost_total_ex_tax?: number;
@@ -611,7 +524,6 @@ export type CheckoutWritable = {
             text?: string;
         }>;
     }>;
-    version?: number;
 };
 export type MetaOpenWritable = {
     [key: string]: unknown;
@@ -622,9 +534,8 @@ export type ConsignmentId = string;
 export type CouponCode = string;
 export type Accept = string;
 export type ContentType = string;
-export type IncludeShippingOptions = 'consignments.available_shipping_options';
-export type IncludeGeneral = Array<'cart.line_items.physical_items.options' | 'cart.line_items.digital_items.options' | 'consignments.available_shipping_options' | 'promotions.banners'>;
-export type GetCheckoutData = {
+export type IncludeShippingOption = 'consignments.available_shipping_options';
+export type CheckoutsByCheckoutIdGetData = {
     body?: never;
     headers: {
         Accept: string;
@@ -633,11 +544,11 @@ export type GetCheckoutData = {
         checkoutId: string;
     };
     query?: {
-        include?: Array<'cart.line_items.physical_items.options' | 'cart.line_items.digital_items.options' | 'consignments.available_shipping_options' | 'promotions.banners'>;
+        include?: 'cart.line_items.physical_items.options' | 'cart.line_items.digital_items.options' | 'consignments.available_shipping_options' | 'promotions.banners';
     };
     url: '/checkouts/{checkoutId}';
 };
-export type GetCheckoutErrors = {
+export type CheckoutsByCheckoutIdGetErrors = {
     404: {
         errors?: Array<{
             status?: number;
@@ -647,15 +558,15 @@ export type GetCheckoutErrors = {
         }>;
     };
 };
-export type GetCheckoutError = GetCheckoutErrors[keyof GetCheckoutErrors];
-export type GetCheckoutResponses = {
+export type CheckoutsByCheckoutIdGetError = CheckoutsByCheckoutIdGetErrors[keyof CheckoutsByCheckoutIdGetErrors];
+export type CheckoutsByCheckoutIdGetResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
-export type GetCheckoutResponse = GetCheckoutResponses[keyof GetCheckoutResponses];
-export type UpdateCheckoutData = {
+export type CheckoutsByCheckoutIdGetResponse = CheckoutsByCheckoutIdGetResponses[keyof CheckoutsByCheckoutIdGetResponses];
+export type CheckoutsByCheckoutIdPutData = {
     body: CheckoutPut;
     headers: {
         Accept: string;
@@ -667,32 +578,20 @@ export type UpdateCheckoutData = {
     query?: never;
     url: '/checkouts/{checkoutId}';
 };
-export type UpdateCheckoutErrors = {
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-export type UpdateCheckoutError = UpdateCheckoutErrors[keyof UpdateCheckoutErrors];
-export type UpdateCheckoutResponses = {
+export type CheckoutsByCheckoutIdPutResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
-export type UpdateCheckoutResponse = UpdateCheckoutResponses[keyof UpdateCheckoutResponses];
-export type AddCheckoutDiscountData = {
+export type CheckoutsByCheckoutIdPutResponse = CheckoutsByCheckoutIdPutResponses[keyof CheckoutsByCheckoutIdPutResponses];
+export type PostStoreHashV3CheckoutsCheckoutIdDiscountsData = {
     body?: {
         cart?: {
             discounts?: Array<{
                 discounted_amount: number;
+                name?: string;
             }>;
-            line_items?: Array<{
-                id?: string;
-                discounted_amount?: number;
-            }>;
-            version?: number;
         };
     };
     headers: {
@@ -705,22 +604,14 @@ export type AddCheckoutDiscountData = {
     query?: never;
     url: '/checkouts/{checkoutId}/discounts';
 };
-export type AddCheckoutDiscountErrors = {
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-export type AddCheckoutDiscountError = AddCheckoutDiscountErrors[keyof AddCheckoutDiscountErrors];
-export type AddCheckoutDiscountResponses = {
+export type PostStoreHashV3CheckoutsCheckoutIdDiscountsResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
-export type AddCheckoutDiscountResponse = AddCheckoutDiscountResponses[keyof AddCheckoutDiscountResponses];
-export type AddCheckoutBillingAddressData = {
+export type PostStoreHashV3CheckoutsCheckoutIdDiscountsResponse = PostStoreHashV3CheckoutsCheckoutIdDiscountsResponses[keyof PostStoreHashV3CheckoutsCheckoutIdDiscountsResponses];
+export type CheckoutsBillingAddressByCheckoutIdPostData = {
     body: AddressProperties;
     headers: {
         Accept: string;
@@ -732,22 +623,14 @@ export type AddCheckoutBillingAddressData = {
     query?: never;
     url: '/checkouts/{checkoutId}/billing-address';
 };
-export type AddCheckoutBillingAddressErrors = {
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-export type AddCheckoutBillingAddressError = AddCheckoutBillingAddressErrors[keyof AddCheckoutBillingAddressErrors];
-export type AddCheckoutBillingAddressResponses = {
+export type CheckoutsBillingAddressByCheckoutIdPostResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
-export type AddCheckoutBillingAddressResponse = AddCheckoutBillingAddressResponses[keyof AddCheckoutBillingAddressResponses];
-export type UpdateCheckoutBillingAddressData = {
+export type CheckoutsBillingAddressByCheckoutIdPostResponse = CheckoutsBillingAddressByCheckoutIdPostResponses[keyof CheckoutsBillingAddressByCheckoutIdPostResponses];
+export type CheckoutsBillingAddressByCheckoutIdAndAddressIdPutData = {
     body: AddressProperties;
     headers: {
         Accept: string;
@@ -760,22 +643,14 @@ export type UpdateCheckoutBillingAddressData = {
     query?: never;
     url: '/checkouts/{checkoutId}/billing-address/{addressId}';
 };
-export type UpdateCheckoutBillingAddressErrors = {
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-export type UpdateCheckoutBillingAddressError = UpdateCheckoutBillingAddressErrors[keyof UpdateCheckoutBillingAddressErrors];
-export type UpdateCheckoutBillingAddressResponses = {
+export type CheckoutsBillingAddressByCheckoutIdAndAddressIdPutResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
-export type UpdateCheckoutBillingAddressResponse = UpdateCheckoutBillingAddressResponses[keyof UpdateCheckoutBillingAddressResponses];
-export type AddCheckoutConsignmentData = {
+export type CheckoutsBillingAddressByCheckoutIdAndAddressIdPutResponse = CheckoutsBillingAddressByCheckoutIdAndAddressIdPutResponses[keyof CheckoutsBillingAddressByCheckoutIdAndAddressIdPutResponses];
+export type CheckoutsConsignmentsByCheckoutIdPostData = {
     body?: CreateConsignmentRequest;
     headers: {
         Accept: string;
@@ -789,23 +664,15 @@ export type AddCheckoutConsignmentData = {
     };
     url: '/checkouts/{checkoutId}/consignments';
 };
-export type AddCheckoutConsignmentErrors = {
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-export type AddCheckoutConsignmentError = AddCheckoutConsignmentErrors[keyof AddCheckoutConsignmentErrors];
-export type AddCheckoutConsignmentResponses = {
+export type CheckoutsConsignmentsByCheckoutIdPostResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
-export type AddCheckoutConsignmentResponse = AddCheckoutConsignmentResponses[keyof AddCheckoutConsignmentResponses];
-export type DeleteCheckoutConsignmentData = {
-    body?: DeleteConsignmentRequest;
+export type CheckoutsConsignmentsByCheckoutIdPostResponse = CheckoutsConsignmentsByCheckoutIdPostResponses[keyof CheckoutsConsignmentsByCheckoutIdPostResponses];
+export type CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteData = {
+    body?: never;
     headers: {
         Accept: string;
     };
@@ -816,14 +683,14 @@ export type DeleteCheckoutConsignmentData = {
     query?: never;
     url: '/checkouts/{checkoutId}/consignments/{consignmentId}';
 };
-export type DeleteCheckoutConsignmentResponses = {
+export type CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
-export type DeleteCheckoutConsignmentResponse = DeleteCheckoutConsignmentResponses[keyof DeleteCheckoutConsignmentResponses];
-export type UpdateCheckoutConsignmentData = {
+export type CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteResponse = CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteResponses[keyof CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteResponses];
+export type CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutData = {
     body: UpdateConsignmentRequest;
     headers: {
         Accept: string;
@@ -838,22 +705,14 @@ export type UpdateCheckoutConsignmentData = {
     };
     url: '/checkouts/{checkoutId}/consignments/{consignmentId}';
 };
-export type UpdateCheckoutConsignmentErrors = {
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-export type UpdateCheckoutConsignmentError = UpdateCheckoutConsignmentErrors[keyof UpdateCheckoutConsignmentErrors];
-export type UpdateCheckoutConsignmentResponses = {
+export type CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
-export type UpdateCheckoutConsignmentResponse = UpdateCheckoutConsignmentResponses[keyof UpdateCheckoutConsignmentResponses];
-export type AddCheckoutCouponData = {
+export type CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutResponse = CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutResponses[keyof CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutResponses];
+export type CheckoutsCouponsByCheckoutIdPostData = {
     body: CouponCodeRequest;
     headers: {
         Accept: string;
@@ -865,23 +724,15 @@ export type AddCheckoutCouponData = {
     query?: never;
     url: '/checkouts/{checkoutId}/coupons';
 };
-export type AddCheckoutCouponErrors = {
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-export type AddCheckoutCouponError = AddCheckoutCouponErrors[keyof AddCheckoutCouponErrors];
-export type AddCheckoutCouponResponses = {
+export type CheckoutsCouponsByCheckoutIdPostResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
-export type AddCheckoutCouponResponse = AddCheckoutCouponResponses[keyof AddCheckoutCouponResponses];
-export type DeleteCheckoutCouponData = {
-    body?: DeleteCouponCodeRequest;
+export type CheckoutsCouponsByCheckoutIdPostResponse = CheckoutsCouponsByCheckoutIdPostResponses[keyof CheckoutsCouponsByCheckoutIdPostResponses];
+export type CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteData = {
+    body?: never;
     headers: {
         Accept: string;
     };
@@ -892,77 +743,14 @@ export type DeleteCheckoutCouponData = {
     query?: never;
     url: '/checkouts/{checkoutId}/coupons/{couponCode}';
 };
-export type DeleteCheckoutCouponErrors = {
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-export type DeleteCheckoutCouponError = DeleteCheckoutCouponErrors[keyof DeleteCheckoutCouponErrors];
-export type DeleteCheckoutCouponResponses = {
+export type CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
-export type DeleteCheckoutCouponResponse = DeleteCheckoutCouponResponses[keyof DeleteCheckoutCouponResponses];
-export type CheckoutsFeesByCheckoutIdDeleteData = {
-    body: DeleteFeesRequest;
-    headers: {
-        Accept: string;
-    };
-    path: {
-        checkoutId: string;
-    };
-    query?: never;
-    url: '/checkouts/{checkoutId}/fees';
-};
-export type CheckoutsFeesByCheckoutIdDeleteResponses = {
-    200: {
-        data?: Checkout;
-        meta?: MetaOpen;
-    };
-};
-export type CheckoutsFeesByCheckoutIdDeleteResponse = CheckoutsFeesByCheckoutIdDeleteResponses[keyof CheckoutsFeesByCheckoutIdDeleteResponses];
-export type CheckoutsFeesByCheckoutIdPostData = {
-    body: AddFeesRequest;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path: {
-        checkoutId: string;
-    };
-    query?: never;
-    url: '/checkouts/{checkoutId}/fees';
-};
-export type CheckoutsFeesByCheckoutIdPostResponses = {
-    200: {
-        data?: Checkout;
-        meta?: MetaOpen;
-    };
-};
-export type CheckoutsFeesByCheckoutIdPostResponse = CheckoutsFeesByCheckoutIdPostResponses[keyof CheckoutsFeesByCheckoutIdPostResponses];
-export type CheckoutsFeesByCheckoutIdPutData = {
-    body: UpdateFeesRequest;
-    headers: {
-        Accept: string;
-    };
-    path: {
-        checkoutId: string;
-    };
-    query?: never;
-    url: '/checkouts/{checkoutId}/fees';
-};
-export type CheckoutsFeesByCheckoutIdPutResponses = {
-    200: {
-        data?: Checkout;
-        meta?: MetaOpen;
-    };
-};
-export type CheckoutsFeesByCheckoutIdPutResponse = CheckoutsFeesByCheckoutIdPutResponses[keyof CheckoutsFeesByCheckoutIdPutResponses];
-export type CreateOrderData = {
+export type CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteResponse = CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteResponses[keyof CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteResponses];
+export type CreateAnOrderData = {
     body?: never;
     headers: {
         Accept: string;
@@ -974,13 +762,13 @@ export type CreateOrderData = {
     query?: never;
     url: '/checkouts/{checkoutId}/orders';
 };
-export type CreateOrderResponses = {
+export type CreateAnOrderResponses = {
     200: {
         data?: Order;
         meta?: MetaOpen;
     };
 };
-export type CreateOrderResponse = CreateOrderResponses[keyof CreateOrderResponses];
+export type CreateAnOrderResponse = CreateAnOrderResponses[keyof CreateAnOrderResponses];
 export type GetCheckoutSettingsData = {
     body?: never;
     headers: {
@@ -1014,43 +802,7 @@ export type UpdateCheckoutSettingsResponses = {
     };
 };
 export type UpdateCheckoutSettingsResponse = UpdateCheckoutSettingsResponses[keyof UpdateCheckoutSettingsResponses];
-export type GetChannelCheckoutSettingsData = {
-    body?: never;
-    path: {
-        channelId: number;
-    };
-    query?: never;
-    url: '/checkouts/settings/channels/{channelId}';
-};
-export type GetChannelCheckoutSettingsErrors = {
-    422: unknown;
-};
-export type GetChannelCheckoutSettingsResponses = {
-    200: {
-        data?: ChannelCheckoutsSettings;
-        meta?: MetaOpen;
-    };
-};
-export type GetChannelCheckoutSettingsResponse = GetChannelCheckoutSettingsResponses[keyof GetChannelCheckoutSettingsResponses];
-export type PutChannelCheckoutSettingsData = {
-    body?: ChannelCheckoutsSettings;
-    path: {
-        channelId: number;
-    };
-    query?: never;
-    url: '/checkouts/settings/channels/{channelId}';
-};
-export type PutChannelCheckoutSettingsErrors = {
-    422: unknown;
-};
-export type PutChannelCheckoutSettingsResponses = {
-    200: {
-        data?: ChannelCheckoutsSettings;
-        meta?: MetaOpen;
-    };
-};
-export type PutChannelCheckoutSettingsResponse = PutChannelCheckoutSettingsResponses[keyof PutChannelCheckoutSettingsResponses];
-export type CreateCheckoutTokenData = {
+export type CheckoutTokenData = {
     body?: {
         maxUses?: number;
         ttl?: number;
@@ -1065,7 +817,7 @@ export type CreateCheckoutTokenData = {
     query?: never;
     url: '/checkouts/{checkoutId}/token';
 };
-export type CreateCheckoutTokenErrors = {
+export type CheckoutTokenErrors = {
     401: {
         status?: number;
         title?: string;
@@ -1080,11 +832,11 @@ export type CreateCheckoutTokenErrors = {
         type?: string;
     };
 };
-export type CreateCheckoutTokenError = CreateCheckoutTokenErrors[keyof CreateCheckoutTokenErrors];
-export type CreateCheckoutTokenResponses = {
+export type CheckoutTokenError = CheckoutTokenErrors[keyof CheckoutTokenErrors];
+export type CheckoutTokenResponses = {
     200: {
         checkoutToken?: string;
         meta?: MetaOpen;
     };
 };
-export type CreateCheckoutTokenResponse = CreateCheckoutTokenResponses[keyof CreateCheckoutTokenResponses];
+export type CheckoutTokenResponse = CheckoutTokenResponses[keyof CheckoutTokenResponses];

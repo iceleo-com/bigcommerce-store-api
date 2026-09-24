@@ -19,19 +19,6 @@ export type ResponseConnection = {
          * Merchants may enable any **configured** tax provider for storefront tax quotation.
          */
         configured?: boolean;
-        /**
-         * The countries and subdivisions in which this tax provider connection is active.
-         */
-        target?: {
-            /**
-             * The list of country codes where the tax provider connection is active. ISO 3166-1 alpha-2.
-             */
-            country_codes?: Array<string>;
-            /**
-             * The list of subdivision codes where the tax provider connection is active. ISO 3166-2.
-             */
-            subdivision_codes?: Array<string>;
-        };
     };
 };
 
@@ -50,7 +37,7 @@ export type ContentType = string;
  */
 export type ProviderId = string;
 
-export type DeleteTaxProviderConnectionData = {
+export type ProviderConnectionDeleteData = {
     body?: never;
     headers: {
         /**
@@ -68,23 +55,23 @@ export type DeleteTaxProviderConnectionData = {
     url: '/tax/providers/{provider_id}/connection';
 };
 
-export type DeleteTaxProviderConnectionErrors = {
+export type ProviderConnectionDeleteErrors = {
     /**
      * Provider or provider connection does not exist
      */
     404: unknown;
 };
 
-export type DeleteTaxProviderConnectionResponses = {
+export type ProviderConnectionDeleteResponses = {
     /**
      * OK
      */
     200: ResponseConnection;
 };
 
-export type DeleteTaxProviderConnectionResponse = DeleteTaxProviderConnectionResponses[keyof DeleteTaxProviderConnectionResponses];
+export type ProviderConnectionDeleteResponse = ProviderConnectionDeleteResponses[keyof ProviderConnectionDeleteResponses];
 
-export type GetTaxProviderConnectionData = {
+export type ProviderConnectionGetData = {
     body?: never;
     headers: {
         /**
@@ -102,23 +89,23 @@ export type GetTaxProviderConnectionData = {
     url: '/tax/providers/{provider_id}/connection';
 };
 
-export type GetTaxProviderConnectionErrors = {
+export type ProviderConnectionGetErrors = {
     /**
      * Provider does not exist
      */
     404: unknown;
 };
 
-export type GetTaxProviderConnectionResponses = {
+export type ProviderConnectionGetResponses = {
     /**
      * OK
      */
     200: ResponseConnection;
 };
 
-export type GetTaxProviderConnectionResponse = GetTaxProviderConnectionResponses[keyof GetTaxProviderConnectionResponses];
+export type ProviderConnectionGetResponse = ProviderConnectionGetResponses[keyof ProviderConnectionGetResponses];
 
-export type UpdateTaxProviderConnectionData = {
+export type ProviderConnectionPutData = {
     /**
      * Basic authentication information, associated with a merchant account on the third-party tax providerʼs infrastructure.
      */
@@ -153,7 +140,7 @@ export type UpdateTaxProviderConnectionData = {
     url: '/tax/providers/{provider_id}/connection';
 };
 
-export type UpdateTaxProviderConnectionErrors = {
+export type ProviderConnectionPutErrors = {
     /**
      * Provider does not exist
      */
@@ -164,11 +151,11 @@ export type UpdateTaxProviderConnectionErrors = {
     422: unknown;
 };
 
-export type UpdateTaxProviderConnectionResponses = {
+export type ProviderConnectionPutResponses = {
     /**
      * OK
      */
     200: ResponseConnection;
 };
 
-export type UpdateTaxProviderConnectionResponse = UpdateTaxProviderConnectionResponses[keyof UpdateTaxProviderConnectionResponses];
+export type ProviderConnectionPutResponse = ProviderConnectionPutResponses[keyof ProviderConnectionPutResponses];

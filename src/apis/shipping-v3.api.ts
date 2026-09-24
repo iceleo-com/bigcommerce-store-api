@@ -40,14 +40,21 @@ export class ShippingV3Api {
      **Limits**
      * Limit of 50 customs information objects per `PUT` request.
      */
-    updateCustomsInformation(
-        requestBody: ShippingV3ApiSpecs.UpdateCustomsInformationData['body'],
+    putCustomsInformation(
+        requestBody: ShippingV3ApiSpecs.PutCustomsInformationData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ShippingV3ApiSpecs.UpdateCustomsInformationResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<ShippingV3ApiSpecs.PutCustomsInformationResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/shipping/products/customs-information',
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `putCustomsInformation` instead.
+     */
+    updateCustomsInformation(...args: Parameters<ShippingV3Api['putCustomsInformation']>) {
+        return this.putCustomsInformation(...args);
     }
 
     /**
@@ -69,62 +76,6 @@ export class ShippingV3Api {
         return this.request.delete<RequestSuccessResponse<204, Required<ShippingV3ApiSpecs.DeleteCustomsInformationResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/shipping/products/customs-information',
             query,
-        });
-    }
-
-    /**
-     * Get Shipping Settings
-     *
-     * Returns the global-level shipping settings.
-     */
-    getShippingSettings(
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ShippingV3ApiSpecs.GetShippingSettingsResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: 'v3/shipping/settings',
-        });
-    }
-
-    /**
-     * Update Shipping Settings
-     *
-     * Updates the global-level shipping settings.
-     */
-    updateShippingSettings(
-        requestBody: ShippingV3ApiSpecs.UpdateShippingSettingsData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ShippingV3ApiSpecs.UpdateShippingSettingsResponses[200]>>,(RequestErrorResponse<400, Required<ShippingV3ApiSpecs.UpdateShippingSettingsErrors[400]>> | RequestErrorResponse<422, Required<ShippingV3ApiSpecs.UpdateShippingSettingsErrors[422]>>)>({
-            path: 'v3/shipping/settings',
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Get Shipping Settings per Channel
-     *
-     * Returns shipping settings for a specific channel.
-     */
-    getChannelShippingSettings(
-        channelId: ShippingV3ApiSpecs.GetChannelShippingSettingsData['path']['channel_id'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ShippingV3ApiSpecs.GetChannelShippingSettingsResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/shipping/settings/channels/${channelId}`,
-        });
-    }
-
-    /**
-     * Update Shipping Settings per Channel
-     *
-     * Updates shipping settings for a specific channel.
-     */
-    updateChannelShippingSettings(
-        channelId: ShippingV3ApiSpecs.UpdateChannelShippingSettingsData['path']['channel_id'],
-        requestBody: ShippingV3ApiSpecs.UpdateChannelShippingSettingsData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ShippingV3ApiSpecs.UpdateChannelShippingSettingsResponses[200]>>,(RequestErrorResponse<400, Required<ShippingV3ApiSpecs.UpdateChannelShippingSettingsErrors[400]>> | RequestErrorResponse<422, Required<ShippingV3ApiSpecs.UpdateChannelShippingSettingsErrors[422]>>)>({
-            path: `v3/shipping/settings/channels/${channelId}`,
-            contentType: 'application/json',
-            body: requestBody,
         });
     }
 }

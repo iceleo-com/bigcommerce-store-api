@@ -27,16 +27,6 @@ export type PaymentBase = {
  */
 export type Accept = string;
 
-/**
- * Request a specific page of results. The value of the limit query parameter determines the number of responses per page.
- */
-export type PageQuery = number;
-
-/**
- * Set the number of responses per page.
- */
-export type LimitQuery = number;
-
 export type GetAllPaymentMethodsData = {
     body?: never;
     headers: {
@@ -48,11 +38,11 @@ export type GetAllPaymentMethodsData = {
     path?: never;
     query?: {
         /**
-         * Request a specific page of results. The value of the limit query parameter determines the number of responses per page.
+         * Optional filter param `/api/v2/payments/methods?page={number}`
          */
         page?: number;
         /**
-         * Set the number of responses per page.
+         * Optional filter param `/api/v2/payments/methods?limit={count}`
          */
         limit?: number;
     };

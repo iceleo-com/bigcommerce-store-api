@@ -122,36 +122,54 @@ export type ResponseMeta = {
 };
 
 /**
- * Body
- *
  * Response payload for the BigCommerce API.
  *
  */
 export type PagesCollectionResponse = {
-    data?: Array<TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink>;
+    data?: Array<TypePage | TypeBlog | TypeContactForm | TypeFeed | TypeRaw | TypeLink>;
     meta?: ResponseMeta;
 };
 
 /**
  * PageResponseObject
  *
- * Response payload for a single content page.
+ * Response payload for the BigCommerce API.
  *
  */
-export type SinglePageResponse = {
-    data?: TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+export type PageResponse = {
+    data?: {
+        [key: string]: unknown;
+    };
     meta?: ResponseMeta;
+};
+
+export type ContactFields = {
+    /**
+     * Full name of the customer who is submitting the form.
+     */
+    fullname?: string;
+    /**
+     * Customer’s phone number, as submitted on the form.
+     */
+    phone?: string;
+    /**
+     * Customer’s submitted company name.
+     */
+    companyname?: string;
+    /**
+     * Customer’s submitted order number.
+     */
+    orderno?: string;
+    /**
+     * Customer’s submitted RMA (Return Merchandise Authorization) number.
+     */
+    rma?: string;
 };
 
 /**
  * Properties of the page modification request body.
  */
-export type PagePutObj = {
-    /**
-     * The ID of the channel where this page should be shown.
-     *
-     */
-    channel_id?: number;
+export type PagePutBulk = {
     /**
      * The name of the page. Must be unique.
      *
@@ -159,6 +177,7 @@ export type PagePutObj = {
     name?: string;
     /**
      * Boolean value that specifies the visibility of the page in the storefront’s navigation menu.
+     *
      *
      * Indicates whether the page is available to users and visible in any menus.
      *
@@ -175,29 +194,47 @@ export type PagePutObj = {
      */
     sort_order?: number;
     /**
-     * Specifies the type of page. See [Pages V3 page types](/docs/rest-content/pages#page-types) for more about the differences.
-     */
-    type?: 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
-    /**
-     * HTML or variable that populates the element of this page, in default/desktop view. Required in a `POST` request if the page type is `raw`.
+     * Specifies the type of the page. The following values are possible;
      *
+     * |Value|Description|
+     * |-|-|
+     * | `blog` | blog page. Read-only; blog pages can only be created in the store control panel. |
+     * |`contact_form`|hosts the store's contact form|
+     * |`link`|link to another absolute URL|
+     * |`page`|user-defined plain-text page|
+     * |`raw`|page that contains markup, such as HTML.|
+     * |`rss_feed`|contains syndicated content from an RSS feed|
      */
-    body?: string | null;
+    type?: 'page' | 'raw' | 'contact_form' | 'feed' | 'link' | 'blog';
     /**
      * Boolean value that specifies whether this page is the storefront’s home page.
      *
      */
     is_homepage?: boolean;
     /**
-     * Boolean value. When `true`, this page is visible only to logged-in customers.
+     * Boolean value. If this value is set to `true`, this page will not be visible when the user is logged in to the store control panel.
      *
      */
     is_customers_only?: boolean;
+    /**
+     * The ID of the target page.
+     */
+    id: number;
     /**
      * Applicable when the page type is `contact_form`: contact email address that receives messages sent via the form. Must be unique.
      */
     email?: string;
     meta_title?: string | null;
+    /**
+     * HTML or variable that populates the element of this page, in default/desktop view. Required in a `POST` request if the page type is `raw`.
+     *
+     */
+    body?: string | null;
+    /**
+     * The URL of the RSS feed. Required in a `POST` request if the page type is `rss_feed`.
+     *
+     */
+    feed?: string;
     /**
      * Required in a `POST` request to create a link if the page type is `link`.
      *
@@ -236,14 +273,233 @@ export type PagePutObj = {
      *
      */
     url?: string;
+    /**
+     * The ID of the channel where this page should be shown.
+     *
+     */
+    channel_id?: number;
 };
 
-export type PagePutBulk = {
+/**
+ * Properties of the page modification request body.
+ */
+export type PagePut = {
     /**
-     * The ID of the target page.
+     * The name of the page. Must be unique.
+     *
      */
-    id: number;
-} & PagePutObj;
+    name?: string;
+    /**
+     * Boolean value that specifies the visibility of the page in the storefront’s navigation menu.
+     *
+     */
+    is_visible?: boolean;
+    /**
+     * ID of any parent Web page.
+     *
+     */
+    parent_id?: number;
+    /**
+     * Specifies the order in which the page is displayed on the storefront. (Lower integers specify earlier display.)
+     *
+     */
+    sort_order?: number;
+    /**
+     * Specifies the type of the page.
+     *
+     * |Value|Description|
+     * |-|-|
+     * | `blog` | blog page. Read-only; blog pages can only be created in the store control panel. |
+     * |`contact_form`|hosts the store's contact form|
+     * |`link`|link to another absolute URL|
+     * |`page`|user-defined plain-text page|
+     * |`raw`|page that contains markup, such as HTML.|
+     * |`rss_feed`|contains syndicated content from an RSS feed|
+     */
+    type?: 'page' | 'raw' | 'contact_form' | 'feed' | 'link' | 'blog';
+    /**
+     * Boolean value that specifies whether this page is the storefront’s home page.
+     *
+     */
+    is_homepage?: boolean;
+    /**
+     * Boolean value. If this value is set to `true`, this page will not be visible when the user is logged in to the store control panel.
+     *
+     */
+    is_customers_only?: boolean;
+    /**
+     * Applicable when the page type is `contact_form`: contact email address that receives messages sent via the form. Must be unique.
+     */
+    email?: string;
+    meta_title?: string | null;
+    /**
+     * HTML or variable that populates the elment of this page, in default/desktop view. Required in a `POST` request if the page type is `raw`.
+     *
+     */
+    body?: string | null;
+    /**
+     * The URL of the RSS feed. Required in a `POST` request if the page type is `rss_feed`.
+     *
+     */
+    feed?: string;
+    /**
+     * Required in a `POST` request to create a link if the page type is `link`.
+     *
+     */
+    link?: string;
+    /**
+     * Applicable when the page type is `contact_form`: comma-separated list of keywords representing the fields enabled in the control panel for storefront display. Possible fields include:
+     *
+     * |Field|Description|
+     * |-|-|
+     * |`fullname`|Full name of the customer submitting the form|
+     * |`phone`|Customer’s phone number, as submitted on the form|
+     * |`companyname`|Customer’s submitted company name|
+     * |`orderno`|Customer’s submitted order number|
+     * |`rma`|Customer’s submitted RMA (Return Merchandise Authorization) number|
+     *
+     */
+    contact_fields?: string;
+    /**
+     * Comma-separated list of SEO-relevant keywords to include in the element of this page.
+     *
+     */
+    meta_keywords?: string | null;
+    /**
+     * Description contained within the element of this page.
+     *
+     */
+    meta_description?: string | null;
+    /**
+     * Comma-separated list of keywords that shoppers can use to locate this page when searching the store.
+     *
+     */
+    search_keywords?: string | null;
+    /**
+     * Relative URL on the storefront for this page.
+     *
+     */
+    url?: string;
+    /**
+     * The ID of the channel where this page should be shown.
+     *
+     */
+    channel_id?: number;
+};
+
+export type Page = {
+    /**
+     * Applicable when the page type is `contact_form`: contact email address that receives messages sent via the form. Must be unique.
+     */
+    email?: string;
+    meta_title?: string | null;
+    /**
+     * HTML or variable that populates this page’s element, in default/desktop view. Required in a `POST` request if the page type is `raw`.
+     *
+     */
+    body?: string | null;
+    /**
+     * The URL of the RSS feed. Required in a `POST` request if the page type is `rss_feed`.
+     *
+     */
+    feed?: string;
+    /**
+     * Required in a `POST` request to create a link if the page type is `link`.
+     *
+     */
+    link?: string;
+    /**
+     * Applicable when the page type is `contact_form`: comma-separated list of keywords representing the fields enabled in the control panel for storefront display. Possible fields include:
+     *
+     * |Field|Description|
+     * |-|-|
+     * |`fullname`|Full name of the customer submitting the form|
+     * |`phone`|Customer’s phone number, as submitted on the form|
+     * |`companyname`|Customer’s submitted company name|
+     * |`orderno`|Customer’s submitted order number|
+     * |`rma`|Customer’s submitted RMA (Return Merchandise Authorization) number|
+     *
+     */
+    contact_fields?: string;
+    /**
+     * Comma-separated list of SEO-relevant keywords to include in the page’s element.
+     *
+     */
+    meta_keywords?: string | null;
+    /**
+     * Description contained within this page’s element.
+     *
+     */
+    meta_description?: string | null;
+    /**
+     * Comma-separated list of keywords that shoppers can use to locate this page when searching the store.
+     *
+     */
+    search_keywords?: string | null;
+    /**
+     * Relative URL on the storefront for this page.
+     *
+     */
+    url?: string;
+    /**
+     * The Id of the channel where this page should be shown.
+     *
+     */
+    channel_id?: number;
+} & PageBase;
+
+/**
+ * Common Page properties.
+ */
+export type PageBase = {
+    /**
+     * The name of the page. Must be unique.
+     *
+     */
+    name: string;
+    /**
+     * Determines the visibility of the page in the storefront’s navigation menu.
+     *
+     * Boolean value that specifies the visibility of the page in the storefront’s navigation menu.
+     *
+     * Indicates whether the page is available to users and visible in any menus.
+     *
+     */
+    is_visible?: boolean;
+    /**
+     * ID of any parent Web page.
+     *
+     */
+    parent_id?: number;
+    /**
+     * Determines the order in which the page is displayed on the storefront. (Lower integers specify earlier display.)
+     *
+     */
+    sort_order?: number;
+    /**
+     * Determines the type of the page.
+     *
+     * |Value|Description|
+     * |-|-|
+     * | `blog` | blog page. Read-only; blog pages can only be created in the store control panel. |
+     * |`contact_form`|hosts the store's contact form|
+     * |`link`|link to another absolute URL|
+     * |`page`|user-defined plain-text page|
+     * |`raw`|page that contains markup, such as HTML.|
+     * |`rss_feed`|contains syndicated content from an RSS feed|
+     */
+    type: 'page' | 'raw' | 'contact_form' | 'feed' | 'link' | 'blog';
+    /**
+     * Determines whether this page is the storefront’s home page.
+     *
+     */
+    is_homepage?: boolean;
+    /**
+     * If `true`, this page will only be visible to customers that are logged in to the store.
+     *
+     */
+    is_customers_only?: boolean;
+};
 
 /**
  * Properties of all Pages V3 pages.
@@ -269,15 +525,15 @@ export type AnyTypePage = {
      */
     sort_order?: number;
     /**
-     * Determines the type of page. See [Pages V3 page types](/docs/rest-content/pages#page-types) for more about the differences.
+     * Determines the type of page. See [Pages v3 page types](/docs/rest-content/pages#page-types) for more about the differences.
      */
-    type: 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+    type: 'page' | 'raw' | 'contact_form' | 'feed' | 'link' | 'blog';
     /**
      * Determines whether this page loads at the siteʼs root route. For example, at `https://example.com/`.
      */
     is_homepage?: boolean;
     /**
-     * When `true`, this page is visible only to logged-in customers.
+     * When `true`, this page is not visible to merchant users who are signed in to the store control panel.
      */
     is_customers_only?: boolean;
     /**
@@ -288,19 +544,12 @@ export type AnyTypePage = {
 };
 
 /**
- * page
- *
- * `type: page`. A user-defined plain-text page.
+ * Schema for a Pages V3 page with `type: page`
  *
  */
 export type TypePage = AnyTypePage & PageMeta & SearchKeywords;
 
-/**
- * blog
- *
- * A page that contains blog posts. Use caution; `blog`-type pages can only be created in the store control panel, but you may be able to change the type of a blog page to something else with this API. Use the [blog feature of the REST Content API](/docs/rest-content/store-content/blog-posts#create-a-blog-post) to work with blog posts and tags.
- */
-export type TypeBlog = unknown & AnyTypePage & PageMeta & SearchKeywords & {
+export type TypeBlog = AnyTypePage & PageMeta & SearchKeywords & {
     /**
      * Relative URL on the storefront for this page.
      *
@@ -308,14 +557,9 @@ export type TypeBlog = unknown & AnyTypePage & PageMeta & SearchKeywords & {
     url?: string;
 };
 
-/**
- * contact form
- *
- * `type: contact_form`. A user-customizable page that contains a contact form. Body content returns HTML.
- */
 export type TypeContactForm = AnyTypePage & PageMeta & SearchKeywords & {
     /**
-     * Applicable when the page type is `contact_form`: contact email address that receives messages sent using the form. Must be unique.
+     * Applicable when the page type is `contact_form`: contact email address that receives messages sent via the form. Must be unique.
      */
     email?: string;
     /**
@@ -333,11 +577,14 @@ export type TypeContactForm = AnyTypePage & PageMeta & SearchKeywords & {
     contact_fields?: string;
 };
 
-/**
- * raw
- *
- * `type: raw`. A user-defined page with a body that contains HTML markup or other stringified code.
- */
+export type TypeFeed = AnyTypePage & PageMeta & SearchKeywords & {
+    /**
+     * The URL of the RSS feed. Required in a `POST` request if the page type is `rss_feed`.
+     *
+     */
+    feed: string;
+};
+
 export type TypeRaw = AnyTypePage & SearchKeywords & {
     /**
      * HTML or variable that populates the element of this page, in default/desktop view. Required in a `POST` request if the page type is `raw`.
@@ -350,11 +597,6 @@ export type TypeRaw = AnyTypePage & SearchKeywords & {
     content_type?: string;
 };
 
-/**
- * link
- *
- * `type: link`. A link to an external absolute URL. Displays in the menu of other pages that contain markup. Does not contain a body.
- */
 export type TypeLink = AnyTypePage & {
     /**
      * The link for the page type `link`.
@@ -384,6 +626,37 @@ export type SearchKeywords = {
     search_keywords?: string | null;
 };
 
+export type ReadShared = {
+    /**
+     * The name of the page. Must be unique.
+     */
+    name: string;
+    /**
+     * Indicates whether the page is available to users and visible in any menus.
+     */
+    is_visible?: boolean;
+    /**
+     * ID of the parent page, if any.
+     */
+    parent_id?: number;
+    /**
+     * Determines the order in which the page is displayed in the parent page’s menu. Pages with lower integers display earlier.
+     */
+    sort_order?: number;
+    /**
+     * Determines the type of page. See [Pages v3 page types](/docs/rest-content/pages#page-types) for more about the differences.
+     */
+    type: 'page' | 'contact_form' | 'raw' | 'blog' | 'feed' | 'link';
+    /**
+     * Determines whether this page loads at the siteʼs root route. For example, at `https://example.com/`.
+     */
+    is_homepage?: boolean;
+    /**
+     * When `true`, this page is not visible to merchant users who are signed in to the store control panel.
+     */
+    is_customers_only?: boolean;
+};
+
 /**
  * Properties of all Pages V3 pages.
  *
@@ -406,30 +679,17 @@ export type AnyTypePageWritable = {
      */
     sort_order?: number;
     /**
-     * Determines the type of page. See [Pages V3 page types](/docs/rest-content/pages#page-types) for more about the differences.
+     * Determines the type of page. See [Pages v3 page types](/docs/rest-content/pages#page-types) for more about the differences.
      */
-    type: 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+    type: 'page' | 'raw' | 'contact_form' | 'feed' | 'link' | 'blog';
     /**
      * Determines whether this page loads at the siteʼs root route. For example, at `https://example.com/`.
      */
     is_homepage?: boolean;
     /**
-     * When `true`, this page is visible only to logged-in customers.
+     * When `true`, this page is not visible to merchant users who are signed in to the store control panel.
      */
     is_customers_only?: boolean;
-    /**
-     * Relative URL on the storefront for this page.
-     *
-     */
-    url?: string;
-};
-
-/**
- * blog
- *
- * A page that contains blog posts. Use caution; `blog`-type pages can only be created in the store control panel, but you may be able to change the type of a blog page to something else with this API. Use the [blog feature of the REST Content API](/docs/rest-content/store-content/blog-posts#create-a-blog-post) to work with blog posts and tags.
- */
-export type TypeBlogWritable = AnyTypePageWritable & PageMeta & SearchKeywords & {
     /**
      * Relative URL on the storefront for this page.
      *
@@ -442,6 +702,11 @@ export type Accept = string;
 export type ContentType = string;
 
 /**
+ * The permanent ID of the BigCommerce store.
+ */
+export type StoreHashPath = string;
+
+/**
  * The ID of the page to be operated on.
  */
 export type PageIdPath = string;
@@ -449,7 +714,7 @@ export type PageIdPath = string;
 /**
  * Include the requested property in the response. The `body` property returns the page’s markup, text, or raw content.
  */
-export type IncludeQuery = Array<'body'>;
+export type IncludeQuery = 'body';
 
 /**
  * Return only pages associated with the specified channel.
@@ -459,19 +724,12 @@ export type ChannelIdQuery = number;
 /**
  * A comma-separated string of page IDs to fetch. Supports bulk operations. If none of the page IDs passed exist, the query will return an empty `data` array.
  */
-export type IdInQueryGet = Array<number>;
+export type IdInQueryGet = string;
 
 /**
  * Request deletion of multiple pages by passing a comma-separated string of corresponding page IDs. Supports bulk operations.
  */
-export type IdInQueryDelete = Array<number>;
-
-/**
- * When you explicitly set this query parameter to `true`, deleting a parent page will recursively delete all its immediate children and their descendants.
- * Otherwise, if you set this query parameter to `false` or not provided, deleting a parent page will update its immediate children by setting their `parent_id` to `0` and their `is_visible` status to `false`.
- *
- */
-export type DeleteChildrenQuery = boolean;
+export type IdInQueryDelete = string;
 
 /**
  * Name of the page.
@@ -493,7 +751,7 @@ export type LimitQuery = number;
  */
 export type PageQuery = number;
 
-export type DeletePagesData = {
+export type ContentPagesDeleteData = {
     body?: never;
     headers: {
         Accept: string;
@@ -503,18 +761,12 @@ export type DeletePagesData = {
         /**
          * Request deletion of multiple pages by passing a comma-separated string of corresponding page IDs. Supports bulk operations.
          */
-        'id:in': Array<number>;
-        /**
-         * When you explicitly set this query parameter to `true`, deleting a parent page will recursively delete all its immediate children and their descendants.
-         * Otherwise, if you set this query parameter to `false` or not provided, deleting a parent page will update its immediate children by setting their `parent_id` to `0` and their `is_visible` status to `false`.
-         *
-         */
-        delete_children?: boolean;
+        'id:in': string;
     };
     url: '/content/pages';
 };
 
-export type DeletePagesErrors = {
+export type ContentPagesDeleteErrors = {
     /**
      * Not Found. One of more of the pages specified for deletion did not exist. Specified pages that did exist were successfully deleted.
      */
@@ -525,18 +777,18 @@ export type DeletePagesErrors = {
     422: ResponseErrorDetailed;
 };
 
-export type DeletePagesError = DeletePagesErrors[keyof DeletePagesErrors];
+export type ContentPagesDeleteError = ContentPagesDeleteErrors[keyof ContentPagesDeleteErrors];
 
-export type DeletePagesResponses = {
+export type ContentPagesDeleteResponses = {
     /**
      * No content. A 204 response with no payload indicates successful deletion of all specified pages.
      */
     204: void;
 };
 
-export type DeletePagesResponse = DeletePagesResponses[keyof DeletePagesResponses];
+export type ContentPagesDeleteResponse = ContentPagesDeleteResponses[keyof ContentPagesDeleteResponses];
 
-export type GetPagesData = {
+export type ContentPagesGetData = {
     body?: never;
     headers: {
         Accept: string;
@@ -550,7 +802,7 @@ export type GetPagesData = {
         /**
          * A comma-separated string of page IDs to fetch. Supports bulk operations. If none of the page IDs passed exist, the query will return an empty `data` array.
          */
-        'id:in'?: Array<number>;
+        'id:in'?: string;
         /**
          * Name of the page.
          */
@@ -570,12 +822,12 @@ export type GetPagesData = {
         /**
          * Include the requested property in the response. The `body` property returns the page’s markup, text, or raw content.
          */
-        include?: Array<'body'>;
+        include?: 'body';
     };
     url: '/content/pages';
 };
 
-export type GetPagesErrors = {
+export type ContentPagesGetErrors = {
     /**
      * Bad Request; reasons for failure include passing query parameters that are not supported on this endpoint, but are common on other BigCommerce endpoints.
      */
@@ -586,16 +838,16 @@ export type GetPagesErrors = {
     422: ResponseErrorItemized;
 };
 
-export type GetPagesError = GetPagesErrors[keyof GetPagesErrors];
+export type ContentPagesGetError = ContentPagesGetErrors[keyof ContentPagesGetErrors];
 
-export type GetPagesResponses = {
+export type ContentPagesGetResponses = {
     200: PagesCollectionResponse;
 };
 
-export type GetPagesResponse = GetPagesResponses[keyof GetPagesResponses];
+export type ContentPagesGetResponse = ContentPagesGetResponses[keyof ContentPagesGetResponses];
 
-export type CreatePagesData = {
-    body: TypePage | TypeBlogWritable | TypeContactForm | TypeRaw | TypeLink | Array<TypePage | TypeBlogWritable | TypeContactForm | TypeRaw | TypeLink>;
+export type ContentPagesPostData = {
+    body: Page;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -605,12 +857,12 @@ export type CreatePagesData = {
         /**
          * Include the requested property in the response. The `body` property returns the page’s markup, text, or raw content.
          */
-        include?: Array<'body'>;
+        include?: 'body';
     };
     url: '/content/pages';
 };
 
-export type CreatePagesErrors = {
+export type ContentPagesPostErrors = {
     /**
      * The input was not valid. This is the result of missing required fields or other invalid arguments. See the response for more details.
      *
@@ -619,20 +871,20 @@ export type CreatePagesErrors = {
     422: ResponseErrorDetailed;
 };
 
-export type CreatePagesError = CreatePagesErrors[keyof CreatePagesErrors];
+export type ContentPagesPostError = ContentPagesPostErrors[keyof ContentPagesPostErrors];
 
-export type CreatePagesResponses = {
+export type ContentPagesPostResponses = {
     /**
      * Created.
      *
-     * Response.data will inherit the data type of the request. A single entry passed as an object will return an object for the data property. Any number of entries passed in an array will return an array for the data property.
+     * Response.data will inherit the datatype of the request. A single entry passed as an object will return an object for the data property. Any number of entries passed in an array will return an array for the data property.
      *
      * Properties associated with a page `type` that are not required to create an entry will be created with default values.
      *
      * When you make bulk requests, an invalid input in any one entry will return 422. The entries that are valid will still be created.
      */
     201: {
-        data?: TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+        data?: TypePage | TypeBlog | TypeContactForm | TypeFeed | TypeRaw | TypeLink;
         meta?: ResponseMeta;
     };
     /**
@@ -641,9 +893,9 @@ export type CreatePagesResponses = {
     207: unknown;
 };
 
-export type CreatePagesResponse = CreatePagesResponses[keyof CreatePagesResponses];
+export type ContentPagesPostResponse = ContentPagesPostResponses[keyof ContentPagesPostResponses];
 
-export type UpdatePagesData = {
+export type ContentPagesPutData = {
     body?: PagePutBulk | Array<PagePutBulk>;
     headers: {
         Accept: string;
@@ -654,12 +906,12 @@ export type UpdatePagesData = {
         /**
          * Include the requested property in the response. The `body` property returns the page’s markup, text, or raw content.
          */
-        include?: Array<'body'>;
+        include?: 'body';
     };
     url: '/content/pages';
 };
 
-export type UpdatePagesErrors = {
+export type ContentPagesPutErrors = {
     /**
      * Not Found
      */
@@ -670,9 +922,9 @@ export type UpdatePagesErrors = {
     422: ResponseErrorDetailed;
 };
 
-export type UpdatePagesError = UpdatePagesErrors[keyof UpdatePagesErrors];
+export type ContentPagesPutError = ContentPagesPutErrors[keyof ContentPagesPutErrors];
 
-export type UpdatePagesResponses = {
+export type ContentPagesPutResponses = {
     /**
      * Updated.
      *
@@ -680,9 +932,9 @@ export type UpdatePagesResponses = {
     200: PagesCollectionResponse;
 };
 
-export type UpdatePagesResponse = UpdatePagesResponses[keyof UpdatePagesResponses];
+export type ContentPagesPutResponse = ContentPagesPutResponses[keyof ContentPagesPutResponses];
 
-export type DeletePageData = {
+export type ContentPageDeleteData = {
     body?: never;
     headers: {
         Accept: string;
@@ -697,25 +949,25 @@ export type DeletePageData = {
     url: '/content/pages/{pageId}';
 };
 
-export type DeletePageErrors = {
+export type ContentPageDeleteErrors = {
     /**
      * The page specified for deletion did not exist.
      */
     404: ResponseErrorBrief;
 };
 
-export type DeletePageError = DeletePageErrors[keyof DeletePageErrors];
+export type ContentPageDeleteError = ContentPageDeleteErrors[keyof ContentPageDeleteErrors];
 
-export type DeletePageResponses = {
+export type ContentPageDeleteResponses = {
     /**
      * No content. A 204 response with no payload indicates successful deletion of all specified pages.
      */
     204: void;
 };
 
-export type DeletePageResponse = DeletePageResponses[keyof DeletePageResponses];
+export type ContentPageDeleteResponse = ContentPageDeleteResponses[keyof ContentPageDeleteResponses];
 
-export type GetPageData = {
+export type ContentPageGetData = {
     body?: never;
     headers: {
         Accept: string;
@@ -730,12 +982,12 @@ export type GetPageData = {
         /**
          * Include the requested property in the response. The `body` property returns the page’s markup, text, or raw content.
          */
-        include?: Array<'body'>;
+        include?: 'body';
     };
     url: '/content/pages/{pageId}';
 };
 
-export type GetPageErrors = {
+export type ContentPageGetErrors = {
     /**
      * Not Found.
      */
@@ -746,16 +998,16 @@ export type GetPageErrors = {
     422: ResponseErrorItemized;
 };
 
-export type GetPageError = GetPageErrors[keyof GetPageErrors];
+export type ContentPageGetError = ContentPageGetErrors[keyof ContentPageGetErrors];
 
-export type GetPageResponses = {
-    200: SinglePageResponse;
+export type ContentPageGetResponses = {
+    200: PageResponse;
 };
 
-export type GetPageResponse = GetPageResponses[keyof GetPageResponses];
+export type ContentPageGetResponse = ContentPageGetResponses[keyof ContentPageGetResponses];
 
-export type UpdatePageData = {
-    body: PagePutObj;
+export type ContentPagePutData = {
+    body: PagePut;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -770,12 +1022,12 @@ export type UpdatePageData = {
         /**
          * Include the requested property in the response. The `body` property returns the page’s markup, text, or raw content.
          */
-        include?: Array<'body'>;
+        include?: 'body';
     };
     url: '/content/pages/{pageId}';
 };
 
-export type UpdatePageErrors = {
+export type ContentPagePutErrors = {
     /**
      * Bad Request; reasons for failure include invalid query parameters. See the response for more details.
      */
@@ -790,10 +1042,14 @@ export type UpdatePageErrors = {
     422: ResponseErrorDetailed;
 };
 
-export type UpdatePageError = UpdatePageErrors[keyof UpdatePageErrors];
+export type ContentPagePutError = ContentPagePutErrors[keyof ContentPagePutErrors];
 
-export type UpdatePageResponses = {
-    200: SinglePageResponse;
+export type ContentPagePutResponses = {
+    /**
+     *
+     *
+     */
+    200: PageResponse;
 };
 
-export type UpdatePageResponse = UpdatePageResponses[keyof UpdatePageResponses];
+export type ContentPagePutResponse = ContentPagePutResponses[keyof ContentPagePutResponses];

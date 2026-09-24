@@ -79,20 +79,6 @@ export type StoredPayPalAccount = {
 };
 
 /**
- * StoredBankAccount
- */
-export type StoredBankAccount = {
-    /**
-     * Type to classify this payment instrument (required)
-     */
-    type?: 'stored_bank_account';
-    /**
-     * Identifier representing this stored bank account (required)
-     */
-    token?: string;
-};
-
-/**
  * GiftCertificate
  */
 export type GiftCertificate = {
@@ -151,12 +137,12 @@ export type PaymentsPostData = {
     /**
      * Payment Request
      */
-    body?: {
+    body: {
         /**
          * Payment
          */
         payment: {
-            instrument: Card | StoredCard | StoredPayPalAccount | GiftCertificate | StoreCredit | TokenizedCard | StoredBankAccount;
+            instrument: Card | StoredCard | StoredPayPalAccount | GiftCertificate | StoreCredit | TokenizedCard;
             /**
              * Identifier for payment method that will be used for this payment and `id` from the Get Accepted Payment Methods API
              */

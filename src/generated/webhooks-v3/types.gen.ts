@@ -108,6 +108,7 @@ export type StoreCartUpdated = WebhookCallbackBase & {
  *
  * Fires when a cart is deleted. Carts are deleted in two ways; when all items are removed from a cart, and when an API consumer explicitly removes the cart using a `DELETE` request. Cart deletion ends the cart lifecycle. The `store/cart/updated` webhook also fires when the last item is removed.
  *
+ *
  * ```json filename="Example callback object" showLineNumbers
  * {
  * "created_at": 1561482670,
@@ -183,6 +184,7 @@ export type StoreCartCouponApplied = WebhookCallbackBase & {
  *
  * This webhook fires after a cart is abandoned. BigCommerce considers a cart abandoned when it has no activity for at least one hour. This webhook is available for all store plans, regardless of whether the Abandoned Cart Saver feature is enabled.
  *
+ *
  * ```json filename="Example callback object" showLineNumbers
  * {
  * "created_at": 1561482670,
@@ -222,6 +224,7 @@ export type StoreCartAbandoned = WebhookCallbackBase & {
  * store/cart/converted
  *
  * Fires when a cart/checkout is converted into an order, which is typically after the checkout payment step on the storefront. At this point, the cart is automatically deleted and no longer accessible. This webhook returns both the cart/checkout ID and order ID for correlation purposes.
+ *
  *
  * ```json filename="Example callback object" showLineNumbers
  * {
@@ -592,6 +595,7 @@ export type StoreChannelCreated = WebhookCallbackBase & {
  * * status
  * * is_listable_from_ui
  * * is_visible
+ * * config_meta
  *
  *
  * ```json filename="Example callback object" showLineNumbers
@@ -910,7 +914,9 @@ export type StoreCustomerPaymentInstrumentDefaultUpdated = WebhookCallbackBase &
  *
  * Fires for all `store/order` events.
  */
-export type StoreOrderWildcard = unknown;
+export type StoreOrderWildcard = {
+    [key: string]: unknown;
+};
 
 /**
  * store/order/created
@@ -1179,7 +1185,9 @@ export type StoreOrderRefundCreated = WebhookCallbackBase & {
  *
  * Fires for all `store/product` events.
  */
-export type StoreProductWildcard = unknown;
+export type StoreProductWildcard = {
+    [key: string]: unknown;
+};
 
 /**
  * store/product/deleted
@@ -1466,7 +1474,9 @@ export type StoreProductInventoryOrderUpdated = WebhookCallbackBase & {
  *
  * Fires for all `store/shipment` events.
  */
-export type StoreShipmentWildcard = unknown;
+export type StoreShipmentWildcard = {
+    [key: string]: unknown;
+};
 
 /**
  * store/shipment/created
@@ -1596,7 +1606,9 @@ export type StoreShipmentDeleted = WebhookCallbackBase & {
  *
  * Fires for all `store/sku` events.
  */
-export type StoreSkuWildcard = unknown;
+export type StoreSkuWildcard = {
+    [key: string]: unknown;
+};
 
 /**
  * store/sku/created
@@ -1795,7 +1807,7 @@ export type StoreSkuInventoryUpdated = WebhookCallbackBase & {
              */
             method?: 'absolute' | 'relative';
             /**
-             * The number of items that the inventory changed by. This can be negative if the inventory is decreased `-3` or positive if an item is returned to the inventory from an order, `2`.
+             * The number of items that the inventory changed by. This can be negative if the inventory is decreased `-3` or positive if an item is returned to the inventory from an order, `2`
              */
             value?: number;
             /**
@@ -1859,7 +1871,7 @@ export type StoreSkuInventoryOrderUpdated = WebhookCallbackBase & {
              */
             method?: 'absolute' | 'relative';
             /**
-             * The number of items that the inventory changed by. This can be negative if the inventory is decreased `-3` or positive if an item is returned to the inventory from an order, `2`.
+             * The number of items that the inventory changed by. This can be negative if the inventory is decreased `-3` or positive if an item is returned to the inventory from an order, `2`
              */
             value?: number;
             /**
@@ -1940,7 +1952,9 @@ export type StoreInformationUpdated = WebhookCallbackBase & {
  *
  * Fires for all `store/subscriber` events.
  */
-export type StoreSubscriberWildcard = unknown;
+export type StoreSubscriberWildcard = {
+    [key: string]: unknown;
+};
 
 /**
  * store/subscriber/created
@@ -2085,7 +2099,9 @@ export type ErrorDetailedFull = {
      * Typically a link to BigCommerce API Status codes
      */
     type?: string;
-    errors?: unknown;
+    errors?: {
+        [key: string]: unknown;
+    };
 };
 
 /**
@@ -2104,6 +2120,10 @@ export type WebhookPut = {
      * Boolean value that indicates whether the webhook is active or not.
      */
     is_active?: boolean;
+    /**
+     * Boolean value that identifies whether events are stored that could not be received.
+     */
+    events_history_enabled?: boolean;
     /**
      * Headers used to validate that webhooks are active. You can pass in any number of custom headers to validate webhooks are being returned.
      */
@@ -2129,6 +2149,12 @@ export type WebhookBase = {
      */
     is_active?: boolean;
     /**
+     * Deprecated. Boolean value that identifies whether events are stored that could not be received.
+     *
+     * @deprecated
+     */
+    events_history_enabled?: boolean;
+    /**
      * Headers used to validate that webhooks are active. You can pass in any number of custom headers to validate webhooks are being returned.
      */
     headers?: {
@@ -2136,7 +2162,7 @@ export type WebhookBase = {
     } | null;
 };
 
-export type WebhookFull = {
+export type WebhookFull = WebhookBase & {
     /**
      * ID of the webhook.
      */
@@ -2150,14 +2176,43 @@ export type WebhookFull = {
      */
     store_hash?: string;
     /**
-     * The time the webhook was created, represented in UNIX epoch time.
+     * Time when the webhook was created.
      */
     created_at?: number;
     /**
-     * The time the webhook was most recently updated, represented in UNIX epoch time.
+     * Time when the webhook was updated.
      */
     updated_at?: number;
-} & WebhookBase;
+};
+
+export type HistoryEvent = {
+    /**
+     * Alias where the event occurred.
+     */
+    scope?: string;
+    /**
+     * A numerical identifier that is unique to each store.
+     */
+    store_id?: string;
+    /**
+     * A lightweight description of the event that triggered the webhook. Will vary depending on the event registered.
+     */
+    data?: {
+        [key: string]: unknown;
+    };
+    /**
+     * The payload data encoded in JSON format and then passed through SH1 encryption.
+     */
+    hash?: string;
+    /**
+     * UTC timestamp, in seconds, that the events was created.
+     */
+    created_at?: number;
+    /**
+     * Will always follow the pattern stores/store_hash. This is the store that created the webhook.
+     */
+    producer?: string;
+};
 
 /**
  * Data about the response, including pagination and collection totals.
@@ -2202,7 +2257,7 @@ export type Pagination = {
 
 export type WebhookCallbackBase = {
     /**
-     * The time the webhook was created, represented in UNIX epoch time.
+     * Hook creation date, in Unix timestamp format.
      */
     readonly created_at?: number;
     /**
@@ -2243,6 +2298,21 @@ export type CallbackCategoryData = {
         id?: number;
     };
 };
+
+/**
+ * store/category*
+ *
+ * Fires for all `store/category` events.
+ *
+ */
+export type StoreCategoryWildcardWritable = unknown;
+
+/**
+ * store/channel*
+ *
+ * Fires for all `store/channel` events.
+ */
+export type StoreChannelWildcardWritable = unknown;
 
 /**
  * store/channel/created
@@ -2286,6 +2356,7 @@ export type StoreChannelCreatedWritable = WebhookCallbackBaseWritable & {
  * * status
  * * is_listable_from_ui
  * * is_visible
+ * * config_meta
  *
  *
  * ```json filename="Example callback object" showLineNumbers
@@ -2313,6 +2384,14 @@ export type StoreChannelUpdatedWritable = WebhookCallbackBaseWritable & {
         id?: number;
     };
 };
+
+/**
+ * store/customer*
+ *
+ * Fires for all `store/customer` events.
+ *
+ */
+export type StoreCustomerWildcardWritable = unknown;
 
 /**
  * store/customer/created
@@ -2493,11 +2572,23 @@ export type FilterPageParam = number;
  */
 export type FilterLimitParam = number;
 
+/**
+ * Maximum value for returned data.
+ *
+ */
+export type FilterMaxCreatedAtParam = string;
+
+/**
+ * Minimum value for returned data.
+ *
+ */
+export type FilterMinCreatedAtParam = string;
+
 export type Accept = string;
 
 export type ContentType = string;
 
-export type GetWebhooksData = {
+export type GetAllWebhooksData = {
     body?: never;
     headers?: {
         Accept?: string;
@@ -2534,16 +2625,20 @@ export type GetWebhooksData = {
     url: '/hooks';
 };
 
-export type GetWebhooksErrors = {
+export type GetAllWebhooksErrors = {
+    /**
+     * Malformed request syntax. Typically need to fix the JSON request body to resend successfully.
+     */
+    400: ErrorFull;
     /**
      * Unauthorized - the v3 Auth client ID or token in the request are not a valid combination for this store.
      */
     401: ErrorFull;
 };
 
-export type GetWebhooksError = GetWebhooksErrors[keyof GetWebhooksErrors];
+export type GetAllWebhooksError = GetAllWebhooksErrors[keyof GetAllWebhooksErrors];
 
-export type GetWebhooksResponses = {
+export type GetAllWebhooksResponses = {
     200: {
         data?: Array<{
             id?: number;
@@ -2555,13 +2650,7 @@ export type GetWebhooksResponses = {
                 [key: string]: string;
             } | null;
             is_active?: boolean;
-            /**
-             * The time the webhook was created, represented in UNIX epoch time.
-             */
             created_at?: number;
-            /**
-             * The time the webhook was most recently updated, represented in UNIX epoch time.
-             */
             updated_at?: number;
         }>;
         meta?: {
@@ -2570,7 +2659,7 @@ export type GetWebhooksResponses = {
     };
 };
 
-export type GetWebhooksResponse = GetWebhooksResponses[keyof GetWebhooksResponses];
+export type GetAllWebhooksResponse = GetAllWebhooksResponses[keyof GetAllWebhooksResponses];
 
 export type CreateWebhooksData = {
     body?: WebhookBase;
@@ -2603,13 +2692,15 @@ export type CreateWebhooksError = CreateWebhooksErrors[keyof CreateWebhooksError
 export type CreateWebhooksResponses = {
     200: {
         data?: WebhookFull;
-        meta?: unknown;
+        meta?: {
+            pagination?: Pagination;
+        };
     };
 };
 
 export type CreateWebhooksResponse = CreateWebhooksResponses[keyof CreateWebhooksResponses];
 
-export type DeleteWebhookData = {
+export type DeleteAWebhookData = {
     body?: never;
     headers?: {
         Accept?: string;
@@ -2625,7 +2716,7 @@ export type DeleteWebhookData = {
     url: '/hooks/{webhook_id}';
 };
 
-export type DeleteWebhookResponses = {
+export type DeleteAWebhookResponses = {
     200: {
         data?: {
             id?: number;
@@ -2637,20 +2728,16 @@ export type DeleteWebhookResponses = {
                 [key: string]: string;
             } | null;
             is_active?: boolean;
-            /**
-             * The time the webhook was created, represented in UNIX epoch time.
-             */
             created_at?: number;
-            /**
-             * The time the webhook was most recently updated, represented in UNIX epoch time.
-             */
             updated_at?: number;
         };
-        meta?: unknown;
+        meta?: {
+            pagination?: Pagination;
+        };
     };
 };
 
-export type DeleteWebhookResponse = DeleteWebhookResponses[keyof DeleteWebhookResponses];
+export type DeleteAWebhookResponse = DeleteAWebhookResponses[keyof DeleteAWebhookResponses];
 
 export type GetWebhookData = {
     body?: never;
@@ -2669,6 +2756,10 @@ export type GetWebhookData = {
 };
 
 export type GetWebhookErrors = {
+    /**
+     * Malformed request syntax. Typically need to fix the JSON request body to resend successfully.
+     */
+    400: ErrorFull;
     /**
      * Unauthorized - the v3 Auth client ID or token in the request are not a valid combination for this store.
      */
@@ -2693,22 +2784,18 @@ export type GetWebhookResponses = {
                 [key: string]: string;
             } | null;
             is_active?: boolean;
-            /**
-             * The time the webhook was created, represented in UNIX epoch time.
-             */
             created_at?: number;
-            /**
-             * The time the webhook was most recently updated, represented in UNIX epoch time.
-             */
             updated_at?: number;
         };
-        meta?: unknown;
+        meta?: {
+            pagination?: Pagination;
+        };
     };
 };
 
 export type GetWebhookResponse = GetWebhookResponses[keyof GetWebhookResponses];
 
-export type UpdateWebhookData = {
+export type UpdateAWebhookData = {
     body?: WebhookPut;
     headers?: {
         Accept?: string;
@@ -2724,7 +2811,7 @@ export type UpdateWebhookData = {
     url: '/hooks/{webhook_id}';
 };
 
-export type UpdateWebhookResponses = {
+export type UpdateAWebhookResponses = {
     200: {
         data?: {
             id?: number;
@@ -2736,20 +2823,16 @@ export type UpdateWebhookResponses = {
                 [key: string]: string;
             } | null;
             is_active?: boolean;
-            /**
-             * The time the webhook was created, represented in UNIX epoch time.
-             */
             created_at?: number;
-            /**
-             * The time the webhook was most recently updated, represented in UNIX epoch time.
-             */
             updated_at?: number;
         };
-        meta?: unknown;
+        meta?: {
+            pagination?: Pagination;
+        };
     };
 };
 
-export type UpdateWebhookResponse = UpdateWebhookResponses[keyof UpdateWebhookResponses];
+export type UpdateAWebhookResponse = UpdateAWebhookResponses[keyof UpdateAWebhookResponses];
 
 export type GetHooksAdminData = {
     body?: never;
@@ -2765,6 +2848,10 @@ export type GetHooksAdminData = {
 };
 
 export type GetHooksAdminErrors = {
+    /**
+     * Malformed request syntax. Typically need to fix the JSON request body to resend successfully.
+     */
+    400: ErrorFull;
     /**
      * Unauthorized - the v3 Auth client ID or token in the request are not a valid combination for this store.
      */
@@ -2818,11 +2905,11 @@ export type GetHooksAdminResponses = {
                  */
                 is_active?: boolean;
                 /**
-                 * The time the webhook was created, represented in UNIX epoch time.
+                 * Created time
                  */
                 created_at?: number;
                 /**
-                 * The time the webhook was most recently updated, represented in UNIX epoch time.
+                 * Updated time
                  */
                 updated_at?: number;
                 /**
@@ -2860,7 +2947,7 @@ export type GetHooksAdminResponses = {
 
 export type GetHooksAdminResponse = GetHooksAdminResponses[keyof GetHooksAdminResponses];
 
-export type UpdateHooksAdminData = {
+export type PutHooksAdminData = {
     /**
      * List of notification emails.
      */
@@ -2872,7 +2959,7 @@ export type UpdateHooksAdminData = {
     url: '/hooks/admin';
 };
 
-export type UpdateHooksAdminErrors = {
+export type PutHooksAdminErrors = {
     /**
      * Malformed request syntax. Typically need to fix the JSON request body to resend successfully.
      */
@@ -2887,13 +2974,68 @@ export type UpdateHooksAdminErrors = {
     422: ErrorDetailedFull;
 };
 
-export type UpdateHooksAdminError = UpdateHooksAdminErrors[keyof UpdateHooksAdminErrors];
+export type PutHooksAdminError = PutHooksAdminErrors[keyof PutHooksAdminErrors];
 
-export type UpdateHooksAdminResponses = {
+export type PutHooksAdminResponses = {
     /**
      * No Content
      */
     204: void;
 };
 
-export type UpdateHooksAdminResponse = UpdateHooksAdminResponses[keyof UpdateHooksAdminResponses];
+export type PutHooksAdminResponse = PutHooksAdminResponses[keyof PutHooksAdminResponses];
+
+export type GetWebhookEventsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Page number.
+         *
+         */
+        page?: number;
+        /**
+         * Items count per page.
+         *
+         */
+        limit?: number;
+        /**
+         * Maximum value for returned data.
+         *
+         */
+        'created_at:max'?: string;
+        /**
+         * Minimum value for returned data.
+         *
+         */
+        'created_at:min'?: string;
+    };
+    url: '/hooks/events';
+};
+
+export type GetWebhookEventsErrors = {
+    /**
+     * Malformed request syntax. Typically need to fix the JSON request body to resend successfully.
+     */
+    400: ErrorFull;
+    /**
+     * Unauthorized - the v3 Auth client ID or token in the request are not a valid combination for this store.
+     */
+    401: ErrorFull;
+};
+
+export type GetWebhookEventsError = GetWebhookEventsErrors[keyof GetWebhookEventsErrors];
+
+export type GetWebhookEventsResponses = {
+    /**
+     * Successful operation.
+     */
+    200: {
+        data?: Array<HistoryEvent>;
+        meta?: {
+            pagination?: Pagination;
+        };
+    };
+};
+
+export type GetWebhookEventsResponse = GetWebhookEventsResponses[keyof GetWebhookEventsResponses];

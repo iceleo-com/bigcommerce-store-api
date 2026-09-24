@@ -196,6 +196,40 @@ export class PromotionsV3Api {
     }
 
     /**
+     * Get A Coupon Code
+     *
+     * Get a coupon with a given coupon code.
+
+     **Note:**
+     The default rate limit for this endpoint is 40 concurrent requests.
+     */
+    getCouponCodeByCode(
+        query?: PromotionsV3ApiSpecs.GetCouponCodeByCodeData['query'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<PromotionsV3ApiSpecs.GetCouponCodeByCodeResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: 'v3/promotions/codes',
+            query,
+        });
+    }
+
+    /**
+     * Delete A Coupon Code
+     *
+     * Deletes a coupon with a given coupon code.
+
+     **Note:**
+     The default rate limit for this endpoint is 40 concurrent requests.
+     */
+    deleteCouponCodeByCode(
+        query?: PromotionsV3ApiSpecs.DeleteCouponCodeByCodeData['query'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<204, Required<PromotionsV3ApiSpecs.DeleteCouponCodeByCodeResponses[204]>>,RequestErrorResponse<400, void>>({
+            path: 'v3/promotions/codes',
+            query,
+        });
+    }
+
+    /**
      * Delete A Coupon Code
      *
      * Deletes a coupon code.

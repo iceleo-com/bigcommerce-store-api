@@ -29,7 +29,6 @@ paths:
       tags:
       - Login Token
       summary: Login Token
-      operationId: getCustomerLogin
       description: |-
         The customer login access point URL.
 
@@ -53,8 +52,6 @@ paths:
             '*/*':
               schema:
                 type: object
-                properties: {}
-                additionalProperties: true
 components:
   schemas:
     customerLoginSSO:

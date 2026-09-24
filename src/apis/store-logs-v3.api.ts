@@ -15,12 +15,19 @@ export class StoreLogsV3Api {
      *
      * Get system logs 
      */
-    getStoreSystemLogs(
-        query?: StoreLogsV3ApiSpecs.GetStoreSystemLogsData['query'],
+    getSites(
+        query?: StoreLogsV3ApiSpecs.GetSitesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<StoreLogsV3ApiSpecs.GetStoreSystemLogsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreLogsV3ApiSpecs.GetSitesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/store/systemlogs',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getSites` instead.
+     */
+    getStoreSystemLogs(...args: Parameters<StoreLogsV3Api['getSites']>) {
+        return this.getSites(...args);
     }
 }

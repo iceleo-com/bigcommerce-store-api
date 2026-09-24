@@ -71,13 +71,9 @@ export type MetaEmptyFull = {
 export type ProductIdParam = number;
 export type ValueIdParam = number;
 export type OptionIdParam = number;
-export type PageParam = number;
-export type LimitParam = number;
-export type IncludeFieldsParam = Array<string>;
-export type ExcludeFieldsParam = Array<string>;
 export type Accept = string;
 export type ContentType = string;
-export type GetProductVariantOptionsData = {
+export type GetOptionsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -88,12 +84,12 @@ export type GetProductVariantOptionsData = {
     query?: {
         page?: number;
         limit?: number;
-        include_fields?: Array<string>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/options';
 };
-export type GetProductVariantOptionsErrors = {
+export type GetOptionsErrors = {
     404: {
         status?: number;
         title?: string;
@@ -101,15 +97,15 @@ export type GetProductVariantOptionsErrors = {
         instance?: string;
     };
 };
-export type GetProductVariantOptionsError = GetProductVariantOptionsErrors[keyof GetProductVariantOptionsErrors];
-export type GetProductVariantOptionsResponses = {
+export type GetOptionsError = GetOptionsErrors[keyof GetOptionsErrors];
+export type GetOptionsResponses = {
     200: {
         data?: Array<ProductOptionFull>;
         meta?: MetaCollectionFull;
     };
 };
-export type GetProductVariantOptionsResponse = GetProductVariantOptionsResponses[keyof GetProductVariantOptionsResponses];
-export type CreateProductVariantOptionData = {
+export type GetOptionsResponse = GetOptionsResponses[keyof GetOptionsResponses];
+export type CreateOptionData = {
     body: {
         product_id?: number;
         display_name?: string;
@@ -163,7 +159,7 @@ export type CreateProductVariantOptionData = {
     query?: never;
     url: '/catalog/products/{product_id}/options';
 };
-export type CreateProductVariantOptionErrors = {
+export type CreateOptionErrors = {
     409: {
         errors?: {
             [key: string]: unknown;
@@ -183,8 +179,8 @@ export type CreateProductVariantOptionErrors = {
         type?: string;
     };
 };
-export type CreateProductVariantOptionError = CreateProductVariantOptionErrors[keyof CreateProductVariantOptionErrors];
-export type CreateProductVariantOptionResponses = {
+export type CreateOptionError = CreateOptionErrors[keyof CreateOptionErrors];
+export type CreateOptionResponses = {
     200: {
         data?: {
             id?: number;
@@ -237,8 +233,8 @@ export type CreateProductVariantOptionResponses = {
         };
     };
 };
-export type CreateProductVariantOptionResponse = CreateProductVariantOptionResponses[keyof CreateProductVariantOptionResponses];
-export type DeleteProductVariantOptionData = {
+export type CreateOptionResponse = CreateOptionResponses[keyof CreateOptionResponses];
+export type DeleteOptionByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -250,11 +246,11 @@ export type DeleteProductVariantOptionData = {
     query?: never;
     url: '/catalog/products/{product_id}/options/{option_id}';
 };
-export type DeleteProductVariantOptionResponses = {
+export type DeleteOptionByIdResponses = {
     204: void;
 };
-export type DeleteProductVariantOptionResponse = DeleteProductVariantOptionResponses[keyof DeleteProductVariantOptionResponses];
-export type GetProductVariantOptionData = {
+export type DeleteOptionByIdResponse = DeleteOptionByIdResponses[keyof DeleteOptionByIdResponses];
+export type GetOptionByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -264,12 +260,12 @@ export type GetProductVariantOptionData = {
         option_id: number;
     };
     query?: {
-        include_fields?: Array<string>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/options/{option_id}';
 };
-export type GetProductVariantOptionErrors = {
+export type GetOptionByIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -277,15 +273,15 @@ export type GetProductVariantOptionErrors = {
         instance?: string;
     };
 };
-export type GetProductVariantOptionError = GetProductVariantOptionErrors[keyof GetProductVariantOptionErrors];
-export type GetProductVariantOptionResponses = {
+export type GetOptionByIdError = GetOptionByIdErrors[keyof GetOptionByIdErrors];
+export type GetOptionByIdResponses = {
     200: {
         data?: ProductOptionFull;
         meta?: MetaEmptyFull;
     };
 };
-export type GetProductVariantOptionResponse = GetProductVariantOptionResponses[keyof GetProductVariantOptionResponses];
-export type UpdateProductVariantOptionData = {
+export type GetOptionByIdResponse = GetOptionByIdResponses[keyof GetOptionByIdResponses];
+export type UpdateOptionData = {
     body: {
         id?: number | null;
         product_id?: number;
@@ -341,7 +337,7 @@ export type UpdateProductVariantOptionData = {
     query?: never;
     url: '/catalog/products/{product_id}/options/{option_id}';
 };
-export type UpdateProductVariantOptionErrors = {
+export type UpdateOptionErrors = {
     409: {
         errors?: {
             [key: string]: unknown;
@@ -361,8 +357,8 @@ export type UpdateProductVariantOptionErrors = {
         type?: string;
     };
 };
-export type UpdateProductVariantOptionError = UpdateProductVariantOptionErrors[keyof UpdateProductVariantOptionErrors];
-export type UpdateProductVariantOptionResponses = {
+export type UpdateOptionError = UpdateOptionErrors[keyof UpdateOptionErrors];
+export type UpdateOptionResponses = {
     200: {
         data?: {
             id?: number;
@@ -413,8 +409,8 @@ export type UpdateProductVariantOptionResponses = {
         meta?: MetaEmptyFull;
     };
 };
-export type UpdateProductVariantOptionResponse = UpdateProductVariantOptionResponses[keyof UpdateProductVariantOptionResponses];
-export type GetProductVariantOptionValuesData = {
+export type UpdateOptionResponse = UpdateOptionResponses[keyof UpdateOptionResponses];
+export type GetOptionValuesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -424,14 +420,14 @@ export type GetProductVariantOptionValuesData = {
         option_id: number;
     };
     query?: {
+        include_fields?: string;
+        exclude_fields?: string;
         page?: number;
         limit?: number;
-        include_fields?: Array<string>;
-        exclude_fields?: Array<string>;
     };
     url: '/catalog/products/{product_id}/options/{option_id}/values';
 };
-export type GetProductVariantOptionValuesResponses = {
+export type GetOptionValuesResponses = {
     200: {
         data?: Array<{
             is_default?: boolean;
@@ -446,8 +442,8 @@ export type GetProductVariantOptionValuesResponses = {
         meta?: MetaCollectionFull;
     };
 };
-export type GetProductVariantOptionValuesResponse = GetProductVariantOptionValuesResponses[keyof GetProductVariantOptionValuesResponses];
-export type CreateProductVariantOptionValueData = {
+export type GetOptionValuesResponse = GetOptionValuesResponses[keyof GetOptionValuesResponses];
+export type CreateOptionValueData = {
     body: {
         is_default?: boolean;
         label: string;
@@ -467,7 +463,7 @@ export type CreateProductVariantOptionValueData = {
     query?: never;
     url: '/catalog/products/{product_id}/options/{option_id}/values';
 };
-export type CreateProductVariantOptionValueErrors = {
+export type CreateOptionValueErrors = {
     422: {
         errors?: {
             [key: string]: unknown;
@@ -478,8 +474,8 @@ export type CreateProductVariantOptionValueErrors = {
         type?: string;
     };
 };
-export type CreateProductVariantOptionValueError = CreateProductVariantOptionValueErrors[keyof CreateProductVariantOptionValueErrors];
-export type CreateProductVariantOptionValueResponses = {
+export type CreateOptionValueError = CreateOptionValueErrors[keyof CreateOptionValueErrors];
+export type CreateOptionValueResponses = {
     200: {
         data?: {
             is_default?: boolean;
@@ -494,8 +490,8 @@ export type CreateProductVariantOptionValueResponses = {
         meta?: MetaEmptyFull;
     };
 };
-export type CreateProductVariantOptionValueResponse = CreateProductVariantOptionValueResponses[keyof CreateProductVariantOptionValueResponses];
-export type DeleteProductVariantOptionValueData = {
+export type CreateOptionValueResponse = CreateOptionValueResponses[keyof CreateOptionValueResponses];
+export type DeleteOptionValueByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -508,11 +504,11 @@ export type DeleteProductVariantOptionValueData = {
     query?: never;
     url: '/catalog/products/{product_id}/options/{option_id}/values/{value_id}';
 };
-export type DeleteProductVariantOptionValueResponses = {
+export type DeleteOptionValueByIdResponses = {
     204: void;
 };
-export type DeleteProductVariantOptionValueResponse = DeleteProductVariantOptionValueResponses[keyof DeleteProductVariantOptionValueResponses];
-export type GetProductVariantOptionValueData = {
+export type DeleteOptionValueByIdResponse = DeleteOptionValueByIdResponses[keyof DeleteOptionValueByIdResponses];
+export type GetOptionValueByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -523,12 +519,12 @@ export type GetProductVariantOptionValueData = {
         value_id: number;
     };
     query?: {
-        include_fields?: Array<string>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/options/{option_id}/values/{value_id}';
 };
-export type GetProductVariantOptionValueErrors = {
+export type GetOptionValueByIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -536,8 +532,8 @@ export type GetProductVariantOptionValueErrors = {
         instance?: string;
     };
 };
-export type GetProductVariantOptionValueError = GetProductVariantOptionValueErrors[keyof GetProductVariantOptionValueErrors];
-export type GetProductVariantOptionValueResponses = {
+export type GetOptionValueByIdError = GetOptionValueByIdErrors[keyof GetOptionValueByIdErrors];
+export type GetOptionValueByIdResponses = {
     200: {
         data?: {
             is_default?: boolean;
@@ -552,8 +548,8 @@ export type GetProductVariantOptionValueResponses = {
         meta?: MetaEmptyFull;
     };
 };
-export type GetProductVariantOptionValueResponse = GetProductVariantOptionValueResponses[keyof GetProductVariantOptionValueResponses];
-export type UpdateProductVariantOptionValueData = {
+export type GetOptionValueByIdResponse = GetOptionValueByIdResponses[keyof GetOptionValueByIdResponses];
+export type UpdateOptionValueData = {
     body: {
         is_default?: boolean;
         label: string;
@@ -576,7 +572,7 @@ export type UpdateProductVariantOptionValueData = {
     query?: never;
     url: '/catalog/products/{product_id}/options/{option_id}/values/{value_id}';
 };
-export type UpdateProductVariantOptionValueErrors = {
+export type UpdateOptionValueErrors = {
     404: unknown;
     422: {
         errors?: {
@@ -588,8 +584,8 @@ export type UpdateProductVariantOptionValueErrors = {
         type?: string;
     };
 };
-export type UpdateProductVariantOptionValueError = UpdateProductVariantOptionValueErrors[keyof UpdateProductVariantOptionValueErrors];
-export type UpdateProductVariantOptionValueResponses = {
+export type UpdateOptionValueError = UpdateOptionValueErrors[keyof UpdateOptionValueErrors];
+export type UpdateOptionValueResponses = {
     200: {
         data?: {
             is_default?: boolean;
@@ -604,4 +600,4 @@ export type UpdateProductVariantOptionValueResponses = {
         meta?: MetaEmptyFull;
     };
 };
-export type UpdateProductVariantOptionValueResponse = UpdateProductVariantOptionValueResponses[keyof UpdateProductVariantOptionValueResponses];
+export type UpdateOptionValueResponse = UpdateOptionValueResponses[keyof UpdateOptionValueResponses];

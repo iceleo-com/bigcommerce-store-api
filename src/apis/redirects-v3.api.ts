@@ -13,7 +13,7 @@ export class RedirectsV3Api {
     /**
      * Get Redirects
      *
-     * Returns a collection of the store's 301 redirects across all sites.
+     * Returns a collection of the storeʼs 301 redirects across all sites.
      */
     getRedirects(
         query?: RedirectsV3ApiSpecs.GetRedirectsData['query'],

@@ -19,12 +19,8 @@ export type AssignmentForPutResponse = {
     };
     meta?: Meta;
 };
-export type PriceRecordBatchItem = {
-    price_list_id?: number;
-    variant_id?: number;
-    sku?: string;
-    currency?: string;
-} & PriceRecordBase;
+export type PriceRecordCollectionPutWithPriceListId = Array<PriceRecordBatchItem>;
+export type PriceRecordBatchItem = Array<PriceRecordBase>;
 export type PriceRecordBase = {
     price?: number;
     sale_price?: number;
@@ -39,12 +35,7 @@ export type BulkPricingTier = {
     amount?: number;
 };
 export type SuccessBatchResponse = {
-    data?: {
-        [key: string]: unknown;
-    };
-    meta?: {
-        [key: string]: unknown;
-    };
+    [key: string]: unknown;
 };
 export type PriceRecordBatchErrorResponse = {
     data?: PriceRecordIdentifiers;
@@ -87,12 +78,6 @@ export type CollectionMeta = {
         per_page?: number;
         current_page?: number;
         total_pages?: number;
-    };
-    cursor_pagination?: {
-        count?: number;
-        per_page?: number;
-        start_cursor?: string;
-        end_cursor?: string;
         links?: {
             previous?: string;
             current?: string;
@@ -114,7 +99,7 @@ export type ErrorResponse = {
     };
 };
 export type CreateBatchPriceListAssignmentsRequest = Array<AssignmentsForRequest>;
-export type ChannelIdInParam = Array<number>;
+export type ChannelIdInParam = string;
 export type PriceListIdParam = number;
 export type Accept = string;
 export type ContentType = string;
@@ -122,40 +107,39 @@ export type FilterAssignmentIdParam = number;
 export type FilterPriceListIdParam = number;
 export type FilterCustomerGroupIdParam = number;
 export type FilterChannelIdParam = number;
-export type DeletePriceListsData = {
+export type DeletePriceListsByFilterData = {
     body?: never;
     headers: {
         Accept: string;
     };
     path?: never;
     query?: {
-        'id:in'?: Array<number>;
+        id?: number;
         name?: string;
     };
     url: '/pricelists';
 };
-export type DeletePriceListsResponses = {
+export type DeletePriceListsByFilterResponses = {
     204: {
         [key: string]: unknown;
     } | null;
 };
-export type DeletePriceListsResponse = DeletePriceListsResponses[keyof DeletePriceListsResponses];
-export type GetPriceListsData = {
+export type DeletePriceListsByFilterResponse = DeletePriceListsByFilterResponses[keyof DeletePriceListsByFilterResponses];
+export type GetPriceListCollectionData = {
     body?: never;
     headers: {
         Accept: string;
     };
     path?: never;
     query?: {
+        id?: number;
         name?: string;
         date_created?: string;
         date_modified?: string;
         page?: number;
         limit?: number;
-        before?: string;
-        after?: string;
         'id:in'?: Array<number>;
-        'name:like'?: string;
+        'name:like'?: Array<string>;
         'date_created:max'?: string;
         'date_created:min'?: string;
         'date_modified:max'?: string;
@@ -163,7 +147,7 @@ export type GetPriceListsData = {
     };
     url: '/pricelists';
 };
-export type GetPriceListsResponses = {
+export type GetPriceListCollectionResponses = {
     200: {
         data?: Array<{
             id?: number;
@@ -180,12 +164,6 @@ export type GetPriceListsResponses = {
                 per_page?: number;
                 current_page?: number;
                 total_pages?: number;
-            };
-            cursor_pagination?: {
-                count?: number;
-                per_page?: number;
-                start_cursor?: string;
-                end_cursor?: string;
                 links?: {
                     previous?: string;
                     current?: string;
@@ -195,7 +173,7 @@ export type GetPriceListsResponses = {
         };
     };
 };
-export type GetPriceListsResponse = GetPriceListsResponses[keyof GetPriceListsResponses];
+export type GetPriceListCollectionResponse = GetPriceListCollectionResponses[keyof GetPriceListCollectionResponses];
 export type CreatePriceListData = {
     body: {
         name: string;
@@ -267,7 +245,14 @@ export type GetPriceListData = {
     path: {
         price_list_id: number;
     };
-    query?: never;
+    query?: {
+        id?: number;
+        name?: string;
+        date_created?: string;
+        date_modified?: string;
+        page?: number;
+        limit?: number;
+    };
     url: '/pricelists/{price_list_id}';
 };
 export type GetPriceListResponses = {
@@ -339,8 +324,8 @@ export type UpdatePriceListResponses = {
     };
 };
 export type UpdatePriceListResponse = UpdatePriceListResponses[keyof UpdatePriceListResponses];
-export type UpsertPriceListsRecordsData = {
-    body: Array<PriceRecordBatchItem>;
+export type UpsertPriceListRecordsData = {
+    body: PriceRecordCollectionPutWithPriceListId;
     headers: {
         Accept: string;
     };
@@ -348,15 +333,15 @@ export type UpsertPriceListsRecordsData = {
     query?: never;
     url: '/pricelists/records';
 };
-export type UpsertPriceListsRecordsErrors = {
+export type UpsertPriceListRecordsErrors = {
     422: PriceRecordBatchErrorResponse;
 };
-export type UpsertPriceListsRecordsError = UpsertPriceListsRecordsErrors[keyof UpsertPriceListsRecordsErrors];
-export type UpsertPriceListsRecordsResponses = {
+export type UpsertPriceListRecordsError = UpsertPriceListRecordsErrors[keyof UpsertPriceListRecordsErrors];
+export type UpsertPriceListRecordsResponses = {
     200: SuccessBatchResponse;
 };
-export type UpsertPriceListsRecordsResponse = UpsertPriceListsRecordsResponses[keyof UpsertPriceListsRecordsResponses];
-export type DeletePriceListRecordsData = {
+export type UpsertPriceListRecordsResponse = UpsertPriceListRecordsResponses[keyof UpsertPriceListRecordsResponses];
+export type DeletePriceListRecordsByFilterData = {
     body?: never;
     headers: {
         Accept: string;
@@ -365,13 +350,11 @@ export type DeletePriceListRecordsData = {
         price_list_id: number;
     };
     query?: {
-        currency?: string;
-        'variant_id:in'?: Array<number>;
-        'sku:in'?: Array<string>;
+        'variant_id:in'?: number;
     };
     url: '/pricelists/{price_list_id}/records';
 };
-export type DeletePriceListRecordsResponses = {
+export type DeletePriceListRecordsByFilterResponses = {
     204: {
         status?: number;
         title?: string;
@@ -379,8 +362,8 @@ export type DeletePriceListRecordsResponses = {
         instance?: string;
     };
 };
-export type DeletePriceListRecordsResponse = DeletePriceListRecordsResponses[keyof DeletePriceListRecordsResponses];
-export type GetPriceListRecordsData = {
+export type DeletePriceListRecordsByFilterResponse = DeletePriceListRecordsByFilterResponses[keyof DeletePriceListRecordsByFilterResponses];
+export type GetPriceListRecordCollectionData = {
     body?: never;
     headers: {
         Accept: string;
@@ -389,13 +372,11 @@ export type GetPriceListRecordsData = {
         price_list_id: number;
     };
     query?: {
-        'variant_id:in'?: Array<number>;
-        'product_id:in'?: Array<number>;
+        'variant_id:in'?: number;
+        'product_id:in'?: string;
         currency?: string;
         page?: number;
         limit?: number;
-        before?: string;
-        after?: string;
         include?: Array<'bulk_pricing_tiers' | 'sku'>;
         price?: number;
         sale_price?: number;
@@ -424,11 +405,11 @@ export type GetPriceListRecordsData = {
     };
     url: '/pricelists/{price_list_id}/records';
 };
-export type GetPriceListRecordsErrors = {
+export type GetPriceListRecordCollectionErrors = {
     429: ErrorResponse;
 };
-export type GetPriceListRecordsError = GetPriceListRecordsErrors[keyof GetPriceListRecordsErrors];
-export type GetPriceListRecordsResponses = {
+export type GetPriceListRecordCollectionError = GetPriceListRecordCollectionErrors[keyof GetPriceListRecordCollectionErrors];
+export type GetPriceListRecordCollectionResponses = {
     200: {
         data?: Array<{
             readonly calculated_price?: number;
@@ -447,7 +428,7 @@ export type GetPriceListRecordsResponses = {
             map_price?: number;
             bulk_pricing_tiers?: Array<{
                 quantity_min?: number;
-                quantity_max?: number | null;
+                quantity_max?: number;
                 type?: 'fixed' | 'price' | 'percent';
                 amount?: number;
             }>;
@@ -460,12 +441,6 @@ export type GetPriceListRecordsResponses = {
                 per_page?: number;
                 current_page?: number;
                 total_pages?: number;
-            };
-            cursor_pagination?: {
-                count?: number;
-                per_page?: number;
-                start_cursor?: string;
-                end_cursor?: string;
                 links?: {
                     previous?: string;
                     current?: string;
@@ -475,8 +450,8 @@ export type GetPriceListRecordsResponses = {
         };
     };
 };
-export type GetPriceListRecordsResponse = GetPriceListRecordsResponses[keyof GetPriceListRecordsResponses];
-export type UpsertPriceListRecordsData = {
+export type GetPriceListRecordCollectionResponse = GetPriceListRecordCollectionResponses[keyof GetPriceListRecordCollectionResponses];
+export type SetPriceListRecordCollectionData = {
     body: Array<{
         variant_id?: number;
         sku?: string;
@@ -504,7 +479,7 @@ export type UpsertPriceListRecordsData = {
     query?: never;
     url: '/pricelists/{price_list_id}/records';
 };
-export type UpsertPriceListRecordsErrors = {
+export type SetPriceListRecordCollectionErrors = {
     422: {
         batch_errors?: Array<{
             data?: {
@@ -520,8 +495,8 @@ export type UpsertPriceListRecordsErrors = {
     };
     429: ErrorResponse;
 };
-export type UpsertPriceListRecordsError = UpsertPriceListRecordsErrors[keyof UpsertPriceListRecordsErrors];
-export type UpsertPriceListRecordsResponses = {
+export type SetPriceListRecordCollectionError = SetPriceListRecordCollectionErrors[keyof SetPriceListRecordCollectionErrors];
+export type SetPriceListRecordCollectionResponses = {
     200: {
         data?: {
             [key: string]: unknown;
@@ -531,7 +506,7 @@ export type UpsertPriceListRecordsResponses = {
         };
     };
 };
-export type UpsertPriceListRecordsResponse = UpsertPriceListRecordsResponses[keyof UpsertPriceListRecordsResponses];
+export type SetPriceListRecordCollectionResponse = SetPriceListRecordCollectionResponses[keyof SetPriceListRecordCollectionResponses];
 export type GetPriceListRecordsByVariantIdData = {
     body?: never;
     headers: {
@@ -541,13 +516,7 @@ export type GetPriceListRecordsByVariantIdData = {
         price_list_id: number;
         variant_id: number;
     };
-    query?: {
-        include?: Array<'bulk_pricing_tiers' | 'sku'>;
-        page?: number;
-        limit?: number;
-        before?: string;
-        after?: string;
-    };
+    query?: never;
     url: '/pricelists/{price_list_id}/records/{variant_id}';
 };
 export type GetPriceListRecordsByVariantIdErrors = {
@@ -586,12 +555,6 @@ export type GetPriceListRecordsByVariantIdResponses = {
                 per_page?: number;
                 current_page?: number;
                 total_pages?: number;
-            };
-            cursor_pagination?: {
-                count?: number;
-                per_page?: number;
-                start_cursor?: string;
-                end_cursor?: string;
                 links?: {
                     previous?: string;
                     current?: string;
@@ -679,6 +642,7 @@ export type SetPriceListRecordData = {
             type?: 'fixed' | 'price' | 'percent';
             amount?: number;
         }>;
+        sku?: string;
     };
     headers: {
         Accept: string;
@@ -730,6 +694,7 @@ export type SetPriceListRecordResponses = {
         } & {
             price_list_id?: number;
             variant_id?: number;
+            sku?: string;
             currency?: string;
         } & {
             price?: number;
@@ -742,12 +707,13 @@ export type SetPriceListRecordResponses = {
                 type?: 'fixed' | 'price' | 'percent';
                 amount?: number;
             }>;
+            sku?: string;
         };
         meta?: Meta;
     };
 };
 export type SetPriceListRecordResponse = SetPriceListRecordResponses[keyof SetPriceListRecordResponses];
-export type DeletePriceListAssignmentsData = {
+export type DeletePriceListAssignmentsByFilterData = {
     body?: never;
     headers: {
         Accept: string;
@@ -758,14 +724,14 @@ export type DeletePriceListAssignmentsData = {
         price_list_id?: number;
         customer_group_id?: number;
         channel_id?: number;
-        'channel_id:in'?: Array<number>;
+        'channel_id:in'?: string;
     };
     url: '/pricelists/assignments';
 };
-export type DeletePriceListAssignmentsResponses = {
+export type DeletePriceListAssignmentsByFilterResponses = {
     204: void;
 };
-export type DeletePriceListAssignmentsResponse = DeletePriceListAssignmentsResponses[keyof DeletePriceListAssignmentsResponses];
+export type DeletePriceListAssignmentsByFilterResponse = DeletePriceListAssignmentsByFilterResponses[keyof DeletePriceListAssignmentsByFilterResponses];
 export type GetListOfPriceListAssignmentsData = {
     body?: never;
     headers: {
@@ -783,8 +749,6 @@ export type GetListOfPriceListAssignmentsData = {
         'channel_id:in'?: Array<number>;
         page?: number;
         limit?: number;
-        before?: string;
-        after?: string;
     };
     url: '/pricelists/assignments';
 };
@@ -807,8 +771,9 @@ export type CreatePriceListAssignmentsErrors = {
 };
 export type CreatePriceListAssignmentsError = CreatePriceListAssignmentsErrors[keyof CreatePriceListAssignmentsErrors];
 export type CreatePriceListAssignmentsResponses = {
-    200: unknown;
+    200: SuccessBatchResponse;
 };
+export type CreatePriceListAssignmentsResponse = CreatePriceListAssignmentsResponses[keyof CreatePriceListAssignmentsResponses];
 export type UpsertPriceListAssignmentData = {
     body: AssignmentForPutRequest;
     headers: {

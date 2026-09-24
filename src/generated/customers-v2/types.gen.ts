@@ -132,6 +132,9 @@ export type CustomerGroupFull = {
      */
     is_default?: boolean;
     category_access?: CategoryAccessLevelFull;
+    /**
+     * A collection of discount rules that are automatically applied to customers who are members of the group.
+     */
     discount_rules?: Array<{
         type?: 'price_list' | 'all' | 'category' | 'product';
         method?: 'percent' | 'fixed' | 'price';
@@ -143,35 +146,6 @@ export type CustomerGroupFull = {
          * If a customer group is assigned to a price list,`method` and `amount` are not shown. `type` and `price_list_id` are returned.
          */
         price_list_id?: number;
-    }> | Array<{
-        type?: 'price_list' | 'all' | 'category' | 'product';
-        method?: 'percent' | 'fixed' | 'price';
-        /**
-         * A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
-         */
-        amount?: string;
-        /**
-         * If a customer group is assigned to a category, `method` and `amount` are not shown. `type` and `category_id` are returned.
-         */
-        category_id?: number;
-    }> | Array<{
-        type?: 'price_list' | 'all' | 'category' | 'product';
-        method?: 'percent' | 'fixed' | 'price';
-        /**
-         * A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
-         */
-        amount?: string;
-        /**
-         * If a customer group is assigned to a product,`method` and `amount` are not shown. `type` and `product` are returned.
-         */
-        product_id?: number;
-    }> | Array<{
-        type?: 'price_list' | 'all' | 'category' | 'product';
-        method?: 'percent' | 'fixed' | 'price';
-        /**
-         * A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
-         */
-        amount?: string;
     }>;
     /**
      * Date on which the customer group was created.
@@ -247,11 +221,11 @@ export type StateFull = {
 };
 
 /**
- * customerGroup_Post_Put
+ * customerGroup_Post
  *
  * When creating a customer group category discount using the API it defaults to "products in this category and its subcategories". In the [store control panel](https://support.bigcommerce.com/s/article/Customer-Groups#pricing), this can be changed to either "products in this category only" or "products in this category and its subcategories". There are currently no settings to change this behavior with the API.
  */
-export type CustomerGroupPostPut = {
+export type CustomerGroupPost = {
     /**
      * Name of the group.
      */
@@ -261,42 +235,29 @@ export type CustomerGroupPostPut = {
      */
     is_default?: boolean;
     category_access?: CategoryAccessLevelFull;
+    /**
+     * A collection of discount rules that are automatically applied to customers who are members of the group.
+     */
     discount_rules?: Array<{
-        type: 'price_list';
-        /**
-         * If a customer group is assigned to a price list,`method` and `amount` are not shown. `type` and `price_list_id` are returned.
-         */
-        price_list_id?: number;
-    }> | Array<{
-        type: 'category';
-        method: 'percent' | 'fixed' | 'price';
-        /**
-         * A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
-         */
-        amount: string;
-        /**
-         * The category the customer group discount is assigned to.
-         */
-        category_id: number;
-    } | {
-        type: 'product';
-        method: 'percent' | 'fixed' | 'price';
-        /**
-         * A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
-         */
-        amount: string;
-        /**
-         * The `product_id` the customer group discount is assigned to.
-         */
-        product_id: number;
-    } | {
-        type: 'all';
+        type?: 'price_list' | 'all' | 'category' | 'product';
         method?: 'percent' | 'fixed' | 'price';
         /**
          * A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
          */
         amount?: string;
+        /**
+         * If a customer group is assigned to a price list,`method` and `amount` are not shown. `type` and `price_list_id` are returned.
+         */
+        price_list_id?: number;
     }>;
+    /**
+     * Date on which the customer group was created.
+     */
+    date_created?: string;
+    /**
+     * Date on which the customer group was last modified.
+     */
+    date_modified?: string;
     /**
      * Describes whether the group is for guests. There can only be one customer group for guests at a time.
      */
@@ -549,7 +510,7 @@ export type CustomerAddressBase = {
      */
     city: string;
     /**
-     * The customer’s state/province. Do not abbreviate the state; spell out the entire word. For example, California. (Cannot be null. As a workaround for addresses that include no state/province string, pass a space as the “state” value.)
+     * The customer’s state/province. Do not abbreviate the state; spell out the entire word, e.g.: California. (Cannot be null. As a workaround for addresses that include no state/province string, pass a space as the “state” value.)
      */
     state: string;
     /**
@@ -749,7 +710,7 @@ export type CustomerAddressId = number;
  */
 export type IsGroupForGuests = boolean;
 
-export type DeleteCustomersData = {
+export type DeleteAllCustomersData = {
     body?: never;
     headers: {
         /**
@@ -762,13 +723,13 @@ export type DeleteCustomersData = {
     url: '/customers';
 };
 
-export type DeleteCustomersResponses = {
+export type DeleteAllCustomersResponses = {
     204: void;
 };
 
-export type DeleteCustomersResponse = DeleteCustomersResponses[keyof DeleteCustomersResponses];
+export type DeleteAllCustomersResponse = DeleteAllCustomersResponses[keyof DeleteAllCustomersResponses];
 
-export type GetCustomersData = {
+export type GetAllCustomersData = {
     body?: never;
     headers: {
         /**
@@ -796,13 +757,13 @@ export type GetCustomersData = {
     url: '/customers';
 };
 
-export type GetCustomersResponses = {
+export type GetAllCustomersResponses = {
     200: Array<CustomerFull>;
 };
 
-export type GetCustomersResponse = GetCustomersResponses[keyof GetCustomersResponses];
+export type GetAllCustomersResponse = GetAllCustomersResponses[keyof GetAllCustomersResponses];
 
-export type CreateCustomerData = {
+export type CreateANewCustomerData = {
     body: {
         /**
          * This can vary depending on the action being taken to update, validate or force a password change. See [Customers V2, Update a customer (Deprecated)](/docs/rest-management/customers-v2#update-a-customer).
@@ -836,13 +797,13 @@ export type CreateCustomerData = {
     url: '/customers';
 };
 
-export type CreateCustomerResponses = {
+export type CreateANewCustomerResponses = {
     200: CustomerFull;
 };
 
-export type CreateCustomerResponse = CreateCustomerResponses[keyof CreateCustomerResponses];
+export type CreateANewCustomerResponse = CreateANewCustomerResponses[keyof CreateANewCustomerResponses];
 
-export type DeleteCustomerData = {
+export type DeleteACustomerData = {
     body?: never;
     headers: {
         /**
@@ -860,13 +821,13 @@ export type DeleteCustomerData = {
     url: '/customers/{customer_id}';
 };
 
-export type DeleteCustomerResponses = {
+export type DeleteACustomerResponses = {
     204: void;
 };
 
-export type DeleteCustomerResponse = DeleteCustomerResponses[keyof DeleteCustomerResponses];
+export type DeleteACustomerResponse = DeleteACustomerResponses[keyof DeleteACustomerResponses];
 
-export type GetCustomerData = {
+export type GetACustomerData = {
     body?: never;
     headers: {
         /**
@@ -884,13 +845,13 @@ export type GetCustomerData = {
     url: '/customers/{customer_id}';
 };
 
-export type GetCustomerResponses = {
+export type GetACustomerResponses = {
     200: CustomerFull;
 };
 
-export type GetCustomerResponse = GetCustomerResponses[keyof GetCustomerResponses];
+export type GetACustomerResponse = GetACustomerResponses[keyof GetACustomerResponses];
 
-export type UpdateCustomerData = {
+export type UpdateACustomerData = {
     body?: CustomerPutWritable;
     headers: {
         /**
@@ -912,13 +873,13 @@ export type UpdateCustomerData = {
     url: '/customers/{customer_id}';
 };
 
-export type UpdateCustomerResponses = {
+export type UpdateACustomerResponses = {
     200: CustomerBase;
 };
 
-export type UpdateCustomerResponse = UpdateCustomerResponses[keyof UpdateCustomerResponses];
+export type UpdateACustomerResponse = UpdateACustomerResponses[keyof UpdateACustomerResponses];
 
-export type GetCustomersCountData = {
+export type GetACountOfCustomersData = {
     body?: never;
     headers: {
         /**
@@ -931,11 +892,11 @@ export type GetCustomersCountData = {
     url: '/customers/count';
 };
 
-export type GetCustomersCountResponses = {
+export type GetACountOfCustomersResponses = {
     200: CountFull;
 };
 
-export type GetCustomersCountResponse = GetCustomersCountResponses[keyof GetCustomersCountResponses];
+export type GetACountOfCustomersResponse = GetACountOfCustomersResponses[keyof GetACountOfCustomersResponses];
 
 export type ValidateCustomerPasswordData = {
     body: {
@@ -970,7 +931,7 @@ export type ValidateCustomerPasswordResponses = {
 
 export type ValidateCustomerPasswordResponse = ValidateCustomerPasswordResponses[keyof ValidateCustomerPasswordResponses];
 
-export type DeleteCustomerAddressesData = {
+export type DeleteAllCustomerAddressesData = {
     body?: never;
     headers: {
         /**
@@ -997,13 +958,13 @@ export type DeleteCustomerAddressesData = {
     url: '/customers/{customer_id}/addresses';
 };
 
-export type DeleteCustomerAddressesResponses = {
+export type DeleteAllCustomerAddressesResponses = {
     204: void;
 };
 
-export type DeleteCustomerAddressesResponse = DeleteCustomerAddressesResponses[keyof DeleteCustomerAddressesResponses];
+export type DeleteAllCustomerAddressesResponse = DeleteAllCustomerAddressesResponses[keyof DeleteAllCustomerAddressesResponses];
 
-export type GetCustomerAddressesData = {
+export type GetAllCustomerAddressesData = {
     body?: never;
     headers: {
         /**
@@ -1030,13 +991,13 @@ export type GetCustomerAddressesData = {
     url: '/customers/{customer_id}/addresses';
 };
 
-export type GetCustomerAddressesResponses = {
+export type GetAllCustomerAddressesResponses = {
     200: Array<CustomerAddressFull>;
 };
 
-export type GetCustomerAddressesResponse = GetCustomerAddressesResponses[keyof GetCustomerAddressesResponses];
+export type GetAllCustomerAddressesResponse = GetAllCustomerAddressesResponses[keyof GetAllCustomerAddressesResponses];
 
-export type CreateCustomerAddressData = {
+export type CreateACustomerAddressData = {
     body: CustomerAddressBase;
     headers: {
         /**
@@ -1058,13 +1019,13 @@ export type CreateCustomerAddressData = {
     url: '/customers/{customer_id}/addresses';
 };
 
-export type CreateCustomerAddressResponses = {
+export type CreateACustomerAddressResponses = {
     200: CustomerAddressFull;
 };
 
-export type CreateCustomerAddressResponse = CreateCustomerAddressResponses[keyof CreateCustomerAddressResponses];
+export type CreateACustomerAddressResponse = CreateACustomerAddressResponses[keyof CreateACustomerAddressResponses];
 
-export type DeletesCustomerAddressData = {
+export type DeletesACustomerAddressData = {
     body?: never;
     headers: {
         /**
@@ -1086,13 +1047,13 @@ export type DeletesCustomerAddressData = {
     url: '/customers/{customer_id}/addresses/{customer_address_id}';
 };
 
-export type DeletesCustomerAddressResponses = {
+export type DeletesACustomerAddressResponses = {
     204: void;
 };
 
-export type DeletesCustomerAddressResponse = DeletesCustomerAddressResponses[keyof DeletesCustomerAddressResponses];
+export type DeletesACustomerAddressResponse = DeletesACustomerAddressResponses[keyof DeletesACustomerAddressResponses];
 
-export type GetCustomerAddressData = {
+export type GetACustomerAddressData = {
     body?: never;
     headers: {
         /**
@@ -1123,13 +1084,13 @@ export type GetCustomerAddressData = {
     url: '/customers/{customer_id}/addresses/{customer_address_id}';
 };
 
-export type GetCustomerAddressResponses = {
+export type GetACustomerAddressResponses = {
     200: CustomerAddressFull;
 };
 
-export type GetCustomerAddressResponse = GetCustomerAddressResponses[keyof GetCustomerAddressResponses];
+export type GetACustomerAddressResponse = GetACustomerAddressResponses[keyof GetACustomerAddressResponses];
 
-export type UpdateCustomerAddressData = {
+export type UpdateACustomerAddressData = {
     /**
      * Customer Address
      */
@@ -1167,7 +1128,7 @@ export type UpdateCustomerAddressData = {
          */
         city: string;
         /**
-         * The customer’s state/province. Do not abbreviate the state; spell out the entire word. For example, California. (Cannot be null. As a workaround for addresses that include no state/province string, pass a space as the “state” value.)
+         * The customer’s state/province. Do not abbreviate the state; spell out the entire word, e.g.: California. (Cannot be null. As a workaround for addresses that include no state/province string, pass a space as the “state” value.)
          */
         state: string;
         /**
@@ -1212,13 +1173,13 @@ export type UpdateCustomerAddressData = {
     url: '/customers/{customer_id}/addresses/{customer_address_id}';
 };
 
-export type UpdateCustomerAddressResponses = {
+export type UpdateACustomerAddressResponses = {
     200: CustomerAddressFull;
 };
 
-export type UpdateCustomerAddressResponse = UpdateCustomerAddressResponses[keyof UpdateCustomerAddressResponses];
+export type UpdateACustomerAddressResponse = UpdateACustomerAddressResponses[keyof UpdateACustomerAddressResponses];
 
-export type GetCustomerAddressesCountData = {
+export type GetACountofCustomerAddressesData = {
     body?: never;
     headers: {
         /**
@@ -1245,13 +1206,32 @@ export type GetCustomerAddressesCountData = {
     url: '/customers/{customer_id}/addresses/count';
 };
 
-export type GetCustomerAddressesCountResponses = {
+export type GetACountofCustomerAddressesResponses = {
     200: CountFull;
 };
 
-export type GetCustomerAddressesCountResponse = GetCustomerAddressesCountResponses[keyof GetCustomerAddressesCountResponses];
+export type GetACountofCustomerAddressesResponse = GetACountofCustomerAddressesResponses[keyof GetACountofCustomerAddressesResponses];
 
-export type GetCustomerGroupsData = {
+export type DeleteAllCustomerGroupsData = {
+    body?: never;
+    headers: {
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+         */
+        Accept: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/customer_groups';
+};
+
+export type DeleteAllCustomerGroupsResponses = {
+    204: void;
+};
+
+export type DeleteAllCustomerGroupsResponse = DeleteAllCustomerGroupsResponses[keyof DeleteAllCustomerGroupsResponses];
+
+export type GetAllCustomerGroupsData = {
     body?: never;
     headers: {
         /**
@@ -1300,11 +1280,11 @@ export type GetCustomerGroupsData = {
         /**
          * Filter customer groups by minimum date_modified. `date_modified:min=2019-09-04T:00:00:00` or `date_modified:min=2019-09-04`
          */
-        'date_modified:min'?: string;
+        '`date_modified:min`'?: string;
         /**
          * Filter customer groups by maximum date_modified. `date_modified:max=2018-09-05T13:45:03` or `date_modified:max=2019-09-04`
          */
-        'date_modified:max'?: string;
+        '`date_modified:max`'?: string;
         /**
          * Filter whether the group is for guests. There can only be one customer group for guests at a time.
          */
@@ -1313,14 +1293,14 @@ export type GetCustomerGroupsData = {
     url: '/customer_groups';
 };
 
-export type GetCustomerGroupsResponses = {
+export type GetAllCustomerGroupsResponses = {
     200: Array<CustomerGroupFull>;
 };
 
-export type GetCustomerGroupsResponse = GetCustomerGroupsResponses[keyof GetCustomerGroupsResponses];
+export type GetAllCustomerGroupsResponse = GetAllCustomerGroupsResponses[keyof GetAllCustomerGroupsResponses];
 
-export type CreateCustomerGroupData = {
-    body: CustomerGroupPostPut;
+export type CreateACustomerGroupData = {
+    body: CustomerGroupPost;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -1336,7 +1316,7 @@ export type CreateCustomerGroupData = {
     url: '/customer_groups';
 };
 
-export type CreateCustomerGroupResponses = {
+export type CreateACustomerGroupResponses = {
     200: CustomerGroupFull;
     207: {
         status?: number;
@@ -1344,9 +1324,9 @@ export type CreateCustomerGroupResponses = {
     };
 };
 
-export type CreateCustomerGroupResponse = CreateCustomerGroupResponses[keyof CreateCustomerGroupResponses];
+export type CreateACustomerGroupResponse = CreateACustomerGroupResponses[keyof CreateACustomerGroupResponses];
 
-export type DeleteCustomerGroupData = {
+export type DeleteACustomerGroupData = {
     body?: never;
     headers: {
         /**
@@ -1364,25 +1344,25 @@ export type DeleteCustomerGroupData = {
     url: '/customer_groups/{customer_group_id}';
 };
 
-export type DeleteCustomerGroupErrors = {
+export type DeleteACustomerGroupErrors = {
     /**
      * Bad Request. The requested resource could not be downloaded and may be invalid. Possible reasons include malformed request syntax or the file host blocking requests.
      */
     400: ErrorRequest;
 };
 
-export type DeleteCustomerGroupError = DeleteCustomerGroupErrors[keyof DeleteCustomerGroupErrors];
+export type DeleteACustomerGroupError = DeleteACustomerGroupErrors[keyof DeleteACustomerGroupErrors];
 
-export type DeleteCustomerGroupResponses = {
+export type DeleteACustomerGroupResponses = {
     /**
      * No content. Request was successful but produced no response.
      */
     204: void;
 };
 
-export type DeleteCustomerGroupResponse = DeleteCustomerGroupResponses[keyof DeleteCustomerGroupResponses];
+export type DeleteACustomerGroupResponse = DeleteACustomerGroupResponses[keyof DeleteACustomerGroupResponses];
 
-export type GetCustomerGroupData = {
+export type GetACustomerGroupData = {
     body?: never;
     headers: {
         /**
@@ -1441,26 +1421,26 @@ export type GetCustomerGroupData = {
     url: '/customer_groups/{customer_group_id}';
 };
 
-export type GetCustomerGroupErrors = {
+export type GetACustomerGroupErrors = {
     /**
      * Bad Request. The requested resource could not be downloaded and may be invalid. Possible reasons include malformed request syntax or the file host blocking requests.
      */
     400: ErrorRequest;
 };
 
-export type GetCustomerGroupError = GetCustomerGroupErrors[keyof GetCustomerGroupErrors];
+export type GetACustomerGroupError = GetACustomerGroupErrors[keyof GetACustomerGroupErrors];
 
-export type GetCustomerGroupResponses = {
+export type GetACustomerGroupResponses = {
     /**
      * The request was successful.
      */
     200: CustomerGroupFull;
 };
 
-export type GetCustomerGroupResponse = GetCustomerGroupResponses[keyof GetCustomerGroupResponses];
+export type GetACustomerGroupResponse = GetACustomerGroupResponses[keyof GetACustomerGroupResponses];
 
-export type UpdateCustomerGroupData = {
-    body?: CustomerGroupPostPut;
+export type UpdateACustomerGroupData = {
+    body?: CustomerGroupFull;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -1481,7 +1461,7 @@ export type UpdateCustomerGroupData = {
     url: '/customer_groups/{customer_group_id}';
 };
 
-export type UpdateCustomerGroupResponses = {
+export type UpdateACustomerGroupResponses = {
     200: CustomerGroupFull;
     207: {
         status: number;
@@ -1489,9 +1469,9 @@ export type UpdateCustomerGroupResponses = {
     };
 };
 
-export type UpdateCustomerGroupResponse = UpdateCustomerGroupResponses[keyof UpdateCustomerGroupResponses];
+export type UpdateACustomerGroupResponse = UpdateACustomerGroupResponses[keyof UpdateACustomerGroupResponses];
 
-export type GetCustomerGroupsCountData = {
+export type GetACountOfCustomerGroupsData = {
     body?: never;
     headers: {
         /**
@@ -1504,8 +1484,8 @@ export type GetCustomerGroupsCountData = {
     url: '/customer_groups/count';
 };
 
-export type GetCustomerGroupsCountResponses = {
+export type GetACountOfCustomerGroupsResponses = {
     200: CountFull;
 };
 
-export type GetCustomerGroupsCountResponse = GetCustomerGroupsCountResponses[keyof GetCustomerGroupsCountResponses];
+export type GetACountOfCustomerGroupsResponse = GetACountOfCustomerGroupsResponses[keyof GetACountOfCustomerGroupsResponses];

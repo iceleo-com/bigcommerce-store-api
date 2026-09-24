@@ -23,116 +23,68 @@ export type DetailedErrors = {
 };
 
 /**
- * Get Categories
- */
-export type GetCategories = {
-    name?: Name;
-    category_id?: CategoryId;
-    category_uuid?: CategoryUuid;
-    tree_id?: TreeId;
-    parent_id?: ParentId;
-} & CategoryBase & {
-    url?: Url;
-};
-
-/**
  * Create Categories
  */
-export type CreateCategories = Array<{
-    name?: Name;
-    url?: Url;
-    parent_id?: ParentId;
-    tree_id?: TreeId;
-} & CategoryBase & unknown>;
+export type CreateCategories = Array<TreeIdCreateData & ParentIdCreateData & CategoryDataPost>;
 
-export type UpdateCategories = Array<{
-    category_id: CategoryId;
-    name?: Name;
-    tree_id?: TreeId;
-    parent_id?: ParentId;
-} & CategoryBase & {
-    url?: Url;
-}>;
+export type UpdateCategories = Array<TreeIdUpdateData & CategoryIdUpdateData & CategoryUuidData & ParentIdUpdateData & CategoryDataPut>;
 
 /**
  * Category
  */
-export type CategoryBase = {
-    /**
-     * The product description, which can include HTML formatting.
-     *
-     */
+export type Category = Id & ParentId & Name & Description & Views & SortOrder & PageTitle & MetaKeywords & MetaDescription & LayoutFile & ImageUrl & IsVisible & SearchKeywords & DefaultProductSort & {
+    url?: Url;
+};
+
+/**
+ * category_uuid
+ */
+export type CategoryUuidData = {
+    category_uuid?: string;
+};
+
+export type CategoryIdUpdateData = {
+    category_id: number;
+};
+
+export type ParentIdCreateData = {
+    parent_id: number;
+};
+
+export type TreeIdCreateData = {
+    tree_id: number;
+};
+
+export type ParentIdUpdateData = {
+    parent_id?: number;
+};
+
+export type TreeIdUpdateData = {
+    tree_id?: number;
+};
+
+export type CategoryData = {
+    name?: string;
     description?: string;
-    /**
-     * Number of views the category has on the storefront.
-     *
-     */
     views?: number;
-    /**
-     * Priority this category will be given when included in the menu and category pages. The lower the number, the closer to the top of the results the category will be.
-     *
-     */
     sort_order?: number;
-    /**
-     * Custom title for the category page. If not defined, the category name will be used as the meta title.
-     *
-     */
     page_title?: string;
-    /**
-     * Custom meta keywords for the category page. If not defined, the storeʼs default keywords will be used. Must post as an array like: ["awesome","sauce"].
-     *
-     */
-    meta_keywords?: Array<string>;
-    /**
-     * Custom meta description for the category page. If not defined, the storeʼs default meta description will be used.
-     *
-     */
-    meta_description?: string;
-    /**
-     * A valid layout file. (Please refer to [this article](https://support.bigcommerce.com/articles/Public/Creating-Custom-Template-Files/) on creating category files.) This field is writable only for stores with a Blueprint theme applied.
-     *
-     */
-    layout_file?: string;
-    /**
-     * Image URL used for this category on the storefront. Images can be uploaded via form file post to `/categories/{categoryId}/image`, or by providing a publicly accessible URL in this field. Must be either a full-qualified URL or an empty string.
-     *
-     */
-    image_url?: string;
-    /**
-     * Flag to determine whether the product should be displayed to customers browsing the store. If `true`, the category will be displayed. If `false`, the category will be hidden from view.
-     *
-     */
-    is_visible?: boolean;
-    /**
-     * A comma-separated list of keywords that can be used to locate the category when searching the store.
-     *
-     */
     search_keywords?: string;
-    /**
-     * Determines how the products are sorted on category page load.
-     *
-     */
-    default_product_sort?: 'use_store_settings' | 'featured' | 'newest' | 'best_selling' | 'alpha_asc' | 'alpha_desc' | 'avg_customer_review' | 'price_asc' | 'price_desc';
+    meta_keywords?: Array<string>;
+    meta_description?: string;
+    layout_file?: string;
+    is_visible?: boolean;
+    image_url?: string;
+    url?: Url;
 };
 
-export type CategoryList = {
-    data?: Array<GetCategories>;
-    meta?: MetaPagination;
-};
+export type CategoryDataPut = CategoryData & DefaultProductSort;
 
-export type CategoryNodeTree = {
-    data?: Array<CategoryNode>;
-    meta?: MetaEmptyFull;
-};
+export type CategoryDataPost = CategoryData & DefaultProductSort;
 
-export type CategoryTreeList = {
-    data?: Array<Tree>;
-    meta?: MetaPaginationObject;
-};
-
-export type CategoryTree = {
-    data?: Array<Tree>;
-    meta?: MetaEmptyFull;
+export type Url = {
+    path?: string;
+    is_customized?: boolean;
 };
 
 export type MetaPagination = {
@@ -190,13 +142,13 @@ export type PartialSuccessNoContentResponse = {
 };
 
 export type PartialSuccessResponse = {
-    data?: Array<GetCategories>;
-    errors?: MetaError;
+    data?: Array<Category>;
     meta?: MetaData;
 };
 
 export type SuccessResponse = {
-    data?: Array<GetCategories>;
+    data?: Array<Category>;
+    errors?: MetaError;
     meta?: MetaData;
 };
 
@@ -211,7 +163,11 @@ export type Tree = {
     channels?: Array<number>;
 };
 
-export type CategoryTreeListRequest = Array<Tree>;
+export type TreeReq = {
+    id?: number;
+    name?: string;
+    channels?: Array<number>;
+};
 
 export type CategoryNode = {
     id?: number;
@@ -221,7 +177,6 @@ export type CategoryNode = {
     name?: string;
     is_visible?: boolean;
     children?: Array<CategoryNode>;
-    url?: string;
 };
 
 export type MetaPaginationObject = {
@@ -266,99 +221,157 @@ export type Beta4ErrorResponse = BaseError & {
 };
 
 /**
- * URL
- *
- * If not provided in POST request, the URL is autogenerated from the category name.
- *
+ * default_product_sort
  */
-export type Url = {
-    path?: string;
-    is_customized?: boolean;
+export type DefaultProductSort = {
+    /**
+     * Determines how the products are sorted on category page load.
+     *
+     */
+    default_product_sort?: 'use_store_settings' | 'featured' | 'newest' | 'best_selling' | 'alpha_asc' | 'alpha_desc' | 'avg_customer_review' | 'price_asc' | 'price_desc';
 };
 
 /**
- * Category UUID
- *
- * An additional unique identifier for the category. Read-Only.
+ * name
  */
-export type CategoryUuid = string;
-
-/**
- * Category ID
- *
- * Unique ID of the *Category*. Increments sequentially.
- */
-export type CategoryId = number;
-
-/**
- * Parent ID
- *
- * The unique numeric ID of the category parent. To create a top-level category, specify the `tree_id`. Otherwise, you can specify the `parent_id`. Required in a POST if creating a child category.
- */
-export type ParentId = number;
-
-/**
- * Tree ID
- *
- * The ID of the category tree. To create a top-level category, specify the `tree_id`. Otherwise, you can specify the `parent_id`.
- */
-export type TreeId = number;
-
-/**
- * Name
- *
- * The name displayed for the category. Name is unique with respect to the categoryʼs siblings.
- * Required in a POST.
- */
-export type Name = string;
-
-/**
- * Not Found
- */
-export type NotFoundError = {
+export type Name = {
     /**
-     * The HTTP status code.
+     * The name displayed for the category. Name is unique with respect to the category's siblings.
+     * Required in a POST.
      */
-    status: number;
-    /**
-     * The error title describing the particular error.
-     */
-    title: string;
-    type: string;
+    name?: string;
 };
 
-export type GeneralError = {
+/**
+ * description
+ */
+export type Description = {
     /**
-     * The HTTP status code.
+     * The product description, which can include HTML formatting.
+     *
      */
-    status: number;
-    /**
-     * The error title describes the particular error.
-     */
-    title: string;
-    type: string;
-    /**
-     * The custom code of the error.
-     */
-    code?: number;
+    description?: string;
 };
 
-export type GeneralErrorWithErrors = {
+/**
+ * views
+ */
+export type Views = {
     /**
-     * The HTTP status code.
+     * Number of views the category has on the storefront.
+     *
      */
-    status: number;
+    views?: number;
+};
+
+/**
+ * sort_order
+ */
+export type SortOrder = {
     /**
-     * The error title describing the particular error.
+     * Priority this category will be given when included in the menu and category pages. The lower the number, the closer to the top of the results the category will be.
+     *
      */
-    title: string;
-    type: string;
+    sort_order?: number;
+};
+
+/**
+ * page_title
+ */
+export type PageTitle = {
     /**
-     * Detailed Errors
+     * Custom title for the category page. If not defined, the category name will be used as the meta title.
+     *
      */
-    errors: {
-        [key: string]: unknown;
-    };
+    page_title?: string;
+};
+
+/**
+ * search_keywords
+ */
+export type SearchKeywords = {
+    /**
+     * A comma-separated list of keywords that can be used to locate the category when searching the store.
+     *
+     */
+    search_keywords?: string;
+};
+
+/**
+ * meta_keywords
+ */
+export type MetaKeywords = {
+    /**
+     * Custom meta keywords for the category page. If not defined, the store's default keywords will be used. Must post as an array like: ["awesome","sauce"].
+     *
+     */
+    meta_keywords?: Array<string>;
+};
+
+/**
+ * layout_file
+ */
+export type LayoutFile = {
+    /**
+     * A valid layout file. (Please refer to [this article](https://support.bigcommerce.com/articles/Public/Creating-Custom-Template-Files/) on creating category files.) This field is writable only for stores with a Blueprint theme applied.
+     *
+     */
+    layout_file?: string;
+};
+
+/**
+ * is_visible
+ */
+export type IsVisible = {
+    /**
+     * Flag to determine whether the product should be displayed to customers browsing the store. If `true`, the category will be displayed. If `false`, the category will be hidden from view.
+     *
+     */
+    is_visible?: boolean;
+};
+
+/**
+ * image_url
+ */
+export type ImageUrl = {
+    /**
+     * Image URL used for this category on the storefront. Images can be uploaded via form file post to `/categories/{categoryId}/image`, or by providing a publicly accessible URL in this field.
+     *
+     */
+    image_url?: string;
+};
+
+/**
+ * meta_description
+ */
+export type MetaDescription = {
+    /**
+     * Custom meta description for the category page. If not defined, the store's default meta description will be used.
+     *
+     */
+    meta_description?: string;
+};
+
+/**
+ * id
+ */
+export type Id = {
+    /**
+     * Unique ID of the *Category*. Increments sequentially.
+     * Read-Only.
+     */
+    readonly id?: number;
+};
+
+/**
+ * parent_id
+ */
+export type ParentId = {
+    /**
+     * The unique numeric ID of the category's parent. This field controls where the category sits in the tree of categories that organize the catalog.
+     * Required in a POST if creating a child category.
+     */
+    parent_id?: number;
 };
 
 /**
@@ -380,14 +393,9 @@ export type DetailedErrorsWritable = {
 };
 
 /**
- * Get Categories
+ * Category
  */
-export type GetCategoriesWritable = {
-    name?: Name;
-    category_id?: CategoryId;
-    tree_id?: TreeId;
-    parent_id?: ParentId;
-} & CategoryBase & {
+export type CategoryWritable = ParentId & Name & Description & Views & SortOrder & PageTitle & MetaKeywords & MetaDescription & LayoutFile & ImageUrl & IsVisible & SearchKeywords & DefaultProductSort & {
     url?: Url;
 };
 
@@ -405,109 +413,6 @@ export type Accept = string;
  */
 export type ContentType = string;
 
-/**
- * Specifies the page number in a limited (paginated) list of products.
- *
- */
-export type PageParam = number;
-
-/**
- * Controls the number of items per page in a limited (paginated) list of products.
- *
- */
-export type LimitParam = number;
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParam = Array<string>;
-
-/**
- * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
- */
-export type ExcludeFieldsParam = Array<string>;
-
-/**
- * Filter items by keywords found in the `name`, `description`, or `sku` fields, or in the brand name.
- */
-export type KeywordParam = string;
-
-/**
- * Filter items based on whether the product is currently visible on the storefront.
- */
-export type IsVisibleParam = boolean;
-
-/**
- * Filter items by name.
- *
- */
-export type NameParam = string;
-
-/**
- * Filter items by substring in the name property. `name:like=stick` returns both `Stickers` and `Lipstick colors`.
- */
-export type NameLikeParam = string;
-
-/**
- * Filter items by substring in the page title property. `page_title:like=oil` returns both `Soil and mulch` and `Oil pastels`.
- */
-export type PageTitleLikeParam = string;
-
-/**
- * Filter items by page_title.
- *
- */
-export type PageTitleParam = string;
-
-/**
- * The ID of the category tree.
- */
-export type TreeIdParam = number;
-
-/**
- * Filter by supplying a comma-separated list of category tree IDs.
- */
-export type IdInParam = Array<number>;
-
-/**
- * Filter by supplying a comma-separated list of channel IDs.
- */
-export type ChannelIdInParam = Array<number>;
-
-/**
- * Filter using a comma-separated list of one or more category UUIDs. To use category IDs, use the `category_id:in` parameter.
- */
-export type CategoryUuidInParam = Array<string>;
-
-/**
- * Filter using a comma-separated list of one or more category IDs. To use category UUIDs, use the `category_uuid:in` parameter.
- */
-export type CategoryIdInParam = Array<number>;
-
-/**
- * Filter using a comma-separated list of one or more category tree IDs.
- */
-export type TreeIdInParam = Array<number>;
-
-export type ParentIdInParam = Array<number>;
-
-/**
- * Filter using a comma-separated list to exclude one or more category UUIDs. To exclude using category IDs, use the `category_id:not_in` parameter.
- */
-export type CategoryUuidNotInParam = Array<string>;
-
-/**
- * Filter using a comma-separated list to exclude one or more category IDs. To exclude using category UUIDs, use the `category_uuid:not_in` parameter.
- */
-export type CategoryIdNotInParam = Array<number>;
-
-/**
- * Filter using a comma-separated list to exclude one or more category tree IDs.
- */
-export type TreeIdNotInParam = Array<number>;
-
-export type ParentIdNotInParam = Array<number>;
-
 export type DeleteTreeCategoriesData = {
     body?: never;
     headers: {
@@ -518,19 +423,10 @@ export type DeleteTreeCategoriesData = {
     };
     path?: never;
     query?: {
-        /**
-         * Filter using a comma-separated list of one or more category UUIDs. To use category IDs, use the `category_id:in` parameter.
-         */
-        'category_uuid:in'?: Array<string>;
-        /**
-         * Filter using a comma-separated list of one or more category IDs. To use category UUIDs, use the `category_uuid:in` parameter.
-         */
-        'category_id:in'?: Array<number>;
-        /**
-         * Filter using a comma-separated list of one or more category tree IDs.
-         */
-        'tree_id:in'?: Array<number>;
-        'parent_id:in'?: Array<number>;
+        'category_uuid:in'?: string;
+        'category_id:in'?: string;
+        'tree_id:in'?: string;
+        'parent_id:in'?: string;
     };
     url: '/catalog/trees/categories';
 };
@@ -541,14 +437,9 @@ export type DeleteTreeCategoriesErrors = {
      */
     400: ErrorRequest;
     /**
-     * Unauthorized
+     * Server error
      */
-    401: string;
-    403: GeneralError;
-    422: {
-        errors?: GeneralErrorWithErrors;
-        meta?: MetaData;
-    };
+    500: ErrorRequest;
 };
 
 export type DeleteTreeCategoriesError = DeleteTreeCategoriesErrors[keyof DeleteTreeCategoriesErrors];
@@ -557,7 +448,7 @@ export type DeleteTreeCategoriesResponses = {
     /**
      * Categories are deleted
      */
-    202: SuccessNoContentResponse;
+    204: SuccessNoContentResponse;
 };
 
 export type DeleteTreeCategoriesResponse = DeleteTreeCategoriesResponses[keyof DeleteTreeCategoriesResponses];
@@ -572,76 +463,24 @@ export type GetAllCategoriesData = {
     };
     path?: never;
     query?: {
-        /**
-         * Filter using a comma-separated list of one or more category UUIDs. To use category IDs, use the `category_id:in` parameter.
-         */
-        'category_uuid:in'?: Array<string>;
-        /**
-         * Filter using a comma-separated list to exclude one or more category UUIDs. To exclude using category IDs, use the `category_id:not_in` parameter.
-         */
-        'category_uuid:not_in'?: Array<string>;
-        /**
-         * Filter using a comma-separated list of one or more category IDs. To use category UUIDs, use the `category_uuid:in` parameter.
-         */
-        'category_id:in'?: Array<number>;
-        /**
-         * Filter using a comma-separated list to exclude one or more category IDs. To exclude using category UUIDs, use the `category_uuid:not_in` parameter.
-         */
-        'category_id:not_in'?: Array<number>;
-        /**
-         * Filter using a comma-separated list of one or more category tree IDs.
-         */
-        'tree_id:in'?: Array<number>;
-        /**
-         * Filter using a comma-separated list to exclude one or more category tree IDs.
-         */
-        'tree_id:not_in'?: Array<number>;
-        'parent_id:in'?: Array<number>;
-        'parent_id:not_in'?: Array<number>;
-        /**
-         * Filter items by page_title.
-         *
-         */
-        page_title?: string;
-        /**
-         * Filter items by substring in the page title property. `page_title:like=oil` returns both `Soil and mulch` and `Oil pastels`.
-         */
-        'page_title:like'?: string;
-        /**
-         * Filter items by name.
-         *
-         */
+        'category_uuid:in'?: string;
+        'category_uuid:not_in'?: string;
+        'category_id:in'?: string;
+        'category_id:not_in'?: string;
+        'tree_id:in'?: string;
+        'tree_id:not_in'?: string;
+        'parent_id:in'?: string;
+        'parent_id:not_in'?: string;
         name?: string;
-        /**
-         * Filter items by substring in the name property. `name:like=stick` returns both `Stickers` and `Lipstick colors`.
-         */
         'name:like'?: string;
-        /**
-         * Filter items by keywords found in the `name`, `description`, or `sku` fields, or in the brand name.
-         */
+        page_title?: string;
+        'page_title:like'?: string;
         keyword?: string;
-        /**
-         * Filter items based on whether the product is currently visible on the storefront.
-         */
         is_visible?: boolean;
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<string>;
-        /**
-         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
-         */
-        exclude_fields?: Array<string>;
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         *
-         */
         page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products.
-         *
-         */
         limit?: number;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/trees/categories';
 };
@@ -650,16 +489,11 @@ export type GetAllCategoriesErrors = {
     /**
      * Bad Request
      */
-    400: string;
+    400: ErrorRequest;
     /**
-     * Unauthorized
+     * Internal Server Error
      */
-    401: string;
-    403: GeneralError;
-    422: {
-        errors?: GeneralErrorWithErrors;
-        meta?: MetaData;
-    };
+    500: ErrorRequest;
 };
 
 export type GetAllCategoriesError = GetAllCategoriesErrors[keyof GetAllCategoriesErrors];
@@ -668,7 +502,10 @@ export type GetAllCategoriesResponses = {
     /**
      * List of categories.
      */
-    200: CategoryList;
+    200: {
+        data?: Array<Category>;
+        meta?: MetaPagination;
+    };
 };
 
 export type GetAllCategoriesResponse = GetAllCategoriesResponses[keyof GetAllCategoriesResponses];
@@ -696,14 +533,13 @@ export type CreateCategoriesErrors = {
      */
     400: ErrorRequest;
     /**
-     * Unauthorized
-     */
-    401: string;
-    403: GeneralError;
-    /**
      * The Category was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
      */
     422: ErrorResponse;
+    /**
+     * Internal Server Error
+     */
+    500: ErrorRequest;
 };
 
 export type CreateCategoriesError = CreateCategoriesErrors[keyof CreateCategoriesErrors];
@@ -744,14 +580,13 @@ export type UpdateCategoriesErrors = {
      */
     400: ErrorRequest;
     /**
-     * Unauthorized
-     */
-    401: string;
-    403: GeneralError;
-    /**
      * The Category was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
      */
     422: ErrorResponse;
+    /**
+     * Internal Server Error
+     */
+    500: ErrorRequest;
 };
 
 export type UpdateCategoriesError = UpdateCategoriesErrors[keyof UpdateCategoriesErrors];
@@ -760,7 +595,11 @@ export type UpdateCategoriesResponses = {
     /**
      * OK
      */
-    200: SuccessNoContentResponse;
+    200: unknown;
+    /**
+     * No Content
+     */
+    204: SuccessNoContentResponse;
     /**
      * Partial success
      */
@@ -779,27 +618,10 @@ export type DeleteCategoryTreesData = {
     };
     path?: never;
     query?: {
-        /**
-         * Filter by supplying a comma-separated list of category tree IDs.
-         */
-        'id:in'?: Array<number>;
+        'id:in'?: string;
     };
     url: '/catalog/trees';
 };
-
-export type DeleteCategoryTreesErrors = {
-    /**
-     * Unauthorized
-     */
-    401: string;
-    403: GeneralError;
-    422: {
-        errors?: GeneralErrorWithErrors;
-        meta?: MetaData;
-    };
-};
-
-export type DeleteCategoryTreesError = DeleteCategoryTreesErrors[keyof DeleteCategoryTreesErrors];
 
 export type DeleteCategoryTreesResponses = {
     /**
@@ -820,43 +642,26 @@ export type GetCategoryTreesData = {
     };
     path?: never;
     query?: {
-        /**
-         * Filter by supplying a comma-separated list of category tree IDs.
-         */
-        'id:in'?: Array<number>;
-        /**
-         * Filter by supplying a comma-separated list of channel IDs.
-         */
-        'channel_id:in'?: Array<number>;
+        'id:in'?: string;
+        'channel_id:in'?: string;
     };
     url: '/catalog/trees';
 };
-
-export type GetCategoryTreesErrors = {
-    /**
-     * Unauthorized
-     */
-    401: string;
-    403: GeneralError;
-    422: {
-        errors?: GeneralErrorWithErrors;
-        meta?: MetaData;
-    };
-};
-
-export type GetCategoryTreesError = GetCategoryTreesErrors[keyof GetCategoryTreesErrors];
 
 export type GetCategoryTreesResponses = {
     /**
      * List of category trees.
      */
-    200: CategoryTreeList;
+    200: {
+        data?: Array<Tree>;
+        meta?: MetaPaginationObject;
+    };
 };
 
 export type GetCategoryTreesResponse = GetCategoryTreesResponses[keyof GetCategoryTreesResponses];
 
 export type UpsertCategoryTreesData = {
-    body: CategoryTreeListRequest;
+    body: Array<TreeReq>;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -874,11 +679,6 @@ export type UpsertCategoryTreesData = {
 
 export type UpsertCategoryTreesErrors = {
     /**
-     * Unauthorized
-     */
-    401: string;
-    403: GeneralError;
-    /**
      * The Channel was not valid. See the response for more details.
      */
     422: Beta4ErrorResponse;
@@ -890,12 +690,15 @@ export type UpsertCategoryTreesResponses = {
     /**
      * Created a category tree.
      */
-    200: CategoryTree;
+    200: {
+        data?: Array<Tree>;
+        meta?: MetaEmptyFull;
+    };
 };
 
 export type UpsertCategoryTreesResponse = UpsertCategoryTreesResponses[keyof UpsertCategoryTreesResponses];
 
-export type GetCategoryTreeData = {
+export type GetCategoryTreeByTreeIdData = {
     body?: never;
     headers: {
         /**
@@ -904,10 +707,7 @@ export type GetCategoryTreeData = {
         Accept: string;
     };
     path: {
-        /**
-         * The ID of the category tree.
-         */
-        tree_id: number;
+        tree_id: string;
     };
     query?: {
         /**
@@ -918,25 +718,23 @@ export type GetCategoryTreeData = {
     url: '/catalog/trees/{tree_id}/categories';
 };
 
-export type GetCategoryTreeErrors = {
-    /**
-     * Unauthorized
-     */
-    401: string;
-    403: GeneralError;
+export type GetCategoryTreeByTreeIdErrors = {
     /**
      * The tree was not found.
      */
     404: Beta4ErrorResponse;
 };
 
-export type GetCategoryTreeError = GetCategoryTreeErrors[keyof GetCategoryTreeErrors];
+export type GetCategoryTreeByTreeIdError = GetCategoryTreeByTreeIdErrors[keyof GetCategoryTreeByTreeIdErrors];
 
-export type GetCategoryTreeResponses = {
+export type GetCategoryTreeByTreeIdResponses = {
     /**
      * Categories tree
      */
-    200: CategoryNodeTree;
+    200: {
+        data?: Array<CategoryNode>;
+        meta?: MetaEmptyFull;
+    };
 };
 
-export type GetCategoryTreeResponse = GetCategoryTreeResponses[keyof GetCategoryTreeResponses];
+export type GetCategoryTreeByTreeIdResponse = GetCategoryTreeByTreeIdResponses[keyof GetCategoryTreeByTreeIdResponses];

@@ -42,11 +42,11 @@ export type RequestItem = {
     quantity: number;
     tax_class?: TaxClass;
     /**
-     * Flag whether or not this item is always tax-exempt. For example, gift certificate purchases and order-level refunds are tax-exempt. Tax-exempt items are included in the request for auditing purposes. Tax-exempt items must have a tax amount of zero within the tax quote response.
+     * Flag whether or not this item is always tax-exempt. For example, gift certificate purchases and order-level refunds are tax-exempt. Tax-exempt items are included in the request for auditing purposes.
      */
     tax_exempt?: boolean;
     /**
-     * Merchants may opt to include additional properties that a tax provider can choose to support, factoring these values into tax calculation. See [Tax Properties API](/docs/rest-management/tax-properties) for more information on configuring tax properties.
+     * Merchants may opt to include additional properties that a tax provider can choose to support, factoring these values into tax calculation.
      */
     tax_properties?: Array<RequestItemTaxProperty>;
 };
@@ -100,9 +100,9 @@ export type RequestDocument = {
         /**
          * Optional gift wrapping for items in the consignment.
          */
-        wrapping?: RequestItem & ({
+        wrapping?: (RequestItem & {
             type: WrappingType;
-        } | null);
+        }) | null;
     }>;
 };
 
@@ -136,13 +136,9 @@ export type RequestQuote = {
          * If applicable, the tax exemption code of the shopper’s customer account. A taxability code is intended to apply to multiple customers. This code should match the exemption codes provided by the third-party integration.
          */
         taxability_code?: string;
-        /**
-         * Any tax property values that have been associated with this customer. See [Tax Properties API](/docs/rest-management/tax-properties) for more information on configuring tax properties.
-         */
-        tax_properties?: Array<RequestItemTaxProperty>;
     };
     /**
-     * ISO 8601 formatted date the shopper placed this order. Tax quotes are expected to reflect taxes applicable on this date. Dates will be provided in UTC.
+     * ISO 8601 formatted date the shopper placed this order. Dates will be provided in UTC.
      */
     transaction_date: string;
     /**
@@ -210,7 +206,7 @@ export type Address = {
 
 export type TaxClass = {
     /**
-     * The provider-specific tax code for this item. Items can be classified with tax codes relevant to each tax provider, configured by the merchant, and assigned to their products within BigCommerce. A tax code is intended to apply to multiple products. This code should match the tax codes provided by the third-party integration.
+     * The provider-specific tax code for this item. Items can be classified with tax codes relevant to each Tax Provider, configured by the merchant, and assigned to their products within BigCommerce. A tax code is intended to apply to multiple products. This code should match the tax codes provided by the third-party integration.
      */
     code: string;
     /**
@@ -228,7 +224,7 @@ export type TaxClass = {
  */
 export type ResponseQuote = {
     /**
-     * The unique identifier of the tax quote that was requested. This value must either match the ID of the requested quote or be an external ID on the tax provider’s system. This value will be used for future adjust and void operations.
+     * The unique identifier of the tax quote that was requested. This must match the ID of the requested quote.
      */
     id: string;
     /**
@@ -257,9 +253,9 @@ export type ResponseDocument = {
         /**
          * Optional gift wrapping for items in the consignment.
          */
-        wrapping?: ResponseItem & ({
+        wrapping?: (ResponseItem & {
             type: WrappingType;
-        } | null);
+        }) | null;
     }>;
     /**
      * Shipping line item present in each document request.
@@ -331,11 +327,11 @@ export type SalesTax = {
     amount: number;
     tax_class?: TaxClass;
     /**
-     * Optional unique identifier for this sales tax, describing the relevant tax classification rule on the tax provider platform.
+     * Optional unique identifier for this sales tax, describing the relevant tax classification rule on the Tax Provider platform.
      *
      * Supplying an identifier allows BigCommerce to group related taxes together from all items in the order.
      *
-     * This identifier is persisted by BigCommerce and may be desirable for auditing purposes between BigCommerce and the tax provider. Currently supports persisting integer values only (the string type indicates we may support UUID values in the future).
+     * This identifier is persisted by BigCommerce and may be desirable for auditing purposes between BigCommerce and the Tax Provider. Currently supports persisting integer values only (the string type indicates we may support UUID values in the future).
      */
     id?: string;
 };
@@ -345,7 +341,7 @@ export type SalesTax = {
  *
  * Tax estimate requests for order-level refunds have an additional line item with the type `refund`.
  */
-export type ItemType = 'item' | 'refund' | 'fee';
+export type ItemType = 'item' | 'refund';
 
 /**
  * The type of item for the line item in the document.
@@ -363,37 +359,27 @@ export type HandlingType = 'handling';
 export type WrappingType = 'wrapping';
 
 /**
- * BigCommerce will send through the store hash as part of all tax provider operations. Each BigCommerce store on the platform has a unique store hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
+ * BigCommerce will send through the Store Hash as part of all Tax Provider API operations. Each BigCommerce store on the platform has a unique Store Hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
  */
-export type StoreHashHeader = string;
+export type HeaderStorehash = string;
 
-/**
- * Unique ID identifying the existing, persisted tax quote that will be voided.
- */
-export type IdQueryVoid = string;
-
-/**
- * Unique ID identifying the existing, persisted tax quote that will be adjusted.
- */
-export type IdQueryAdjusted = string;
-
-export type EstimateTaxesData = {
+export type EstimateData = {
     /**
      * Estimates may not always contain complete data as these requests will be fired at different stages of the shopper checkout. For example, the **Estimate Shipping & Tax** function on the **Cart** page is not expected to provide any billing address data, but the tax provider will still be expected to return a valid estimate.
      */
     body: RequestQuote;
     headers: {
         /**
-         * BigCommerce will send through the store hash as part of all tax provider operations. Each BigCommerce store on the platform has a unique store hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
+         * BigCommerce will send through the Store Hash as part of all Tax Provider API operations. Each BigCommerce store on the platform has a unique Store Hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
          */
-        'X-Bc-Store-Hash': string;
+        'X-BC-Store-Hash': string;
     };
     path?: never;
     query?: never;
     url: '/estimate';
 };
 
-export type EstimateTaxesErrors = {
+export type EstimateErrors = {
     /**
      * Fallback Tax will be used for this transaction. General response that points to an issue with the incoming request that means a valid response is unable to be returned.
      */
@@ -408,34 +394,34 @@ export type EstimateTaxesErrors = {
     500: unknown;
 };
 
-export type EstimateTaxesResponses = {
+export type EstimateResponses = {
     /**
      * Noteworthy is that the estimate response does not contain an **external ID** since there is no expectation that an estimate will result in any persisted tax documents by the tax provider.
      */
     200: ResponseQuote;
 };
 
-export type EstimateTaxesResponse = EstimateTaxesResponses[keyof EstimateTaxesResponses];
+export type EstimateResponse = EstimateResponses[keyof EstimateResponses];
 
-export type VoidTaxQuoteData = {
+export type VoidData = {
     body?: never;
     headers: {
         /**
-         * BigCommerce will send through the store hash as part of all tax provider operations. Each BigCommerce store on the platform has a unique store hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
+         * BigCommerce will send through the Store Hash as part of all Tax Provider API operations. Each BigCommerce store on the platform has a unique Store Hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
          */
-        'X-Bc-Store-Hash': string;
+        'X-BC-Store-Hash': string;
     };
     path?: never;
     query: {
         /**
-         * Unique ID identifying the existing, persisted tax quote that will be voided.
+         * Unique ID identifying the existing, persisted Tax Quote that will be voided.
          */
         id: string;
     };
     url: '/void';
 };
 
-export type VoidTaxQuoteErrors = {
+export type VoidErrors = {
     /**
      * General response that points to an issue with the incoming request that means a valid response is unable to be returned.
      */
@@ -450,27 +436,27 @@ export type VoidTaxQuoteErrors = {
     500: unknown;
 };
 
-export type VoidTaxQuoteResponses = {
+export type VoidResponses = {
     /**
      * OK
      */
     200: unknown;
 };
 
-export type CommitTaxQuoteData = {
+export type CommitData = {
     body: RequestQuote;
     headers: {
         /**
-         * BigCommerce will send through the store hash as part of all tax provider operations. Each BigCommerce store on the platform has a unique store hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
+         * BigCommerce will send through the Store Hash as part of all Tax Provider API operations. Each BigCommerce store on the platform has a unique Store Hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
          */
-        'X-Bc-Store-Hash': string;
+        'X-BC-Store-Hash': string;
     };
     path?: never;
     query?: never;
     url: '/commit';
 };
 
-export type CommitTaxQuoteErrors = {
+export type CommitErrors = {
     /**
      * General response that points to an issue with the incoming request that means a valid response is unable to be returned.
      */
@@ -485,34 +471,34 @@ export type CommitTaxQuoteErrors = {
     500: unknown;
 };
 
-export type CommitTaxQuoteResponses = {
+export type CommitResponses = {
     /**
      * OK
      */
     200: ResponseQuote;
 };
 
-export type CommitTaxQuoteResponse = CommitTaxQuoteResponses[keyof CommitTaxQuoteResponses];
+export type CommitResponse = CommitResponses[keyof CommitResponses];
 
-export type AdjustTaxQuoteData = {
+export type AdjustData = {
     body?: RequestAdjust;
     headers: {
         /**
-         * BigCommerce will send through the store hash as part of all tax provider operations. Each BigCommerce store on the platform has a unique store hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
+         * BigCommerce will send through the Store Hash as part of all Tax Provider API operations. Each BigCommerce store on the platform has a unique Store Hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
          */
-        'X-Bc-Store-Hash': string;
+        'X-BC-Store-Hash': string;
     };
     path?: never;
     query: {
         /**
-         * Unique ID identifying the existing, persisted tax quote that will be adjusted.
+         * Unique ID identifying the existing, persisted Tax Quote that will be adjusted.
          */
         id: string;
     };
     url: '/adjust';
 };
 
-export type AdjustTaxQuoteErrors = {
+export type AdjustErrors = {
     /**
      * General response that points to an issue with the incoming request that means a valid response is unable to be returned.
      */
@@ -527,13 +513,13 @@ export type AdjustTaxQuoteErrors = {
     500: ResponseQuote;
 };
 
-export type AdjustTaxQuoteError = AdjustTaxQuoteErrors[keyof AdjustTaxQuoteErrors];
+export type AdjustError = AdjustErrors[keyof AdjustErrors];
 
-export type AdjustTaxQuoteResponses = {
+export type AdjustResponses = {
     /**
      * Returned Tax Quote response matches the updated QuoteRequest provided to the service method.
      */
-    200: ResponseQuote;
+    200: RequestAdjust;
 };
 
-export type AdjustTaxQuoteResponse = AdjustTaxQuoteResponses[keyof AdjustTaxQuoteResponses];
+export type AdjustResponse = AdjustResponses[keyof AdjustResponses];

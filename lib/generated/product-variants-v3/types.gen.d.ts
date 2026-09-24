@@ -26,12 +26,11 @@ export type ProductVariantBase = {
     purchasing_disabled?: boolean;
     purchasing_disabled_message?: string;
     upc?: string | null;
-    image_url?: string;
     inventory_level?: number | null;
     inventory_warning_level?: number | null;
     bin_picking_number?: string | null;
-    mpn?: string | null;
-    gtin?: string | null;
+    mpn?: string;
+    gtin?: string;
 };
 export type ProductVariantFull = ProductVariantBase & {
     id?: number;
@@ -60,8 +59,8 @@ export type ProductVariantPost = {
     inventory_warning_level?: number | null;
     bin_picking_number?: string | null;
     image_url?: string;
-    gtin?: string | null;
-    mpn?: string | null;
+    gtin?: string;
+    mpn?: string;
 } & {
     product_id?: number;
     sku?: string;
@@ -84,11 +83,6 @@ export type MetafieldBase = {
 };
 export type MetaCollectionFull = {
     pagination?: PaginationFull;
-};
-export type MultiStatus = {
-    data?: ProductVariantFull;
-    errors?: ErrorMultiStatus;
-    meta?: MetaCollectionFull;
 };
 export type PaginationFull = {
     total?: number;
@@ -126,105 +120,6 @@ export type ProductVariantPut = ProductVariantBase & {
     product_id?: number;
     sku?: string;
 };
-export type Metafield = {
-    id?: number;
-    key?: string;
-    value?: string;
-    namespace?: string;
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    resource_id?: number;
-    description?: string;
-    date_created?: string;
-    date_modified?: string;
-    owner_client_id?: string;
-};
-export type MetaFieldCollectionResponse = {
-    data?: Array<Metafield>;
-    meta?: CollectionMeta;
-};
-export type MetaFieldCollectionResponsePostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<unknown>;
-    meta?: CollectionMeta;
-};
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-export type WriteCollectionPartialSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
-export type WriteCollectionSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
-export type Total = number;
-export type Success = number;
-export type Failed = number;
-export type _Error = {
-    status?: number;
-    title?: string;
-    type?: string;
-    errors?: ErrorDetail;
-};
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-export type CollectionMeta = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    };
-    [key: string]: unknown | {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    } | undefined;
-};
-export type MetafieldBasePost = {
-    key: string;
-    value: string;
-    namespace: string;
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    description?: string;
-};
-export type MetafieldBasePut = {
-    key?: string;
-    value?: string;
-    namespace?: string;
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    description?: string;
-};
 export type MetaEmptyFullWritable = {
     [key: string]: unknown;
 };
@@ -235,32 +130,12 @@ export type MetafieldFullWritable = MetafieldBase & {
     resource_type?: 'category' | 'brand' | 'product' | 'variant';
     resource_id?: number;
 };
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
-};
-export type ProductIdPathParam = number;
+export type ProductIdParam = number;
 export type VariantIdParam = number;
 export type MetafieldIdParam = number;
 export type Accept = string;
 export type ContentType = string;
-export type PageParam = number;
-export type MetafieldKeyParam = string;
-export type MetafieldKeyInParam = Array<string>;
-export type MetafieldNamespaceParam = string;
-export type MetafieldNamespaceInParam = Array<string>;
-export type LimitParam = number;
-export type DirectionParam = 'asc' | 'desc';
-export type DateCreatedMin = string;
-export type DateCreatedMax = string;
-export type DateModifiedMax = string;
-export type DateModifiedMin = string;
-export type IncludeFieldsParam = Array<string>;
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-export type ExcludeFieldsParam = Array<string>;
-export type ProductIdInParam = Array<number>;
-export type UpcParam = string;
-export type SkuParam = string;
-export type GetProductVariantsData = {
+export type GetVariantsByProductIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -269,14 +144,14 @@ export type GetProductVariantsData = {
         product_id: number;
     };
     query?: {
-        include_fields?: Array<string>;
-        exclude_fields?: Array<string>;
         page?: number;
         limit?: number;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/variants';
 };
-export type GetProductVariantsErrors = {
+export type GetVariantsByProductIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -284,15 +159,15 @@ export type GetProductVariantsErrors = {
         instance?: string;
     };
 };
-export type GetProductVariantsError = GetProductVariantsErrors[keyof GetProductVariantsErrors];
-export type GetProductVariantsResponses = {
+export type GetVariantsByProductIdError = GetVariantsByProductIdErrors[keyof GetVariantsByProductIdErrors];
+export type GetVariantsByProductIdResponses = {
     200: {
         data?: Array<ProductVariantFull>;
         meta?: MetaCollectionFull;
     };
 };
-export type GetProductVariantsResponse = GetProductVariantsResponses[keyof GetProductVariantsResponses];
-export type CreateProductVariantData = {
+export type GetVariantsByProductIdResponse = GetVariantsByProductIdResponses[keyof GetVariantsByProductIdResponses];
+export type CreateVariantData = {
     body: ProductVariantPost;
     headers: {
         Accept: string;
@@ -304,7 +179,7 @@ export type CreateProductVariantData = {
     query?: never;
     url: '/catalog/products/{product_id}/variants';
 };
-export type CreateProductVariantErrors = {
+export type CreateVariantErrors = {
     404: {
         status?: number;
         title?: string;
@@ -312,16 +187,20 @@ export type CreateProductVariantErrors = {
         instance?: string;
     };
 };
-export type CreateProductVariantError = CreateProductVariantErrors[keyof CreateProductVariantErrors];
-export type CreateProductVariantResponses = {
+export type CreateVariantError = CreateVariantErrors[keyof CreateVariantErrors];
+export type CreateVariantResponses = {
     200: {
         data?: ProductVariantFull;
         meta?: MetaEmptyFull;
     };
-    207: MultiStatus;
+    207: {
+        data?: ProductVariantFull;
+        errors?: ErrorMultiStatus;
+        meta?: MetaCollectionFull;
+    };
 };
-export type CreateProductVariantResponse = CreateProductVariantResponses[keyof CreateProductVariantResponses];
-export type DeleteProductVariantData = {
+export type CreateVariantResponse = CreateVariantResponses[keyof CreateVariantResponses];
+export type DeleteVariantByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -333,11 +212,11 @@ export type DeleteProductVariantData = {
     query?: never;
     url: '/catalog/products/{product_id}/variants/{variant_id}';
 };
-export type DeleteProductVariantResponses = {
+export type DeleteVariantByIdResponses = {
     204: void;
 };
-export type DeleteProductVariantResponse = DeleteProductVariantResponses[keyof DeleteProductVariantResponses];
-export type GetProductVariantData = {
+export type DeleteVariantByIdResponse = DeleteVariantByIdResponses[keyof DeleteVariantByIdResponses];
+export type GetVariantByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -347,12 +226,12 @@ export type GetProductVariantData = {
         variant_id: number;
     };
     query?: {
-        include_fields?: Array<string>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/variants/{variant_id}';
 };
-export type GetProductVariantErrors = {
+export type GetVariantByIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -360,15 +239,15 @@ export type GetProductVariantErrors = {
         instance?: string;
     };
 };
-export type GetProductVariantError = GetProductVariantErrors[keyof GetProductVariantErrors];
-export type GetProductVariantResponses = {
+export type GetVariantByIdError = GetVariantByIdErrors[keyof GetVariantByIdErrors];
+export type GetVariantByIdResponses = {
     200: {
         data?: ProductVariantFull;
         meta?: MetaEmptyFull;
     };
 };
-export type GetProductVariantResponse = GetProductVariantResponses[keyof GetProductVariantResponses];
-export type UpdateProductVariantData = {
+export type GetVariantByIdResponse = GetVariantByIdResponses[keyof GetVariantByIdResponses];
+export type UpdateVariantData = {
     body: ProductVariantPut;
     headers: {
         Accept: string;
@@ -381,7 +260,7 @@ export type UpdateProductVariantData = {
     query?: never;
     url: '/catalog/products/{product_id}/variants/{variant_id}';
 };
-export type UpdateProductVariantErrors = {
+export type UpdateVariantErrors = {
     404: {
         status?: number;
         title?: string;
@@ -389,16 +268,20 @@ export type UpdateProductVariantErrors = {
         instance?: string;
     };
 };
-export type UpdateProductVariantError = UpdateProductVariantErrors[keyof UpdateProductVariantErrors];
-export type UpdateProductVariantResponses = {
+export type UpdateVariantError = UpdateVariantErrors[keyof UpdateVariantErrors];
+export type UpdateVariantResponses = {
     200: {
         data?: ProductVariantFull;
         meta?: MetaEmptyFull;
     };
-    207: MultiStatus;
+    207: {
+        data?: ProductVariantFull;
+        errors?: ErrorMultiStatus;
+        meta?: MetaCollectionFull;
+    };
 };
-export type UpdateProductVariantResponse = UpdateProductVariantResponses[keyof UpdateProductVariantResponses];
-export type GetProductVariantMetafieldsData = {
+export type UpdateVariantResponse = UpdateVariantResponses[keyof UpdateVariantResponses];
+export type GetVariantMetafieldsByProductIdAndVariantIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -408,23 +291,32 @@ export type GetProductVariantMetafieldsData = {
         variant_id: number;
     };
     query?: {
-        include_fields?: Array<string>;
-        exclude_fields?: Array<string>;
         page?: number;
         limit?: number;
         key?: string;
         namespace?: string;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/variants/{variant_id}/metafields';
 };
-export type GetProductVariantMetafieldsResponses = {
+export type GetVariantMetafieldsByProductIdAndVariantIdErrors = {
+    404: {
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+export type GetVariantMetafieldsByProductIdAndVariantIdError = GetVariantMetafieldsByProductIdAndVariantIdErrors[keyof GetVariantMetafieldsByProductIdAndVariantIdErrors];
+export type GetVariantMetafieldsByProductIdAndVariantIdResponses = {
     200: {
         data?: Array<MetafieldFull>;
         meta?: CategoriesTreeResp;
     };
 };
-export type GetProductVariantMetafieldsResponse = GetProductVariantMetafieldsResponses[keyof GetProductVariantMetafieldsResponses];
-export type CreateProductVariantMetafieldData = {
+export type GetVariantMetafieldsByProductIdAndVariantIdResponse = GetVariantMetafieldsByProductIdAndVariantIdResponses[keyof GetVariantMetafieldsByProductIdAndVariantIdResponses];
+export type CreateVariantMetafieldData = {
     body: MetafieldBase;
     headers: {
         Accept: string;
@@ -437,13 +329,7 @@ export type CreateProductVariantMetafieldData = {
     query?: never;
     url: '/catalog/products/{product_id}/variants/{variant_id}/metafields';
 };
-export type CreateProductVariantMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
+export type CreateVariantMetafieldErrors = {
     409: {
         errors?: {
             [key: string]: unknown;
@@ -463,15 +349,15 @@ export type CreateProductVariantMetafieldErrors = {
         type?: string;
     };
 };
-export type CreateProductVariantMetafieldError = CreateProductVariantMetafieldErrors[keyof CreateProductVariantMetafieldErrors];
-export type CreateProductVariantMetafieldResponses = {
+export type CreateVariantMetafieldError = CreateVariantMetafieldErrors[keyof CreateVariantMetafieldErrors];
+export type CreateVariantMetafieldResponses = {
     200: {
         data?: MetafieldFull;
         meta?: MetaEmptyFull;
     };
 };
-export type CreateProductVariantMetafieldResponse = CreateProductVariantMetafieldResponses[keyof CreateProductVariantMetafieldResponses];
-export type DeleteProductVariantMetafieldData = {
+export type CreateVariantMetafieldResponse = CreateVariantMetafieldResponses[keyof CreateVariantMetafieldResponses];
+export type DeleteVariantMetafieldByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -484,20 +370,11 @@ export type DeleteProductVariantMetafieldData = {
     query?: never;
     url: '/catalog/products/{product_id}/variants/{variant_id}/metafields/{metafield_id}';
 };
-export type DeleteProductVariantMetafieldErrors = {
-    404: {
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    };
-};
-export type DeleteProductVariantMetafieldError = DeleteProductVariantMetafieldErrors[keyof DeleteProductVariantMetafieldErrors];
-export type DeleteProductVariantMetafieldResponses = {
+export type DeleteVariantMetafieldByIdResponses = {
     204: void;
 };
-export type DeleteProductVariantMetafieldResponse = DeleteProductVariantMetafieldResponses[keyof DeleteProductVariantMetafieldResponses];
-export type GetProductVariantMetafieldData = {
+export type DeleteVariantMetafieldByIdResponse = DeleteVariantMetafieldByIdResponses[keyof DeleteVariantMetafieldByIdResponses];
+export type GetVariantMetafieldByProductIdAndVariantIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -508,12 +385,12 @@ export type GetProductVariantMetafieldData = {
         metafield_id: number;
     };
     query?: {
-        include_fields?: Array<string>;
-        exclude_fields?: Array<string>;
+        include_fields?: string;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/variants/{variant_id}/metafields/{metafield_id}';
 };
-export type GetProductVariantMetafieldErrors = {
+export type GetVariantMetafieldByProductIdAndVariantIdErrors = {
     404: {
         status?: number;
         title?: string;
@@ -521,15 +398,15 @@ export type GetProductVariantMetafieldErrors = {
         instance?: string;
     };
 };
-export type GetProductVariantMetafieldError = GetProductVariantMetafieldErrors[keyof GetProductVariantMetafieldErrors];
-export type GetProductVariantMetafieldResponses = {
+export type GetVariantMetafieldByProductIdAndVariantIdError = GetVariantMetafieldByProductIdAndVariantIdErrors[keyof GetVariantMetafieldByProductIdAndVariantIdErrors];
+export type GetVariantMetafieldByProductIdAndVariantIdResponses = {
     200: {
         data?: MetafieldFull;
         meta?: MetaEmptyFull;
     };
 };
-export type GetProductVariantMetafieldResponse = GetProductVariantMetafieldResponses[keyof GetProductVariantMetafieldResponses];
-export type UpdateProductVariantMetafieldData = {
+export type GetVariantMetafieldByProductIdAndVariantIdResponse = GetVariantMetafieldByProductIdAndVariantIdResponses[keyof GetVariantMetafieldByProductIdAndVariantIdResponses];
+export type UpdateVariantMetafieldData = {
     body: MetafieldBase;
     headers: {
         Accept: string;
@@ -543,13 +420,7 @@ export type UpdateProductVariantMetafieldData = {
     query?: never;
     url: '/catalog/products/{product_id}/variants/{variant_id}/metafields/{metafield_id}';
 };
-export type UpdateProductVariantMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
+export type UpdateVariantMetafieldErrors = {
     404: {
         status?: number;
         title?: string;
@@ -557,20 +428,21 @@ export type UpdateProductVariantMetafieldErrors = {
         instance?: string;
     };
 };
-export type UpdateProductVariantMetafieldError = UpdateProductVariantMetafieldErrors[keyof UpdateProductVariantMetafieldErrors];
-export type UpdateProductVariantMetafieldResponses = {
+export type UpdateVariantMetafieldError = UpdateVariantMetafieldErrors[keyof UpdateVariantMetafieldErrors];
+export type UpdateVariantMetafieldResponses = {
     200: {
         data?: MetafieldFull;
         meta?: MetaEmptyFull;
     };
 };
-export type UpdateProductVariantMetafieldResponse = UpdateProductVariantMetafieldResponses[keyof UpdateProductVariantMetafieldResponses];
-export type CreateProductVariantImageData = {
+export type UpdateVariantMetafieldResponse = UpdateVariantMetafieldResponses[keyof UpdateVariantMetafieldResponses];
+export type CreateVariantImageData = {
     body?: {
         image_url?: string;
     };
     headers: {
         Accept: string;
+        'Content-Type': string;
     };
     path: {
         product_id: number;
@@ -579,7 +451,7 @@ export type CreateProductVariantImageData = {
     query?: never;
     url: '/catalog/products/{product_id}/variants/{variant_id}/image';
 };
-export type CreateProductVariantImageErrors = {
+export type CreateVariantImageErrors = {
     400: {
         [key: string]: unknown;
     };
@@ -608,8 +480,8 @@ export type CreateProductVariantImageErrors = {
         type?: string;
     };
 };
-export type CreateProductVariantImageError = CreateProductVariantImageErrors[keyof CreateProductVariantImageErrors];
-export type CreateProductVariantImageResponses = {
+export type CreateVariantImageError = CreateVariantImageErrors[keyof CreateVariantImageErrors];
+export type CreateVariantImageResponses = {
     200: {
         data?: {
             image_url?: string;
@@ -617,7 +489,7 @@ export type CreateProductVariantImageResponses = {
         meta?: MetaEmptyFull;
     };
 };
-export type CreateProductVariantImageResponse = CreateProductVariantImageResponses[keyof CreateProductVariantImageResponses];
+export type CreateVariantImageResponse = CreateVariantImageResponses[keyof CreateVariantImageResponses];
 export type GetVariantsData = {
     body?: never;
     headers: {
@@ -628,11 +500,11 @@ export type GetVariantsData = {
         id?: number;
         sku?: string;
         upc?: string;
-        include_fields?: Array<string>;
-        exclude_fields?: Array<string>;
         page?: number;
         limit?: number;
-        'product_id:in'?: Array<number>;
+        include_fields?: string;
+        exclude_fields?: string;
+        product_id?: string;
     };
     url: '/catalog/variants';
 };
@@ -660,7 +532,7 @@ export type GetVariantsResponses = {
             fixed_cost_shipping_price?: number;
             purchasing_disabled?: boolean;
             purchasing_disabled_message?: string;
-            upc?: string | null;
+            upc?: string;
             inventory_level?: number;
             inventory_warning_level?: number;
             bin_picking_number?: string;
@@ -696,7 +568,7 @@ export type UpdateVariantsBatchData = {
         fixed_cost_shipping_price?: number;
         purchasing_disabled?: boolean;
         purchasing_disabled_message?: string;
-        upc?: string | null;
+        upc?: string;
         inventory_level?: number;
         inventory_warning_level?: number;
         bin_picking_number?: string;
@@ -742,7 +614,7 @@ export type UpdateVariantsBatchResponses = {
             fixed_cost_shipping_price?: number;
             purchasing_disabled?: boolean;
             purchasing_disabled_message?: string;
-            upc?: string | null;
+            upc?: string;
             inventory_level?: number;
             inventory_warning_level?: number;
             bin_picking_number?: string;
@@ -777,104 +649,3 @@ export type UpdateVariantsBatchResponses = {
     };
 };
 export type UpdateVariantsBatchResponse = UpdateVariantsBatchResponses[keyof UpdateVariantsBatchResponses];
-export type DeleteVariantsMetafieldsData = {
-    body?: Array<number>;
-    headers: {
-        Accept: string;
-    };
-    path?: never;
-    query?: never;
-    url: '/catalog/variants/metafields';
-};
-export type DeleteVariantsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-export type DeleteVariantsMetafieldsError = DeleteVariantsMetafieldsErrors[keyof DeleteVariantsMetafieldsErrors];
-export type DeleteVariantsMetafieldsResponses = {
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-export type DeleteVariantsMetafieldsResponse = DeleteVariantsMetafieldsResponses[keyof DeleteVariantsMetafieldsResponses];
-export type GetVariantsMetafieldsData = {
-    body?: never;
-    headers: {
-        Accept: string;
-    };
-    path?: never;
-    query?: {
-        page?: number;
-        limit?: number;
-        key?: string;
-        'key:in'?: Array<string>;
-        namespace?: string;
-        'namespace:in'?: Array<string>;
-        direction?: 'asc' | 'desc';
-        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-        'date_created:min'?: string;
-        'date_created:max'?: string;
-        'date_modified:min'?: string;
-        'date_modified:max'?: string;
-    };
-    url: '/catalog/variants/metafields';
-};
-export type GetVariantsMetafieldsResponses = {
-    200: MetaFieldCollectionResponse;
-};
-export type GetVariantsMetafieldsResponse = GetVariantsMetafieldsResponses[keyof GetVariantsMetafieldsResponses];
-export type CreateVariantsMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        resource_id: number;
-    }>;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path?: never;
-    query?: never;
-    url: '/catalog/variants/metafields';
-};
-export type CreateVariantsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-export type CreateVariantsMetafieldsError = CreateVariantsMetafieldsErrors[keyof CreateVariantsMetafieldsErrors];
-export type CreateVariantsMetafieldsResponses = {
-    200: MetaFieldCollectionResponsePostPut;
-};
-export type CreateVariantsMetafieldsResponse = CreateVariantsMetafieldsResponses[keyof CreateVariantsMetafieldsResponses];
-export type UpdateVariantsMetafieldsData = {
-    body?: Array<MetafieldBasePut & {
-        id: number;
-    }>;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path?: never;
-    query?: never;
-    url: '/catalog/variants/metafields';
-};
-export type UpdateVariantsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-export type UpdateVariantsMetafieldsError = UpdateVariantsMetafieldsErrors[keyof UpdateVariantsMetafieldsErrors];
-export type UpdateVariantsMetafieldsResponses = {
-    200: MetaFieldCollectionResponsePostPut;
-};
-export type UpdateVariantsMetafieldsResponse = UpdateVariantsMetafieldsResponses[keyof UpdateVariantsMetafieldsResponses];

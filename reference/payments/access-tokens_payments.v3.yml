@@ -57,12 +57,16 @@ paths:
       description: |-
         Use this endpoint to create a payment access token. A payment access token is required to process payments with the BigCommerce API.
 
+        You can also generate a payment access token during checkout by using the `completeCheckout` mutation in the [GraphQL Storefront API](/docs/storefront/cart-checkout/guide/graphql-storefront#handling-payments).
+
+        After the token is created, use the token to [Process a payment](/docs/rest-payments/processing#process-payment).
+
         **Required Fields**
         * order_id
       summary: Create Payment Access Token
       tags:
         - Tokens
-      operationId: createPaymentAccessToken
+      operationId: PaymentsAccessTokensPost
       deprecated: false
       parameters:
         - $ref: '#/components/parameters/ContentType'
@@ -150,7 +154,6 @@ paths:
                     format: int32
                   errors:
                     type: object
-                    properties: {}
                     additionalProperties:
                       type: string
                 required:
@@ -184,7 +187,6 @@ paths:
                     format: int32
                   errors:
                     type: object
-                    properties: {}
                     additionalProperties:
                       type: string
                 required:
@@ -218,7 +220,6 @@ paths:
                     format: int32
                   errors:
                     type: object
-                    properties: {}
                     additionalProperties:
                       type: string
                 required:
@@ -252,7 +253,6 @@ paths:
                     format: int32
                   errors:
                     type: object
-                    properties: {}
                     additionalProperties:
                       type: string
                 required:
@@ -286,7 +286,6 @@ paths:
                     format: int32
                   errors:
                     type: object
-                    properties: {}
                     additionalProperties:
                       type: string
                 required:
@@ -320,7 +319,6 @@ paths:
                     format: int32
                   errors:
                     type: object
-                    properties: {}
                     additionalProperties:
                       type: string
                 required:

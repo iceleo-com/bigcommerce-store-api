@@ -17,8 +17,6 @@ export class StorefrontTokensV3Api {
 
      **Required Scopes**
      * `Manage` `Storefront API Tokens`
-
-     > NOTE: While neither `channel_id` nor `channel_ids` is labelled as required, one must be included in the request body. Including neither will throw an error, and including both will result in unexpected behaviors.
      */
     createToken(
         requestBody: StorefrontTokensV3ApiSpecs.CreateTokenData['body'],
@@ -49,8 +47,6 @@ export class StorefrontTokensV3Api {
 
      **Required Scopes**
      * `Manage` `Storefront API Customer Impersonation Tokens`
-
-     > NOTE: While neither `channel_id` nor `channel_ids` is labelled as required, one must be included in the request body. Including neither will throw an error, and including both will result in unexpected behaviors.
      */
     createTokenWithCustomerImpersonation(
         requestBody: StorefrontTokensV3ApiSpecs.CreateTokenWithCustomerImpersonationData['body'],

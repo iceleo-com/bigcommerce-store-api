@@ -58,5 +58,10 @@ export declare class PromotionsV3Api {
             [key: string]: unknown;
         };
     }>> | RequestErrorResponse<405, Required<PromotionsV3ApiSpecs.ErrorResponse405>>>;
+    getCouponCodeByCode(query?: PromotionsV3ApiSpecs.GetCouponCodeByCodeData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: Array<PromotionsV3ApiSpecs.CouponCode>;
+        meta?: PromotionsV3ApiSpecs.OptionalCursorCollectionMeta;
+    }>>>;
+    deleteCouponCodeByCode(query?: PromotionsV3ApiSpecs.DeleteCouponCodeByCodeData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
     deleteCouponCode(promotionId: PromotionsV3ApiSpecs.DeleteCouponCodeData['path']['promotion_id'], codeId: PromotionsV3ApiSpecs.DeleteCouponCodeData['path']['code_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
 }

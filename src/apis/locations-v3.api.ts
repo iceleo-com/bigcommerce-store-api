@@ -100,9 +100,11 @@ export class LocationsV3Api {
      */
     getLocationMetafields(
         locationId: LocationsV3ApiSpecs.GetLocationMetafieldsData['path']['location_id'],
+        query?: LocationsV3ApiSpecs.GetLocationMetafieldsData['query'],
     ) {
         return this.request.get<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.GetLocationMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/inventory/locations/${locationId}/metafields`,
+            query,
         });
     }
 

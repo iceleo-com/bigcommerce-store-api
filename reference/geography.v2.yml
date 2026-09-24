@@ -4,29 +4,13 @@ info:
   title: Geography
   description: |-
     Get countries, states, and provinces.
-  termsOfService: 'https://www.bigcommerce.com/terms'
-  contact:
-    name: BigCommerce
-    url: 'https://www.bigcommerce.com'
-    email: support@bigcommerce.com
-security:
-  - X-Auth-Token: []
-tags:
-  - name: Countries
-  - name: States
-servers:
-  - url: 'https://api.bigcommerce.com/stores/{store_hash}/v2'
-    variables:
-      store_hash:
-        default: store_hash
-        description: Permanent ID of the BigCommerce store.
-    description: BigCommerce API Gateway
+    
 paths:
   '/countries':
     get:
+      operationId: get-all-countries
       description: 'Get a list of all countries available. A country or territory, identifiable by an ISO 3166 country code.'
       summary: Get All Countries
-      operationId: getCountries
       parameters:
         - name: Accept
           in: header
@@ -41,11 +25,11 @@ paths:
           description: ''
           schema:
             type: string
-            default: 'application/json'
+            default: application/json
         - name: page
           in: query
           required: false
-          description: Number of pages.
+          description: Number of pages
           schema:
             type: number
             exclusiveMinimum: false
@@ -53,7 +37,7 @@ paths:
         - name: limit
           in: query
           required: false
-          description: Count per page.
+          description: Count per page
           schema:
             type: number
             exclusiveMinimum: false
@@ -77,14 +61,14 @@ paths:
         - Countries
   '/countries/{id}':
     get:
+      operationId: get-a-country
       description: 'Returns a single *Country*.  Gets a country. A country or territory, identifiable by an ISO 3166 country code.'
       summary: Get a Country
-      operationId: getCountry
       parameters:
         - name: id
           in: path
           required: true
-          description: The ID of the country.
+          description: The id of the country.
           schema:
             type: integer
             exclusiveMinimum: false
@@ -117,11 +101,11 @@ paths:
 
   '/countries/{country_id}/states':
     get:
+      operationId: get-all-country-states
       description: |-
         Returns a list of *States* belonging to a *Country*. 
         A state or province, identifiable by an ISO 3166 subdivision code.
-      summary: Get All Countryʼs States
-      operationId: getCountryStates
+      summary: Get All Country's States
       parameters:
         - name: country_id
           in: path
@@ -137,32 +121,28 @@ paths:
           description: ''
           schema:
             type: string
-            default: application/json
         - name: Content-Type
           in: header
           required: true
           description: ''
           schema:
             type: string
-            default: application/json
         - name: state
           in: query
           required: false
-          description: |-
-            Name of the state/province.
+          description: Name of the state/province.
           schema:
             type: string
         - name: state_abbreviation
           in: query
           required: false
-          description: |-
-            Abbreviation for the state/province.
+          description: Abbreviation for the state/province.
           schema:
             type: string
         - name: page
           in: query
           required: false
-          description: Number of pages.
+          description: Number of pages
           schema:
             type: number
             exclusiveMinimum: false
@@ -170,7 +150,7 @@ paths:
         - name: limit
           in: query
           required: false
-          description: Count per page.
+          description: Count per page
           schema:
             type: number
             exclusiveMinimum: false
@@ -189,11 +169,11 @@ paths:
 
   '/countries/{country_id}/states/{id}':
     get:
-      operationId: getCountryState
+      operationId: get-a-state
       description: |-
         Returns a *State*. 
         A state or province, identifiable by an ISO 3166 subdivision code.
-      summary: Get a Countryʼs State
+      summary: Get a Country's State
       parameters:
         - name: country_id
           in: path
@@ -241,7 +221,7 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
 
       - schema:
           type: string
@@ -256,11 +236,11 @@ paths:
       summary: Get a Count of All Countries
       tags:
         - Countries
-      operationId: getCountriesCount
+      operationId: get-count-countries
       description: Returns a count of all countries.
   '/countries/states/count':
     get:
-      operationId: getStatesCount
+      operationId: get-count-states
       responses:
         '200':
           $ref: '#/components/responses/countResponse'
@@ -270,6 +250,7 @@ paths:
       description: Returns a count of all states.
   '/countries/states':
     get:
+      operationId: get-all-states
       responses:
         '200':
           $ref: '#/components/responses/countriesStatesCollectionResponse'
@@ -277,7 +258,6 @@ paths:
       tags:
         - States
       description: Returns a list of all states.
-      operationId: getStates
       parameters:
         - schema:
             type: integer
@@ -291,20 +271,34 @@ paths:
           description: The ordered grouping of results to return.
   '/countries/{country_id}/states/count':
     get:
-      operationId: getCountryStatesCount
+      operationId: get-count-country-states
       responses:
         '200':
           $ref: '#/components/responses/countResponse'
       summary: 'Get a Count of Country’s States'
       tags:
         - States
-      description: Returns a count of a countryʼs states.
+      description: Returns a count of a country's states.
     parameters:
       - name: country_id
         in: path
         required: true
         schema:
-          type: integer
+          type: string
+
+security:
+  - X-Auth-Token: []
+tags:
+  - name: Countries
+  - name: States
+
+servers:
+  - url: 'https://api.bigcommerce.com/stores/{store_hash}/v2'
+    variables:
+      store_hash:
+        default: store_hash
+        description: Permanent ID of the BigCommerce store.
+    description: BigCommerce API Gateway
 components:
   responses:
     countriesResponse:

@@ -1,6 +1,29 @@
 export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
+export type Pagination = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: {
+        previous?: string;
+        current?: string;
+        next?: string;
+    };
+};
+export type CursorPagination = {
+    count?: number;
+    per_page?: number;
+    start_cursor?: string;
+    end_cursor?: string;
+    links?: {
+        previous?: string;
+        current?: string;
+        next?: string;
+    };
+};
 export type ErrorResponse = {
     status?: number;
     title?: string;
@@ -203,30 +226,9 @@ export type ErrorDetail = {
     [key: string]: unknown;
 };
 export type CollectionMeta = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    };
-    [key: string]: unknown | {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    } | undefined;
+    pagination?: Pagination;
+    cursor_pagination?: CursorPagination;
+    [key: string]: unknown | Pagination | CursorPagination | undefined;
 };
 export type MetafieldBasePost = {
     permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
@@ -253,6 +255,8 @@ export type MetafieldWritable = {
 export type ErrorDetailWritable = {
     [key: string]: unknown;
 };
+export type BeforeCursorParam = string;
+export type AfterCursorParam = string;
 export type Accept = string;
 export type ContentType = string;
 export type LocationIdParam = number;
@@ -365,7 +369,22 @@ export type GetLocationMetafieldsData = {
     path: {
         location_id: number;
     };
-    query?: never;
+    query?: {
+        page?: number;
+        limit?: number;
+        key?: string;
+        'key:in'?: Array<string>;
+        namespace?: string;
+        'namespace:in'?: Array<string>;
+        direction?: 'asc' | 'desc';
+        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date modified'>;
+        'date_created:min'?: string;
+        'date_created:max'?: string;
+        'date_modified:min'?: string;
+        'date_modified:max'?: string;
+        before?: string;
+        after?: string;
+    };
     url: '/inventory/locations/{location_id}/metafields';
 };
 export type GetLocationMetafieldsResponses = {
@@ -528,6 +547,8 @@ export type GetLocationsMetafieldsData = {
         'date_modified:max'?: string;
         'date_created:min'?: string;
         'date_created:max'?: string;
+        before?: string;
+        after?: string;
     };
     url: '/inventory/locations/metafields';
 };

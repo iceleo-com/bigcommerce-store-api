@@ -24,7 +24,7 @@ export type CountryBase = {
 export type CountFull = {
     count?: number;
 };
-export type GetCountriesData = {
+export type GetAllCountriesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -40,11 +40,11 @@ export type GetCountriesData = {
     };
     url: '/countries';
 };
-export type GetCountriesResponses = {
+export type GetAllCountriesResponses = {
     200: Array<CountryFull>;
 };
-export type GetCountriesResponse = GetCountriesResponses[keyof GetCountriesResponses];
-export type GetCountryData = {
+export type GetAllCountriesResponse = GetAllCountriesResponses[keyof GetAllCountriesResponses];
+export type GetACountryData = {
     body?: never;
     headers: {
         Accept: string;
@@ -56,11 +56,11 @@ export type GetCountryData = {
     query?: never;
     url: '/countries/{id}';
 };
-export type GetCountryResponses = {
+export type GetACountryResponses = {
     200: CountryFull;
 };
-export type GetCountryResponse = GetCountryResponses[keyof GetCountryResponses];
-export type GetCountryStatesData = {
+export type GetACountryResponse = GetACountryResponses[keyof GetACountryResponses];
+export type GetAllCountryStatesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -77,11 +77,11 @@ export type GetCountryStatesData = {
     };
     url: '/countries/{country_id}/states';
 };
-export type GetCountryStatesResponses = {
+export type GetAllCountryStatesResponses = {
     200: Array<CountriesStateFull>;
 };
-export type GetCountryStatesResponse = GetCountryStatesResponses[keyof GetCountryStatesResponses];
-export type GetCountryStateData = {
+export type GetAllCountryStatesResponse = GetAllCountryStatesResponses[keyof GetAllCountryStatesResponses];
+export type GetAStateData = {
     body?: never;
     headers: {
         Accept: string;
@@ -94,31 +94,31 @@ export type GetCountryStateData = {
     query?: never;
     url: '/countries/{country_id}/states/{id}';
 };
-export type GetCountryStateResponses = {
+export type GetAStateResponses = {
     200: CountriesStateFull;
 };
-export type GetCountryStateResponse = GetCountryStateResponses[keyof GetCountryStateResponses];
-export type GetCountriesCountData = {
+export type GetAStateResponse = GetAStateResponses[keyof GetAStateResponses];
+export type GetCountCountriesData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/countries/count';
 };
-export type GetCountriesCountResponses = {
+export type GetCountCountriesResponses = {
     200: CountFull;
 };
-export type GetCountriesCountResponse = GetCountriesCountResponses[keyof GetCountriesCountResponses];
-export type GetStatesCountData = {
+export type GetCountCountriesResponse = GetCountCountriesResponses[keyof GetCountCountriesResponses];
+export type GetCountStatesData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/countries/states/count';
 };
-export type GetStatesCountResponses = {
+export type GetCountStatesResponses = {
     200: CountFull;
 };
-export type GetStatesCountResponse = GetStatesCountResponses[keyof GetStatesCountResponses];
-export type GetStatesData = {
+export type GetCountStatesResponse = GetCountStatesResponses[keyof GetCountStatesResponses];
+export type GetAllStatesData = {
     body?: never;
     path?: never;
     query?: {
@@ -127,19 +127,19 @@ export type GetStatesData = {
     };
     url: '/countries/states';
 };
-export type GetStatesResponses = {
+export type GetAllStatesResponses = {
     200: Array<CountriesStateFull>;
 };
-export type GetStatesResponse = GetStatesResponses[keyof GetStatesResponses];
-export type GetCountryStatesCountData = {
+export type GetAllStatesResponse = GetAllStatesResponses[keyof GetAllStatesResponses];
+export type GetCountCountryStatesData = {
     body?: never;
     path: {
-        country_id: number;
+        country_id: string;
     };
     query?: never;
     url: '/countries/{country_id}/states/count';
 };
-export type GetCountryStatesCountResponses = {
+export type GetCountCountryStatesResponses = {
     200: CountFull;
 };
-export type GetCountryStatesCountResponse = GetCountryStatesCountResponses[keyof GetCountryStatesCountResponses];
+export type GetCountCountryStatesResponse = GetCountCountryStatesResponses[keyof GetCountCountryStatesResponses];

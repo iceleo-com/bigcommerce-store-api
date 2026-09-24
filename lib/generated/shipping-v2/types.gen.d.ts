@@ -57,7 +57,6 @@ export type ShippingMethodBase = {
         percentage_surcharge?: number;
     };
     is_fallback?: boolean;
-    channel_ids?: Array<number>;
 };
 export type ShippingResponse = {
     [key: string]: unknown;
@@ -111,7 +110,7 @@ export type ShippingResponseWritable = {
 };
 export type Accept = string;
 export type ContentType = string;
-export type GetShippingZonesData = {
+export type GetAllShippingZonesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -120,7 +119,7 @@ export type GetShippingZonesData = {
     query?: never;
     url: '/shipping/zones';
 };
-export type GetShippingZonesResponses = {
+export type GetAllShippingZonesResponses = {
     200: Array<{
         id?: number;
         name?: string;
@@ -146,8 +145,8 @@ export type GetShippingZonesResponses = {
         enabled?: boolean;
     }>;
 };
-export type GetShippingZonesResponse = GetShippingZonesResponses[keyof GetShippingZonesResponses];
-export type CreateShippingZonesData = {
+export type GetAllShippingZonesResponse = GetAllShippingZonesResponses[keyof GetAllShippingZonesResponses];
+export type CreateAShippingZonesData = {
     body?: {
         name: string;
         type: 'zip' | 'country' | 'state' | 'global';
@@ -179,60 +178,7 @@ export type CreateShippingZonesData = {
     query?: never;
     url: '/shipping/zones';
 };
-export type CreateShippingZonesResponses = {
-    201: {
-        id?: number;
-        name?: string;
-        type?: 'zip' | 'country' | 'state' | 'global';
-        locations?: Array<{
-            id?: number;
-            zip?: string;
-            country_iso2?: string;
-            state_iso2?: string;
-        }>;
-        free_shipping?: {
-            enabled?: boolean;
-            minimum_sub_total?: string;
-            exclude_fixed_shipping_products?: boolean;
-        };
-        handling_fees?: {
-            fixed_surcharge?: string;
-            display_separately?: boolean;
-        } | {
-            percentage_surcharge?: string;
-            display_separately?: boolean;
-        };
-        enabled?: boolean;
-    };
-};
-export type CreateShippingZonesResponse = CreateShippingZonesResponses[keyof CreateShippingZonesResponses];
-export type DeleteShippingZoneData = {
-    body?: never;
-    headers: {
-        Accept: string;
-    };
-    path: {
-        id: number;
-    };
-    query?: never;
-    url: '/shipping/zones/{id}';
-};
-export type DeleteShippingZoneResponses = {
-    204: void;
-};
-export type DeleteShippingZoneResponse = DeleteShippingZoneResponses[keyof DeleteShippingZoneResponses];
-export type GetShippingZoneData = {
-    body?: never;
-    headers: {
-        Accept: string;
-    };
-    path: {
-        id: number;
-    };
-    query?: never;
-    url: '/shipping/zones/{id}';
-};
-export type GetShippingZoneResponses = {
+export type CreateAShippingZonesResponses = {
     200: {
         id?: number;
         name?: string;
@@ -258,8 +204,61 @@ export type GetShippingZoneResponses = {
         enabled?: boolean;
     };
 };
-export type GetShippingZoneResponse = GetShippingZoneResponses[keyof GetShippingZoneResponses];
-export type UpdateShippingZoneData = {
+export type CreateAShippingZonesResponse = CreateAShippingZonesResponses[keyof CreateAShippingZonesResponses];
+export type DeleteAShippingZoneData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/shipping/zones/{id}';
+};
+export type DeleteAShippingZoneResponses = {
+    204: void;
+};
+export type DeleteAShippingZoneResponse = DeleteAShippingZoneResponses[keyof DeleteAShippingZoneResponses];
+export type GetAShippingZoneData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/shipping/zones/{id}';
+};
+export type GetAShippingZoneResponses = {
+    200: {
+        id?: number;
+        name?: string;
+        type?: 'zip' | 'country' | 'state' | 'global';
+        locations?: Array<{
+            id?: number;
+            zip?: string;
+            country_iso2?: string;
+            state_iso2?: string;
+        }>;
+        free_shipping?: {
+            enabled?: boolean;
+            minimum_sub_total?: string;
+            exclude_fixed_shipping_products?: boolean;
+        };
+        handling_fees?: {
+            fixed_surcharge?: string;
+            display_separately?: boolean;
+        } | {
+            percentage_surcharge?: string;
+            display_separately?: boolean;
+        };
+        enabled?: boolean;
+    };
+};
+export type GetAShippingZoneResponse = GetAShippingZoneResponses[keyof GetAShippingZoneResponses];
+export type UpdateAShippingZoneData = {
     body: {
         readonly id?: number;
         name: string;
@@ -294,7 +293,7 @@ export type UpdateShippingZoneData = {
     query?: never;
     url: '/shipping/zones/{id}';
 };
-export type UpdateShippingZoneResponses = {
+export type UpdateAShippingZoneResponses = {
     200: {
         readonly id?: number;
         name: string;
@@ -320,8 +319,8 @@ export type UpdateShippingZoneResponses = {
         enabled?: boolean;
     };
 };
-export type UpdateShippingZoneResponse = UpdateShippingZoneResponses[keyof UpdateShippingZoneResponses];
-export type GetShippingZoneMethodsData = {
+export type UpdateAShippingZoneResponse = UpdateAShippingZoneResponses[keyof UpdateAShippingZoneResponses];
+export type GetShippingMethodsZoneData = {
     body?: never;
     headers: {
         Accept: string;
@@ -332,11 +331,11 @@ export type GetShippingZoneMethodsData = {
     query?: never;
     url: '/shipping/zones/{zone_id}/methods';
 };
-export type GetShippingZoneMethodsResponses = {
+export type GetShippingMethodsZoneResponses = {
     200: Array<ShippingMethodFull>;
 };
-export type GetShippingZoneMethodsResponse = GetShippingZoneMethodsResponses[keyof GetShippingZoneMethodsResponses];
-export type CreateShippingMethodData = {
+export type GetShippingMethodsZoneResponse = GetShippingMethodsZoneResponses[keyof GetShippingMethodsZoneResponses];
+export type CreateAShippingMethodData = {
     body: ShippingMethodBase;
     headers: {
         Accept: string;
@@ -348,11 +347,11 @@ export type CreateShippingMethodData = {
     query?: never;
     url: '/shipping/zones/{zone_id}/methods';
 };
-export type CreateShippingMethodResponses = {
+export type CreateAShippingMethodResponses = {
     200: ShippingMethodFull;
 };
-export type CreateShippingMethodResponse = CreateShippingMethodResponses[keyof CreateShippingMethodResponses];
-export type DeleteShippingMethodData = {
+export type CreateAShippingMethodResponse = CreateAShippingMethodResponses[keyof CreateAShippingMethodResponses];
+export type DeleteAShippingMethodData = {
     body?: never;
     headers: {
         Accept: string;
@@ -364,11 +363,11 @@ export type DeleteShippingMethodData = {
     query?: never;
     url: '/shipping/zones/{zone_id}/methods/{method_id}';
 };
-export type DeleteShippingMethodResponses = {
+export type DeleteAShippingMethodResponses = {
     204: void;
 };
-export type DeleteShippingMethodResponse = DeleteShippingMethodResponses[keyof DeleteShippingMethodResponses];
-export type GetShippingMethodData = {
+export type DeleteAShippingMethodResponse = DeleteAShippingMethodResponses[keyof DeleteAShippingMethodResponses];
+export type GetAShippingMethodData = {
     body?: never;
     headers: {
         Accept: string;
@@ -380,7 +379,7 @@ export type GetShippingMethodData = {
     query?: never;
     url: '/shipping/zones/{zone_id}/methods/{method_id}';
 };
-export type GetShippingMethodResponses = {
+export type GetAShippingMethodResponses = {
     200: {
         readonly id?: number;
         name?: string;
@@ -395,11 +394,10 @@ export type GetShippingMethodResponses = {
             percentage_surcharge?: number;
         };
         is_fallback?: boolean;
-        channel_ids?: Array<number>;
     };
 };
-export type GetShippingMethodResponse = GetShippingMethodResponses[keyof GetShippingMethodResponses];
-export type UpdateShippingMethodData = {
+export type GetAShippingMethodResponse = GetAShippingMethodResponses[keyof GetAShippingMethodResponses];
+export type UpdateAShippingMethodData = {
     body: ShippingMethodBase;
     headers: {
         Accept: string;
@@ -412,10 +410,10 @@ export type UpdateShippingMethodData = {
     query?: never;
     url: '/shipping/zones/{zone_id}/methods/{method_id}';
 };
-export type UpdateShippingMethodResponses = {
+export type UpdateAShippingMethodResponses = {
     200: ShippingMethodFull;
 };
-export type UpdateShippingMethodResponse = UpdateShippingMethodResponses[keyof UpdateShippingMethodResponses];
+export type UpdateAShippingMethodResponse = UpdateAShippingMethodResponses[keyof UpdateAShippingMethodResponses];
 export type DeleteCarrierConnectionData = {
     body: {
         carrier_id?: string;
@@ -434,7 +432,7 @@ export type DeleteCarrierConnectionResponses = {
     204: void;
 };
 export type DeleteCarrierConnectionResponse = DeleteCarrierConnectionResponses[keyof DeleteCarrierConnectionResponses];
-export type CreateCarrierConnectionData = {
+export type CreateACarrierConnectionData = {
     body?: CarrierConnection;
     headers: {
         Accept: string;
@@ -444,14 +442,14 @@ export type CreateCarrierConnectionData = {
     query?: never;
     url: '/shipping/carrier/connection';
 };
-export type CreateCarrierConnectionErrors = {
+export type CreateACarrierConnectionErrors = {
     400: unknown;
 };
-export type CreateCarrierConnectionResponses = {
+export type CreateACarrierConnectionResponses = {
     204: void;
 };
-export type CreateCarrierConnectionResponse = CreateCarrierConnectionResponses[keyof CreateCarrierConnectionResponses];
-export type UpdateCarrierConnectionData = {
+export type CreateACarrierConnectionResponse = CreateACarrierConnectionResponses[keyof CreateACarrierConnectionResponses];
+export type UpdateACarrierConnectionData = {
     body?: CarrierConnection;
     headers: {
         Accept: string;
@@ -461,10 +459,10 @@ export type UpdateCarrierConnectionData = {
     query?: never;
     url: '/shipping/carrier/connection';
 };
-export type UpdateCarrierConnectionErrors = {
+export type UpdateACarrierConnectionErrors = {
     400: unknown;
 };
-export type UpdateCarrierConnectionResponses = {
+export type UpdateACarrierConnectionResponses = {
     204: void;
 };
-export type UpdateCarrierConnectionResponse = UpdateCarrierConnectionResponses[keyof UpdateCarrierConnectionResponses];
+export type UpdateACarrierConnectionResponse = UpdateACarrierConnectionResponses[keyof UpdateACarrierConnectionResponses];

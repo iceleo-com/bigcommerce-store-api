@@ -30,7 +30,16 @@ export declare class SubscribersV3Api {
         type?: string;
     }>>>;
     deleteSubscribers(query?: SubscribersV3ApiSpecs.DeleteSubscribersData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    getSubscriber(subscriberId: SubscribersV3ApiSpecs.GetSubscriberData['path']['subscriber_id']): Promise<RequestSuccessResponse<200, Required<{
+    getSubscriberById(subscriberId: SubscribersV3ApiSpecs.GetSubscriberByIdData['path']['subscriber_id']): Promise<RequestSuccessResponse<200, Required<{
+        data?: SubscribersV3ApiSpecs.SubscriberFull;
+        meta?: SubscribersV3ApiSpecs.OpenMeta;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getSubscriber(...args: Parameters<SubscribersV3Api['getSubscriberById']>): Promise<RequestSuccessResponse<200, Required<{
         data?: SubscribersV3ApiSpecs.SubscriberFull;
         meta?: SubscribersV3ApiSpecs.OpenMeta;
     }>> | RequestErrorResponse<404, Required<{
@@ -64,5 +73,6 @@ export declare class SubscribersV3Api {
         title?: string;
         type?: string;
     }>>>;
-    deleteSubscriber(subscriberId: SubscribersV3ApiSpecs.DeleteSubscriberData['path']['subscriber_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteSubscriberById(subscriberId: SubscribersV3ApiSpecs.DeleteSubscriberByIdData['path']['subscriber_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteSubscriber(...args: Parameters<SubscribersV3Api['deleteSubscriberById']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
 }

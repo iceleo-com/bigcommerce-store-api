@@ -187,11 +187,11 @@ export type DeleteRedirectsData = {
     path?: never;
     query: {
         /**
-         * A comma-separated list of redirect IDs to delete explicitly.
+         * List of Redirect IDs to delete explicitly.
          */
         'id:in': Array<number>;
         /**
-         * To delete all redirects for a given site, provide the site ID.
+         * Site ID provided to delete all redirects for a given Site.
          */
         site_id?: number;
     };
@@ -218,21 +218,13 @@ export type GetRedirectsData = {
     path?: never;
     query?: {
         /**
-         * Filters items by site ID.
+         * Filters items by `site_id`.
          */
         site_id?: number;
         /**
-         * Filters items by redirect ID. Also accepts comma-separated values to filter for multiple redirects.
+         * Filters items by redirect `id`. Also accepts comma-separated values to filter for multiple redirects.
          */
-        'id:in'?: Array<number>;
-        /**
-         * Filters items by minimum redirect ID.
-         */
-        'id:min'?: number;
-        /**
-         * Filters items by maximum redirect ID.
-         */
-        'id:max'?: number;
+        'id:in'?: Array<string>;
         /**
          * Controls the number of items to return per page.
          */
@@ -242,7 +234,7 @@ export type GetRedirectsData = {
          */
         page?: number;
         /**
-         * Field name to sort by. Since redirect IDs increment when new redirects are added, you can sort by ID to return results in redirect create date order.
+         * Field name to sort by. Note: Since redirect `id` increments when new redirects are added, you can use that field to sort by redirect create date.
          *
          */
         sort?: 'from_path' | 'type' | 'site_id' | 'id';
@@ -253,7 +245,7 @@ export type GetRedirectsData = {
         /**
          * Indicates whether to include redirect sub-resources. Only `to_url` is supported.
          */
-        include?: Array<'to_url'>;
+        include?: 'to_url';
         /**
          * Filters redirects by the specified keyword. Will only search from the beginning of a URL path. For example, `blue` will match `/blue` and `/blue-shirt` ,  **not** `/royal-blue-shirt`.
          */
@@ -311,11 +303,11 @@ export type GetRedirectImportExportJobsData = {
     path?: never;
     query?: {
         /**
-         * Filters results by redirect import-export job ID.
+         * Filters results by Redirect Import-Export job ID.
          */
         id?: string;
         /**
-         * Filters results by the type of the redirect import-export job.
+         * Filters results by the type of the Redirect Import-Export job.
          */
         type?: ImportExportJobType;
         /**

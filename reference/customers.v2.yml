@@ -2,7 +2,7 @@ openapi: '3.0.1'
 info:
   title: Customers V2
   description: |-
-    Create and Manage Customers, Customer Addresses, and Customer Groups. Additionally, validate customer passwords. To learn more about Customers see the [Customers Overview](/docs/store-operations/customers). 
+    Create and Manage Customers, Customer Addresses, and Customer Groups. Additionally, validate customer passwords. To learn more about Customers see [here](/docs/store-operations/customers/customers-subscribers-overview). 
     
     ## Available Endpoints
     | Resource / Endpoint                     | Description                                                                   |
@@ -57,7 +57,7 @@ paths:
         - Customers
       summary: Get All Customers
       description: Returns a list of all *Customers*. Default sorting is by `customer_ID`, from lowest to highest. Optional parameters can be passed in.
-      operationId: getCustomers
+      operationId: getAllCustomers
       parameters:
         - name: first_name
           in: query
@@ -173,7 +173,7 @@ paths:
             }
         }
         ```
-      operationId: createCustomer
+      operationId: createANewCustomer
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -220,7 +220,7 @@ paths:
         - Customers
       summary: Delete Customers
       description: By default, it deletes all *Customers*. Up to 100 customers per batch can be deleted.
-      operationId: deleteCustomers
+      operationId: deleteAllCustomers
       responses:
         '204':
           description: ''
@@ -260,7 +260,7 @@ paths:
         - Customers
       summary: Get a Customer
       description: Returns a single *Customer*.
-      operationId: getCustomer
+      operationId: getACustomer
       responses:
         '200':
           description: ''
@@ -318,7 +318,7 @@ paths:
             }
         }
         ```
-      operationId: updateCustomer
+      operationId: updateACustomer
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -341,7 +341,7 @@ paths:
         - Customers
       summary: Delete a Customer
       description: Deletes a *Customer*.
-      operationId: deleteCustomer
+      operationId: deleteACustomer
       responses:
         '204':
           description: ''
@@ -355,7 +355,7 @@ paths:
         - Customers
       summary: Get a Count of Customers
       description: Returns a count of all *Customers*.
-      operationId: getCustomersCount
+      operationId: getACountOfCustomers
       responses:
         '200':
           description: ''
@@ -452,7 +452,7 @@ paths:
       description: |-
         Returns a list of *Customer Addresses*. Returns the addresses belonging to a customer. Default sorting is by address id, from lowest to highest. 
         The maximum limit is 250. If a limit isn’t provided, up to 50 `customer_addresses` are returned by default.
-      operationId: getCustomerAddresses
+      operationId: getAllCustomerAddresses
       parameters:
         - name: page
           in: query
@@ -498,7 +498,7 @@ paths:
         **Read Only Fields**
         *   id
         *   country_iso2
-      operationId: createCustomerAddress
+      operationId: createACustomerAddress
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -520,7 +520,7 @@ paths:
         - Customer Addresses
       summary: Delete Customer Address
       description: 'By default, it deletes all *Customer Addresses*.'
-      operationId: deleteCustomerAddresses
+      operationId: deleteAllCustomerAddresses
       parameters:
         - name: page
           in: query
@@ -551,7 +551,7 @@ paths:
         - Customer Addresses
       summary: Get a Customer Address
       description: Returns a *Customer Address*.
-      operationId: getCustomerAddress
+      operationId: getACustomerAddress
       parameters:
         - name: page
           in: query
@@ -585,7 +585,7 @@ paths:
         **Read Only Fields**
         *   id
         *   country_iso2
-      operationId: updateCustomerAddress
+      operationId: updateACustomerAddress
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -638,8 +638,7 @@ paths:
                   example: Austin
                 state:
                   type: string
-                  description: |-
-                    The customer’s state/province. Do not abbreviate the state; spell out the entire word. For example, California. (Cannot be null. As a workaround for addresses that include no state/province string, pass a space as the “state” value.)
+                  description: 'The customer’s state/province. Do not abbreviate the state; spell out the entire word, e.g.: California. (Cannot be null. As a workaround for addresses that include no state/province string, pass a space as the “state” value.)'
                   example: Texas
                 zip:
                   type: string
@@ -694,7 +693,7 @@ paths:
         - Customer Addresses
       summary: Delete a Customer Address
       description: Deletes a *Customer Address*.
-      operationId: deletesCustomerAddress
+      operationId: deletesACustomerAddress
       responses:
         '204':
           description: ''
@@ -709,7 +708,7 @@ paths:
         - Customer Addresses
       summary: Get a Count of Customer Addresses
       description: Returns a count of addresses for a customer.
-      operationId: getCustomerAddressesCount
+      operationId: getACountofCustomerAddresses
       parameters:
         - name: page
           in: query
@@ -747,7 +746,7 @@ paths:
 
         **Note:**
         The default rate limit for this endpoint is 40 concurrent requests.
-      operationId: getCustomerGroups
+      operationId: getAllCustomerGroups
       parameters:
         - name: page
           in: query
@@ -801,13 +800,13 @@ paths:
           schema:
             type: string
             format: date-time
-        - name: 'date_modified:min'
+        - name: '`date_modified:min`'
           in: query
           description: Filter customer groups by minimum date_modified. `date_modified:min=2019-09-04T:00:00:00` or `date_modified:min=2019-09-04`
           schema:
             type: string
             format: date-time
-        - name: 'date_modified:max'
+        - name: '`date_modified:max`'
           in:  query
           description: Filter customer groups by maximum date_modified. `date_modified:max=2018-09-05T13:45:03` or `date_modified:max=2019-09-04`
           schema:
@@ -839,14 +838,14 @@ paths:
 
         **Note:**
         The default rate limit for this endpoint is 40 concurrent requests.
-      operationId: createCustomerGroup
+      operationId: createACustomerGroup
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/customerGroup_Post_Put'
+              $ref: '#/components/schemas/customerGroup_Post'
         required: true
       responses:
         '200':
@@ -868,6 +867,18 @@ paths:
                     minLength: 1
                     type: string
                 description: ''
+    delete:
+      tags:
+        - Customer Groups
+      summary: Delete Customer Groups
+      description: |-
+        By default, it deletes all *Customer Groups*. 
+        All existing customers are unassigned from the group when it is deleted.
+      operationId: deleteAllCustomerGroups
+      responses:
+        '204':
+          description: ''
+          content: {}
   '/customer_groups/{customer_group_id}':
     parameters:
       - $ref: '#/components/parameters/Accept'
@@ -877,7 +888,7 @@ paths:
         - Customer Groups
       summary: Get a Customer Group
       description: Returns a *Customer Group*.
-      operationId: getCustomerGroup
+      operationId: getACustomerGroup
       parameters:
         - name: page
           in: query
@@ -961,14 +972,14 @@ paths:
         **Notes**
 
         Any combination of fields can be updated at once. Discount rules are treated in bulk. The entire set of rules is overwritten when a request is sent.
-      operationId: updateCustomerGroup
+      operationId: updateACustomerGroup
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/customerGroup_Post_Put'
+              $ref: '#/components/schemas/customerGroup_Full'
         required: false
       responses:
         '200':
@@ -1004,7 +1015,7 @@ paths:
         **Notes**
         - All existing customers are unassigned from the group when it is deleted.
         - The default rate limit for this endpoint is 40 concurrent requests.
-      operationId: deleteCustomerGroup
+      operationId: deleteACustomerGroup
       responses:
         '204':
           description: No content. Request was successful but produced no response.
@@ -1024,7 +1035,7 @@ paths:
         - Customer Groups
       summary: Get a Count of Customer Groups
       description: Returns a count of all *Customer Groups*.
-      operationId: getCustomerGroupsCount
+      operationId: getACountOfCustomerGroups
       responses:
         '200':
           description: ''
@@ -1148,6 +1159,7 @@ components:
               readOnly: true
         - $ref: '#/components/schemas/customer_Base'
       x-internal: false
+      x-examples: {}
     categoryAccessLevel_Full:
       title: categoryAccessLevel_Full
       type: object
@@ -1220,107 +1232,32 @@ components:
         category_access:
           $ref: '#/components/schemas/categoryAccessLevel_Full'
         discount_rules:
-          oneOf:
-          - type: array
-            description: A collection of discount rules that are automatically applied to customers who are members of the group.
-            items:
-              type: object
-              properties:
-                type:
-                  type: string
-                  enum:
-                    - price_list
-                    - all
-                    - category
-                    - product
-                method:
-                  type: string
-                  enum:
-                    - percent
-                    - fixed
-                    - price
-                amount:
-                  type: string
-                  description: A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
-                  example: "5.0000"
-                price_list_id:
-                  type: integer
-                  description: If a customer group is assigned to a price list,`method` and `amount` are not shown. `type` and `price_list_id` are returned.
-                  example: 3
-          - type: array
-            description: A collection of category-level discount rules that are automatically applied to customers who are members of the group.
-            items:
-              type: object
-              properties:
-                type:
-                  type: string
-                  enum:
-                    - price_list
-                    - all
-                    - category
-                    - product
-                method:
-                  type: string
-                  enum:
-                    - percent
-                    - fixed
-                    - price
-                amount:
-                  type: string
-                  description: A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
-                  example: "5.0000"
-                category_id:
-                  type: integer
-                  description: If a customer group is assigned to a category, `method` and `amount` are not shown. `type` and `category_id` are returned.
-                  example: 30
-          - type: array
-            description: A collection of product-level discount rules that are automatically applied to customers who are members of the group.
-            items:
-              type: object
-              properties:
-                type:
-                  type: string
-                  enum:
-                    - price_list
-                    - all
-                    - category
-                    - product
-                method:
-                  type: string
-                  enum:
-                    - percent
-                    - fixed
-                    - price
-                amount:
-                  type: string
-                  description: A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
-                  example: "5.0000"
-                product_id:
-                  type: integer
-                  description: If a customer group is assigned to a product,`method` and `amount` are not shown. `type` and `product` are returned.
-                  example: 3
-          - type: array
-            description: A collection of storewide discount rules that are automatically applied to customers who are members of the group.
-            items:
-              type: object
-              properties:
-                type:
-                  type: string
-                  enum:
-                    - price_list
-                    - all
-                    - category
-                    - product
-                method:
-                  type: string
-                  enum:
-                    - percent
-                    - fixed
-                    - price
-                amount:
-                  type: string
-                  description: A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
-                  example: "5.0000"
+          type: array
+          description: A collection of discount rules that are automatically applied to customers who are members of the group.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                  - price_list
+                  - all
+                  - category
+                  - product
+              method:
+                type: string
+                enum:
+                  - percent
+                  - fixed
+                  - price
+              amount:
+                type: string
+                description: A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
+                example: '"5.0000"'
+              price_list_id:
+                type: integer
+                description: If a customer group is assigned to a price list,`method` and `amount` are not shown. `type` and `price_list_id` are returned.
+                example: 3
         date_created:
           type: string
           description: Date on which the customer group was created.
@@ -1409,8 +1346,8 @@ components:
           description: Numeric ID of the state’s/province’s associated country.
           example: 13
       x-internal: false
-    customerGroup_Post_Put:
-      title: customerGroup_Post_Put
+    customerGroup_Post:
+      title: customerGroup_Post
       type: object
       properties:
         name:
@@ -1424,104 +1361,40 @@ components:
         category_access:
           $ref: '#/components/schemas/categoryAccessLevel_Full'
         discount_rules:
-          oneOf:
-          - type: array
-            title: price list
-            description: A singe discount rule that references a price list. If you select `price_list`, it must be the only rule. No other discount rule types can be combined with a `price_list` rule. If a `price_list` rule is not used, you can have one or many category or product discount rules. Additionally, you can only have a single all rule, but it can be combined with multiple category or product discount rules.
-            items:
-              type: object
-              properties:
-                type:
-                  type: string
-                  enum:
-                    - price_list
-                price_list_id:
-                  type: integer
-                  description: If a customer group is assigned to a price list,`method` and `amount` are not shown. `type` and `price_list_id` are returned.
-                  example: 3
-              required:
-                - type
-                - price_list
-              minItems: 1
-              maxItems: 1
-          - type: array
-            title: category, product, or sitewide
-            description: A collection of discount rules. You can have one or many category-level or product-level discount rules and one sitewide discount rule.
-            items:
-                oneOf:
-                  - type: object
-                    title: category
-                    properties:
-                      type:
-                        type: string
-                        enum:
-                          - category
-                      method:
-                        type: string
-                        enum:
-                          - percent
-                          - fixed
-                          - price
-                      amount:
-                        type: string
-                        description: A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
-                        example: "5.0000"
-                      category_id:
-                        type: integer
-                        description: The category the customer group discount is assigned to.
-                        example: 3
-                    required:
-                    - type
-                    - method
-                    - amount
-                    - category_id
-                  - type: object
-                    title: product
-                    properties:
-                      type:
-                        type: string
-                        enum:
-                          - product
-                      method:
-                        type: string
-                        enum:
-                          - percent
-                          - fixed
-                          - price
-                      amount:
-                        type: string
-                        description: A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
-                        example: "5.0000"
-                      product_id:
-                        type: integer
-                        description: The `product_id` the customer group discount is assigned to.
-                        example: 3
-                    required:
-                      - type
-                      - method
-                      - amount
-                      - product_id
-                  - type: object
-                    title: all (store-wide)
-                    description:  You can only have a single `all` discount rule, but you can combine it with multiple category or product discount rules.
-                    properties:
-                      type:
-                        type: string
-                        enum:
-                          - all
-                      method:
-                        type: string
-                        enum:
-                          - percent
-                          - fixed
-                          - price
-                      amount:
-                        type: string
-                        description: A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
-                        example: "5.0000"
-                    required:
-                      - type
-                    minItems: 1
+          type: array
+          description: A collection of discount rules that are automatically applied to customers who are members of the group.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                  - price_list
+                  - all
+                  - category
+                  - product
+              method:
+                type: string
+                enum:
+                  - percent
+                  - fixed
+                  - price
+              amount:
+                type: string
+                description: A float that specifies the value applied to the price modified. (Float, Float as String, Integer)
+                example: '"5.0000"'
+              price_list_id:
+                type: integer
+                description: If a customer group is assigned to a price list,`method` and `amount` are not shown. `type` and `price_list_id` are returned.
+                example: 3
+        date_created:
+          type: string
+          description: Date on which the customer group was created.
+          example: 2023-07-17 06:30:41
+        date_modified:
+          type: string
+          description: Date on which the customer group was last modified.
+          example: 2023-07-25 01:15:19
         is_group_for_guests:
           type: boolean
           description: Describes whether the group is for guests. There can only be one customer group for guests at a time.
@@ -1797,8 +1670,7 @@ components:
           example: Austin
         state:
           type: string
-          description: |-
-            The customer’s state/province. Do not abbreviate the state; spell out the entire word. For example, California. (Cannot be null. As a workaround for addresses that include no state/province string, pass a space as the “state” value.)
+          description: 'The customer’s state/province. Do not abbreviate the state; spell out the entire word, e.g.: California. (Cannot be null. As a workaround for addresses that include no state/province string, pass a space as the “state” value.)'
           example: Texas
         zip:
           type: string

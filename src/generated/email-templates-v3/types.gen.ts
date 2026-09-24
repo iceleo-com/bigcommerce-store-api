@@ -104,7 +104,7 @@ export type Accept = string;
 export type ContentType = string;
 
 /**
- * Channel ID to use for channel-specific settings. If omitted, you will interact with the global setting only.
+ * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
  */
 export type ChannelIdParam = number;
 
@@ -124,7 +124,7 @@ export type GetEmailTemplatesData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global setting only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -189,7 +189,7 @@ export type GetEmailTemplateData = {
     };
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global setting only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -230,7 +230,7 @@ export type UpdateEmailTemplateData = {
     };
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global setting only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };

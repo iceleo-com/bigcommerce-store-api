@@ -17,13 +17,20 @@ export class WebhooksV3Api {
 
      *Note: BigCommerce determines the `client_id` from the `access_token`.*
      */
-    getWebhooks(
-        query?: WebhooksV3ApiSpecs.GetWebhooksData['query'],
+    getAllWebhooks(
+        query?: WebhooksV3ApiSpecs.GetAllWebhooksData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.GetWebhooksResponses[200]>>,RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.GetWebhooksErrors[401]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.GetAllWebhooksResponses[200]>>,(RequestErrorResponse<400, Required<WebhooksV3ApiSpecs.GetAllWebhooksErrors[400]>> | RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.GetAllWebhooksErrors[401]>>)>({
             path: 'v3/hooks',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getAllWebhooks` instead.
+     */
+    getWebhooks(...args: Parameters<WebhooksV3Api['getAllWebhooks']>) {
+        return this.getAllWebhooks(...args);
     }
 
     /**
@@ -49,7 +56,7 @@ export class WebhooksV3Api {
     getWebhook(
         webhookId: WebhooksV3ApiSpecs.GetWebhookData['path']['webhook_id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.GetWebhookResponses[200]>>,(RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.GetWebhookErrors[401]>> | RequestErrorResponse<404, Required<WebhooksV3ApiSpecs.GetWebhookErrors[404]>>)>({
+        return this.request.get<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.GetWebhookResponses[200]>>,(RequestErrorResponse<400, Required<WebhooksV3ApiSpecs.GetWebhookErrors[400]>> | RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.GetWebhookErrors[401]>> | RequestErrorResponse<404, Required<WebhooksV3ApiSpecs.GetWebhookErrors[404]>>)>({
             path: `v3/hooks/${webhookId}`,
         });
     }
@@ -57,13 +64,13 @@ export class WebhooksV3Api {
     /**
      * Update a Webhook
      *
-     * Updates a webhook. You can add custom headers. At least one field is required to perform an update.
+     * Updates a webhook. Custom headers can be added.
      */
-    updateWebhook(
-        webhookId: WebhooksV3ApiSpecs.UpdateWebhookData['path']['webhook_id'],
-        requestBody: WebhooksV3ApiSpecs.UpdateWebhookData['body'],
+    updateAwebhook(
+        webhookId: WebhooksV3ApiSpecs.UpdateAWebhookData['path']['webhook_id'],
+        requestBody: WebhooksV3ApiSpecs.UpdateAWebhookData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.UpdateWebhookResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.UpdateAWebhookResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/hooks/${webhookId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -71,16 +78,30 @@ export class WebhooksV3Api {
     }
 
     /**
+     * @deprecated Use `updateAwebhook` instead.
+     */
+    updateWebhook(...args: Parameters<WebhooksV3Api['updateAwebhook']>) {
+        return this.updateAwebhook(...args);
+    }
+
+    /**
      * Delete a Webhook
      *
      * Deletes a webhook. Only one webhook at a time can be deleted. When a webhook is deleted, it is returned in the response as a 200 OK.
      */
-    deleteWebhook(
-        webhookId: WebhooksV3ApiSpecs.DeleteWebhookData['path']['webhook_id'],
+    deleteAwebhook(
+        webhookId: WebhooksV3ApiSpecs.DeleteAWebhookData['path']['webhook_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.DeleteWebhookResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.DeleteAWebhookResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/hooks/${webhookId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteAwebhook` instead.
+     */
+    deleteWebhook(...args: Parameters<WebhooksV3Api['deleteAwebhook']>) {
+        return this.deleteAwebhook(...args);
     }
 
     /**
@@ -91,7 +112,7 @@ export class WebhooksV3Api {
     getHooksAdmin(
         query?: WebhooksV3ApiSpecs.GetHooksAdminData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.GetHooksAdminResponses[200]>>,RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.GetHooksAdminErrors[401]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.GetHooksAdminResponses[200]>>,(RequestErrorResponse<400, Required<WebhooksV3ApiSpecs.GetHooksAdminErrors[400]>> | RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.GetHooksAdminErrors[401]>>)>({
             path: 'v3/hooks/admin',
             query,
         });
@@ -103,13 +124,35 @@ export class WebhooksV3Api {
      * Update email addresses that are sent notification emails when any domain associated with the API account is denylisted or when a webhook is deactivated. Supports `upsert` functionality in the case that no email address exists yet.
 
      */
-    updateHooksAdmin(
-        requestBody: WebhooksV3ApiSpecs.UpdateHooksAdminData['body'],
+    putHooksAdmin(
+        requestBody: WebhooksV3ApiSpecs.PutHooksAdminData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<204, Required<WebhooksV3ApiSpecs.UpdateHooksAdminResponses[204]>>,(RequestErrorResponse<400, Required<WebhooksV3ApiSpecs.UpdateHooksAdminErrors[400]>> | RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.UpdateHooksAdminErrors[401]>> | RequestErrorResponse<422, Required<WebhooksV3ApiSpecs.UpdateHooksAdminErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<204, Required<WebhooksV3ApiSpecs.PutHooksAdminResponses[204]>>,(RequestErrorResponse<400, Required<WebhooksV3ApiSpecs.PutHooksAdminErrors[400]>> | RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.PutHooksAdminErrors[401]>> | RequestErrorResponse<422, Required<WebhooksV3ApiSpecs.PutHooksAdminErrors[422]>>)>({
             path: 'v3/hooks/admin',
             contentType: 'application/json',
             body: requestBody,
+        });
+    }
+
+    /**
+     * @deprecated Use `putHooksAdmin` instead.
+     */
+    updateHooksAdmin(...args: Parameters<WebhooksV3Api['putHooksAdmin']>) {
+        return this.putHooksAdmin(...args);
+    }
+
+    /**
+     * Get Events
+     *
+     * Get a list of events that were sent but not successfully received. Events are stored for not less than one week.
+
+     */
+    getWebhookEvents(
+        query?: WebhooksV3ApiSpecs.GetWebhookEventsData['query'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<WebhooksV3ApiSpecs.GetWebhookEventsResponses[200]>>,(RequestErrorResponse<400, Required<WebhooksV3ApiSpecs.GetWebhookEventsErrors[400]>> | RequestErrorResponse<401, Required<WebhooksV3ApiSpecs.GetWebhookEventsErrors[401]>>)>({
+            path: 'v3/hooks/events',
+            query,
         });
     }
 }

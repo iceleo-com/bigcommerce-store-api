@@ -19,13 +19,20 @@ export class CustomersV3Api {
 
      Attribute names are not available on the customer object.
      */
-    getCustomers(
-        query?: CustomersV3ApiSpecs.GetCustomersData['query'],
+    customersGet(
+        query?: CustomersV3ApiSpecs.CustomersGetData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.GetCustomersErrors[422]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersGetResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `customersGet` instead.
+     */
+    getCustomers(...args: Parameters<CustomersV3Api['customersGet']>) {
+        return this.customersGet(...args);
     }
 
     /**
@@ -59,10 +66,10 @@ export class CustomersV3Api {
      * **Channel-specific access:**
        * Provide a `channel_ids` array containing the channels accessible by the customer. This array cannot be empty.
      */
-    createCustomers(
-        requestBody: CustomersV3ApiSpecs.CreateCustomersData['body'],
+    customersPost(
+        requestBody: CustomersV3ApiSpecs.CustomersPostData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CreateCustomersResponses[200]>>,(RequestErrorResponse<413, Required<CustomersV3ApiSpecs.CreateCustomersErrors[413]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CreateCustomersErrors[422]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersPostResponses[200]>>,(RequestErrorResponse<413, Required<CustomersV3ApiSpecs.CustomersPostErrors[413]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CustomersPostErrors[422]>>)>({
             path: 'v3/customers',
             contentType: 'application/json',
             body: requestBody,
@@ -70,9 +77,16 @@ export class CustomersV3Api {
     }
 
     /**
+     * @deprecated Use `customersPost` instead.
+     */
+    createCustomers(...args: Parameters<CustomersV3Api['customersPost']>) {
+        return this.customersPost(...args);
+    }
+
+    /**
      * Update Customers
      *
-     * Updates Customers. Subresource updates are not supported. 
+     * Updates Customers. Subresource updates are not supported. Up to 10 customers can be updated in one call.
 
      **Required Fields**
      * id -- ID of the *Customer* This must be included in the request body
@@ -82,26 +96,27 @@ export class CustomersV3Api {
      * registration_ip_address
      * date_created
      * date_modified
-     * origin_channel_id
-
-     **Limits**
-     * Limit of 10 customers per call.
-     * Limit of 3 concurrent requests
 
      **Notes**
 
      * Attributes Values can not be updated using Update a Customer. Use the [Update customer attribute values](/docs/rest-management/customers/customer-attribute-values#upsert-customer-attribute-values) endpoint.
      * channel_ids -- Updating the list of channels a customer can access may create some side effects in a multi-storefront situation. This list determines which customer account we will use to authenticate a shopper given a channel.
-     * origin_channel_id -- This is an immutable value set as a reference to the channel of origin when a customer is created.
      */
-    updateCustomers(
-        requestBody: CustomersV3ApiSpecs.UpdateCustomersData['body'],
+    customersPut(
+        requestBody: CustomersV3ApiSpecs.CustomersPutData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomersResponses[200]>>,(RequestErrorResponse<413, Required<CustomersV3ApiSpecs.UpdateCustomersErrors[413]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpdateCustomersErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersPutResponses[200]>>,(RequestErrorResponse<413, Required<CustomersV3ApiSpecs.CustomersPutErrors[413]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CustomersPutErrors[422]>>)>({
             path: 'v3/customers',
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `customersPut` instead.
+     */
+    updateCustomers(...args: Parameters<CustomersV3Api['customersPut']>) {
+        return this.customersPut(...args);
     }
 
     /**
@@ -116,13 +131,20 @@ export class CustomersV3Api {
 
      A query is required to delete customers. If not provided, a 204 is returned, with no changes to the data.
      */
-    deleteCustomers(
-        query?: CustomersV3ApiSpecs.DeleteCustomersData['query'],
+    customersDelete(
+        query?: CustomersV3ApiSpecs.CustomersDeleteData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.DeleteCustomersResponses[204]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.DeleteCustomersErrors[422]>>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.CustomersDeleteResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `customersDelete` instead.
+     */
+    deleteCustomers(...args: Parameters<CustomersV3Api['customersDelete']>) {
+        return this.customersDelete(...args);
     }
 
     /**
@@ -130,13 +152,20 @@ export class CustomersV3Api {
      *
      * Returns a list of Customer Addresses. Optional filter parameters can be passed in.
      */
-    getCustomersAddresses(
-        query?: CustomersV3ApiSpecs.GetCustomersAddressesData['query'],
+    customersAddressesGet(
+        query?: CustomersV3ApiSpecs.CustomersAddressesGetData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersAddressesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersAddressesGetResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/addresses',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `customersAddressesGet` instead.
+     */
+    getCustomersAddresses(...args: Parameters<CustomersV3Api['customersAddressesGet']>) {
+        return this.customersAddressesGet(...args);
     }
 
     /**
@@ -151,8 +180,6 @@ export class CustomersV3Api {
      * **city**
      * **country_code**
      * **address1**
-     * **state_or_province**
-     * **postal_code**
 
      **Notes**
      * A unique customer address is a combination of the following core address fields:
@@ -171,14 +198,21 @@ export class CustomersV3Api {
      * An attempt to create an address that already exists will result in no change to the address or custom form field values, an HTTP 200 return code, and the address will be absent from the response body.
      * The default rate limit for this endpoint is 10 concurrent requests.
      */
-    createCustomersAddresses(
-        requestBody: CustomersV3ApiSpecs.CreateCustomersAddressesData['body'],
+    customersAddressesPost(
+        requestBody: CustomersV3ApiSpecs.CustomersAddressesPostData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CreateCustomersAddressesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CreateCustomersAddressesErrors[422]>>>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersAddressesPostResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CustomersAddressesPostErrors[422]>>>({
             path: 'v3/customers/addresses',
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `customersAddressesPost` instead.
+     */
+    createCustomersAddresses(...args: Parameters<CustomersV3Api['customersAddressesPost']>) {
+        return this.customersAddressesPost(...args);
     }
 
     /**
@@ -207,14 +241,21 @@ export class CustomersV3Api {
        * **postal_code**
      * An attempt to update an address such that it becomes identical to another address that already exists will result in no change to the target address or custom form field values. The response will have an HTTP 200 return code, and the address will be absent from the response body.
      */
-    updateCustomersAddresses(
-        requestBody: CustomersV3ApiSpecs.UpdateCustomersAddressesData['body'],
+    customersAddressesPut(
+        requestBody: CustomersV3ApiSpecs.CustomersAddressesPutData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomersAddressesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpdateCustomersAddressesErrors[422]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersAddressesPutResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CustomersAddressesPutErrors[422]>>>({
             path: 'v3/customers/addresses',
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `customersAddressesPut` instead.
+     */
+    updateCustomersAddresses(...args: Parameters<CustomersV3Api['customersAddressesPut']>) {
+        return this.customersAddressesPut(...args);
     }
 
     /**
@@ -225,13 +266,20 @@ export class CustomersV3Api {
      **Required Query**
      * id:in -- ID of the *Customer Address*
      */
-    deleteCustomersAddresses(
-        query?: CustomersV3ApiSpecs.DeleteCustomersAddressesData['query'],
+    customersAddressesDelete(
+        query?: CustomersV3ApiSpecs.CustomersAddressesDeleteData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.DeleteCustomersAddressesResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.CustomersAddressesDeleteResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/addresses',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `customersAddressesDelete` instead.
+     */
+    deleteCustomersAddresses(...args: Parameters<CustomersV3Api['customersAddressesDelete']>) {
+        return this.customersAddressesDelete(...args);
     }
 
     /**
@@ -239,10 +287,10 @@ export class CustomersV3Api {
      *
      * Validate a customer credentials - This endpoint has special rate limiting protections to protect against abuse.
      */
-    validateCustomerCredentials(
-        requestBody: CustomersV3ApiSpecs.ValidateCustomerCredentialsData['body'],
+    customerValidateCredentials(
+        requestBody: CustomersV3ApiSpecs.CustomerValidateCredentialsData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.ValidateCustomerCredentialsResponses[200]>>,(RequestErrorResponse<422, Required<CustomersV3ApiSpecs.ValidateCustomerCredentialsErrors[422]>> | RequestErrorResponse<429, Required<CustomersV3ApiSpecs.ValidateCustomerCredentialsErrors[429]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomerValidateCredentialsResponses[200]>>,(RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CustomerValidateCredentialsErrors[422]>> | RequestErrorResponse<429, Required<CustomersV3ApiSpecs.CustomerValidateCredentialsErrors[429]>>)>({
             path: 'v3/customers/validate-credentials',
             contentType: 'application/json',
             body: requestBody,
@@ -250,19 +298,29 @@ export class CustomersV3Api {
     }
 
     /**
+     * @deprecated Use `customerValidateCredentials` instead.
+     */
+    validateCustomerCredentials(...args: Parameters<CustomersV3Api['customerValidateCredentials']>) {
+        return this.customerValidateCredentials(...args);
+    }
+
+    /**
      * Get Customer Settings
      *
      * Returns the global-level customer settings.
-
-     **Notes:**
-     * Global customer settings don't apply on a channel when there are channel specific settings configured through [Channel Settings](/docs/rest-management/customers/channel-settings).
-
      */
-    getCustomersSettings(
+    customerSettingsGet(
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersSettingsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomerSettingsGetResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/settings',
         });
+    }
+
+    /**
+     * @deprecated Use `customerSettingsGet` instead.
+     */
+    getCustomersSettings(...args: Parameters<CustomersV3Api['customerSettingsGet']>) {
+        return this.customerSettingsGet(...args);
     }
 
     /**
@@ -270,10 +328,10 @@ export class CustomersV3Api {
      *
      * Updates the customer settings on the global level.
      */
-    updateCustomersSettings(
-        requestBody: CustomersV3ApiSpecs.UpdateCustomersSettingsData['body'],
+    customerSettingsPut(
+        requestBody: CustomersV3ApiSpecs.CustomerSettingsPutData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomersSettingsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomerSettingsPutResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/settings',
             contentType: 'application/json',
             body: requestBody,
@@ -281,21 +339,34 @@ export class CustomersV3Api {
     }
 
     /**
+     * @deprecated Use `customerSettingsPut` instead.
+     */
+    updateCustomersSettings(...args: Parameters<CustomersV3Api['customerSettingsPut']>) {
+        return this.customerSettingsPut(...args);
+    }
+
+    /**
      * Get Customer Settings per Channel
      *
      * Returns the customer settings per channel.
 
-     **Notes:**
+     **Notes**
 
-      * `null` value configuration indicates that there is no override provided for a given channel; thus, values are inherited from [Global Settings](/docs/rest-management/customers/global-settings).
-
+      * `null` indicates that there is no override per given channel and values are inherited from the global level.
      */
-    getCustomersSettingsChannel(
-        channelId: CustomersV3ApiSpecs.GetCustomersSettingsChannelData['path']['channel_id'],
+    customerSettingsChannelGet(
+        channelId: CustomersV3ApiSpecs.CustomerSettingsChannelGetData['path']['channel_id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersSettingsChannelResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomerSettingsChannelGetResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/customers/settings/channels/${channelId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `customerSettingsChannelGet` instead.
+     */
+    getCustomersSettingsChannel(...args: Parameters<CustomersV3Api['customerSettingsChannelGet']>) {
+        return this.customerSettingsChannelGet(...args);
     }
 
     /**
@@ -311,11 +382,11 @@ export class CustomersV3Api {
 
      * Setting `null` will delete override per given channel, and values will be inherited from the global level. Make sure the channel has `allow_global_logins` enabled.
      */
-    updateCustomersSettingsChannel(
-        channelId: CustomersV3ApiSpecs.UpdateCustomersSettingsChannelData['path']['channel_id'],
-        requestBody: CustomersV3ApiSpecs.UpdateCustomersSettingsChannelData['body'],
+    customerSettingsChannelPut(
+        channelId: CustomersV3ApiSpecs.CustomerSettingsChannelPutData['path']['channel_id'],
+        requestBody: CustomersV3ApiSpecs.CustomerSettingsChannelPutData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomersSettingsChannelResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomerSettingsChannelPutResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/customers/settings/channels/${channelId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -323,17 +394,31 @@ export class CustomersV3Api {
     }
 
     /**
+     * @deprecated Use `customerSettingsChannelPut` instead.
+     */
+    updateCustomersSettingsChannel(...args: Parameters<CustomersV3Api['customerSettingsChannelPut']>) {
+        return this.customerSettingsChannelPut(...args);
+    }
+
+    /**
      * Get All Customer Attributes
      *
      * Returns a list of Customer Attributes. You can pass in optional filter parameters.
      */
-    getCustomersAttributes(
-        query?: CustomersV3ApiSpecs.GetCustomersAttributesData['query'],
+    customersAttributesGet(
+        query?: CustomersV3ApiSpecs.CustomersAttributesGetData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersAttributesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersAttributesGetResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/attributes',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `customersAttributesGet` instead.
+     */
+    getCustomersAttributes(...args: Parameters<CustomersV3Api['customersAttributesGet']>) {
+        return this.customersAttributesGet(...args);
     }
 
     /**
@@ -356,14 +441,21 @@ export class CustomersV3Api {
 
      A store cannot have more than 50 customer attributes.
      */
-    createCustomersAttributes(
-        requestBody: CustomersV3ApiSpecs.CreateCustomersAttributesData['body'],
+    customersAttributesPost(
+        requestBody: CustomersV3ApiSpecs.CustomersAttributesPostData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CreateCustomersAttributesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CreateCustomersAttributesErrors[422]>>>({
+        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersAttributesPostResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CustomersAttributesPostErrors[422]>>>({
             path: 'v3/customers/attributes',
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `customersAttributesPost` instead.
+     */
+    createCustomersAttributes(...args: Parameters<CustomersV3Api['customersAttributesPost']>) {
+        return this.customersAttributesPost(...args);
     }
 
     /**
@@ -379,14 +471,21 @@ export class CustomersV3Api {
      **Limits**
      * Limit of 3 concurrent requests.
      */
-    updateCustomersAttributes(
-        requestBody: CustomersV3ApiSpecs.UpdateCustomersAttributesData['body'],
+    customersAttributesPut(
+        requestBody: CustomersV3ApiSpecs.CustomersAttributesPutData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomersAttributesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpdateCustomersAttributesErrors[422]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersAttributesPutResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CustomersAttributesPutErrors[422]>>>({
             path: 'v3/customers/attributes',
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `customersAttributesPut` instead.
+     */
+    updateCustomersAttributes(...args: Parameters<CustomersV3Api['customersAttributesPut']>) {
+        return this.customersAttributesPut(...args);
     }
 
     /**
@@ -397,13 +496,20 @@ export class CustomersV3Api {
      **Required Query**
      * id:in -- ID of the *Customer Attribute*
      */
-    deleteCustomersAttributes(
-        query?: CustomersV3ApiSpecs.DeleteCustomersAttributesData['query'],
+    customersAttributesDelete(
+        query?: CustomersV3ApiSpecs.CustomersAttributesDeleteData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.DeleteCustomersAttributesResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.CustomersAttributesDeleteResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/attributes',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `customersAttributesDelete` instead.
+     */
+    deleteCustomersAttributes(...args: Parameters<CustomersV3Api['customersAttributesDelete']>) {
+        return this.customersAttributesDelete(...args);
     }
 
     /**
@@ -411,13 +517,20 @@ export class CustomersV3Api {
      *
      * Returns a list of Customer Attribute Values. Optional filter parameters can be passed in.
      */
-    getCustomersAttributeValues(
-        query?: CustomersV3ApiSpecs.GetCustomersAttributeValuesData['query'],
+    customersAttributeValuesGet(
+        query?: CustomersV3ApiSpecs.CustomersAttributeValuesGetData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersAttributeValuesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersAttributeValuesGetResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/attribute-values',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `customersAttributeValuesGet` instead.
+     */
+    getCustomersAttributeValues(...args: Parameters<CustomersV3Api['customersAttributeValuesGet']>) {
+        return this.customersAttributeValuesGet(...args);
     }
 
     /**
@@ -428,17 +541,23 @@ export class CustomersV3Api {
      Upsert checks for an existing record. If there is none, it creates the record, if there is a matching record, it updates that record.
 
      **Limits**
-     * Limit of 10 customers per call.
-     * Limit of 3 concurrent requests.
+     * 10 per call limit.
      */
-    upsertCustomersAttributeValues(
-        requestBody: CustomersV3ApiSpecs.UpsertCustomersAttributeValuesData['body'],
+    customersAttributeValuesPut(
+        requestBody: CustomersV3ApiSpecs.CustomersAttributeValuesPutData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpsertCustomersAttributeValuesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpsertCustomersAttributeValuesErrors[422]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersAttributeValuesPutResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CustomersAttributeValuesPutErrors[422]>>>({
             path: 'v3/customers/attribute-values',
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `customersAttributeValuesPut` instead.
+     */
+    upsertCustomersAttributeValues(...args: Parameters<CustomersV3Api['customersAttributeValuesPut']>) {
+        return this.customersAttributeValuesPut(...args);
     }
 
     /**
@@ -449,13 +568,20 @@ export class CustomersV3Api {
      **Required Query**
      * id:in - ID of the *Customer Attribute Value*
      */
-    deleteCustomersAttributeValues(
-        query?: CustomersV3ApiSpecs.DeleteCustomersAttributeValuesData['query'],
+    customersAttributeValuesDelete(
+        query?: CustomersV3ApiSpecs.CustomersAttributeValuesDeleteData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.DeleteCustomersAttributeValuesResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.CustomersAttributeValuesDeleteResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/customers/attribute-values',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `customersAttributeValuesDelete` instead.
+     */
+    deleteCustomersAttributeValues(...args: Parameters<CustomersV3Api['customersAttributeValuesDelete']>) {
+        return this.customersAttributeValuesDelete(...args);
     }
 
     /**
@@ -465,29 +591,38 @@ export class CustomersV3Api {
 
      To learn about adding and managing form fields, see [Adding and Editing Fields in the Account Signup Form](https://support.bigcommerce.com/s/article/Editing-Form-Fields).
      */
-    getCustomersFormFieldValues(
-        query?: CustomersV3ApiSpecs.GetCustomersFormFieldValuesData['query'],
+    customerFormFieldsGet(
+        query?: CustomersV3ApiSpecs.CustomerFormFieldsGetData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersFormFieldValuesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.GetCustomersFormFieldValuesErrors[422]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomerFormFieldsGetResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CustomerFormFieldsGetErrors[422]>>>({
             path: 'v3/customers/form-field-values',
             query,
         });
     }
 
     /**
-     * Upsert Customer Form Field Values (Deprecated)
+     * @deprecated Use `customerFormFieldsGet` instead.
+     */
+    getCustomersFormFieldValues(...args: Parameters<CustomersV3Api['customerFormFieldsGet']>) {
+        return this.customerFormFieldsGet(...args);
+    }
+
+    /**
+     * Upsert Customer Form Field Values
      *
-     * This endpoint is deprecated. Use [Update a Customer Address](/docs/rest-management/customers/addresses#update-a-customer-address) and [Update Customers](/docs/rest-management/customers#update-customers) endpoints instead.
+     * Updates form field values on the Customer or Customer Address objects. Multiple form field values can be updated in one call.
+
+     Upsert checks for an existing record, if there is none it creates the record, if there is a matching record it updates that record.
 
      To learn more about editing form fields, see [Adding and Editing Fields in the Account Signup Form](https://support.bigcommerce.com/s/article/Editing-Form-Fields).
 
      **Limits**
      * Limit of 10 concurrent requests.
      */
-    updateCustomerFormFieldValues(
-        requestBody: CustomersV3ApiSpecs.UpdateCustomerFormFieldValuesData['body'],
+    customerFormFieldValuePut(
+        requestBody: CustomersV3ApiSpecs.CustomerFormFieldValuePutData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomerFormFieldValuesResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpdateCustomerFormFieldValuesErrors[422]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomerFormFieldValuePutResponses[200]>>,RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CustomerFormFieldValuePutErrors[422]>>>({
             path: 'v3/customers/form-field-values',
             contentType: 'application/json',
             body: requestBody,
@@ -495,32 +630,53 @@ export class CustomersV3Api {
     }
 
     /**
+     * @deprecated Use `customerFormFieldValuePut` instead.
+     */
+    updateCustomerFormFieldValues(...args: Parameters<CustomersV3Api['customerFormFieldValuePut']>) {
+        return this.customerFormFieldValuePut(...args);
+    }
+
+    /**
      * Get Customer Consent
      *
-     * Gets the status of a customerʼs consent to allow data collection by cookies and scripts while shopping on a storefront.
+     * Gets the status of a customer's consent to allow data collection by cookies and scripts while shopping on a storefront.
      */
-    getCustomerConsent(
-        customerId: CustomersV3ApiSpecs.GetCustomerConsentData['path']['customerId'],
+    customersConsentByCustomerIdGet(
+        customerId: CustomersV3ApiSpecs.CustomersConsentByCustomerIdGetData['path']['customerId'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomerConsentResponses[200]>>,(RequestErrorResponse<401, Required<CustomersV3ApiSpecs.GetCustomerConsentErrors[401]>> | RequestErrorResponse<403, Required<CustomersV3ApiSpecs.GetCustomerConsentErrors[403]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.GetCustomerConsentErrors[422]>>)>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersConsentByCustomerIdGetResponses[200]>>,(RequestErrorResponse<401, Required<CustomersV3ApiSpecs.CustomersConsentByCustomerIdGetErrors[401]>> | RequestErrorResponse<403, Required<CustomersV3ApiSpecs.CustomersConsentByCustomerIdGetErrors[403]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CustomersConsentByCustomerIdGetErrors[422]>>)>({
             path: `v3/customers/${customerId}/consent`,
         });
     }
 
     /**
+     * @deprecated Use `customersConsentByCustomerIdGet` instead.
+     */
+    getCustomerConsent(...args: Parameters<CustomersV3Api['customersConsentByCustomerIdGet']>) {
+        return this.customersConsentByCustomerIdGet(...args);
+    }
+
+    /**
      * Update Customer Consent
      *
-     * Updates the status of a customerʼs consent to allow data collection by cookies and scripts while shopping on a storefront.
+     * Updates the status of a customer's consent to allow data collection by cookies and scripts while shopping on a storefront.
      */
-    updateCustomerConsent(
-        customerId: CustomersV3ApiSpecs.UpdateCustomerConsentData['path']['customerId'],
-        requestBody: CustomersV3ApiSpecs.UpdateCustomerConsentData['body'],
+    customersConsentByCustomerIdPut(
+        customerId: CustomersV3ApiSpecs.CustomersConsentByCustomerIdPutData['path']['customerId'],
+        requestBody: CustomersV3ApiSpecs.CustomersConsentByCustomerIdPutData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomerConsentResponses[200]>>,(RequestErrorResponse<401, Required<CustomersV3ApiSpecs.UpdateCustomerConsentErrors[401]>> | RequestErrorResponse<403, Required<CustomersV3ApiSpecs.UpdateCustomerConsentErrors[403]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpdateCustomerConsentErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CustomersConsentByCustomerIdPutResponses[200]>>,(RequestErrorResponse<401, Required<CustomersV3ApiSpecs.CustomersConsentByCustomerIdPutErrors[401]>> | RequestErrorResponse<403, Required<CustomersV3ApiSpecs.CustomersConsentByCustomerIdPutErrors[403]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CustomersConsentByCustomerIdPutErrors[422]>>)>({
             path: `v3/customers/${customerId}/consent`,
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `customersConsentByCustomerIdPut` instead.
+     */
+    updateCustomerConsent(...args: Parameters<CustomersV3Api['customersConsentByCustomerIdPut']>) {
+        return this.customersConsentByCustomerIdPut(...args);
     }
 
     /**
@@ -528,145 +684,18 @@ export class CustomersV3Api {
      *
      * Lists all available stored instruments for a customer. This list will include all types of stored instruments namely card, account and bank_account instruments
      */
-    getCustomerStoredInstruments(
-        customerId: CustomersV3ApiSpecs.GetCustomerStoredInstrumentsData['path']['customerId'],
+    liststoredinstruments(
+        customerId: CustomersV3ApiSpecs.ListstoredinstrumentsData['path']['customerId'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomerStoredInstrumentsResponses[200]>>,(RequestErrorResponse<401, Required<CustomersV3ApiSpecs.GetCustomerStoredInstrumentsErrors[401]>> | RequestErrorResponse<403, Required<CustomersV3ApiSpecs.GetCustomerStoredInstrumentsErrors[403]>>)>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.ListstoredinstrumentsResponses[200]>>,(RequestErrorResponse<401, Required<CustomersV3ApiSpecs.ListstoredinstrumentsErrors[401]>> | RequestErrorResponse<403, Required<CustomersV3ApiSpecs.ListstoredinstrumentsErrors[403]>>)>({
             path: `v3/customers/${customerId}/stored-instruments`,
         });
     }
 
     /**
-     * Get Customer Metafields
-     *
-     * Gets customer metafields by passing the `customerId` in the query parameters.
+     * @deprecated Use `liststoredinstruments` instead.
      */
-    getCustomersMetafields(
-        customerId: CustomersV3ApiSpecs.GetCustomersMetafieldsData['path']['customerId'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetCustomersMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/customers/${customerId}/metafields`,
-        });
-    }
-
-    /**
-     * Create Customer Metafields
-     *
-     * Creates Customer metafields by passing the `customerId` in the query parameters.
-     */
-    createCustomerMetafields(
-        customerId: CustomersV3ApiSpecs.CreateCustomerMetafieldsData['path']['customerId'],
-        requestBody: CustomersV3ApiSpecs.CreateCustomerMetafieldsData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CreateCustomerMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CustomersV3ApiSpecs.CreateCustomerMetafieldsErrors[400]>> | RequestErrorResponse<409, Required<CustomersV3ApiSpecs.CreateCustomerMetafieldsErrors[409]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CreateCustomerMetafieldsErrors[422]>>)>({
-            path: `v3/customers/${customerId}/metafields`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Get a Customer Metafield
-     *
-     * Returns a single *Customer Metafield*.
-
-     */
-    getMetafieldsCustomerId(
-        customerId: CustomersV3ApiSpecs.GetMetafieldsCustomerIdData['path']['customerId'],
-        metafieldId: CustomersV3ApiSpecs.GetMetafieldsCustomerIdData['path']['metafieldId'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetMetafieldsCustomerIdResponses[200]>>,RequestErrorResponse<404, Required<CustomersV3ApiSpecs.GetMetafieldsCustomerIdErrors[404]>>>({
-            path: `v3/customers/${customerId}/metafields/${metafieldId}`,
-        });
-    }
-
-    /**
-     * Update a Metafield
-     *
-     * Updates customer metafields. To update the customer metafields, use 'customerId' and 'metafield' in the query parameters.
-     */
-    updateCustomerMetafield(
-        metafieldId: CustomersV3ApiSpecs.UpdateCustomerMetafieldData['path']['metafieldId'],
-        customerId: CustomersV3ApiSpecs.UpdateCustomerMetafieldData['path']['customerId'],
-        requestBody: CustomersV3ApiSpecs.UpdateCustomerMetafieldData['body'],
-        query?: CustomersV3ApiSpecs.UpdateCustomerMetafieldData['query'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomerMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<CustomersV3ApiSpecs.UpdateCustomerMetafieldErrors[400]>> | RequestErrorResponse<404, Required<CustomersV3ApiSpecs.UpdateCustomerMetafieldErrors[404]>>)>({
-            path: `v3/customers/${customerId}/metafields/${metafieldId}`,
-            contentType: 'application/json',
-            body: requestBody,
-            query,
-        });
-    }
-
-    /**
-     * Delete a Customer Metafield
-     *
-     * Deletes a customer metafield. To delete a customer metafield, use 'customerId' and 'metafieldId' in the query parameters.
-
-     */
-    deleteCustomerMetafieldsId(
-        customerId: CustomersV3ApiSpecs.DeleteCustomerMetafieldsIdData['path']['customerId'],
-        metafieldId: CustomersV3ApiSpecs.DeleteCustomerMetafieldsIdData['path']['metafieldId'],
-    ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CustomersV3ApiSpecs.DeleteCustomerMetafieldsIdResponses[204]>>,RequestErrorResponse<404, Required<CustomersV3ApiSpecs.DeleteCustomerMetafieldsIdErrors[404]>>>({
-            path: `v3/customers/${customerId}/metafields/${metafieldId}`,
-        });
-    }
-
-    /**
-     * Get All Customer Metafields
-     *
-     * Get all customer metafields.
-     */
-    getAllCustomersMetafields(
-        query?: CustomersV3ApiSpecs.GetAllCustomersMetafieldsData['query'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.GetAllCustomersMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: 'v3/customers/metafields',
-            query,
-        });
-    }
-
-    /**
-     * Create Multiple Metafields
-     *
-     * Create multiple metafields.
-     */
-    createCustomersMetafields(
-        requestBody: CustomersV3ApiSpecs.CreateCustomersMetafieldsData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.CreateCustomersMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CustomersV3ApiSpecs.CreateCustomersMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.CreateCustomersMetafieldsErrors[422]>>)>({
-            path: 'v3/customers/metafields',
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Update Multiple Metafields
-     *
-     * Create multiple metafields.
-     */
-    updateCustomersMetafields(
-        requestBody: CustomersV3ApiSpecs.UpdateCustomersMetafieldsData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.UpdateCustomersMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CustomersV3ApiSpecs.UpdateCustomersMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.UpdateCustomersMetafieldsErrors[422]>>)>({
-            path: 'v3/customers/metafields',
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Delete Multiple Metafields
-     *
-     * Delete all customer metafields.
-     */
-    deleteCustomersMetafields(
-    ) {
-        return this.request.delete<RequestSuccessResponse<200, Required<CustomersV3ApiSpecs.DeleteCustomersMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CustomersV3ApiSpecs.DeleteCustomersMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CustomersV3ApiSpecs.DeleteCustomersMetafieldsErrors[422]>>)>({
-            path: 'v3/customers/metafields',
-        });
+    getCustomerStoredInstruments(...args: Parameters<CustomersV3Api['liststoredinstruments']>) {
+        return this.liststoredinstruments(...args);
     }
 }

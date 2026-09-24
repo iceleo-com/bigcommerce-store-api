@@ -3,9 +3,9 @@ info:
   version: Storefront
   title: Storefront Carts
   description: |-
-    Manage cart operations and data on BigCommerce-hosted storefronts. To work with headless storefronts, use the [GraphQL Storefront API](/graphql-storefront/reference).
+    Manage cart operations and data using frontend JavaScript on BigCommerce Stencil-powered storefronts.
     
-    The REST Storefront API uses [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) headers for authentication, and therefore has no required scopes. You do not need to send any BigCommerce-specific tokens with your requests to these endpoints.
+    For info about API accounts, see our [Guide to API Accounts](/docs/start/authentication/api-accounts).
         
     For info about authenticating BigCommerce APIs, see [Authentication and Example Requests](/docs/start/authentication#same-origin-cors-authentication).
   termsOfService: 'https://www.bigcommerce.com/terms'
@@ -25,9 +25,6 @@ tags:
   - name: Cart Currency
 paths:
   /carts:
-    parameters:
-      - $ref: '#/components/parameters/Accept'
-      - $ref: '#/components/parameters/Include'
     get:
       tags:
         - Cart
@@ -38,7 +35,10 @@ paths:
         > #### Note
         > * Substitute your storefront domain for `yourstore.example.com`. 
         > * The Send a Test Request feature is not currently supported for this endpoint.  
-      operationId: getCart
+
+      operationId: getACart
+      parameters:
+        - $ref: '#/components/parameters/include'
       responses:
         '200':
           $ref: '#/components/responses/getCarts'
@@ -52,9 +52,10 @@ paths:
         > #### Note
         > * Substitute your storefront domain for `yourstore.example.com`. 
         > * The Send a Test Request feature is not currently supported for this endpoint.  
-      operationId: createCart
+
+      operationId: createACart
       parameters:
-        - $ref: '#/components/parameters/ContentType'
+        - $ref: '#/components/parameters/include'
       requestBody:
         content:
           application/json:
@@ -90,9 +91,6 @@ paths:
           $ref: '#/components/responses/postCarts'
       x-codegen-request-body-name: cartData
   '/carts/{cartId}':
-    parameters:
-      - $ref: '#/components/parameters/CartIdPath'
-      - $ref: '#/components/parameters/Accept'
     delete:
       tags:
         - Cart
@@ -104,16 +102,20 @@ paths:
         > #### Note
         > * Substitute your storefront domain for `yourstore.example.com`. 
         > * The Send a Test Request feature is not currently supported for this endpoint.  
-      operationId: deleteCart
+
+      operationId: deleteACart
+      parameters:
+        - name: cartId
+          in: path
+          description: This cart's unique ID.
+          required: true
+          schema:
+            type: string
+            format: UUID
       responses:
         '204':
           description: No Content
   '/carts/{cartId}/items':
-    parameters:
-      - $ref: '#/components/parameters/CartIdPath'
-      - $ref: '#/components/parameters/Accept'
-      - $ref: '#/components/parameters/ContentType'
-      - $ref: '#/components/parameters/Include'
     post:
       tags:
         - Cart Items
@@ -124,13 +126,37 @@ paths:
         > #### Notes
         > * Substitute your storefront domain for `yourstore.example.com`. 
         > * The Send a Test Request feature is not currently supported for this endpoint.  
-        > * To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
+        > * Please note that this API endpoint is not concurrent safe, meaning multiple simultaneous requests could result in unexpected and inconsistent results.
+
       operationId: addCartLineItem
+      parameters:
+        - name: cartId
+          in: path
+          description: This cart's unique ID.
+          required: true
+          schema:
+            type: string
+            format: UUID
+        - name: include
+          in: query
+          description: |-
+            To return product options add one of the following include:
+
+            `lineItems.physicalItems.options`: The Cart returns an abbreviated result. Use this to return physical items product options. Can also be used in a /POST to have the extended Cart object return.
+
+            `lineItems.digitalItems.options`:  The Cart returns an abbreviated result. Use this to return digital items product options.  Can also be used in a /POST to have the extended Cart object return.
+
+            `lineItems.digitalItems.options,lineItems.physicalItems.options`:  The Cart returns an abbreviated result. Use this to return digital and physical options. Can also be used in a /POST to have the extended Cart object return.
+          schema:
+            type: string
+            default: 'lineItems.digitalItems.options,lineItems.physicalItems.options'
+            enum:
+              - lineItems.physicalItems.options
+              - lineItems.digitalItems.options
+              - 'lineItems.digitalItems.options,lineItems.physicalItems.options'
       responses:
         '200':
           $ref: '#/components/responses/postCartsItems'
-        '409':
-          $ref: '#/components/responses/CartConflictErrorResponse'
       requestBody:
         content:
           application/json:
@@ -148,7 +174,6 @@ paths:
                           optionValue: 117
                         - optionId: 11
                           optionValue: 125
-                  version: 1
               With Gift Wrapping:
                 value:
                   lineItems:
@@ -159,15 +184,9 @@ paths:
                           wrapTogether: true
                           wrapDetails:
                             - id: 1
-                              message: "Happy Birthday"
-                  version: 1
+                              message: "Happy Birthday"                 
         description: ''
   '/carts/{cartId}/items/{itemId}':
-    parameters:
-      - $ref: '#/components/parameters/CartIdPath'
-      - $ref: '#/components/parameters/ItemIdPath'
-      - $ref: '#/components/parameters/Accept'
-      - $ref: '#/components/parameters/Include'
     put:
       tags:
         - Cart Items
@@ -181,10 +200,41 @@ paths:
         > #### Notes
         > * Substitute your storefront domain for `yourstore.example.com`. 
         > * The Send a Test Request feature is not currently supported for this endpoint. 
-        > * To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
+        > * Please note that this API endpoint is not concurrent safe, meaning multiple simultaneous requests could result in unexpected and inconsistent results.
+
       operationId: updateCartLineItem
       parameters:
-        - $ref: '#/components/parameters/ContentType'
+        - name: cartId
+          in: path
+          description: This cart's unique ID.
+          required: true
+          schema:
+            type: string
+            format: UUID
+        - name: itemId
+          in: path
+          description: This item's ID.
+          required: true
+          schema:
+            type: string
+            format: number
+        - name: include
+          in: query
+          description: |-
+            To return product options add one of the following include:
+
+            `lineItems.physicalItems.options`: The Cart returns an abbreviated result. Use this to return physical items product options. Can also be used in a /POST to have the extended Cart object return.
+
+            `lineItems.digitalItems.options`:  The Cart returns an abbreviated result. Use this to return digital items product options.  Can also be used in a /POST to have the extended Cart object return.
+
+            `lineItems.digitalItems.options,lineItems.physicalItems.options`:  The Cart returns an abbreviated result. Use this to return digital and physical options. Can also be used in a /POST to have the extended Cart object return.
+          schema:
+            type: string
+            default: 'lineItems.digitalItems.options,lineItems.physicalItems.options'
+            enum:
+              - lineItems.physicalItems.options
+              - lineItems.digitalItems.options
+              - 'lineItems.digitalItems.options,lineItems.physicalItems.options'
       requestBody:
         content:
           application/json:
@@ -198,7 +248,6 @@ paths:
                     variantId: 191
                     quantity: 10
                   locale: en
-                  version: 1
               Custom Item:
                 value:
                   lineItem:
@@ -209,7 +258,6 @@ paths:
                       - optionId: 125
                         optionValue: 127
                   locale: en
-                  version: 1
               With Gift Wrapping:
                 value:
                   lineItem:
@@ -221,7 +269,6 @@ paths:
                         wrapDetails:
                           - id: 1
                             message: "Happy Birthday"
-                  version: 1
               With null Gift Wrapping (will delete current gift wrapping):
                 value:
                   lineItem:
@@ -229,20 +276,12 @@ paths:
                     productId: 230
                     variantId: 124
                     giftWrapping: null
-                  version: 1
         required: true
       responses:
         '200':
           $ref: '#/components/responses/putCartsItems'
-        '409':
-          $ref: '#/components/responses/CartConflictErrorResponse'
       x-codegen-request-body-name: lineItem
     delete:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/requestLineItemDelete'
       tags:
         - Cart Items
       summary: Delete Cart Line Item
@@ -254,18 +293,43 @@ paths:
         > #### Note
         > * Substitute your storefront domain for `yourstore.example.com`. 
         > * The Send a Test Request feature is not currently supported for this endpoint.  
-        > * To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
       operationId: deleteCartLineItem
+      parameters:
+        - name: cartId
+          in: path
+          description: This cart's unique ID.
+          required: true
+          schema:
+            type: string
+            format: UUID
+        - name: itemId
+          in: path
+          description: The ID of the item to delete.
+          required: true
+          schema:
+            type: string
+            format: number
+        - name: include
+          in: query
+          description: |-
+            To return product options add one of the following include:
+
+            `lineItems.physicalItems.options`: The Cart returns an abbreviated result. Use this to return physical items product options. Can also be used in a /POST to have the extended Cart object return.
+
+            `lineItems.digitalItems.options`:  The Cart returns an abbreviated result. Use this to return digital items product options.  Can also be used in a /POST to have the extended Cart object return.
+
+            `lineItems.digitalItems.options,lineItems.physicalItems.options`:  The Cart returns an abbreviated result. Use this to return digital and physical options. Can also be used in a /POST to have the extended Cart object return.
+          schema:
+            type: string
+            default: 'lineItems.digitalItems.options,lineItems.physicalItems.options'
+            enum:
+              - lineItems.physicalItems.options
+              - lineItems.digitalItems.options
+              - 'lineItems.digitalItems.options,lineItems.physicalItems.options'
       responses:
         '200':
           $ref: '#/components/responses/deleteCartsItems'
-        '409':
-          $ref: '#/components/responses/CartConflictErrorResponse'
   '/carts/{cartId}/currency':
-    parameters:
-      - $ref: '#/components/parameters/CartIdPath'
-      - $ref: '#/components/parameters/Accept'
-      - $ref: '#/components/parameters/ContentType'
     post:
       tags:
         - Cart Currency
@@ -278,9 +342,15 @@ paths:
         > #### Note
         > * Substitute your storefront domain for `yourstore.example.com`. 
         > * The Send a Test Request feature is not currently supported for this endpoint.  
-      operationId: updateCartCurrency
+      operationId: addCartCurrency
       parameters:
-        - $ref: '#/components/parameters/Include'
+        - name: cartId
+          in: path
+          description: This cart's unique ID.
+          required: true
+          schema:
+            type: string
+            format: UUID
       responses:
         '200':
           $ref: '#/components/responses/getCarts'
@@ -332,9 +402,6 @@ components:
             type: number
             description: The discounted amount applied within a given context.
             format: float
-          displayName:
-            type: string
-            description: The coupon name displayed on the storefront.
           id:
             type: string
             description: The coupon ID.
@@ -400,17 +467,12 @@ components:
         locale:
           type: string
           description: Locale of the cart.
-        version:
-          type: integer
-          description: The current version of the cart increments with each successful update. You can use it to enable optimistic concurrency control for subsequent updates.
-          example: 1
       x-internal: false
     requestCart:
       title: Create Cart Request Object
       description: Cart object used in create cart requests.
-      anyOf:
-        - type: object
-          properties:
+      oneOf:
+        - properties:
             lineItems:
               type: array
               items:
@@ -419,8 +481,7 @@ components:
               type: string
           required:
             - lineItems
-        - type: object
-          properties:
+        - properties:
             giftCertificates:
               type: array
               items:
@@ -429,21 +490,20 @@ components:
               type: string
           required:
             - giftCertificates
-        - type: object
-          properties:
+        - properties:
             lineItems:
               type: array
               items:
                 $ref: '#/components/schemas/requestCartPostLineItem'
             giftCertificates:
-              type: array
-              items:
-                $ref: '#/components/schemas/requestLineItemGiftCertificate'
+              $ref: '#/components/schemas/requestLineItemGiftCertificate'
             locale:
               type: string
           required:
             - lineItems
             - giftCertificates
+      type: object
+      x-internal: false
     responseCartLineItemsPhysicalItemGiftWrapping:
       title: Gift Wrapping
       type: object
@@ -528,116 +588,69 @@ components:
                 example: Happy Birthday
     LineItemsRequest:
       title: requestLineItems
-      anyOf:
-        - type: object
-          properties:
+      oneOf:
+        - properties:
             lineItems:
               type: array
               items:
                 $ref: '#/components/schemas/requestCartPostLineItem'
-            version:
-              type: integer
-              description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-              example: 1
           required:
             - lineItems
-        - type: object
-          properties:
+        - properties:
             giftCertificates:
               type: array
               items:
                 $ref: '#/components/schemas/requestLineItemGiftCertificate'
-            version:
-              type: integer
-              description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-              example: 1
           required:
             - giftCertificates
-        - type: object
-          properties:
+        - properties:
             lineItems:
               type: array
               items:
                 $ref: '#/components/schemas/requestCartPostLineItem'
             giftCertificates:
-              type: array
-              items:
-                $ref: '#/components/schemas/requestLineItemGiftCertificate'
-            version:
-              type: integer
-              description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-              example: 1
+              $ref: '#/components/schemas/requestLineItemGiftCertificate'
           required:
             - lineItems
             - giftCertificates
+      type: object
       description: Cart object used in add items requests.
       x-internal: false
     requestLineItemPut:
       title: requestLineItemPut
-      anyOf:
-        - type: object
-          properties:
+      oneOf:
+        - properties:
             lineItem:
               $ref: '#/components/schemas/requestCartPostLineItem'
-            version:
-              type: integer
-              description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-              example: 1
           required:
             - lineItem
           title: Line item
-        - type: object
-          properties:
-            giftCertificate:
+        - properties:
+            giftCertificates:
               $ref: '#/components/schemas/requestLineItemGiftCertificate'
-            version:
-              type: integer
-              description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-              example: 1
           required:
             - giftCertificates
           title: Gift certificate item
-        - type: object
-          properties:
+        - properties:
             lineItem:
               $ref: '#/components/schemas/requestCartPostLineItem'
-            giftCertificate:
+            giftCertificates:
               $ref: '#/components/schemas/requestLineItemGiftCertificate'
-            version:
-              type: integer
-              description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-              example: 1
           required:
             - lineItem
             - giftCertificates
           title: line & gift certificate items
       description: ''
-    requestLineItemDelete:
       type: object
-      properties:
-        version:
-          type: integer
-          description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-          example: 1
+      x-internal: false
     responseCartCurrency:
       title: Currency
       type: object
       properties:
         code:
           type: string
-          description: 'ISO-4217 currency code. (See: https://www.iso.org/iso-4217-currency-codes.html.)'
+          description: 'ISO-4217 currency code. (See: http://en.wikipedia.org/wiki/ISO_4217.)'
           format: ISO-4217
-        decimalPlaces:
-          type: integer
-          description: The number of decimal places that prices have when you use the currency.
-        name:
-          type: string
-          description: The name for the currency that the merchant entered in the control panel.
-          example: US Dollar
-        symbol:
-          type: string
-          description: The currency symbol displayed on the storefront.
-          example: $
       description: This will always be the same between cart and checkout.
       x-go-gen-location: models
       x-internal: false
@@ -746,9 +759,6 @@ components:
           type: string
           description: 'URL of an image of this item, accessible on the internet.'
           format: uri
-        isMutable:
-          type: boolean
-          description: Whether or not you can change or remove the item from the cart. Items that are immutable include those added automatically by promotions.
         isTaxable:
           type: boolean
           description: Whether the item is taxable.
@@ -777,11 +787,6 @@ components:
         sku:
           type: string
           description: SKU of the variant.
-        type:
-          type: string
-          description: The type of line item.
-          enum:
-            - digital
         url:
           type: string
           description: The product URL.
@@ -837,7 +842,7 @@ components:
         id:
           type: string
           description: ID of this gift certificate.
-        taxable:
+        isTaxable:
           type: boolean
           description: Whether or not the gift certificate is taxable.
         message:
@@ -853,11 +858,6 @@ components:
         theme:
           type: string
           description: 'Currently supports `Birthday`, `Boy`, `Celebration`, `Christmas`, `General`, and `Girl`.'
-        type:
-          type: string
-          description: The type of line item.
-          enum:
-            - giftCertificate
       x-internal: false
     responseCartLineItemsGiftCertificatesRecipient:
       title: Contact Entity
@@ -924,9 +924,6 @@ components:
           type: string
           description: 'URL of an image of this item, accessible on the internet.'
           format: uri
-        isMutable:
-          type: boolean
-          description: Whether or not you can change or remove the item from the cart. Items that are immutable include those added automatically by promotions.
         isTaxable:
           type: boolean
           description: Whether the item is taxable.
@@ -955,11 +952,6 @@ components:
         sku:
           type: string
           description: SKU of the variant.
-        type:
-          type: string
-          description: The type of line item.
-          enum:
-            - physical
         url:
           type: string
           description: The product URL.
@@ -1002,25 +994,10 @@ components:
     requestCartPostLineItem:
       title: Line Item Request Data
       anyOf:
-        - type: object
-          properties:
+        - properties:
             productId:
               type: number
               description: ID of the product.
-            optionSelections:
-              type: array
-              items:
-                type: object
-                properties:
-                  optionId: 
-                    type: integer
-                    description: Modifier option ID.
-                    example: 2
-                  optionValue:
-                    oneOf:
-                      - type: string
-                      - type: integer
-                    description: Modifier option value.
             quantity:
               type: number
               description: Quantity of this item.
@@ -1030,8 +1007,7 @@ components:
             - productId
             - quantity
           title: Simple product
-        - type: object
-          properties:
+        - properties:
             productId:
               type: number
               description: ID of the product.
@@ -1041,31 +1017,19 @@ components:
             variantId:
               type: number
               description: ID of the variant.
-            optionSelections:
-              type: array
-              items:
-                type: object
-                properties:
-                  optionId: 
-                    type: integer
-                    description: Modifier option ID.
-                    example: 2
-                  optionValue:
-                    oneOf:
-                      - type: string
-                      - type: integer
-                    description: Modifier option value.
             giftWrapping:
               $ref: '#/components/schemas/requestPostOrPutGiftWrapping'
           required:
             - productId
             - quantity
+            - variantId
           title: Product with a variant    
       x-examples:
         example-1:
           productId: 0
           quantity: 0
       x-internal: false
+      type: object
     requestLineItemGiftCertificateRecipient:
       title: Contact Entity
       type: object
@@ -1105,9 +1069,6 @@ components:
                 email: string
                 currency:
                   code: string
-                  decimalPlaces: 2
-                  name: US Dollar
-                  symbol: $
                 isTaxIncluded: true
                 baseAmount: 0
                 discountAmount: 0
@@ -1116,7 +1077,6 @@ components:
                   - code: string
                     couponType: 0
                     discountedAmount: 0
-                    displayName: $1.00 off total order
                     id: string
                 discounts:
                   - discountedAmount: 0
@@ -1139,7 +1099,6 @@ components:
                       extendedSalePrice: 0
                       id: '4'
                       imageUrl: 'http://example.com'
-                      isMutable: true
                       isTaxable: true
                       listPrice: 0
                       originalPrice: 0
@@ -1149,13 +1108,12 @@ components:
                       quantity: 0
                       salePrice: 0
                       sku: string
-                      type: digital
                       url: 'http://example.com'
                       variantId: 7
                   giftCertificates:
                     - amount: 0
                       id: string
-                      taxable: true
+                      isTaxable: true
                       message: string
                       name: string
                       recipient:
@@ -1165,7 +1123,6 @@ components:
                         email: user@example.com
                         name: string
                       theme: string
-                      type: giftCertificate
                   physicalItems:
                     - options:
                         - name: string
@@ -1182,7 +1139,6 @@ components:
                       extendedSalePrice: 0
                       id: '4'
                       imageUrl: 'http://example.com'
-                      isMutable: true
                       isTaxable: true
                       listPrice: 0
                       originalPrice: 0
@@ -1192,7 +1148,6 @@ components:
                       quantity: 0
                       salePrice: 0
                       sku: string
-                      type: physical
                       url: 'http://example.com'
                       variantId: 7
                       giftWrapping:
@@ -1217,9 +1172,6 @@ components:
                 email: string
                 currency:
                   code: string
-                  decimalPlaces: 2
-                  name: US Dollar
-                  symbol: $
                 isTaxIncluded: true
                 baseAmount: 0
                 discountAmount: 0
@@ -1228,7 +1180,6 @@ components:
                   - code: string
                     couponType: 0
                     discountedAmount: 0
-                    displayName: $1.00 off the order total
                     id: string
                 discounts:
                   - discountedAmount: 0
@@ -1251,7 +1202,6 @@ components:
                       extendedSalePrice: 0
                       id: '4'
                       imageUrl: 'http://example.com'
-                      isMutable: true
                       isTaxable: true
                       listPrice: 0
                       originalPrice: 0
@@ -1261,13 +1211,12 @@ components:
                       quantity: 0
                       salePrice: 0
                       sku: string
-                      type: digital
                       url: 'http://example.com'
                       variantId: 7
                   giftCertificates:
                     - amount: 0
                       id: string
-                      taxable: true
+                      isTaxable: true
                       message: string
                       name: string
                       recipient:
@@ -1277,7 +1226,6 @@ components:
                         email: user@example.com
                         name: string
                       theme: string
-                      type: giftCertificate
                   physicalItems:
                     - options:
                         - name: string
@@ -1294,7 +1242,6 @@ components:
                       extendedSalePrice: 0
                       id: '4'
                       imageUrl: 'http://example.com'
-                      isMutable: true
                       isTaxable: true
                       listPrice: 0
                       originalPrice: 0
@@ -1304,7 +1251,6 @@ components:
                       quantity: 0
                       salePrice: 0
                       sku: string
-                      type: physical
                       url: 'http://example.com'
                       variantId: 7
                       giftWrapping:
@@ -1329,9 +1275,6 @@ components:
                 email: string
                 currency:
                   code: string
-                  decimalPlaces: 2
-                  name: US Dollar
-                  symbol: $
                 isTaxIncluded: true
                 baseAmount: 0
                 discountAmount: 0
@@ -1340,7 +1283,6 @@ components:
                   - code: string
                     couponType: 0
                     discountedAmount: 0
-                    displayName: $1.00 off the order total
                     id: string
                 discounts:
                   - discountedAmount: 0
@@ -1363,7 +1305,6 @@ components:
                       extendedSalePrice: 0
                       id: '4'
                       imageUrl: 'http://example.com'
-                      isMutable: true
                       isTaxable: true
                       originalPrice: 0
                       listPrice: 0
@@ -1373,13 +1314,12 @@ components:
                       quantity: 0
                       salePrice: 0
                       sku: string
-                      type: digital
                       url: 'http://example.com'
                       variantId: 7
                   giftCertificates:
                     - amount: 0
                       id: string
-                      taxable: true
+                      isTaxable: true
                       message: string
                       name: string
                       recipient:
@@ -1389,7 +1329,6 @@ components:
                         email: user@example.com
                         name: string
                       theme: string
-                      type: giftCertificate
                   physicalItems:
                     - options:
                         - name: string
@@ -1406,7 +1345,6 @@ components:
                       extendedSalePrice: 0
                       id: '4'
                       imageUrl: 'http://example.com'
-                      isMutable: true
                       isTaxable: true
                       originalPrice: 0
                       listPrice: 0
@@ -1416,7 +1354,6 @@ components:
                       quantity: 0
                       salePrice: 0
                       sku: string
-                      type: physical
                       url: 'http://example.com'
                       variantId: 7
                       giftWrapping:
@@ -1487,7 +1424,6 @@ components:
                   createdTime: '2021-03-04T14:17:50+00:00'
                   updatedTime: '2021-03-04T14:17:50+00:00'
                   locale: en
-                  version: 1
     deleteCartsItems:
       description: 'NOTE: Discounted line items are re-evaluated on cart actions and may be automatically added back to your cart with a new line item ID to satisfy promotional requirements.'
       content:
@@ -1502,9 +1438,6 @@ components:
                 email: string
                 currency:
                   code: string
-                  decimalPlaces: 2
-                  name: US Dollar
-                  symbol: $
                 isTaxIncluded: true
                 baseAmount: 0
                 discountAmount: 0
@@ -1513,7 +1446,6 @@ components:
                   - code: string
                     couponType: 0
                     discountedAmount: 0
-                    displayName: $1.00 off the order total
                     id: string
                 discounts:
                   - discountedAmount: 0
@@ -1536,7 +1468,6 @@ components:
                       extendedSalePrice: 0
                       id: '4'
                       imageUrl: 'http://example.com'
-                      isMutable: true
                       isTaxable: true
                       originalPrice: 0
                       listPrice: 0
@@ -1546,13 +1477,12 @@ components:
                       quantity: 0
                       salePrice: 0
                       sku: string
-                      type: digital
                       url: 'http://example.com'
                       variantId: 7
                   giftCertificates:
                     - amount: 0
                       id: string
-                      taxable: true
+                      isTaxable: true
                       message: string
                       name: string
                       recipient:
@@ -1562,7 +1492,6 @@ components:
                         email: user@example.com
                         name: string
                       theme: string
-                      type: giftCertificate
                   physicalItems:
                     - options:
                         - name: string
@@ -1579,7 +1508,6 @@ components:
                       extendedSalePrice: 0
                       id: '4'
                       imageUrl: 'http://example.com'
-                      isMutable: true
                       isTaxable: true
                       originalPrice: 0
                       listPrice: 0
@@ -1589,7 +1517,6 @@ components:
                       quantity: 0
                       salePrice: 0
                       sku: string
-                      type: physical
                       url: 'http://example.com'
                       variantId: 7
                       giftWrapping: null
@@ -1597,75 +1524,15 @@ components:
                 createdTime: string
                 updatedTime: string
                 locale: string
-    CartConflictErrorResponse:
-      description: 'Cart conflict'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status:
-                type: integer
-              title:
-                type: string
-              type:
-                type: string
-          example:
-            status: 409
-            title: The request cannot be processed due to a possible conflict. Please review the changes and try again.
-            type: https://developer.bigcommerce.com/api-docs/getting-started/api-status-codes
   parameters:
-    Accept:
-      name: Accept
-      in: header
-      required: true
-      description: 'The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.'
-      schema:
-        type: string
-        default: 'application/json'
-    ContentType:
-      name: Content-Type
-      in: header
-      required: true
-      description: 'The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.'
-      schema:
-        type: string
-        default: 'application/json'
-    CartIdPath:
-      name: cartId
-      in: path
-      description: This cartʼs unique ID.
-      required: true
-      schema:
-        type: string
-        format: uuid
-    ItemIdPath:
-      name: itemId
-      in: path
-      description: The ID of the subject item.
-      required: true
-      schema:
-        type: string
-        format: number
-    Include:
+    include:
       name: include
       in: query
-      description: |-
-        To return product options add one of the following include:
-
-        `lineItems.physicalItems.options`: The Cart returns an abbreviated result. Use this to return physical items product options. Can also be used in a /POST to have the extended Cart object return.
-
-        `lineItems.digitalItems.options`:  The Cart returns an abbreviated result. Use this to return digital items product options.  Can also be used in a /POST to have the extended Cart object return.
-
-        `lineItems.digitalItems.options,lineItems.physicalItems.options`:  The Cart returns an abbreviated result. Use this to return digital and physical options. Can also be used in a /POST to have the extended Cart object return.
-      style: form
-      explode: false
+      description: Include product options in specified line item types.
       schema:
-        type: array
-        items:
-          type: string
-          enum:
-            - lineItems.physicalItems.options
-            - lineItems.digitalItems.options
-  examples: {}
+        type: string
+        enum:
+          - lineItems.physicalItems.options
+          - lineItems.digitalItems.options
+          - 'lineItems.digitalItems.options,lineItems.physicalItems.options'
 

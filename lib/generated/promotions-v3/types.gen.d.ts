@@ -28,7 +28,6 @@ export type PatchCouponPromotion = PromotionBase & {
     coupon_type?: 'SINGLE' | 'BULK';
 };
 export type DraftCouponPromotion = PromotionBase & {
-    codes?: CouponCode;
     coupon_overrides_automatic_when_offering_higher_discounts?: boolean;
     redemption_type: 'COUPON';
     coupon_type?: 'SINGLE' | 'BULK';
@@ -122,6 +121,7 @@ export type VariantsItemMatcher = {
 export type CartValueAction = {
     cart_value?: {
         discount: Discount;
+        maximum_allowed_discount_amount?: MaximumAllowedDiscountAmount;
     };
 };
 export type GiftItemAction = {
@@ -144,6 +144,7 @@ export type FixedPriceSetAction = {
 export type CartItemsAction = {
     cart_items?: {
         discount: Discount;
+        maximum_allowed_discount_amount?: MaximumAllowedDiscountAmount;
         as_total?: boolean;
         items?: ItemMatcher;
         include_items_considered_by_condition?: boolean;
@@ -161,12 +162,13 @@ export type ShippingAction = {
 };
 export type Discount = FixedDiscount | PercentageDiscount;
 export type PercentageDiscount = {
-    percentage_amount?: string;
+    percentage_amount: string;
 };
 export type FixedDiscount = {
-    fixed_amount?: Money;
+    fixed_amount: Money;
 };
 export type Money = string;
+export type MaximumAllowedDiscountAmount = string | null;
 export type OptionalCursorCollectionMeta = {
     pagination?: DeprecatedPagination;
     cursor_pagination?: CursorPagination;
@@ -374,6 +376,7 @@ export type LimitQuery = number;
 export type NameQuery = string;
 export type Query = string;
 export type CodeQuery = string;
+export type CodeQueryRequired = string;
 export type CurrencyCodeQuery = string;
 export type RedemptionTypeQuery = 'automatic' | 'coupon';
 export type StatusQuery = string;
@@ -537,6 +540,7 @@ export type DeleteCouponCodesData = {
     };
     query: {
         'id:in': Array<number>;
+        code?: string;
     };
     url: '/promotions/{promotion_id}/codes';
 };
@@ -564,6 +568,7 @@ export type GetPromotionCodesData = {
         after?: string;
         page?: number;
         limit?: number;
+        code?: string;
     };
     url: '/promotions/{promotion_id}/codes';
 };
@@ -637,6 +642,39 @@ export type GeneratePromotionCodesBatchResponses = {
     };
 };
 export type GeneratePromotionCodesBatchResponse = GeneratePromotionCodesBatchResponses[keyof GeneratePromotionCodesBatchResponses];
+export type DeleteCouponCodeByCodeData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query: {
+        code: string;
+    };
+    url: '/promotions/codes';
+};
+export type DeleteCouponCodeByCodeResponses = {
+    204: void;
+};
+export type DeleteCouponCodeByCodeResponse = DeleteCouponCodeByCodeResponses[keyof DeleteCouponCodeByCodeResponses];
+export type GetCouponCodeByCodeData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query: {
+        code: string;
+    };
+    url: '/promotions/codes';
+};
+export type GetCouponCodeByCodeResponses = {
+    200: {
+        data?: Array<CouponCode>;
+        meta?: OptionalCursorCollectionMeta;
+    };
+};
+export type GetCouponCodeByCodeResponse = GetCouponCodeByCodeResponses[keyof GetCouponCodeByCodeResponses];
 export type DeleteCouponCodeData = {
     body?: never;
     headers: {

@@ -28,7 +28,7 @@ export type Accept = string;
  */
 export type ContentType = string;
 
-export type CreatePaymentAccessTokenData = {
+export type PaymentsAccessTokensPostData = {
     /**
      * Payment Access Token Request
      */
@@ -50,7 +50,7 @@ export type CreatePaymentAccessTokenData = {
     url: '/payments/access_tokens';
 };
 
-export type CreatePaymentAccessTokenErrors = {
+export type PaymentsAccessTokensPostErrors = {
     /**
      * ErrorResponse
      *
@@ -233,9 +233,9 @@ export type CreatePaymentAccessTokenErrors = {
     };
 };
 
-export type CreatePaymentAccessTokenError = CreatePaymentAccessTokenErrors[keyof CreatePaymentAccessTokenErrors];
+export type PaymentsAccessTokensPostError = PaymentsAccessTokensPostErrors[keyof PaymentsAccessTokensPostErrors];
 
-export type CreatePaymentAccessTokenResponses = {
+export type PaymentsAccessTokensPostResponses = {
     /**
      * Payments Access Tokens Response
      *
@@ -260,4 +260,4 @@ export type CreatePaymentAccessTokenResponses = {
     };
 };
 
-export type CreatePaymentAccessTokenResponse = CreatePaymentAccessTokenResponses[keyof CreatePaymentAccessTokenResponses];
+export type PaymentsAccessTokensPostResponse = PaymentsAccessTokensPostResponses[keyof PaymentsAccessTokensPostResponses];

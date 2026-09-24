@@ -8,13 +8,11 @@ export type Property = {
     description?: string;
     readonly created_at?: string;
     readonly updated_at?: string;
-    type?: 'PRODUCT' | 'CUSTOMER';
 };
 export type PropertyPost = {
     code: string;
     display_name: string;
     description?: string;
-    type: 'PRODUCT' | 'CUSTOMER';
 };
 export type PropertyPut = {
     id: number;
@@ -35,17 +33,15 @@ export type PropertyWritable = {
     code?: string;
     display_name?: string;
     description?: string;
-    type?: 'PRODUCT' | 'CUSTOMER';
 };
 export type MetaOpenWritable = {
     [key: string]: unknown;
 };
 export type Accept = string;
 export type ContentType = string;
-export type ProductIdin = Array<number>;
-export type Idin = Array<number>;
-export type IdinRequired = Array<number>;
-export type Typein = Array<string>;
+export type ProductIdin = string;
+export type Idin = string;
+export type IdinRequired = string;
 export type DeleteTaxPropertiesData = {
     body?: never;
     headers: {
@@ -53,7 +49,7 @@ export type DeleteTaxPropertiesData = {
     };
     path?: never;
     query: {
-        'id:in': Array<number>;
+        'id:in': string;
     };
     url: '/tax/properties';
 };
@@ -72,8 +68,7 @@ export type GetTaxPropertiesData = {
     };
     path?: never;
     query?: {
-        'id:in'?: Array<number>;
-        'type:in'?: Array<string>;
+        'id:in'?: string;
     };
     url: '/tax/properties';
 };
@@ -134,7 +129,7 @@ export type DeleteProductTaxPropertiesData = {
     };
     path?: never;
     query: {
-        'product_id:in': Array<number>;
+        'product_id:in': string;
     };
     url: '/tax/products/properties';
 };
@@ -145,27 +140,27 @@ export type DeleteProductTaxPropertiesResponses = {
     204: void;
 };
 export type DeleteProductTaxPropertiesResponse = DeleteProductTaxPropertiesResponses[keyof DeleteProductTaxPropertiesResponses];
-export type GetProductsTaxPropertiesData = {
+export type GetProductTaxPropertiesData = {
     body?: never;
     headers: {
         Accept: string;
     };
     path?: never;
     query: {
-        'product_id:in': Array<number>;
+        'product_id:in': string;
     };
     url: '/tax/products/properties';
 };
-export type GetProductsTaxPropertiesErrors = {
+export type GetProductTaxPropertiesErrors = {
     400: unknown;
 };
-export type GetProductsTaxPropertiesResponses = {
+export type GetProductTaxPropertiesResponses = {
     200: {
         data?: Array<ProductTaxProperty>;
         meta?: MetaOpen;
     };
 };
-export type GetProductsTaxPropertiesResponse = GetProductsTaxPropertiesResponses[keyof GetProductsTaxPropertiesResponses];
+export type GetProductTaxPropertiesResponse = GetProductTaxPropertiesResponses[keyof GetProductTaxPropertiesResponses];
 export type UpdateProductTaxPropertiesData = {
     body: Array<ProductTaxProperty>;
     headers: {

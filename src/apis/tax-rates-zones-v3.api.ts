@@ -62,6 +62,7 @@ export class TaxRatesZonesV3Api {
      *
      * Delete one or more tax zones. Deleting a tax zone removes all associated tax rates.
 
+     > #### Note
      > You must specify which zone(s) to delete using the `id:in` query parameter.
      */
     deleteTaxZones(
@@ -122,6 +123,7 @@ export class TaxRatesZonesV3Api {
      *
      * Delete one or more tax rates.
 
+     > #### Note
      > You must specify which rate(s) to delete using the `id:in` query parameter.
      */
     deleteTaxRates(

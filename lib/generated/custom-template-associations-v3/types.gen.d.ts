@@ -60,13 +60,6 @@ export type CustomTemplateAssociationUpsert = {
 };
 export type Accept = string;
 export type ContentType = string;
-export type IdInQuery = Array<number>;
-export type ChannelIdQuery = number;
-export type EntityIdInQuery = Array<number>;
-export type TypeQuery = 'product' | 'category' | 'brand' | 'page';
-export type LimitQuery = number;
-export type PageQuery = number;
-export type IsValidQuery = boolean;
 export type DeleteCustomTemplateAssociationsData = {
     body?: never;
     headers: {
@@ -74,10 +67,10 @@ export type DeleteCustomTemplateAssociationsData = {
     };
     path?: never;
     query?: {
-        'id:in'?: Array<number>;
+        'id:in'?: number;
+        'entity_id:in'?: number;
         channel_id?: number;
         type?: 'product' | 'category' | 'brand' | 'page';
-        'entity_id:in'?: Array<number>;
     };
     url: '/storefront/custom-template-associations';
 };
@@ -93,10 +86,10 @@ export type GetCustomTemplateAssociationsData = {
     path?: never;
     query?: {
         channel_id?: number;
-        'entity_id:in'?: Array<number>;
-        type?: 'product' | 'category' | 'brand' | 'page';
+        'entity_id:in'?: string;
         limit?: number;
         page?: number;
+        type?: 'product' | 'category' | 'brand' | 'page';
         is_valid?: boolean;
     };
     url: '/storefront/custom-template-associations';

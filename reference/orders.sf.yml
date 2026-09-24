@@ -2,9 +2,9 @@ openapi: '3.0.1'
 info:
   title: Storefront Orders
   description: |- 
-    Get order data immediately after an order is placed on BigCommerce-hosted storefronts. To work with headless storefronts, use the [GraphQL Storefront API](/graphql-storefront/reference).
-    
-    The REST Storefront API uses [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) headers for authentication, and therefore has no required scopes. You do not need to send any BigCommerce-specific tokens with your requests to these endpoints.
+    Get order data immediately after an order is placed on the storefront.
+
+    For info about API accounts, see our [Guide to API Accounts](/docs/start/authentication/api-accounts).
         
     For info about authenticating BigCommerce APIs, see [Authentication and Example Requests](/docs/start/authentication#same-origin-cors-authentication).
   version: ''
@@ -33,7 +33,7 @@ paths:
         > #### Note
         > * Substitute your storefront domain for `yourstore.example.com`. 
         > * The Send a Test Request feature is not currently supported for this endpoint.
-      operationId: getOrder
+      operationId: OrdersByOrderIdGet
       parameters:
         - name: orderId
           in: path
@@ -47,7 +47,6 @@ paths:
         - name: include
           in: query
           description: Sub-resources to include in an Order, in a comma-separated list. The ID and the specified fields will be returned.
-          style: form
           explode: false
           schema:
             type: array
@@ -146,18 +145,11 @@ components:
           type: string
           description: Shopperʼs provided message for the order.
         shippingCostTotal:
-          type: number
+          type: integer
         shippingCostBeforeDiscount:
-          type: number
-          description: Estimated total shipping cost before any shipping discounts have been applied.
-        comparisonShippingCost:
-          type: number
-          description: |
-            The total shipping cost to be shown to shopper in the summary as struck-through.
-            - If the entered-price and display-price have the same tax setting (e.g.: both are tax-inclusive), this field will be the estimated total shipping cost before any coupons applied (but after automatic promotions applied).
-            - If the entered-price and display-price have different tax setting (e.g.: one is tax-inclusive, and one is tax-exclusive), this field will be the estimated total shipping cost before any discounts applied, similar to the `shippingCostBeforeDiscount`.
+          type: integer
         handlingCostTotal:
-          type: number
+          type: integer
         customerCanBeCreated:
           type: boolean
         taxes:
@@ -186,7 +178,7 @@ components:
           description: The currency name.
         code:
           type: string
-          description: 'ISO-4217 currency code. (See: https://www.iso.org/iso-4217-currency-codes.html.)'
+          description: 'ISO-4217 currency code. (See: http://en.wikipedia.org/wiki/ISO_4217.)'
         symbol:
           type: string
           description: The currency symbol.
@@ -308,7 +300,7 @@ components:
           format: double
         listPrice:
           type: number
-          description: The net item price before discounts and coupons. BigCommerce derives an item's list price from the product default price or, if applicable, the sale price configured in the admin panel.
+          description: The itemʼs list price, as quoted by the manufacturer/distributor.
           format: double
         salePrice:
           type: number
@@ -338,7 +330,6 @@ components:
           description: Categories the item belongs to.
           items:
             type: object
-            properties: {}
       x-internal: false
     GiftWrapping:
       title: Gift Wrapping
@@ -412,7 +403,7 @@ components:
           format: double
         listPrice:
           type: number
-          description: The net item price before discounts and coupons. BigCommerce derives an item's list price from the product default price or, if applicable, the sale price configured in the admin panel.
+          description: The itemʼs list price, as quoted by the manufacturer/distributor.
           format: double
         salePrice:
           type: number
@@ -445,7 +436,6 @@ components:
           description: Categories the item belongs to.
           items:
             type: object
-            properties: {}
       x-internal: false
     OrderItemGiftCertificate:
       title: Order Item Gift Certificate
@@ -618,7 +608,7 @@ components:
           format: double
         listPrice:
           type: number
-          description: The net item price before discounts and coupons. BigCommerce derives an item's list price from the product default price or, if applicable, the sale price configured in the admin panel.
+          description: The itemʼs list price, as quoted by the manufacturer/distributor.
           format: double
         salePrice:
           type: number
@@ -914,15 +904,6 @@ components:
         costTaxClassId:
           type: integer
           example: 2
-        shippingCostBeforeDiscount:
-          type: number
-          description: Estimated consignment shipping cost before any shipping discounts have been applied.
-        comparisonShippingCost:
-          type: number
-          description: |
-            The consignment shipping cost to be shown to shopper in the summary as struck-through.
-            - If the entered-price and display-price have the same tax setting (e.g.: both are tax-inclusive), this field will be the estimated shipping cost before any coupons applied (but after automatic promotions applied).
-            - If the entered-price and display-price have different tax setting (e.g.: one is tax-inclusive, and one is tax-exclusive), this field will be the estimated shipping cost before any discounts applied, similar to the `shippingCostBeforeDiscount`.
         baseHandlingCost:
           type: number
           example: 0.00
@@ -974,8 +955,6 @@ components:
           costIncTax: 16.7
           costTax: 1.2
           costTaxClassId: 2
-          shippingCostBeforeDiscount: 17.5
-          comparisonShippingCost: 16.5
           baseHandlingCost: 0
           handlingCostExTax: 0
           handlingCostIncTax: 0

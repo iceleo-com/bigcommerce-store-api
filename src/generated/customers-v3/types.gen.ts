@@ -34,47 +34,12 @@ export type Pagination = {
 };
 
 /**
- * Cursor Pagination
- *
- * Data about cursor pagination.
- */
-export type CursorPagination = {
-    /**
-     * Total number of items in the collection response.
-     */
-    count?: number;
-    /**
-     * The amount of items returned in the collection per page, controlled by the limit parameter.
-     */
-    per_page?: number;
-    /**
-     * A string representing the starting point of the current page in the collection
-     */
-    start_cursor?: string;
-    /**
-     * A string representing the ending point of the current page in the collection.
-     */
-    end_cursor?: string;
-    links?: Links;
-};
-
-/**
  * _metaCollection
  *
  * Data about the response, including pagination and collection totals.
  */
 export type MetaCollection = {
     pagination?: Pagination;
-};
-
-/**
- * _metaCollection
- *
- * Data about the response, including pagination and collection totals. Both `pagination` and `cursor_pagination` would be returned in the first page. Only `pagination` would be returned when page is greater than 1. Only `cursor_pagination` would be returned when `before` or `after` is provided in the request.
- */
-export type MetaCollectionWithCursorPagination = {
-    pagination?: Pagination;
-    cursor_pagination?: CursorPagination;
 };
 
 /**
@@ -264,10 +229,6 @@ export type CustomerPost = {
      *
      */
     form_fields?: Array<FormFieldValue>;
-    /**
-     * Indicates whether to send a customer registered welcome email.
-     */
-    trigger_account_created_notification?: boolean;
 };
 
 /**
@@ -348,7 +309,7 @@ export type AttributeValueBase = {
      */
     attribute_id: number;
     /**
-     * Attribute value. This will always be a string, regardless of the attributeʼs type.
+     * Attribute value. This will always be a string, regardless of the attribute's type.
      *
      * Corresponds to `attribute_value` used in customer attribute values `GET` requests.
      */
@@ -578,11 +539,11 @@ export type AddressPost = {
     /**
      * The state or province name spelled out in full. It is required for countries that need a state/province to complete an address. State or province codes not accepted.
      */
-    state_or_province: string;
+    state_or_province?: string;
     /**
      * The postal code of the customer address. It is required for countries that need postal codes to complete an address.
      */
-    postal_code: string;
+    postal_code?: string;
     /**
      * The country code of the customer address.
      */
@@ -611,7 +572,7 @@ export type AddressPost = {
 /**
  * customerAddresses_Base
  *
- * The `address` object for the `customer` objectʼs `addresses` array.
+ * The `address` object for the `customer` object's `addresses` array.
  */
 export type CustomerAddressesBase = {
     /**
@@ -665,7 +626,7 @@ export type CustomerAddressesBase = {
 /**
  * customerAddresses_CustomerPost
  *
- * The `address` object for the `customer` objectʼs `addresses` array.
+ * The `address` object for the `customer` object's `addresses` array.
  */
 export type CustomerAddressesCustomerPost = {
     /**
@@ -728,6 +689,7 @@ export type CustomerAuthenticationPostPut = {
      * If `true`, this customer will be forced to change password on next login.
      */
     force_password_reset?: boolean;
+} & {
     /**
      * New password for customer. Write only field.
      */
@@ -997,7 +959,7 @@ export type CustomerSettingsObject = {
          */
         ask_shopper_for_tracking_consent?: boolean;
         /**
-         * The URL for a websiteʼs privacy policy.
+         * The URL for a website's privacy policy.
          */
         policy_url?: string;
     };
@@ -1029,7 +991,7 @@ export type CustomerChannelSettingsObject = {
          */
         ask_shopper_for_tracking_consent?: boolean;
         /**
-         * The URL for a websiteʼs privacy policy.
+         * The URL for a website's privacy policy.
          */
         policy_url?: string;
     };
@@ -1085,742 +1047,9 @@ export type ValidateCustomerCredentialsResponseObject = {
     is_valid?: boolean;
 };
 
-/**
- * Common metafield properties.
- *
- */
-export type Metafield = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description: string;
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    /**
-     * The unique identifier for the resource with which the metafield is associated.
-     *
-     */
-    readonly resource_id: number;
-    /**
-     * The unique identifier for the metafield.
-     */
-    id: number;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified: string;
-    /**
-     * Client ID for the metafieldʼs creator.
-     */
-    readonly owner_client_id?: string;
-};
+export type CustomerId = string;
 
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponse = {
-    data?: Array<Metafield>;
-    meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- */
-export type MetaFieldCollectionPostPutResponses = {
-    data?: Array<Metafield>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionPartialSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Total number of items in the result set.
- *
- */
-export type Total = number;
-
-/**
- * Total number of items that were successfully deleted.
- *
- */
-export type Success = number;
-
-/**
- * Total number of items that failed to be deleted.
- *
- */
-export type Failed = number;
-
-/**
- * Error response payload for the BigCommerce API.
- *
- */
-export type _Error = {
-    /**
-     * The HTTP status code for the error.
-     *
-     */
-    status?: number;
-    /**
-     * The error title.
-     *
-     */
-    title?: string;
-    /**
-     * The error type.
-     *
-     */
-    type?: string;
-    errors?: ErrorDetail;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-
-/**
- * Collection Meta
- *
- * Data about the response, including pagination and collection totals.
- */
-export type CollectionMeta = {
-    /**
-     * Pagination
-     *
-     * Data about the response, including pagination and collection totals.
-     */
-    pagination?: {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    };
-    [key: string]: unknown | {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    } | undefined;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBasePost = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     *
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBasePut = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     *
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-};
-
-/**
- * metafield_Full
- */
-export type MetafieldFull = {
-    /**
-     * Unique ID of the *Metafield*. Read-Only.
-     */
-    readonly id?: number;
-} & MetafieldBase & {
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type?: 'category' | 'brand' | 'product' | 'variant' | 'customer';
-    /**
-     * The ID of the resource with which the metafield is associated.
-     *
-     */
-    resource_id?: number;
-    /**
-     * Date and time of the metafieldʼs creation. Read-Only.
-     *
-     */
-    readonly date_created?: string;
-    /**
-     * Date and time when the metafield was last updated. Read-Only.
-     *
-     */
-    readonly date_modified?: string;
-};
-
-/**
- * metafield_Base
- *
- * Metafield for products, categories, variants, and brands; the max number of metafields allowed on each is 50. For more information, see [Platform Limits](https://support.bigcommerce.com/s/article/Platform-Limits) in the Help Center.
- */
-export type MetafieldBase = {
-    /**
-     * The name of the field, for example: `location_id`, `color`. Required for POST.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`. Required for POST.
-     *
-     */
-    value: string;
-    /**
-     * Namespace for the metafield, for organizational purposes. This is set by the developer. Required for POST.
-     *
-     */
-    namespace: string;
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     *
-     * |Value|Description
-     * |-|-|
-     * |`app_only`|Private to the app that owns the field|
-     * |`read`|Visible to other API consumers|
-     * |`write`|Open for reading and writing by other API consumers|
-     * |`read_and_sf_access`|Visible to other API consumers, including on storefront|
-     * |`write_and_sf_access`|Open for reading and writing by other API consumers, including on storefront|
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-};
-
-/**
- * Response meta
- *
- * Response metadata.
- */
-export type MetaEmptyFull = {
-    [key: string]: unknown;
-};
-
-/**
- * metaCollection_Full
- *
- * Data about the response, including pagination and collection totals.
- */
-export type MetaCollectionFull = {
-    pagination?: PaginationFull;
-};
-
-/**
- * Not Found
- *
- * Error payload for the BigCommerce API.
- */
-export type NotFound = {
-    /**
-     * 404 HTTP status code.
-     *
-     */
-    status?: number;
-    /**
-     * The error title describing the particular error.
-     */
-    title?: string;
-    type?: string;
-    instance?: string;
-};
-
-/**
- * pagination_Full
- *
- * Data about the response, including pagination and collection totals.
- */
-export type PaginationFull = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items in the collection response.
-     *
-     */
-    count?: number;
-    /**
-     * The amount of items returned in the collection per page, controlled by the limit parameter.
-     *
-     */
-    per_page?: number;
-    /**
-     * The page you are currently on within the collection.
-     *
-     */
-    current_page?: number;
-    /**
-     * The total number of pages in the collection.
-     *
-     */
-    total_pages?: number;
-    /**
-     * Pagination links for the previous and next parts of the whole collection.
-     *
-     */
-    links?: {
-        /**
-         * Link to the previous page returned in the response.
-         *
-         */
-        previous?: string;
-        /**
-         * Link to the current page returned in the response.
-         *
-         */
-        current?: string;
-        /**
-         * Link to the next page returned in the response.
-         *
-         */
-        next?: string;
-    };
-};
-
-/**
- * Response meta
- *
- * Response metadata.
- */
-export type MetaOpenWritable = {
-    [key: string]: unknown;
-};
-
-/**
- * Common metafield properties.
- *
- */
-export type MetafieldWritable = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description: string;
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    /**
-     * The unique identifier for the metafield.
-     */
-    id: number;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified: string;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
-};
-
-/**
- * metafield_Full
- */
-export type MetafieldFullWritable = MetafieldBase & {
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type?: 'category' | 'brand' | 'product' | 'variant' | 'customer';
-    /**
-     * The ID of the resource with which the metafield is associated.
-     *
-     */
-    resource_id?: number;
-};
-
-/**
- * Response meta
- *
- * Response metadata.
- */
-export type MetaEmptyFullWritable = {
-    [key: string]: unknown;
-};
-
-/**
- * The ID of the metafield belonging to the customer. The metafieldId is a generated response when sending a POST query to the Create a Customer Metafields endpoint.
- */
-export type MetafieldId = number;
-
-/**
- * The ID of the customer.
- */
-export type CustomerId = number;
-
-/**
- * Specifies the page number in a limited (paginated) list of products.
- *
- */
-export type PageParam = number;
-
-/**
- * Filter based on a metafieldʼs key.
- */
-export type MetafieldKeyParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla 'key' query parameter.
- */
-export type MetafieldKeyInParam = Array<string>;
-
-/**
- * Filter based on a metafieldʼs namespaces.
- */
-export type MetafieldNamespaceParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter.
- */
-export type MetafieldNamespaceInParam = Array<string>;
-
-/**
- * Controls the number of items per page in a limited (paginated) list of products.
- *
- */
-export type LimitParam = number;
-
-/**
- * Filter items by minimum date created. For example, `date_created:min=2019-09-04T00:00:00` or `date_created:min=2019-09-04`. Returns metafields created after this date.
- */
-export type DateCreatedMin = string;
-
-/**
- * Filter items by maximum date created. For example, `date_created:max=`2024-05-14T09:34:00` or `date_created:max=2019-09-04`. Returns metafields created before this date.
- */
-export type DateCreatedMax = string;
-
-/**
- * Filter items by minimum date modified. For example, `date_modified:min=`2024-05-14T09:34:00` or `date_modified:min=2019-09-04`. Returns metafields modified after this date.
- */
-export type DateModifiedMin = string;
-
-/**
- * Filter items by maximum date modified. For example, `date_modified:max=2019-09-04T00:00:00` or `date_modified:max=2019-09-04`. Returns metafields modified before this date.
- */
-export type DateModifiedMax = string;
-
-/**
- * Sort direction. Acceptable values are: `asc`, `desc`.
- *
- */
-export type DirectionParam = 'asc' | 'desc';
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-
-export type DeleteCustomersData = {
+export type CustomersDeleteData = {
     body?: never;
     path?: never;
     query: {
@@ -1833,27 +1062,18 @@ export type DeleteCustomersData = {
     url: '/customers';
 };
 
-export type DeleteCustomersErrors = {
-    /**
-     * The `id:in` was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
-     */
-    422: _Error;
-};
-
-export type DeleteCustomersError = DeleteCustomersErrors[keyof DeleteCustomersErrors];
-
-export type DeleteCustomersResponses = {
+export type CustomersDeleteResponses = {
     204: void;
 };
 
-export type DeleteCustomersResponse = DeleteCustomersResponses[keyof DeleteCustomersResponses];
+export type CustomersDeleteResponse = CustomersDeleteResponses[keyof CustomersDeleteResponses];
 
-export type GetCustomersData = {
+export type CustomersGetData = {
     body?: never;
     path?: never;
     query?: {
         /**
-         * Page number (`page` will be ignored if you provide `before` or `after` in the request). For example `page=1`.
+         * Page number. `page=1`
          */
         page?: number;
         /**
@@ -1874,47 +1094,43 @@ export type GetCustomersData = {
          */
         'customer_group_id:in'?: Array<string>;
         /**
-         * Filter items by date created, for example, `2024-05-14T09:34:00` or `2024-05-14`.
+         * Filter items by date_created. `date_created=2018-09-05T13:43:54`
          */
         date_created?: string;
         /**
-         * Filter items by maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns customers created before this date.
+         * Filter items by maximum date_created. `date_created:max=2018-09-10`
          */
         'date_created:max'?: string;
         /**
-         * Filter items by date created for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns customers created after this date.
+         * Filter items by date_created. `date_created:min=2018-09-05`
          */
         'date_created:min'?: string;
         /**
-         * Filter items by date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`.
+         * Filter items by date_modified. `date_modified=2018-09-05T13:45:03`
          */
         date_modified?: string;
         /**
-         * Filter items by minimum date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns customers modified after this date.
+         * Filter items by minimum date_modified. `date_modified:min=2019-09-04T:00:00:00` or `date_modified:min=2019-09-04`
          */
         'date_modified:min'?: string;
         /**
-         * Filter items by maximum date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns customers modified before this date.
+         * Filter items by maximum date_modified. `date_modified:max=2018-09-05T13:45:03` or `date_modified:max=2019-09-04`
          */
         'date_modified:max'?: string;
         /**
          * Filter items by email. `email:in=janedoe@example.com`
          */
-        'email:in'?: Array<string>;
+        'email:in'?: string;
         /**
          * Filter items by first_name and last_name. `name=james moriarty`
          */
         'name:in'?: Array<string>;
         /**
          * Filter items by substring in first_name and last_name.
-         * `name:like=moriarty,sherlock`
+         * `name:like=moriarty, sherlock`
          * Concatenates the first_name and last_name fields.
          */
         'name:like'?: Array<string>;
-        /**
-         * Filter items by phone number. `phone:in=555-55-5555`
-         */
-        'phone:in'?: string;
         /**
          * Filter items by registration_ip_address. If the customer was created using the API, then registration address is blank.
          * `registration_ip_address:in=12.345.6.789`
@@ -1936,48 +1152,30 @@ export type GetCustomersData = {
          * Sort items by date_created, date_modified, or last_name:* `date_created:asc` - date created, ascending* `date_created:desc` - date created, descending* `last_name:asc` - last name, ascending* `last_name:desc` - last name, descending * `date_modified:asc` - date modified, ascending* `date_modified:desc`- date modified, descending  Example: `sort=last_name:asc`
          */
         sort?: 'date_created:asc' | 'date_created:desc' | 'last_name:asc' | 'last_name:desc' | 'date_modified:asc' | 'date_modified:desc';
-        /**
-         * The cursor reference of the last entry for the previous page. Use the `end_cursor` value from the last response to get the next page (`end_cursor` is only returned on the first page or when the request contains query parameter `before` or `after`). For example `after=eyJpZCI6MjA0fQ`.
-         */
-        after?: string;
-        /**
-         * The cursor reference of the first entry for the next page. Use the `start_cursor` value from the last response to get the previous page (`start_cursor` is only returned on the first page or when the request contains query parameter `before` or `after`). For example `before=eyJpZCI6MjA1fQ`.
-         */
-        before?: string;
     };
     url: '/customers';
 };
 
-export type GetCustomersErrors = {
+export type CustomersGetResponses = {
     /**
-     * The optional filter parameter was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
-     *
-     */
-    422: _Error;
-};
-
-export type GetCustomersError = GetCustomersErrors[keyof GetCustomersErrors];
-
-export type GetCustomersResponses = {
-    /**
-     * Get Customer Collection Response
+     * Customer Collection Response
      */
     200: {
         data?: Array<CustomerFull>;
-        meta?: MetaCollectionWithCursorPagination;
+        meta?: MetaCollection;
     };
 };
 
-export type GetCustomersResponse = GetCustomersResponses[keyof GetCustomersResponses];
+export type CustomersGetResponse = CustomersGetResponses[keyof CustomersGetResponses];
 
-export type CreateCustomersData = {
+export type CustomersPostData = {
     body: Array<CustomerPost>;
     path?: never;
     query?: never;
     url: '/customers';
 };
 
-export type CreateCustomersErrors = {
+export type CustomersPostErrors = {
     /**
      * The request payload is too large. The maximum number of items allowed in the array is 10.
      */
@@ -1988,28 +1186,28 @@ export type CreateCustomersErrors = {
     422: ErrorResponse;
 };
 
-export type CreateCustomersError = CreateCustomersErrors[keyof CreateCustomersErrors];
+export type CustomersPostError = CustomersPostErrors[keyof CustomersPostErrors];
 
-export type CreateCustomersResponses = {
+export type CustomersPostResponses = {
     /**
      * Customer Collection Response
      */
     200: {
         data?: Array<CustomerFull>;
-        meta?: MetaOpen;
+        meta?: MetaCollection;
     };
 };
 
-export type CreateCustomersResponse = CreateCustomersResponses[keyof CreateCustomersResponses];
+export type CustomersPostResponse = CustomersPostResponses[keyof CustomersPostResponses];
 
-export type UpdateCustomersData = {
+export type CustomersPutData = {
     body?: Array<CustomerPut>;
     path?: never;
     query?: never;
     url: '/customers';
 };
 
-export type UpdateCustomersErrors = {
+export type CustomersPutErrors = {
     /**
      * The request payload is too large. The maximum number of items allowed in the array is 10.
      */
@@ -2021,21 +1219,21 @@ export type UpdateCustomersErrors = {
     422: ErrorResponse;
 };
 
-export type UpdateCustomersError = UpdateCustomersErrors[keyof UpdateCustomersErrors];
+export type CustomersPutError = CustomersPutErrors[keyof CustomersPutErrors];
 
-export type UpdateCustomersResponses = {
+export type CustomersPutResponses = {
     /**
      * Customer Collection Response
      */
     200: {
         data?: Array<CustomerFull>;
-        meta?: MetaOpen;
+        meta?: MetaCollection;
     };
 };
 
-export type UpdateCustomersResponse = UpdateCustomersResponses[keyof UpdateCustomersResponses];
+export type CustomersPutResponse = CustomersPutResponses[keyof CustomersPutResponses];
 
-export type DeleteCustomersAddressesData = {
+export type CustomersAddressesDeleteData = {
     body?: never;
     headers?: {
         Accept?: string;
@@ -2052,13 +1250,13 @@ export type DeleteCustomersAddressesData = {
     url: '/customers/addresses';
 };
 
-export type DeleteCustomersAddressesResponses = {
+export type CustomersAddressesDeleteResponses = {
     204: void;
 };
 
-export type DeleteCustomersAddressesResponse = DeleteCustomersAddressesResponses[keyof DeleteCustomersAddressesResponses];
+export type CustomersAddressesDeleteResponse = CustomersAddressesDeleteResponses[keyof CustomersAddressesDeleteResponses];
 
-export type GetCustomersAddressesData = {
+export type CustomersAddressesGetData = {
     body?: never;
     headers?: {
         Accept?: string;
@@ -2091,7 +1289,7 @@ export type GetCustomersAddressesData = {
          * * `formfields` - address form fields
          * `include=formfields`
          */
-        include?: Array<'formfields'>;
+        include?: 'formfields';
         /**
          * Filter items by ID.
          * `id:in=4,5,6`
@@ -2101,7 +1299,7 @@ export type GetCustomersAddressesData = {
     url: '/customers/addresses';
 };
 
-export type GetCustomersAddressesResponses = {
+export type CustomersAddressesGetResponses = {
     /**
      * AddressCollectionResponse
      *
@@ -2176,9 +1374,9 @@ export type GetCustomersAddressesResponses = {
     };
 };
 
-export type GetCustomersAddressesResponse = GetCustomersAddressesResponses[keyof GetCustomersAddressesResponses];
+export type CustomersAddressesGetResponse = CustomersAddressesGetResponses[keyof CustomersAddressesGetResponses];
 
-export type CreateCustomersAddressesData = {
+export type CustomersAddressesPostData = {
     body: Array<AddressPost>;
     headers?: {
         Accept?: string;
@@ -2189,7 +1387,7 @@ export type CreateCustomersAddressesData = {
     url: '/customers/addresses';
 };
 
-export type CreateCustomersAddressesErrors = {
+export type CustomersAddressesPostErrors = {
     /**
      * The `Address` was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
      *
@@ -2197,9 +1395,9 @@ export type CreateCustomersAddressesErrors = {
     422: ErrorResponse;
 };
 
-export type CreateCustomersAddressesError = CreateCustomersAddressesErrors[keyof CreateCustomersAddressesErrors];
+export type CustomersAddressesPostError = CustomersAddressesPostErrors[keyof CustomersAddressesPostErrors];
 
-export type CreateCustomersAddressesResponses = {
+export type CustomersAddressesPostResponses = {
     200: ({
         data?: Array<{
             /**
@@ -2266,9 +1464,7 @@ export type CreateCustomersAddressesResponses = {
             form_fields?: Array<FormFieldValueFull>;
         }>;
         meta?: MetaOpen;
-    } | {
-        [key: string]: unknown;
-    }) & {
+    } | unknown) & {
         data?: Array<{
             /**
              * The address 1 line.
@@ -2337,9 +1533,9 @@ export type CreateCustomersAddressesResponses = {
     };
 };
 
-export type CreateCustomersAddressesResponse = CreateCustomersAddressesResponses[keyof CreateCustomersAddressesResponses];
+export type CustomersAddressesPostResponse = CustomersAddressesPostResponses[keyof CustomersAddressesPostResponses];
 
-export type UpdateCustomersAddressesData = {
+export type CustomersAddressesPutData = {
     body: Array<AddressPut>;
     headers?: {
         Accept?: string;
@@ -2350,7 +1546,7 @@ export type UpdateCustomersAddressesData = {
     url: '/customers/addresses';
 };
 
-export type UpdateCustomersAddressesErrors = {
+export type CustomersAddressesPutErrors = {
     /**
      * The `Address` was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
      *
@@ -2358,9 +1554,9 @@ export type UpdateCustomersAddressesErrors = {
     422: ErrorResponse;
 };
 
-export type UpdateCustomersAddressesError = UpdateCustomersAddressesErrors[keyof UpdateCustomersAddressesErrors];
+export type CustomersAddressesPutError = CustomersAddressesPutErrors[keyof CustomersAddressesPutErrors];
 
-export type UpdateCustomersAddressesResponses = {
+export type CustomersAddressesPutResponses = {
     200: ({
         data?: Array<{
             /**
@@ -2427,9 +1623,7 @@ export type UpdateCustomersAddressesResponses = {
             form_fields?: Array<FormFieldValueFull>;
         }>;
         meta?: MetaOpen;
-    } | {
-        [key: string]: unknown;
-    }) & {
+    } | unknown) & {
         data?: Array<{
             /**
              * The address 1 line.
@@ -2498,16 +1692,16 @@ export type UpdateCustomersAddressesResponses = {
     };
 };
 
-export type UpdateCustomersAddressesResponse = UpdateCustomersAddressesResponses[keyof UpdateCustomersAddressesResponses];
+export type CustomersAddressesPutResponse = CustomersAddressesPutResponses[keyof CustomersAddressesPutResponses];
 
-export type ValidateCustomerCredentialsData = {
+export type CustomerValidateCredentialsData = {
     body: ValidateCustomerCredentialsObject;
     path?: never;
     query?: never;
     url: '/customers/validate-credentials';
 };
 
-export type ValidateCustomerCredentialsErrors = {
+export type CustomerValidateCredentialsErrors = {
     /**
      * This is the result of missing required fields. See the response for more details.
      */
@@ -2519,60 +1713,50 @@ export type ValidateCustomerCredentialsErrors = {
     429: ErrorResponse;
 };
 
-export type ValidateCustomerCredentialsError = ValidateCustomerCredentialsErrors[keyof ValidateCustomerCredentialsErrors];
+export type CustomerValidateCredentialsError = CustomerValidateCredentialsErrors[keyof CustomerValidateCredentialsErrors];
 
-export type ValidateCustomerCredentialsResponses = {
+export type CustomerValidateCredentialsResponses = {
     /**
      * Returns if the customer credentials provided are valid or not.
      */
     200: ValidateCustomerCredentialsResponseObject;
 };
 
-export type ValidateCustomerCredentialsResponse = ValidateCustomerCredentialsResponses[keyof ValidateCustomerCredentialsResponses];
+export type CustomerValidateCredentialsResponse = CustomerValidateCredentialsResponses[keyof CustomerValidateCredentialsResponses];
 
-export type GetCustomersSettingsData = {
+export type CustomerSettingsGetData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/customers/settings';
 };
 
-export type GetCustomersSettingsResponses = {
+export type CustomerSettingsGetResponses = {
     /**
      * Returns customer settings values for global level.
      */
-    200: {
-        data?: CustomerSettingsObject;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: CustomerSettingsObject;
 };
 
-export type GetCustomersSettingsResponse = GetCustomersSettingsResponses[keyof GetCustomersSettingsResponses];
+export type CustomerSettingsGetResponse = CustomerSettingsGetResponses[keyof CustomerSettingsGetResponses];
 
-export type UpdateCustomersSettingsData = {
+export type CustomerSettingsPutData = {
     body: CustomerSettingsObject;
     path?: never;
     query?: never;
     url: '/customers/settings';
 };
 
-export type UpdateCustomersSettingsResponses = {
+export type CustomerSettingsPutResponses = {
     /**
      * Customer settings are returned on a global level.
      */
-    200: {
-        data?: CustomerSettingsObject;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: CustomerSettingsObject;
 };
 
-export type UpdateCustomersSettingsResponse = UpdateCustomersSettingsResponses[keyof UpdateCustomersSettingsResponses];
+export type CustomerSettingsPutResponse = CustomerSettingsPutResponses[keyof CustomerSettingsPutResponses];
 
-export type GetCustomersSettingsChannelData = {
+export type CustomerSettingsChannelGetData = {
     body?: never;
     path: {
         channel_id: number;
@@ -2581,21 +1765,16 @@ export type GetCustomersSettingsChannelData = {
     url: '/customers/settings/channels/{channel_id}';
 };
 
-export type GetCustomersSettingsChannelResponses = {
+export type CustomerSettingsChannelGetResponses = {
     /**
      * Customer settings for this channel are returned.
      */
-    200: {
-        data?: CustomerChannelSettingsObject;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: CustomerChannelSettingsObject;
 };
 
-export type GetCustomersSettingsChannelResponse = GetCustomersSettingsChannelResponses[keyof GetCustomersSettingsChannelResponses];
+export type CustomerSettingsChannelGetResponse = CustomerSettingsChannelGetResponses[keyof CustomerSettingsChannelGetResponses];
 
-export type UpdateCustomersSettingsChannelData = {
+export type CustomerSettingsChannelPutData = {
     body: CustomerChannelSettingsObject;
     path: {
         channel_id: number;
@@ -2604,21 +1783,16 @@ export type UpdateCustomersSettingsChannelData = {
     url: '/customers/settings/channels/{channel_id}';
 };
 
-export type UpdateCustomersSettingsChannelResponses = {
+export type CustomerSettingsChannelPutResponses = {
     /**
      * Customer settings are returned.
      */
-    200: {
-        data?: CustomerSettingsObject;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: CustomerSettingsObject;
 };
 
-export type UpdateCustomersSettingsChannelResponse = UpdateCustomersSettingsChannelResponses[keyof UpdateCustomersSettingsChannelResponses];
+export type CustomerSettingsChannelPutResponse = CustomerSettingsChannelPutResponses[keyof CustomerSettingsChannelPutResponses];
 
-export type DeleteCustomersAttributesData = {
+export type CustomersAttributesDeleteData = {
     body?: never;
     headers?: {
         Accept?: string;
@@ -2634,13 +1808,13 @@ export type DeleteCustomersAttributesData = {
     url: '/customers/attributes';
 };
 
-export type DeleteCustomersAttributesResponses = {
+export type CustomersAttributesDeleteResponses = {
     204: void;
 };
 
-export type DeleteCustomersAttributesResponse = DeleteCustomersAttributesResponses[keyof DeleteCustomersAttributesResponses];
+export type CustomersAttributesDeleteResponse = CustomersAttributesDeleteResponses[keyof CustomersAttributesDeleteResponses];
 
-export type GetCustomersAttributesData = {
+export type CustomersAttributesGetData = {
     body?: never;
     headers?: {
         Accept?: string;
@@ -2669,34 +1843,34 @@ export type GetCustomersAttributesData = {
          */
         type?: string;
         /**
-         * Filter items by `date_created`, for example, `2024-05-14T09:34:00`, `2024-05-14T09:34:00` or `2024-05-14`.
+         * Filter items by `date_created`. `date_created=2021-01-07T20:28:16Z`
          */
         date_created?: string;
         /**
-         * Filter items by maximum `date_created`, for example, `2024-05-14T09:34:00`, `2024-05-14T09:34:00` or `2024-05-14`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. Returns metafields created before this date.
+         * Filter items by maximum `date_created`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. `date_created=2021-01-07` or `date_created=1610051296000`
          */
         'date_created:max'?: string;
         /**
-         * Filter items by minimum `date_created`, for example, `2024-05-14T09:34:00`, `2024-05-14T09:34:00` or `2024-05-14`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. Returns metafields created after this date.
+         * Filter items by minimum `date_created`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. `date_created=2021-01-07` or `date_created=1610051296000`
          */
         'date_created:min'?: string;
         /**
-         * Filter items by `date_modified`, for example, `2024-05-14T09:34:00` or `2024-05-14`.
+         * Filter items by `date_modified`.
          */
         date_modified?: string;
         /**
-         * Filter items by maximum `date_modified`, for example, `2024-05-14T09:34:00` or `2024-05-14`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. Returns metafields modified before this date.
+         * Filter items by maximum `date_modified`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. `date_created=2021-01-07` or `date_created=1610051296000`
          */
         'date_modified:max'?: string;
         /**
-         * Filter items by minimum `date_modified`, for example, `2024-05-14T09:34:00` or `2024-05-14`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. Returns metafields modified after this date.
+         * Filter items by minimum `date_modified`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. `date_created=2021-01-07` or `date_created=1610051296000`
          */
         'date_modified:min'?: string;
     };
     url: '/customers/attributes';
 };
 
-export type GetCustomersAttributesResponses = {
+export type CustomersAttributesGetResponses = {
     /**
      * CustomerAttributesResponse
      *
@@ -2731,9 +1905,9 @@ export type GetCustomersAttributesResponses = {
     };
 };
 
-export type GetCustomersAttributesResponse = GetCustomersAttributesResponses[keyof GetCustomersAttributesResponses];
+export type CustomersAttributesGetResponse = CustomersAttributesGetResponses[keyof CustomersAttributesGetResponses];
 
-export type CreateCustomersAttributesData = {
+export type CustomersAttributesPostData = {
     body: Array<AttributePost>;
     headers?: {
         Accept?: string;
@@ -2744,7 +1918,7 @@ export type CreateCustomersAttributesData = {
     url: '/customers/attributes';
 };
 
-export type CreateCustomersAttributesErrors = {
+export type CustomersAttributesPostErrors = {
     /**
      * The `Attribute` was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
      *
@@ -2752,9 +1926,9 @@ export type CreateCustomersAttributesErrors = {
     422: ErrorResponse;
 };
 
-export type CreateCustomersAttributesError = CreateCustomersAttributesErrors[keyof CreateCustomersAttributesErrors];
+export type CustomersAttributesPostError = CustomersAttributesPostErrors[keyof CustomersAttributesPostErrors];
 
-export type CreateCustomersAttributesResponses = {
+export type CustomersAttributesPostResponses = {
     /**
      * CustomerAttributesResponse
      *
@@ -2789,9 +1963,9 @@ export type CreateCustomersAttributesResponses = {
     };
 };
 
-export type CreateCustomersAttributesResponse = CreateCustomersAttributesResponses[keyof CreateCustomersAttributesResponses];
+export type CustomersAttributesPostResponse = CustomersAttributesPostResponses[keyof CustomersAttributesPostResponses];
 
-export type UpdateCustomersAttributesData = {
+export type CustomersAttributesPutData = {
     body: Array<AttributePut>;
     headers?: {
         Accept?: string;
@@ -2802,7 +1976,7 @@ export type UpdateCustomersAttributesData = {
     url: '/customers/attributes';
 };
 
-export type UpdateCustomersAttributesErrors = {
+export type CustomersAttributesPutErrors = {
     /**
      * The `Attribute` was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
      *
@@ -2810,9 +1984,9 @@ export type UpdateCustomersAttributesErrors = {
     422: ErrorResponse;
 };
 
-export type UpdateCustomersAttributesError = UpdateCustomersAttributesErrors[keyof UpdateCustomersAttributesErrors];
+export type CustomersAttributesPutError = CustomersAttributesPutErrors[keyof CustomersAttributesPutErrors];
 
-export type UpdateCustomersAttributesResponses = {
+export type CustomersAttributesPutResponses = {
     /**
      * CustomerAttributesResponse
      *
@@ -2847,9 +2021,9 @@ export type UpdateCustomersAttributesResponses = {
     };
 };
 
-export type UpdateCustomersAttributesResponse = UpdateCustomersAttributesResponses[keyof UpdateCustomersAttributesResponses];
+export type CustomersAttributesPutResponse = CustomersAttributesPutResponses[keyof CustomersAttributesPutResponses];
 
-export type DeleteCustomersAttributeValuesData = {
+export type CustomersAttributeValuesDeleteData = {
     body?: never;
     headers?: {
         Accept?: string;
@@ -2866,13 +2040,13 @@ export type DeleteCustomersAttributeValuesData = {
     url: '/customers/attribute-values';
 };
 
-export type DeleteCustomersAttributeValuesResponses = {
+export type CustomersAttributeValuesDeleteResponses = {
     204: void;
 };
 
-export type DeleteCustomersAttributeValuesResponse = DeleteCustomersAttributeValuesResponses[keyof DeleteCustomersAttributeValuesResponses];
+export type CustomersAttributeValuesDeleteResponse = CustomersAttributeValuesDeleteResponses[keyof CustomersAttributeValuesDeleteResponses];
 
-export type GetCustomersAttributeValuesData = {
+export type CustomersAttributeValuesGetData = {
     body?: never;
     headers?: {
         Accept?: string;
@@ -2901,34 +2075,34 @@ export type GetCustomersAttributeValuesData = {
          */
         name?: string;
         /**
-         * Filter items by `date_created`, for example, `2024-05-14T09:34:00`, `2024-05-14T09:34:00` or `2024-05-14`.
+         * Filter items by `date_created`. `date_created=2018-09-05T13:43:54`
          */
         date_created?: string;
         /**
-         * Filter items by maximum `date_created`, for example, `2024-05-14T09:34:00`, `2024-05-14T09:34:00` or `2024-05-14`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. Returns metafields created before this date.
+         * Filter items by maximum `date_created`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. `date_created=2021-01-07` or `date_created=1610051296000`
          */
         'date_created:max'?: string;
         /**
-         * Filter items by minimum `date_created`, for example, `2024-05-14T09:34:00`, `2024-05-14T09:34:00` or `2024-05-14`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. Returns metafields created after this date
+         * Filter items by minimum `date_created`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. `date_created=2021-01-07` or `date_created=1610051296000`
          */
         'date_created:min'?: string;
         /**
-         * Filter items by `date_modified`, for example, `2024-05-14T09:34:00` or `2024-05-14`.
+         * Filter items by `date_modified`. `date_modified=2018-09-05T13:45:03`
          */
         date_modified?: string;
         /**
-         * Filter items by maximum `date_modified`, for example, `2024-05-14T09:34:00` or `2024-05-14`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. Returns metafields modified before this date.
+         * Filter items by maximum `date_modified`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. `date_created=2021-01-07` or `date_created=1610051296000`
          */
         'date_modified:max'?: string;
         /**
-         * Filter items by minimum `date_modified`, for example, `2024-05-14T09:34:00` or `2024-05-14`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. Returns metafields modified after this date.
+         * Filter items by minimum `date_modified`. ISO 8601 full-date is required, ISO 8601 full-time is not required. UNIX timestamp also accepted. `date_created=2021-01-07` or `date_created=1610051296000`
          */
         'date_modified:min'?: string;
     };
     url: '/customers/attribute-values';
 };
 
-export type GetCustomersAttributeValuesResponses = {
+export type CustomersAttributeValuesGetResponses = {
     /**
      * CustomerAttributeValueCollectionResponse
      *
@@ -3019,9 +2193,9 @@ export type GetCustomersAttributeValuesResponses = {
     };
 };
 
-export type GetCustomersAttributeValuesResponse = GetCustomersAttributeValuesResponses[keyof GetCustomersAttributeValuesResponses];
+export type CustomersAttributeValuesGetResponse = CustomersAttributeValuesGetResponses[keyof CustomersAttributeValuesGetResponses];
 
-export type UpsertCustomersAttributeValuesData = {
+export type CustomersAttributeValuesPutData = {
     body: Array<AttributeValueBase>;
     headers?: {
         Accept?: string;
@@ -3032,7 +2206,7 @@ export type UpsertCustomersAttributeValuesData = {
     url: '/customers/attribute-values';
 };
 
-export type UpsertCustomersAttributeValuesErrors = {
+export type CustomersAttributeValuesPutErrors = {
     /**
      * The `CustomerAttributeValue` was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
      *
@@ -3040,9 +2214,9 @@ export type UpsertCustomersAttributeValuesErrors = {
     422: ErrorResponse;
 };
 
-export type UpsertCustomersAttributeValuesError = UpsertCustomersAttributeValuesErrors[keyof UpsertCustomersAttributeValuesErrors];
+export type CustomersAttributeValuesPutError = CustomersAttributeValuesPutErrors[keyof CustomersAttributeValuesPutErrors];
 
-export type UpsertCustomersAttributeValuesResponses = {
+export type CustomersAttributeValuesPutResponses = {
     /**
      * CustomerAttributeValueCollectionResponse
      *
@@ -3133,9 +2307,9 @@ export type UpsertCustomersAttributeValuesResponses = {
     };
 };
 
-export type UpsertCustomersAttributeValuesResponse = UpsertCustomersAttributeValuesResponses[keyof UpsertCustomersAttributeValuesResponses];
+export type CustomersAttributeValuesPutResponse = CustomersAttributeValuesPutResponses[keyof CustomersAttributeValuesPutResponses];
 
-export type GetCustomersFormFieldValuesData = {
+export type CustomerFormFieldsGetData = {
     body?: never;
     headers?: {
         Accept?: string;
@@ -3144,7 +2318,7 @@ export type GetCustomersFormFieldValuesData = {
     path?: never;
     query?: {
         /**
-         * Page number (`page` will be ignored if you provide `before` or `after` in the request). For example `page=1`.
+         * Page number. `page=1`
          */
         page?: number;
         /**
@@ -3175,28 +2349,20 @@ export type GetCustomersFormFieldValuesData = {
          * * `picklist` - pick list field
          */
         field_type?: 'checkboxes' | 'date' | 'multiline' | 'numbers' | 'password' | 'radiobuttons' | 'text' | 'picklist';
-        /**
-         * The cursor reference of the last entry for the previous page. Use the `end_cursor` value from the last response to get the next page (`end_cursor` is only returned on the first page or when the request contains query parameter `before` or `after`). For example `after=eyJzZXNzaW9uSWQiOjM4LCJmaWVsZElkIjo0MH0`.
-         */
-        after?: string;
-        /**
-         * The cursor reference of the first entry for the next page. Use the `start_cursor` value from the last response to get the previous page (`start_cursor` is only returned on the first page or when the request contains query parameter `before` or `after`). For example `before=eyJzZXNzaW9uSWQiOjgsImZpZWxkSWQiOjMxfQ`.
-         */
-        before?: string;
     };
     url: '/customers/form-field-values';
 };
 
-export type GetCustomersFormFieldValuesErrors = {
+export type CustomerFormFieldsGetErrors = {
     /**
      * The form field value was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
      */
     422: ErrorResponse;
 };
 
-export type GetCustomersFormFieldValuesError = GetCustomersFormFieldValuesErrors[keyof GetCustomersFormFieldValuesErrors];
+export type CustomerFormFieldsGetError = CustomerFormFieldsGetErrors[keyof CustomerFormFieldsGetErrors];
 
-export type GetCustomersFormFieldValuesResponses = {
+export type CustomerFormFieldsGetResponses = {
     200: {
         /**
          * Form Field Value
@@ -3221,29 +2387,81 @@ export type GetCustomersFormFieldValuesResponses = {
              */
             address_id: number;
         })>;
-        meta?: MetaCollectionWithCursorPagination;
+        /**
+         * Collection Meta
+         *
+         * Data about the response, including pagination and collection totals.
+         */
+        meta?: {
+            /**
+             * Pagination
+             *
+             * Data about the response, including pagination and collection totals.
+             */
+            pagination?: {
+                /**
+                 * Total number of items in the result set.
+                 */
+                total?: number;
+                /**
+                 * Total number of items in the collection response.
+                 */
+                count?: number;
+                /**
+                 * The amount of items returned in the collection per page, controlled by the limit parameter.
+                 */
+                per_page?: number;
+                /**
+                 * The page you are currently on within the collection.
+                 */
+                current_page?: number;
+                /**
+                 * The total number of pages in the collection.
+                 */
+                total_pages?: number;
+                /**
+                 * Links
+                 *
+                 * Pagination links for the previous and next parts of the whole collection.
+                 */
+                links?: {
+                    /**
+                     * Link to the previous page returned in the response.
+                     */
+                    previous?: string;
+                    /**
+                     * Link to the current page returned in the response.
+                     */
+                    current?: string;
+                    /**
+                     * Link to the next page returned in the response.
+                     */
+                    next?: string;
+                };
+            };
+        };
     };
 };
 
-export type GetCustomersFormFieldValuesResponse = GetCustomersFormFieldValuesResponses[keyof GetCustomersFormFieldValuesResponses];
+export type CustomerFormFieldsGetResponse = CustomerFormFieldsGetResponses[keyof CustomerFormFieldsGetResponses];
 
-export type UpdateCustomerFormFieldValuesData = {
+export type CustomerFormFieldValuePutData = {
     body?: Array<FormFieldValueFull>;
     path?: never;
     query?: never;
     url: '/customers/form-field-values';
 };
 
-export type UpdateCustomerFormFieldValuesErrors = {
+export type CustomerFormFieldValuePutErrors = {
     /**
      * The form field value was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
      */
     422: ErrorResponse;
 };
 
-export type UpdateCustomerFormFieldValuesError = UpdateCustomerFormFieldValuesErrors[keyof UpdateCustomerFormFieldValuesErrors];
+export type CustomerFormFieldValuePutError = CustomerFormFieldValuePutErrors[keyof CustomerFormFieldValuePutErrors];
 
-export type UpdateCustomerFormFieldValuesResponses = {
+export type CustomerFormFieldValuePutResponses = {
     200: {
         /**
          * Form Field Value
@@ -3272,21 +2490,18 @@ export type UpdateCustomerFormFieldValuesResponses = {
     };
 };
 
-export type UpdateCustomerFormFieldValuesResponse = UpdateCustomerFormFieldValuesResponses[keyof UpdateCustomerFormFieldValuesResponses];
+export type CustomerFormFieldValuePutResponse = CustomerFormFieldValuePutResponses[keyof CustomerFormFieldValuePutResponses];
 
-export type GetCustomerConsentData = {
+export type CustomersConsentByCustomerIdGetData = {
     body?: never;
     path: {
-        /**
-         * The ID of the customer.
-         */
-        customerId: number;
+        customerId: string;
     };
     query?: never;
     url: '/customers/{customerId}/consent';
 };
 
-export type GetCustomerConsentErrors = {
+export type CustomersConsentByCustomerIdGetErrors = {
     /**
      * Unauthorized - the v3 Auth client ID or token in the request are not a valid combination for this store.
      */
@@ -3301,30 +2516,27 @@ export type GetCustomerConsentErrors = {
     422: ErrorResponse;
 };
 
-export type GetCustomerConsentError = GetCustomerConsentErrors[keyof GetCustomerConsentErrors];
+export type CustomersConsentByCustomerIdGetError = CustomersConsentByCustomerIdGetErrors[keyof CustomersConsentByCustomerIdGetErrors];
 
-export type GetCustomerConsentResponses = {
+export type CustomersConsentByCustomerIdGetResponses = {
     200: ConsentFull;
 };
 
-export type GetCustomerConsentResponse = GetCustomerConsentResponses[keyof GetCustomerConsentResponses];
+export type CustomersConsentByCustomerIdGetResponse = CustomersConsentByCustomerIdGetResponses[keyof CustomersConsentByCustomerIdGetResponses];
 
-export type UpdateCustomerConsentData = {
+export type CustomersConsentByCustomerIdPutData = {
     body?: DeclareCustomerConsentRequest;
     headers?: {
         'Content-Type'?: string;
     };
     path: {
-        /**
-         * The ID of the customer.
-         */
-        customerId: number;
+        customerId: string;
     };
     query?: never;
     url: '/customers/{customerId}/consent';
 };
 
-export type UpdateCustomerConsentErrors = {
+export type CustomersConsentByCustomerIdPutErrors = {
     /**
      * Unauthorized - the v3 Auth client ID or token in the request are not a valid combination for this store.
      */
@@ -3339,27 +2551,24 @@ export type UpdateCustomerConsentErrors = {
     422: ErrorResponse;
 };
 
-export type UpdateCustomerConsentError = UpdateCustomerConsentErrors[keyof UpdateCustomerConsentErrors];
+export type CustomersConsentByCustomerIdPutError = CustomersConsentByCustomerIdPutErrors[keyof CustomersConsentByCustomerIdPutErrors];
 
-export type UpdateCustomerConsentResponses = {
+export type CustomersConsentByCustomerIdPutResponses = {
     200: ConsentFull;
 };
 
-export type UpdateCustomerConsentResponse = UpdateCustomerConsentResponses[keyof UpdateCustomerConsentResponses];
+export type CustomersConsentByCustomerIdPutResponse = CustomersConsentByCustomerIdPutResponses[keyof CustomersConsentByCustomerIdPutResponses];
 
-export type GetCustomerStoredInstrumentsData = {
+export type ListstoredinstrumentsData = {
     body?: never;
     path: {
-        /**
-         * The ID of the customer.
-         */
-        customerId: number;
+        customerId: string;
     };
     query?: never;
     url: '/customers/{customerId}/stored-instruments';
 };
 
-export type GetCustomerStoredInstrumentsErrors = {
+export type ListstoredinstrumentsErrors = {
     /**
      * Unauthorized
      */
@@ -3370,390 +2579,19 @@ export type GetCustomerStoredInstrumentsErrors = {
     403: ErrorResponse;
 };
 
-export type GetCustomerStoredInstrumentsError = GetCustomerStoredInstrumentsErrors[keyof GetCustomerStoredInstrumentsErrors];
+export type ListstoredinstrumentsError = ListstoredinstrumentsErrors[keyof ListstoredinstrumentsErrors];
 
-export type GetCustomerStoredInstrumentsResponses = {
+export type ListstoredinstrumentsResponses = {
     /**
      * OK
      */
     200: Array<({
         type: 'stored_card';
     } & CardInstrument) | ({
-        type: 'stored_paypal_account';
+        type: 'PayPalAccountInstrument';
     } & PayPalAccountInstrument) | ({
         type: 'stored_bank_account';
     } & BankAccountInstrument)>;
 };
 
-export type GetCustomerStoredInstrumentsResponse = GetCustomerStoredInstrumentsResponses[keyof GetCustomerStoredInstrumentsResponses];
-
-export type GetCustomersMetafieldsData = {
-    body?: never;
-    path: {
-        /**
-         * The ID of the customer.
-         */
-        customerId: number;
-    };
-    query?: never;
-    url: '/customers/{customerId}/metafields';
-};
-
-export type GetCustomersMetafieldsResponses = {
-    /**
-     * Meta Field Collection Response
-     *
-     * Response payload for the BigCommerce API.
-     */
-    200: {
-        data?: Array<MetafieldFull>;
-        meta?: MetaCollectionFull;
-    };
-};
-
-export type GetCustomersMetafieldsResponse = GetCustomersMetafieldsResponses[keyof GetCustomersMetafieldsResponses];
-
-export type CreateCustomerMetafieldsData = {
-    body: MetafieldBasePost;
-    path: {
-        /**
-         * The ID of the customer.
-         */
-        customerId: number;
-    };
-    query?: never;
-    url: '/customers/{customerId}/metafields';
-};
-
-export type CreateCustomerMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * The `Metafield` conflicts with another `Metafield`. This can result from duplicate unique key combinations of the appʼs client id, namespace, key, resource_type, and resource_id.
-     *
-     */
-    409: ErrorResponse;
-    /**
-     * The `Metafield` was not valid. This is the result of missing required fields, or of invalid data. See the response for more details.
-     */
-    422: ErrorResponse;
-};
-
-export type CreateCustomerMetafieldsError = CreateCustomerMetafieldsErrors[keyof CreateCustomerMetafieldsErrors];
-
-export type CreateCustomerMetafieldsResponses = {
-    /**
-     * Response payload for the BigCommerce API.
-     */
-    200: MetaFieldCollectionPostPutResponses;
-};
-
-export type CreateCustomerMetafieldsResponse = CreateCustomerMetafieldsResponses[keyof CreateCustomerMetafieldsResponses];
-
-export type DeleteCustomerMetafieldsIdData = {
-    body?: never;
-    path: {
-        /**
-         * The ID of the customer.
-         */
-        customerId: number;
-        /**
-         * The ID of the metafield belonging to the customer. The metafieldId is a generated response when sending a POST query to the Create a Customer Metafields endpoint.
-         */
-        metafieldId: number;
-    };
-    query?: never;
-    url: '/customers/{customerId}/metafields/{metafieldId}';
-};
-
-export type DeleteCustomerMetafieldsIdErrors = {
-    /**
-     * Not found (A metafield was not found with this query).
-     *
-     */
-    404: NotFound;
-};
-
-export type DeleteCustomerMetafieldsIdError = DeleteCustomerMetafieldsIdErrors[keyof DeleteCustomerMetafieldsIdErrors];
-
-export type DeleteCustomerMetafieldsIdResponses = {
-    /**
-     * Response object for customer metafields deletion with success.
-     *
-     */
-    204: void;
-};
-
-export type DeleteCustomerMetafieldsIdResponse = DeleteCustomerMetafieldsIdResponses[keyof DeleteCustomerMetafieldsIdResponses];
-
-export type GetMetafieldsCustomerIdData = {
-    body?: never;
-    path: {
-        /**
-         * The ID that belongs to the customer.
-         */
-        customerId: number;
-        /**
-         * The ID that is generated for a metafield when created.
-         */
-        metafieldId: number;
-    };
-    query?: never;
-    url: '/customers/{customerId}/metafields/{metafieldId}';
-};
-
-export type GetMetafieldsCustomerIdErrors = {
-    /**
-     * Not found (A metafield was not found with this query).
-     *
-     */
-    404: NotFound;
-};
-
-export type GetMetafieldsCustomerIdError = GetMetafieldsCustomerIdErrors[keyof GetMetafieldsCustomerIdErrors];
-
-export type GetMetafieldsCustomerIdResponses = {
-    /**
-     * Metafield Response
-     */
-    200: {
-        data?: MetafieldFull;
-        meta?: MetaEmptyFull;
-    };
-};
-
-export type GetMetafieldsCustomerIdResponse = GetMetafieldsCustomerIdResponses[keyof GetMetafieldsCustomerIdResponses];
-
-export type UpdateCustomerMetafieldData = {
-    body?: MetafieldBasePut & {
-        /**
-         * The ID of metafield to update.
-         *
-         */
-        id: number;
-    };
-    path: {
-        /**
-         * The ID of the metafield belonging to the customer. The metafieldId is a generated response when sending a POST query to the Create a Customer Metafields endpoint.
-         */
-        metafieldId: number;
-        /**
-         * The ID of the customer.
-         */
-        customerId: number;
-    };
-    query?: {
-        /**
-         * The ID that is generated for a metafield when created.
-         */
-        metafieldId?: number;
-    };
-    url: '/customers/{customerId}/metafields/{metafieldId}';
-};
-
-export type UpdateCustomerMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Not found (A metafield was not found with this query).
-     *
-     */
-    404: NotFound;
-};
-
-export type UpdateCustomerMetafieldError = UpdateCustomerMetafieldErrors[keyof UpdateCustomerMetafieldErrors];
-
-export type UpdateCustomerMetafieldResponses = {
-    /**
-     * Response payload for the BigCommerce API.
-     */
-    200: MetaFieldCollectionPostPutResponses;
-};
-
-export type UpdateCustomerMetafieldResponse = UpdateCustomerMetafieldResponses[keyof UpdateCustomerMetafieldResponses];
-
-export type DeleteCustomersMetafieldsData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/customers/metafields';
-};
-
-export type DeleteCustomersMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields deletion with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-
-export type DeleteCustomersMetafieldsError = DeleteCustomersMetafieldsErrors[keyof DeleteCustomersMetafieldsErrors];
-
-export type DeleteCustomersMetafieldsResponses = {
-    /**
-     * Response object for metafields deletion with success.
-     *
-     */
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-
-export type DeleteCustomersMetafieldsResponse = DeleteCustomersMetafieldsResponses[keyof DeleteCustomersMetafieldsResponses];
-
-export type GetAllCustomersMetafieldsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         *
-         */
-        page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products.
-         *
-         */
-        limit?: number;
-        /**
-         * Filter based on a metafieldʼs key.
-         */
-        key?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla 'key' query parameter.
-         */
-        'key:in'?: Array<string>;
-        /**
-         * Filter based on a metafieldʼs namespaces.
-         */
-        namespace?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter.
-         */
-        'namespace:in'?: Array<string>;
-        /**
-         * Sort direction. Acceptable values are: `asc`, `desc`.
-         *
-         */
-        direction?: 'asc' | 'desc';
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-        /**
-         * Filter items by minimum date modified. For example, `date_modified:min=`2024-05-14T09:34:00` or `date_modified:min=2019-09-04`. Returns metafields modified after this date.
-         */
-        'date_modified:min'?: string;
-        /**
-         * Filter items by maximum date modified. For example, `date_modified:max=2019-09-04T00:00:00` or `date_modified:max=2019-09-04`. Returns metafields modified before this date.
-         */
-        'date_modified:max'?: string;
-        /**
-         * Filter items by minimum date created. For example, `date_created:min=2019-09-04T00:00:00` or `date_created:min=2019-09-04`. Returns metafields created after this date.
-         */
-        'date_created:min'?: string;
-        /**
-         * Filter items by maximum date created. For example, `date_created:max=`2024-05-14T09:34:00` or `date_created:max=2019-09-04`. Returns metafields created before this date.
-         */
-        'date_created:max'?: string;
-    };
-    url: '/customers/metafields';
-};
-
-export type GetAllCustomersMetafieldsResponses = {
-    /**
-     * List of `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponse;
-};
-
-export type GetAllCustomersMetafieldsResponse = GetAllCustomersMetafieldsResponses[keyof GetAllCustomersMetafieldsResponses];
-
-export type CreateCustomersMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        /**
-         * The ID for the resource with which the metafield is associated.
-         *
-         */
-        resource_id: number;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/customers/metafields';
-};
-
-export type CreateCustomersMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type CreateCustomersMetafieldsError = CreateCustomersMetafieldsErrors[keyof CreateCustomersMetafieldsErrors];
-
-export type CreateCustomersMetafieldsResponses = {
-    /**
-     * Response payload for the BigCommerce API.
-     */
-    200: MetaFieldCollectionPostPutResponses;
-};
-
-export type CreateCustomersMetafieldsResponse = CreateCustomersMetafieldsResponses[keyof CreateCustomersMetafieldsResponses];
-
-export type UpdateCustomersMetafieldsData = {
-    body?: Array<MetafieldBasePut & {
-        /**
-         * The ID of metafield to update.
-         *
-         */
-        id: number;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/customers/metafields';
-};
-
-export type UpdateCustomersMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type UpdateCustomersMetafieldsError = UpdateCustomersMetafieldsErrors[keyof UpdateCustomersMetafieldsErrors];
-
-export type UpdateCustomersMetafieldsResponses = {
-    /**
-     * Response payload for the BigCommerce API.
-     */
-    200: MetaFieldCollectionPostPutResponses;
-};
-
-export type UpdateCustomersMetafieldsResponse = UpdateCustomersMetafieldsResponses[keyof UpdateCustomersMetafieldsResponses];
+export type ListstoredinstrumentsResponse = ListstoredinstrumentsResponses[keyof ListstoredinstrumentsResponses];

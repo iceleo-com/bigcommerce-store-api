@@ -7,8 +7,6 @@ export type PaymentBase = {
     test_mode?: boolean;
 };
 export type Accept = string;
-export type PageQuery = number;
-export type LimitQuery = number;
 export type GetAllPaymentMethodsData = {
     body?: never;
     headers: {

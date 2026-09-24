@@ -5,11 +5,11 @@ export * as BrandsV3ApiSpecs from '../generated/brands-v3';
 export declare class BrandsV3Api {
     private readonly request;
     constructor(request: RequestService);
-    getBrands(query?: BrandsV3ApiSpecs.GetBrandsData['query']): Promise<RequestSuccessResponse<200, Required<{
+    getBrands(query?: BrandsV3ApiSpecs.GetBrandsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
         data?: Array<BrandsV3ApiSpecs.BrandFull>;
         meta?: BrandsV3ApiSpecs.MetaCollectionFull;
-    }>> | RequestErrorResponse<401, string> | RequestErrorResponse<403, Required<BrandsV3ApiSpecs.ErrorBase>>>;
-    createBrand(requestBody: BrandsV3ApiSpecs.CreateBrandData['body']): Promise<RequestErrorResponse<401, string> | RequestErrorResponse<403, Required<BrandsV3ApiSpecs.ErrorBase>> | RequestSuccessResponse<200, Required<{
+    }>>>;
+    createBrand(requestBody: BrandsV3ApiSpecs.CreateBrandData['body']): Promise<RequestSuccessResponse<200, Required<{
         data?: {
             readonly id?: number;
             name?: string;
@@ -24,14 +24,11 @@ export declare class BrandsV3Api {
             };
         };
         meta?: BrandsV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestSuccessResponse<207, Required<{
-        data?: Array<BrandsV3ApiSpecs.BrandFull>;
-        errors?: BrandsV3ApiSpecs._Error;
-        meta?: BrandsV3ApiSpecs.WriteCollectionSuccessMeta;
-    }>> | RequestErrorResponse<404, Required<BrandsV3ApiSpecs.NotFoundError>> | RequestErrorResponse<409, Required<{
+    }>> | RequestSuccessResponse<207, Required<BrandsV3ApiSpecs.ErrorBase>> | RequestErrorResponse<409, Required<{
         errors?: {
             [key: string]: unknown;
         };
+        instance?: string;
         status?: number;
         title?: string;
         type?: string;
@@ -39,25 +36,31 @@ export declare class BrandsV3Api {
         errors?: {
             [key: string]: unknown;
         };
+        instance?: string;
         status?: number;
         title?: string;
         type?: string;
     }>>>;
-    deleteBrands(query?: BrandsV3ApiSpecs.DeleteBrandsData['query']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<401, string> | RequestErrorResponse<403, Required<BrandsV3ApiSpecs.ErrorBase>> | RequestErrorResponse<422, Required<BrandsV3ApiSpecs.ErrorBase>>>;
-    getBrand(brandId: BrandsV3ApiSpecs.GetBrandData['path']['brand_id'], query?: BrandsV3ApiSpecs.GetBrandData['query']): Promise<RequestErrorResponse<401, string> | RequestErrorResponse<403, Required<BrandsV3ApiSpecs.ErrorBase>> | RequestSuccessResponse<200, Required<{
+    deleteBrands(query?: BrandsV3ApiSpecs.DeleteBrandsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    getBrandById(brandId: BrandsV3ApiSpecs.GetBrandByIdData['path']['brand_id'], query?: BrandsV3ApiSpecs.GetBrandByIdData['query']): Promise<RequestSuccessResponse<200, Required<{
         data?: BrandsV3ApiSpecs.BrandFull;
         meta?: BrandsV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestSuccessResponse<207, Required<{
-        data?: Array<BrandsV3ApiSpecs.BrandFull>;
-        errors?: BrandsV3ApiSpecs._Error;
-        meta?: BrandsV3ApiSpecs.WriteCollectionSuccessMeta;
     }>> | RequestErrorResponse<404, Required<{
         status?: number;
         title?: string;
         type?: string;
         instance?: string;
-    }>> | RequestErrorResponse<409, Required<BrandsV3ApiSpecs.Conflict>> | RequestErrorResponse<422, Required<BrandsV3ApiSpecs._Error>>>;
-    updateBrand(brandId: BrandsV3ApiSpecs.UpdateBrandData['path']['brand_id'], requestBody: BrandsV3ApiSpecs.UpdateBrandData['body']): Promise<RequestErrorResponse<401, string> | RequestErrorResponse<403, Required<BrandsV3ApiSpecs.ErrorBase>> | RequestSuccessResponse<200, Required<{
+    }>>>;
+    getBrand(...args: Parameters<BrandsV3Api['getBrandById']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: BrandsV3ApiSpecs.BrandFull;
+        meta?: BrandsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    updateBrand(brandId: BrandsV3ApiSpecs.UpdateBrandData['path']['brand_id'], requestBody: BrandsV3ApiSpecs.UpdateBrandData['body']): Promise<RequestSuccessResponse<207, Required<BrandsV3ApiSpecs.ErrorBase>> | RequestSuccessResponse<200, Required<{
         data?: {
             readonly id?: number;
             name: string;
@@ -72,18 +75,16 @@ export declare class BrandsV3Api {
             };
         };
         meta?: BrandsV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestSuccessResponse<207, Required<{
-        data?: Array<BrandsV3ApiSpecs.BrandFull>;
-        errors?: BrandsV3ApiSpecs._Error;
-        meta?: BrandsV3ApiSpecs.WriteCollectionSuccessMeta;
     }>> | RequestErrorResponse<404, Required<{
         status?: number;
         title?: string;
         type?: string;
+        instance?: string;
     }>> | RequestErrorResponse<409, Required<{
         errors?: {
             [key: string]: unknown;
         };
+        instance?: string;
         status?: number;
         title?: string;
         type?: string;
@@ -91,25 +92,36 @@ export declare class BrandsV3Api {
         errors?: {
             [key: string]: unknown;
         };
+        instance?: string;
         status?: number;
         title?: string;
         type?: string;
     }>>>;
-    deleteBrand(brandId: BrandsV3ApiSpecs.DeleteBrandData['path']['brand_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<401, string> | RequestErrorResponse<403, Required<BrandsV3ApiSpecs.ErrorBase>> | RequestErrorResponse<404, Required<BrandsV3ApiSpecs.NotFoundError>>>;
-    getBrandMetafields(brandId: BrandsV3ApiSpecs.GetBrandMetafieldsData['path']['brand_id'], query?: BrandsV3ApiSpecs.GetBrandMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+    deleteBrandById(brandId: BrandsV3ApiSpecs.DeleteBrandByIdData['path']['brand_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteBrand(...args: Parameters<BrandsV3Api['deleteBrandById']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    getBrandMetafieldsByBrandId(brandId: BrandsV3ApiSpecs.GetBrandMetafieldsByBrandIdData['path']['brand_id'], query?: BrandsV3ApiSpecs.GetBrandMetafieldsByBrandIdData['query']): Promise<RequestSuccessResponse<200, Required<{
         data?: Array<BrandsV3ApiSpecs.MetafieldFull>;
         meta?: BrandsV3ApiSpecs.MetaCollectionFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getBrandMetafields(...args: Parameters<BrandsV3Api['getBrandMetafieldsByBrandId']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: Array<BrandsV3ApiSpecs.MetafieldFull>;
+        meta?: BrandsV3ApiSpecs.MetaCollectionFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
     }>>>;
     createBrandMetafield(brandId: BrandsV3ApiSpecs.CreateBrandMetafieldData['path']['brand_id'], requestBody: BrandsV3ApiSpecs.CreateBrandMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<{
         data?: BrandsV3ApiSpecs.MetafieldFull;
         meta?: {
             [key: string]: unknown;
         };
-    }>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
     }>> | RequestErrorResponse<409, Required<{
         errors?: {
             [key: string]: unknown;
@@ -127,7 +139,16 @@ export declare class BrandsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    getBrandMetafield(brandId: BrandsV3ApiSpecs.GetBrandMetafieldData['path']['brand_id'], metafieldId: BrandsV3ApiSpecs.GetBrandMetafieldData['path']['metafield_id'], query?: BrandsV3ApiSpecs.GetBrandMetafieldData['query']): Promise<RequestSuccessResponse<200, Required<{
+    getBrandMetafieldByBrandId(brandId: BrandsV3ApiSpecs.GetBrandMetafieldByBrandIdData['path']['brand_id'], metafieldId: BrandsV3ApiSpecs.GetBrandMetafieldByBrandIdData['path']['metafield_id'], query?: BrandsV3ApiSpecs.GetBrandMetafieldByBrandIdData['query']): Promise<RequestSuccessResponse<200, Required<{
+        data?: BrandsV3ApiSpecs.MetafieldFull;
+        meta?: BrandsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getBrandMetafield(...args: Parameters<BrandsV3Api['getBrandMetafieldByBrandId']>): Promise<RequestSuccessResponse<200, Required<{
         data?: BrandsV3ApiSpecs.MetafieldFull;
         meta?: BrandsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<404, Required<{
@@ -139,23 +160,14 @@ export declare class BrandsV3Api {
     updateBrandMetafield(brandId: BrandsV3ApiSpecs.UpdateBrandMetafieldData['path']['brand_id'], metafieldId: BrandsV3ApiSpecs.UpdateBrandMetafieldData['path']['metafield_id'], requestBody: BrandsV3ApiSpecs.UpdateBrandMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<{
         data?: BrandsV3ApiSpecs.MetafieldFull;
         meta?: BrandsV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
     }>> | RequestErrorResponse<404, Required<{
         status?: number;
         title?: string;
         type?: string;
         instance?: string;
     }>>>;
-    deleteBrandMetafield(brandId: BrandsV3ApiSpecs.DeleteBrandMetafieldData['path']['brand_id'], metafieldId: BrandsV3ApiSpecs.DeleteBrandMetafieldData['path']['metafield_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>>>;
+    deleteBrandMetafieldById(brandId: BrandsV3ApiSpecs.DeleteBrandMetafieldByIdData['path']['brand_id'], metafieldId: BrandsV3ApiSpecs.DeleteBrandMetafieldByIdData['path']['metafield_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteBrandMetafield(...args: Parameters<BrandsV3Api['deleteBrandMetafieldById']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
     createBrandImage(brandId: BrandsV3ApiSpecs.CreateBrandImageData['path']['brand_id'], requestBody: BrandsV3ApiSpecs.CreateBrandImageData['body']): Promise<RequestSuccessResponse<200, Required<{
         data?: {
             image_url?: string;
@@ -178,37 +190,4 @@ export declare class BrandsV3Api {
         type?: string;
     }>>>;
     deleteBrandImage(brandId: BrandsV3ApiSpecs.DeleteBrandImageData['path']['brand_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    getBrandsMetafields(query?: BrandsV3ApiSpecs.GetBrandsMetafieldsData['query']): Promise<RequestSuccessResponse<200, Required<BrandsV3ApiSpecs.MetaFieldCollectionResponse>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        errors?: unknown;
-    }>>>;
-    createBrandsMetafields(requestBody: BrandsV3ApiSpecs.CreateBrandsMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<BrandsV3ApiSpecs.MetaFieldCollectionResponsePostPut>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>> | RequestErrorResponse<422, Required<BrandsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>>>;
-    updateBrandsMetafields(requestBody: BrandsV3ApiSpecs.UpdateBrandsMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<BrandsV3ApiSpecs.MetaFieldCollectionResponsePostPut>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        errors?: {
-            [key: string]: unknown;
-        };
-    }>> | RequestErrorResponse<422, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        errors?: {
-            [key: string]: unknown;
-        };
-    }>>>;
-    deleteBrandsMetafields(requestBody: BrandsV3ApiSpecs.DeleteBrandsMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<BrandsV3ApiSpecs.MetaFieldCollectionDeleteResponseSuccess>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>> | RequestErrorResponse<422, Required<BrandsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessDelete>>>;
 }

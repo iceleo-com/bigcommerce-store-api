@@ -6,9 +6,7 @@ export declare class ProductsV3Api {
     private readonly request;
     constructor(request: RequestService);
     getProducts(query?: ProductsV3ApiSpecs.GetProductsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: Array<ProductsV3ApiSpecs.ProductFull & {
-            channels?: Array<number>;
-        }>;
+        data?: Array<ProductsV3ApiSpecs.ProductFull>;
         meta?: ProductsV3ApiSpecs.MetaCollectionFull;
     }>>>;
     createProduct(requestBody: ProductsV3ApiSpecs.CreateProductData['body'], query?: ProductsV3ApiSpecs.CreateProductData['query']): Promise<RequestSuccessResponse<200, Required<{
@@ -37,7 +35,7 @@ export declare class ProductsV3Api {
     }>>>;
     updateProducts(requestBody: ProductsV3ApiSpecs.UpdateProductsData['body'], query?: ProductsV3ApiSpecs.UpdateProductsData['query']): Promise<RequestSuccessResponse<200, Required<{
         data?: Array<ProductsV3ApiSpecs.ProductFull>;
-        meta?: unknown;
+        meta?: ProductsV3ApiSpecs.MetaCollectionFull;
     }>> | RequestSuccessResponse<207, Required<{
         data?: Array<ProductsV3ApiSpecs.ProductFull>;
         errors?: ProductsV3ApiSpecs.ErrorMultiStatus;
@@ -49,10 +47,17 @@ export declare class ProductsV3Api {
         instance?: string;
     }>> | RequestErrorResponse<409, Required<ProductsV3ApiSpecs.ErrorResponse409>> | RequestErrorResponse<413, Required<ProductsV3ApiSpecs.ErrorBase>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.ErrorResponse422>>>;
     deleteProducts(query?: ProductsV3ApiSpecs.DeleteProductsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    getProduct(productId: ProductsV3ApiSpecs.GetProductData['path']['product_id'], query?: ProductsV3ApiSpecs.GetProductData['query']): Promise<RequestSuccessResponse<200, Required<{
-        data?: ProductsV3ApiSpecs.ProductFull & {
-            channels?: Array<number>;
-        };
+    getProductById(productId: ProductsV3ApiSpecs.GetProductByIdData['path']['product_id'], query?: ProductsV3ApiSpecs.GetProductByIdData['query']): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductsV3ApiSpecs.ProductFull;
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getProduct(...args: Parameters<ProductsV3Api['getProductById']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductsV3ApiSpecs.ProductFull;
         meta?: ProductsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<404, Required<{
         status?: number;
@@ -91,7 +96,8 @@ export declare class ProductsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    deleteProduct(productId: ProductsV3ApiSpecs.DeleteProductData['path']['product_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteProductById(productId: ProductsV3ApiSpecs.DeleteProductByIdData['path']['product_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteProduct(...args: Parameters<ProductsV3Api['deleteProductById']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
     getProductImages(productId: ProductsV3ApiSpecs.GetProductImagesData['path']['product_id'], query?: ProductsV3ApiSpecs.GetProductImagesData['query']): Promise<RequestSuccessResponse<204, void> | RequestSuccessResponse<200, Required<{
         data?: Array<ProductsV3ApiSpecs.ProductImageFull>;
         meta?: ProductsV3ApiSpecs.MetaCollectionFull;
@@ -113,8 +119,7 @@ export declare class ProductsV3Api {
             is_thumbnail?: boolean;
             sort_order?: number;
             description?: string;
-            image_url?: string;
-        } | {
+        } & {
             id?: number;
             product_id?: number;
             image_file?: string;
@@ -123,9 +128,7 @@ export declare class ProductsV3Api {
             readonly url_thumbnail?: string;
             readonly url_tiny?: string;
             date_modified?: string;
-            is_thumbnail?: boolean;
-            sort_order?: number;
-            description?: string;
+            image_url?: string;
         };
         meta?: ProductsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<400, Required<{
@@ -140,7 +143,7 @@ export declare class ProductsV3Api {
         title: string;
         type: string;
     }>>>;
-    getProductImage(productId: ProductsV3ApiSpecs.GetProductImageData['path']['product_id'], imageId: ProductsV3ApiSpecs.GetProductImageData['path']['image_id'], query?: ProductsV3ApiSpecs.GetProductImageData['query']): Promise<RequestSuccessResponse<200, Required<{
+    getProductImageById(productId: ProductsV3ApiSpecs.GetProductImageByIdData['path']['product_id'], imageId: ProductsV3ApiSpecs.GetProductImageByIdData['path']['image_id'], query?: ProductsV3ApiSpecs.GetProductImageByIdData['query']): Promise<RequestSuccessResponse<200, Required<{
         data?: ProductsV3ApiSpecs.ProductImageFull;
         meta?: ProductsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<404, Required<{
@@ -149,7 +152,16 @@ export declare class ProductsV3Api {
         type?: string;
         instance?: string;
     }>>>;
-    updateProductImage(productId: ProductsV3ApiSpecs.UpdateProductImageData['path']['product_id'], imageId: ProductsV3ApiSpecs.UpdateProductImageData['path']['image_id'], requestBody: ProductsV3ApiSpecs.UpdateProductImageData['body']): Promise<RequestErrorResponse<422, Required<ProductsV3ApiSpecs.ErrorResponse422>> | RequestSuccessResponse<200, Required<{
+    getProductImage(...args: Parameters<ProductsV3Api['getProductImageById']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductsV3ApiSpecs.ProductImageFull;
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    updateProductImage(productId: ProductsV3ApiSpecs.UpdateProductImageData['path']['product_id'], imageId: ProductsV3ApiSpecs.UpdateProductImageData['path']['image_id'], requestBody: ProductsV3ApiSpecs.UpdateProductImageData['body']): Promise<RequestSuccessResponse<200, Required<{
         data?: {
             id?: number;
             product_id?: number;
@@ -161,8 +173,7 @@ export declare class ProductsV3Api {
             is_thumbnail?: boolean;
             sort_order?: number;
             description?: string;
-            image_url?: string;
-        } | {
+        } & {
             id?: number;
             product_id?: number;
             image_file?: string;
@@ -171,9 +182,7 @@ export declare class ProductsV3Api {
             readonly url_thumbnail?: string;
             readonly url_tiny?: string;
             date_modified?: string;
-            is_thumbnail?: boolean;
-            sort_order?: number;
-            description?: string;
+            image_url?: string;
         };
         meta?: ProductsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestSuccessResponse<201, Required<{
@@ -210,7 +219,16 @@ export declare class ProductsV3Api {
         type?: string;
         instance?: string;
     }>>>;
-    getProductVideo(productId: ProductsV3ApiSpecs.GetProductVideoData['path']['product_id'], id: ProductsV3ApiSpecs.GetProductVideoData['path']['id'], query?: ProductsV3ApiSpecs.GetProductVideoData['query']): Promise<RequestSuccessResponse<200, Required<{
+    getProductVideoById(productId: ProductsV3ApiSpecs.GetProductVideoByIdData['path']['product_id'], id: ProductsV3ApiSpecs.GetProductVideoByIdData['path']['id'], query?: ProductsV3ApiSpecs.GetProductVideoByIdData['query']): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductsV3ApiSpecs.ProductVideoFull;
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getProductVideo(...args: Parameters<ProductsV3Api['getProductVideoById']>): Promise<RequestSuccessResponse<200, Required<{
         data?: ProductsV3ApiSpecs.ProductVideoFull;
         meta?: ProductsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<404, Required<{
@@ -239,11 +257,15 @@ export declare class ProductsV3Api {
         instance?: string;
     }>>>;
     deleteProductVideo(productId: ProductsV3ApiSpecs.DeleteProductVideoData['path']['product_id'], id: ProductsV3ApiSpecs.DeleteProductVideoData['path']['id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    getProductComplexRules(productId: ProductsV3ApiSpecs.GetProductComplexRulesData['path']['product_id'], query?: ProductsV3ApiSpecs.GetProductComplexRulesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+    getComplexRules(productId: ProductsV3ApiSpecs.GetComplexRulesData['path']['product_id'], query?: ProductsV3ApiSpecs.GetComplexRulesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
         data?: Array<ProductsV3ApiSpecs.ComplexRuleBase>;
         meta?: ProductsV3ApiSpecs.MetaCollectionFull;
     }>>>;
-    createProductComplexRule(productId: ProductsV3ApiSpecs.CreateProductComplexRuleData['path']['product_id'], requestBody: ProductsV3ApiSpecs.CreateProductComplexRuleData['body']): Promise<RequestSuccessResponse<200, Required<{
+    getProductComplexRules(...args: Parameters<ProductsV3Api['getComplexRules']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: Array<ProductsV3ApiSpecs.ComplexRuleBase>;
+        meta?: ProductsV3ApiSpecs.MetaCollectionFull;
+    }>>>;
+    createComplexRule(productId: ProductsV3ApiSpecs.CreateComplexRuleData['path']['product_id'], requestBody: ProductsV3ApiSpecs.CreateComplexRuleData['body']): Promise<RequestSuccessResponse<200, Required<{
         data?: {
             id?: number;
             product_id?: number | null;
@@ -289,7 +311,53 @@ export declare class ProductsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    getProductComplexRule(productId: ProductsV3ApiSpecs.GetProductComplexRuleData['path']['product_id'], complexRuleId: ProductsV3ApiSpecs.GetProductComplexRuleData['path']['complex_rule_id'], query?: ProductsV3ApiSpecs.GetProductComplexRuleData['query']): Promise<RequestSuccessResponse<200, Required<{
+    createProductComplexRule(...args: Parameters<ProductsV3Api['createComplexRule']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: {
+            id?: number;
+            product_id?: number | null;
+            sort_order?: number;
+            enabled?: boolean;
+            stop?: boolean;
+            purchasing_disabled?: boolean;
+            purchasing_disabled_message?: string;
+            purchasing_hidden?: boolean;
+            image_url?: string;
+            price_adjuster?: {
+                adjuster?: "relative" | "percentage";
+                adjuster_value?: number;
+            };
+            weight_adjuster?: {
+                adjuster?: "relative" | "percentage";
+                adjuster_value?: number;
+            };
+            conditions?: Array<{
+                id?: number | null;
+                rule_id?: number | null;
+                modifier_id: number | null;
+                modifier_value_id: number | null;
+                variant_id: number | null;
+                combination_id?: number;
+            }>;
+        };
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<409, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    }>> | RequestErrorResponse<422, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    getComplexRuleById(productId: ProductsV3ApiSpecs.GetComplexRuleByIdData['path']['product_id'], complexRuleId: ProductsV3ApiSpecs.GetComplexRuleByIdData['path']['complex_rule_id'], query?: ProductsV3ApiSpecs.GetComplexRuleByIdData['query']): Promise<RequestSuccessResponse<200, Required<{
         data?: {
             id?: number;
             product_id?: number;
@@ -324,7 +392,42 @@ export declare class ProductsV3Api {
         type?: string;
         instance?: string;
     }>>>;
-    updateProductComplexRule(productId: ProductsV3ApiSpecs.UpdateProductComplexRuleData['path']['product_id'], complexRuleId: ProductsV3ApiSpecs.UpdateProductComplexRuleData['path']['complex_rule_id'], requestBody: ProductsV3ApiSpecs.UpdateProductComplexRuleData['body']): Promise<RequestSuccessResponse<200, Required<{
+    getProductComplexRule(...args: Parameters<ProductsV3Api['getComplexRuleById']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: {
+            id?: number;
+            product_id?: number;
+            sort_order?: number;
+            enabled?: boolean;
+            stop?: boolean;
+            purchasing_disabled?: boolean;
+            purchasing_disabled_message?: string;
+            purchasing_hidden?: boolean;
+            image_url?: string;
+            price_adjuster?: {
+                adjuster?: "relative" | "percentage";
+                adjuster_value?: number;
+            };
+            weight_adjuster?: {
+                adjuster?: "relative" | "percentage";
+                adjuster_value?: number;
+            };
+            conditions?: Array<{
+                id?: number;
+                rule_id?: number;
+                modifier_id: number;
+                modifier_value_id: number;
+                variant_id: number;
+                combination_id?: number;
+            }>;
+        };
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    updateComplexRule(productId: ProductsV3ApiSpecs.UpdateComplexRuleData['path']['product_id'], complexRuleId: ProductsV3ApiSpecs.UpdateComplexRuleData['path']['complex_rule_id'], requestBody: ProductsV3ApiSpecs.UpdateComplexRuleData['body']): Promise<RequestSuccessResponse<200, Required<{
         data?: {
             id?: number;
             product_id?: number;
@@ -370,40 +473,250 @@ export declare class ProductsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    deleteProductComplexRule(productId: ProductsV3ApiSpecs.DeleteProductComplexRuleData['path']['product_id'], complexRuleId: ProductsV3ApiSpecs.DeleteProductComplexRuleData['path']['complex_rule_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    getProductCustomFields(productId: ProductsV3ApiSpecs.GetProductCustomFieldsData['path']['product_id'], query?: ProductsV3ApiSpecs.GetProductCustomFieldsData['query']): Promise<RequestErrorResponse<401, string> | RequestSuccessResponse<200, Required<{
-        data?: Array<ProductsV3ApiSpecs.CustomFieldData>;
-        meta?: ProductsV3ApiSpecs.MetaCollectionFull2;
-    }>> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.GeneralErrorWithErrors>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GeneralError>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.MethodNotAllowedError>>>;
-    createProductCustomField(productId: ProductsV3ApiSpecs.CreateProductCustomFieldData['path']['product_id'], requestBody: ProductsV3ApiSpecs.CreateProductCustomFieldData['body']): Promise<RequestErrorResponse<401, string> | RequestErrorResponse<415, string> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.GeneralErrorWithErrors>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GeneralError>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.MethodNotAllowedError>> | RequestSuccessResponse<200, Required<{
-        data?: ProductsV3ApiSpecs.CustomFieldData;
-        meta?: ProductsV3ApiSpecs.MetaEmptyFull2;
-    }>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.GeneralError>>>;
-    getProductCustomField(productId: ProductsV3ApiSpecs.GetProductCustomFieldData['path']['product_id'], customFieldId: ProductsV3ApiSpecs.GetProductCustomFieldData['path']['custom_field_id'], query?: ProductsV3ApiSpecs.GetProductCustomFieldData['query']): Promise<RequestErrorResponse<401, string> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.GeneralErrorWithErrors>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GeneralError>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.MethodNotAllowedError>> | RequestSuccessResponse<200, Required<{
-        data?: ProductsV3ApiSpecs.CustomFieldData;
-        meta?: ProductsV3ApiSpecs.MetaEmptyFull2;
-    }>>>;
-    updateProductCustomField(productId: ProductsV3ApiSpecs.UpdateProductCustomFieldData['path']['product_id'], customFieldId: ProductsV3ApiSpecs.UpdateProductCustomFieldData['path']['custom_field_id'], requestBody: ProductsV3ApiSpecs.UpdateProductCustomFieldData['body']): Promise<RequestErrorResponse<401, string> | RequestErrorResponse<415, string> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.GeneralErrorWithErrors>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GeneralError>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.MethodNotAllowedError>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.GeneralError>> | RequestSuccessResponse<200, Required<{
-        data?: ProductsV3ApiSpecs.CustomFieldData;
-        meta?: ProductsV3ApiSpecs.MetaEmptyFull2;
-    }>>>;
-    deleteProductCustomField(productId: ProductsV3ApiSpecs.DeleteProductCustomFieldData['path']['product_id'], customFieldId: ProductsV3ApiSpecs.DeleteProductCustomFieldData['path']['custom_field_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<401, string> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.GeneralErrorWithErrors>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GeneralError>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.MethodNotAllowedError>>>;
-    getAllBulkPricingRules(productId: ProductsV3ApiSpecs.GetAllBulkPricingRulesData['path']['product_id'], query?: ProductsV3ApiSpecs.GetAllBulkPricingRulesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+    updateProductComplexRule(...args: Parameters<ProductsV3Api['updateComplexRule']>): Promise<RequestSuccessResponse<200, Required<{
         data?: {
-            readonly id?: number;
-        } & ProductsV3ApiSpecs.BulkPricingRuleResponse;
+            id?: number;
+            product_id?: number;
+            sort_order?: number;
+            enabled?: boolean;
+            stop?: boolean;
+            purchasing_disabled?: boolean;
+            purchasing_disabled_message?: string;
+            purchasing_hidden?: boolean;
+            image_url?: string;
+            price_adjuster?: {
+                adjuster?: "relative" | "percentage";
+                adjuster_value?: number;
+            };
+            weight_adjuster?: {
+                adjuster?: "relative" | "percentage";
+                adjuster_value?: number;
+            };
+            conditions?: Array<{
+                id?: number;
+                rule_id?: number;
+                modifier_id: number;
+                modifier_value_id: number;
+                variant_id: number;
+                combination_id?: number;
+            }>;
+        };
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<409, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    }>> | RequestErrorResponse<422, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    deleteComplexRuleById(productId: ProductsV3ApiSpecs.DeleteComplexRuleByIdData['path']['product_id'], complexRuleId: ProductsV3ApiSpecs.DeleteComplexRuleByIdData['path']['complex_rule_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteProductComplexRule(...args: Parameters<ProductsV3Api['deleteComplexRuleById']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    getCustomFields(productId: ProductsV3ApiSpecs.GetCustomFieldsData['path']['product_id'], query?: ProductsV3ApiSpecs.GetCustomFieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: Array<{
+            id?: number;
+            name: string;
+            value: string;
+        }>;
         meta?: ProductsV3ApiSpecs.MetaCollectionFull;
     }>>>;
-    createBulkPricingRule(productId: ProductsV3ApiSpecs.CreateBulkPricingRuleData['path']['product_id'], requestBody: ProductsV3ApiSpecs.CreateBulkPricingRuleData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: {
-            readonly id?: number;
-        } & ProductsV3ApiSpecs.BulkPricingRuleResponse;
-        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    getProductCustomFields(...args: Parameters<ProductsV3Api['getCustomFields']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+        data?: Array<{
+            id?: number;
+            name: string;
+            value: string;
+        }>;
+        meta?: ProductsV3ApiSpecs.MetaCollectionFull;
     }>>>;
-    getBulkPricingRule(productId: ProductsV3ApiSpecs.GetBulkPricingRuleData['path']['product_id'], bulkPricingRuleId: ProductsV3ApiSpecs.GetBulkPricingRuleData['path']['bulk_pricing_rule_id'], query?: ProductsV3ApiSpecs.GetBulkPricingRuleData['query']): Promise<RequestSuccessResponse<200, Required<{
+    createCustomField(productId: ProductsV3ApiSpecs.CreateCustomFieldData['path']['product_id'], requestBody: ProductsV3ApiSpecs.CreateCustomFieldData['body']): Promise<RequestSuccessResponse<200, Required<{
+        data?: {
+            id?: number;
+            name: string;
+            value: string;
+        };
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>> | RequestErrorResponse<422, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    createProductCustomField(...args: Parameters<ProductsV3Api['createCustomField']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: {
+            id?: number;
+            name: string;
+            value: string;
+        };
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>> | RequestErrorResponse<422, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    getCustomFieldById(productId: ProductsV3ApiSpecs.GetCustomFieldByIdData['path']['product_id'], customFieldId: ProductsV3ApiSpecs.GetCustomFieldByIdData['path']['custom_field_id'], query?: ProductsV3ApiSpecs.GetCustomFieldByIdData['query']): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductsV3ApiSpecs.ProductCustomFieldBase;
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getProductCustomField(...args: Parameters<ProductsV3Api['getCustomFieldById']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductsV3ApiSpecs.ProductCustomFieldBase;
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    updateCustomField(productId: ProductsV3ApiSpecs.UpdateCustomFieldData['path']['product_id'], customFieldId: ProductsV3ApiSpecs.UpdateCustomFieldData['path']['custom_field_id'], requestBody: ProductsV3ApiSpecs.UpdateCustomFieldData['body']): Promise<RequestSuccessResponse<200, Required<{
+        data?: {
+            id?: number;
+            name: string;
+            value: string;
+        };
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>> | RequestErrorResponse<422, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    updateProductCustomField(...args: Parameters<ProductsV3Api['updateCustomField']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: {
+            id?: number;
+            name: string;
+            value: string;
+        };
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>> | RequestErrorResponse<422, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    deleteCustomFieldById(productId: ProductsV3ApiSpecs.DeleteCustomFieldByIdData['path']['product_id'], customFieldId: ProductsV3ApiSpecs.DeleteCustomFieldByIdData['path']['custom_field_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    deleteProductCustomField(...args: Parameters<ProductsV3Api['deleteCustomFieldById']>): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getBulkPricingRules(productId: ProductsV3ApiSpecs.GetBulkPricingRulesData['path']['product_id'], query?: ProductsV3ApiSpecs.GetBulkPricingRulesData['query']): Promise<RequestSuccessResponse<200, Required<{
+        data?: Array<{
+            readonly id: number;
+        } & ProductsV3ApiSpecs.BulkPricingRuleFull>;
+        meta?: ProductsV3ApiSpecs.MetaCollectionFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getAllBulkPricingRules(...args: Parameters<ProductsV3Api['getBulkPricingRules']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: Array<{
+            readonly id: number;
+        } & ProductsV3ApiSpecs.BulkPricingRuleFull>;
+        meta?: ProductsV3ApiSpecs.MetaCollectionFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    createBulkPricingRule(productId: ProductsV3ApiSpecs.CreateBulkPricingRuleData['path']['product_id'], requestBody: ProductsV3ApiSpecs.CreateBulkPricingRuleData['body'], query?: ProductsV3ApiSpecs.CreateBulkPricingRuleData['query']): Promise<RequestSuccessResponse<200, Required<{
         data?: {
             readonly id: number;
-        } & ProductsV3ApiSpecs.BulkPricingRuleResponse;
+        } & ProductsV3ApiSpecs.BulkPricingRuleFull;
+        meta?: {
+            [key: string]: unknown;
+        };
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>> | RequestErrorResponse<409, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    }>> | RequestErrorResponse<422, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    getBulkPricingRuleById(productId: ProductsV3ApiSpecs.GetBulkPricingRuleByIdData['path']['product_id'], bulkPricingRuleId: ProductsV3ApiSpecs.GetBulkPricingRuleByIdData['path']['bulk_pricing_rule_id'], query?: ProductsV3ApiSpecs.GetBulkPricingRuleByIdData['query']): Promise<RequestSuccessResponse<200, Required<{
+        data?: {
+            readonly id: number;
+        } & ProductsV3ApiSpecs.BulkPricingRuleFull;
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getBulkPricingRule(...args: Parameters<ProductsV3Api['getBulkPricingRuleById']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: {
+            readonly id: number;
+        } & ProductsV3ApiSpecs.BulkPricingRuleFull;
         meta?: ProductsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<404, Required<{
         status?: number;
@@ -414,7 +727,11 @@ export declare class ProductsV3Api {
     updateBulkPricingRule(productId: ProductsV3ApiSpecs.UpdateBulkPricingRuleData['path']['product_id'], bulkPricingRuleId: ProductsV3ApiSpecs.UpdateBulkPricingRuleData['path']['bulk_pricing_rule_id'], requestBody: ProductsV3ApiSpecs.UpdateBulkPricingRuleData['body']): Promise<RequestSuccessResponse<200, Required<{
         data?: {
             readonly id?: number;
-        } & ProductsV3ApiSpecs.BulkPricingRuleResponse;
+            quantity_min: number;
+            quantity_max: number;
+            type: "price" | "percent" | "fixed";
+            amount: number;
+        };
         meta?: ProductsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<404, Required<{
         status?: number;
@@ -438,24 +755,39 @@ export declare class ProductsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    deleteBulkPricingRule(productId: ProductsV3ApiSpecs.DeleteBulkPricingRuleData['path']['product_id'], bulkPricingRuleId: ProductsV3ApiSpecs.DeleteBulkPricingRuleData['path']['bulk_pricing_rule_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<404, Required<{
+    deleteBulkPricingRuleById(productId: ProductsV3ApiSpecs.DeleteBulkPricingRuleByIdData['path']['product_id'], bulkPricingRuleId: ProductsV3ApiSpecs.DeleteBulkPricingRuleByIdData['path']['bulk_pricing_rule_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<404, Required<{
         status?: number;
         title?: string;
         type?: string;
         instance?: string;
     }>>>;
-    getProductMetafields(productId: ProductsV3ApiSpecs.GetProductMetafieldsData['path']['product_id'], query?: ProductsV3ApiSpecs.GetProductMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+    deleteBulkPricingRule(...args: Parameters<ProductsV3Api['deleteBulkPricingRuleById']>): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getProductMetafieldsByProductId(productId: ProductsV3ApiSpecs.GetProductMetafieldsByProductIdData['path']['product_id'], query?: ProductsV3ApiSpecs.GetProductMetafieldsByProductIdData['query']): Promise<RequestSuccessResponse<200, Required<{
         data?: Array<ProductsV3ApiSpecs.MetafieldFull>;
         meta?: ProductsV3ApiSpecs.MetaCollectionFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getProductMetafields(...args: Parameters<ProductsV3Api['getProductMetafieldsByProductId']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: Array<ProductsV3ApiSpecs.MetafieldFull>;
+        meta?: ProductsV3ApiSpecs.MetaCollectionFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
     }>>>;
     createProductMetafield(productId: ProductsV3ApiSpecs.CreateProductMetafieldData['path']['product_id'], requestBody: ProductsV3ApiSpecs.CreateProductMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<{
         data?: ProductsV3ApiSpecs.MetafieldFull;
         meta?: ProductsV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
     }>> | RequestErrorResponse<409, Required<{
         errors?: {
             [key: string]: unknown;
@@ -473,7 +805,16 @@ export declare class ProductsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    getProductMetafield(productId: ProductsV3ApiSpecs.GetProductMetafieldData['path']['product_id'], metafieldId: ProductsV3ApiSpecs.GetProductMetafieldData['path']['metafield_id'], query?: ProductsV3ApiSpecs.GetProductMetafieldData['query']): Promise<RequestSuccessResponse<200, Required<{
+    getProductMetafieldByProductId(productId: ProductsV3ApiSpecs.GetProductMetafieldByProductIdData['path']['product_id'], metafieldId: ProductsV3ApiSpecs.GetProductMetafieldByProductIdData['path']['metafield_id'], query?: ProductsV3ApiSpecs.GetProductMetafieldByProductIdData['query']): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductsV3ApiSpecs.MetafieldFull;
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getProductMetafield(...args: Parameters<ProductsV3Api['getProductMetafieldByProductId']>): Promise<RequestSuccessResponse<200, Required<{
         data?: ProductsV3ApiSpecs.MetafieldFull;
         meta?: ProductsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<404, Required<{
@@ -485,23 +826,14 @@ export declare class ProductsV3Api {
     updateProductMetafield(productId: ProductsV3ApiSpecs.UpdateProductMetafieldData['path']['product_id'], metafieldId: ProductsV3ApiSpecs.UpdateProductMetafieldData['path']['metafield_id'], requestBody: ProductsV3ApiSpecs.UpdateProductMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<{
         data?: ProductsV3ApiSpecs.MetafieldFull;
         meta?: ProductsV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
     }>> | RequestErrorResponse<404, Required<{
         status?: number;
         title?: string;
         type?: string;
         instance?: string;
     }>>>;
-    deleteProductMetafield(productId: ProductsV3ApiSpecs.DeleteProductMetafieldData['path']['product_id'], metafieldId: ProductsV3ApiSpecs.DeleteProductMetafieldData['path']['metafield_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>>>;
+    deleteProductMetafieldById(productId: ProductsV3ApiSpecs.DeleteProductMetafieldByIdData['path']['product_id'], metafieldId: ProductsV3ApiSpecs.DeleteProductMetafieldByIdData['path']['metafield_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteProductMetafield(...args: Parameters<ProductsV3Api['deleteProductMetafieldById']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
     getProductReviews(productId: ProductsV3ApiSpecs.GetProductReviewsData['path']['product_id'], query?: ProductsV3ApiSpecs.GetProductReviewsData['query']): Promise<RequestSuccessResponse<204, void> | RequestSuccessResponse<200, Required<{
         data?: Array<{
             title: string;
@@ -513,6 +845,7 @@ export declare class ProductsV3Api {
             date_reviewed: string;
         } & {
             id?: number;
+            product_id?: number;
             date_created?: string;
             date_modified?: string;
         }>;
@@ -534,6 +867,7 @@ export declare class ProductsV3Api {
             date_reviewed: string;
         } & {
             id?: number;
+            product_id?: number;
             date_created?: string;
             date_modified?: string;
         };
@@ -544,7 +878,28 @@ export declare class ProductsV3Api {
         type?: string;
         instance?: string;
     }>>>;
-    getProductReview(productId: ProductsV3ApiSpecs.GetProductReviewData['path']['product_id'], reviewId: ProductsV3ApiSpecs.GetProductReviewData['path']['review_id'], query?: ProductsV3ApiSpecs.GetProductReviewData['query']): Promise<RequestSuccessResponse<200, Required<{
+    getProductReviewById(productId: ProductsV3ApiSpecs.GetProductReviewByIdData['path']['product_id'], reviewId: ProductsV3ApiSpecs.GetProductReviewByIdData['path']['review_id'], query?: ProductsV3ApiSpecs.GetProductReviewByIdData['query']): Promise<RequestSuccessResponse<200, Required<{
+        data?: {
+            title: string;
+            text?: string;
+            status?: string;
+            rating?: number;
+            email?: string;
+            name?: string;
+            date_reviewed: string;
+        } & {
+            id?: number;
+            date_created?: string;
+            date_modified?: string;
+        };
+        meta?: ProductsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getProductReview(...args: Parameters<ProductsV3Api['getProductReviewById']>): Promise<RequestSuccessResponse<200, Required<{
         data?: {
             title: string;
             text?: string;
@@ -576,6 +931,7 @@ export declare class ProductsV3Api {
             date_reviewed: string;
         } & {
             id?: number;
+            product_id?: number;
             date_created?: string;
             date_modified?: string;
         };
@@ -614,23 +970,4 @@ export declare class ProductsV3Api {
         };
         meta?: ProductsV3ApiSpecs.MetaEmptyFull;
     }>>>;
-    getProductsMetafields(query?: ProductsV3ApiSpecs.GetProductsMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.MetaFieldCollectionResponse>>>;
-    createProductsMetafields(requestBody: ProductsV3ApiSpecs.CreateProductsMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.MetaFieldCollectionResponsePostPut>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>>>;
-    updateProductsMetafields(requestBody: ProductsV3ApiSpecs.UpdateProductsMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.MetaFieldCollectionResponsePostPut>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>>>;
-    deleteProductsMetafields(requestBody: ProductsV3ApiSpecs.DeleteProductsMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.MetaFieldCollectionDeleteResponseSuccess>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessDelete>>>;
 }

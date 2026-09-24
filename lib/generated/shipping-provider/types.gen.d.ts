@@ -110,7 +110,6 @@ export type KeyValuePair = {
 };
 export type RateResponsePayload = {
     quote_id: string;
-    ttl?: number;
     messages: Array<{
         text: string;
         type: 'INFO' | 'WARNING' | 'ERROR';

@@ -29,37 +29,23 @@ paths:
       tags:
         - Redirects
       summary: Get Redirects
-      description: Returns a collection of the store's 301 redirects across all sites.
-      operationId: getRedirects
+      description: Returns a collection of the storeʼs 301 redirects across all sites.
+      operationId: GetRedirects
       parameters:
         - name: site_id
           in: query
-          description: Filters items by site ID.
+          description: Filters items by `site_id`.
           schema:
             type: integer
         - name: 'id:in'
           in: query
-          description: Filters items by redirect ID. Also accepts comma-separated values to filter for multiple redirects.
+          description: Filters items by redirect `id`. Also accepts comma-separated values to filter for multiple redirects.
           style: form
           explode: false
           schema:
             type: array
             items:
-              type: integer
-        - name: 'id:min'
-          in: query
-          description: Filters items by minimum redirect ID.
-          style: form
-          explode: false
-          schema:
-            type: integer
-        - name: 'id:max'
-          in: query
-          description: Filters items by maximum redirect ID.
-          style: form
-          explode: false
-          schema:
-            type: integer
+              type: string
         - name: limit
           in: query
           description: Controls the number of items to return per page.
@@ -73,7 +59,7 @@ paths:
         - name: sort
           in: query
           description: |
-            Field name to sort by. Since redirect IDs increment when new redirects are added, you can sort by ID to return results in redirect create date order.
+            Field name to sort by. Note: Since redirect `id` increments when new redirects are added, you can use that field to sort by redirect create date.
           schema:
             type: string
             enum:
@@ -92,14 +78,10 @@ paths:
         - name: include
           in: query
           description: Indicates whether to include redirect sub-resources. Only `to_url` is supported.
-          style: form
-          explode: false
           schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - to_url
+            type: string
+            enum:
+              - to_url
         - name: keyword
           in: query
           description: 'Filters redirects by the specified keyword. Will only search from the beginning of a URL path. For example, `blue` will match `/blue` and `/blue-shirt` ,  **not** `/royal-blue-shirt`.'
@@ -124,7 +106,7 @@ paths:
         - Redirects
       summary: Upsert Redirects
       description: Upserts new redirect data across all storefronts.
-      operationId: upsertRedirects
+      operationId: UpsertRedirects
       parameters:
         - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -154,11 +136,11 @@ paths:
         - Redirects
       summary: Delete Redirects
       description: Deletes redirects.
-      operationId: deleteRedirects
+      operationId: DeleteRedirects
       parameters:
         - name: 'id:in'
           in: query
-          description: A comma-separated list of redirect IDs to delete explicitly.
+          description: List of Redirect IDs to delete explicitly.
           required: true
           style: form
           explode: false
@@ -168,7 +150,7 @@ paths:
               type: integer
         - name: site_id
           in: query
-          description: To delete all redirects for a given site, provide the site ID.
+          description: Site ID provided to delete all redirects for a given Site.
           schema:
             type: integer
       responses:
@@ -187,18 +169,23 @@ paths:
       parameters:
         - name: id
           in: query
-          description: Filters results by redirect import-export job ID.
+          description: Filters results by Redirect Import-Export job ID.
+          style: form
+          explode: false
           schema:
             type: string
-            format: uuid
         - name: type
           in: query
-          description: Filters results by the type of the redirect import-export job.
+          description: Filters results by the type of the Redirect Import-Export job.
+          style: form
+          explode: false
           schema:
             $ref: '#/components/schemas/ImportExportJobType'
         - name: status
           in: query
           description: Filters results by the status of the Redirect Import-Export job.
+          style: form
+          explode: false
           schema:
             $ref: '#/components/schemas/ImportExportJobStatus'
         - name: limit

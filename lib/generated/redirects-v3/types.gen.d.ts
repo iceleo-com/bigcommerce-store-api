@@ -106,14 +106,12 @@ export type GetRedirectsData = {
     path?: never;
     query?: {
         site_id?: number;
-        'id:in'?: Array<number>;
-        'id:min'?: number;
-        'id:max'?: number;
+        'id:in'?: Array<string>;
         limit?: number;
         page?: number;
         sort?: 'from_path' | 'type' | 'site_id' | 'id';
         direction?: 'asc' | 'desc';
-        include?: Array<'to_url'>;
+        include?: 'to_url';
         keyword?: string;
     };
     url: '/storefront/redirects';

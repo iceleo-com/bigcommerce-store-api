@@ -2,13 +2,53 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
 export type CollectionMeta = {
-    [key: string]: unknown;
+    pagination?: {
+        total?: number;
+        count?: number;
+        per_page?: number;
+        current_page?: number;
+        total_pages?: number;
+        links?: {
+            previous?: string;
+            current?: string;
+            next?: string;
+        };
+    };
 };
 export type ThemesCollectionMeta = {
-    [key: string]: unknown;
+    pagination?: {
+        total?: number;
+        count?: number;
+        per_page?: number;
+        current_page?: number;
+        total_pages?: number;
+    };
+};
+export type Pagination = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: {
+        previous?: string;
+        current?: string;
+        next?: string;
+    };
 };
 export type Meta = {
-    [key: string]: unknown;
+    pagination?: {
+        total?: number;
+        count?: number;
+        per_page?: number;
+        current_page?: number;
+        total_pages?: number;
+        links?: {
+            previous?: string;
+            current?: string;
+            next?: string;
+        };
+    };
 };
 export type ErrorResponse = {
     status?: number;
@@ -71,12 +111,10 @@ export type Theme = {
     uuid?: string;
     name?: string;
     is_private?: boolean;
-    is_active?: boolean;
-    updated_at?: string;
 };
 export type Activate = {
     variation_id: string;
-    which?: 'original' | 'last_activated' | 'last_created';
+    which: 'original' | 'last_activated' | 'last_created';
 };
 export type Variation = {
     description?: string;
@@ -95,11 +133,20 @@ export type ThemesCollectionResponse = {
         uuid?: string;
         name?: string;
         is_private?: boolean;
-        is_active?: boolean;
-        updated_at?: string;
     }>;
     meta?: {
-        [key: string]: unknown;
+        pagination?: {
+            total?: number;
+            count?: number;
+            per_page?: number;
+            current_page?: number;
+            total_pages?: number;
+            links?: {
+                previous?: string;
+                current?: string;
+                next?: string;
+            };
+        };
     };
 };
 export type ThemeResponse = {
@@ -170,7 +217,7 @@ export type GetStoreThemesResponses = {
     200: ThemesCollectionResponse;
 };
 export type GetStoreThemesResponse = GetStoreThemesResponses[keyof GetStoreThemesResponses];
-export type UploadStoreThemeData = {
+export type UploadThemeData = {
     body: {
         file: Blob | File;
     };
@@ -182,7 +229,7 @@ export type UploadStoreThemeData = {
     query?: never;
     url: '/themes';
 };
-export type UploadStoreThemeErrors = {
+export type UploadThemeErrors = {
     default: {
         status?: number;
         title?: string;
@@ -194,11 +241,11 @@ export type UploadStoreThemeErrors = {
         };
     };
 };
-export type UploadStoreThemeError = UploadStoreThemeErrors[keyof UploadStoreThemeErrors];
-export type UploadStoreThemeResponses = {
+export type UploadThemeError = UploadThemeErrors[keyof UploadThemeErrors];
+export type UploadThemeResponses = {
     201: JobId;
 };
-export type UploadStoreThemeResponse = UploadStoreThemeResponses[keyof UploadStoreThemeResponses];
+export type UploadThemeResponse = UploadThemeResponses[keyof UploadThemeResponses];
 export type DeleteStoreThemeData = {
     body?: never;
     headers: {
@@ -255,7 +302,7 @@ export type GetStoreThemeResponses = {
     200: ThemeResponse;
 };
 export type GetStoreThemeResponse = GetStoreThemeResponses[keyof GetStoreThemeResponses];
-export type DownloadStoreThemeData = {
+export type DownloadThemeData = {
     body: WhichThemeToDownload;
     headers: {
         Accept: string;
@@ -267,7 +314,7 @@ export type DownloadStoreThemeData = {
     query?: never;
     url: '/themes/{uuid}/actions/download';
 };
-export type DownloadStoreThemeErrors = {
+export type DownloadThemeErrors = {
     default: {
         status?: number;
         title?: string;
@@ -279,11 +326,11 @@ export type DownloadStoreThemeErrors = {
         };
     };
 };
-export type DownloadStoreThemeError = DownloadStoreThemeErrors[keyof DownloadStoreThemeErrors];
-export type DownloadStoreThemeResponses = {
+export type DownloadThemeError = DownloadThemeErrors[keyof DownloadThemeErrors];
+export type DownloadThemeResponses = {
     200: JobId;
 };
-export type DownloadStoreThemeResponse = DownloadStoreThemeResponses[keyof DownloadStoreThemeResponses];
+export type DownloadThemeResponse = DownloadThemeResponses[keyof DownloadThemeResponses];
 export type ActivateStoreThemeData = {
     body: Activate;
     headers: {
@@ -291,9 +338,7 @@ export type ActivateStoreThemeData = {
         'Content-Type': string;
     };
     path?: never;
-    query?: {
-        channel_id?: number;
-    };
+    query?: never;
     url: '/themes/actions/activate';
 };
 export type ActivateStoreThemeErrors = {
@@ -313,7 +358,7 @@ export type ActivateStoreThemeResponses = {
     204: NoContent;
 };
 export type ActivateStoreThemeResponse = ActivateStoreThemeResponses[keyof ActivateStoreThemeResponses];
-export type GetStoreThemeJobData = {
+export type GetJobData = {
     body?: never;
     headers: {
         Accept: string;
@@ -324,7 +369,7 @@ export type GetStoreThemeJobData = {
     query?: never;
     url: '/themes/jobs/{job_id}';
 };
-export type GetStoreThemeJobErrors = {
+export type GetJobErrors = {
     default: {
         status?: number;
         title?: string;
@@ -336,12 +381,12 @@ export type GetStoreThemeJobErrors = {
         };
     };
 };
-export type GetStoreThemeJobError = GetStoreThemeJobErrors[keyof GetStoreThemeJobErrors];
-export type GetStoreThemeJobResponses = {
+export type GetJobError = GetJobErrors[keyof GetJobErrors];
+export type GetJobResponses = {
     200: JobResponse;
 };
-export type GetStoreThemeJobResponse = GetStoreThemeJobResponses[keyof GetStoreThemeJobResponses];
-export type GetThemeConfigurationData = {
+export type GetJobResponse = GetJobResponses[keyof GetJobResponses];
+export type GetThemesByUuidConfigurationsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -349,23 +394,24 @@ export type GetThemeConfigurationData = {
     path: {
         uuid: string;
     };
-    query?: {
+    query: {
+        'site_id:in': Array<number>;
         'uuid:in'?: Array<string>;
         variation_uuid?: string;
-        'channel_id:in'?: Array<number>;
         page?: number;
         limit?: number;
+        'channel_id:in'?: Array<number>;
     };
     url: '/themes/{uuid}/configurations';
 };
-export type GetThemeConfigurationResponses = {
+export type GetThemesByUuidConfigurationsResponses = {
     200: {
         data?: Array<ThemeConfigurationFull>;
         meta?: ThemesCollectionMeta;
     };
 };
-export type GetThemeConfigurationResponse = GetThemeConfigurationResponses[keyof GetThemeConfigurationResponses];
-export type ValidateThemeConfigurationData = {
+export type GetThemesByUuidConfigurationsResponse = GetThemesByUuidConfigurationsResponses[keyof GetThemesByUuidConfigurationsResponses];
+export type PostThemesByUuidConfigurationsValidateData = {
     body?: ThemeConfigurationWrite;
     headers: {
         Accept: string;
@@ -377,17 +423,17 @@ export type ValidateThemeConfigurationData = {
     query?: never;
     url: '/themes/{uuid}/configurations/validate';
 };
-export type ValidateThemeConfigurationErrors = {
+export type PostThemesByUuidConfigurationsValidateErrors = {
     422: ErrorResponse;
 };
-export type ValidateThemeConfigurationError = ValidateThemeConfigurationErrors[keyof ValidateThemeConfigurationErrors];
-export type ValidateThemeConfigurationResponses = {
+export type PostThemesByUuidConfigurationsValidateError = PostThemesByUuidConfigurationsValidateErrors[keyof PostThemesByUuidConfigurationsValidateErrors];
+export type PostThemesByUuidConfigurationsValidateResponses = {
     200: {
         [key: string]: unknown;
     };
 };
-export type ValidateThemeConfigurationResponse = ValidateThemeConfigurationResponses[keyof ValidateThemeConfigurationResponses];
-export type GetThemeCustomTemplatesData = {
+export type PostThemesByUuidConfigurationsValidateResponse = PostThemesByUuidConfigurationsValidateResponses[keyof PostThemesByUuidConfigurationsValidateResponses];
+export type GetThemesThemeUuidCustomTemplatesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -398,7 +444,7 @@ export type GetThemeCustomTemplatesData = {
     query?: never;
     url: '/themes/custom-templates/{version_uuid}';
 };
-export type GetThemeCustomTemplatesResponses = {
+export type GetThemesThemeUuidCustomTemplatesResponses = {
     200: {
         data?: {
             product?: Array<string>;
@@ -409,4 +455,4 @@ export type GetThemeCustomTemplatesResponses = {
         meta?: OpenMeta;
     };
 };
-export type GetThemeCustomTemplatesResponse = GetThemeCustomTemplatesResponses[keyof GetThemeCustomTemplatesResponses];
+export type GetThemesThemeUuidCustomTemplatesResponse = GetThemesThemeUuidCustomTemplatesResponses[keyof GetThemesThemeUuidCustomTemplatesResponses];

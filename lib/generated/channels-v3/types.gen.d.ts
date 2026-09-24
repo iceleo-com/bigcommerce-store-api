@@ -14,126 +14,6 @@ export type MetafieldBase = {
     date_created?: string;
     date_modified?: string;
 };
-export type Metafield = {
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace: string;
-    key: string;
-    value: string;
-    description: string;
-    resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    readonly resource_id: number;
-    id: number;
-    date_created: string;
-    date_modified: string;
-    readonly owner_client_id?: string;
-};
-export type MetaFieldCollectionResponse = {
-    data?: Array<Metafield>;
-    meta?: CollectionMeta;
-};
-export type MetaFieldCollectionResponsePostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<unknown>;
-    meta?: CollectionMeta;
-};
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-export type WriteCollectionPartialSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
-export type WriteCollectionSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
-export type Total = number;
-export type Success = number;
-export type Failed = number;
-export type _Error = {
-    status?: number;
-    title?: string;
-    type?: string;
-    errors?: ErrorDetail;
-};
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-export type ErrorResponse = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-    errors?: {
-        [key: string]: unknown;
-    };
-};
-export type CollectionMeta = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    };
-    [key: string]: unknown | {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    } | undefined;
-};
-export type MetafieldBasePost = {
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace: string;
-    key: string;
-    value: string;
-    description?: string;
-};
-export type MetafieldPost = MetafieldBasePost & {
-    resource_id: number;
-};
-export type MetafieldBasePut = {
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace?: string;
-    key?: string;
-    value?: string;
-    description?: string;
-};
-export type MetafieldPut = MetafieldBasePut & {
-    id: number;
-};
-export type NotFound = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-};
 export type PutCheckoutUrl = {
     url?: string;
 };
@@ -163,6 +43,15 @@ export type ChannelListingDateModified = string;
 export type ChannelListingVariantDateModified = string;
 export type ListingState = 'active' | 'disabled' | 'error' | 'pending' | 'pending_disable' | 'pending_delete' | 'partially_rejected' | 'queued' | 'rejected' | 'submitted' | 'deleted';
 export type VariantState = 'active' | 'disabled' | 'error' | 'pending' | 'pending_disable' | 'pending_delete' | 'queued' | 'rejected' | 'submitted' | 'deleted';
+export type ChannelConfigMeta = {
+    app?: {
+        id?: number;
+        sections?: Array<{
+            title?: string;
+            query_path?: string;
+        }>;
+    };
+};
 export type CurrencyNotRequiredWithChannelId = {
     channel_id?: ChannelId;
     enabled_currencies?: EnabledCurrencies;
@@ -178,6 +67,7 @@ export type CurrencyRequiredWithoutChannelId = {
     default_currency: DefaultCurrency;
 };
 export type CreateChannelReq = {
+    config_meta?: ChannelConfigMeta;
     external_id?: ExternalId;
     is_listable_from_ui?: IsListableFromUi;
     is_visible?: IsVisible;
@@ -187,6 +77,7 @@ export type CreateChannelReq = {
     platform: ChannelPlatform;
 };
 export type UpdateChannelReq = {
+    config_meta?: ChannelConfigMeta;
     external_id?: ExternalId;
     is_listable_from_ui?: IsListableFromUi;
     is_visible?: IsVisible;
@@ -234,10 +125,10 @@ export type ChannelProductVariantFull = {
     date_modified?: ChannelListingVariantDateModified;
 };
 export type ChannelWithoutCurrencies = {
+    config_meta?: ChannelConfigMeta;
     id: ChannelId;
     external_id?: ExternalId;
     is_listable_from_ui?: IsListableFromUi;
-    is_enabled?: boolean;
     is_visible?: IsVisible;
     status?: ChannelStatus;
     name: ChannelName;
@@ -248,10 +139,10 @@ export type ChannelWithoutCurrencies = {
     icon_url?: IconUrl;
 };
 export type ChannelWithCurrencies = {
+    config_meta?: ChannelConfigMeta;
     id?: ChannelId;
     external_id?: ExternalId;
     is_listable_from_ui?: IsListableFromUi;
-    is_enabled?: boolean;
     is_visible?: IsVisible;
     status?: ChannelStatus;
     name?: ChannelName;
@@ -280,7 +171,7 @@ export type Listing = {
     date_modified?: ChannelListingDateModified;
     variants?: Array<ChannelProductVariantFull>;
 };
-export type BigCommerceProtectedAppSections = Array<'overview' | 'storefront_settings' | 'localization' | 'carousel' | 'script_manager' | 'currencies' | 'payments' | 'checkout' | 'domains' | 'notifications' | 'social' | 'pages' | 'data_solutions'>;
+export type BigCommerceProtectedAppSections = Array<'storefront_settings' | 'social' | 'carousel' | 'domains' | 'currencies' | 'notifications'>;
 export type ChannelMenusPost = {
     bigcommerce_protected_app_sections?: BigCommerceProtectedAppSections;
     custom_app_sections?: CustomAppSections;
@@ -289,6 +180,14 @@ export type CustomAppSections = Array<{
     title?: string;
     query_path?: string;
 }>;
+export type _Error = {
+    status?: number;
+    title?: string;
+    type?: string;
+    errors?: {
+        [key: string]: unknown;
+    };
+};
 export type MetaWithFullPagination = {
     pagination?: PaginationFull;
 };
@@ -332,7 +231,7 @@ export type Site = {
 };
 export type Url = {
     url?: string;
-    type?: 'checkout' | 'primary' | 'canonical';
+    type?: 'primary' | 'canonical' | 'checkout';
     created_at?: string;
     updated_at?: string;
 };
@@ -356,49 +255,29 @@ export type SiteFull = {
         route?: string;
     }>;
 };
-export type MetafieldPost2 = {
+export type MetafieldPost = {
     namespace: string;
     key: string;
     value: string;
     permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
     description?: string;
 };
-export type MetafieldPut2 = {
+export type MetafieldPut = {
     namespace?: string;
     key?: string;
     value?: string;
     permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
     description?: string;
 };
-export type MetafieldWritable = {
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace: string;
-    key: string;
-    value: string;
-    description: string;
-    resource_type: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    id: number;
-    date_created: string;
-    date_modified: string;
-};
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
-};
-export type EmptyMetaWritable = {
-    [key: string]: unknown;
-};
 export type Accept = string;
 export type ContentType = string;
 export type PageParam = number;
 export type MetafieldIdParam = number;
 export type MetafieldKeyParam = string;
-export type MetafieldKeyInParam = Array<string>;
 export type MetafieldNamespaceParam = string;
-export type MetafieldNamespaceInParam = Array<string>;
 export type LimitParam = number;
 export type DirectionParam = 'asc' | 'desc';
 export type Include = 'currencies';
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
 export type Available = boolean;
 export type StatusIn = Array<'prelaunch' | 'active' | 'inactive' | 'connected' | 'disconnected' | 'archived' | 'deleted' | 'terminated'>;
 export type TypeIn = Array<'marketplace' | 'marketing' | 'pos' | 'storefront'>;
@@ -415,7 +294,7 @@ export type After = number;
 export type ProductIdIn = Array<number>;
 export type ChannelIdPathParam = number;
 export type ListingIdPathParam = number;
-export type GetChannelsData = {
+export type ListChannelsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -438,17 +317,17 @@ export type GetChannelsData = {
     };
     url: '/channels';
 };
-export type GetChannelsErrors = {
+export type ListChannelsErrors = {
     422: _Error;
 };
-export type GetChannelsError = GetChannelsErrors[keyof GetChannelsErrors];
-export type GetChannelsResponses = {
+export type ListChannelsError = ListChannelsErrors[keyof ListChannelsErrors];
+export type ListChannelsResponses = {
     200: {
         data: Array<ChannelWithoutCurrencies>;
         meta: MetaWithFullPagination;
     };
 };
-export type GetChannelsResponse = GetChannelsResponses[keyof GetChannelsResponses];
+export type ListChannelsResponse = ListChannelsResponses[keyof ListChannelsResponses];
 export type CreateChannelData = {
     body: CreateChannelReq;
     headers: {
@@ -541,7 +420,7 @@ export type GetChannelActiveThemeResponses = {
     };
 };
 export type GetChannelActiveThemeResponse = GetChannelActiveThemeResponses[keyof GetChannelActiveThemeResponses];
-export type GetAllCurrencyAssignmentsData = {
+export type ListAllCurrencyAssignmentsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -550,13 +429,13 @@ export type GetAllCurrencyAssignmentsData = {
     query?: never;
     url: '/channels/currency-assignments';
 };
-export type GetAllCurrencyAssignmentsResponses = {
+export type ListAllCurrencyAssignmentsResponses = {
     200: {
         data?: Array<CurrencyNotRequiredWithChannelId>;
         meta?: EmptyMeta;
     };
 };
-export type GetAllCurrencyAssignmentsResponse = GetAllCurrencyAssignmentsResponses[keyof GetAllCurrencyAssignmentsResponses];
+export type ListAllCurrencyAssignmentsResponse = ListAllCurrencyAssignmentsResponses[keyof ListAllCurrencyAssignmentsResponses];
 export type CreateMultipleChannelsCurrencyAssignmentsData = {
     body: UpsertMultipleChannelsCurrencyAssignmentsReq;
     headers: {
@@ -689,7 +568,7 @@ export type UpdateSingleChannelCurrencyAssignmentsResponses = {
     };
 };
 export type UpdateSingleChannelCurrencyAssignmentsResponse = UpdateSingleChannelCurrencyAssignmentsResponses[keyof UpdateSingleChannelCurrencyAssignmentsResponses];
-export type GetChannelListingsData = {
+export type ListChannelListingsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -710,18 +589,18 @@ export type GetChannelListingsData = {
     };
     url: '/channels/{channel_id}/listings';
 };
-export type GetChannelListingsErrors = {
+export type ListChannelListingsErrors = {
     400: _Error;
     422: _Error;
 };
-export type GetChannelListingsError = GetChannelListingsErrors[keyof GetChannelListingsErrors];
-export type GetChannelListingsResponses = {
+export type ListChannelListingsError = ListChannelListingsErrors[keyof ListChannelListingsErrors];
+export type ListChannelListingsResponses = {
     200: {
         data?: Array<Listing>;
         meta?: MetaWithPartialPagination;
     };
 };
-export type GetChannelListingsResponse = GetChannelListingsResponses[keyof GetChannelListingsResponses];
+export type ListChannelListingsResponse = ListChannelListingsResponses[keyof ListChannelListingsResponses];
 export type CreateChannelListingsData = {
     body: CreateMultipleListingsReq;
     headers: {
@@ -811,7 +690,7 @@ export type DeleteCheckoutUrlResponses = {
     };
 };
 export type DeleteCheckoutUrlResponse = DeleteCheckoutUrlResponses[keyof DeleteCheckoutUrlResponses];
-export type UpdateCheckoutUrlData = {
+export type PutCheckoutUrlData = {
     body?: PutCheckoutUrl;
     headers: {
         Accept: string;
@@ -823,7 +702,7 @@ export type UpdateCheckoutUrlData = {
     query?: never;
     url: '/channels/{channel_id}/site/checkout-url';
 };
-export type UpdateCheckoutUrlErrors = {
+export type PutCheckoutUrlErrors = {
     422: {
         status?: number;
         title?: string;
@@ -833,11 +712,11 @@ export type UpdateCheckoutUrlErrors = {
         };
     };
 };
-export type UpdateCheckoutUrlError = UpdateCheckoutUrlErrors[keyof UpdateCheckoutUrlErrors];
-export type UpdateCheckoutUrlResponses = {
+export type PutCheckoutUrlError = PutCheckoutUrlErrors[keyof PutCheckoutUrlErrors];
+export type PutCheckoutUrlResponses = {
     200: Site;
 };
-export type UpdateCheckoutUrlResponse = UpdateCheckoutUrlResponses[keyof UpdateCheckoutUrlResponses];
+export type PutCheckoutUrlResponse = PutCheckoutUrlResponses[keyof PutCheckoutUrlResponses];
 export type DeleteChannelSiteData = {
     body?: never;
     headers: {
@@ -873,7 +752,7 @@ export type GetChannelSiteResponses = {
     };
 };
 export type GetChannelSiteResponse = GetChannelSiteResponses[keyof GetChannelSiteResponses];
-export type CreateChannelSiteData = {
+export type PostChannelSiteData = {
     body?: SitePost;
     headers: {
         Accept: string;
@@ -885,14 +764,14 @@ export type CreateChannelSiteData = {
     query?: never;
     url: '/channels/{channel_id}/site';
 };
-export type CreateChannelSiteResponses = {
+export type PostChannelSiteResponses = {
     200: {
         data?: Site;
         meta?: EmptyMeta;
     };
 };
-export type CreateChannelSiteResponse = CreateChannelSiteResponses[keyof CreateChannelSiteResponses];
-export type UpdateChannelSiteData = {
+export type PostChannelSiteResponse = PostChannelSiteResponses[keyof PostChannelSiteResponses];
+export type PutChannelSiteData = {
     body?: SitePut;
     headers: {
         Accept: string;
@@ -904,13 +783,13 @@ export type UpdateChannelSiteData = {
     query?: never;
     url: '/channels/{channel_id}/site';
 };
-export type UpdateChannelSiteResponses = {
+export type PutChannelSiteResponses = {
     200: {
         data?: Site;
         meta?: EmptyMeta;
     };
 };
-export type UpdateChannelSiteResponse = UpdateChannelSiteResponses[keyof UpdateChannelSiteResponses];
+export type PutChannelSiteResponse = PutChannelSiteResponses[keyof PutChannelSiteResponses];
 export type DeleteChannelMenusData = {
     body?: never;
     headers: {
@@ -950,7 +829,7 @@ export type GetChannelMenusResponses = {
     };
 };
 export type GetChannelMenusResponse = GetChannelMenusResponses[keyof GetChannelMenusResponses];
-export type CreateChannelMenusData = {
+export type PostChannelMenusData = {
     body?: ChannelMenusPost;
     headers: {
         Accept: string;
@@ -962,11 +841,7 @@ export type CreateChannelMenusData = {
     query?: never;
     url: '/channels/{channel_id}/channel-menus';
 };
-export type CreateChannelMenusErrors = {
-    422: ErrorResponse;
-};
-export type CreateChannelMenusError = CreateChannelMenusErrors[keyof CreateChannelMenusErrors];
-export type CreateChannelMenusResponses = {
+export type PostChannelMenusResponses = {
     200: {
         data?: {
             bigcommerce_protected_app_sections?: BigCommerceProtectedAppSections;
@@ -975,8 +850,8 @@ export type CreateChannelMenusResponses = {
         meta?: EmptyMeta;
     };
 };
-export type CreateChannelMenusResponse = CreateChannelMenusResponses[keyof CreateChannelMenusResponses];
-export type GetChannelMetafieldsData = {
+export type PostChannelMenusResponse = PostChannelMenusResponses[keyof PostChannelMenusResponses];
+export type GetChannelsChannelIdMetafieldsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -993,7 +868,7 @@ export type GetChannelMetafieldsData = {
     };
     url: '/channels/{channel_id}/metafields';
 };
-export type GetChannelMetafieldsResponses = {
+export type GetChannelsChannelIdMetafieldsResponses = {
     200: {
         id?: number;
         permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
@@ -1007,9 +882,9 @@ export type GetChannelMetafieldsResponses = {
         date_modified?: string;
     };
 };
-export type GetChannelMetafieldsResponse = GetChannelMetafieldsResponses[keyof GetChannelMetafieldsResponses];
-export type CreateChannelMetafieldData = {
-    body?: MetafieldPost2;
+export type GetChannelsChannelIdMetafieldsResponse = GetChannelsChannelIdMetafieldsResponses[keyof GetChannelsChannelIdMetafieldsResponses];
+export type PostChannelsChannelIdMetafieldsData = {
+    body?: MetafieldPost;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -1020,18 +895,7 @@ export type CreateChannelMetafieldData = {
     query?: never;
     url: '/channels/{channel_id}/metafields';
 };
-export type CreateChannelMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    409: ErrorResponse;
-    422: ErrorResponse;
-};
-export type CreateChannelMetafieldError = CreateChannelMetafieldErrors[keyof CreateChannelMetafieldErrors];
-export type CreateChannelMetafieldResponses = {
+export type PostChannelsChannelIdMetafieldsResponses = {
     200: {
         id?: number;
         permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
@@ -1045,8 +909,8 @@ export type CreateChannelMetafieldResponses = {
         date_modified?: string;
     };
 };
-export type CreateChannelMetafieldResponse = CreateChannelMetafieldResponses[keyof CreateChannelMetafieldResponses];
-export type DeleteChannelMetafieldData = {
+export type PostChannelsChannelIdMetafieldsResponse = PostChannelsChannelIdMetafieldsResponses[keyof PostChannelsChannelIdMetafieldsResponses];
+export type DeleteChannelsChannelIdMetafieldsMetafieldIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1058,15 +922,11 @@ export type DeleteChannelMetafieldData = {
     query?: never;
     url: '/channels/{channel_id}/metafields/{metafield_id}';
 };
-export type DeleteChannelMetafieldErrors = {
-    404: NotFound;
-};
-export type DeleteChannelMetafieldError = DeleteChannelMetafieldErrors[keyof DeleteChannelMetafieldErrors];
-export type DeleteChannelMetafieldResponses = {
+export type DeleteChannelsChannelIdMetafieldsMetafieldIdResponses = {
     204: void;
 };
-export type DeleteChannelMetafieldResponse = DeleteChannelMetafieldResponses[keyof DeleteChannelMetafieldResponses];
-export type GetChannelMetafieldData = {
+export type DeleteChannelsChannelIdMetafieldsMetafieldIdResponse = DeleteChannelsChannelIdMetafieldsMetafieldIdResponses[keyof DeleteChannelsChannelIdMetafieldsMetafieldIdResponses];
+export type GetChannelsChannelIdMetafieldsMetafieldIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1078,11 +938,7 @@ export type GetChannelMetafieldData = {
     query?: never;
     url: '/channels/{channel_id}/metafields/{metafield_id}';
 };
-export type GetChannelMetafieldErrors = {
-    404: NotFound;
-};
-export type GetChannelMetafieldError = GetChannelMetafieldErrors[keyof GetChannelMetafieldErrors];
-export type GetChannelMetafieldResponses = {
+export type GetChannelsChannelIdMetafieldsMetafieldIdResponses = {
     200: {
         id?: number;
         permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
@@ -1096,9 +952,9 @@ export type GetChannelMetafieldResponses = {
         date_modified?: string;
     };
 };
-export type GetChannelMetafieldResponse = GetChannelMetafieldResponses[keyof GetChannelMetafieldResponses];
-export type UpdateChannelMetafieldData = {
-    body?: MetafieldPut2;
+export type GetChannelsChannelIdMetafieldsMetafieldIdResponse = GetChannelsChannelIdMetafieldsMetafieldIdResponses[keyof GetChannelsChannelIdMetafieldsMetafieldIdResponses];
+export type PutChannelsChannelIdMetafieldsMetafieldIdData = {
+    body?: MetafieldPut;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -1110,17 +966,7 @@ export type UpdateChannelMetafieldData = {
     query?: never;
     url: '/channels/{channel_id}/metafields/{metafield_id}';
 };
-export type UpdateChannelMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    404: NotFound;
-};
-export type UpdateChannelMetafieldError = UpdateChannelMetafieldErrors[keyof UpdateChannelMetafieldErrors];
-export type UpdateChannelMetafieldResponses = {
+export type PutChannelsChannelIdMetafieldsMetafieldIdResponses = {
     200: {
         id?: number;
         permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
@@ -1134,87 +980,4 @@ export type UpdateChannelMetafieldResponses = {
         date_modified?: string;
     };
 };
-export type UpdateChannelMetafieldResponse = UpdateChannelMetafieldResponses[keyof UpdateChannelMetafieldResponses];
-export type DeleteChannelsMetafieldsData = {
-    body?: Array<number>;
-    path?: never;
-    query?: never;
-    url: '/channels/metafields';
-};
-export type DeleteChannelsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-export type DeleteChannelsMetafieldsError = DeleteChannelsMetafieldsErrors[keyof DeleteChannelsMetafieldsErrors];
-export type DeleteChannelsMetafieldsResponses = {
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-export type DeleteChannelsMetafieldsResponse = DeleteChannelsMetafieldsResponses[keyof DeleteChannelsMetafieldsResponses];
-export type GetChannelsMetafieldsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        page?: number;
-        limit?: number;
-        key?: string;
-        'key:in'?: Array<string>;
-        namespace?: string;
-        'namespace:in'?: Array<string>;
-        direction?: 'asc' | 'desc';
-        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-        'date_modified:min'?: string;
-        'date_modified:max'?: string;
-        'date_created:min'?: string;
-        'date_created:max'?: string;
-    };
-    url: '/channels/metafields';
-};
-export type GetChannelsMetafieldsResponses = {
-    200: MetaFieldCollectionResponse;
-};
-export type GetChannelsMetafieldsResponse = GetChannelsMetafieldsResponses[keyof GetChannelsMetafieldsResponses];
-export type CreateChannelsMetafieldsData = {
-    body?: Array<MetafieldPost>;
-    path?: never;
-    query?: never;
-    url: '/channels/metafields';
-};
-export type CreateChannelsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: ErrorResponse;
-};
-export type CreateChannelsMetafieldsError = CreateChannelsMetafieldsErrors[keyof CreateChannelsMetafieldsErrors];
-export type CreateChannelsMetafieldsResponses = {
-    200: MetaFieldCollectionResponsePostPut;
-};
-export type CreateChannelsMetafieldsResponse = CreateChannelsMetafieldsResponses[keyof CreateChannelsMetafieldsResponses];
-export type UpdateChannelsMetafieldsData = {
-    body?: Array<MetafieldPut>;
-    path?: never;
-    query?: never;
-    url: '/channels/metafields';
-};
-export type UpdateChannelsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-export type UpdateChannelsMetafieldsError = UpdateChannelsMetafieldsErrors[keyof UpdateChannelsMetafieldsErrors];
-export type UpdateChannelsMetafieldsResponses = {
-    200: MetaFieldCollectionResponsePostPut;
-};
-export type UpdateChannelsMetafieldsResponse = UpdateChannelsMetafieldsResponses[keyof UpdateChannelsMetafieldsResponses];
+export type PutChannelsChannelIdMetafieldsMetafieldIdResponse = PutChannelsChannelIdMetafieldsMetafieldIdResponses[keyof PutChannelsChannelIdMetafieldsMetafieldIdResponses];

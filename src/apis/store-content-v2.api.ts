@@ -15,11 +15,18 @@ export class StoreContentV2Api {
      *
      * Returns a list of *Blog Tags*.
      */
-    getBlogTags(
+    getAllBlogTags(
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetBlogTagsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetAllBlogTagsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/blog/tags',
         });
+    }
+
+    /**
+     * @deprecated Use `getAllBlogTags` instead.
+     */
+    getBlogTags(...args: Parameters<StoreContentV2Api['getAllBlogTags']>) {
+        return this.getAllBlogTags(...args);
     }
 
     /**
@@ -27,13 +34,20 @@ export class StoreContentV2Api {
      *
      * Returns all *Blog Posts*. Default sorting is by published_date, beginning with the most recent post.
      */
-    getBlogPosts(
-        query?: StoreContentV2ApiSpecs.GetBlogPostsData['query'],
+    getAllBlogPosts(
+        query?: StoreContentV2ApiSpecs.GetAllBlogPostsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetBlogPostsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetAllBlogPostsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/blog/posts',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getAllBlogPosts` instead.
+     */
+    getBlogPosts(...args: Parameters<StoreContentV2Api['getAllBlogPosts']>) {
+        return this.getAllBlogPosts(...args);
     }
 
     /**
@@ -47,14 +61,14 @@ export class StoreContentV2Api {
 
      **Notes**
 
-     * When including `published_date` in a request, supply it as a flat date string (not an object) in valid <a href="http://tools.ietf.org/html/rfc2822#section-3.3" target="_blank">RFC 2822</a>. The following example request includes a `published_date` in RFC 2822 format.
+     * When including `published_date` in a request, supply it as a flat date string (not an object) in valid <a href="http://tools.ietf.org/html/rfc2822#section-3.3" target="_blank">RFC 2822</a>. The&#160;example request below includes a `published_date` in RFC 2822 format.
      * Blog posts default to draft status. To publish blog posts to the storefront, set the `is_published` property to `true`.
      * If a custom URL is not provided, the post’s URL will be generated based on the value of `title`.
      */
-    createBlogPosts(
-        requestBody: StoreContentV2ApiSpecs.CreateBlogPostsData['body'],
+    createAblogPosts(
+        requestBody: StoreContentV2ApiSpecs.CreateABlogPostsData['body'],
     ) {
-        return this.request.post<(RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.CreateBlogPostsResponses[200]>> | RequestSuccessResponse<207, Required<StoreContentV2ApiSpecs.CreateBlogPostsResponses[207]>>),RequestErrorResponse<400, void>>({
+        return this.request.post<(RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.CreateABlogPostsResponses[200]>> | RequestSuccessResponse<207, Required<StoreContentV2ApiSpecs.CreateABlogPostsResponses[207]>>),RequestErrorResponse<400, void>>({
             path: 'v2/blog/posts',
             contentType: 'application/json',
             body: requestBody,
@@ -62,17 +76,31 @@ export class StoreContentV2Api {
     }
 
     /**
+     * @deprecated Use `createAblogPosts` instead.
+     */
+    createBlogPosts(...args: Parameters<StoreContentV2Api['createAblogPosts']>) {
+        return this.createAblogPosts(...args);
+    }
+
+    /**
      * Delete Blog Posts
      *
      * Deletes a page of `Blog Posts`.
      */
-    deleteBlogPosts(
-        query?: StoreContentV2ApiSpecs.DeleteBlogPostsData['query'],
+    deleteAllBlogPosts(
+        query?: StoreContentV2ApiSpecs.DeleteAllBlogPostsData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteBlogPostsResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteAllBlogPostsResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/blog/posts',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteAllBlogPosts` instead.
+     */
+    deleteBlogPosts(...args: Parameters<StoreContentV2Api['deleteAllBlogPosts']>) {
+        return this.deleteAllBlogPosts(...args);
     }
 
     /**
@@ -80,12 +108,19 @@ export class StoreContentV2Api {
      *
      * Returns a single *Blog Post*.
      */
-    getBlogPost(
-        id: StoreContentV2ApiSpecs.GetBlogPostData['path']['id'],
+    getAblogPost(
+        id: StoreContentV2ApiSpecs.GetABlogPostData['path']['id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetBlogPostResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetABlogPostResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/blog/posts/${id}`,
         });
+    }
+
+    /**
+     * @deprecated Use `getAblogPost` instead.
+     */
+    getBlogPost(...args: Parameters<StoreContentV2Api['getAblogPost']>) {
+        return this.getAblogPost(...args);
     }
 
     /**
@@ -95,15 +130,15 @@ export class StoreContentV2Api {
 
      **Notes**
 
-     * To include `published_date` in a request, provide a flat date string (not an object) in valid <a href="http://tools.ietf.org/html/rfc2822#section-3.3" target="_blank">RFC 2822</a>. The following example request includes a `published_date` in RFC 2822 format.
+     * When including `published_date` in a request, supply it as a flat date string (not an object) in valid <a href="http://tools.ietf.org/html/rfc2822#section-3.3" target="_blank">RFC 2822</a>. The&#160;example request below includes a `published_date` in RFC 2822 format.
 
      * Blog posts default to draft status. To publish blog posts to the storefront, set the `is_published` property to `true`.
      */
-    updateBlogPost(
-        id: StoreContentV2ApiSpecs.UpdateBlogPostData['path']['id'],
-        requestBody: StoreContentV2ApiSpecs.UpdateBlogPostData['body'],
+    updateAblogPost(
+        id: StoreContentV2ApiSpecs.UpdateABlogPostData['path']['id'],
+        requestBody: StoreContentV2ApiSpecs.UpdateABlogPostData['body'],
     ) {
-        return this.request.put<(RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.UpdateBlogPostResponses[200]>> | RequestSuccessResponse<207, Required<StoreContentV2ApiSpecs.UpdateBlogPostResponses[207]>>),RequestErrorResponse<400, void>>({
+        return this.request.put<(RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.UpdateABlogPostResponses[200]>> | RequestSuccessResponse<207, Required<StoreContentV2ApiSpecs.UpdateABlogPostResponses[207]>>),RequestErrorResponse<400, void>>({
             path: `v2/blog/posts/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -111,16 +146,30 @@ export class StoreContentV2Api {
     }
 
     /**
+     * @deprecated Use `updateAblogPost` instead.
+     */
+    updateBlogPost(...args: Parameters<StoreContentV2Api['updateAblogPost']>) {
+        return this.updateAblogPost(...args);
+    }
+
+    /**
      * Delete a Blog Post
      *
      * Deletes a *Blog Post*.
      */
-    deleteBlogPost(
-        id: StoreContentV2ApiSpecs.DeleteBlogPostData['path']['id'],
+    deleteAblogPost(
+        id: StoreContentV2ApiSpecs.DeleteABlogPostData['path']['id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteBlogPostResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteABlogPostResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/blog/posts/${id}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteAblogPost` instead.
+     */
+    deleteBlogPost(...args: Parameters<StoreContentV2Api['deleteAblogPost']>) {
+        return this.deleteAblogPost(...args);
     }
 
     /**
@@ -128,15 +177,22 @@ export class StoreContentV2Api {
      *
      * Returns a count of all *Blog Posts*.
      */
-    getBlogPostsCount(
+    getAcountOfAllBlogPosts(
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetBlogPostsCountResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetACountOfAllBlogPostsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/blog/posts/count',
         });
     }
 
     /**
-     * Get All Pages (Deprecated)
+     * @deprecated Use `getAcountOfAllBlogPosts` instead.
+     */
+    getBlogPostsCount(...args: Parameters<StoreContentV2Api['getAcountOfAllBlogPosts']>) {
+        return this.getAcountOfAllBlogPosts(...args);
+    }
+
+    /**
+     * Get All Pages
      *
      * Returns a list of *Pages*. Default sorting is by auto-generated ID from oldest to newest.
 
@@ -146,17 +202,24 @@ export class StoreContentV2Api {
      > * To get one or more pages, use Pages V3ʼs [Get pages](/docs/rest-content/pages#get-pages) endpoint. To get a single page, use Pages V3ʼs [Get a page](/docs/rest-content/pages#get-a-page) endpoint.
 
      */
-    getPages(
-        query?: StoreContentV2ApiSpecs.GetPagesData['query'],
+    getAllPages(
+        query?: StoreContentV2ApiSpecs.GetAllPagesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetPagesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetAllPagesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/pages',
             query,
         });
     }
 
     /**
-     * Create a Page (Deprecated)
+     * @deprecated Use `getAllPages` instead.
+     */
+    getPages(...args: Parameters<StoreContentV2Api['getAllPages']>) {
+        return this.getAllPages(...args);
+    }
+
+    /**
+     * Create a Page
      *
      * Creates a *Page*. The request payload limit is 1MB.
 
@@ -164,6 +227,7 @@ export class StoreContentV2Api {
      *   `type`
      *   `name`
      *   `link` (for a page of `type: link`)
+     *   `feed` (for a page of `type: rss_feed`)
      *   `body` (for a page of `type: raw`)
 
      **Read Only Fields**
@@ -171,17 +235,17 @@ export class StoreContentV2Api {
 
      ## Content Type
 
-     The default value for `content_type` is `text/html`; however, if `page_type` is set to `raw`, `content_type` can be changed to `text/javascript` or `application/json`. Updating this field lets you place a JavaScript or a JSON file in the root directory.
+     The default value for `content_type` is `text/html`; however, if `page_type` is set to `raw`, `content_type` can be changed to `text/javascript` or `application/json`. Updating this field allows you to place a JavaScript or a JSON file in the root directory.
 
      > #### Warning
      > **Deprecated**
      > * This API operation is deprecated. Avoid using this API operation if possible. It will be removed in a future version.
-     > * To create one or more pages, use Pages V3ʼs [Create pages](/docs/rest-content/pages#create-pages) endpoint.
+     > * To create one or more pages, use Pages V3ʼs [Create pages](/docs/rest-content/pages#create-pages) endpoint. 
      */
-    createPage(
-        requestBody: StoreContentV2ApiSpecs.CreatePageData['body'],
+    createApage(
+        requestBody: StoreContentV2ApiSpecs.CreateAPageData['body'],
     ) {
-        return this.request.post<(RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.CreatePageResponses[200]>> | RequestSuccessResponse<207, Required<StoreContentV2ApiSpecs.CreatePageResponses[207]>>),RequestErrorResponse<400, void>>({
+        return this.request.post<(RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.CreateAPageResponses[200]>> | RequestSuccessResponse<207, Required<StoreContentV2ApiSpecs.CreateAPageResponses[207]>>),RequestErrorResponse<400, void>>({
             path: 'v2/pages',
             contentType: 'application/json',
             body: requestBody,
@@ -189,7 +253,14 @@ export class StoreContentV2Api {
     }
 
     /**
-     * Get A Page (Deprecated)
+     * @deprecated Use `createApage` instead.
+     */
+    createPage(...args: Parameters<StoreContentV2Api['createApage']>) {
+        return this.createApage(...args);
+    }
+
+    /**
+     * Get A Page
      *
      * Returns a *Page*. 
 
@@ -199,16 +270,23 @@ export class StoreContentV2Api {
      > * To get a single page, use Pages V3ʼs [Get a page](/docs/rest-content/pages#get-a-page) endpoint.
 
      */
-    getPage(
-        id: StoreContentV2ApiSpecs.GetPageData['path']['id'],
+    getApage(
+        id: StoreContentV2ApiSpecs.GetAPageData['path']['id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetPageResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetAPageResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/pages/${id}`,
         });
     }
 
     /**
-     * Update a Page (Deprecated)
+     * @deprecated Use `getApage` instead.
+     */
+    getPage(...args: Parameters<StoreContentV2Api['getApage']>) {
+        return this.getApage(...args);
+    }
+
+    /**
+     * Update a Page
      *
      * Updates a *Page*. The request payload limit is 1MB.
 
@@ -219,13 +297,12 @@ export class StoreContentV2Api {
      > **Deprecated**
      > * This API operation is deprecated. Avoid using this API operation if possible. It will be removed in a future version.
      > * To update multiple pages, use Pages V3ʼs [Update pages](/docs/rest-content/pages#update-pages) endpoint. To update a single page, use Pages V3ʼs [Update a page](/docs/rest-content/pages#update-a-page) endpoint.
-     > * Updating the channel ID for a page is not supported.
      */
-    updatePage(
-        id: StoreContentV2ApiSpecs.UpdatePageData['path']['id'],
-        requestBody: StoreContentV2ApiSpecs.UpdatePageData['body'],
+    updateApage(
+        id: StoreContentV2ApiSpecs.UpdateAPageData['path']['id'],
+        requestBody: StoreContentV2ApiSpecs.UpdateAPageData['body'],
     ) {
-        return this.request.put<(RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.UpdatePageResponses[200]>> | RequestSuccessResponse<207, Required<StoreContentV2ApiSpecs.UpdatePageResponses[207]>>),RequestErrorResponse<400, void>>({
+        return this.request.put<(RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.UpdateAPageResponses[200]>> | RequestSuccessResponse<207, Required<StoreContentV2ApiSpecs.UpdateAPageResponses[207]>>),RequestErrorResponse<400, void>>({
             path: `v2/pages/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -233,22 +310,36 @@ export class StoreContentV2Api {
     }
 
     /**
-     * Delete a Page (Deprecated)
+     * @deprecated Use `updateApage` instead.
+     */
+    updatePage(...args: Parameters<StoreContentV2Api['updateApage']>) {
+        return this.updateApage(...args);
+    }
+
+    /**
+     * Delete a Page
      *
      * Deletes a *Page*.
 
      > #### Warning
      > **Deprecated**
      > * This API operation is deprecated. Avoid using this API operation if possible. It will be removed in a future version.
-     > * To delete multiple pages, use Pages V3ʼs [Delete pages](/docs/rest-content/pages#delete-pages) endpoint. To delete a single page, use Pages V3ʼs [Delete a page](/docs/rest-content/pages#delete-a-page) endpoint.
+     > * To delete multiple pages, use Pages V3ʼs [Delete pages](/docs/rest-content/pages#delete-pages) endpoint. To delete a single page, use Pages V3ʼs [Delete a page](/docs/rest-content/pages#delete-a-page) endpoint. 
 
      */
-    deletePage(
-        id: StoreContentV2ApiSpecs.DeletePageData['path']['id'],
+    deleteApage(
+        id: StoreContentV2ApiSpecs.DeleteAPageData['path']['id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeletePageResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteAPageResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/pages/${id}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteApage` instead.
+     */
+    deletePage(...args: Parameters<StoreContentV2Api['deleteApage']>) {
+        return this.deleteApage(...args);
     }
 
     /**
@@ -261,13 +352,20 @@ export class StoreContentV2Api {
      > * This API operation is deprecated. Avoid using this API operation if possible. It will be removed in a future version.
      > * To get redirect URLs, use Redirects V3ʼs [Get redirects](/docs/rest-management/redirects#get-redirects) endpoint.
      */
-    getRedirects(
-        query?: StoreContentV2ApiSpecs.GetRedirectsData['query'],
+    getAlistofRedirects(
+        query?: StoreContentV2ApiSpecs.GetAListofRedirectsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetRedirectsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetAListofRedirectsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/redirects',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getAlistofRedirects` instead.
+     */
+    getRedirects(...args: Parameters<StoreContentV2Api['getAlistofRedirects']>) {
+        return this.getAlistofRedirects(...args);
     }
 
     /**
@@ -287,14 +385,21 @@ export class StoreContentV2Api {
      > * This API operation is deprecated. Avoid using this API operation if possible. It will be removed in a future version.
      > * To upsert new redirect data, use Redirects V3ʼs [Upsert redirects](/docs/rest-management/redirects#upsert-redirects) endpoint.
      */
-    createRedirect(
-        requestBody: StoreContentV2ApiSpecs.CreateRedirectData['body'],
+    createAredirect(
+        requestBody: StoreContentV2ApiSpecs.CreateARedirectData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.CreateRedirectResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.CreateARedirectResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/redirects',
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `createAredirect` instead.
+     */
+    createRedirect(...args: Parameters<StoreContentV2Api['createAredirect']>) {
+        return this.createAredirect(...args);
     }
 
     /**
@@ -307,11 +412,18 @@ export class StoreContentV2Api {
      > * This API operation is deprecated. Avoid using this API operation if possible. It will be removed in a future version.
      > * To delete redirect URLs, use Redirects V3ʼs [Delete redirects](/docs/rest-management/redirects#delete-redirects) endpoint.
      */
-    deleteRedirects(
+    deleteAllRedirects(
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteRedirectsResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteAllRedirectsResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/redirects',
         });
+    }
+
+    /**
+     * @deprecated Use `deleteAllRedirects` instead.
+     */
+    deleteRedirects(...args: Parameters<StoreContentV2Api['deleteAllRedirects']>) {
+        return this.deleteAllRedirects(...args);
     }
 
     /**
@@ -324,12 +436,19 @@ export class StoreContentV2Api {
      > * This API operation is deprecated. Avoid using this API operation if possible. It will be removed in a future version.
      > * To get a redirect URL, use Redirects V3ʼs [Get redirects](/docs/rest-management/redirects#get-redirects) endpoint.
      */
-    getRedirect(
-        id: StoreContentV2ApiSpecs.GetRedirectData['path']['id'],
+    getAredirectUrl(
+        id: StoreContentV2ApiSpecs.GetARedirectUrlData['path']['id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetRedirectResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetARedirectUrlResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/redirects/${id}`,
         });
+    }
+
+    /**
+     * @deprecated Use `getAredirectUrl` instead.
+     */
+    getRedirect(...args: Parameters<StoreContentV2Api['getAredirectUrl']>) {
+        return this.getAredirectUrl(...args);
     }
 
     /**
@@ -349,15 +468,22 @@ export class StoreContentV2Api {
      > * This API operation is deprecated. Avoid using this API operation if possible. It will be removed in a future version.
      > * To update redirect data, use Redirects V3ʼs [Upsert redirects](/docs/rest-management/redirects#upsert-redirects) endpoint.
      */
-    updateRedirect(
-        id: StoreContentV2ApiSpecs.UpdateRedirectData['path']['id'],
-        requestBody: StoreContentV2ApiSpecs.UpdateRedirectData['body'],
+    updateAredirectUrl(
+        id: StoreContentV2ApiSpecs.UpdateARedirectUrlData['path']['id'],
+        requestBody: StoreContentV2ApiSpecs.UpdateARedirectUrlData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.UpdateRedirectResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.UpdateARedirectUrlResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/redirects/${id}`,
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `updateAredirectUrl` instead.
+     */
+    updateRedirect(...args: Parameters<StoreContentV2Api['updateAredirectUrl']>) {
+        return this.updateAredirectUrl(...args);
     }
 
     /**
@@ -370,12 +496,19 @@ export class StoreContentV2Api {
      > * This API operation is deprecated. Avoid using this API operation if possible. It will be removed in a future version.
      > * To delete a redirect URL, use Redirects V3ʼs [Delete redirects](/docs/rest-management/redirects#delete-redirects) endpoint.
      */
-    deleteRedirect(
-        id: StoreContentV2ApiSpecs.DeleteRedirectData['path']['id'],
+    deleteAredirect(
+        id: StoreContentV2ApiSpecs.DeleteARedirectData['path']['id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteRedirectResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<StoreContentV2ApiSpecs.DeleteARedirectResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/redirects/${id}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteAredirect` instead.
+     */
+    deleteRedirect(...args: Parameters<StoreContentV2Api['deleteAredirect']>) {
+        return this.deleteAredirect(...args);
     }
 
     /**
@@ -388,10 +521,17 @@ export class StoreContentV2Api {
      > * This API operation is deprecated. Avoid using this API operation if possible. It will be removed in a future version.
      > * To get a count of redirects, use the `meta` object data returned with the Redirects V3ʼs [Get redirects](/docs/rest-management/redirects#get-redirects) endpoint.
      */
-    getRedirectsCount(
+    getAcountOfRedirects(
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetRedirectsCountResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreContentV2ApiSpecs.GetACountOfRedirectsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/redirects/count',
         });
+    }
+
+    /**
+     * @deprecated Use `getAcountOfRedirects` instead.
+     */
+    getRedirectsCount(...args: Parameters<StoreContentV2Api['getAcountOfRedirects']>) {
+        return this.getAcountOfRedirects(...args);
     }
 }

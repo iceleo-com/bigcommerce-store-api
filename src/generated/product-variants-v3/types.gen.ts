@@ -27,12 +27,12 @@ export type CategoriesTreeNodeFull = {
      */
     id?: number;
     /**
-     * The unique numeric ID of the categoryʼs parent. This field controls where the category sits in the tree of categories that organize the catalog.
+     * The unique numeric ID of the category's parent. This field controls where the category sits in the tree of categories that organize the catalog.
      *
      */
     parent_id?: number;
     /**
-     * The name displayed for the category. Name is unique with respect to the categoryʼs siblings.
+     * The name displayed for the category. Name is unique with respect to the category's siblings.
      *
      */
     name?: string;
@@ -55,7 +55,7 @@ export type CategoriesTreeNodeFull = {
  */
 export type ProductVariantBase = {
     /**
-     * The cost price of the variant. It is not affected by Price List prices. This value displays as null in the control panel when `cost_price` equals zero.
+     * The cost price of the variant. Not affected by Price List prices.
      */
     cost_price?: number | null;
     /**
@@ -75,17 +75,17 @@ export type ProductVariantBase = {
      */
     weight?: number | null;
     /**
-     * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default width (set in the Product resourceʼs `width` field) will be used as the base width.
+     * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default width (set in the Product resource's `width` field) will be used as the base width.
      *
      */
     width?: number | null;
     /**
-     * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default height (set in the Product resourceʼs `height` field) will be used as the base height.
+     * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default height (set in the Product resource's `height` field) will be used as the base height.
      *
      */
     height?: number | null;
     /**
-     * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default depth (set in the Product resourceʼs `depth` field) will be used as the base depth.
+     * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default depth (set in the Product resource's `depth` field) will be used as the base depth.
      *
      */
     depth?: number | null;
@@ -112,10 +112,6 @@ export type ProductVariantBase = {
      */
     upc?: string | null;
     /**
-     * Publicly available image url
-     */
-    image_url?: string;
-    /**
      * Inventory level for the variant, which is used when the product’s inventory_tracking is set to `variant`. The Catalog API returns the inventory for only the default location.
      *
      * The inventory for a variant cannot exceed 2,147,483,647 in the catalog. The sum of the variant inventories, or the total inventory for a product, cannot exceed 2,147,483,647.
@@ -136,8 +132,8 @@ export type ProductVariantBase = {
     /**
      * The Manufacturer Part Number (MPN) for the variant.
      */
-    mpn?: string | null;
-    gtin?: string | null;
+    mpn?: string;
+    gtin?: string;
 };
 
 /**
@@ -148,11 +144,11 @@ export type ProductVariantFull = ProductVariantBase & {
     product_id?: number;
     sku?: string;
     /**
-     * Read-only reference to v2 APIʼs SKU ID. Null if it is a base variant.
+     * Read-only reference to v2 API's SKU ID. Null if it is a base variant.
      */
     sku_id?: number | null;
     /**
-     * Array of option and option values IDs that make up this variant. Will be empty if the variant is the productʼs base variant.
+     * Array of option and option values IDs that make up this variant. Will be empty if the variant is the product's base variant.
      */
     option_values?: Array<ProductVariantOptionValueFull>;
     /**
@@ -171,7 +167,7 @@ export type ProductVariantFull = ProductVariantBase & {
  */
 export type ProductVariantPost = {
     /**
-     * The cost price of the variant. It is not affected by Price List prices. This value displays as null in the control panel when `cost_price` equals zero.
+     * The cost price of the variant. Not affected by Price List prices.
      */
     cost_price?: number | null;
     /**
@@ -191,17 +187,17 @@ export type ProductVariantPost = {
      */
     weight?: number | null;
     /**
-     * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default width (set in the Product resourceʼs `width` field) will be used as the base width.
+     * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default width (set in the Product resource's `width` field) will be used as the base width.
      *
      */
     width?: number | null;
     /**
-     * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default height (set in the Product resourceʼs `height` field) will be used as the base height.
+     * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default height (set in the Product resource's `height` field) will be used as the base height.
      *
      */
     height?: number | null;
     /**
-     * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default depth (set in the Product resourceʼs `depth` field) will be used as the base depth.
+     * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default depth (set in the Product resource's `depth` field) will be used as the base depth.
      *
      */
     depth?: number | null;
@@ -252,16 +248,16 @@ export type ProductVariantPost = {
     /**
      * Global Trade Item Number
      */
-    gtin?: string | null;
+    gtin?: string;
     /**
      * Manufacturer Part Number
      */
-    mpn?: string | null;
+    mpn?: string;
 } & {
     product_id?: number;
     sku?: string;
     /**
-     * Array of option and option values IDs that make up this variant. Will be empty if the variant is the productʼs base variant.
+     * Array of option and option values IDs that make up this variant. Will be empty if the variant is the product's base variant.
      */
     option_values?: Array<ProductVariantOptionValueFull>;
 };
@@ -310,7 +306,7 @@ export type MetafieldBase = {
      */
     key: string;
     /**
-     * The value of the field, for example: `1`, `blue`. You must enter a JSON formatted string for [ShipperHQ](/docs/store-operations/shipping/shipper-hq#shipperhq-object-properties) metafields. Required for POST.
+     * The value of the field, for example: `1`, `blue`. Required for POST.
      *
      */
     value: string;
@@ -345,12 +341,6 @@ export type MetafieldBase = {
  */
 export type MetaCollectionFull = {
     pagination?: PaginationFull;
-};
-
-export type MultiStatus = {
-    data?: ProductVariantFull;
-    errors?: ErrorMultiStatus;
-    meta?: MetaCollectionFull;
 };
 
 /**
@@ -464,7 +454,7 @@ export type MetafieldFull = {
      */
     resource_id?: number;
     /**
-     * Date and time of the metafieldʼs creation. Read-Only.
+     * Date and time of the metafield's creation. Read-Only.
      *
      */
     readonly date_created?: string;
@@ -483,408 +473,6 @@ export type MetafieldFull = {
 export type ProductVariantPut = ProductVariantBase & {
     product_id?: number;
     sku?: string;
-};
-
-/**
- * Common metafield properties.
- *
- */
-export type Metafield = {
-    /**
-     * The unique identifier for the metafield.
-     */
-    id?: number;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    /**
-     * The unique identifier for the resource with which the metafield is associated.
-     *
-     */
-    resource_id?: number;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created?: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified?: string;
-    /**
-     * Client ID for the metafieldʼs creator.
-     */
-    owner_client_id?: string;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponse = {
-    data?: Array<Metafield>;
-    meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePostPut = {
-    data?: Array<Metafield>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionPartialSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Total number of items in the result set.
- *
- */
-export type Total = number;
-
-/**
- * Total number of items that were successfully deleted.
- *
- */
-export type Success = number;
-
-/**
- * Total number of items that failed to be deleted.
- *
- */
-export type Failed = number;
-
-/**
- * Error response payload for the BigCommerce API.
- *
- */
-export type _Error = {
-    /**
-     * The HTTP status code for the error.
-     *
-     */
-    status?: number;
-    /**
-     * The error title.
-     *
-     */
-    title?: string;
-    /**
-     * The error type.
-     *
-     */
-    type?: string;
-    errors?: ErrorDetail;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-
-/**
- * Collection Meta
- *
- * Data about the response, including pagination and collection totals.
- */
-export type CollectionMeta = {
-    /**
-     * Pagination
-     *
-     * Data about the response, including pagination and collection totals.
-     */
-    pagination?: {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    };
-    [key: string]: unknown | {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    } | undefined;
-};
-
-/**
- * Common metafield properties.
- *
- */
-export type MetafieldBasePost = {
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBasePut = {
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
 };
 
 /**
@@ -922,18 +510,10 @@ export type MetafieldFullWritable = MetafieldBase & {
 };
 
 /**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
-};
-
-/**
  * The ID of the `Product` to which the resource belongs. Product variant metafield endpoints that have the `product_id` in the request path are successful as long as the parameter is not empty. The `product_id` segment is there only for path consistency.
  *
  */
-export type ProductIdPathParam = number;
+export type ProductIdParam = number;
 
 /**
  * ID of the variant on a product, or on an associated Price List Record.
@@ -957,100 +537,7 @@ export type Accept = string;
  */
 export type ContentType = string;
 
-/**
- * Specifies the page number in a limited (paginated) list of products.
- *
- */
-export type PageParam = number;
-
-/**
- * Filter based on a metafieldʼs key.
- */
-export type MetafieldKeyParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
- */
-export type MetafieldKeyInParam = Array<string>;
-
-/**
- * Filter based on a metafieldʼs namespaces.
- */
-export type MetafieldNamespaceParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter.
- */
-export type MetafieldNamespaceInParam = Array<string>;
-
-/**
- * Controls the number of items per page in a limited (paginated) list of products.
- *
- */
-export type LimitParam = number;
-
-/**
- * Sort direction. Acceptable values are: `asc`, `desc`.
- *
- */
-export type DirectionParam = 'asc' | 'desc';
-
-/**
- * 'Query parameter that lets you filter by the minimum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.'
- *
- */
-export type DateCreatedMin = string;
-
-/**
- * 'Query parameter that lets you filter by the maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.'
- *
- */
-export type DateCreatedMax = string;
-
-/**
- * 'Query parameter that lets you filter by the maximum date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.'
- *
- */
-export type DateModifiedMax = string;
-
-/**
- * 'Query parameter that lets you filter by the minimum date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.'
- *
- */
-export type DateModifiedMin = string;
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParam = Array<string>;
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-
-/**
- * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
- */
-export type ExcludeFieldsParam = Array<string>;
-
-/**
- * A comma-separated list of IDs of products you want to request. For example, `?product_id:in=77,80,81`.
- */
-export type ProductIdInParam = Array<number>;
-
-/**
- * Filter items by UPC.
- *
- */
-export type UpcParam = string;
-
-/**
- * Filter items by variant SKU. To filter by product / base variant SKU, see [Get all products](/docs/rest-catalog/products#get-all-products).
- */
-export type SkuParam = string;
-
-export type GetProductVariantsData = {
+export type GetVariantsByProductIdData = {
     body?: never;
     headers: {
         /**
@@ -1067,28 +554,26 @@ export type GetProductVariantsData = {
     };
     query?: {
         /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<string>;
-        /**
-         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
-         */
-        exclude_fields?: Array<string>;
-        /**
          * Specifies the page number in a limited (paginated) list of products.
-         *
          */
         page?: number;
         /**
          * Controls the number of items per page in a limited (paginated) list of products.
-         *
          */
         limit?: number;
+        /**
+         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
+         */
+        include_fields?: string;
+        /**
+         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
+         */
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/variants';
 };
 
-export type GetProductVariantsErrors = {
+export type GetVariantsByProductIdErrors = {
     /**
      * Not Found
      *
@@ -1109,9 +594,9 @@ export type GetProductVariantsErrors = {
     };
 };
 
-export type GetProductVariantsError = GetProductVariantsErrors[keyof GetProductVariantsErrors];
+export type GetVariantsByProductIdError = GetVariantsByProductIdErrors[keyof GetVariantsByProductIdErrors];
 
-export type GetProductVariantsResponses = {
+export type GetVariantsByProductIdResponses = {
     /**
      * Variant Collection Response
      */
@@ -1121,9 +606,9 @@ export type GetProductVariantsResponses = {
     };
 };
 
-export type GetProductVariantsResponse = GetProductVariantsResponses[keyof GetProductVariantsResponses];
+export type GetVariantsByProductIdResponse = GetVariantsByProductIdResponses[keyof GetVariantsByProductIdResponses];
 
-export type CreateProductVariantData = {
+export type CreateVariantData = {
     body: ProductVariantPost;
     headers: {
         /**
@@ -1146,7 +631,7 @@ export type CreateProductVariantData = {
     url: '/catalog/products/{product_id}/variants';
 };
 
-export type CreateProductVariantErrors = {
+export type CreateVariantErrors = {
     /**
      * Not Found
      *
@@ -1167,9 +652,9 @@ export type CreateProductVariantErrors = {
     };
 };
 
-export type CreateProductVariantError = CreateProductVariantErrors[keyof CreateProductVariantErrors];
+export type CreateVariantError = CreateVariantErrors[keyof CreateVariantErrors];
 
-export type CreateProductVariantResponses = {
+export type CreateVariantResponses = {
     /**
      * Variant Response
      */
@@ -1182,12 +667,16 @@ export type CreateProductVariantResponses = {
      *
      * Verify that the inventory-related updates are well-formed and correct; for example, that they donʼt result in negative stock levels. Then consider updating the inventory data again.
      */
-    207: MultiStatus;
+    207: {
+        data?: ProductVariantFull;
+        errors?: ErrorMultiStatus;
+        meta?: MetaCollectionFull;
+    };
 };
 
-export type CreateProductVariantResponse = CreateProductVariantResponses[keyof CreateProductVariantResponses];
+export type CreateVariantResponse = CreateVariantResponses[keyof CreateVariantResponses];
 
-export type DeleteProductVariantData = {
+export type DeleteVariantByIdData = {
     body?: never;
     headers: {
         /**
@@ -1211,13 +700,13 @@ export type DeleteProductVariantData = {
     url: '/catalog/products/{product_id}/variants/{variant_id}';
 };
 
-export type DeleteProductVariantResponses = {
+export type DeleteVariantByIdResponses = {
     204: void;
 };
 
-export type DeleteProductVariantResponse = DeleteProductVariantResponses[keyof DeleteProductVariantResponses];
+export type DeleteVariantByIdResponse = DeleteVariantByIdResponses[keyof DeleteVariantByIdResponses];
 
-export type GetProductVariantData = {
+export type GetVariantByIdData = {
     body?: never;
     headers: {
         /**
@@ -1241,16 +730,16 @@ export type GetProductVariantData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<string>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/variants/{variant_id}';
 };
 
-export type GetProductVariantErrors = {
+export type GetVariantByIdErrors = {
     /**
      * Not Found
      *
@@ -1271,9 +760,9 @@ export type GetProductVariantErrors = {
     };
 };
 
-export type GetProductVariantError = GetProductVariantErrors[keyof GetProductVariantErrors];
+export type GetVariantByIdError = GetVariantByIdErrors[keyof GetVariantByIdErrors];
 
-export type GetProductVariantResponses = {
+export type GetVariantByIdResponses = {
     /**
      * Variant Response
      */
@@ -1283,9 +772,9 @@ export type GetProductVariantResponses = {
     };
 };
 
-export type GetProductVariantResponse = GetProductVariantResponses[keyof GetProductVariantResponses];
+export type GetVariantByIdResponse = GetVariantByIdResponses[keyof GetVariantByIdResponses];
 
-export type UpdateProductVariantData = {
+export type UpdateVariantData = {
     body: ProductVariantPut;
     headers: {
         /**
@@ -1313,7 +802,7 @@ export type UpdateProductVariantData = {
     url: '/catalog/products/{product_id}/variants/{variant_id}';
 };
 
-export type UpdateProductVariantErrors = {
+export type UpdateVariantErrors = {
     /**
      * Not Found
      *
@@ -1334,9 +823,9 @@ export type UpdateProductVariantErrors = {
     };
 };
 
-export type UpdateProductVariantError = UpdateProductVariantErrors[keyof UpdateProductVariantErrors];
+export type UpdateVariantError = UpdateVariantErrors[keyof UpdateVariantErrors];
 
-export type UpdateProductVariantResponses = {
+export type UpdateVariantResponses = {
     /**
      * Variant Response
      */
@@ -1349,12 +838,16 @@ export type UpdateProductVariantResponses = {
      *
      * Verify that the inventory-related updates are well-formed and correct; for example, that they donʼt result in negative stock levels. Then consider updating the inventory data again.
      */
-    207: MultiStatus;
+    207: {
+        data?: ProductVariantFull;
+        errors?: ErrorMultiStatus;
+        meta?: MetaCollectionFull;
+    };
 };
 
-export type UpdateProductVariantResponse = UpdateProductVariantResponses[keyof UpdateProductVariantResponses];
+export type UpdateVariantResponse = UpdateVariantResponses[keyof UpdateVariantResponses];
 
-export type GetProductVariantMetafieldsData = {
+export type GetVariantMetafieldsByProductIdAndVariantIdData = {
     body?: never;
     headers: {
         /**
@@ -1376,36 +869,58 @@ export type GetProductVariantMetafieldsData = {
     };
     query?: {
         /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<string>;
-        /**
-         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
-         */
-        exclude_fields?: Array<string>;
-        /**
          * Specifies the page number in a limited (paginated) list of products.
-         *
          */
         page?: number;
         /**
          * Controls the number of items per page in a limited (paginated) list of products.
-         *
          */
         limit?: number;
         /**
-         * Filter based on a metafieldʼs key.
+         * Filter based on a metafield's key.
+         *
          */
         key?: string;
         /**
-         * Filter based on a metafieldʼs namespaces.
+         * Filter based on a metafield's namespace.
          */
         namespace?: string;
+        /**
+         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
+         */
+        include_fields?: string;
+        /**
+         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
+         */
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/variants/{variant_id}/metafields';
 };
 
-export type GetProductVariantMetafieldsResponses = {
+export type GetVariantMetafieldsByProductIdAndVariantIdErrors = {
+    /**
+     * Not Found
+     *
+     * Error payload for the BigCommerce API.
+     */
+    404: {
+        /**
+         * 404 HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         */
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+
+export type GetVariantMetafieldsByProductIdAndVariantIdError = GetVariantMetafieldsByProductIdAndVariantIdErrors[keyof GetVariantMetafieldsByProductIdAndVariantIdErrors];
+
+export type GetVariantMetafieldsByProductIdAndVariantIdResponses = {
     /**
      * Meta Field Collection Response
      */
@@ -1415,9 +930,9 @@ export type GetProductVariantMetafieldsResponses = {
     };
 };
 
-export type GetProductVariantMetafieldsResponse = GetProductVariantMetafieldsResponses[keyof GetProductVariantMetafieldsResponses];
+export type GetVariantMetafieldsByProductIdAndVariantIdResponse = GetVariantMetafieldsByProductIdAndVariantIdResponses[keyof GetVariantMetafieldsByProductIdAndVariantIdResponses];
 
-export type CreateProductVariantMetafieldData = {
+export type CreateVariantMetafieldData = {
     body: MetafieldBase;
     headers: {
         /**
@@ -1445,17 +960,11 @@ export type CreateProductVariantMetafieldData = {
     url: '/catalog/products/{product_id}/variants/{variant_id}/metafields';
 };
 
-export type CreateProductVariantMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
+export type CreateVariantMetafieldErrors = {
     /**
      * Error Response
      *
-     * The `Metafield` was in conflict with another `Metafield`. This can be the result of duplicate unique-key combinations of the appʼs client id, namespace, key, resource_type, and resource_id.
+     * The `Metafield` was in conflict with another `Metafield`. This can be the result of duplicate unique-key combinations of the app's client id, namespace, key, resource_type, and resource_id.
      *
      */
     409: {
@@ -1506,9 +1015,9 @@ export type CreateProductVariantMetafieldErrors = {
     };
 };
 
-export type CreateProductVariantMetafieldError = CreateProductVariantMetafieldErrors[keyof CreateProductVariantMetafieldErrors];
+export type CreateVariantMetafieldError = CreateVariantMetafieldErrors[keyof CreateVariantMetafieldErrors];
 
-export type CreateProductVariantMetafieldResponses = {
+export type CreateVariantMetafieldResponses = {
     /**
      * Metafield Response
      */
@@ -1518,9 +1027,9 @@ export type CreateProductVariantMetafieldResponses = {
     };
 };
 
-export type CreateProductVariantMetafieldResponse = CreateProductVariantMetafieldResponses[keyof CreateProductVariantMetafieldResponses];
+export type CreateVariantMetafieldResponse = CreateVariantMetafieldResponses[keyof CreateVariantMetafieldResponses];
 
-export type DeleteProductVariantMetafieldData = {
+export type DeleteVariantMetafieldByIdData = {
     body?: never;
     headers: {
         /**
@@ -1549,36 +1058,13 @@ export type DeleteProductVariantMetafieldData = {
     url: '/catalog/products/{product_id}/variants/{variant_id}/metafields/{metafield_id}';
 };
 
-export type DeleteProductVariantMetafieldErrors = {
-    /**
-     * Not Found
-     *
-     * Error payload for the BigCommerce API.
-     */
-    404: {
-        /**
-         * 404 HTTP status code.
-         *
-         */
-        status?: number;
-        /**
-         * The error title describing the particular error.
-         */
-        title?: string;
-        type?: string;
-        instance?: string;
-    };
-};
-
-export type DeleteProductVariantMetafieldError = DeleteProductVariantMetafieldErrors[keyof DeleteProductVariantMetafieldErrors];
-
-export type DeleteProductVariantMetafieldResponses = {
+export type DeleteVariantMetafieldByIdResponses = {
     204: void;
 };
 
-export type DeleteProductVariantMetafieldResponse = DeleteProductVariantMetafieldResponses[keyof DeleteProductVariantMetafieldResponses];
+export type DeleteVariantMetafieldByIdResponse = DeleteVariantMetafieldByIdResponses[keyof DeleteVariantMetafieldByIdResponses];
 
-export type GetProductVariantMetafieldData = {
+export type GetVariantMetafieldByProductIdAndVariantIdData = {
     body?: never;
     headers: {
         /**
@@ -1607,16 +1093,16 @@ export type GetProductVariantMetafieldData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<string>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/products/{product_id}/variants/{variant_id}/metafields/{metafield_id}';
 };
 
-export type GetProductVariantMetafieldErrors = {
+export type GetVariantMetafieldByProductIdAndVariantIdErrors = {
     /**
      * Not Found
      *
@@ -1637,9 +1123,9 @@ export type GetProductVariantMetafieldErrors = {
     };
 };
 
-export type GetProductVariantMetafieldError = GetProductVariantMetafieldErrors[keyof GetProductVariantMetafieldErrors];
+export type GetVariantMetafieldByProductIdAndVariantIdError = GetVariantMetafieldByProductIdAndVariantIdErrors[keyof GetVariantMetafieldByProductIdAndVariantIdErrors];
 
-export type GetProductVariantMetafieldResponses = {
+export type GetVariantMetafieldByProductIdAndVariantIdResponses = {
     /**
      * Metafield Response
      */
@@ -1649,9 +1135,9 @@ export type GetProductVariantMetafieldResponses = {
     };
 };
 
-export type GetProductVariantMetafieldResponse = GetProductVariantMetafieldResponses[keyof GetProductVariantMetafieldResponses];
+export type GetVariantMetafieldByProductIdAndVariantIdResponse = GetVariantMetafieldByProductIdAndVariantIdResponses[keyof GetVariantMetafieldByProductIdAndVariantIdResponses];
 
-export type UpdateProductVariantMetafieldData = {
+export type UpdateVariantMetafieldData = {
     body: MetafieldBase;
     headers: {
         /**
@@ -1684,13 +1170,7 @@ export type UpdateProductVariantMetafieldData = {
     url: '/catalog/products/{product_id}/variants/{variant_id}/metafields/{metafield_id}';
 };
 
-export type UpdateProductVariantMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
+export type UpdateVariantMetafieldErrors = {
     /**
      * Not Found
      *
@@ -1711,9 +1191,9 @@ export type UpdateProductVariantMetafieldErrors = {
     };
 };
 
-export type UpdateProductVariantMetafieldError = UpdateProductVariantMetafieldErrors[keyof UpdateProductVariantMetafieldErrors];
+export type UpdateVariantMetafieldError = UpdateVariantMetafieldErrors[keyof UpdateVariantMetafieldErrors];
 
-export type UpdateProductVariantMetafieldResponses = {
+export type UpdateVariantMetafieldResponses = {
     /**
      * Metafield Response
      */
@@ -1723,9 +1203,9 @@ export type UpdateProductVariantMetafieldResponses = {
     };
 };
 
-export type UpdateProductVariantMetafieldResponse = UpdateProductVariantMetafieldResponses[keyof UpdateProductVariantMetafieldResponses];
+export type UpdateVariantMetafieldResponse = UpdateVariantMetafieldResponses[keyof UpdateVariantMetafieldResponses];
 
-export type CreateProductVariantImageData = {
+export type CreateVariantImageData = {
     /**
      * An object containing a publicly accessible image URL, or a form post that contains an image file.
      */
@@ -1741,6 +1221,10 @@ export type CreateProductVariantImageData = {
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+         */
+        'Content-Type': string;
     };
     path: {
         /**
@@ -1758,7 +1242,7 @@ export type CreateProductVariantImageData = {
     url: '/catalog/products/{product_id}/variants/{variant_id}/image';
 };
 
-export type CreateProductVariantImageErrors = {
+export type CreateVariantImageErrors = {
     /**
      * Bad Request. The requested resource could not be downloaded and may be invalid. Possible reasons include malformed request syntax or the file host blocking requests.
      */
@@ -1836,9 +1320,9 @@ export type CreateProductVariantImageErrors = {
     };
 };
 
-export type CreateProductVariantImageError = CreateProductVariantImageErrors[keyof CreateProductVariantImageErrors];
+export type CreateVariantImageError = CreateVariantImageErrors[keyof CreateVariantImageErrors];
 
-export type CreateProductVariantImageResponses = {
+export type CreateVariantImageResponses = {
     /**
      * Image Response
      *
@@ -1865,7 +1349,7 @@ export type CreateProductVariantImageResponses = {
     };
 };
 
-export type CreateProductVariantImageResponse = CreateProductVariantImageResponses[keyof CreateProductVariantImageResponses];
+export type CreateVariantImageResponse = CreateVariantImageResponses[keyof CreateVariantImageResponses];
 
 export type GetVariantsData = {
     body?: never;
@@ -1878,40 +1362,37 @@ export type GetVariantsData = {
     path?: never;
     query?: {
         /**
-         * Filter items by variant ID.
+         * Filter items by ID.
          */
         id?: number;
         /**
-         * Filter items by variant SKU. To filter by product / base variant SKU, see [Get all products](/docs/rest-catalog/products#get-all-products).
+         * Filter items by SKU.
          */
         sku?: string;
         /**
          * Filter items by UPC.
-         *
          */
         upc?: string;
         /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<string>;
-        /**
-         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
-         */
-        exclude_fields?: Array<string>;
-        /**
          * Specifies the page number in a limited (paginated) list of products.
-         *
          */
         page?: number;
         /**
          * Controls the number of items per page in a limited (paginated) list of products.
-         *
          */
         limit?: number;
         /**
-         * A comma-separated list of IDs of products you want to request. For example, `?product_id:in=77,80,81`.
+         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        'product_id:in'?: Array<number>;
+        include_fields?: string;
+        /**
+         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
+         */
+        exclude_fields?: string;
+        /**
+         * A comma-separated list of IDs of products whose variants were requested. For example:`?product_id:in=77,80,81`
+         */
+        product_id?: string;
     };
     url: '/catalog/variants';
 };
@@ -1946,7 +1427,7 @@ export type GetVariantsResponses = {
     200: {
         data?: Array<{
             /**
-             * The cost price of the variant. It is not affected by Price List prices. This value displays as null in the control panel when `cost_price` equals zero.
+             * The cost price of the variant. Not affected by Price List prices.
              */
             cost_price?: number;
             /**
@@ -1966,17 +1447,17 @@ export type GetVariantsResponses = {
              */
             weight?: number;
             /**
-             * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default width (set in the Product resourceʼs `width` field) will be used as the base width.
+             * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default width (set in the Product resource's `width` field) will be used as the base width.
              *
              */
             width?: number;
             /**
-             * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default height (set in the Product resourceʼs `height` field) will be used as the base height.
+             * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default height (set in the Product resource's `height` field) will be used as the base height.
              *
              */
             height?: number;
             /**
-             * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default depth (set in the Product resourceʼs `depth` field) will be used as the base depth.
+             * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default depth (set in the Product resource's `depth` field) will be used as the base depth.
              *
              */
             depth?: number;
@@ -2001,7 +1482,7 @@ export type GetVariantsResponses = {
             /**
              * The UPC code used in feeds for shopping comparison sites and external channel integrations.
              */
-            upc?: string | null;
+            upc?: string;
             /**
              * Inventory level for the variant, which is used when the product’s inventory_tracking is set to `variant`. The Catalog API returns the inventory for only the default location.
              *
@@ -2025,13 +1506,13 @@ export type GetVariantsResponses = {
             product_id?: number;
             sku?: string;
             /**
-             * Read-only reference to v2 APIʼs SKU ID. Null if it is a base variant.
+             * Read-only reference to v2 API's SKU ID. Null if it is a base variant.
              */
             sku_id?: number;
             /**
              * Option Value Variant
              *
-             * Array of option and option values IDs that make up this variant. Will be empty if the variant is the productʼs base variant.
+             * Array of option and option values IDs that make up this variant. Will be empty if the variant is the product's base variant.
              */
             option_values?: Array<{
                 /**
@@ -2069,7 +1550,7 @@ export type UpdateVariantsBatchData = {
      */
     body: Array<{
         /**
-         * The cost price of the variant. It is not affected by Price List prices. This value displays as null in the control panel when `cost_price` equals zero.
+         * The cost price of the variant. Not affected by Price List prices.
          */
         cost_price?: number;
         /**
@@ -2089,17 +1570,17 @@ export type UpdateVariantsBatchData = {
          */
         weight?: number;
         /**
-         * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default width (set in the Product resourceʼs `width` field) will be used as the base width.
+         * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default width (set in the Product resource's `width` field) will be used as the base width.
          *
          */
         width?: number;
         /**
-         * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default height (set in the Product resourceʼs `height` field) will be used as the base height.
+         * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default height (set in the Product resource's `height` field) will be used as the base height.
          *
          */
         height?: number;
         /**
-         * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default depth (set in the Product resourceʼs `depth` field) will be used as the base depth.
+         * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default depth (set in the Product resource's `depth` field) will be used as the base depth.
          *
          */
         depth?: number;
@@ -2124,7 +1605,7 @@ export type UpdateVariantsBatchData = {
         /**
          * The UPC code used in feeds for shopping comparison sites and external channel integrations.
          */
-        upc?: string | null;
+        upc?: string;
         /**
          * Inventory level for the variant, which is used when the product’s inventory_tracking is set to `variant`. The Catalog API returns the inventory for only the default location.
          *
@@ -2206,7 +1687,7 @@ export type UpdateVariantsBatchResponses = {
     200: {
         data?: Array<{
             /**
-             * The cost price of the variant. It is not affected by Price List prices. This value displays as null in the control panel when `cost_price` equals zero.
+             * The cost price of the variant. Not affected by Price List prices.
              */
             cost_price?: number;
             /**
@@ -2226,17 +1707,17 @@ export type UpdateVariantsBatchResponses = {
              */
             weight?: number;
             /**
-             * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default width (set in the Product resourceʼs `width` field) will be used as the base width.
+             * Width of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default width (set in the Product resource's `width` field) will be used as the base width.
              *
              */
             width?: number;
             /**
-             * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default height (set in the Product resourceʼs `height` field) will be used as the base height.
+             * Height of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default height (set in the Product resource's `height` field) will be used as the base height.
              *
              */
             height?: number;
             /**
-             * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the productʼs default depth (set in the Product resourceʼs `depth` field) will be used as the base depth.
+             * Depth of the variant, which can be used when calculating shipping costs. If this value is `null`, the product's default depth (set in the Product resource's `depth` field) will be used as the base depth.
              *
              */
             depth?: number;
@@ -2261,7 +1742,7 @@ export type UpdateVariantsBatchResponses = {
             /**
              * The UPC code used in feeds for shopping comparison sites and external channel integrations.
              */
-            upc?: string | null;
+            upc?: string;
             /**
              * Inventory level for the variant, which is used when the product’s inventory_tracking is set to `variant`. The Catalog API returns the inventory for only the default location.
              *
@@ -2285,13 +1766,13 @@ export type UpdateVariantsBatchResponses = {
             product_id?: number;
             sku?: string;
             /**
-             * Read-only reference to v2 APIʼs SKU ID. Null if it is a base variant.
+             * Read-only reference to v2 API's SKU ID. Null if it is a base variant.
              */
             sku_id?: number;
             /**
              * Option Value Variant
              *
-             * Array of option and option values IDs that make up this variant. Will be empty if the variant is the productʼs base variant.
+             * Array of option and option values IDs that make up this variant. Will be empty if the variant is the product's base variant.
              */
             option_values?: Array<{
                 /**
@@ -2378,222 +1859,3 @@ export type UpdateVariantsBatchResponses = {
 };
 
 export type UpdateVariantsBatchResponse = UpdateVariantsBatchResponses[keyof UpdateVariantsBatchResponses];
-
-export type DeleteVariantsMetafieldsData = {
-    /**
-     * List of metafield IDs.
-     */
-    body?: Array<number>;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-    };
-    path?: never;
-    query?: never;
-    url: '/catalog/variants/metafields';
-};
-
-export type DeleteVariantsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields deletion with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-
-export type DeleteVariantsMetafieldsError = DeleteVariantsMetafieldsErrors[keyof DeleteVariantsMetafieldsErrors];
-
-export type DeleteVariantsMetafieldsResponses = {
-    /**
-     * Response object for metafields deletion with success.
-     *
-     */
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-
-export type DeleteVariantsMetafieldsResponse = DeleteVariantsMetafieldsResponses[keyof DeleteVariantsMetafieldsResponses];
-
-export type GetVariantsMetafieldsData = {
-    body?: never;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         *
-         */
-        page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products.
-         *
-         */
-        limit?: number;
-        /**
-         * Filter based on a metafieldʼs key.
-         */
-        key?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
-         */
-        'key:in'?: Array<string>;
-        /**
-         * Filter based on a metafieldʼs namespaces.
-         */
-        namespace?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter.
-         */
-        'namespace:in'?: Array<string>;
-        /**
-         * Sort direction. Acceptable values are: `asc`, `desc`.
-         *
-         */
-        direction?: 'asc' | 'desc';
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-        /**
-         * 'Query parameter that lets you filter by the minimum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.'
-         *
-         */
-        'date_created:min'?: string;
-        /**
-         * 'Query parameter that lets you filter by the maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.'
-         *
-         */
-        'date_created:max'?: string;
-        /**
-         * 'Query parameter that lets you filter by the minimum date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.'
-         *
-         */
-        'date_modified:min'?: string;
-        /**
-         * 'Query parameter that lets you filter by the maximum date modified, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.'
-         *
-         */
-        'date_modified:max'?: string;
-    };
-    url: '/catalog/variants/metafields';
-};
-
-export type GetVariantsMetafieldsResponses = {
-    /**
-     * List of `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponse;
-};
-
-export type GetVariantsMetafieldsResponse = GetVariantsMetafieldsResponses[keyof GetVariantsMetafieldsResponses];
-
-export type CreateVariantsMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        /**
-         * The ID for the product variant with which the metafield is associated.
-         *
-         */
-        resource_id: number;
-    }>;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
-    };
-    path?: never;
-    query?: never;
-    url: '/catalog/variants/metafields';
-};
-
-export type CreateVariantsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type CreateVariantsMetafieldsError = CreateVariantsMetafieldsErrors[keyof CreateVariantsMetafieldsErrors];
-
-export type CreateVariantsMetafieldsResponses = {
-    /**
-     * List of created `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponsePostPut;
-};
-
-export type CreateVariantsMetafieldsResponse = CreateVariantsMetafieldsResponses[keyof CreateVariantsMetafieldsResponses];
-
-export type UpdateVariantsMetafieldsData = {
-    body?: Array<MetafieldBasePut & {
-        /**
-         * The ID of metafield to update.
-         *
-         */
-        id: number;
-    }>;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
-    };
-    path?: never;
-    query?: never;
-    url: '/catalog/variants/metafields';
-};
-
-export type UpdateVariantsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type UpdateVariantsMetafieldsError = UpdateVariantsMetafieldsErrors[keyof UpdateVariantsMetafieldsErrors];
-
-export type UpdateVariantsMetafieldsResponses = {
-    /**
-     * List of updated `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponsePostPut;
-};
-
-export type UpdateVariantsMetafieldsResponse = UpdateVariantsMetafieldsResponses[keyof UpdateVariantsMetafieldsResponses];

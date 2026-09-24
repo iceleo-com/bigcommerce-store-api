@@ -6,16 +6,22 @@ export type ClientOptions = {
 
 export type TokenPostImpersonation = {
     /**
+     * Channel ID for requested token
+     */
+    channel_id: number;
+    /**
      * Unix timestamp (UTC time) defining when the token should expire. Supports seconds, but does not support milliseconds, microseconds, or nanoseconds.
      */
     expires_at: number;
-} & Channels & Channel;
+};
 
 export type TokenPostSimple = {
     /**
-     * List of allowed domains for Cross-Origin Request Sharing. Currently accepts a maximum of two domains per created token.
+     * List of allowed domains for Cross-Origin Request Sharing. Currently only accepts a single element.
      */
-    allowed_cors_origins?: Array<string>;
+    allowed_cors_origins?: [
+        string
+    ];
 };
 
 export type TokenFull = {
@@ -33,26 +39,6 @@ export type TokenBase = {
      * JWT Token for accessing the Storefront API
      */
     token?: string;
-};
-
-/**
- * channel_id
- */
-export type Channel = {
-    /**
-     * Channel ID that is valid for the requested token. Use this field to enter a channel ID. Do not use this field if you have more than one channel. We support this field for backwards compatibility, but `channel_ids` is preferred. You can not use both `channel_id` and `channel_ids` in your request.
-     */
-    channel_id?: number;
-};
-
-/**
- * channel_ids
- */
-export type Channels = {
-    /**
-     * A list of channel IDs that are valid for the requested token. Use this field if you have more than one channel ID. You can not use both `channel_id` and `channel_ids` in your request.
-     */
-    channel_ids?: Array<number>;
 };
 
 export type ErrorResponse = BaseError & {

@@ -29,28 +29,6 @@ export type CustomsInformationRequest = {
     hs_codes: HarmonizedSystemCodes;
 };
 
-export type ShippingSettings = {
-    checkout?: {
-        /**
-         * The approach for displaying the list of countries at checkout.
-         */
-        country_list_strategy?: 'DISPLAY_ALL_COUNTRIES' | 'DISPLAY_ONLY_SHIPPABLE_COUNTRIES';
-        /**
-         * Message shown to the shopper during checkout when their order does not meet the merchant's shipping criteria.
-         */
-        out_of_delivery_zone_message?: string;
-    };
-};
-
-export type ChannelShippingSettings = {
-    checkout?: {
-        /**
-         * Message shown to the shopper during checkout when their order does not meet the merchant's shipping criteria.
-         */
-        out_of_delivery_zone_message?: string;
-    };
-};
-
 /**
  * customsInformation
  *
@@ -145,6 +123,8 @@ export type MetaCollection = {
 
 /**
  * Error
+ *
+ * Meta data relating to pagination
  */
 export type ErrorFull = {
     [key: string]: unknown;
@@ -191,13 +171,6 @@ export type HarmonizedSystemCodesWritable = {
 };
 
 /**
- * Error
- */
-export type ErrorFullWritable = {
-    [key: string]: unknown;
-};
-
-/**
  * Permanent ID of the BigCommerce store.
  */
 export type StoreHash = string;
@@ -222,7 +195,7 @@ export type DeleteCustomsInformationData = {
     };
     path?: never;
     query: {
-        'product_id:in': Array<number>;
+        'product_id:in': string;
     };
     url: '/shipping/products/customs-information';
 };
@@ -265,7 +238,7 @@ export type GetCustomsInformationResponses = {
 
 export type GetCustomsInformationResponse = GetCustomsInformationResponses[keyof GetCustomsInformationResponses];
 
-export type UpdateCustomsInformationData = {
+export type PutCustomsInformationData = {
     body?: Array<CustomsInformationRequest>;
     headers: {
         /**
@@ -282,7 +255,7 @@ export type UpdateCustomsInformationData = {
     url: '/shipping/products/customs-information';
 };
 
-export type UpdateCustomsInformationResponses = {
+export type PutCustomsInformationResponses = {
     /**
      * OK
      */
@@ -291,150 +264,4 @@ export type UpdateCustomsInformationResponses = {
     };
 };
 
-export type UpdateCustomsInformationResponse = UpdateCustomsInformationResponses[keyof UpdateCustomsInformationResponses];
-
-export type GetShippingSettingsData = {
-    body?: never;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-    };
-    path?: never;
-    query?: never;
-    url: '/shipping/settings';
-};
-
-export type GetShippingSettingsResponses = {
-    200: {
-        data?: ShippingSettings;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
-};
-
-export type GetShippingSettingsResponse = GetShippingSettingsResponses[keyof GetShippingSettingsResponses];
-
-export type UpdateShippingSettingsData = {
-    body?: ShippingSettings;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
-    };
-    path?: never;
-    query?: never;
-    url: '/shipping/settings';
-};
-
-export type UpdateShippingSettingsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-
-export type UpdateShippingSettingsError = UpdateShippingSettingsErrors[keyof UpdateShippingSettingsErrors];
-
-export type UpdateShippingSettingsResponses = {
-    200: {
-        data?: ShippingSettings;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
-};
-
-export type UpdateShippingSettingsResponse = UpdateShippingSettingsResponses[keyof UpdateShippingSettingsResponses];
-
-export type GetChannelShippingSettingsData = {
-    body?: never;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-    };
-    path: {
-        /**
-         * Channel ID
-         */
-        channel_id: string;
-    };
-    query?: never;
-    url: '/shipping/settings/channels/{channel_id}';
-};
-
-export type GetChannelShippingSettingsResponses = {
-    200: {
-        data?: ChannelShippingSettings;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
-};
-
-export type GetChannelShippingSettingsResponse = GetChannelShippingSettingsResponses[keyof GetChannelShippingSettingsResponses];
-
-export type UpdateChannelShippingSettingsData = {
-    body?: ChannelShippingSettings;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
-    };
-    path: {
-        /**
-         * Channel ID
-         */
-        channel_id: string;
-    };
-    query?: never;
-    url: '/shipping/settings/channels/{channel_id}';
-};
-
-export type UpdateChannelShippingSettingsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-
-export type UpdateChannelShippingSettingsError = UpdateChannelShippingSettingsErrors[keyof UpdateChannelShippingSettingsErrors];
-
-export type UpdateChannelShippingSettingsResponses = {
-    200: {
-        data?: ChannelShippingSettings;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
-};
-
-export type UpdateChannelShippingSettingsResponse = UpdateChannelShippingSettingsResponses[keyof UpdateChannelShippingSettingsResponses];
+export type PutCustomsInformationResponse = PutCustomsInformationResponses[keyof PutCustomsInformationResponses];

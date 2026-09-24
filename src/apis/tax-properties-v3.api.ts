@@ -73,13 +73,20 @@ export class TaxPropertiesV3Api {
      *
      * Retrieve the tax properties that are associated with one or more products.
      */
-    getProductsTaxProperties(
-        query?: TaxPropertiesV3ApiSpecs.GetProductsTaxPropertiesData['query'],
+    getProductTaxProperties(
+        query?: TaxPropertiesV3ApiSpecs.GetProductTaxPropertiesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<TaxPropertiesV3ApiSpecs.GetProductsTaxPropertiesResponses[200]>>,RequestErrorResponse<400, Required<TaxPropertiesV3ApiSpecs.GetProductsTaxPropertiesErrors[400]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<TaxPropertiesV3ApiSpecs.GetProductTaxPropertiesResponses[200]>>,RequestErrorResponse<400, Required<TaxPropertiesV3ApiSpecs.GetProductTaxPropertiesErrors[400]>>>({
             path: 'v3/tax/products/properties',
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getProductTaxProperties` instead.
+     */
+    getProductsTaxProperties(...args: Parameters<TaxPropertiesV3Api['getProductTaxProperties']>) {
+        return this.getProductTaxProperties(...args);
     }
 
     /**

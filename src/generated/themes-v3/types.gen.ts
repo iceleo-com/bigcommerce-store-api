@@ -7,26 +7,217 @@ export type ClientOptions = {
 /**
  * Collection Meta
  *
- * Response metadata.
+ * Data about the response, including pagination and collection totals.
  */
 export type CollectionMeta = {
-    [key: string]: unknown;
+    /**
+     * Pagination
+     *
+     * Data about the response, including pagination and collection totals.
+     */
+    pagination?: {
+        /**
+         * Total number of items in the result set.
+         *
+         */
+        total?: number;
+        /**
+         * Total number of items in the collection response.
+         *
+         */
+        count?: number;
+        /**
+         * The amount of items returned in the collection per page, controlled by the limit parameter.
+         *
+         */
+        per_page?: number;
+        /**
+         * The page you are currently on within the collection.
+         *
+         */
+        current_page?: number;
+        /**
+         * The total number of pages in the collection.
+         *
+         */
+        total_pages?: number;
+        /**
+         * Pagination links for the previous and next parts of the whole collection.
+         *
+         */
+        links?: {
+            /**
+             * Link to the previous page returned in the response.
+             *
+             */
+            previous?: string;
+            /**
+             * Link to the current page returned in the response.
+             *
+             */
+            current?: string;
+            /**
+             * Link to the next page returned in the response.
+             *
+             */
+            next?: string;
+        };
+    };
 };
 
 /**
  * Themes Collection Meta
  *
- * Response metadata.
+ * Data about the response, including pagination and collection totals.
  */
 export type ThemesCollectionMeta = {
-    [key: string]: unknown;
+    /**
+     * Pagination
+     *
+     * Data about the response, including pagination and collection totals.
+     */
+    pagination?: {
+        /**
+         * Total number of items in the result set.
+         *
+         */
+        total?: number;
+        /**
+         * Total number of items in the collection response.
+         *
+         */
+        count?: number;
+        /**
+         * The amount of items returned in the collection per page, controlled by the limit parameter.
+         *
+         */
+        per_page?: number;
+        /**
+         * The page you are currently on within the collection.
+         *
+         */
+        current_page?: number;
+        /**
+         * The total number of pages in the collection.
+         *
+         */
+        total_pages?: number;
+    };
 };
 
 /**
- * Response metadata.
+ * Pagination
+ *
+ * Data about the response, including pagination and collection totals.
+ */
+export type Pagination = {
+    /**
+     * Total number of items in the result set.
+     *
+     */
+    total?: number;
+    /**
+     * Total number of items in the collection response.
+     *
+     */
+    count?: number;
+    /**
+     * The amount of items returned in the collection per page, controlled by the limit parameter.
+     *
+     */
+    per_page?: number;
+    /**
+     * The page you are currently on within the collection.
+     *
+     */
+    current_page?: number;
+    /**
+     * The total number of pages in the collection.
+     *
+     */
+    total_pages?: number;
+    /**
+     * Pagination links for the previous and next parts of the whole collection.
+     *
+     */
+    links?: {
+        /**
+         * Link to the previous page returned in the response.
+         *
+         */
+        previous?: string;
+        /**
+         * Link to the current page returned in the response.
+         *
+         */
+        current?: string;
+        /**
+         * Link to the next page returned in the response.
+         *
+         */
+        next?: string;
+    };
+};
+
+/**
+ * Collection Meta
+ *
+ * Data about the response, including pagination and collection totals.
  */
 export type Meta = {
-    [key: string]: unknown;
+    /**
+     * Pagination
+     *
+     * Data about the response, including pagination and collection totals.
+     */
+    pagination?: {
+        /**
+         * Total number of items in the result set.
+         *
+         */
+        total?: number;
+        /**
+         * Total number of items in the collection response.
+         *
+         */
+        count?: number;
+        /**
+         * The amount of items returned in the collection per page, controlled by the limit parameter.
+         *
+         */
+        per_page?: number;
+        /**
+         * The page you are currently on within the collection.
+         *
+         */
+        current_page?: number;
+        /**
+         * The total number of pages in the collection.
+         *
+         */
+        total_pages?: number;
+        /**
+         * Pagination links for the previous and next parts of the whole collection.
+         *
+         */
+        links?: {
+            /**
+             * Link to the previous page returned in the response.
+             *
+             */
+            previous?: string;
+            /**
+             * Link to the current page returned in the response.
+             *
+             */
+            current?: string;
+            /**
+             * Link to the next page returned in the response.
+             *
+             */
+            next?: string;
+        };
+    };
 };
 
 /**
@@ -225,14 +416,6 @@ export type Theme = {
      * Flag to identify private themes.
      */
     is_private?: boolean;
-    /**
-     * Indicates whether this theme is active on the storefront.
-     */
-    is_active?: boolean;
-    /**
-     * The date-time of the last theme update.
-     */
-    updated_at?: string;
 };
 
 /**
@@ -248,7 +431,7 @@ export type Activate = {
     /**
      * Which configuration to use.
      */
-    which?: 'original' | 'last_activated' | 'last_created';
+    which: 'original' | 'last_activated' | 'last_created';
 };
 
 /**
@@ -314,22 +497,66 @@ export type ThemesCollectionResponse = {
          * Flag to identify private themes.
          */
         is_private?: boolean;
-        /**
-         * Indicates whether this theme is active on the storefront.
-         */
-        is_active?: boolean;
-        /**
-         * The date-time of the last theme update.
-         */
-        updated_at?: string;
     }>;
     /**
      * Collection Meta
      *
-     * Response metadata.
+     * Data about the response, including pagination and collection totals.
      */
     meta?: {
-        [key: string]: unknown;
+        /**
+         * Pagination
+         *
+         * Data about the response, including pagination and collection totals.
+         */
+        pagination?: {
+            /**
+             * Total number of items in the result set.
+             *
+             */
+            total?: number;
+            /**
+             * Total number of items in the collection response.
+             *
+             */
+            count?: number;
+            /**
+             * The amount of items returned in the collection per page, controlled by the limit parameter.
+             *
+             */
+            per_page?: number;
+            /**
+             * The page you are currently on within the collection.
+             *
+             */
+            current_page?: number;
+            /**
+             * The total number of pages in the collection.
+             *
+             */
+            total_pages?: number;
+            /**
+             * Pagination links for the previous and next parts of the whole collection.
+             *
+             */
+            links?: {
+                /**
+                 * Link to the previous page returned in the response.
+                 *
+                 */
+                previous?: string;
+                /**
+                 * Link to the current page returned in the response.
+                 *
+                 */
+                current?: string;
+                /**
+                 * Link to the next page returned in the response.
+                 *
+                 */
+                next?: string;
+            };
+        };
     };
 };
 
@@ -411,7 +638,15 @@ export type JobResponse = {
 /**
  * Which Theme To Download
  *
- * An object specifying which theme to download. One of: `original`: the original Marketplace or uploaded custom theme; `last_activated`: the theme version most recently applied to the store; `last_created`: the theme version most recently created. If `which` is missing or invalid in the request, its value will default to `last_activated`.
+ * A BigCommerce object specifying which theme to download.
+ *
+ * `original`: the original Marketplace or uploaded custom theme.
+ *
+ * `last_activated`: the theme version most recently applied to the store.
+ *
+ * `last_created`: the theme version most recently created.
+ *
+ * If `which` is missing or invalid in the request, its value will default to `last_activated`.
  */
 export type WhichThemeToDownload = {
     /**
@@ -535,7 +770,7 @@ export type GetStoreThemesResponses = {
 
 export type GetStoreThemesResponse = GetStoreThemesResponses[keyof GetStoreThemesResponses];
 
-export type UploadStoreThemeData = {
+export type UploadThemeData = {
     body: {
         /**
          * The file.
@@ -557,7 +792,7 @@ export type UploadStoreThemeData = {
     url: '/themes';
 };
 
-export type UploadStoreThemeErrors = {
+export type UploadThemeErrors = {
     /**
      * Error Response
      *
@@ -586,16 +821,16 @@ export type UploadStoreThemeErrors = {
     };
 };
 
-export type UploadStoreThemeError = UploadStoreThemeErrors[keyof UploadStoreThemeErrors];
+export type UploadThemeError = UploadThemeErrors[keyof UploadThemeErrors];
 
-export type UploadStoreThemeResponses = {
+export type UploadThemeResponses = {
     /**
      * Job ID for the background job processing the theme upload.
      */
     201: JobId;
 };
 
-export type UploadStoreThemeResponse = UploadStoreThemeResponses[keyof UploadStoreThemeResponses];
+export type UploadThemeResponse = UploadThemeResponses[keyof UploadThemeResponses];
 
 export type DeleteStoreThemeData = {
     body?: never;
@@ -707,7 +942,7 @@ export type GetStoreThemeResponses = {
 
 export type GetStoreThemeResponse = GetStoreThemeResponses[keyof GetStoreThemeResponses];
 
-export type DownloadStoreThemeData = {
+export type DownloadThemeData = {
     body: WhichThemeToDownload;
     headers: {
         /**
@@ -729,7 +964,7 @@ export type DownloadStoreThemeData = {
     url: '/themes/{uuid}/actions/download';
 };
 
-export type DownloadStoreThemeErrors = {
+export type DownloadThemeErrors = {
     /**
      * Error Response
      *
@@ -758,16 +993,16 @@ export type DownloadStoreThemeErrors = {
     };
 };
 
-export type DownloadStoreThemeError = DownloadStoreThemeErrors[keyof DownloadStoreThemeErrors];
+export type DownloadThemeError = DownloadThemeErrors[keyof DownloadThemeErrors];
 
-export type DownloadStoreThemeResponses = {
+export type DownloadThemeResponses = {
     /**
      * Job ID for the background job processing the download.
      */
     200: JobId;
 };
 
-export type DownloadStoreThemeResponse = DownloadStoreThemeResponses[keyof DownloadStoreThemeResponses];
+export type DownloadThemeResponse = DownloadThemeResponses[keyof DownloadThemeResponses];
 
 export type ActivateStoreThemeData = {
     /**
@@ -785,12 +1020,7 @@ export type ActivateStoreThemeData = {
         'Content-Type': string;
     };
     path?: never;
-    query?: {
-        /**
-         * The ID for the channel where you want to activate the theme.
-         */
-        channel_id?: number;
-    };
+    query?: never;
     url: '/themes/actions/activate';
 };
 
@@ -834,7 +1064,7 @@ export type ActivateStoreThemeResponses = {
 
 export type ActivateStoreThemeResponse = ActivateStoreThemeResponses[keyof ActivateStoreThemeResponses];
 
-export type GetStoreThemeJobData = {
+export type GetJobData = {
     body?: never;
     headers: {
         /**
@@ -852,7 +1082,7 @@ export type GetStoreThemeJobData = {
     url: '/themes/jobs/{job_id}';
 };
 
-export type GetStoreThemeJobErrors = {
+export type GetJobErrors = {
     /**
      * Error Response
      *
@@ -881,15 +1111,15 @@ export type GetStoreThemeJobErrors = {
     };
 };
 
-export type GetStoreThemeJobError = GetStoreThemeJobErrors[keyof GetStoreThemeJobErrors];
+export type GetJobError = GetJobErrors[keyof GetJobErrors];
 
-export type GetStoreThemeJobResponses = {
+export type GetJobResponses = {
     200: JobResponse;
 };
 
-export type GetStoreThemeJobResponse = GetStoreThemeJobResponses[keyof GetStoreThemeJobResponses];
+export type GetJobResponse = GetJobResponses[keyof GetJobResponses];
 
-export type GetThemeConfigurationData = {
+export type GetThemesByUuidConfigurationsData = {
     body?: never;
     headers: {
         /**
@@ -903,19 +1133,19 @@ export type GetThemeConfigurationData = {
          */
         uuid: string;
     };
-    query?: {
+    query: {
         /**
-         * Filter configurations by passing a comma-separated list of configuration UUIDs.
+         * Filter configurations by a list of site_ids
+         */
+        'site_id:in': Array<number>;
+        /**
+         * Filter configurations by a list of configuration UUIDs.
          */
         'uuid:in'?: Array<string>;
         /**
          * Filter configurations by a variation_uuid.
          */
         variation_uuid?: string;
-        /**
-         * Filter configurations by passing a comma-separated list of channel IDs.
-         */
-        'channel_id:in'?: Array<number>;
         /**
          * Specifies the page number in a limited (paginated) list.
          *
@@ -926,11 +1156,15 @@ export type GetThemeConfigurationData = {
          *
          */
         limit?: number;
+        /**
+         * Filter configurations by a list of channel_ids.
+         */
+        'channel_id:in'?: Array<number>;
     };
     url: '/themes/{uuid}/configurations';
 };
 
-export type GetThemeConfigurationResponses = {
+export type GetThemesByUuidConfigurationsResponses = {
     /**
      * Response payload for the BigCommerce API.
      *
@@ -941,9 +1175,9 @@ export type GetThemeConfigurationResponses = {
     };
 };
 
-export type GetThemeConfigurationResponse = GetThemeConfigurationResponses[keyof GetThemeConfigurationResponses];
+export type GetThemesByUuidConfigurationsResponse = GetThemesByUuidConfigurationsResponses[keyof GetThemesByUuidConfigurationsResponses];
 
-export type ValidateThemeConfigurationData = {
+export type PostThemesByUuidConfigurationsValidateData = {
     body?: ThemeConfigurationWrite;
     headers: {
         /**
@@ -965,16 +1199,16 @@ export type ValidateThemeConfigurationData = {
     url: '/themes/{uuid}/configurations/validate';
 };
 
-export type ValidateThemeConfigurationErrors = {
+export type PostThemesByUuidConfigurationsValidateErrors = {
     /**
      * Theme failed validation, detailed errors in response.
      */
     422: ErrorResponse;
 };
 
-export type ValidateThemeConfigurationError = ValidateThemeConfigurationErrors[keyof ValidateThemeConfigurationErrors];
+export type PostThemesByUuidConfigurationsValidateError = PostThemesByUuidConfigurationsValidateErrors[keyof PostThemesByUuidConfigurationsValidateErrors];
 
-export type ValidateThemeConfigurationResponses = {
+export type PostThemesByUuidConfigurationsValidateResponses = {
     /**
      * Theme passes validation.
      */
@@ -983,9 +1217,9 @@ export type ValidateThemeConfigurationResponses = {
     };
 };
 
-export type ValidateThemeConfigurationResponse = ValidateThemeConfigurationResponses[keyof ValidateThemeConfigurationResponses];
+export type PostThemesByUuidConfigurationsValidateResponse = PostThemesByUuidConfigurationsValidateResponses[keyof PostThemesByUuidConfigurationsValidateResponses];
 
-export type GetThemeCustomTemplatesData = {
+export type GetThemesThemeUuidCustomTemplatesData = {
     body?: never;
     headers: {
         /**
@@ -1000,7 +1234,7 @@ export type GetThemeCustomTemplatesData = {
     url: '/themes/custom-templates/{version_uuid}';
 };
 
-export type GetThemeCustomTemplatesResponses = {
+export type GetThemesThemeUuidCustomTemplatesResponses = {
     /**
      * OK
      */
@@ -1015,4 +1249,4 @@ export type GetThemeCustomTemplatesResponses = {
     };
 };
 
-export type GetThemeCustomTemplatesResponse = GetThemeCustomTemplatesResponses[keyof GetThemeCustomTemplatesResponses];
+export type GetThemesThemeUuidCustomTemplatesResponse = GetThemesThemeUuidCustomTemplatesResponses[keyof GetThemesThemeUuidCustomTemplatesResponses];

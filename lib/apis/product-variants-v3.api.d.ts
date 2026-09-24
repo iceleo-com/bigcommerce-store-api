@@ -5,7 +5,7 @@ export * as ProductVariantsV3ApiSpecs from '../generated/product-variants-v3';
 export declare class ProductVariantsV3Api {
     private readonly request;
     constructor(request: RequestService);
-    getProductVariants(productId: ProductVariantsV3ApiSpecs.GetProductVariantsData['path']['product_id'], query?: ProductVariantsV3ApiSpecs.GetProductVariantsData['query']): Promise<RequestSuccessResponse<200, Required<{
+    getVariantsByProductId(productId: ProductVariantsV3ApiSpecs.GetVariantsByProductIdData['path']['product_id'], query?: ProductVariantsV3ApiSpecs.GetVariantsByProductIdData['query']): Promise<RequestSuccessResponse<200, Required<{
         data?: Array<ProductVariantsV3ApiSpecs.ProductVariantFull>;
         meta?: ProductVariantsV3ApiSpecs.MetaCollectionFull;
     }>> | RequestErrorResponse<404, Required<{
@@ -14,16 +14,42 @@ export declare class ProductVariantsV3Api {
         type?: string;
         instance?: string;
     }>>>;
-    createProductVariant(productId: ProductVariantsV3ApiSpecs.CreateProductVariantData['path']['product_id'], requestBody: ProductVariantsV3ApiSpecs.CreateProductVariantData['body']): Promise<RequestSuccessResponse<200, Required<{
-        data?: ProductVariantsV3ApiSpecs.ProductVariantFull;
-        meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestSuccessResponse<207, Required<ProductVariantsV3ApiSpecs.MultiStatus>> | RequestErrorResponse<404, Required<{
+    getProductVariants(...args: Parameters<ProductVariantsV3Api['getVariantsByProductId']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: Array<ProductVariantsV3ApiSpecs.ProductVariantFull>;
+        meta?: ProductVariantsV3ApiSpecs.MetaCollectionFull;
+    }>> | RequestErrorResponse<404, Required<{
         status?: number;
         title?: string;
         type?: string;
         instance?: string;
     }>>>;
-    getProductVariant(productId: ProductVariantsV3ApiSpecs.GetProductVariantData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.GetProductVariantData['path']['variant_id'], query?: ProductVariantsV3ApiSpecs.GetProductVariantData['query']): Promise<RequestSuccessResponse<200, Required<{
+    createVariant(productId: ProductVariantsV3ApiSpecs.CreateVariantData['path']['product_id'], requestBody: ProductVariantsV3ApiSpecs.CreateVariantData['body']): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductVariantsV3ApiSpecs.ProductVariantFull;
+        meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestSuccessResponse<207, Required<{
+        data?: ProductVariantsV3ApiSpecs.ProductVariantFull;
+        errors?: ProductVariantsV3ApiSpecs.ErrorMultiStatus;
+        meta?: ProductVariantsV3ApiSpecs.MetaCollectionFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    createProductVariant(...args: Parameters<ProductVariantsV3Api['createVariant']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductVariantsV3ApiSpecs.ProductVariantFull;
+        meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestSuccessResponse<207, Required<{
+        data?: ProductVariantsV3ApiSpecs.ProductVariantFull;
+        errors?: ProductVariantsV3ApiSpecs.ErrorMultiStatus;
+        meta?: ProductVariantsV3ApiSpecs.MetaCollectionFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    getVariantById(productId: ProductVariantsV3ApiSpecs.GetVariantByIdData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.GetVariantByIdData['path']['variant_id'], query?: ProductVariantsV3ApiSpecs.GetVariantByIdData['query']): Promise<RequestSuccessResponse<200, Required<{
         data?: ProductVariantsV3ApiSpecs.ProductVariantFull;
         meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<404, Required<{
@@ -32,7 +58,7 @@ export declare class ProductVariantsV3Api {
         type?: string;
         instance?: string;
     }>>>;
-    updateProductVariant(productId: ProductVariantsV3ApiSpecs.UpdateProductVariantData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.UpdateProductVariantData['path']['variant_id'], requestBody: ProductVariantsV3ApiSpecs.UpdateProductVariantData['body']): Promise<RequestSuccessResponse<207, Required<ProductVariantsV3ApiSpecs.MultiStatus>> | RequestSuccessResponse<200, Required<{
+    getProductVariant(...args: Parameters<ProductVariantsV3Api['getVariantById']>): Promise<RequestSuccessResponse<200, Required<{
         data?: ProductVariantsV3ApiSpecs.ProductVariantFull;
         meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<404, Required<{
@@ -41,19 +67,55 @@ export declare class ProductVariantsV3Api {
         type?: string;
         instance?: string;
     }>>>;
-    deleteProductVariant(productId: ProductVariantsV3ApiSpecs.DeleteProductVariantData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.DeleteProductVariantData['path']['variant_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    getProductVariantMetafields(productId: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldsData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldsData['path']['variant_id'], query?: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
+    updateVariant(productId: ProductVariantsV3ApiSpecs.UpdateVariantData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.UpdateVariantData['path']['variant_id'], requestBody: ProductVariantsV3ApiSpecs.UpdateVariantData['body']): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductVariantsV3ApiSpecs.ProductVariantFull;
+        meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestSuccessResponse<207, Required<{
+        data?: ProductVariantsV3ApiSpecs.ProductVariantFull;
+        errors?: ProductVariantsV3ApiSpecs.ErrorMultiStatus;
+        meta?: ProductVariantsV3ApiSpecs.MetaCollectionFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    updateProductVariant(...args: Parameters<ProductVariantsV3Api['updateVariant']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductVariantsV3ApiSpecs.ProductVariantFull;
+        meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestSuccessResponse<207, Required<{
+        data?: ProductVariantsV3ApiSpecs.ProductVariantFull;
+        errors?: ProductVariantsV3ApiSpecs.ErrorMultiStatus;
+        meta?: ProductVariantsV3ApiSpecs.MetaCollectionFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    deleteVariantById(productId: ProductVariantsV3ApiSpecs.DeleteVariantByIdData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.DeleteVariantByIdData['path']['variant_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteProductVariant(...args: Parameters<ProductVariantsV3Api['deleteVariantById']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    getVariantMetafieldsByProductIdAndVariantId(productId: ProductVariantsV3ApiSpecs.GetVariantMetafieldsByProductIdAndVariantIdData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.GetVariantMetafieldsByProductIdAndVariantIdData['path']['variant_id'], query?: ProductVariantsV3ApiSpecs.GetVariantMetafieldsByProductIdAndVariantIdData['query']): Promise<RequestSuccessResponse<200, Required<{
         data?: Array<ProductVariantsV3ApiSpecs.MetafieldFull>;
         meta?: ProductVariantsV3ApiSpecs.CategoriesTreeResp;
-    }>>>;
-    createProductVariantMetafield(productId: ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldData['path']['variant_id'], requestBody: ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<{
-        data?: ProductVariantsV3ApiSpecs.MetafieldFull;
-        meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<400, Required<{
+    }>> | RequestErrorResponse<404, Required<{
         status?: number;
         title?: string;
         type?: string;
-        detail?: string;
+        instance?: string;
+    }>>>;
+    getProductVariantMetafields(...args: Parameters<ProductVariantsV3Api['getVariantMetafieldsByProductIdAndVariantId']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: Array<ProductVariantsV3ApiSpecs.MetafieldFull>;
+        meta?: ProductVariantsV3ApiSpecs.CategoriesTreeResp;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    createVariantMetafield(productId: ProductVariantsV3ApiSpecs.CreateVariantMetafieldData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.CreateVariantMetafieldData['path']['variant_id'], requestBody: ProductVariantsV3ApiSpecs.CreateVariantMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductVariantsV3ApiSpecs.MetafieldFull;
+        meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<409, Required<{
         errors?: {
             [key: string]: unknown;
@@ -71,7 +133,27 @@ export declare class ProductVariantsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    getProductVariantMetafield(productId: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldData['path']['variant_id'], metafieldId: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldData['path']['metafield_id'], query?: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldData['query']): Promise<RequestSuccessResponse<200, Required<{
+    createProductVariantMetafield(...args: Parameters<ProductVariantsV3Api['createVariantMetafield']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductVariantsV3ApiSpecs.MetafieldFull;
+        meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<409, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    }>> | RequestErrorResponse<422, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    getVariantMetafieldByProductIdAndVariantId(productId: ProductVariantsV3ApiSpecs.GetVariantMetafieldByProductIdAndVariantIdData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.GetVariantMetafieldByProductIdAndVariantIdData['path']['variant_id'], metafieldId: ProductVariantsV3ApiSpecs.GetVariantMetafieldByProductIdAndVariantIdData['path']['metafield_id'], query?: ProductVariantsV3ApiSpecs.GetVariantMetafieldByProductIdAndVariantIdData['query']): Promise<RequestSuccessResponse<200, Required<{
         data?: ProductVariantsV3ApiSpecs.MetafieldFull;
         meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<404, Required<{
@@ -80,27 +162,65 @@ export declare class ProductVariantsV3Api {
         type?: string;
         instance?: string;
     }>>>;
-    updateProductVariantMetafield(productId: ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldData['path']['variant_id'], metafieldId: ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldData['path']['metafield_id'], requestBody: ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<{
+    getProductVariantMetafield(...args: Parameters<ProductVariantsV3Api['getVariantMetafieldByProductIdAndVariantId']>): Promise<RequestSuccessResponse<200, Required<{
         data?: ProductVariantsV3ApiSpecs.MetafieldFull;
+        meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    updateVariantMetafield(productId: ProductVariantsV3ApiSpecs.UpdateVariantMetafieldData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.UpdateVariantMetafieldData['path']['variant_id'], metafieldId: ProductVariantsV3ApiSpecs.UpdateVariantMetafieldData['path']['metafield_id'], requestBody: ProductVariantsV3ApiSpecs.UpdateVariantMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductVariantsV3ApiSpecs.MetafieldFull;
+        meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    updateProductVariantMetafield(...args: Parameters<ProductVariantsV3Api['updateVariantMetafield']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: ProductVariantsV3ApiSpecs.MetafieldFull;
+        meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
+    }>> | RequestErrorResponse<404, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+        instance?: string;
+    }>>>;
+    deleteVariantMetafieldById(productId: ProductVariantsV3ApiSpecs.DeleteVariantMetafieldByIdData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.DeleteVariantMetafieldByIdData['path']['variant_id'], metafieldId: ProductVariantsV3ApiSpecs.DeleteVariantMetafieldByIdData['path']['metafield_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    deleteProductVariantMetafield(...args: Parameters<ProductVariantsV3Api['deleteVariantMetafieldById']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    createVariantImage(productId: ProductVariantsV3ApiSpecs.CreateVariantImageData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.CreateVariantImageData['path']['variant_id'], requestBody: ProductVariantsV3ApiSpecs.CreateVariantImageData['body']): Promise<RequestSuccessResponse<200, Required<{
+        data?: {
+            image_url?: string;
+        };
         meta?: ProductVariantsV3ApiSpecs.MetaEmptyFull;
     }>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
+        [key: string]: unknown;
     }>> | RequestErrorResponse<404, Required<{
         status?: number;
         title?: string;
         type?: string;
         instance?: string;
-    }>>>;
-    deleteProductVariantMetafield(productId: ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldData['path']['variant_id'], metafieldId: ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldData['path']['metafield_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<404, Required<{
+    }>> | RequestErrorResponse<422, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
+        instance?: string;
         status?: number;
         title?: string;
         type?: string;
+    }>> | RequestErrorResponse<500, Required<{
+        errors?: {
+            [key: string]: unknown;
+        };
         instance?: string;
+        status?: number;
+        title?: string;
+        type?: string;
     }>>>;
-    createProductVariantImage(productId: ProductVariantsV3ApiSpecs.CreateProductVariantImageData['path']['product_id'], variantId: ProductVariantsV3ApiSpecs.CreateProductVariantImageData['path']['variant_id'], requestBody: ProductVariantsV3ApiSpecs.CreateProductVariantImageData['body']): Promise<RequestSuccessResponse<200, Required<{
+    createProductVariantImage(...args: Parameters<ProductVariantsV3Api['createVariantImage']>): Promise<RequestSuccessResponse<200, Required<{
         data?: {
             image_url?: string;
         };
@@ -143,7 +263,7 @@ export declare class ProductVariantsV3Api {
             fixed_cost_shipping_price?: number;
             purchasing_disabled?: boolean;
             purchasing_disabled_message?: string;
-            upc?: string | null;
+            upc?: string;
             inventory_level?: number;
             inventory_warning_level?: number;
             bin_picking_number?: string;
@@ -182,7 +302,7 @@ export declare class ProductVariantsV3Api {
             fixed_cost_shipping_price?: number;
             purchasing_disabled?: boolean;
             purchasing_disabled_message?: string;
-            upc?: string | null;
+            upc?: string;
             inventory_level?: number;
             inventory_warning_level?: number;
             bin_picking_number?: string;
@@ -226,23 +346,4 @@ export declare class ProductVariantsV3Api {
             };
         }>;
     }>>>;
-    getVariantsMetafields(query?: ProductVariantsV3ApiSpecs.GetVariantsMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.MetaFieldCollectionResponse>>>;
-    createVariantsMetafields(requestBody: ProductVariantsV3ApiSpecs.CreateVariantsMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.MetaFieldCollectionResponsePostPut>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>>>;
-    updateVariantsMetafields(requestBody: ProductVariantsV3ApiSpecs.UpdateVariantsMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.MetaFieldCollectionResponsePostPut>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>>>;
-    deleteVariantsMetafields(requestBody: ProductVariantsV3ApiSpecs.DeleteVariantsMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.MetaFieldCollectionDeleteResponseSuccess>> | RequestErrorResponse<400, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    }>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessDelete>>>;
 }

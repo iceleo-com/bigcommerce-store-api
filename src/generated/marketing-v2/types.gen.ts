@@ -156,7 +156,9 @@ export type BannerFull = {
 /**
  * banner_Put
  */
-export type BannerPut = BannerBase;
+export type BannerPut = {
+    [key: string]: unknown;
+} & BannerBase;
 
 /**
  * giftCertificate_Base
@@ -205,11 +207,11 @@ export type GiftCertificateFull = GiftCertificateBase & {
      */
     balance?: string;
     /**
-     * Date the gift certificate was purchased. If not assigned, this will be set to today’s date. Date displays in the Unix timestamp format.
+     * Date the gift certificate was purchased. If not assigned, this will be set to today’s date. Date displays in the [RFC 2822](https://www.rfc-editor.org/rfc/rfc2822#section-3.3) timestamp format.
      */
     purchase_date?: string;
     /**
-     * Date on which the gift certificate is set to expire. Date displays in the Unix timestamp format.
+     * Date on which the gift certificate is set to expire. Date displays in the [RFC 2822](https://www.rfc-editor.org/rfc/rfc2822#section-3.3) timestamp format.
      */
     expiry_date?: string;
     /**
@@ -328,7 +330,7 @@ export type Accept = string;
  */
 export type ContentType = string;
 
-export type DeleteCouponsData = {
+export type DeleteAllCouponsData = {
     body?: never;
     headers: {
         /**
@@ -339,20 +341,20 @@ export type DeleteCouponsData = {
     path?: never;
     query?: {
         /**
-         * Optional param to identify a comma-separated list of IDs for coupons to delete in a batch. `/api/v2/coupons?id:in=1,2,3`
+         * Optional param to identify a comma separated list of ids for coupons to delete in a batch. `/api/v2/coupons?id:in=1,2,3`
          */
-        'id:in'?: Array<number>;
+        'id:in'?: string;
     };
     url: '/coupons';
 };
 
-export type DeleteCouponsResponses = {
+export type DeleteAllCouponsResponses = {
     204: void;
 };
 
-export type DeleteCouponsResponse = DeleteCouponsResponses[keyof DeleteCouponsResponses];
+export type DeleteAllCouponsResponse = DeleteAllCouponsResponses[keyof DeleteAllCouponsResponses];
 
-export type GetCouponsData = {
+export type GetAllCouponsData = {
     body?: never;
     headers: {
         /**
@@ -375,9 +377,16 @@ export type GetCouponsData = {
          */
         name?: string;
         /**
-         * The type of discount.
+         * |Type|
+         * |-|
+         * |`per_item_discount`|
+         * |`percentage_discount`|
+         * |`per_total_discount`|
+         * |`shipping_discount`|
+         * |`free_shipping`|
+         * |`promotion`|
          */
-        type?: 'per_item_discount' | 'percentage_discount' | 'per_total_discount' | 'shipping_discount' | 'free_shipping' | 'promotion';
+        type?: string;
         /**
          * Optional filter param `/api/v2/coupons?min_id={value}`
          */
@@ -395,20 +404,27 @@ export type GetCouponsData = {
          */
         limit?: number;
         /**
-         * Exclude a type of coupon.
+         * |Type|
+         * |-|
+         * |`per_item_discount`|
+         * |`percentage_discount`|
+         * |`per_total_discount`|
+         * |`shipping_discount`|
+         * |`free_shipping`|
+         * |`promotion`|
          */
-        exclude_type?: 'per_item_discount' | 'percentage_discount' | 'per_total_discount' | 'shipping_discount' | 'free_shipping' | 'promotion';
+        exclude_type?: string;
     };
     url: '/coupons';
 };
 
-export type GetCouponsResponses = {
+export type GetAllCouponsResponses = {
     200: Array<CouponFull>;
 };
 
-export type GetCouponsResponse = GetCouponsResponses[keyof GetCouponsResponses];
+export type GetAllCouponsResponse = GetAllCouponsResponses[keyof GetAllCouponsResponses];
 
-export type CreateCouponData = {
+export type CreateANewCouponData = {
     body: CouponBase;
     headers: {
         /**
@@ -425,13 +441,13 @@ export type CreateCouponData = {
     url: '/coupons';
 };
 
-export type CreateCouponResponses = {
+export type CreateANewCouponResponses = {
     201: CouponFull;
 };
 
-export type CreateCouponResponse = CreateCouponResponses[keyof CreateCouponResponses];
+export type CreateANewCouponResponse = CreateANewCouponResponses[keyof CreateANewCouponResponses];
 
-export type GetCouponsCountData = {
+export type GetACountOfCouponsData = {
     body?: never;
     headers: {
         /**
@@ -444,15 +460,15 @@ export type GetCouponsCountData = {
     url: '/coupons/count';
 };
 
-export type GetCouponsCountResponses = {
+export type GetACountOfCouponsResponses = {
     200: {
         count?: number;
     };
 };
 
-export type GetCouponsCountResponse = GetCouponsCountResponses[keyof GetCouponsCountResponses];
+export type GetACountOfCouponsResponse = GetACountOfCouponsResponses[keyof GetACountOfCouponsResponses];
 
-export type DeleteCouponData = {
+export type DeleteACouponData = {
     body?: never;
     headers: {
         /**
@@ -470,13 +486,13 @@ export type DeleteCouponData = {
     url: '/coupons/{id}';
 };
 
-export type DeleteCouponResponses = {
+export type DeleteACouponResponses = {
     204: void;
 };
 
-export type DeleteCouponResponse = DeleteCouponResponses[keyof DeleteCouponResponses];
+export type DeleteACouponResponse = DeleteACouponResponses[keyof DeleteACouponResponses];
 
-export type UpdateCouponData = {
+export type UpdateACouponData = {
     body: CouponBase;
     headers: {
         /**
@@ -498,13 +514,13 @@ export type UpdateCouponData = {
     url: '/coupons/{id}';
 };
 
-export type UpdateCouponResponses = {
+export type UpdateACouponResponses = {
     200: CouponFull;
 };
 
-export type UpdateCouponResponse = UpdateCouponResponses[keyof UpdateCouponResponses];
+export type UpdateACouponResponse = UpdateACouponResponses[keyof UpdateACouponResponses];
 
-export type DeleteBannersData = {
+export type DeleteAllBannersData = {
     body?: never;
     headers: {
         /**
@@ -517,13 +533,13 @@ export type DeleteBannersData = {
     url: '/banners';
 };
 
-export type DeleteBannersResponses = {
+export type DeleteAllBannersResponses = {
     204: void;
 };
 
-export type DeleteBannersResponse = DeleteBannersResponses[keyof DeleteBannersResponses];
+export type DeleteAllBannersResponse = DeleteAllBannersResponses[keyof DeleteAllBannersResponses];
 
-export type GetBannersData = {
+export type GetAllBannersData = {
     body?: never;
     headers: {
         /**
@@ -553,13 +569,13 @@ export type GetBannersData = {
     url: '/banners';
 };
 
-export type GetBannersResponses = {
+export type GetAllBannersResponses = {
     200: Array<BannerFull>;
 };
 
-export type GetBannersResponse = GetBannersResponses[keyof GetBannersResponses];
+export type GetAllBannersResponse = GetAllBannersResponses[keyof GetAllBannersResponses];
 
-export type CreateBannerData = {
+export type CreateABannerData = {
     body: BannerBase;
     headers: {
         /**
@@ -576,13 +592,13 @@ export type CreateBannerData = {
     url: '/banners';
 };
 
-export type CreateBannerResponses = {
+export type CreateABannerResponses = {
     200: BannerFull;
 };
 
-export type CreateBannerResponse = CreateBannerResponses[keyof CreateBannerResponses];
+export type CreateABannerResponse = CreateABannerResponses[keyof CreateABannerResponses];
 
-export type DeleteBannerData = {
+export type DeleteABannerData = {
     body?: never;
     headers: {
         /**
@@ -600,13 +616,13 @@ export type DeleteBannerData = {
     url: '/banners/{id}';
 };
 
-export type DeleteBannerResponses = {
+export type DeleteABannerResponses = {
     204: void;
 };
 
-export type DeleteBannerResponse = DeleteBannerResponses[keyof DeleteBannerResponses];
+export type DeleteABannerResponse = DeleteABannerResponses[keyof DeleteABannerResponses];
 
-export type GetBannerData = {
+export type GetABannerData = {
     body?: never;
     headers: {
         /**
@@ -624,13 +640,13 @@ export type GetBannerData = {
     url: '/banners/{id}';
 };
 
-export type GetBannerResponses = {
+export type GetABannerResponses = {
     200: BannerFull;
 };
 
-export type GetBannerResponse = GetBannerResponses[keyof GetBannerResponses];
+export type GetABannerResponse = GetABannerResponses[keyof GetABannerResponses];
 
-export type UpdateBannerData = {
+export type UpdateABannerData = {
     body: BannerPut;
     headers: {
         /**
@@ -652,13 +668,13 @@ export type UpdateBannerData = {
     url: '/banners/{id}';
 };
 
-export type UpdateBannerResponses = {
+export type UpdateABannerResponses = {
     200: BannerFull;
 };
 
-export type UpdateBannerResponse = UpdateBannerResponses[keyof UpdateBannerResponses];
+export type UpdateABannerResponse = UpdateABannerResponses[keyof UpdateABannerResponses];
 
-export type GetBannersCountData = {
+export type GetACountOfBannersData = {
     body?: never;
     headers: {
         /**
@@ -671,15 +687,15 @@ export type GetBannersCountData = {
     url: '/banners/count';
 };
 
-export type GetBannersCountResponses = {
+export type GetACountOfBannersResponses = {
     200: {
         count?: number;
     };
 };
 
-export type GetBannersCountResponse = GetBannersCountResponses[keyof GetBannersCountResponses];
+export type GetACountOfBannersResponse = GetACountOfBannersResponses[keyof GetACountOfBannersResponses];
 
-export type DeleteGiftCertificateData = {
+export type DeleteAGiftCertificateData = {
     body?: never;
     headers: {
         /**
@@ -697,13 +713,13 @@ export type DeleteGiftCertificateData = {
     url: '/gift_certificates/{id}';
 };
 
-export type DeleteGiftCertificateResponses = {
+export type DeleteAGiftCertificateResponses = {
     204: void;
 };
 
-export type DeleteGiftCertificateResponse = DeleteGiftCertificateResponses[keyof DeleteGiftCertificateResponses];
+export type DeleteAGiftCertificateResponse = DeleteAGiftCertificateResponses[keyof DeleteAGiftCertificateResponses];
 
-export type GetGiftCertificateData = {
+export type GetAGiftCertificateData = {
     body?: never;
     headers: {
         /**
@@ -721,13 +737,13 @@ export type GetGiftCertificateData = {
     url: '/gift_certificates/{id}';
 };
 
-export type GetGiftCertificateResponses = {
+export type GetAGiftCertificateResponses = {
     200: GiftCertificateFull;
 };
 
-export type GetGiftCertificateResponse = GetGiftCertificateResponses[keyof GetGiftCertificateResponses];
+export type GetAGiftCertificateResponse = GetAGiftCertificateResponses[keyof GetAGiftCertificateResponses];
 
-export type UpdateGiftCertificateData = {
+export type UpdateAGiftCertificateData = {
     body?: GiftCertificatePut;
     headers: {
         /**
@@ -749,13 +765,13 @@ export type UpdateGiftCertificateData = {
     url: '/gift_certificates/{id}';
 };
 
-export type UpdateGiftCertificateResponses = {
+export type UpdateAGiftCertificateResponses = {
     200: GiftCertificateFull;
 };
 
-export type UpdateGiftCertificateResponse = UpdateGiftCertificateResponses[keyof UpdateGiftCertificateResponses];
+export type UpdateAGiftCertificateResponse = UpdateAGiftCertificateResponses[keyof UpdateAGiftCertificateResponses];
 
-export type DeleteGiftCertificatesData = {
+export type DeleteAllGiftCertificatesData = {
     body?: never;
     headers: {
         /**
@@ -768,15 +784,15 @@ export type DeleteGiftCertificatesData = {
     url: '/gift_certificates';
 };
 
-export type DeleteGiftCertificatesResponses = {
+export type DeleteAllGiftCertificatesResponses = {
     204: {
         [key: string]: unknown;
     };
 };
 
-export type DeleteGiftCertificatesResponse = DeleteGiftCertificatesResponses[keyof DeleteGiftCertificatesResponses];
+export type DeleteAllGiftCertificatesResponse = DeleteAllGiftCertificatesResponses[keyof DeleteAllGiftCertificatesResponses];
 
-export type GetGiftCertificatesData = {
+export type GetAllGiftCertificatesData = {
     body?: never;
     headers: {
         /**
@@ -796,25 +812,17 @@ export type GetGiftCertificatesData = {
         from_email?: string;
         page?: number;
         limit?: number;
-        /**
-         * Field to sort results by.
-         */
-        sort?: 'id';
-        /**
-         * Sort direction. Defaults to asc.
-         */
-        direction?: 'asc' | 'desc';
     };
     url: '/gift_certificates';
 };
 
-export type GetGiftCertificatesResponses = {
+export type GetAllGiftCertificatesResponses = {
     200: Array<GiftCertificateFull>;
 };
 
-export type GetGiftCertificatesResponse = GetGiftCertificatesResponses[keyof GetGiftCertificatesResponses];
+export type GetAllGiftCertificatesResponse = GetAllGiftCertificatesResponses[keyof GetAllGiftCertificatesResponses];
 
-export type CreateGiftCertificateData = {
+export type CreateAGiftCertificateData = {
     body?: GiftCertificatePost;
     headers: {
         /**
@@ -831,8 +839,8 @@ export type CreateGiftCertificateData = {
     url: '/gift_certificates';
 };
 
-export type CreateGiftCertificateResponses = {
-    201: GiftCertificateFull;
+export type CreateAGiftCertificateResponses = {
+    200: GiftCertificateFull;
 };
 
-export type CreateGiftCertificateResponse = CreateGiftCertificateResponses[keyof CreateGiftCertificateResponses];
+export type CreateAGiftCertificateResponse = CreateAGiftCertificateResponses[keyof CreateAGiftCertificateResponses];

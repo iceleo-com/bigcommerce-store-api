@@ -82,17 +82,7 @@ export type PaymentMethodFull = {
  */
 export type Accept = string;
 
-/**
- * The ID of the subject order.
- */
-export type OrderIdQuery = number;
-
-/**
- * The ID of the subject checkout; identical to the cart ID.
- */
-export type CheckoutIdQuery = string;
-
-export type GetPaymentMethodsData = {
+export type PaymentsMethodsGetData = {
     body?: never;
     headers: {
         /**
@@ -103,18 +93,18 @@ export type GetPaymentMethodsData = {
     path?: never;
     query?: {
         /**
-         * The ID of the subject order.
+         * Identifier for the order
          */
         order_id?: number;
         /**
-         * The ID of the subject checkout; identical to the cart ID.
+         * Identifier for the checkout (same as the cart ID)
          */
         checkout_id?: string;
     };
     url: '/payments/methods';
 };
 
-export type GetPaymentMethodsErrors = {
+export type PaymentsMethodsGetErrors = {
     /**
      * ErrorResponse
      *
@@ -267,9 +257,9 @@ export type GetPaymentMethodsErrors = {
     };
 };
 
-export type GetPaymentMethodsError = GetPaymentMethodsErrors[keyof GetPaymentMethodsErrors];
+export type PaymentsMethodsGetError = PaymentsMethodsGetErrors[keyof PaymentsMethodsGetErrors];
 
-export type GetPaymentMethodsResponses = {
+export type PaymentsMethodsGetResponses = {
     /**
      * Payments Methods Response
      */
@@ -284,4 +274,4 @@ export type GetPaymentMethodsResponses = {
     };
 };
 
-export type GetPaymentMethodsResponse = GetPaymentMethodsResponses[keyof GetPaymentMethodsResponses];
+export type PaymentsMethodsGetResponse = PaymentsMethodsGetResponses[keyof PaymentsMethodsGetResponses];

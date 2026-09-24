@@ -4,7 +4,7 @@ export type ClientOptions = {
 export type TaxSettings = {
     tax_entered_with_prices?: boolean;
     price_display_settings?: {
-        control_panel_price_display_strategy?: 'ZONE' | 'INCLUSIVE' | 'EXCLUSIVE';
+        show_inclusive_in_control_panel?: boolean;
         invoice_price_display_strategy?: 'ZONE' | 'INCLUSIVE' | 'EXCLUSIVE';
     };
     fallback_strategy?: 'FIXED' | 'BASIC' | 'DISABLE';
@@ -12,7 +12,6 @@ export type TaxSettings = {
     should_use_geolocation_to_determine_guest_shopper_tax_zone?: boolean;
     guest_shopper_tax_zone_id?: number;
     store_tax_zone_id?: number;
-    document_submission_strategy?: 'ON_PAYMENT_CAPTURE' | 'ON_ORDER_CREATION';
 };
 export type MetaOpen = {
     [key: string]: unknown;
@@ -35,7 +34,7 @@ export type GetTaxSettingsResponses = {
     };
 };
 export type GetTaxSettingsResponse = GetTaxSettingsResponses[keyof GetTaxSettingsResponses];
-export type UpdateTaxSettingsData = {
+export type SetTaxSettingsData = {
     body: TaxSettings;
     headers: {
         Accept: string;
@@ -45,13 +44,13 @@ export type UpdateTaxSettingsData = {
     query?: never;
     url: '/tax/settings';
 };
-export type UpdateTaxSettingsErrors = {
+export type SetTaxSettingsErrors = {
     422: unknown;
 };
-export type UpdateTaxSettingsResponses = {
+export type SetTaxSettingsResponses = {
     200: {
         data?: TaxSettings;
         meta?: MetaOpen;
     };
 };
-export type UpdateTaxSettingsResponse = UpdateTaxSettingsResponses[keyof UpdateTaxSettingsResponses];
+export type SetTaxSettingsResponse = SetTaxSettingsResponses[keyof SetTaxSettingsResponses];

@@ -109,7 +109,6 @@ export type PatchCouponPromotion = PromotionBase & {
  * A draft **Coupon Promotion** to be created. A shopper must manually apply a *coupon promotion* to their cart.
  */
 export type DraftCouponPromotion = PromotionBase & {
-    codes?: CouponCode;
     /**
      * This field only has effect when `can_be_used_with_other_promotions` is `false`:
      * - When the property is set to `true`, the coupon will override the applied automatic promotions if it provides a greater discount.
@@ -473,6 +472,7 @@ export type VariantsItemMatcher = {
 export type CartValueAction = {
     cart_value?: {
         discount: Discount;
+        maximum_allowed_discount_amount?: MaximumAllowedDiscountAmount;
     };
 };
 
@@ -535,6 +535,7 @@ export type FixedPriceSetAction = {
 export type CartItemsAction = {
     cart_items?: {
         discount: Discount;
+        maximum_allowed_discount_amount?: MaximumAllowedDiscountAmount;
         /**
          * Set this value to true to distribute the discount as a total among matching items. By default, the discount applies to each item.
          * Example: If set to false, the discount is $10 and you have 2 eligible items for this discount in the cart, both items will be discounted by $10, with a total of $20 off the order.
@@ -577,6 +578,9 @@ export type ShippingAction = {
          * Set this property to true to provide a separate free shipping method. Read-Only.
          */
         free_shipping?: boolean;
+        /**
+         * List of shipping zone IDs to which free shipping can apply, or '*' for all zones.
+         */
         zone_ids: '*' | Array<number>;
     };
 };
@@ -597,7 +601,7 @@ export type PercentageDiscount = {
     /**
      * The amount of discount (percentage off) to apply.
      */
-    percentage_amount?: string;
+    percentage_amount: string;
 };
 
 /**
@@ -606,7 +610,7 @@ export type PercentageDiscount = {
  * **Fixed Discount**
  */
 export type FixedDiscount = {
-    fixed_amount?: Money;
+    fixed_amount: Money;
 };
 
 /**
@@ -616,6 +620,16 @@ export type FixedDiscount = {
  * Represents a monetary value in the store’s default currency.
  */
 export type Money = string;
+
+/**
+ * The maximum monetary value that can be applied as a discount. It can take value from 1 to 10000000.
+ * The application of this maximum depends on the discount type:
+ * - Discount on shipping: the max limit is distributed to the first number of shipping destinations until it is reached
+ * - Discount on products: the max limit is distributed to the first number of eligible products until it is reached
+ * - Discount on order subtotal: the max limit is checked against the order discount value
+ *
+ */
+export type MaximumAllowedDiscountAmount = string | null;
 
 /**
  * Collection Meta
@@ -1051,6 +1065,8 @@ export type AvailabilityByWeekDay = {
 
 /**
  * CustomerSegmentLimitation
+ *
+ * Specifies customer segment limitations for the promotion.
  */
 export type CustomerSegmentLimitation = CustomerSegmentIdLimitation | NotCustomerSegmentLimitation | AndCustomerSegmentLimitation | OrCustomerSegmentLimitation;
 
@@ -1337,6 +1353,11 @@ export type Query = string;
 export type CodeQuery = string;
 
 /**
+ * Filter items by `code`.
+ */
+export type CodeQueryRequired = string;
+
+/**
  * Filter items by `currency_code`.
  */
 export type CurrencyCodeQuery = string;
@@ -1404,6 +1425,9 @@ export type DeletePromotionsData = {
 };
 
 export type DeletePromotionsErrors = {
+    /**
+     * Response for bulk delete operations on promotions.
+     */
     422: {
         errors?: Array<BulkActionResponseError>;
         meta?: BulkActionResponseMeta;
@@ -1684,11 +1708,18 @@ export type DeleteCouponCodesData = {
          * Example: **?id:in=11,12,13,14**
          */
         'id:in': Array<number>;
+        /**
+         * Filter items by `code`.
+         */
+        code?: string;
     };
     url: '/promotions/{promotion_id}/codes';
 };
 
 export type DeleteCouponCodesErrors = {
+    /**
+     * Response for bulk delete operations on promotions.
+     */
     422: {
         errors?: Array<BulkActionResponseError>;
         meta?: BulkActionResponseMeta;
@@ -1743,6 +1774,10 @@ export type GetPromotionCodesData = {
          *
          */
         limit?: number;
+        /**
+         * Filter items by `code`.
+         */
+        code?: string;
     };
     url: '/promotions/{promotion_id}/codes';
 };
@@ -1892,6 +1927,60 @@ export type GeneratePromotionCodesBatchResponses = {
 };
 
 export type GeneratePromotionCodesBatchResponse = GeneratePromotionCodesBatchResponses[keyof GeneratePromotionCodesBatchResponses];
+
+export type DeleteCouponCodeByCodeData = {
+    body?: never;
+    headers: {
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+         */
+        Accept: string;
+    };
+    path?: never;
+    query: {
+        /**
+         * Filter items by `code`.
+         */
+        code: string;
+    };
+    url: '/promotions/codes';
+};
+
+export type DeleteCouponCodeByCodeResponses = {
+    /**
+     * The deletion was successful or the resource does not exist.
+     */
+    204: void;
+};
+
+export type DeleteCouponCodeByCodeResponse = DeleteCouponCodeByCodeResponses[keyof DeleteCouponCodeByCodeResponses];
+
+export type GetCouponCodeByCodeData = {
+    body?: never;
+    headers: {
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+         */
+        Accept: string;
+    };
+    path?: never;
+    query: {
+        /**
+         * Filter items by `code`.
+         */
+        code: string;
+    };
+    url: '/promotions/codes';
+};
+
+export type GetCouponCodeByCodeResponses = {
+    200: {
+        data?: Array<CouponCode>;
+        meta?: OptionalCursorCollectionMeta;
+    };
+};
+
+export type GetCouponCodeByCodeResponse = GetCouponCodeByCodeResponses[keyof GetCouponCodeByCodeResponses];
 
 export type DeleteCouponCodeData = {
     body?: never;

@@ -528,7 +528,7 @@ export type TransactionPost = {
      */
     event: 'purchase' | 'authorization' | 'capture' | 'refund' | 'void' | 'pending' | 'settled';
     /**
-     * The payment method: `credit_card` - a credit card transaction; `electronic_wallet` - an online wallet; `store_credit` - a transaction using store credit; `gift_certificate` - a transaction using a gift certificate; `custom` - manual payment methods; `token` - payment token; `nonce` - temporary payment token; `offsite` - online payment off the site (e.g., PayPal); `offline` - payment method that takes place offline.
+     * The payment method: `credit_card` - a credit-card transaction; `electronic_wallet` - an online wallet; `store_credit` - a transaction using store credit; `gift_certificate` - a transaction using a gift certificate; `custom` - manual payment methods; `token` - payment token; `nonce` - temporary payment token; `offsite` - online payment off the site (e.g., PayPal); `offline` - payment method that takes place offline.
      *
      */
     method: 'credit_card' | 'electronic_wallet' | 'gift_certificate' | 'store_credit' | 'apple_pay_card' | 'apple_pay_token' | 'bigpay_token' | 'token' | 'custom' | 'offsite' | 'offline' | 'nonce';
@@ -593,14 +593,11 @@ export type NotFound = {
      */
     status?: number;
     /**
-     * The resource at that URL is not found.
+     * The error title describing the particular error.
      */
     title?: string;
     type?: string;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
+    instance?: string;
 };
 
 export type Transaction = {
@@ -610,7 +607,7 @@ export type Transaction = {
      */
     event: 'purchase' | 'authorization' | 'capture' | 'refund' | 'void' | 'pending' | 'settled';
     /**
-     * The payment method: `credit_card` - a credit card transaction; `electronic_wallet` - an online wallet; `store_credit` - a transaction using store credit; `gift_certificate` - a transaction using a gift certificate; `custom` - manual payment methods; `token` - payment token; `nonce` - temporary payment token; `offsite` - online payment off the site; `offline` - payment method that takes place offline.
+     * The payment method: `credit_card` - a credit-card transaction; `electronic_wallet` - an online wallet; `store_credit` - a transaction using store credit; `gift_certificate` - a transaction using a gift certificate; `custom` - manual payment methods; `token` - payment token; `nonce` - temporary payment token; `offsite` - online payment off the site; `offline` - payment method that takes place offline.
      *
      */
     method: 'credit_card' | 'electronic_wallet' | 'gift_certificate' | 'store_credit' | 'apple_pay_card' | 'bigpay_token' | 'apple_pay_token' | 'token' | 'custom' | 'offsite' | 'offline' | 'nonce';
@@ -634,6 +631,11 @@ export type Transaction = {
      *
      */
     gateway_transaction_id?: string;
+    /**
+     * The date/time of the transaction.
+     *
+     */
+    date_created?: string;
     /**
      * True if the transaction performed was a test, or if the gateway is in test mode.
      *
@@ -665,7 +667,7 @@ export type Transaction = {
          *
          */
         display_name?: string;
-    } | null;
+    };
     /**
      * Custom
      *
@@ -677,7 +679,7 @@ export type Transaction = {
          *
          */
         payment_method?: string;
-    } | null;
+    };
     /**
      * The payment method ID used for this transaction.
      *
@@ -695,14 +697,14 @@ export type Transaction = {
      */
     order_id?: string;
     /**
-     * The date/time of the transaction in ISO-8601 format.
+     * The date/time of the transaction.
      *
      */
     date_created?: string;
     /**
      * This field contains internal BigPay token for stored card that is then mapped to the actual third-party token. We currently do not offer a way to get third party tokens.These tokens are read-only and do not return any information about the payment.
      */
-    payment_instrument_token?: string | null;
+    payment_instrument_token?: string;
     /**
      * AVS Results
      *
@@ -773,51 +775,24 @@ export type Transaction = {
          *
          */
         status?: 'active' | 'pending' | 'disabled' | 'expired';
-    } | null;
+    };
     /**
      * A store credit model.
      *
      */
     store_credit?: {
         /**
-         * Remaining balance of shopperʼs store credit.
+         * Remaining balance of shopper's store credit.
          *
          */
         remaining_balance?: number;
-    } | null;
-    /**
-     * Custom Payment Provider Field
-     *
-     * Fields for custom payment providers.
-     */
-    custom_provider_field_result?: {
-        /**
-         * The receipt number associated with the transaction.
-         *
-         */
-        receipt_number?: string | null;
-        /**
-         * Authorization code for the transaction.
-         *
-         */
-        authorization_code?: string | null;
-        /**
-         * The fraud response associated with the transaction.
-         *
-         */
-        fraud_response?: string | null;
-        /**
-         * The amount received for the transaction, divided by 100 to convert to the correct currency format.
-         *
-         */
-        amount_received?: number | null;
-    } | null;
+    };
 };
 
 /**
  * Credit Card
  *
- * A credit card model.
+ * A credit-card model.
  */
 export type CreditCard = {
     /**
@@ -825,22 +800,22 @@ export type CreditCard = {
      */
     card_type?: 'alelo' | 'alia' | 'american_express' | 'cabal' | 'carnet' | 'dankort' | 'diners_club' | 'discover' | 'elo' | 'forbrugsforeningen' | 'jcb' | 'maestro' | 'master' | 'naranja' | 'sodexo' | 'unionpay' | 'visa' | 'vr';
     /**
-     * The IIN of a credit card number.
+     * The IIN of a credit-card number.
      *
      */
     card_iin?: string;
     /**
-     * The last 4 digits of a credit card number.
+     * The last 4 digits of a credit-card number.
      *
      */
     card_last4?: string;
     /**
-     * The expiry month of a credit card.
+     * The expiry month of a credit-card.
      *
      */
     card_expiry_month?: number;
     /**
-     * The expiry year of a credit card.
+     * The expiry year of a credit-card.
      *
      */
     card_expiry_year?: number;
@@ -852,7 +827,7 @@ export type CreditCard = {
  */
 export type StoreCredit = {
     /**
-     * Remaining balance of shopperʼs store credit.
+     * Remaining balance of shopper's store credit.
      *
      */
     remaining_balance?: number;
@@ -1083,7 +1058,9 @@ export type PostRefundQuotesRequest = Array<RefundQuotePost>;
  *
  * Request body for refund quotes.
  */
-export type RefundQuotePost = RefundQuoteItemsRefund | RefundQuoteTaxAdjustmentAmount;
+export type RefundQuotePost = {
+    items: Array<ItemsRefund>;
+};
 
 /**
  * RefundQuote_Full
@@ -1095,7 +1072,6 @@ export type RefundQuoteFull = {
     order_id?: number;
     total_refund_amount?: Amount;
     total_refund_tax_amount?: number;
-    order_level_refund_amount?: number;
     /**
      * Indicates rounding value to bring `refund_total` to an amount refundable with payment providers (in this case to 2 decimal places).
      */
@@ -1111,7 +1087,6 @@ export type RefundQuoteFull = {
      * Note that `refund_methods` is an array of refund methods, with each refund method being an array of payment options.
      *
      * For example, if the order was placed by a combination of store credit and bank deposit the refund methods would be:
-     *
      * ```json
      * {
      * "refund_methods": [
@@ -1171,22 +1146,9 @@ export type RefundQuoteFull = {
  *
  * Request body for refund requests.
  */
-export type RefundRequestPost = RefundRequestPostItems | RefundRequestPostTaxAdjustmentAmount;
-
-/**
- * Items Refund
- */
-export type RefundRequestPostItems = {
+export type RefundRequestPost = {
     items: Array<ItemsRefund>;
     payments: Array<PaymentRequest>;
-    merchant_calculated_override?: MerchantOverride;
-};
-
-/**
- * Tax Adjustment Refund
- */
-export type RefundRequestPostTaxAdjustmentAmount = {
-    tax_adjustment_amount: TaxAdjustmentAmount;
     merchant_calculated_override?: MerchantOverride;
 };
 
@@ -1264,17 +1226,14 @@ export type RefundIdGet = {
              */
             declined_message?: string;
         }>;
-        /**
-         * Array of items refunded. In cases when `tax_refund_adjustment` was used to create the refund, this array will be empty.
-         */
         items?: Array<{
             /**
              * Type of item that was refunded.
              *
              */
-            item_type?: 'PRODUCT' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'ORDER' | 'FEE';
+            item_type?: 'PRODUCT' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'ORDER';
             /**
-             * `order_product.id` corresponding to the item_types of PRODUCT, GIFT_WRAPPING. `order_address.id` corresponding to the item_types of SHIPPING, HANDLING. `order.id` corresponding to the item_type of ORDER, FEE.
+             * `order_product.id` corresponding to the item_types of PRODUCT, GIFT_WRAPPING. `order_address.id` corresponding to the item_types of SHIPPING, HANDLING. `order.id` corresponding to the item_type of ORDER.
              *
              */
             item_id?: number;
@@ -1325,7 +1284,7 @@ export type FailedQuoteError = {
 /**
  * ItemsRefund
  */
-export type ItemsRefund = QuantityBoundItem | AmountBoundItem | TaxExemptItem | FeeItem;
+export type ItemsRefund = AmountBoundItem | QuantityBoundItem | TaxExemptItem;
 
 /**
  * Payment Request
@@ -1356,65 +1315,26 @@ export type RefundMethod = Array<PaymentOption>;
  * Quantity Bound Item
  *
  * Type of refund item that capture refunding of items in the order that are of type quantity.
+ * * `ORDER`
  * * `PRODUCT`
  * * `GIFT_WRAPPING`
+ * * `SHIPPING`
+ * * `HANDLING`
+ * * `TAX`
  *
  */
 export type QuantityBoundItem = {
     /**
      * Type of refund.
      */
-    item_type: 'PRODUCT' | 'GIFT_WRAPPING';
+    item_type?: 'ORDER' | 'PRODUCT' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'TAX';
     /**
      * Order Product ID.
      */
-    item_id: number;
-    /**
-     * Array of product refund deductions
-     */
-    adjustments?: Array<RefundItemAdjustment>;
-    quantity: number;
+    item_id?: number;
+    quantity?: number;
     /**
      * Reason for refund.
-     */
-    reason?: string;
-};
-
-/**
- * Refund Item Adjustment
- *
- * Use to reduce the amount refunded for an item.
- */
-export type RefundItemAdjustment = {
-    /**
-     * Refund Item Adjustment Amount
-     *
-     * A negative 2 decimal place rounded value to deduct from the amount refunded.
-     */
-    amount?: number;
-    /**
-     * Description of reason for the adjustment.
-     */
-    description?: string;
-};
-
-/**
- * Fee
- *
- * Use this field to refund a custom fee at the order level.
- */
-export type FeeItem = {
-    /**
-     * The type of refund.
-     */
-    item_type?: 'FEE';
-    /**
-     * Numeric ID of the fee in the order.
-     */
-    item_id?: number;
-    amount?: Amount;
-    /**
-     * Reason for the refund.
      */
     reason?: string;
 };
@@ -1446,22 +1366,27 @@ export type TaxExemptItem = {
  * Amount Bound Item
  *
  * Type of refund item that capture refunding of items in the order that are of type amount.
+ * * `PRODUCT`
  * * `ORDER`
+ * * `GIFT_WRAPPING`
  * * `SHIPPING`
  * * `HANDLING`
  * * `TAX`
- * * `FEE`
  */
 export type AmountBoundItem = {
     /**
      * Type of refund.
      */
-    item_type: 'ORDER' | 'SHIPPING' | 'HANDLING' | 'TAX' | 'FEE';
+    item_type?: 'PRODUCT' | 'ORDER' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'TAX';
     /**
      * Order address ID.
      */
-    item_id: number;
-    amount: Amount;
+    item_id?: number;
+    amount?: Amount;
+    /**
+     * Number of items in refund.
+     */
+    quantity?: number;
     /**
      * Explanation of refund.
      */
@@ -1488,29 +1413,6 @@ export type MerchantOverride = {
 };
 
 /**
- * Tax Adjustment Amount
- *
- * Amount to be used when tax may have been overcharged for an order, such as when the value for a partial refund is overridden. This amount should be equal to the calculated overcharged value, or should be used with `merchant_calculated_override` to override the value. If not, this will result in a `422` error.
- */
-export type TaxAdjustmentAmount = number;
-
-/**
- * Items Refund
- */
-export type RefundQuoteItemsRefund = {
-    items: Array<ItemsRefund>;
-    merchant_calculated_override?: MerchantOverride;
-};
-
-/**
- * Tax Adjustment Refund
- */
-export type RefundQuoteTaxAdjustmentAmount = {
-    tax_adjustment_amount: TaxAdjustmentAmount;
-    merchant_calculated_override?: MerchantOverride;
-};
-
-/**
  * Refund
  */
 export type Refund = {
@@ -1523,7 +1425,7 @@ export type Refund = {
      */
     order_id?: number;
     /**
-     * Reference to the userʼs ID who create this refund. This is automatically populated by BigCommerce.
+     * Reference to the user's ID who create this refund. This is automatically populated by BigCommerce.
      */
     readonly user_id?: number;
     /**
@@ -1544,7 +1446,7 @@ export type Refund = {
      */
     uses_merchant_override_values?: boolean;
     /**
-     * Array of items refunded. In cases when `tax_refund_adjustment` was used to create the refund, this array will be empty.
+     * Array of items refunded.
      */
     items?: Array<RefundItem>;
     /**
@@ -1560,7 +1462,7 @@ export type RefundItem = {
     /**
      * Type of item that was refunded.
      */
-    item_type?: 'PRODUCT' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'ORDER' | 'FEE';
+    item_type?: 'PRODUCT' | 'GIFT_WRAPPING' | 'SHIPPING' | 'HANDLING' | 'ORDER';
     /**
      * order_product.id corresponding to the item_types of PRODUCT, GIFT_WRAPPING. order_address.id corresponding to the item_types of SHIPPING, HANDLING. order.id corresponding to the item_type of ORDER.
      */
@@ -1573,10 +1475,6 @@ export type RefundItem = {
      * Quantity of item refunded. Note: this will only be populated for item_type PRODUCT
      */
     quantity?: number;
-    /**
-     * Adjustments to apply to the refunded amount for an item. Only supported for item_type PRODUCT
-     */
-    adjustments?: Array<RefundItemAdjustment>;
     requested_amount?: Amount;
 };
 
@@ -1605,10 +1503,6 @@ export type RefundPayment = {
      * Message indicate why payment was declined.
      */
     declined_message?: string;
-    /**
-     * The BigCommerce `transaction_id`.
-     */
-    transaction_id?: string;
 };
 
 /**
@@ -1644,7 +1538,7 @@ export type PaymentOption = {
 /**
  * Amount
  *
- * A non-negative 2 decimal place rounded value that represents the amount that can be charged/refunded with payment providers. When creating refunds and refund quotes, this field becomes irrelevant when you select PRODUCT or GIFT_WRAPPING for `item_type`.
+ * A non-negative 2 decimal place rounded value that represents the amount that can be charged/refunded with payment providers.
  */
 export type Amount = number;
 
@@ -1679,23 +1573,9 @@ export type MetaFieldCollectionResponse = {
  * Response payload for the BigCommerce API.
  *
  */
-export type MetaFieldCollectionResponsePostPut = {
-    data?: Array<Metafield>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: BatchOperationMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
 export type MetafieldResponse = {
     data?: Metafield;
-    meta?: MetaEmptyFull;
-};
+} & Meta;
 
 /**
  * Common Metafield properties.
@@ -1798,7 +1678,7 @@ export type Metafield = MetafieldBase & {
      */
     id?: number;
     /**
-     * Date and time of the metafieldʼs creation.
+     * Date and time of the metafield's creation.
      *
      */
     date_created?: string;
@@ -1807,11 +1687,13 @@ export type Metafield = MetafieldBase & {
      *
      */
     date_modified?: string;
-    /**
-     * Client ID for the metafieldʼs creator.
-     */
-    readonly owner_client_id?: string;
 };
+
+/**
+ * The model for a POST to create metafield.
+ *
+ */
+export type MetafieldPost = MetafieldBasePost;
 
 /**
  * The model for a PUT to update metafield.
@@ -1846,163 +1728,6 @@ export type GlobalOrderSettings = {
             email_addresses?: Array<string>;
         };
     };
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionPartialSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Total number of items in the result set.
- *
- */
-export type Total = number;
-
-/**
- * Total number of items that were successfully deleted.
- *
- */
-export type Success = number;
-
-/**
- * Total number of items that failed to be deleted.
- *
- */
-export type Failed = number;
-
-/**
- * Error response payload for the BigCommerce API.
- *
- */
-export type _Error = {
-    /**
-     * The HTTP status code for the error.
-     *
-     */
-    status?: number;
-    /**
-     * The error title.
-     *
-     */
-    title?: string;
-    /**
-     * The error type.
-     *
-     */
-    type?: string;
-    errors?: ErrorDetail;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-
-/**
- * The model for a POST to create metafield.
- *
- */
-export type MetafieldPostBatch = MetafieldBasePost & {
-    /**
-     * The ID for the resource with which the metafield is associated.
-     *
-     */
-    resource_id: number;
-};
-
-/**
- * The model for a PUT to create metafield.
- *
- */
-export type MetafieldPutBatch = MetafieldBasePost & {
-    /**
-     * The ID of metafield to update.
-     *
-     */
-    id: number;
-    /**
-     * The ID for the resource with which the metafield is associated.
-     *
-     */
-    resource_id?: number;
 };
 
 /**
@@ -2070,6 +1795,10 @@ export type BaseError = {
     type?: string;
 };
 
+export type BetaDetailedErrors = {
+    [key: string]: unknown;
+};
+
 /**
  * DetailedErrors
  */
@@ -2108,7 +1837,7 @@ export type RefundWritable = {
      */
     uses_merchant_override_values?: boolean;
     /**
-     * Array of items refunded. In cases when `tax_refund_adjustment` was used to create the refund, this array will be empty.
+     * Array of items refunded.
      */
     items?: Array<RefundItem>;
     /**
@@ -2138,10 +1867,6 @@ export type RefundPaymentWritable = {
      * Message indicate why payment was declined.
      */
     declined_message?: string;
-    /**
-     * The BigCommerce `transaction_id`.
-     */
-    transaction_id?: string;
 };
 
 /**
@@ -2190,36 +1915,6 @@ export type MetafieldBaseWritable = {
 };
 
 /**
- * Allows app partners to write custom data to various resources in the API.
- *
- */
-export type MetafieldWritable = MetafieldBaseWritable & {
-    /**
-     * The unique identifier for the metafields.
-     *
-     */
-    id?: number;
-    /**
-     * Date and time of the metafieldʼs creation.
-     *
-     */
-    date_created?: string;
-    /**
-     * Date and time when the metafield was last updated.
-     *
-     */
-    date_modified?: string;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
-};
-
-/**
  * The ID of the `Order` to which the transactions belong.
  *
  */
@@ -2242,62 +1937,22 @@ export type ContentType = string;
 export type PageParam = number;
 
 /**
- * Filter items by minimum date created. For example, `date_created:min=2019-09-04T00:00:00` or `date_created:min=2019-09-04`. Returns metafields created after this date.
- */
-export type DateCreatedMin = string;
-
-/**
- * Filter items by maximum date created. For example, `date_created:max=2019-09-04T00:00:00` or `date_created:max=2019-09-04`. Returns metafields created before this date.
- */
-export type DateCreatedMax = string;
-
-/**
- * Filter items by date created. For example, `date_created=2019-09-04T00:00:00`. Returns metafields created on this date.
- */
-export type DateCreated = string;
-
-/**
- * Filter items by minimum date modified. For example, `date_modified:min=2019-09-04T00:00:00` or `date_modified:min=2019-09-04`. Returns metafields modified after this date.
- */
-export type DateModifiedMin = string;
-
-/**
- * Filter items by maximum date modified. For example, `date_modified:max=2019-09-04T00:00:00` or `date_modified:max=2019-09-04`. Returns metafields modified before this date.
- */
-export type DateModifiedMax = string;
-
-/**
- * Filter items by date modified. For example, `date_modified=2019-09-04T00:00:00`. Returns metafields modified on this date.
- */
-export type DateModified = string;
-
-/**
  * The ID of the `Metafield`.
  *
  */
 export type MetafieldIdParam = number;
 
 /**
- * Filter based on a metafieldʼs key.
+ * Filter based on a metafield's key.
  *
  */
 export type MetafieldKeyParam = string;
 
 /**
- * Filter using a comma-separated list of metafield keys. Could be used with vanilla `key` query parameter.
- */
-export type MetafieldKeyInParam = Array<string>;
-
-/**
- * Filter based on a metafieldʼs key.
+ * Filter based on a metafield's key.
  *
  */
 export type MetafieldNamespaceParam = string;
-
-/**
- * Filter using a comma-separated list of metafield namespaces. Can be used with vanilla `namespace` query parameter.
- */
-export type MetafieldNamespaceInParam = Array<string>;
 
 /**
  * Controls the number of items per page in a limited (paginated) list of products.
@@ -2311,12 +1966,7 @@ export type LimitParam = number;
  */
 export type DirectionParam = 'asc' | 'desc';
 
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-
-export type CaptureOrderPaymentData = {
+export type PaymentactioncaptureData = {
     body?: never;
     headers: {
         /**
@@ -2339,7 +1989,7 @@ export type CaptureOrderPaymentData = {
     url: '/orders/{order_id}/payment_actions/capture';
 };
 
-export type CaptureOrderPaymentErrors = {
+export type PaymentactioncaptureErrors = {
     /**
      * Malformed request syntax. Typically need to fix the JSON.
      * Body to resend successfully.
@@ -2367,9 +2017,9 @@ export type CaptureOrderPaymentErrors = {
     504: ErrorDetailedFull;
 };
 
-export type CaptureOrderPaymentError = CaptureOrderPaymentErrors[keyof CaptureOrderPaymentErrors];
+export type PaymentactioncaptureError = PaymentactioncaptureErrors[keyof PaymentactioncaptureErrors];
 
-export type CaptureOrderPaymentResponses = {
+export type PaymentactioncaptureResponses = {
     /**
      * Resource Created.
      */
@@ -2378,9 +2028,9 @@ export type CaptureOrderPaymentResponses = {
     };
 };
 
-export type CaptureOrderPaymentResponse = CaptureOrderPaymentResponses[keyof CaptureOrderPaymentResponses];
+export type PaymentactioncaptureResponse = PaymentactioncaptureResponses[keyof PaymentactioncaptureResponses];
 
-export type VoidOrderPaymentData = {
+export type PaymentactionvoidData = {
     body?: never;
     headers: {
         /**
@@ -2403,7 +2053,7 @@ export type VoidOrderPaymentData = {
     url: '/orders/{order_id}/payment_actions/void';
 };
 
-export type VoidOrderPaymentErrors = {
+export type PaymentactionvoidErrors = {
     /**
      * Malformed request syntax. Typically need to fix the JSON.
      * Body to resend successfully.
@@ -2431,9 +2081,9 @@ export type VoidOrderPaymentErrors = {
     504: ErrorDetailedFull;
 };
 
-export type VoidOrderPaymentError = VoidOrderPaymentErrors[keyof VoidOrderPaymentErrors];
+export type PaymentactionvoidError = PaymentactionvoidErrors[keyof PaymentactionvoidErrors];
 
-export type VoidOrderPaymentResponses = {
+export type PaymentactionvoidResponses = {
     /**
      * Resource Created.
      */
@@ -2442,9 +2092,9 @@ export type VoidOrderPaymentResponses = {
     };
 };
 
-export type VoidOrderPaymentResponse = VoidOrderPaymentResponses[keyof VoidOrderPaymentResponses];
+export type PaymentactionvoidResponse = PaymentactionvoidResponses[keyof PaymentactionvoidResponses];
 
-export type GetOrderTransactionsData = {
+export type GetTransactionsData = {
     body?: never;
     headers: {
         /**
@@ -2463,7 +2113,7 @@ export type GetOrderTransactionsData = {
     url: '/orders/{order_id}/transactions';
 };
 
-export type GetOrderTransactionsErrors = {
+export type GetTransactionsErrors = {
     /**
      * Not Found
      *
@@ -2482,28 +2132,11 @@ export type GetOrderTransactionsErrors = {
         type?: string;
         instance?: string;
     };
-    /**
-     * Service Unavailable
-     *
-     * Error payload for the BigCommerce API.
-     */
-    503: {
-        /**
-         * 503 HTTP status code.
-         *
-         */
-        status?: number;
-        /**
-         * The error title describing the particular error.
-         */
-        title?: string;
-        type?: string;
-    };
 };
 
-export type GetOrderTransactionsError = GetOrderTransactionsErrors[keyof GetOrderTransactionsErrors];
+export type GetTransactionsError = GetTransactionsErrors[keyof GetTransactionsErrors];
 
-export type GetOrderTransactionsResponses = {
+export type GetTransactionsResponses = {
     /**
      * Response payload for the BigCommerce Order Transactions API.
      */
@@ -2531,9 +2164,9 @@ export type GetOrderTransactionsResponses = {
     };
 };
 
-export type GetOrderTransactionsResponse = GetOrderTransactionsResponses[keyof GetOrderTransactionsResponses];
+export type GetTransactionsResponse = GetTransactionsResponses[keyof GetTransactionsResponses];
 
-export type CreateOrderRefundQuotesData = {
+export type PostrefundquoteData = {
     body: RefundQuotePost;
     headers: {
         /**
@@ -2556,25 +2189,25 @@ export type CreateOrderRefundQuotesData = {
     url: '/orders/{order_id}/payment_actions/refund_quotes';
 };
 
-export type CreateOrderRefundQuotesErrors = {
+export type PostrefundquoteErrors = {
     /**
      * This occurs when missing or unacceptable data is passed for one or more fields. Please correct the values for the fields listed in the errors object.
      */
     422: ErrorResponse;
 };
 
-export type CreateOrderRefundQuotesError = CreateOrderRefundQuotesErrors[keyof CreateOrderRefundQuotesErrors];
+export type PostrefundquoteError = PostrefundquoteErrors[keyof PostrefundquoteErrors];
 
-export type CreateOrderRefundQuotesResponses = {
+export type PostrefundquoteResponses = {
     201: {
         data?: RefundQuoteFull;
         meta?: MetaEmptyFull;
     };
 };
 
-export type CreateOrderRefundQuotesResponse = CreateOrderRefundQuotesResponses[keyof CreateOrderRefundQuotesResponses];
+export type PostrefundquoteResponse = PostrefundquoteResponses[keyof PostrefundquoteResponses];
 
-export type GetOrderRefundsData = {
+export type GetorderrefundsData = {
     body?: never;
     headers: {
         /**
@@ -2589,16 +2222,11 @@ export type GetOrderRefundsData = {
          */
         order_id: number;
     };
-    query?: {
-        /**
-         * Filters by refund payment using the BigCommerce `transaction_id`.
-         */
-        transaction_id?: string;
-    };
+    query?: never;
     url: '/orders/{order_id}/payment_actions/refunds';
 };
 
-export type GetOrderRefundsResponses = {
+export type GetorderrefundsResponses = {
     /**
      * Response payload for Refund resource.
      */
@@ -2611,9 +2239,9 @@ export type GetOrderRefundsResponses = {
     };
 };
 
-export type GetOrderRefundsResponse = GetOrderRefundsResponses[keyof GetOrderRefundsResponses];
+export type GetorderrefundsResponse = GetorderrefundsResponses[keyof GetorderrefundsResponses];
 
-export type CreateOrderRefundData = {
+export type PostrefundData = {
     body: RefundRequestPost;
     headers: {
         /**
@@ -2632,16 +2260,11 @@ export type CreateOrderRefundData = {
          */
         order_id: number;
     };
-    query?: {
-        /**
-         * Filters by refund payment using the BigCommerce `transaction_id`.
-         */
-        transaction_id?: string;
-    };
+    query?: never;
     url: '/orders/{order_id}/payment_actions/refunds';
 };
 
-export type CreateOrderRefundErrors = {
+export type PostrefundErrors = {
     /**
      * Unable to process a guest refund with store credit.
      *
@@ -2658,18 +2281,18 @@ export type CreateOrderRefundErrors = {
     };
 };
 
-export type CreateOrderRefundError = CreateOrderRefundErrors[keyof CreateOrderRefundErrors];
+export type PostrefundError = PostrefundErrors[keyof PostrefundErrors];
 
-export type CreateOrderRefundResponses = {
+export type PostrefundResponses = {
     201: {
         data?: Refund;
         meta?: MetaEmptyFull;
     };
 };
 
-export type CreateOrderRefundResponse = CreateOrderRefundResponses[keyof CreateOrderRefundResponses];
+export type PostrefundResponse = PostrefundResponses[keyof PostrefundResponses];
 
-export type GetOrderRefundData = {
+export type RefundIdGetData = {
     body?: never;
     headers: {
         /**
@@ -2687,13 +2310,13 @@ export type GetOrderRefundData = {
     url: '/orders/payment_actions/refunds/{refund_id}';
 };
 
-export type GetOrderRefundResponses = {
+export type RefundIdGetResponses = {
     200: RefundIdGet;
 };
 
-export type GetOrderRefundResponse = GetOrderRefundResponses[keyof GetOrderRefundResponses];
+export type RefundIdGetResponse = RefundIdGetResponses[keyof RefundIdGetResponses];
 
-export type GetOrdersRefundsData = {
+export type GetrefundsData = {
     body?: never;
     headers: {
         /**
@@ -2704,11 +2327,11 @@ export type GetOrdersRefundsData = {
     path?: never;
     query?: {
         /**
-         * Pass a comma-separated list of order IDs to filter the included orders. Accepts multiple values.
+         * Filter by `order_id`. Accepts multiple as comma-separated values.
          */
         'order_id:in'?: Array<number>;
         /**
-         * Pass a comma-separated list of refund IDs to filter the included refunds. Accepts multiple values.
+         * Filter by refund `id`. Accepts multiple as comma-separated values.
          */
         'id:in'?: Array<number>;
         /**
@@ -2729,10 +2352,6 @@ export type GetOrdersRefundsData = {
          */
         'created:max'?: string;
         /**
-         * Filters by refund payment using the BigCommerce `transaction_id`.
-         */
-        transaction_id?: string;
-        /**
          * Specifies the page number in a limited (paginated) list of items.
          */
         page?: number;
@@ -2744,7 +2363,7 @@ export type GetOrdersRefundsData = {
     url: '/orders/payment_actions/refunds';
 };
 
-export type GetOrdersRefundsResponses = {
+export type GetrefundsResponses = {
     /**
      * Response payload for Refund resource.
      */
@@ -2757,9 +2376,53 @@ export type GetOrdersRefundsResponses = {
     };
 };
 
-export type GetOrdersRefundsResponse = GetOrdersRefundsResponses[keyof GetOrdersRefundsResponses];
+export type GetrefundsResponse = GetrefundsResponses[keyof GetrefundsResponses];
 
-export type GetOrderMetafieldsData = {
+export type PostrefundquotesData = {
+    body: PostRefundQuotesRequest;
+    headers: {
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+         */
+        Accept: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/orders/payment_actions/refund_quotes';
+};
+
+export type PostrefundquotesErrors = {
+    /**
+     * Partial success/failure response. Status to roll up to the most severe individual failure to the whole request.
+     */
+    422: {
+        data?: Array<RefundQuoteFull>;
+        errors?: Array<FailedQuoteError>;
+        meta?: Meta;
+    };
+    /**
+     * Every request in the batch failed. The error object describes the failure for each component request.
+     */
+    503: {
+        data?: Array<RefundQuoteFull>;
+        errors?: Array<FailedQuoteError>;
+        meta?: Meta;
+    };
+};
+
+export type PostrefundquotesError = PostrefundquotesErrors[keyof PostrefundquotesErrors];
+
+export type PostrefundquotesResponses = {
+    201: {
+        data?: Array<RefundQuoteFull>;
+        errors?: Array<FailedQuoteError>;
+        meta?: Meta;
+    };
+};
+
+export type PostrefundquotesResponse = PostrefundquotesResponses[keyof PostrefundquotesResponses];
+
+export type GetOrderMetafieldsByOrderIdData = {
     body?: never;
     headers: {
         /**
@@ -2786,12 +2449,12 @@ export type GetOrderMetafieldsData = {
          */
         limit?: number;
         /**
-         * Filter based on a metafieldʼs key.
+         * Filter based on a metafield's key.
          *
          */
         key?: string;
         /**
-         * Filter based on a metafieldʼs key.
+         * Filter based on a metafield's key.
          *
          */
         namespace?: string;
@@ -2804,7 +2467,17 @@ export type GetOrderMetafieldsData = {
     url: '/orders/{order_id}/metafields';
 };
 
-export type GetOrderMetafieldsResponses = {
+export type GetOrderMetafieldsByOrderIdErrors = {
+    /**
+     * The resource was not found.
+     *
+     */
+    404: NotFound;
+};
+
+export type GetOrderMetafieldsByOrderIdError = GetOrderMetafieldsByOrderIdErrors[keyof GetOrderMetafieldsByOrderIdErrors];
+
+export type GetOrderMetafieldsByOrderIdResponses = {
     /**
      * An array of metafields and metadata.
      *
@@ -2812,14 +2485,14 @@ export type GetOrderMetafieldsResponses = {
     200: MetaFieldCollectionResponse;
 };
 
-export type GetOrderMetafieldsResponse = GetOrderMetafieldsResponses[keyof GetOrderMetafieldsResponses];
+export type GetOrderMetafieldsByOrderIdResponse = GetOrderMetafieldsByOrderIdResponses[keyof GetOrderMetafieldsByOrderIdResponses];
 
 export type CreateOrderMetafieldData = {
     /**
      * A `Metafield` object.
      *
      */
-    body: MetafieldBasePost;
+    body: MetafieldPost;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -2842,14 +2515,8 @@ export type CreateOrderMetafieldData = {
 };
 
 export type CreateOrderMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
     /**
-     * The metafield conflicts with another metafield. This can result from duplicate unique key combinations of the appʼs client ID, namespace, key, resource type, and resource ID.
+     * The `Metafield` conflicts with another `Metafield`. This can be the result of duplicate unique key combinations of the app's client ID, namespace, key, resource_type, and resource_id.
      *
      */
     409: ErrorResponse;
@@ -2872,7 +2539,7 @@ export type CreateOrderMetafieldResponses = {
 
 export type CreateOrderMetafieldResponse = CreateOrderMetafieldResponses[keyof CreateOrderMetafieldResponses];
 
-export type DeleteOrderMetafieldData = {
+export type DeleteOrderMetafieldByIdData = {
     body?: never;
     headers: {
         /**
@@ -2896,17 +2563,7 @@ export type DeleteOrderMetafieldData = {
     url: '/orders/{order_id}/metafields/{metafield_id}';
 };
 
-export type DeleteOrderMetafieldErrors = {
-    /**
-     * The resource was not found.
-     *
-     */
-    404: NotFound;
-};
-
-export type DeleteOrderMetafieldError = DeleteOrderMetafieldErrors[keyof DeleteOrderMetafieldErrors];
-
-export type DeleteOrderMetafieldResponses = {
+export type DeleteOrderMetafieldByIdResponses = {
     /**
      * An empty response.
      *
@@ -2914,9 +2571,9 @@ export type DeleteOrderMetafieldResponses = {
     204: void;
 };
 
-export type DeleteOrderMetafieldResponse = DeleteOrderMetafieldResponses[keyof DeleteOrderMetafieldResponses];
+export type DeleteOrderMetafieldByIdResponse = DeleteOrderMetafieldByIdResponses[keyof DeleteOrderMetafieldByIdResponses];
 
-export type GetOrderMetafieldData = {
+export type GetOrderMetafieldByOrderIdAndMetafieldIdData = {
     body?: never;
     headers: {
         /**
@@ -2940,17 +2597,17 @@ export type GetOrderMetafieldData = {
     url: '/orders/{order_id}/metafields/{metafield_id}';
 };
 
-export type GetOrderMetafieldErrors = {
+export type GetOrderMetafieldByOrderIdAndMetafieldIdErrors = {
     /**
-     * A metafield was not found with this query.
+     * The resource was not found.
      *
      */
     404: NotFound;
 };
 
-export type GetOrderMetafieldError = GetOrderMetafieldErrors[keyof GetOrderMetafieldErrors];
+export type GetOrderMetafieldByOrderIdAndMetafieldIdError = GetOrderMetafieldByOrderIdAndMetafieldIdErrors[keyof GetOrderMetafieldByOrderIdAndMetafieldIdErrors];
 
-export type GetOrderMetafieldResponses = {
+export type GetOrderMetafieldByOrderIdAndMetafieldIdResponses = {
     /**
      * A `Metafield` object.
      *
@@ -2958,7 +2615,7 @@ export type GetOrderMetafieldResponses = {
     200: MetafieldResponse;
 };
 
-export type GetOrderMetafieldResponse = GetOrderMetafieldResponses[keyof GetOrderMetafieldResponses];
+export type GetOrderMetafieldByOrderIdAndMetafieldIdResponse = GetOrderMetafieldByOrderIdAndMetafieldIdResponses[keyof GetOrderMetafieldByOrderIdAndMetafieldIdResponses];
 
 export type UpdateOrderMetafieldData = {
     /**
@@ -2993,14 +2650,8 @@ export type UpdateOrderMetafieldData = {
 };
 
 export type UpdateOrderMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
     /**
-     * A metafield was not found with this query.
+     * The resource was not found.
      *
      */
     404: NotFound;
@@ -3085,7 +2736,9 @@ export type UpdateGlobalOrderSettingsResponses = {
     /**
      * OK
      */
-    200: GlobalOrderSettings & {
+    200: {
+        [key: string]: unknown;
+    } & GlobalOrderSettings & {
         meta?: MetaEmptyFull;
     };
 };
@@ -3175,196 +2828,3 @@ export type UpdateChannelOrderSettingsResponses = {
 };
 
 export type UpdateChannelOrderSettingsResponse = UpdateChannelOrderSettingsResponses[keyof UpdateChannelOrderSettingsResponses];
-
-export type DeleteOrdersMetafieldsData = {
-    /**
-     * List of metafield IDs.
-     */
-    body?: Array<number>;
-    path?: never;
-    query?: never;
-    url: '/orders/metafields';
-};
-
-export type DeleteOrdersMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields deletion with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-
-export type DeleteOrdersMetafieldsError = DeleteOrdersMetafieldsErrors[keyof DeleteOrdersMetafieldsErrors];
-
-export type DeleteOrdersMetafieldsResponses = {
-    /**
-     * Response object for metafields deletion with success.
-     *
-     */
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-
-export type DeleteOrdersMetafieldsResponse = DeleteOrdersMetafieldsResponses[keyof DeleteOrdersMetafieldsResponses];
-
-export type GetOrdersMetafieldsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         *
-         */
-        page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products.
-         *
-         */
-        limit?: number;
-        /**
-         * Filter based on a metafieldʼs key.
-         *
-         */
-        key?: string;
-        /**
-         * Filter using a comma-separated list of metafield keys. Could be used with vanilla `key` query parameter.
-         */
-        'key:in'?: Array<string>;
-        /**
-         * Filter based on a metafieldʼs key.
-         *
-         */
-        namespace?: string;
-        /**
-         * Filter using a comma-separated list of metafield namespaces. Can be used with vanilla `namespace` query parameter.
-         */
-        'namespace:in'?: Array<string>;
-        /**
-         * Sort direction. Acceptable values are: `asc`, `desc`.
-         *
-         */
-        direction?: 'asc' | 'desc';
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-        /**
-         * Filter items by date created. For example, `date_created=2019-09-04T00:00:00`. Returns metafields created on this date.
-         */
-        date_created?: string;
-        /**
-         * Filter items by date modified. For example, `date_modified=2019-09-04T00:00:00`. Returns metafields modified on this date.
-         */
-        date_modified?: string;
-        /**
-         * Filter items by minimum date created. For example, `date_created:min=2019-09-04T00:00:00` or `date_created:min=2019-09-04`. Returns metafields created after this date.
-         */
-        'date_created:min'?: string;
-        /**
-         * Filter items by maximum date created. For example, `date_created:max=2019-09-04T00:00:00` or `date_created:max=2019-09-04`. Returns metafields created before this date.
-         */
-        'date_created:max'?: string;
-        /**
-         * Filter items by minimum date modified. For example, `date_modified:min=2019-09-04T00:00:00` or `date_modified:min=2019-09-04`. Returns metafields modified after this date.
-         */
-        'date_modified:min'?: string;
-        /**
-         * Filter items by maximum date modified. For example, `date_modified:max=2019-09-04T00:00:00` or `date_modified:max=2019-09-04`. Returns metafields modified before this date.
-         */
-        'date_modified:max'?: string;
-    };
-    url: '/orders/metafields';
-};
-
-export type GetOrdersMetafieldsResponses = {
-    /**
-     * List of `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponse;
-};
-
-export type GetOrdersMetafieldsResponse = GetOrdersMetafieldsResponses[keyof GetOrdersMetafieldsResponses];
-
-export type CreateOrdersMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        /**
-         * The ID for the order with which the metafield is associated.
-         *
-         */
-        resource_id: number;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/orders/metafields';
-};
-
-export type CreateOrdersMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type CreateOrdersMetafieldsError = CreateOrdersMetafieldsErrors[keyof CreateOrdersMetafieldsErrors];
-
-export type CreateOrdersMetafieldsResponses = {
-    /**
-     * List of created `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponsePostPut;
-};
-
-export type CreateOrdersMetafieldsResponse = CreateOrdersMetafieldsResponses[keyof CreateOrdersMetafieldsResponses];
-
-export type UpdateOrdersMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        /**
-         * The ID of metafield to update.
-         *
-         */
-        id: number;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/orders/metafields';
-};
-
-export type UpdateOrdersMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type UpdateOrdersMetafieldsError = UpdateOrdersMetafieldsErrors[keyof UpdateOrdersMetafieldsErrors];
-
-export type UpdateOrdersMetafieldsResponses = {
-    /**
-     * List of updated `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponsePostPut;
-};
-
-export type UpdateOrdersMetafieldsResponse = UpdateOrdersMetafieldsResponses[keyof UpdateOrdersMetafieldsResponses];

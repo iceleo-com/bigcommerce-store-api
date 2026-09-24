@@ -68,6 +68,9 @@ export type Meta = {
     };
 };
 
+/**
+ * Request payload for relative inventory adjustments.
+ */
 export type AdjustmentsRelativeRequest = {
     /**
      * Reason for the adjustment operation.

@@ -14,7 +14,7 @@ export type CartUpdateRequest = {
     };
     gift_certificate?: {
         name: string;
-        theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+        theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
         amount: number;
         quantity: number;
         sender: {
@@ -34,7 +34,7 @@ export type CartCreatePostData = {
     custom_items?: CartPostCustomItem;
     gift_certificates?: Array<{
         name: string;
-        theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+        theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
         amount: number;
         quantity: number;
         sender: {
@@ -66,7 +66,7 @@ export type CartRequestData = {
     }>;
     gift_certificates?: Array<{
         name: string;
-        theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+        theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
         amount: number;
         quantity: number;
         sender: {
@@ -83,7 +83,6 @@ export type CartRequestData = {
 };
 export type CartUpdatePutRequestData = {
     customer_id?: number;
-    version?: number;
 };
 export type LineItemRequestData = {
     quantity: number;
@@ -101,7 +100,7 @@ export type ProductOptionSelection = {
 };
 export type LineItemGiftCertificateRequestData = {
     name: string;
-    theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+    theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
     amount: number;
     quantity: number;
     sender: {
@@ -116,8 +115,8 @@ export type LineItemGiftCertificateRequestData = {
 };
 export type CartFull = {
     id?: string;
+    parent_id?: string;
     customer_id?: number;
-    channel_id?: number;
     email?: string;
     currency?: {
         code?: string;
@@ -125,7 +124,6 @@ export type CartFull = {
     tax_included?: boolean;
     base_amount?: number;
     discount_amount?: number;
-    manual_discount_amount?: number;
     cart_amount?: number;
     coupons?: Array<AppliedCoupon>;
     discounts?: Array<{
@@ -135,6 +133,7 @@ export type CartFull = {
     line_items?: LineItemsGet;
     created_time?: string;
     updated_time?: string;
+    channel_id?: number;
     locale?: string;
     promotions?: {
         banners?: {
@@ -144,7 +143,6 @@ export type CartFull = {
             text?: string;
         };
     };
-    version?: number;
 };
 export type Currency = {
     code?: string;
@@ -158,7 +156,7 @@ export type LineItems = {
 export type ItemGiftCertificate = {
     id?: string;
     name?: string;
-    theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+    theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
     amount: number;
     is_taxable?: boolean;
     sender: {
@@ -176,7 +174,7 @@ export type ItemGiftCertificateGet = {
     name?: string;
     theme?: string;
     amount?: number;
-    taxable?: boolean;
+    is_taxable?: boolean;
     sender?: {
         name?: string;
         email?: string;
@@ -238,14 +236,13 @@ export type ItemDigital = {
 };
 export type ItemDigitalGet = {
     id?: string;
-    parent_id?: string;
     variant_id?: number;
     product_id?: number;
     sku?: string;
     name?: string;
     url?: string;
     quantity?: number;
-    taxable?: boolean;
+    is_taxable?: boolean;
     image_url?: string;
     discounts?: Array<{
         id?: string | number;
@@ -267,9 +264,13 @@ export type ItemDigitalGet = {
     sale_price?: number;
     extended_list_price?: number;
     extended_sale_price?: number;
-    is_require_shipping?: boolean;
-    is_mutable?: boolean;
-    added_by_promotion?: boolean;
+    options?: Array<{
+        name?: string;
+        nameId?: number;
+        value?: string;
+        valueId?: number;
+    }>;
+} & {
     download_file_urls?: Array<string>;
     download_page_url?: string;
     download_size?: string;
@@ -367,7 +368,6 @@ export type AppliedCoupon = {
     readonly id?: string;
     coupon_type?: '0' | '1' | '2' | '3' | '4' | '5';
     readonly discounted_amount?: number;
-    display_name?: string;
 };
 export type AppliedDiscount = {
     id?: string | number;
@@ -391,8 +391,6 @@ export type ItemCustomGet = {
     name?: string;
     quantity?: string;
     list_price?: string;
-    extended_list_price?: number;
-    image_url?: string;
 };
 export type CartPostVariant = {
     quantity?: number;
@@ -426,7 +424,7 @@ export type CartLineItemUpdatePut = {
     line_item?: CartPostVariant | CartPostModifier;
     gift_certificates?: Array<{
         name: string;
-        theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+        theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
         amount: number;
         quantity: number;
         sender: {
@@ -440,22 +438,12 @@ export type CartLineItemUpdatePut = {
         message?: string;
     }>;
     custom_items?: CartPostCustomItem;
-    version?: number;
-};
-export type CartLineItemDelete = {
-    version?: number;
-};
-export type RedirectUrlsPost = {
-    query_params?: {
-        key?: string;
-        value?: string;
-    };
 };
 export type CartLineItemUpdatePost = {
-    line_items?: Array<CartPostVariant> | Array<CartPostModifier>;
+    line_items?: unknown;
     gift_certificates?: Array<{
         name: string;
-        theme: 'Birthday' | 'Boy' | 'Celebration' | 'Christmas' | 'General' | 'Girl';
+        theme: 'birthday.html' | 'boy.html' | 'celebration.html' | 'christmas.html' | 'general.html' | 'girl.html';
         amount: number;
         quantity: number;
         sender: {
@@ -469,14 +457,12 @@ export type CartLineItemUpdatePost = {
         message?: string;
     }>;
     custom_items?: CartPostCustomItem;
-    version?: number;
 };
 export type CartPostCustomItem = Array<{
     sku?: string;
     name?: string;
     quantity?: number;
     list_price?: number;
-    image_url?: string;
 }>;
 export type CartSettings = {
     allow_purchasing?: boolean;
@@ -511,14 +497,19 @@ export type LineItemsGet = {
 };
 export type ItemPhysicalGet = {
     id?: string;
-    parent_id?: string;
     variant_id: number;
     product_id: number;
     sku?: string;
     name?: string;
+    weight?: number;
+    dimensions?: {
+        height?: number;
+        width?: number;
+        depth?: number;
+    };
     url?: string;
     quantity: number;
-    taxable?: boolean;
+    is_taxable?: boolean;
     image_url?: string;
     discounts?: Array<{
         id?: string | number;
@@ -540,9 +531,12 @@ export type ItemPhysicalGet = {
     sale_price?: number;
     extended_list_price?: number;
     extended_sale_price?: number;
-    is_require_shipping?: boolean;
-    is_mutable?: boolean;
-    added_by_promotion?: boolean;
+    options?: Array<{
+        name?: string;
+        nameId?: number;
+        value?: string;
+        valueId?: number | string;
+    }>;
     gift_wrapping?: {
         name?: string;
         message?: string;
@@ -557,15 +551,14 @@ export type NotFound = {
 };
 export type MetafieldResponse = {
     data?: Metafield;
-};
+} & CollectionMeta;
 export type Metafield = MetafieldBase & {
-    id?: string;
+    id?: number;
     date_created?: string;
     date_modified?: string;
-    readonly owner_client_id?: string;
 };
 export type MetafieldBase = {
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
     namespace?: string;
     key?: string;
     value?: string;
@@ -573,6 +566,7 @@ export type MetafieldBase = {
     resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart';
     readonly resource_id?: string;
 };
+export type MetafieldPost = MetafieldBasePost;
 export type MetafieldBasePost = {
     permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
     namespace: string;
@@ -582,50 +576,7 @@ export type MetafieldBasePost = {
 };
 export type MetaFieldCollectionResponse = {
     data?: Metafield;
-    meta?: MetaCollectionOpen;
-};
-export type MetaFieldCollectionResponseBatch = {
-    data?: Array<Metafield>;
     meta?: CollectionMeta;
-};
-export type MetaFieldCollectionResponseBatchPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<unknown>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type _Error = {
-    status?: number;
-    title?: string;
-    type?: string;
-    errors?: ErrorDetail;
-};
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-export type WriteCollectionSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
-export type WriteCollectionPartialSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
 };
 export type CollectionMeta = {
     pagination?: {
@@ -658,23 +609,14 @@ export type MetaCollectionOpen = {
 };
 export type AppliedCouponWritable = {
     code: string;
-    display_name?: string;
-};
-export type MetafieldWritable = MetafieldBaseWritable & {
-    id?: string;
-    date_created?: string;
-    date_modified?: string;
 };
 export type MetafieldBaseWritable = {
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
     namespace?: string;
     key?: string;
     value?: string;
     description?: string;
     resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart';
-};
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
 };
 export type MetaCollectionOpenWritable = {
     [key: string]: unknown;
@@ -683,21 +625,14 @@ export type Accept = string;
 export type ContentType = string;
 export type CartId = string;
 export type CartId2 = string;
-export type LineItems2 = Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options'>;
+export type LineItems2 = 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options';
 export type PageParam = number;
 export type MetafieldIdParam = number;
 export type MetafieldKeyParam = string;
-export type MetafieldKeyInParam = Array<string>;
 export type MetafieldNamespaceParam = string;
-export type MetafieldNamespaceInParam = Array<string>;
 export type LimitParam = number;
-export type DateCreatedMin = string;
-export type DateCreatedMax = string;
-export type DateModifiedMax = string;
-export type DateModifiedMin = string;
 export type DirectionParam = 'asc' | 'desc';
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-export type CreateCartData = {
+export type CreateACartData = {
     body: CartCreatePostData;
     headers: {
         Accept: string;
@@ -705,18 +640,15 @@ export type CreateCartData = {
     };
     path?: never;
     query?: {
-        include?: Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners'>;
+        include?: 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners';
     };
     url: '/carts';
 };
-export type CreateCartResponses = {
-    201: {
-        data?: CartFull;
-        meta?: MetaCollectionOpen;
-    };
+export type CreateACartResponses = {
+    201: CartFull;
 };
-export type CreateCartResponse = CreateCartResponses[keyof CreateCartResponses];
-export type AddCartLineItemsData = {
+export type CreateACartResponse = CreateACartResponses[keyof CreateACartResponses];
+export type AddCartLineItemData = {
     body: CartLineItemUpdatePost;
     headers: {
         Accept: string;
@@ -726,19 +658,16 @@ export type AddCartLineItemsData = {
         cartId: string;
     };
     query?: {
-        include?: Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners'>;
+        include?: 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners';
     };
     url: '/carts/{cartId}/items';
 };
-export type AddCartLineItemsResponses = {
-    201: {
-        data?: CartFull;
-        meta?: MetaCollectionOpen;
-    };
+export type AddCartLineItemResponses = {
+    201: CartFull;
 };
-export type AddCartLineItemsResponse = AddCartLineItemsResponses[keyof AddCartLineItemsResponses];
+export type AddCartLineItemResponse = AddCartLineItemResponses[keyof AddCartLineItemResponses];
 export type CreateCartRedirectUrlData = {
-    body?: RedirectUrlsPost;
+    body?: never;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -761,7 +690,7 @@ export type CreateCartRedirectUrlResponses = {
 };
 export type CreateCartRedirectUrlResponse = CreateCartRedirectUrlResponses[keyof CreateCartRedirectUrlResponses];
 export type DeleteCartLineItemData = {
-    body?: CartLineItemDelete;
+    body?: never;
     headers: {
         Accept: string;
     };
@@ -770,14 +699,10 @@ export type DeleteCartLineItemData = {
         itemId: string;
     };
     query?: {
-        include?: Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners'>;
+        include?: 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners';
     };
     url: '/carts/{cartId}/items/{itemId}';
 };
-export type DeleteCartLineItemErrors = {
-    409: ErrorResponse;
-};
-export type DeleteCartLineItemError = DeleteCartLineItemErrors[keyof DeleteCartLineItemErrors];
 export type DeleteCartLineItemResponses = {
     200: CartFull;
     204: void;
@@ -794,22 +719,15 @@ export type UpdateCartLineItemData = {
         itemId: string;
     };
     query?: {
-        include?: Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners'>;
+        include?: 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners';
     };
     url: '/carts/{cartId}/items/{itemId}';
 };
-export type UpdateCartLineItemErrors = {
-    409: ErrorResponse;
-};
-export type UpdateCartLineItemError = UpdateCartLineItemErrors[keyof UpdateCartLineItemErrors];
 export type UpdateCartLineItemResponses = {
-    200: {
-        data?: CartFull;
-        meta?: MetaCollectionOpen;
-    };
+    200: CartFull;
 };
 export type UpdateCartLineItemResponse = UpdateCartLineItemResponses[keyof UpdateCartLineItemResponses];
-export type DeleteCartData = {
+export type DeleteACartData = {
     body?: never;
     headers: {
         Accept: string;
@@ -820,11 +738,11 @@ export type DeleteCartData = {
     query?: never;
     url: '/carts/{cartId}';
 };
-export type DeleteCartResponses = {
+export type DeleteACartResponses = {
     204: void;
 };
-export type DeleteCartResponse = DeleteCartResponses[keyof DeleteCartResponses];
-export type GetCartData = {
+export type DeleteACartResponse = DeleteACartResponses[keyof DeleteACartResponses];
+export type GetACartData = {
     body?: never;
     headers: {
         Accept: string;
@@ -833,21 +751,18 @@ export type GetCartData = {
         cartId: string;
     };
     query?: {
-        include?: Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners'>;
+        include?: 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners';
     };
     url: '/carts/{cartId}';
 };
-export type GetCartErrors = {
+export type GetACartErrors = {
     404: unknown;
 };
-export type GetCartResponses = {
-    200: {
-        data?: CartFull;
-        meta?: MetaCollectionOpen;
-    };
+export type GetACartResponses = {
+    200: CartFull;
 };
-export type GetCartResponse = GetCartResponses[keyof GetCartResponses];
-export type UpdateCartData = {
+export type GetACartResponse = GetACartResponses[keyof GetACartResponses];
+export type UpdateACartData = {
     body: CartUpdatePutRequestData;
     headers: {
         Accept: string;
@@ -857,21 +772,14 @@ export type UpdateCartData = {
         cartId: string;
     };
     query?: {
-        include?: Array<'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners'>;
+        include?: 'redirect_urls' | 'line_items.physical_items.options' | 'line_items.digital_items.options' | 'promotions.banners';
     };
     url: '/carts/{cartId}';
 };
-export type UpdateCartErrors = {
-    409: ErrorResponse;
+export type UpdateACartResponses = {
+    201: CartFull;
 };
-export type UpdateCartError = UpdateCartErrors[keyof UpdateCartErrors];
-export type UpdateCartResponses = {
-    201: {
-        data?: CartFull;
-        meta?: MetaCollectionOpen;
-    };
-};
-export type UpdateCartResponse = UpdateCartResponses[keyof UpdateCartResponses];
+export type UpdateACartResponse = UpdateACartResponses[keyof UpdateACartResponses];
 export type GetGlobalCartSettingsData = {
     body?: never;
     headers: {
@@ -960,7 +868,7 @@ export type UpdateChannelCartSettingsResponses = {
     200: ChannelCartSettingsResponse;
 };
 export type UpdateChannelCartSettingsResponse = UpdateChannelCartSettingsResponses[keyof UpdateChannelCartSettingsResponses];
-export type GetCartMetafieldsData = {
+export type GetAllCartMetafieldsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -977,38 +885,36 @@ export type GetCartMetafieldsData = {
     };
     url: '/carts/{cart_id}/metafields';
 };
-export type GetCartMetafieldsResponses = {
-    200: MetafieldResponse;
-};
-export type GetCartMetafieldsResponse = GetCartMetafieldsResponses[keyof GetCartMetafieldsResponses];
-export type CreateCartMetafieldData = {
-    body: MetafieldBasePost;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path: {
-        cart_id: string;
-    };
-    query?: never;
-    url: '/carts/{cart_id}/metafields';
-};
-export type CreateCartMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
+export type GetAllCartMetafieldsErrors = {
     409: ErrorResponse;
     422: ErrorResponse;
 };
-export type CreateCartMetafieldError = CreateCartMetafieldErrors[keyof CreateCartMetafieldErrors];
-export type CreateCartMetafieldResponses = {
+export type GetAllCartMetafieldsError = GetAllCartMetafieldsErrors[keyof GetAllCartMetafieldsErrors];
+export type GetAllCartMetafieldsResponses = {
+    200: MetafieldResponse;
+};
+export type GetAllCartMetafieldsResponse = GetAllCartMetafieldsResponses[keyof GetAllCartMetafieldsResponses];
+export type CreateCartMetafieldsByCartIdData = {
+    body: MetafieldPost;
+    headers: {
+        Accept: string;
+        'Content-Type': string;
+    };
+    path: {
+        cart_id: string;
+    };
+    query?: never;
+    url: '/carts/{cart_id}/metafields';
+};
+export type CreateCartMetafieldsByCartIdErrors = {
+    404: NotFound;
+};
+export type CreateCartMetafieldsByCartIdError = CreateCartMetafieldsByCartIdErrors[keyof CreateCartMetafieldsByCartIdErrors];
+export type CreateCartMetafieldsByCartIdResponses = {
     200: MetaFieldCollectionResponse;
 };
-export type CreateCartMetafieldResponse = CreateCartMetafieldResponses[keyof CreateCartMetafieldResponses];
-export type DeleteCartMetafieldData = {
+export type CreateCartMetafieldsByCartIdResponse = CreateCartMetafieldsByCartIdResponses[keyof CreateCartMetafieldsByCartIdResponses];
+export type DeleteCartMetafieldByIdData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1020,15 +926,11 @@ export type DeleteCartMetafieldData = {
     query?: never;
     url: '/carts/{cart_id}/metafields/{metafield_id}';
 };
-export type DeleteCartMetafieldErrors = {
-    404: NotFound;
-};
-export type DeleteCartMetafieldError = DeleteCartMetafieldErrors[keyof DeleteCartMetafieldErrors];
-export type DeleteCartMetafieldResponses = {
+export type DeleteCartMetafieldByIdResponses = {
     204: void;
 };
-export type DeleteCartMetafieldResponse = DeleteCartMetafieldResponses[keyof DeleteCartMetafieldResponses];
-export type GetCartMetafieldData = {
+export type DeleteCartMetafieldByIdResponse = DeleteCartMetafieldByIdResponses[keyof DeleteCartMetafieldByIdResponses];
+export type GetACartMetafieldData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1046,16 +948,18 @@ export type GetCartMetafieldData = {
     };
     url: '/carts/{cart_id}/metafields/{metafield_id}';
 };
-export type GetCartMetafieldErrors = {
-    404: NotFound;
+export type GetACartMetafieldErrors = {
+    409: ErrorResponse;
+    422: ErrorResponse;
+    500: unknown;
 };
-export type GetCartMetafieldError = GetCartMetafieldErrors[keyof GetCartMetafieldErrors];
-export type GetCartMetafieldResponses = {
+export type GetACartMetafieldError = GetACartMetafieldErrors[keyof GetACartMetafieldErrors];
+export type GetACartMetafieldResponses = {
     200: MetafieldResponse;
 };
-export type GetCartMetafieldResponse = GetCartMetafieldResponses[keyof GetCartMetafieldResponses];
-export type UpdateCartMetafieldData = {
-    body: MetafieldBasePost;
+export type GetACartMetafieldResponse = GetACartMetafieldResponses[keyof GetACartMetafieldResponses];
+export type UpdateCartMetafieldsByCartIdData = {
+    body: MetafieldPost;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -1067,104 +971,11 @@ export type UpdateCartMetafieldData = {
     query?: never;
     url: '/carts/{cart_id}/metafields/{metafield_id}';
 };
-export type UpdateCartMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
+export type UpdateCartMetafieldsByCartIdErrors = {
+    404: NotFound;
 };
-export type UpdateCartMetafieldError = UpdateCartMetafieldErrors[keyof UpdateCartMetafieldErrors];
-export type UpdateCartMetafieldResponses = {
+export type UpdateCartMetafieldsByCartIdError = UpdateCartMetafieldsByCartIdErrors[keyof UpdateCartMetafieldsByCartIdErrors];
+export type UpdateCartMetafieldsByCartIdResponses = {
     200: MetaFieldCollectionResponse;
 };
-export type UpdateCartMetafieldResponse = UpdateCartMetafieldResponses[keyof UpdateCartMetafieldResponses];
-export type DeleteCartsMetafieldsData = {
-    body?: Array<number>;
-    path?: never;
-    query?: never;
-    url: '/carts/metafields';
-};
-export type DeleteCartsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-export type DeleteCartsMetafieldsError = DeleteCartsMetafieldsErrors[keyof DeleteCartsMetafieldsErrors];
-export type DeleteCartsMetafieldsResponses = {
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-export type DeleteCartsMetafieldsResponse = DeleteCartsMetafieldsResponses[keyof DeleteCartsMetafieldsResponses];
-export type GetCartsMetafieldsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        page?: number;
-        limit?: number;
-        key?: string;
-        'key:in'?: Array<string>;
-        namespace?: string;
-        'namespace:in'?: Array<string>;
-        direction?: 'asc' | 'desc';
-        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-        'date_modified:min'?: string;
-        'date_modified:max'?: string;
-        'date_created:min'?: string;
-        'date_created:max'?: string;
-    };
-    url: '/carts/metafields';
-};
-export type GetCartsMetafieldsResponses = {
-    200: MetaFieldCollectionResponseBatch;
-};
-export type GetCartsMetafieldsResponse = GetCartsMetafieldsResponses[keyof GetCartsMetafieldsResponses];
-export type CreateCartsMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        resource_id: string;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/carts/metafields';
-};
-export type CreateCartsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-export type CreateCartsMetafieldsError = CreateCartsMetafieldsErrors[keyof CreateCartsMetafieldsErrors];
-export type CreateCartsMetafieldsResponses = {
-    200: MetaFieldCollectionResponseBatchPostPut;
-};
-export type CreateCartsMetafieldsResponse = CreateCartsMetafieldsResponses[keyof CreateCartsMetafieldsResponses];
-export type UpdateCartsMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        id: string;
-    }>;
-    path?: never;
-    query?: never;
-    url: '/carts/metafields';
-};
-export type UpdateCartsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-export type UpdateCartsMetafieldsError = UpdateCartsMetafieldsErrors[keyof UpdateCartsMetafieldsErrors];
-export type UpdateCartsMetafieldsResponses = {
-    200: MetaFieldCollectionResponseBatchPostPut;
-};
-export type UpdateCartsMetafieldsResponse = UpdateCartsMetafieldsResponses[keyof UpdateCartsMetafieldsResponses];
+export type UpdateCartMetafieldsByCartIdResponse = UpdateCartMetafieldsByCartIdResponses[keyof UpdateCartMetafieldsByCartIdResponses];

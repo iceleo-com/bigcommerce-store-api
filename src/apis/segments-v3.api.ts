@@ -31,6 +31,7 @@ export class SegmentsV3Api {
 
      **Limits**
      * Limit of 10 concurrent requests.
+     * Max total segements allowed per store is 1000.
 
      */
     segmentsPostRequest(
@@ -98,7 +99,7 @@ export class SegmentsV3Api {
     /**
      * Add Shopper Profiles to a Segment
      *
-     * Add *Shopper Profiles* to a specific *Segment*. 
+     * Add *Shopper Profiles* to a specific *Segment*.
 
      **Limits**
      * Limit of *Shopper Profiles* per request is `50`.
@@ -134,7 +135,7 @@ export class SegmentsV3Api {
     /**
      * Get All Shopper Profiles
      *
-     * Returns a paginated *Shopper Profiles* list. 
+     * Returns a paginated *Shopper Profiles* list.
 
      */
     getShopperList(

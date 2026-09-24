@@ -4,12 +4,14 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2' | (string & {});
 };
 
+export type CurrencyPost = CurrencyBase;
+
 /**
- * currency_Post
+ * currency_Base
  *
  * Currency Object
  */
-export type CurrencyPost = {
+export type CurrencyBase = {
     /**
      * Specifies the store’s default currency display format. For write operations, only true value is accepted. When set to true, it cannot be unset, only overridden.
      */
@@ -64,129 +66,7 @@ export type CurrencyPost = {
     is_transactional?: boolean;
 };
 
-/**
- * currency_Put
- *
- * Currency Object
- */
-export type CurrencyPut = {
-    /**
-     * Specifies the store’s default currency display format. For write operations, only true value is accepted. When set to true, it cannot be unset, only overridden.
-     */
-    is_default?: boolean;
-    /**
-     * 2-letter ISO Alpha-2 code for this currency’s country.
-     */
-    country_iso2?: string;
-    /**
-     * Amount of this currency that is equivalent to one U.S. dollar.(Float, Float as String, Integer)
-     */
-    currency_exchange_rate?: string;
-    /**
-     * Specifies whether to use the Open Exchange Rates service to update the currency conversion. A value of false specifies a static conversion value. auto_update only applies to non-transactional currencies.
-     */
-    auto_update?: boolean;
-    /**
-     * Specifies whether this currency’s symbol appears to the “left” or “right” of the numeric amount.
-     */
-    token_location?: string;
-    /**
-     * Symbol for this currency.
-     */
-    token?: string;
-    /**
-     * Symbol used as the decimal separator in this currency.
-     */
-    decimal_token?: string;
-    /**
-     * Symbol used as the thousands separator in this currency.
-     */
-    thousands_token?: string;
-    /**
-     * Number of decimal places to show for this currency.
-     */
-    decimal_places?: number;
-    /**
-     * Name of the currency.
-     */
-    name?: string;
-    /**
-     * If the currency is active on the store.
-     */
-    enabled?: boolean;
-    /**
-     * Indicates if the currency is set as transactional or not. False means display only currency
-     */
-    is_transactional?: boolean;
-};
-
-/**
- * currency_Base
- *
- * Currency Object
- */
-export type CurrencyBase = {
-    /**
-     * Specifies the store’s default currency display format. For write operations, only true value is accepted. When set to true, it cannot be unset, only overridden.
-     */
-    is_default?: boolean;
-    /**
-     * 2-letter ISO Alpha-2 code for this currency’s country.
-     */
-    country_iso2?: string;
-    /**
-     * Default 3-letter ISO 4217 code for this currency.
-     */
-    default_for_country_codes?: Array<string>;
-    /**
-     * 3-letter ISO 4217 code for this currency.
-     */
-    currency_code?: string;
-    /**
-     * Amount of this currency that is equivalent to one U.S. dollar.(Float, Float as String, Integer)
-     */
-    currency_exchange_rate?: string;
-    /**
-     * Specifies whether to use the Open Exchange Rates service to update the currency conversion. A value of false specifies a static conversion value. auto_update only applies to non-transactional currencies.
-     */
-    auto_update?: boolean;
-    /**
-     * Specifies whether this currency’s symbol appears to the “left” or “right” of the numeric amount.
-     */
-    token_location?: string;
-    /**
-     * Symbol for this currency.
-     */
-    token?: string;
-    /**
-     * Symbol used as the decimal separator in this currency.
-     */
-    decimal_token?: string;
-    /**
-     * Symbol used as the thousands separator in this currency.
-     */
-    thousands_token?: string;
-    /**
-     * Number of decimal places to show for this currency.
-     */
-    decimal_places?: number;
-    /**
-     * Name of the currency.
-     */
-    name?: string;
-    /**
-     * If the currency is active on the store.
-     */
-    enabled?: boolean;
-    /**
-     * Indicates if the currency is set as transactional or not. False means display only currency
-     */
-    is_transactional?: boolean;
-    /**
-     * Default currency name
-     */
-    use_default_name?: boolean;
-};
+export type CurrencyPut = CurrencyBase;
 
 /**
  * currency_Full
@@ -199,38 +79,26 @@ export type CurrencyFull = CurrencyBase & {
     /**
      * Date the currency was last updated, created or modified.
      */
-    readonly last_updated?: string;
+    last_updated?: string;
 };
 
 /**
  * currency_Full
  */
-export type CurrencyFullWritable = CurrencyBase;
+export type CurrencyFullWritable = CurrencyBase & {
+    /**
+     * Date the currency was last updated, created or modified.
+     */
+    last_updated?: string;
+};
 
 export type StoreHash = string;
-
-/**
- * The ID of the subject currency.
- */
-export type CurrencyIdPath = string;
-
-/**
- * Specifies the page number in a limited (paginated) list of currencies.
- *
- */
-export type PageNumberQuery = number;
-
-/**
- * Controls the number of items per page in a limited (paginated) list of currencies.
- *
- */
-export type LimitQuery = number;
 
 export type Accept = string;
 
 export type ContentType = string;
 
-export type DeleteCurrenciesData = {
+export type DeleteAllCurrenciesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -240,15 +108,15 @@ export type DeleteCurrenciesData = {
     url: '/currencies';
 };
 
-export type DeleteCurrenciesResponses = {
+export type DeleteAllCurrenciesResponses = {
     204: {
         [key: string]: unknown;
     };
 };
 
-export type DeleteCurrenciesResponse = DeleteCurrenciesResponses[keyof DeleteCurrenciesResponses];
+export type DeleteAllCurrenciesResponse = DeleteAllCurrenciesResponses[keyof DeleteAllCurrenciesResponses];
 
-export type GetCurrenciesData = {
+export type GetAllCurrenciesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -269,14 +137,14 @@ export type GetCurrenciesData = {
     url: '/currencies';
 };
 
-export type GetCurrenciesResponses = {
+export type GetAllCurrenciesResponses = {
     200: Array<CurrencyFull>;
 };
 
-export type GetCurrenciesResponse = GetCurrenciesResponses[keyof GetCurrenciesResponses];
+export type GetAllCurrenciesResponse = GetAllCurrenciesResponses[keyof GetAllCurrenciesResponses];
 
-export type CreateCurrencyData = {
-    body?: CurrencyPost;
+export type CreateACurrencyData = {
+    body?: CurrencyBase;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -286,20 +154,20 @@ export type CreateCurrencyData = {
     url: '/currencies';
 };
 
-export type CreateCurrencyResponses = {
+export type CreateACurrencyResponses = {
     200: CurrencyFull;
 };
 
-export type CreateCurrencyResponse = CreateCurrencyResponses[keyof CreateCurrencyResponses];
+export type CreateACurrencyResponse = CreateACurrencyResponses[keyof CreateACurrencyResponses];
 
-export type DeleteCurrencyData = {
+export type DeleteACurrencyData = {
     body?: never;
     headers: {
         Accept: string;
     };
     path: {
         /**
-         * The ID of the subject currency.
+         * Currency ID
          */
         id: string;
     };
@@ -307,22 +175,22 @@ export type DeleteCurrencyData = {
     url: '/currencies/{id}';
 };
 
-export type DeleteCurrencyResponses = {
+export type DeleteACurrencyResponses = {
     204: {
         [key: string]: unknown;
     };
 };
 
-export type DeleteCurrencyResponse = DeleteCurrencyResponses[keyof DeleteCurrencyResponses];
+export type DeleteACurrencyResponse = DeleteACurrencyResponses[keyof DeleteACurrencyResponses];
 
-export type GetCurrencyData = {
+export type GetACurrencyData = {
     body?: never;
     headers: {
         Accept: string;
     };
     path: {
         /**
-         * The ID of the subject currency.
+         * Currency ID
          */
         id: string;
     };
@@ -330,21 +198,21 @@ export type GetCurrencyData = {
     url: '/currencies/{id}';
 };
 
-export type GetCurrencyResponses = {
+export type GetACurrencyResponses = {
     200: CurrencyFull;
 };
 
-export type GetCurrencyResponse = GetCurrencyResponses[keyof GetCurrencyResponses];
+export type GetACurrencyResponse = GetACurrencyResponses[keyof GetACurrencyResponses];
 
-export type UpdateCurrencyData = {
-    body?: CurrencyPut;
+export type UpdateACurrencyData = {
+    body?: CurrencyBase;
     headers: {
         Accept: string;
         'Content-Type': string;
     };
     path: {
         /**
-         * The ID of the subject currency.
+         * Currency ID
          */
         id: string;
     };
@@ -352,8 +220,8 @@ export type UpdateCurrencyData = {
     url: '/currencies/{id}';
 };
 
-export type UpdateCurrencyResponses = {
+export type UpdateACurrencyResponses = {
     200: CurrencyFull;
 };
 
-export type UpdateCurrencyResponse = UpdateCurrencyResponses[keyof UpdateCurrencyResponses];
+export type UpdateACurrencyResponse = UpdateACurrencyResponses[keyof UpdateACurrencyResponses];

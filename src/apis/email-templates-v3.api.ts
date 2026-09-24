@@ -14,6 +14,9 @@ export class EmailTemplatesV3Api {
      * Get Email Templates
      *
      * Get a list of email templates.
+
+     > #### Note
+     > The `/marketing/email-templates` endpoints only work after opting into the new email management experience from your storeʼs control panel. You can opt-in by visiting Email Templates. If you have already opted in, visiting the Email Templates page will return a `404` error, and you will be able to access the new Transactional Emails page.
      */
     getEmailTemplates(
         query?: EmailTemplatesV3ApiSpecs.GetEmailTemplatesData['query'],
@@ -28,6 +31,9 @@ export class EmailTemplatesV3Api {
      * Get an Email Template
      *
      * Get a single global email template or a channel-specific email template override.
+
+     > #### Note
+     > The `/marketing/email-templates` endpoints only work after opting into the new email management experience from your storeʼs control panel. You can opt-in by visiting [Email Templates](https://login.bigcommerce.com/deep-links/manage/marketing/email-templates). If you have already opted in, visiting the [Email Templates](https://login.bigcommerce.com/deep-links/manage/marketing/email-templates) page will return a `404` error, and you will be able to access the new [Transactional Emails](https://login.bigcommerce.com/deep-links/manage/transactional-emails) page.
      */
     getEmailTemplate(
         templateName: EmailTemplatesV3ApiSpecs.GetEmailTemplateData['path']['template-name'],

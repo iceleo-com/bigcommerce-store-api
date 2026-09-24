@@ -18,7 +18,11 @@ export declare class TaxPropertiesV3Api {
         meta?: TaxPropertiesV3ApiSpecs.MetaOpen;
     }>>>;
     deleteTaxProperties(query?: TaxPropertiesV3ApiSpecs.DeleteTaxPropertiesData['query']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<400, Required<unknown>> | RequestErrorResponse<409, Required<unknown>>>;
-    getProductsTaxProperties(query?: TaxPropertiesV3ApiSpecs.GetProductsTaxPropertiesData['query']): Promise<RequestErrorResponse<400, Required<unknown>> | RequestSuccessResponse<200, Required<{
+    getProductTaxProperties(query?: TaxPropertiesV3ApiSpecs.GetProductTaxPropertiesData['query']): Promise<RequestErrorResponse<400, Required<unknown>> | RequestSuccessResponse<200, Required<{
+        data?: Array<TaxPropertiesV3ApiSpecs.ProductTaxProperty>;
+        meta?: TaxPropertiesV3ApiSpecs.MetaOpen;
+    }>>>;
+    getProductsTaxProperties(...args: Parameters<TaxPropertiesV3Api['getProductTaxProperties']>): Promise<RequestErrorResponse<400, Required<unknown>> | RequestSuccessResponse<200, Required<{
         data?: Array<TaxPropertiesV3ApiSpecs.ProductTaxProperty>;
         meta?: TaxPropertiesV3ApiSpecs.MetaOpen;
     }>>>;

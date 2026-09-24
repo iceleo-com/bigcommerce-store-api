@@ -103,41 +103,6 @@ export type Accept = string;
  */
 export type ContentType = string;
 
-/**
- * A comma-separated string that specifies a list of association IDs to delete.
- */
-export type IdInQuery = Array<number>;
-
-/**
- * Return results or act upon only template associations in the specified channel.
- */
-export type ChannelIdQuery = number;
-
-/**
- * A comma-separated list of entity IDs to return or act upon. Must be used together with the `type` filter. Currently, all supported entities have integer-type IDs.
- */
-export type EntityIdInQuery = Array<number>;
-
-/**
- * Filter associations by type.
- */
-export type TypeQuery = 'product' | 'category' | 'brand' | 'page';
-
-/**
- * Number of results to return per page.
- */
-export type LimitQuery = number;
-
-/**
- * Which page number to return, based on the limit value. Used to paginate large collections.
- */
-export type PageQuery = number;
-
-/**
- * Optional toggle to filter for exclusively valid or invalid associations entries. An invalid entry is one where its file name does not match up to an existing custom layout file in the currently active theme for the channel.
- */
-export type IsValidQuery = boolean;
-
 export type DeleteCustomTemplateAssociationsData = {
     body?: never;
     headers: {
@@ -149,21 +114,21 @@ export type DeleteCustomTemplateAssociationsData = {
     path?: never;
     query?: {
         /**
-         * A comma-separated string that specifies a list of association IDs to delete.
+         * List of Association IDs to delete explicitly.
          */
-        'id:in'?: Array<number>;
+        'id:in'?: number;
         /**
-         * Return results or act upon only template associations in the specified channel.
+         * List of Entity IDs to delete explicitly. Must be used together with "type"
+         */
+        'entity_id:in'?: number;
+        /**
+         * Channel ID provided to delete all custom template associations for a given Channel
          */
         channel_id?: number;
         /**
-         * Filter associations by type.
+         * Filter associations by type
          */
         type?: 'product' | 'category' | 'brand' | 'page';
-        /**
-         * A comma-separated list of entity IDs to return or act upon. Must be used together with the `type` filter. Currently, all supported entities have integer-type IDs.
-         */
-        'entity_id:in'?: Array<number>;
     };
     url: '/storefront/custom-template-associations';
 };
@@ -188,25 +153,25 @@ export type GetCustomTemplateAssociationsData = {
     path?: never;
     query?: {
         /**
-         * Return results or act upon only template associations in the specified channel.
+         * Channel ID to return only custom template associations for a given Channel
          */
         channel_id?: number;
         /**
-         * A comma-separated list of entity IDs to return or act upon. Must be used together with the `type` filter. Currently, all supported entities have integer-type IDs.
+         * Filter by a list of entity IDs. Must be used together with "type" filter.
          */
-        'entity_id:in'?: Array<number>;
+        'entity_id:in'?: string;
         /**
-         * Filter associations by type.
-         */
-        type?: 'product' | 'category' | 'brand' | 'page';
-        /**
-         * Number of results to return per page.
+         * Number of results to return per page
          */
         limit?: number;
         /**
-         * Which page number to return, based on the limit value. Used to paginate large collections.
+         * Which page number to return, based on the page size. Used to paginate large collections.
          */
         page?: number;
+        /**
+         * Filter associations by type
+         */
+        type?: 'product' | 'category' | 'brand' | 'page';
         /**
          * Optional toggle to filter for exclusively valid or invalid associations entries. An invalid entry is one where its file name does not match up to an existing custom layout file in the currently active theme for the channel.
          */

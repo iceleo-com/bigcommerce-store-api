@@ -10,7 +10,7 @@ export type TaxZone = {
      */
     id?: number;
     /**
-     * The human-readable name for this tax zone. The name appears in the store control panel.
+     * The human-readable name for this tax zone. The name displays on the merchant's control panel.
      */
     name?: string;
     /**
@@ -65,7 +65,7 @@ export type TaxZonePut = {
      */
     id: number;
     /**
-     * The human-readable name for this tax zone. The name appears in the store control panel.
+     * The human-readable name for this tax zone. The name displays on the merchant's control panel.
      */
     name?: string;
     /**
@@ -116,7 +116,7 @@ export type TaxZonePut = {
 
 export type TaxZonePost = {
     /**
-     * The human-readable name for this tax zone. The name appears in the store control panel.
+     * The human-readable name for this tax zone. The name displays on the merchant's control panel.
      */
     name: string;
     /**
@@ -188,7 +188,7 @@ export type TaxRate = {
      */
     id?: number;
     /**
-     * The human-readable name for this tax zone. The name appears in the store control panel and may be visible to shoppers, depending on store tax settings.
+     * The human-readable name for this tax zone. The name displays on the merchant control panel and to shoppers, depending on store tax settings.
      */
     name?: string;
     /**
@@ -224,7 +224,7 @@ export type TaxRatePut = {
      */
     id: number;
     /**
-     * The human-readable name for this tax zone. The name appears in the store control panel and may be visible to shoppers, depending on store tax settings.
+     * The human-readable name for this tax zone. The name displays on the merchant control panel and to shoppers, depending on store tax settings.
      */
     name?: string;
     /**
@@ -256,7 +256,7 @@ export type TaxRatePost = {
      */
     enabled?: boolean;
     /**
-     * The human-readable name for this tax zone. The name appears in the store control panel and may be visible to shoppers, depending on store tax settings.
+     * The human-readable name for this tax zone. The name displays on the merchant control panel and to shoppers, depending on store tax settings.
      */
     name: string;
     /**

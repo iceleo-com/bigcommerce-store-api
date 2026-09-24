@@ -222,11 +222,9 @@ export type WidgetSchemaConditional = {
     operator?: string;
     value?: Array<unknown>;
 };
-export type ChannelId = string;
 export type TemplateUuid = string;
 export type FilterWidgetTemplateUuidParam = string;
 export type FilterWidgetTemplateKindParam = string;
-export type FilterWidgetNameParam = string;
 export type FilterTemplateFileParam = string;
 export type RequiredTemplateFile = string;
 export type LayoutUuid = string;
@@ -235,13 +233,11 @@ export type WidgetUuid = string;
 export type FilterWidgetUuidParam = string;
 export type PageParam = number;
 export type LimitParam = number;
-export type FilterVersionUuid = string;
 export type QueryWidgetsParam = string;
 export type Accept = string;
 export type ContentType = string;
-export type ChannelIdInParam = Array<number>;
-export type SiteIdInParam = Array<number>;
-export type NameInParam = Array<string>;
+export type ChannelIdInParam = string;
+export type SiteIdInParam = string;
 export type GetWidgetTemplatesData = {
     body?: never;
     headers: {
@@ -253,7 +249,7 @@ export type GetWidgetTemplatesData = {
         page?: number;
         limit?: number;
         widget_template_kind?: string;
-        'channel_id:in'?: Array<number>;
+        'channel_id:in'?: number;
     };
     url: '/content/widget-templates';
 };
@@ -285,6 +281,7 @@ export type CreateWidgetTemplateError = CreateWidgetTemplateErrors[keyof CreateW
 export type CreateWidgetTemplateResponses = {
     200: {
         data?: WidgetTemplateFull;
+    } & {
         meta?: Meta;
     };
 };
@@ -346,6 +343,7 @@ export type GetWidgetTemplateError = GetWidgetTemplateErrors[keyof GetWidgetTemp
 export type GetWidgetTemplateResponses = {
     200: {
         data?: WidgetTemplateFull;
+    } & {
         meta?: Meta;
     };
 };
@@ -370,6 +368,7 @@ export type UpdateWidgetTemplateError = UpdateWidgetTemplateErrors[keyof UpdateW
 export type UpdateWidgetTemplateResponses = {
     200: {
         data?: WidgetTemplateFull;
+    } & {
         meta?: Meta;
     };
 };
@@ -386,9 +385,9 @@ export type GetWidgetsData = {
         widget_template_kind?: string;
         widget_template_uuid?: string;
         name?: string;
-        'name:in'?: Array<string>;
-        'channel_id:in'?: Array<number>;
-        'site_id:in'?: Array<number>;
+        'name:in'?: Array<unknown>;
+        'channel_id:in'?: number;
+        'site_id:in'?: string;
     };
     url: '/content/widgets';
 };
@@ -504,8 +503,8 @@ export type GetPlacementsData = {
         template_file?: string;
         widget_uuid?: string;
         widget_template_uuid?: string;
-        'channel_id:in'?: Array<number>;
-        'site_id:in'?: Array<number>;
+        'channel_id:in'?: string;
+        'site_id:in'?: string;
     };
     url: '/content/placements';
 };
@@ -616,7 +615,6 @@ export type GetContentRegionsData = {
     path?: never;
     query: {
         template_file: string;
-        channel_id?: string;
     };
     url: '/content/regions';
 };

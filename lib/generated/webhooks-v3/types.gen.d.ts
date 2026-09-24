@@ -148,7 +148,9 @@ export type StoreCustomerPaymentInstrumentDefaultUpdated = WebhookCallbackBase &
         id?: number;
     };
 };
-export type StoreOrderWildcard = unknown;
+export type StoreOrderWildcard = {
+    [key: string]: unknown;
+};
 export type StoreOrderCreated = WebhookCallbackBase & {
     data?: {
         type?: string;
@@ -195,7 +197,9 @@ export type StoreOrderRefundCreated = WebhookCallbackBase & {
         };
     };
 };
-export type StoreProductWildcard = unknown;
+export type StoreProductWildcard = {
+    [key: string]: unknown;
+};
 export type StoreProductDeleted = WebhookCallbackBase & {
     data?: {
         type?: string;
@@ -236,7 +240,9 @@ export type StoreProductInventoryOrderUpdated = WebhookCallbackBase & {
         };
     };
 };
-export type StoreShipmentWildcard = unknown;
+export type StoreShipmentWildcard = {
+    [key: string]: unknown;
+};
 export type StoreShipmentCreated = WebhookCallbackBase & {
     data?: {
         type?: string;
@@ -258,7 +264,9 @@ export type StoreShipmentDeleted = WebhookCallbackBase & {
         orderId?: number;
     };
 };
-export type StoreSkuWildcard = unknown;
+export type StoreSkuWildcard = {
+    [key: string]: unknown;
+};
 export type StoreSkuCreated = WebhookCallbackBase & {
     data?: {
         type?: string;
@@ -323,7 +331,9 @@ export type StoreInformationUpdated = WebhookCallbackBase & {
         type?: string;
     };
 };
-export type StoreSubscriberWildcard = unknown;
+export type StoreSubscriberWildcard = {
+    [key: string]: unknown;
+};
 export type StoreSubscriberCreated = WebhookCallbackBase & {
     data?: {
         type?: string;
@@ -351,12 +361,15 @@ export type ErrorDetailedFull = {
     status?: number;
     title?: string;
     type?: string;
-    errors?: unknown;
+    errors?: {
+        [key: string]: unknown;
+    };
 };
 export type WebhookPut = {
     scope?: string;
     destination?: string;
     is_active?: boolean;
+    events_history_enabled?: boolean;
     headers?: {
         [key: string]: string;
     } | null;
@@ -365,17 +378,28 @@ export type WebhookBase = {
     scope: string;
     destination: string;
     is_active?: boolean;
+    events_history_enabled?: boolean;
     headers?: {
         [key: string]: string;
     } | null;
 };
-export type WebhookFull = {
+export type WebhookFull = WebhookBase & {
     id?: number;
     client_id?: string;
     store_hash?: string;
     created_at?: number;
     updated_at?: number;
-} & WebhookBase;
+};
+export type HistoryEvent = {
+    scope?: string;
+    store_id?: string;
+    data?: {
+        [key: string]: unknown;
+    };
+    hash?: string;
+    created_at?: number;
+    producer?: string;
+};
 export type Pagination = {
     total?: number;
     count?: number;
@@ -401,6 +425,8 @@ export type CallbackCategoryData = {
         id?: number;
     };
 };
+export type StoreCategoryWildcardWritable = unknown;
+export type StoreChannelWildcardWritable = unknown;
 export type StoreChannelCreatedWritable = WebhookCallbackBaseWritable & {
     data?: {
         id?: number;
@@ -411,6 +437,7 @@ export type StoreChannelUpdatedWritable = WebhookCallbackBaseWritable & {
         id?: number;
     };
 };
+export type StoreCustomerWildcardWritable = unknown;
 export type StoreCustomerCreatedWritable = WebhookCallbackBaseWritable & {
     data?: {
         id?: number;
@@ -443,9 +470,11 @@ export type FilterByScope = string;
 export type FilterByDestination = string;
 export type FilterPageParam = number;
 export type FilterLimitParam = number;
+export type FilterMaxCreatedAtParam = string;
+export type FilterMinCreatedAtParam = string;
 export type Accept = string;
 export type ContentType = string;
-export type GetWebhooksData = {
+export type GetAllWebhooksData = {
     body?: never;
     headers?: {
         Accept?: string;
@@ -461,11 +490,12 @@ export type GetWebhooksData = {
     };
     url: '/hooks';
 };
-export type GetWebhooksErrors = {
+export type GetAllWebhooksErrors = {
+    400: ErrorFull;
     401: ErrorFull;
 };
-export type GetWebhooksError = GetWebhooksErrors[keyof GetWebhooksErrors];
-export type GetWebhooksResponses = {
+export type GetAllWebhooksError = GetAllWebhooksErrors[keyof GetAllWebhooksErrors];
+export type GetAllWebhooksResponses = {
     200: {
         data?: Array<{
             id?: number;
@@ -485,7 +515,7 @@ export type GetWebhooksResponses = {
         };
     };
 };
-export type GetWebhooksResponse = GetWebhooksResponses[keyof GetWebhooksResponses];
+export type GetAllWebhooksResponse = GetAllWebhooksResponses[keyof GetAllWebhooksResponses];
 export type CreateWebhooksData = {
     body?: WebhookBase;
     headers?: {
@@ -505,11 +535,13 @@ export type CreateWebhooksError = CreateWebhooksErrors[keyof CreateWebhooksError
 export type CreateWebhooksResponses = {
     200: {
         data?: WebhookFull;
-        meta?: unknown;
+        meta?: {
+            pagination?: Pagination;
+        };
     };
 };
 export type CreateWebhooksResponse = CreateWebhooksResponses[keyof CreateWebhooksResponses];
-export type DeleteWebhookData = {
+export type DeleteAWebhookData = {
     body?: never;
     headers?: {
         Accept?: string;
@@ -521,7 +553,7 @@ export type DeleteWebhookData = {
     query?: never;
     url: '/hooks/{webhook_id}';
 };
-export type DeleteWebhookResponses = {
+export type DeleteAWebhookResponses = {
     200: {
         data?: {
             id?: number;
@@ -536,10 +568,12 @@ export type DeleteWebhookResponses = {
             created_at?: number;
             updated_at?: number;
         };
-        meta?: unknown;
+        meta?: {
+            pagination?: Pagination;
+        };
     };
 };
-export type DeleteWebhookResponse = DeleteWebhookResponses[keyof DeleteWebhookResponses];
+export type DeleteAWebhookResponse = DeleteAWebhookResponses[keyof DeleteAWebhookResponses];
 export type GetWebhookData = {
     body?: never;
     headers?: {
@@ -553,6 +587,7 @@ export type GetWebhookData = {
     url: '/hooks/{webhook_id}';
 };
 export type GetWebhookErrors = {
+    400: ErrorFull;
     401: ErrorFull;
     404: ErrorFull;
 };
@@ -572,11 +607,13 @@ export type GetWebhookResponses = {
             created_at?: number;
             updated_at?: number;
         };
-        meta?: unknown;
+        meta?: {
+            pagination?: Pagination;
+        };
     };
 };
 export type GetWebhookResponse = GetWebhookResponses[keyof GetWebhookResponses];
-export type UpdateWebhookData = {
+export type UpdateAWebhookData = {
     body?: WebhookPut;
     headers?: {
         Accept?: string;
@@ -588,7 +625,7 @@ export type UpdateWebhookData = {
     query?: never;
     url: '/hooks/{webhook_id}';
 };
-export type UpdateWebhookResponses = {
+export type UpdateAWebhookResponses = {
     200: {
         data?: {
             id?: number;
@@ -603,10 +640,12 @@ export type UpdateWebhookResponses = {
             created_at?: number;
             updated_at?: number;
         };
-        meta?: unknown;
+        meta?: {
+            pagination?: Pagination;
+        };
     };
 };
-export type UpdateWebhookResponse = UpdateWebhookResponses[keyof UpdateWebhookResponses];
+export type UpdateAWebhookResponse = UpdateAWebhookResponses[keyof UpdateAWebhookResponses];
 export type GetHooksAdminData = {
     body?: never;
     path?: never;
@@ -616,6 +655,7 @@ export type GetHooksAdminData = {
     url: '/hooks/admin';
 };
 export type GetHooksAdminErrors = {
+    400: ErrorFull;
     401: ErrorFull;
 };
 export type GetHooksAdminError = GetHooksAdminErrors[keyof GetHooksAdminErrors];
@@ -653,7 +693,7 @@ export type GetHooksAdminResponses = {
     };
 };
 export type GetHooksAdminResponse = GetHooksAdminResponses[keyof GetHooksAdminResponses];
-export type UpdateHooksAdminData = {
+export type PutHooksAdminData = {
     body: {
         emails?: Array<string>;
     };
@@ -661,13 +701,38 @@ export type UpdateHooksAdminData = {
     query?: never;
     url: '/hooks/admin';
 };
-export type UpdateHooksAdminErrors = {
+export type PutHooksAdminErrors = {
     400: ErrorFull;
     401: ErrorFull;
     422: ErrorDetailedFull;
 };
-export type UpdateHooksAdminError = UpdateHooksAdminErrors[keyof UpdateHooksAdminErrors];
-export type UpdateHooksAdminResponses = {
+export type PutHooksAdminError = PutHooksAdminErrors[keyof PutHooksAdminErrors];
+export type PutHooksAdminResponses = {
     204: void;
 };
-export type UpdateHooksAdminResponse = UpdateHooksAdminResponses[keyof UpdateHooksAdminResponses];
+export type PutHooksAdminResponse = PutHooksAdminResponses[keyof PutHooksAdminResponses];
+export type GetWebhookEventsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        page?: number;
+        limit?: number;
+        'created_at:max'?: string;
+        'created_at:min'?: string;
+    };
+    url: '/hooks/events';
+};
+export type GetWebhookEventsErrors = {
+    400: ErrorFull;
+    401: ErrorFull;
+};
+export type GetWebhookEventsError = GetWebhookEventsErrors[keyof GetWebhookEventsErrors];
+export type GetWebhookEventsResponses = {
+    200: {
+        data?: Array<HistoryEvent>;
+        meta?: {
+            pagination?: Pagination;
+        };
+    };
+};
+export type GetWebhookEventsResponse = GetWebhookEventsResponses[keyof GetWebhookEventsResponses];

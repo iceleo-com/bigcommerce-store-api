@@ -342,13 +342,6 @@ export type ScriptBase = {
      */
     enabled?: boolean;
     channel_id?: number;
-    /**
-     * Array of [Subresource integrity (SRI) hashes](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) for external SRC scripts that lets browsers validate the contents of the script.
-     *
-     * The hash is the `integrity` attribute on the `script` tag. You can add up to five hashes for a script and generate them using any SRI standard-supported algorithm, including SHA-256, SHA-384, and SHA-512. If you provide more than one hash, they will all be added to the `integrity` attribute in order, separated by whitespace.
-     *
-     */
-    integrity_hashes?: Array<string>;
 };
 
 /**
@@ -384,12 +377,12 @@ export type FilterWidgetUuidParam = string;
 /**
  * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
  */
-export type FilterIncludeFieldsParam = Array<string>;
+export type FilterIncludeFieldsParam = string;
 
 /**
  * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
  */
-export type FilterExcludeFieldsParam = Array<string>;
+export type FilterExcludeFieldsParam = string;
 
 /**
  * Specifies the page number in a limited (paginated) list of products.
@@ -468,9 +461,9 @@ export type GetScriptsData = {
          */
         direction?: 'asc' | 'desc';
         /**
-         * Filters list of scripts by the associated channel ID.
+         * Filters list of scripts by the associated channel_id.
          */
-        'channel_id:in'?: Array<number>;
+        'channel_id:in'?: Array<unknown>;
     };
     url: '/content/scripts';
 };

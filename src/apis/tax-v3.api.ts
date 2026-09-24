@@ -19,12 +19,19 @@ export class TaxV3Api {
      > * Requires **read** permissions on the **Information and Settings** scope.
 
      */
-    getTaxProviderConnection(
-        providerId: TaxV3ApiSpecs.GetTaxProviderConnectionData['path']['provider_id'],
+    providerConnectionGet(
+        providerId: TaxV3ApiSpecs.ProviderConnectionGetData['path']['provider_id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<TaxV3ApiSpecs.GetTaxProviderConnectionResponses[200]>>,RequestErrorResponse<404, Required<TaxV3ApiSpecs.GetTaxProviderConnectionErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<TaxV3ApiSpecs.ProviderConnectionGetResponses[200]>>,RequestErrorResponse<404, Required<TaxV3ApiSpecs.ProviderConnectionGetErrors[404]>>>({
             path: `v3/tax/providers/${providerId}/connection`,
         });
+    }
+
+    /**
+     * @deprecated Use `providerConnectionGet` instead.
+     */
+    getTaxProviderConnection(...args: Parameters<TaxV3Api['providerConnectionGet']>) {
+        return this.providerConnectionGet(...args);
     }
 
     /**
@@ -34,22 +41,29 @@ export class TaxV3Api {
      - [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication) (developer.mozilla.org) credentials
      - (optional) Tax provider profile used in customized endpoint urls for tax provider calls. This is only available for tax providers that support this feature.
 
-     The configured `username`, `password`, and `profile` (if available) are used to authenticate each API request to the Tax Provider from the associated store. 
-     The tax provider's `profile` will be included in the URL for [Tax Provider API](/docs/rest-contracts/tax) endpoints. 
+     The configured `username`, `password`, and `profile` (if available) is used to authenticate each API request to the Tax Provider from the associated store. 
+     The tax provider's `profile` will be included in the url for [Tax Provider API](/docs/rest-contracts/tax) endpoints. 
 
      > #### Note
      > * This operation will be logged in [Store Logs](https://support.bigcommerce.com/s/article/Using-Store-Logs) under **Staff Actions**.
      > * Requires **write** permissions on the **Information and Settings** [scope](/docs/start/authentication/api-accounts#oauth-scopes).
      */
-    updateTaxProviderConnection(
-        providerId: TaxV3ApiSpecs.UpdateTaxProviderConnectionData['path']['provider_id'],
-        requestBody: TaxV3ApiSpecs.UpdateTaxProviderConnectionData['body'],
+    providerConnectionPut(
+        providerId: TaxV3ApiSpecs.ProviderConnectionPutData['path']['provider_id'],
+        requestBody: TaxV3ApiSpecs.ProviderConnectionPutData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<TaxV3ApiSpecs.UpdateTaxProviderConnectionResponses[200]>>,(RequestErrorResponse<404, Required<TaxV3ApiSpecs.UpdateTaxProviderConnectionErrors[404]>> | RequestErrorResponse<422, Required<TaxV3ApiSpecs.UpdateTaxProviderConnectionErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<TaxV3ApiSpecs.ProviderConnectionPutResponses[200]>>,(RequestErrorResponse<404, Required<TaxV3ApiSpecs.ProviderConnectionPutErrors[404]>> | RequestErrorResponse<422, Required<TaxV3ApiSpecs.ProviderConnectionPutErrors[422]>>)>({
             path: `v3/tax/providers/${providerId}/connection`,
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `providerConnectionPut` instead.
+     */
+    updateTaxProviderConnection(...args: Parameters<TaxV3Api['providerConnectionPut']>) {
+        return this.providerConnectionPut(...args);
     }
 
     /**
@@ -62,11 +76,18 @@ export class TaxV3Api {
      > * Requires **write** permissions on the **Information and Settings** [scope](/docs/start/authentication/api-accounts#oauth-scopes).
 
      */
-    deleteTaxProviderConnection(
-        providerId: TaxV3ApiSpecs.DeleteTaxProviderConnectionData['path']['provider_id'],
+    providerConnectionDelete(
+        providerId: TaxV3ApiSpecs.ProviderConnectionDeleteData['path']['provider_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<200, Required<TaxV3ApiSpecs.DeleteTaxProviderConnectionResponses[200]>>,RequestErrorResponse<404, Required<TaxV3ApiSpecs.DeleteTaxProviderConnectionErrors[404]>>>({
+        return this.request.delete<RequestSuccessResponse<200, Required<TaxV3ApiSpecs.ProviderConnectionDeleteResponses[200]>>,RequestErrorResponse<404, Required<TaxV3ApiSpecs.ProviderConnectionDeleteErrors[404]>>>({
             path: `v3/tax/providers/${providerId}/connection`,
         });
+    }
+
+    /**
+     * @deprecated Use `providerConnectionDelete` instead.
+     */
+    deleteTaxProviderConnection(...args: Parameters<TaxV3Api['providerConnectionDelete']>) {
+        return this.providerConnectionDelete(...args);
     }
 }

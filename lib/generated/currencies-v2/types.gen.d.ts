@@ -1,7 +1,8 @@
 export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2' | (string & {});
 };
-export type CurrencyPost = {
+export type CurrencyPost = CurrencyBase;
+export type CurrencyBase = {
     is_default?: boolean;
     country_iso2?: string;
     currency_code: string;
@@ -16,49 +17,18 @@ export type CurrencyPost = {
     enabled?: boolean;
     is_transactional?: boolean;
 };
-export type CurrencyPut = {
-    is_default?: boolean;
-    country_iso2?: string;
-    currency_exchange_rate?: string;
-    auto_update?: boolean;
-    token_location?: string;
-    token?: string;
-    decimal_token?: string;
-    thousands_token?: string;
-    decimal_places?: number;
-    name?: string;
-    enabled?: boolean;
-    is_transactional?: boolean;
-};
-export type CurrencyBase = {
-    is_default?: boolean;
-    country_iso2?: string;
-    default_for_country_codes?: Array<string>;
-    currency_code?: string;
-    currency_exchange_rate?: string;
-    auto_update?: boolean;
-    token_location?: string;
-    token?: string;
-    decimal_token?: string;
-    thousands_token?: string;
-    decimal_places?: number;
-    name?: string;
-    enabled?: boolean;
-    is_transactional?: boolean;
-    use_default_name?: boolean;
-};
+export type CurrencyPut = CurrencyBase;
 export type CurrencyFull = CurrencyBase & {
     readonly id?: number;
-    readonly last_updated?: string;
+    last_updated?: string;
 };
-export type CurrencyFullWritable = CurrencyBase;
+export type CurrencyFullWritable = CurrencyBase & {
+    last_updated?: string;
+};
 export type StoreHash = string;
-export type CurrencyIdPath = string;
-export type PageNumberQuery = number;
-export type LimitQuery = number;
 export type Accept = string;
 export type ContentType = string;
-export type DeleteCurrenciesData = {
+export type DeleteAllCurrenciesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -67,13 +37,13 @@ export type DeleteCurrenciesData = {
     query?: never;
     url: '/currencies';
 };
-export type DeleteCurrenciesResponses = {
+export type DeleteAllCurrenciesResponses = {
     204: {
         [key: string]: unknown;
     };
 };
-export type DeleteCurrenciesResponse = DeleteCurrenciesResponses[keyof DeleteCurrenciesResponses];
-export type GetCurrenciesData = {
+export type DeleteAllCurrenciesResponse = DeleteAllCurrenciesResponses[keyof DeleteAllCurrenciesResponses];
+export type GetAllCurrenciesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -85,12 +55,12 @@ export type GetCurrenciesData = {
     };
     url: '/currencies';
 };
-export type GetCurrenciesResponses = {
+export type GetAllCurrenciesResponses = {
     200: Array<CurrencyFull>;
 };
-export type GetCurrenciesResponse = GetCurrenciesResponses[keyof GetCurrenciesResponses];
-export type CreateCurrencyData = {
-    body?: CurrencyPost;
+export type GetAllCurrenciesResponse = GetAllCurrenciesResponses[keyof GetAllCurrenciesResponses];
+export type CreateACurrencyData = {
+    body?: CurrencyBase;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -99,11 +69,11 @@ export type CreateCurrencyData = {
     query?: never;
     url: '/currencies';
 };
-export type CreateCurrencyResponses = {
+export type CreateACurrencyResponses = {
     200: CurrencyFull;
 };
-export type CreateCurrencyResponse = CreateCurrencyResponses[keyof CreateCurrencyResponses];
-export type DeleteCurrencyData = {
+export type CreateACurrencyResponse = CreateACurrencyResponses[keyof CreateACurrencyResponses];
+export type DeleteACurrencyData = {
     body?: never;
     headers: {
         Accept: string;
@@ -114,13 +84,13 @@ export type DeleteCurrencyData = {
     query?: never;
     url: '/currencies/{id}';
 };
-export type DeleteCurrencyResponses = {
+export type DeleteACurrencyResponses = {
     204: {
         [key: string]: unknown;
     };
 };
-export type DeleteCurrencyResponse = DeleteCurrencyResponses[keyof DeleteCurrencyResponses];
-export type GetCurrencyData = {
+export type DeleteACurrencyResponse = DeleteACurrencyResponses[keyof DeleteACurrencyResponses];
+export type GetACurrencyData = {
     body?: never;
     headers: {
         Accept: string;
@@ -131,12 +101,12 @@ export type GetCurrencyData = {
     query?: never;
     url: '/currencies/{id}';
 };
-export type GetCurrencyResponses = {
+export type GetACurrencyResponses = {
     200: CurrencyFull;
 };
-export type GetCurrencyResponse = GetCurrencyResponses[keyof GetCurrencyResponses];
-export type UpdateCurrencyData = {
-    body?: CurrencyPut;
+export type GetACurrencyResponse = GetACurrencyResponses[keyof GetACurrencyResponses];
+export type UpdateACurrencyData = {
+    body?: CurrencyBase;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -147,7 +117,7 @@ export type UpdateCurrencyData = {
     query?: never;
     url: '/currencies/{id}';
 };
-export type UpdateCurrencyResponses = {
+export type UpdateACurrencyResponses = {
     200: CurrencyFull;
 };
-export type UpdateCurrencyResponse = UpdateCurrencyResponses[keyof UpdateCurrencyResponses];
+export type UpdateACurrencyResponse = UpdateACurrencyResponses[keyof UpdateACurrencyResponses];

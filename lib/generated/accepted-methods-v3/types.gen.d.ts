@@ -23,9 +23,7 @@ export type PaymentMethodFull = {
     type: string;
 };
 export type Accept = string;
-export type OrderIdQuery = number;
-export type CheckoutIdQuery = string;
-export type GetPaymentMethodsData = {
+export type PaymentsMethodsGetData = {
     body?: never;
     headers: {
         Accept: string;
@@ -37,7 +35,7 @@ export type GetPaymentMethodsData = {
     };
     url: '/payments/methods';
 };
-export type GetPaymentMethodsErrors = {
+export type PaymentsMethodsGetErrors = {
     400: {
         status: number;
         title: string;
@@ -89,8 +87,8 @@ export type GetPaymentMethodsErrors = {
         };
     };
 };
-export type GetPaymentMethodsError = GetPaymentMethodsErrors[keyof GetPaymentMethodsErrors];
-export type GetPaymentMethodsResponses = {
+export type PaymentsMethodsGetError = PaymentsMethodsGetErrors[keyof PaymentsMethodsGetErrors];
+export type PaymentsMethodsGetResponses = {
     200: {
         data?: Array<PaymentMethodFull>;
         meta?: {
@@ -98,4 +96,4 @@ export type GetPaymentMethodsResponses = {
         };
     };
 };
-export type GetPaymentMethodsResponse = GetPaymentMethodsResponses[keyof GetPaymentMethodsResponses];
+export type PaymentsMethodsGetResponse = PaymentsMethodsGetResponses[keyof PaymentsMethodsGetResponses];

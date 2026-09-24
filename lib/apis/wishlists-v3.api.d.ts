@@ -5,7 +5,7 @@ export * as WishlistsV3ApiSpecs from '../generated/wishlists-v3';
 export declare class WishlistsV3Api {
     private readonly request;
     constructor(request: RequestService);
-    getWishlists(query?: WishlistsV3ApiSpecs.GetWishlistsData['query']): Promise<RequestSuccessResponse<200, Required<{
+    wishlistsGet(query?: WishlistsV3ApiSpecs.WishlistsGetData['query']): Promise<RequestSuccessResponse<200, Required<{
         data?: Array<WishlistsV3ApiSpecs.WishlistFull>;
         meta?: WishlistsV3ApiSpecs.MetaCollection;
     }>> | RequestErrorResponse<401, Required<{
@@ -17,7 +17,19 @@ export declare class WishlistsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    createWishlist(requestBody: WishlistsV3ApiSpecs.CreateWishlistData['body']): Promise<RequestSuccessResponse<201, Required<{
+    getWishlists(...args: Parameters<WishlistsV3Api['wishlistsGet']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: Array<WishlistsV3ApiSpecs.WishlistFull>;
+        meta?: WishlistsV3ApiSpecs.MetaCollection;
+    }>> | RequestErrorResponse<401, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>> | RequestErrorResponse<500, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    wishlistsPost(requestBody: WishlistsV3ApiSpecs.WishlistsPostData['body']): Promise<RequestSuccessResponse<201, Required<{
         data?: WishlistsV3ApiSpecs.WishlistFull;
         meta?: {
             [key: string]: unknown;
@@ -31,7 +43,21 @@ export declare class WishlistsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    deleteWishlistItem(wishlistId: WishlistsV3ApiSpecs.DeleteWishlistItemData['path']['wishlist_id'], itemId: WishlistsV3ApiSpecs.DeleteWishlistItemData['path']['item_id']): Promise<RequestSuccessResponse<200, Required<{
+    createWishlist(...args: Parameters<WishlistsV3Api['wishlistsPost']>): Promise<RequestSuccessResponse<201, Required<{
+        data?: WishlistsV3ApiSpecs.WishlistFull;
+        meta?: {
+            [key: string]: unknown;
+        };
+    }>> | RequestErrorResponse<401, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>> | RequestErrorResponse<500, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    wishlistsItemsByIdDelete(wishlistId: WishlistsV3ApiSpecs.WishlistsItemsByIdDeleteData['path']['wishlist_id'], itemId: WishlistsV3ApiSpecs.WishlistsItemsByIdDeleteData['path']['item_id']): Promise<RequestSuccessResponse<200, Required<{
         data?: WishlistsV3ApiSpecs.WishlistFull;
         meta?: {
             [key: string]: unknown;
@@ -47,7 +73,7 @@ export declare class WishlistsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    getWishlist(wishlistId: WishlistsV3ApiSpecs.GetWishlistData['path']['wishlist_id']): Promise<RequestSuccessResponse<200, Required<{
+    deleteWishlistItem(...args: Parameters<WishlistsV3Api['wishlistsItemsByIdDelete']>): Promise<RequestSuccessResponse<200, Required<{
         data?: WishlistsV3ApiSpecs.WishlistFull;
         meta?: {
             [key: string]: unknown;
@@ -63,7 +89,39 @@ export declare class WishlistsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    updateWishlist(wishlistId: WishlistsV3ApiSpecs.UpdateWishlistData['path']['wishlist_id'], requestBody: WishlistsV3ApiSpecs.UpdateWishlistData['body']): Promise<RequestSuccessResponse<201, Required<{
+    wishlistsByIdGet(wishlistId: WishlistsV3ApiSpecs.WishlistsByIdGetData['path']['wishlist_id']): Promise<RequestSuccessResponse<200, Required<{
+        data?: WishlistsV3ApiSpecs.WishlistFull;
+        meta?: {
+            [key: string]: unknown;
+        };
+    }>> | RequestErrorResponse<401, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>> | RequestErrorResponse<404, Required<{
+        [key: string]: unknown;
+    }>> | RequestErrorResponse<500, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    getWishlist(...args: Parameters<WishlistsV3Api['wishlistsByIdGet']>): Promise<RequestSuccessResponse<200, Required<{
+        data?: WishlistsV3ApiSpecs.WishlistFull;
+        meta?: {
+            [key: string]: unknown;
+        };
+    }>> | RequestErrorResponse<401, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>> | RequestErrorResponse<404, Required<{
+        [key: string]: unknown;
+    }>> | RequestErrorResponse<500, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    wishlistsByIdPut(wishlistId: WishlistsV3ApiSpecs.WishlistsByIdPutData['path']['wishlist_id'], requestBody: WishlistsV3ApiSpecs.WishlistsByIdPutData['body']): Promise<RequestSuccessResponse<201, Required<{
         data?: WishlistsV3ApiSpecs.WishlistFull;
         meta?: {
             [key: string]: unknown;
@@ -77,7 +135,12 @@ export declare class WishlistsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    deleteWishlist(wishlistId: WishlistsV3ApiSpecs.DeleteWishlistData['path']['wishlist_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<401, Required<{
+    updateWishlist(...args: Parameters<WishlistsV3Api['wishlistsByIdPut']>): Promise<RequestSuccessResponse<201, Required<{
+        data?: WishlistsV3ApiSpecs.WishlistFull;
+        meta?: {
+            [key: string]: unknown;
+        };
+    }>> | RequestErrorResponse<401, Required<{
         status?: number;
         title?: string;
         type?: string;
@@ -86,7 +149,35 @@ export declare class WishlistsV3Api {
         title?: string;
         type?: string;
     }>>>;
-    addWishlistItem(wishlistId: WishlistsV3ApiSpecs.AddWishlistItemData['path']['wishlist_id'], requestBody: WishlistsV3ApiSpecs.AddWishlistItemData['body']): Promise<RequestErrorResponse<404, Required<unknown>> | RequestErrorResponse<500, Required<unknown>> | RequestSuccessResponse<201, Required<{
+    wishlistsByIdDelete(wishlistId: WishlistsV3ApiSpecs.WishlistsByIdDeleteData['path']['wishlist_id']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<401, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>> | RequestErrorResponse<500, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    deleteWishlist(...args: Parameters<WishlistsV3Api['wishlistsByIdDelete']>): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<401, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>> | RequestErrorResponse<500, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    wishlistsItemsByIdPost(wishlistId: WishlistsV3ApiSpecs.WishlistsItemsByIdPostData['path']['wishlist_id'], requestBody: WishlistsV3ApiSpecs.WishlistsItemsByIdPostData['body']): Promise<RequestErrorResponse<404, Required<unknown>> | RequestErrorResponse<500, Required<unknown>> | RequestSuccessResponse<201, Required<{
+        data?: WishlistsV3ApiSpecs.WishlistFull;
+        meta?: {
+            [key: string]: unknown;
+        };
+    }>> | RequestErrorResponse<401, Required<{
+        status?: number;
+        title?: string;
+        type?: string;
+    }>>>;
+    addWishlistItem(...args: Parameters<WishlistsV3Api['wishlistsItemsByIdPost']>): Promise<RequestErrorResponse<404, Required<unknown>> | RequestErrorResponse<500, Required<unknown>> | RequestSuccessResponse<201, Required<{
         data?: WishlistsV3ApiSpecs.WishlistFull;
         meta?: {
             [key: string]: unknown;

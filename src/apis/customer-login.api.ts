@@ -23,12 +23,19 @@ export class CustomerLoginApi {
      https://yourstore.example.com/login/token/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ7Y2xpZW50X2lkfSIsImlhdCI6MTUzNTM5MzExMywianRpIjoie3V1aWR9Iiwib3BlcmF0aW9uIjoiY3VzdG9tZXJfbG9naW4iLCJzdG9yZV9oYXNoIjoie3N0b3JlX2hhc2h9IiwiY3VzdG9tZXJfaWQiOjJ9.J-fAtbjRFGdLsT744DhoprFEDqIfVq72HbDzrbFy6Is
      ```
      */
-    getCustomerLogin(
+    getLoginTokenByJwtToken(
         storeDomain: string,
-        jwtToken: CustomerLoginApiSpecs.GetCustomerLoginData['path']['jwt_token'],
+        jwtToken: CustomerLoginApiSpecs.GetLoginTokenByJwtTokenData['path']['jwt_token'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CustomerLoginApiSpecs.GetCustomerLoginResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CustomerLoginApiSpecs.GetLoginTokenByJwtTokenResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `https://${storeDomain}/login/token/${jwtToken}`,
         });
+    }
+
+    /**
+     * @deprecated Use `getLoginTokenByJwtToken` instead.
+     */
+    getCustomerLogin(...args: Parameters<CustomerLoginApi['getLoginTokenByJwtToken']>) {
+        return this.getLoginTokenByJwtToken(...args);
     }
 }

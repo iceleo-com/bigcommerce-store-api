@@ -30,14 +30,10 @@ export type Checkout = {
          */
         currency?: {
             /**
-             * ISO-4217 currency code. (See: https://www.iso.org/iso-4217-currency-codes.html.)
+             * ISO-4217 currency code. (See: http://en.wikipedia.org/wiki/ISO_4217.)
              */
             code?: string;
         };
-        /**
-         * Indicates whether product prices are shown inclusive of sales tax.
-         */
-        tax_included?: boolean;
         /**
          * Sum of cart line-item amounts before cart-level discounts, coupons, or taxes are applied.
          */
@@ -47,7 +43,7 @@ export type Checkout = {
          */
         channel_id?: number;
         /**
-         * The amount includes order-level automatic promotions plus manual discounts and excludes coupon and product-based discounts.
+         * Order-based discounted amount only - Excludes coupon discounts and product-based discounts.
          */
         discount_amount?: number;
         /**
@@ -75,10 +71,6 @@ export type Checkout = {
              * The discounted amount applied within a given context.
              */
             discounted_amount?: number;
-            /**
-             * The display name of the coupon.
-             */
-            display_name?: string;
         }>;
         discounts?: Array<{
             /**
@@ -115,9 +107,9 @@ export type Checkout = {
                 image_url?: string;
                 discounts?: Array<{
                     /**
-                     * The string value is always equal to "manual-discount" regardless of the input.
+                     * ID of the applied discount.
                      */
-                    id?: string | number;
+                    id?: number;
                     /**
                      * The discounted amount applied within a given context.
                      */
@@ -151,20 +143,8 @@ export type Checkout = {
                  * Sale price of the item multiplied by the quantity.
                  */
                 extended_sale_price?: number;
-                /**
-                 * The price of a single product used for strike-through.
-                 */
-                comparison_price?: number;
-                /**
-                 * The price of a line item (product * quantity) used for strike-through.
-                 */
-                extended_comparison_price?: number;
                 is_require_shipping?: boolean;
                 is_mutable?: boolean;
-                /**
-                 * Whether or not a promotion added an additional item.
-                 */
-                added_by_promotion?: boolean;
                 parent_id?: number | null;
                 /**
                  * Gift Wrapping
@@ -196,10 +176,6 @@ export type Checkout = {
                 url?: string;
                 is_mutable?: boolean;
                 is_require_shipping?: boolean;
-                /**
-                 * Whether or not a promotion added an additional item.
-                 */
-                added_by_promotion?: boolean;
                 is_taxable?: boolean;
                 image_url?: string;
                 discounts?: Array<{
@@ -240,14 +216,6 @@ export type Checkout = {
                  * Sale price of the item multiplied by the quantity.
                  */
                 extended_sale_price?: number;
-                /**
-                 * The price of a single product used for strike-through.
-                 */
-                comparison_price?: number;
-                /**
-                 * The price of a line item (product * quantity) used for strike-through.
-                 */
-                extended_comparison_price?: number;
             }>;
             gift_certificates: Array<{
                 /**
@@ -333,9 +301,6 @@ export type Checkout = {
     };
     consignments?: Array<{
         id?: string;
-        shippingAddress?: {
-            [key: string]: unknown;
-        };
         /**
          * Address Response
          */
@@ -459,10 +424,6 @@ export type Checkout = {
      * Coupons applied at checkout level.
      */
     coupons?: Array<AppliedCoupon>;
-    /**
-     * Fees applied at the checkout level.
-     */
-    fees?: Array<CheckoutFee>;
     order_id?: string | null;
     /**
      * Shipping cost before any discounts are applied including tax.
@@ -528,10 +489,6 @@ export type Checkout = {
             text?: string;
         }>;
     }>;
-    /**
-     * The current version of the checkout increments with each successful update. You can use it to enable optimistic concurrency control for subsequent updates.
-     */
-    version?: number;
 };
 
 /**
@@ -539,10 +496,6 @@ export type Checkout = {
  */
 export type CheckoutPut = {
     customer_message: string;
-    /**
-     * The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-     */
-    version?: number;
 };
 
 /**
@@ -562,51 +515,9 @@ export type AppliedCoupon = {
      */
     coupon_type?: string;
     /**
-     * The display name of the coupon.
-     */
-    display_name?: string;
-    /**
      * The discounted amount applied within a given context.
      */
     discounted_amount?: number;
-};
-
-/**
- * Checkout Fee
- */
-export type CheckoutFee = {
-    /**
-     * The fee ID.
-     */
-    id?: string;
-    /**
-     * The type of the fee.
-     */
-    type?: 'custom_fee';
-    /**
-     * Name of the fee.
-     */
-    name?: string;
-    /**
-     * Display name of the fee targeting customers/shoppers.
-     */
-    display_name?: string;
-    /**
-     * Cost of the fee including tax.
-     */
-    cost_inc_tax?: number;
-    /**
-     * Cost of the fee excluding tax.
-     */
-    cost_ex_tax?: number;
-    /**
-     * The source of the request.
-     */
-    source?: string;
-    /**
-     * The tax class ID.
-     */
-    tax_class_id?: number | null;
 };
 
 /**
@@ -638,10 +549,6 @@ export type AddressProperties = {
          */
         field_value?: string;
     }>;
-    /**
-     * The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-     */
-    version?: number;
 };
 
 /**
@@ -662,10 +569,10 @@ export type CreateConsignmentRequest = Array<{
         /**
          * Represents state or province.
          */
-        state_or_province: string;
+        state_or_province?: string;
         state_or_province_code?: string;
         country_code: string;
-        postal_code: string;
+        postal_code?: string;
         phone?: string;
         /**
          * You can retrieve custom fields from the [Get Form Fields](/docs/rest-storefront/forms#get-form-fields) endpoint.
@@ -694,21 +601,7 @@ export type CreateConsignmentRequest = Array<{
     pickup_option?: {
         pickup_method_id?: number;
     };
-    /**
-     * The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-     */
-    version?: number;
 }>;
-
-/**
- * Delete Consignment Request
- */
-export type DeleteConsignmentRequest = {
-    /**
-     * The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-     */
-    version?: number;
-};
 
 /**
  * Update Consignment Request
@@ -754,14 +647,6 @@ export type UpdateConsignmentRequest = {
     pickup_option?: {
         pickup_method_id?: number;
     };
-    custom_shipping?: {
-        price?: number;
-        description?: string;
-    };
-    /**
-     * The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-     */
-    version?: number;
 };
 
 /**
@@ -772,84 +657,6 @@ export type CouponCodeRequest = {
      * Coupon codes have a 50-character limit.
      */
     coupon_code?: string;
-    /**
-     * The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-     */
-    version?: number;
-};
-
-export type BaseFee = {
-    /**
-     * The type of the fee.
-     */
-    type: 'custom_fee';
-    /**
-     * The name of the fee.
-     */
-    name: string;
-    /**
-     * The display name of the fee targeting customers/shoppers.
-     */
-    display_name: string;
-    /**
-     * The cost of the fee.
-     */
-    cost: number;
-    /**
-     * The source of the request.
-     */
-    source: string;
-    /**
-     * The tax class ID applied to this fee (you can retrieve the tax class ID from our management API - v2/tax_classes). If the tax class is not provided or is null, the tax class set in the control panel is applied.
-     */
-    tax_class_id?: number;
-};
-
-export type FeeWithId = BaseFee & {
-    /**
-     * ID of the fee.
-     */
-    id: string;
-};
-
-/**
- * Fees POST request
- */
-export type AddFeesRequest = {
-    /**
-     * The fees to be added to a checkout.
-     */
-    fees: Array<BaseFee>;
-};
-
-/**
- * Fees PUT request
- */
-export type UpdateFeesRequest = {
-    /**
-     * The fees to be updated in a checkout.
-     */
-    fees: Array<FeeWithId>;
-};
-
-/**
- * Fees DELETE request
- */
-export type DeleteFeesRequest = {
-    /**
-     * The IDs of the fees to be deleted from a checkout.
-     */
-    ids: Array<string>;
-};
-
-/**
- * Delete Coupon Request
- */
-export type DeleteCouponCodeRequest = {
-    /**
-     * The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-     */
-    version?: number;
 };
 
 /**
@@ -870,25 +677,7 @@ export type CheckoutsSettings = {
     order_confirmation_use_custom_checkout_script?: boolean;
     custom_order_confirmation_script_url?: string;
     custom_checkout_supports_uco_settings?: boolean;
-    custom_checkout_sri_hash?: string;
-    custom_order_confirmation_sri_hash?: string;
 };
-
-/**
- * Channel-Specific Checkouts Settings
- */
-export type ChannelCheckoutsSettings = {
-    checkout_type?: string;
-    guest_checkout_type?: string;
-    guest_checkout_for_existing_accounts?: string;
-    policy_consent?: string;
-    order_confirmation_contact_email?: string;
-    is_order_terms_and_conditions_enabled?: boolean;
-    order_terms_and_conditions_type?: string;
-    order_terms_and_conditions_link?: string;
-    order_terms_and_conditions_textarea?: string;
-    should_redirect_to_storefront_for_auth?: boolean;
-} & CheckoutsSettings;
 
 /**
  * Checkouts settings request
@@ -910,14 +699,6 @@ export type CheckoutsSettingsRequest = {
      * Boolean value that specifies whether this checkout supports Optimized One-Page Checkout settings.
      */
     custom_checkout_supports_uco_settings?: boolean;
-    /**
-     * The Subresource Integrity (SRI) hash for the custom checkout script URL.
-     */
-    custom_checkout_sri_hash?: string;
-    /**
-     * The Subresource Integrity (SRI) hash for the custom order confirmation script URL.
-     */
-    custom_order_confirmation_sri_hash?: string;
 };
 
 /**
@@ -962,14 +743,10 @@ export type CheckoutWritable = {
          */
         currency?: {
             /**
-             * ISO-4217 currency code. (See: https://www.iso.org/iso-4217-currency-codes.html.)
+             * ISO-4217 currency code. (See: http://en.wikipedia.org/wiki/ISO_4217.)
              */
             code?: string;
         };
-        /**
-         * Indicates whether product prices are shown inclusive of sales tax.
-         */
-        tax_included?: boolean;
         /**
          * Sum of cart line-item amounts before cart-level discounts, coupons, or taxes are applied.
          */
@@ -979,7 +756,7 @@ export type CheckoutWritable = {
          */
         channel_id?: number;
         /**
-         * The amount includes order-level automatic promotions plus manual discounts and excludes coupon and product-based discounts.
+         * Order-based discounted amount only - Excludes coupon discounts and product-based discounts.
          */
         discount_amount?: number;
         /**
@@ -1007,10 +784,6 @@ export type CheckoutWritable = {
              * The discounted amount applied within a given context.
              */
             discounted_amount?: number;
-            /**
-             * The display name of the coupon.
-             */
-            display_name?: string;
         }>;
         discounts?: Array<{
             /**
@@ -1047,9 +820,9 @@ export type CheckoutWritable = {
                 image_url?: string;
                 discounts?: Array<{
                     /**
-                     * The string value is always equal to "manual-discount" regardless of the input.
+                     * ID of the applied discount.
                      */
-                    id?: string | number;
+                    id?: number;
                     /**
                      * The discounted amount applied within a given context.
                      */
@@ -1083,20 +856,8 @@ export type CheckoutWritable = {
                  * Sale price of the item multiplied by the quantity.
                  */
                 extended_sale_price?: number;
-                /**
-                 * The price of a single product used for strike-through.
-                 */
-                comparison_price?: number;
-                /**
-                 * The price of a line item (product * quantity) used for strike-through.
-                 */
-                extended_comparison_price?: number;
                 is_require_shipping?: boolean;
                 is_mutable?: boolean;
-                /**
-                 * Whether or not a promotion added an additional item.
-                 */
-                added_by_promotion?: boolean;
                 parent_id?: number | null;
                 /**
                  * Gift Wrapping
@@ -1128,10 +889,6 @@ export type CheckoutWritable = {
                 url?: string;
                 is_mutable?: boolean;
                 is_require_shipping?: boolean;
-                /**
-                 * Whether or not a promotion added an additional item.
-                 */
-                added_by_promotion?: boolean;
                 is_taxable?: boolean;
                 image_url?: string;
                 discounts?: Array<{
@@ -1172,14 +929,6 @@ export type CheckoutWritable = {
                  * Sale price of the item multiplied by the quantity.
                  */
                 extended_sale_price?: number;
-                /**
-                 * The price of a single product used for strike-through.
-                 */
-                comparison_price?: number;
-                /**
-                 * The price of a line item (product * quantity) used for strike-through.
-                 */
-                extended_comparison_price?: number;
             }>;
             gift_certificates: Array<{
                 /**
@@ -1265,9 +1014,6 @@ export type CheckoutWritable = {
     };
     consignments?: Array<{
         id?: string;
-        shippingAddress?: {
-            [key: string]: unknown;
-        };
         /**
          * Address Response
          */
@@ -1383,10 +1129,6 @@ export type CheckoutWritable = {
      * Coupons applied at checkout level.
      */
     coupons?: Array<AppliedCoupon>;
-    /**
-     * Fees applied at the checkout level.
-     */
-    fees?: Array<CheckoutFee>;
     order_id?: string | null;
     /**
      * Shipping cost before any discounts are applied including tax.
@@ -1452,10 +1194,6 @@ export type CheckoutWritable = {
             text?: string;
         }>;
     }>;
-    /**
-     * The current version of the checkout increments with each successful update. You can use it to enable optimistic concurrency control for subsequent updates.
-     */
-    version?: number;
 };
 
 /**
@@ -1491,20 +1229,9 @@ export type Accept = string;
  */
 export type ContentType = string;
 
-/**
- * Include the shipping options available to this checkout.
- */
-export type IncludeShippingOptions = 'consignments.available_shipping_options';
+export type IncludeShippingOption = 'consignments.available_shipping_options';
 
-/**
- * * `cart.line_items.physical_items.options` - physical options
- * * `cart.line_items.digital_items.options` - digital options
- * * `consignments.available_shipping_options` - shipping options
- * * `promotions.banners` - promotion options
- */
-export type IncludeGeneral = Array<'cart.line_items.physical_items.options' | 'cart.line_items.digital_items.options' | 'consignments.available_shipping_options' | 'promotions.banners'>;
-
-export type GetCheckoutData = {
+export type CheckoutsByCheckoutIdGetData = {
     body?: never;
     headers: {
         /**
@@ -1525,12 +1252,12 @@ export type GetCheckoutData = {
          * * `consignments.available_shipping_options` - shipping options
          * * `promotions.banners` - promotion options
          */
-        include?: Array<'cart.line_items.physical_items.options' | 'cart.line_items.digital_items.options' | 'consignments.available_shipping_options' | 'promotions.banners'>;
+        include?: 'cart.line_items.physical_items.options' | 'cart.line_items.digital_items.options' | 'consignments.available_shipping_options' | 'promotions.banners';
     };
     url: '/checkouts/{checkoutId}';
 };
 
-export type GetCheckoutErrors = {
+export type CheckoutsByCheckoutIdGetErrors = {
     /**
      * Checkout Error
      *
@@ -1546,18 +1273,18 @@ export type GetCheckoutErrors = {
     };
 };
 
-export type GetCheckoutError = GetCheckoutErrors[keyof GetCheckoutErrors];
+export type CheckoutsByCheckoutIdGetError = CheckoutsByCheckoutIdGetErrors[keyof CheckoutsByCheckoutIdGetErrors];
 
-export type GetCheckoutResponses = {
+export type CheckoutsByCheckoutIdGetResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
 
-export type GetCheckoutResponse = GetCheckoutResponses[keyof GetCheckoutResponses];
+export type CheckoutsByCheckoutIdGetResponse = CheckoutsByCheckoutIdGetResponses[keyof CheckoutsByCheckoutIdGetResponses];
 
-export type UpdateCheckoutData = {
+export type CheckoutsByCheckoutIdPutData = {
     /**
      * `customer_message` is required (maximum length is 2000).
      */
@@ -1582,42 +1309,22 @@ export type UpdateCheckoutData = {
     url: '/checkouts/{checkoutId}';
 };
 
-export type UpdateCheckoutErrors = {
-    /**
-     * Cart conflict
-     */
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-
-export type UpdateCheckoutError = UpdateCheckoutErrors[keyof UpdateCheckoutErrors];
-
-export type UpdateCheckoutResponses = {
+export type CheckoutsByCheckoutIdPutResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
 
-export type UpdateCheckoutResponse = UpdateCheckoutResponses[keyof UpdateCheckoutResponses];
+export type CheckoutsByCheckoutIdPutResponse = CheckoutsByCheckoutIdPutResponses[keyof CheckoutsByCheckoutIdPutResponses];
 
-export type AddCheckoutDiscountData = {
+export type PostStoreHashV3CheckoutsCheckoutIdDiscountsData = {
     body?: {
         cart?: {
             discounts?: Array<{
                 discounted_amount: number;
+                name?: string;
             }>;
-            line_items?: Array<{
-                id?: string;
-                discounted_amount?: number;
-            }>;
-            /**
-             * The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-             */
-            version?: number;
         };
     };
     headers: {
@@ -1640,29 +1347,16 @@ export type AddCheckoutDiscountData = {
     url: '/checkouts/{checkoutId}/discounts';
 };
 
-export type AddCheckoutDiscountErrors = {
-    /**
-     * Cart conflict
-     */
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-
-export type AddCheckoutDiscountError = AddCheckoutDiscountErrors[keyof AddCheckoutDiscountErrors];
-
-export type AddCheckoutDiscountResponses = {
+export type PostStoreHashV3CheckoutsCheckoutIdDiscountsResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
 
-export type AddCheckoutDiscountResponse = AddCheckoutDiscountResponses[keyof AddCheckoutDiscountResponses];
+export type PostStoreHashV3CheckoutsCheckoutIdDiscountsResponse = PostStoreHashV3CheckoutsCheckoutIdDiscountsResponses[keyof PostStoreHashV3CheckoutsCheckoutIdDiscountsResponses];
 
-export type AddCheckoutBillingAddressData = {
+export type CheckoutsBillingAddressByCheckoutIdPostData = {
     body: AddressProperties;
     headers: {
         /**
@@ -1684,29 +1378,16 @@ export type AddCheckoutBillingAddressData = {
     url: '/checkouts/{checkoutId}/billing-address';
 };
 
-export type AddCheckoutBillingAddressErrors = {
-    /**
-     * Cart conflict
-     */
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-
-export type AddCheckoutBillingAddressError = AddCheckoutBillingAddressErrors[keyof AddCheckoutBillingAddressErrors];
-
-export type AddCheckoutBillingAddressResponses = {
+export type CheckoutsBillingAddressByCheckoutIdPostResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
 
-export type AddCheckoutBillingAddressResponse = AddCheckoutBillingAddressResponses[keyof AddCheckoutBillingAddressResponses];
+export type CheckoutsBillingAddressByCheckoutIdPostResponse = CheckoutsBillingAddressByCheckoutIdPostResponses[keyof CheckoutsBillingAddressByCheckoutIdPostResponses];
 
-export type UpdateCheckoutBillingAddressData = {
+export type CheckoutsBillingAddressByCheckoutIdAndAddressIdPutData = {
     body: AddressProperties;
     headers: {
         /**
@@ -1729,29 +1410,16 @@ export type UpdateCheckoutBillingAddressData = {
     url: '/checkouts/{checkoutId}/billing-address/{addressId}';
 };
 
-export type UpdateCheckoutBillingAddressErrors = {
-    /**
-     * Cart conflict
-     */
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-
-export type UpdateCheckoutBillingAddressError = UpdateCheckoutBillingAddressErrors[keyof UpdateCheckoutBillingAddressErrors];
-
-export type UpdateCheckoutBillingAddressResponses = {
+export type CheckoutsBillingAddressByCheckoutIdAndAddressIdPutResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
 
-export type UpdateCheckoutBillingAddressResponse = UpdateCheckoutBillingAddressResponses[keyof UpdateCheckoutBillingAddressResponses];
+export type CheckoutsBillingAddressByCheckoutIdAndAddressIdPutResponse = CheckoutsBillingAddressByCheckoutIdAndAddressIdPutResponses[keyof CheckoutsBillingAddressByCheckoutIdAndAddressIdPutResponses];
 
-export type AddCheckoutConsignmentData = {
+export type CheckoutsConsignmentsByCheckoutIdPostData = {
     body?: CreateConsignmentRequest;
     headers: {
         /**
@@ -1770,38 +1438,22 @@ export type AddCheckoutConsignmentData = {
         checkoutId: string;
     };
     query?: {
-        /**
-         * Include the shipping options available to this checkout.
-         */
         include?: 'consignments.available_shipping_options';
     };
     url: '/checkouts/{checkoutId}/consignments';
 };
 
-export type AddCheckoutConsignmentErrors = {
-    /**
-     * Cart conflict
-     */
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-
-export type AddCheckoutConsignmentError = AddCheckoutConsignmentErrors[keyof AddCheckoutConsignmentErrors];
-
-export type AddCheckoutConsignmentResponses = {
+export type CheckoutsConsignmentsByCheckoutIdPostResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
 
-export type AddCheckoutConsignmentResponse = AddCheckoutConsignmentResponses[keyof AddCheckoutConsignmentResponses];
+export type CheckoutsConsignmentsByCheckoutIdPostResponse = CheckoutsConsignmentsByCheckoutIdPostResponses[keyof CheckoutsConsignmentsByCheckoutIdPostResponses];
 
-export type DeleteCheckoutConsignmentData = {
-    body?: DeleteConsignmentRequest;
+export type CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteData = {
+    body?: never;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -1819,16 +1471,16 @@ export type DeleteCheckoutConsignmentData = {
     url: '/checkouts/{checkoutId}/consignments/{consignmentId}';
 };
 
-export type DeleteCheckoutConsignmentResponses = {
+export type CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
 
-export type DeleteCheckoutConsignmentResponse = DeleteCheckoutConsignmentResponses[keyof DeleteCheckoutConsignmentResponses];
+export type CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteResponse = CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteResponses[keyof CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteResponses];
 
-export type UpdateCheckoutConsignmentData = {
+export type CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutData = {
     body: UpdateConsignmentRequest;
     headers: {
         /**
@@ -1849,36 +1501,23 @@ export type UpdateCheckoutConsignmentData = {
     };
     query?: {
         /**
-         * Include the shipping options available to this checkout.
+         * Include to get available shipping options.
          */
         include?: 'consignments.available_shipping_options';
     };
     url: '/checkouts/{checkoutId}/consignments/{consignmentId}';
 };
 
-export type UpdateCheckoutConsignmentErrors = {
-    /**
-     * Cart conflict
-     */
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-
-export type UpdateCheckoutConsignmentError = UpdateCheckoutConsignmentErrors[keyof UpdateCheckoutConsignmentErrors];
-
-export type UpdateCheckoutConsignmentResponses = {
+export type CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
 
-export type UpdateCheckoutConsignmentResponse = UpdateCheckoutConsignmentResponses[keyof UpdateCheckoutConsignmentResponses];
+export type CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutResponse = CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutResponses[keyof CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutResponses];
 
-export type AddCheckoutCouponData = {
+export type CheckoutsCouponsByCheckoutIdPostData = {
     body: CouponCodeRequest;
     headers: {
         /**
@@ -1900,30 +1539,17 @@ export type AddCheckoutCouponData = {
     url: '/checkouts/{checkoutId}/coupons';
 };
 
-export type AddCheckoutCouponErrors = {
-    /**
-     * Cart conflict
-     */
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-
-export type AddCheckoutCouponError = AddCheckoutCouponErrors[keyof AddCheckoutCouponErrors];
-
-export type AddCheckoutCouponResponses = {
+export type CheckoutsCouponsByCheckoutIdPostResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
 
-export type AddCheckoutCouponResponse = AddCheckoutCouponResponses[keyof AddCheckoutCouponResponses];
+export type CheckoutsCouponsByCheckoutIdPostResponse = CheckoutsCouponsByCheckoutIdPostResponses[keyof CheckoutsCouponsByCheckoutIdPostResponses];
 
-export type DeleteCheckoutCouponData = {
-    body?: DeleteCouponCodeRequest;
+export type CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteData = {
+    body?: never;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -1944,114 +1570,16 @@ export type DeleteCheckoutCouponData = {
     url: '/checkouts/{checkoutId}/coupons/{couponCode}';
 };
 
-export type DeleteCheckoutCouponErrors = {
-    /**
-     * Cart conflict
-     */
-    409: {
-        status?: number;
-        title?: string;
-        type?: string;
-    };
-};
-
-export type DeleteCheckoutCouponError = DeleteCheckoutCouponErrors[keyof DeleteCheckoutCouponErrors];
-
-export type DeleteCheckoutCouponResponses = {
+export type CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteResponses = {
     200: {
         data?: Checkout;
         meta?: MetaOpen;
     };
 };
 
-export type DeleteCheckoutCouponResponse = DeleteCheckoutCouponResponses[keyof DeleteCheckoutCouponResponses];
+export type CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteResponse = CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteResponses[keyof CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteResponses];
 
-export type CheckoutsFeesByCheckoutIdDeleteData = {
-    body: DeleteFeesRequest;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-    };
-    path: {
-        /**
-         * ID of the checkout; the same as the cart ID.
-         */
-        checkoutId: string;
-    };
-    query?: never;
-    url: '/checkouts/{checkoutId}/fees';
-};
-
-export type CheckoutsFeesByCheckoutIdDeleteResponses = {
-    200: {
-        data?: Checkout;
-        meta?: MetaOpen;
-    };
-};
-
-export type CheckoutsFeesByCheckoutIdDeleteResponse = CheckoutsFeesByCheckoutIdDeleteResponses[keyof CheckoutsFeesByCheckoutIdDeleteResponses];
-
-export type CheckoutsFeesByCheckoutIdPostData = {
-    body: AddFeesRequest;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
-    };
-    path: {
-        /**
-         * ID of the checkout; the same as the cart ID.
-         */
-        checkoutId: string;
-    };
-    query?: never;
-    url: '/checkouts/{checkoutId}/fees';
-};
-
-export type CheckoutsFeesByCheckoutIdPostResponses = {
-    200: {
-        data?: Checkout;
-        meta?: MetaOpen;
-    };
-};
-
-export type CheckoutsFeesByCheckoutIdPostResponse = CheckoutsFeesByCheckoutIdPostResponses[keyof CheckoutsFeesByCheckoutIdPostResponses];
-
-export type CheckoutsFeesByCheckoutIdPutData = {
-    body: UpdateFeesRequest;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-    };
-    path: {
-        /**
-         * ID of the checkout; the same as the cart ID.
-         */
-        checkoutId: string;
-    };
-    query?: never;
-    url: '/checkouts/{checkoutId}/fees';
-};
-
-export type CheckoutsFeesByCheckoutIdPutResponses = {
-    200: {
-        data?: Checkout;
-        meta?: MetaOpen;
-    };
-};
-
-export type CheckoutsFeesByCheckoutIdPutResponse = CheckoutsFeesByCheckoutIdPutResponses[keyof CheckoutsFeesByCheckoutIdPutResponses];
-
-export type CreateOrderData = {
+export type CreateAnOrderData = {
     body?: never;
     headers: {
         /**
@@ -2073,14 +1601,14 @@ export type CreateOrderData = {
     url: '/checkouts/{checkoutId}/orders';
 };
 
-export type CreateOrderResponses = {
+export type CreateAnOrderResponses = {
     200: {
         data?: Order;
         meta?: MetaOpen;
     };
 };
 
-export type CreateOrderResponse = CreateOrderResponses[keyof CreateOrderResponses];
+export type CreateAnOrderResponse = CreateAnOrderResponses[keyof CreateAnOrderResponses];
 
 export type GetCheckoutSettingsData = {
     body?: never;
@@ -2130,63 +1658,7 @@ export type UpdateCheckoutSettingsResponses = {
 
 export type UpdateCheckoutSettingsResponse = UpdateCheckoutSettingsResponses[keyof UpdateCheckoutSettingsResponses];
 
-export type GetChannelCheckoutSettingsData = {
-    body?: never;
-    path: {
-        channelId: number;
-    };
-    query?: never;
-    url: '/checkouts/settings/channels/{channelId}';
-};
-
-export type GetChannelCheckoutSettingsErrors = {
-    /**
-     * Invalid channelId or invalid request
-     */
-    422: unknown;
-};
-
-export type GetChannelCheckoutSettingsResponses = {
-    /**
-     * Channel checkout settings retrieved successfully
-     */
-    200: {
-        data?: ChannelCheckoutsSettings;
-        meta?: MetaOpen;
-    };
-};
-
-export type GetChannelCheckoutSettingsResponse = GetChannelCheckoutSettingsResponses[keyof GetChannelCheckoutSettingsResponses];
-
-export type PutChannelCheckoutSettingsData = {
-    body?: ChannelCheckoutsSettings;
-    path: {
-        channelId: number;
-    };
-    query?: never;
-    url: '/checkouts/settings/channels/{channelId}';
-};
-
-export type PutChannelCheckoutSettingsErrors = {
-    /**
-     * Invalid channelId or invalid request
-     */
-    422: unknown;
-};
-
-export type PutChannelCheckoutSettingsResponses = {
-    /**
-     * Channel checkout settings updated successfully
-     */
-    200: {
-        data?: ChannelCheckoutsSettings;
-        meta?: MetaOpen;
-    };
-};
-
-export type PutChannelCheckoutSettingsResponse = PutChannelCheckoutSettingsResponses[keyof PutChannelCheckoutSettingsResponses];
-
-export type CreateCheckoutTokenData = {
+export type CheckoutTokenData = {
     body?: {
         maxUses?: number;
         /**
@@ -2214,7 +1686,7 @@ export type CreateCheckoutTokenData = {
     url: '/checkouts/{checkoutId}/token';
 };
 
-export type CreateCheckoutTokenErrors = {
+export type CheckoutTokenErrors = {
     /**
      * Unauthorized - the v3 Auth client ID or token in the request are not a valid combination for this store.
      */
@@ -2255,9 +1727,9 @@ export type CreateCheckoutTokenErrors = {
     };
 };
 
-export type CreateCheckoutTokenError = CreateCheckoutTokenErrors[keyof CreateCheckoutTokenErrors];
+export type CheckoutTokenError = CheckoutTokenErrors[keyof CheckoutTokenErrors];
 
-export type CreateCheckoutTokenResponses = {
+export type CheckoutTokenResponses = {
     /**
      * OK
      */
@@ -2267,4 +1739,4 @@ export type CreateCheckoutTokenResponses = {
     };
 };
 
-export type CreateCheckoutTokenResponse = CreateCheckoutTokenResponses[keyof CreateCheckoutTokenResponses];
+export type CheckoutTokenResponse = CheckoutTokenResponses[keyof CheckoutTokenResponses];

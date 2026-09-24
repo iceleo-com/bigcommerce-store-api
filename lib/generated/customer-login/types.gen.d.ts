@@ -11,7 +11,7 @@ export type CustomerLoginSso = {
     redirect_to?: string;
     request_ip?: string;
 };
-export type GetCustomerLoginData = {
+export type GetLoginTokenByJwtTokenData = {
     body?: never;
     path: {
         jwt_token: string;
@@ -19,9 +19,9 @@ export type GetCustomerLoginData = {
     query?: never;
     url: '/login/token/{jwt_token}';
 };
-export type GetCustomerLoginResponses = {
+export type GetLoginTokenByJwtTokenResponses = {
     200: {
         [key: string]: unknown;
     };
 };
-export type GetCustomerLoginResponse = GetCustomerLoginResponses[keyof GetCustomerLoginResponses];
+export type GetLoginTokenByJwtTokenResponse = GetLoginTokenByJwtTokenResponses[keyof GetLoginTokenByJwtTokenResponses];

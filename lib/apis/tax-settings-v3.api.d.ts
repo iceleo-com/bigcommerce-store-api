@@ -9,7 +9,11 @@ export declare class TaxSettingsV3Api {
         data?: TaxSettingsV3ApiSpecs.TaxSettings;
         meta?: TaxSettingsV3ApiSpecs.MetaOpen;
     }>>>;
-    updateTaxSettings(requestBody: TaxSettingsV3ApiSpecs.UpdateTaxSettingsData['body']): Promise<RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<{
+    setTaxSettings(requestBody: TaxSettingsV3ApiSpecs.SetTaxSettingsData['body']): Promise<RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<{
+        data?: TaxSettingsV3ApiSpecs.TaxSettings;
+        meta?: TaxSettingsV3ApiSpecs.MetaOpen;
+    }>>>;
+    updateTaxSettings(...args: Parameters<TaxSettingsV3Api['setTaxSettings']>): Promise<RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<{
         data?: TaxSettingsV3ApiSpecs.TaxSettings;
         meta?: TaxSettingsV3ApiSpecs.MetaOpen;
     }>>>;

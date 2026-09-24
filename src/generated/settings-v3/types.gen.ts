@@ -13,18 +13,6 @@ export type AddressTypeEnumValues = 'Home Office' | 'Commercial Office' | 'Retai
 
 export type AnalyticsProvider = {
     /**
-     * Web Analytics Provider ID.
-     */
-    id?: number;
-    /**
-     * Channels ID
-     */
-    channel_id?: number;
-    /**
-     * Web Analytics Provider title.
-     */
-    name?: string;
-    /**
      * Web Analytics Provider code.
      */
     code?: string;
@@ -32,9 +20,14 @@ export type AnalyticsProvider = {
      * Flag indicates if Web Analytics Provider is enabled or not.
      */
     enabled?: boolean;
-    data_tag_enabled?: boolean;
-    version?: number;
-    api_secret?: string;
+    /**
+     * Web Analytics Provider ID.
+     */
+    id?: number;
+    /**
+     * Web Analytics Provider title.
+     */
+    name?: string;
 };
 
 export type AnalyticsProviders = Array<AnalyticsProvider>;
@@ -144,9 +137,6 @@ export type EnabledBrandFilter = {
     collapsed_by_default?: boolean;
     display_name?: string;
     display_product_count?: boolean;
-    /**
-     * The ID of the filter.
-     */
     id?: string;
     is_enabled?: boolean;
     items_to_show?: 5 | 10 | 15;
@@ -163,9 +153,6 @@ export type EnabledCategoryFilter = {
     collapsed_by_default?: boolean;
     display_name?: string;
     display_product_count?: boolean;
-    /**
-     * The ID of the filter.
-     */
     id?: string;
     is_enabled?: boolean;
     items_to_show?: 5 | 10 | 15;
@@ -173,18 +160,35 @@ export type EnabledCategoryFilter = {
 };
 
 /**
+ * EnabledFilter
+ */
+export type EnabledFilter = EnabledProductFilter | EnabledPriceFilter | EnabledCategoryFilter | EnabledBrandFilter | EnabledRatingFilter | EnabledMiscFilter;
+
+/**
+ * EnabledFilters
+ */
+export type EnabledFilters = Array<EnabledFilter>;
+
+/**
+ * EnabledFiltersOverride
+ *
+ * A new set of enabled Product Filtering filters which should display in a particular context, such as on a particular Channel, or while viewing a particular Category. Array order indicates the display order on the storefront.
+ */
+export type EnabledFiltersOverride = {
+    data?: EnabledFilters;
+    scope?: SearchFilterOverrideScopeIdentifier;
+};
+
+/**
  * EnabledMiscFilter
  *
- * Miscellaneous filters which appear as a group.
+ * Miscellaneous Filters which appear as a group.
  */
 export type EnabledMiscFilter = {
     collapsed_by_default?: boolean;
     display_name?: string;
     display_product_count?: boolean;
-    /**
-     * The ID of the filter.
-     */
-    id?: string;
+    id?: number;
     is_enabled?: boolean;
     show_free_shipping_filter?: boolean;
     show_in_stock_filter?: boolean;
@@ -201,9 +205,6 @@ export type EnabledMiscFilter = {
 export type EnabledPriceFilter = {
     collapsed_by_default?: boolean;
     display_name?: string;
-    /**
-     * The ID of the filter.
-     */
     id?: string;
     is_enabled?: boolean;
     type?: 'price';
@@ -218,9 +219,6 @@ export type EnabledProductFilter = {
     collapsed_by_default?: boolean;
     display_name?: string;
     display_product_count?: boolean;
-    /**
-     * The ID of the filter.
-     */
     id?: string;
     is_enabled?: boolean;
     items_to_show?: 5 | 10 | 15;
@@ -236,9 +234,6 @@ export type EnabledProductFilter = {
 export type EnabledRatingFilter = {
     collapsed_by_default?: boolean;
     display_name?: string;
-    /**
-     * The ID of the filter.
-     */
     id?: string;
     is_enabled?: boolean;
     type?: 'rating';
@@ -351,7 +346,7 @@ export type InventorySettings = {
 export type Locale = {
     default_shopper_language: string;
     /**
-     * Determines whether to display the storefront content in the shopperʼs browser language or the shopperʼs selected default language.
+     * Determines whether to display the storefront content in the shopper's browser language or the shopper's selected default language.
      *
      * Available values:
      * * `browser` - language updates automatically based on the shopper browser language. Multiple languages are supported.
@@ -423,8 +418,14 @@ export type SearchFilterOverrideContextIdentifier = {
 };
 
 /**
- * Store Profile
- *
+ * ScopeIdentifier
+ */
+export type SearchFilterOverrideScopeIdentifier = {
+    category_id?: number;
+    channel_id?: number;
+};
+
+/**
  * The basic profile settings for a store, used to give the shopper information about the business from which they are purchasing.
  */
 export type StoreProfile = {
@@ -456,22 +457,22 @@ export type StorefrontProductSettings = {
      */
     show_product_sku?: boolean;
     /**
-     * Determines the visibility of the productʼs weight.
+     * Determines the visibility of the product's weight.
      *
      */
     show_product_weight?: boolean;
     /**
-     * Determines the visibility of the productʼs brand.
+     * Determines the visibility of the product's brand.
      *
      */
     show_product_brand?: boolean;
     /**
-     * Determines the visibility of the productʼs shipping option.
+     * Determines the visibility of the product's shipping option.
      *
      */
     show_product_shipping?: boolean;
     /**
-     * Determines the visibility of the productʼs rating.
+     * Determines the visibility of the product's rating.
      *
      */
     show_product_rating?: boolean;
@@ -481,7 +482,7 @@ export type StorefrontProductSettings = {
      */
     show_add_to_cart_link?: boolean;
     /**
-     * The productʼs pre-order message. If undefined, the message defaults to the storewide setting.
+     * The product's pre-order message. If undefined, the message defaults to the storewide setting.
      *
      */
     default_preorder_message?: string;
@@ -492,7 +493,7 @@ export type StorefrontProductSettings = {
      */
     show_add_to_cart_qty_box?: boolean;
     /**
-     * Determines the visibility of the Add to Wishlist setting.
+     * Determines the visibilty of the Add to Wishlist setting.
      *
      */
     show_add_to_wishlist?: boolean;
@@ -564,11 +565,21 @@ export type Accept = string;
 export type ContentType = string;
 
 /**
- * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+ * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
  */
 export type ChannelIdParam = number;
 
-export type GetAnalyticsProvidersData = {
+/**
+ * Array of strings (CSV) representing which configuration keys should be cleared (un-overridden) for the Channel.
+ */
+export type KeysToDelete = Array<string>;
+
+/**
+ * Required Channel ID. This delete operation will delete overridden settings for this channel, thus restoring them to the global defaults.
+ */
+export type RequiredChannelIdParamForDelete = number;
+
+export type GetSettingsAnalyticsData = {
     body?: never;
     headers: {
         /**
@@ -579,14 +590,14 @@ export type GetAnalyticsProvidersData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/analytics';
 };
 
-export type GetAnalyticsProvidersResponses = {
+export type GetSettingsAnalyticsResponses = {
     /**
      * OK
      */
@@ -596,9 +607,9 @@ export type GetAnalyticsProvidersResponses = {
     };
 };
 
-export type GetAnalyticsProvidersResponse = GetAnalyticsProvidersResponses[keyof GetAnalyticsProvidersResponses];
+export type GetSettingsAnalyticsResponse = GetSettingsAnalyticsResponses[keyof GetSettingsAnalyticsResponses];
 
-export type GetAnalyticsProviderData = {
+export type GetSettingsAnalyticsByIdData = {
     body?: never;
     headers: {
         /**
@@ -614,14 +625,14 @@ export type GetAnalyticsProviderData = {
     };
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/analytics/{id}';
 };
 
-export type GetAnalyticsProviderErrors = {
+export type GetSettingsAnalyticsByIdErrors = {
     /**
      * Bad request. Authentication Required.
      */
@@ -632,22 +643,24 @@ export type GetAnalyticsProviderErrors = {
     404: ErrorResponse404;
 };
 
-export type GetAnalyticsProviderError = GetAnalyticsProviderErrors[keyof GetAnalyticsProviderErrors];
+export type GetSettingsAnalyticsByIdError = GetSettingsAnalyticsByIdErrors[keyof GetSettingsAnalyticsByIdErrors];
 
-export type GetAnalyticsProviderResponses = {
+export type GetSettingsAnalyticsByIdResponses = {
     /**
      * Successful operation.
      */
     200: AnalyticsProvider;
 };
 
-export type GetAnalyticsProviderResponse = GetAnalyticsProviderResponses[keyof GetAnalyticsProviderResponses];
+export type GetSettingsAnalyticsByIdResponse = GetSettingsAnalyticsByIdResponses[keyof GetSettingsAnalyticsByIdResponses];
 
-export type UpdateAnalyticsProviderData = {
+export type PutSettingsAnalyticsByIdData = {
     body?: {
+        channel_id?: number;
         code?: string;
         data_tag_enabled?: boolean;
         enabled?: boolean;
+        id?: number;
         is_oauth_connected?: unknown;
         name?: string;
         version?: number;
@@ -670,14 +683,14 @@ export type UpdateAnalyticsProviderData = {
     };
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/analytics/{id}';
 };
 
-export type UpdateAnalyticsProviderErrors = {
+export type PutSettingsAnalyticsByIdErrors = {
     /**
      * Bad request. Authentication Required.
      */
@@ -696,16 +709,16 @@ export type UpdateAnalyticsProviderErrors = {
     422: ErrorResponse422;
 };
 
-export type UpdateAnalyticsProviderError = UpdateAnalyticsProviderErrors[keyof UpdateAnalyticsProviderErrors];
+export type PutSettingsAnalyticsByIdError = PutSettingsAnalyticsByIdErrors[keyof PutSettingsAnalyticsByIdErrors];
 
-export type UpdateAnalyticsProviderResponses = {
+export type PutSettingsAnalyticsByIdResponses = {
     /**
      * Successful operation.
      */
     200: AnalyticsProvider;
 };
 
-export type UpdateAnalyticsProviderResponse = UpdateAnalyticsProviderResponses[keyof UpdateAnalyticsProviderResponses];
+export type PutSettingsAnalyticsByIdResponse = PutSettingsAnalyticsByIdResponses[keyof PutSettingsAnalyticsByIdResponses];
 
 export type GetSettingsCatalogData = {
     body?: never;
@@ -718,7 +731,7 @@ export type GetSettingsCatalogData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -737,7 +750,7 @@ export type GetSettingsCatalogResponses = {
 
 export type GetSettingsCatalogResponse = GetSettingsCatalogResponses[keyof GetSettingsCatalogResponses];
 
-export type UpdateSettingsCatalogData = {
+export type PutSettingsCatalogData = {
     /**
      * null set for a particular field removes override on a channel level and means inheritance from a global level
      */
@@ -755,14 +768,14 @@ export type UpdateSettingsCatalogData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/catalog';
 };
 
-export type UpdateSettingsCatalogResponses = {
+export type PutSettingsCatalogResponses = {
     /**
      * OK. `null` indicates that a particular field has not been overridden on a channel level when channel level settings are requested
      */
@@ -772,9 +785,9 @@ export type UpdateSettingsCatalogResponses = {
     };
 };
 
-export type UpdateSettingsCatalogResponse = UpdateSettingsCatalogResponses[keyof UpdateSettingsCatalogResponses];
+export type PutSettingsCatalogResponse = PutSettingsCatalogResponses[keyof PutSettingsCatalogResponses];
 
-export type GetSettingsEmailStatusesData = {
+export type GetSettingsEmailsEnabledData = {
     body?: never;
     headers: {
         /**
@@ -785,14 +798,14 @@ export type GetSettingsEmailStatusesData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/email-statuses';
 };
 
-export type GetSettingsEmailStatusesResponses = {
+export type GetSettingsEmailsEnabledResponses = {
     /**
      * OK, null indicates that a particular field has not been overridden on a channel level when channel level settings are requested
      */
@@ -802,9 +815,9 @@ export type GetSettingsEmailStatusesResponses = {
     };
 };
 
-export type GetSettingsEmailStatusesResponse = GetSettingsEmailStatusesResponses[keyof GetSettingsEmailStatusesResponses];
+export type GetSettingsEmailsEnabledResponse = GetSettingsEmailsEnabledResponses[keyof GetSettingsEmailsEnabledResponses];
 
-export type UpdateSettingsEmailStatusesData = {
+export type PutSettingsTransactionalEmailsEnabledData = {
     body?: EnabledTransactionalEmails;
     headers: {
         /**
@@ -819,14 +832,14 @@ export type UpdateSettingsEmailStatusesData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/email-statuses';
 };
 
-export type UpdateSettingsEmailStatusesResponses = {
+export type PutSettingsTransactionalEmailsEnabledResponses = {
     /**
      * OK
      */
@@ -836,9 +849,9 @@ export type UpdateSettingsEmailStatusesResponses = {
     };
 };
 
-export type UpdateSettingsEmailStatusesResponse = UpdateSettingsEmailStatusesResponses[keyof UpdateSettingsEmailStatusesResponses];
+export type PutSettingsTransactionalEmailsEnabledResponse = PutSettingsTransactionalEmailsEnabledResponses[keyof PutSettingsTransactionalEmailsEnabledResponses];
 
-export type CreateSettingsFaviconImageData = {
+export type PostFaviconLogoImageData = {
     body?: {
         FaviconFile?: Blob | File;
     };
@@ -855,28 +868,21 @@ export type CreateSettingsFaviconImageData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/favicon/image';
 };
 
-export type CreateSettingsFaviconImageErrors = {
-    /**
-     * Failed to save!
-     */
-    422: unknown;
-};
-
-export type CreateSettingsFaviconImageResponses = {
+export type PostFaviconLogoImageResponses = {
     /**
      * OK
      */
     204: void;
 };
 
-export type CreateSettingsFaviconImageResponse = CreateSettingsFaviconImageResponses[keyof CreateSettingsFaviconImageResponses];
+export type PostFaviconLogoImageResponse = PostFaviconLogoImageResponses[keyof PostFaviconLogoImageResponses];
 
 export type GetSettingsInventoryNotificationsData = {
     body?: never;
@@ -889,7 +895,7 @@ export type GetSettingsInventoryNotificationsData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -908,7 +914,7 @@ export type GetSettingsInventoryNotificationsResponses = {
 
 export type GetSettingsInventoryNotificationsResponse = GetSettingsInventoryNotificationsResponses[keyof GetSettingsInventoryNotificationsResponses];
 
-export type UpdateSettingsInventoryNotificationsData = {
+export type PutSettingsInventoryNotificationsData = {
     /**
      * null set for a particular field removes override on a channel level and means inheritance from a global level
      */
@@ -926,14 +932,14 @@ export type UpdateSettingsInventoryNotificationsData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/inventory/notifications';
 };
 
-export type UpdateSettingsInventoryNotificationsResponses = {
+export type PutSettingsInventoryNotificationsResponses = {
     /**
      * OK
      */
@@ -951,7 +957,7 @@ export type GetSettingsLogoData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -970,7 +976,7 @@ export type GetSettingsLogoResponses = {
 
 export type GetSettingsLogoResponse = GetSettingsLogoResponses[keyof GetSettingsLogoResponses];
 
-export type UpdateSettingsLogoData = {
+export type PutSettingsLogoData = {
     body?: LogoSettingsUpdate;
     headers: {
         /**
@@ -981,14 +987,14 @@ export type UpdateSettingsLogoData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/logo';
 };
 
-export type UpdateSettingsLogoResponses = {
+export type PutSettingsLogoResponses = {
     /**
      * OK
      */
@@ -998,9 +1004,9 @@ export type UpdateSettingsLogoResponses = {
     };
 };
 
-export type UpdateSettingsLogoResponse = UpdateSettingsLogoResponses[keyof UpdateSettingsLogoResponses];
+export type PutSettingsLogoResponse = PutSettingsLogoResponses[keyof PutSettingsLogoResponses];
 
-export type CreateSettingsLogoImageData = {
+export type PostSettingsLogoImageData = {
     body?: {
         LogoFile?: Blob | File;
     };
@@ -1017,39 +1023,39 @@ export type CreateSettingsLogoImageData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/logo/image';
 };
 
-export type CreateSettingsLogoImageResponses = {
+export type PostSettingsLogoImageResponses = {
     /**
      * OK
      */
     204: void;
 };
 
-export type CreateSettingsLogoImageResponse = CreateSettingsLogoImageResponses[keyof CreateSettingsLogoImageResponses];
+export type PostSettingsLogoImageResponse = PostSettingsLogoImageResponses[keyof PostSettingsLogoImageResponses];
 
-export type GetSettingsEnabledSearchFiltersData = {
+export type GetEnabledData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/settings/search/filters';
 };
 
-export type GetSettingsEnabledSearchFiltersResponses = {
+export type GetEnabledResponses = {
     200: {
         data?: ConfiguredFilters;
         meta?: MetaOpen;
     };
 };
 
-export type GetSettingsEnabledSearchFiltersResponse = GetSettingsEnabledSearchFiltersResponses[keyof GetSettingsEnabledSearchFiltersResponses];
+export type GetEnabledResponse = GetEnabledResponses[keyof GetEnabledResponses];
 
-export type UpdateSettingsEnabledSearchFiltersData = {
+export type UpdateEnabledData = {
     body?: ConfiguredFilters;
     headers: {
         /**
@@ -1062,16 +1068,16 @@ export type UpdateSettingsEnabledSearchFiltersData = {
     url: '/settings/search/filters';
 };
 
-export type UpdateSettingsEnabledSearchFiltersResponses = {
+export type UpdateEnabledResponses = {
     200: {
         data?: ConfiguredFilters;
         meta?: MetaOpen;
     };
 };
 
-export type UpdateSettingsEnabledSearchFiltersResponse = UpdateSettingsEnabledSearchFiltersResponses[keyof UpdateSettingsEnabledSearchFiltersResponses];
+export type UpdateEnabledResponse = UpdateEnabledResponses[keyof UpdateEnabledResponses];
 
-export type GetSettingsAvailableFiltersData = {
+export type GetAvailableData = {
     body?: never;
     headers: {
         /**
@@ -1097,16 +1103,16 @@ export type GetSettingsAvailableFiltersData = {
     url: '/settings/search/filters/available';
 };
 
-export type GetSettingsAvailableFiltersResponses = {
+export type GetAvailableResponses = {
     200: {
         data?: Array<AvailableFilter>;
         meta?: MetaOpen;
     };
 };
 
-export type GetSettingsAvailableFiltersResponse = GetSettingsAvailableFiltersResponses[keyof GetSettingsAvailableFiltersResponses];
+export type GetAvailableResponse = GetAvailableResponses[keyof GetAvailableResponses];
 
-export type GetSettingsFiltersContextsData = {
+export type GetContextsData = {
     body?: never;
     headers: {
         /**
@@ -1128,7 +1134,7 @@ export type GetSettingsFiltersContextsData = {
     url: '/settings/search/filters/contexts';
 };
 
-export type GetSettingsFiltersContextsResponses = {
+export type GetContextsResponses = {
     /**
      * OK
      */
@@ -1138,9 +1144,9 @@ export type GetSettingsFiltersContextsResponses = {
     };
 };
 
-export type GetSettingsFiltersContextsResponse = GetSettingsFiltersContextsResponses[keyof GetSettingsFiltersContextsResponses];
+export type GetContextsResponse = GetContextsResponses[keyof GetContextsResponses];
 
-export type UpsertSettingsFiltersContextsData = {
+export type UpsertContextsData = {
     body?: Array<ConfiguredFiltersOverride>;
     headers: {
         /**
@@ -1157,7 +1163,7 @@ export type UpsertSettingsFiltersContextsData = {
     url: '/settings/search/filters/contexts';
 };
 
-export type UpsertSettingsFiltersContextsResponses = {
+export type UpsertContextsResponses = {
     /**
      * OK
      */
@@ -1167,9 +1173,9 @@ export type UpsertSettingsFiltersContextsResponses = {
     };
 };
 
-export type UpsertSettingsFiltersContextsResponse = UpsertSettingsFiltersContextsResponses[keyof UpsertSettingsFiltersContextsResponses];
+export type UpsertContextsResponse = UpsertContextsResponses[keyof UpsertContextsResponses];
 
-export type GetSettingsLocaleData = {
+export type GetSettingsStoreLocaleData = {
     body?: never;
     headers: {
         /**
@@ -1178,20 +1184,25 @@ export type GetSettingsLocaleData = {
         Accept: string;
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
+         */
+        channel_id?: number;
+    };
     url: '/settings/store/locale';
 };
 
-export type GetSettingsLocaleResponses = {
+export type GetSettingsStoreLocaleResponses = {
     200: {
         data?: Locale;
         meta?: MetaOpen;
     };
 };
 
-export type GetSettingsLocaleResponse = GetSettingsLocaleResponses[keyof GetSettingsLocaleResponses];
+export type GetSettingsStoreLocaleResponse = GetSettingsStoreLocaleResponses[keyof GetSettingsStoreLocaleResponses];
 
-export type UpdateSettingsLocaleData = {
+export type PutSettingsStoreLocaleData = {
     body?: Locale;
     headers: {
         /**
@@ -1204,27 +1215,32 @@ export type UpdateSettingsLocaleData = {
         'Content-Type': string;
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
+         */
+        channel_id?: number;
+    };
     url: '/settings/store/locale';
 };
 
-export type UpdateSettingsLocaleErrors = {
+export type PutSettingsStoreLocaleErrors = {
     /**
      * Provided settings could not be applied for some reason - detailed errors in the response.
      */
     422: ErrorResponse;
 };
 
-export type UpdateSettingsLocaleError = UpdateSettingsLocaleErrors[keyof UpdateSettingsLocaleErrors];
+export type PutSettingsStoreLocaleError = PutSettingsStoreLocaleErrors[keyof PutSettingsStoreLocaleErrors];
 
-export type UpdateSettingsLocaleResponses = {
+export type PutSettingsStoreLocaleResponses = {
     200: {
         data?: Locale;
         meta?: MetaOpen;
     };
 };
 
-export type UpdateSettingsLocaleResponse = UpdateSettingsLocaleResponses[keyof UpdateSettingsLocaleResponses];
+export type PutSettingsStoreLocaleResponse = PutSettingsStoreLocaleResponses[keyof PutSettingsStoreLocaleResponses];
 
 export type GetSettingsStoreProfileData = {
     body?: never;
@@ -1237,7 +1253,7 @@ export type GetSettingsStoreProfileData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -1256,7 +1272,7 @@ export type GetSettingsStoreProfileResponses = {
 
 export type GetSettingsStoreProfileResponse = GetSettingsStoreProfileResponses[keyof GetSettingsStoreProfileResponses];
 
-export type UpdateSettingsStoreProfileData = {
+export type PutSettingsStoreProfileData = {
     body?: StoreProfile;
     headers: {
         /**
@@ -1271,30 +1287,30 @@ export type UpdateSettingsStoreProfileData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/store/profile';
 };
 
-export type UpdateSettingsStoreProfileErrors = {
+export type PutSettingsStoreProfileErrors = {
     /**
      * Provided settings could not be applied for some reason - detailed errors in the response.
      */
     422: ErrorResponse;
 };
 
-export type UpdateSettingsStoreProfileError = UpdateSettingsStoreProfileErrors[keyof UpdateSettingsStoreProfileErrors];
+export type PutSettingsStoreProfileError = PutSettingsStoreProfileErrors[keyof PutSettingsStoreProfileErrors];
 
-export type UpdateSettingsStoreProfileResponses = {
+export type PutSettingsStoreProfileResponses = {
     200: {
         data?: StoreProfile;
         meta?: MetaOpen;
     };
 };
 
-export type UpdateSettingsStoreProfileResponse = UpdateSettingsStoreProfileResponses[keyof UpdateSettingsStoreProfileResponses];
+export type PutSettingsStoreProfileResponse = PutSettingsStoreProfileResponses[keyof PutSettingsStoreProfileResponses];
 
 export type GetSettingsStorefrontCategoryData = {
     body?: never;
@@ -1307,7 +1323,7 @@ export type GetSettingsStorefrontCategoryData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -1326,7 +1342,7 @@ export type GetSettingsStorefrontCategoryResponses = {
 
 export type GetSettingsStorefrontCategoryResponse = GetSettingsStorefrontCategoryResponses[keyof GetSettingsStorefrontCategoryResponses];
 
-export type UpdateSettingsStorefrontCategoryData = {
+export type PutSettingsStorefrontCategoryData = {
     body?: StorefrontCategorySettings;
     headers: {
         /**
@@ -1341,14 +1357,14 @@ export type UpdateSettingsStorefrontCategoryData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/storefront/category';
 };
 
-export type UpdateSettingsStorefrontCategoryErrors = {
+export type PutSettingsStorefrontCategoryErrors = {
     422: {
         errors?: {
             ''?: string;
@@ -1359,9 +1375,9 @@ export type UpdateSettingsStorefrontCategoryErrors = {
     };
 };
 
-export type UpdateSettingsStorefrontCategoryError = UpdateSettingsStorefrontCategoryErrors[keyof UpdateSettingsStorefrontCategoryErrors];
+export type PutSettingsStorefrontCategoryError = PutSettingsStorefrontCategoryErrors[keyof PutSettingsStorefrontCategoryErrors];
 
-export type UpdateSettingsStorefrontCategoryResponses = {
+export type PutSettingsStorefrontCategoryResponses = {
     /**
      * OK
      */
@@ -1371,7 +1387,7 @@ export type UpdateSettingsStorefrontCategoryResponses = {
     };
 };
 
-export type UpdateSettingsStorefrontCategoryResponse = UpdateSettingsStorefrontCategoryResponses[keyof UpdateSettingsStorefrontCategoryResponses];
+export type PutSettingsStorefrontCategoryResponse = PutSettingsStorefrontCategoryResponses[keyof PutSettingsStorefrontCategoryResponses];
 
 export type GetSettingsStorefrontProductData = {
     body?: never;
@@ -1384,7 +1400,7 @@ export type GetSettingsStorefrontProductData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -1403,7 +1419,7 @@ export type GetSettingsStorefrontProductResponses = {
 
 export type GetSettingsStorefrontProductResponse = GetSettingsStorefrontProductResponses[keyof GetSettingsStorefrontProductResponses];
 
-export type UpdateSettingsStorefrontProductData = {
+export type PutSettingsStorefrontProductData = {
     body?: StorefrontProductSettings;
     headers: {
         /**
@@ -1418,14 +1434,14 @@ export type UpdateSettingsStorefrontProductData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/storefront/product';
 };
 
-export type UpdateSettingsStorefrontProductErrors = {
+export type PutSettingsStorefrontProductErrors = {
     422: {
         errors?: {
             ''?: string;
@@ -1436,9 +1452,9 @@ export type UpdateSettingsStorefrontProductErrors = {
     };
 };
 
-export type UpdateSettingsStorefrontProductError = UpdateSettingsStorefrontProductErrors[keyof UpdateSettingsStorefrontProductErrors];
+export type PutSettingsStorefrontProductError = PutSettingsStorefrontProductErrors[keyof PutSettingsStorefrontProductErrors];
 
-export type UpdateSettingsStorefrontProductResponses = {
+export type PutSettingsStorefrontProductResponses = {
     /**
      * OK. `null` indicates that a particular field has not been overridden on a channel level when channel level settings are requested
      */
@@ -1448,9 +1464,9 @@ export type UpdateSettingsStorefrontProductResponses = {
     };
 };
 
-export type UpdateSettingsStorefrontProductResponse = UpdateSettingsStorefrontProductResponses[keyof UpdateSettingsStorefrontProductResponses];
+export type PutSettingsStorefrontProductResponse = PutSettingsStorefrontProductResponses[keyof PutSettingsStorefrontProductResponses];
 
-export type GetSettingsRobotsTxtData = {
+export type GetSettingsStorefrontRobotstxtData = {
     body?: never;
     headers: {
         /**
@@ -1461,14 +1477,14 @@ export type GetSettingsRobotsTxtData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/storefront/robotstxt';
 };
 
-export type GetSettingsRobotsTxtResponses = {
+export type GetSettingsStorefrontRobotstxtResponses = {
     /**
      * OK, null indicates that a particular field has not been overridden on a channel level when channel level settings are requested
      */
@@ -1478,9 +1494,9 @@ export type GetSettingsRobotsTxtResponses = {
     };
 };
 
-export type GetSettingsRobotsTxtResponse = GetSettingsRobotsTxtResponses[keyof GetSettingsRobotsTxtResponses];
+export type GetSettingsStorefrontRobotstxtResponse = GetSettingsStorefrontRobotstxtResponses[keyof GetSettingsStorefrontRobotstxtResponses];
 
-export type UpdateSettingsRobotsTxtData = {
+export type PutSettingsStorefrontRobotstxtData = {
     body?: RobotsTxtSettings;
     headers: {
         /**
@@ -1495,14 +1511,14 @@ export type UpdateSettingsRobotsTxtData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/storefront/robotstxt';
 };
 
-export type UpdateSettingsRobotsTxtResponses = {
+export type PutSettingsStorefrontRobotstxtResponses = {
     /**
      * OK
      */
@@ -1512,7 +1528,7 @@ export type UpdateSettingsRobotsTxtResponses = {
     };
 };
 
-export type UpdateSettingsRobotsTxtResponse = UpdateSettingsRobotsTxtResponses[keyof UpdateSettingsRobotsTxtResponses];
+export type PutSettingsStorefrontRobotstxtResponse = PutSettingsStorefrontRobotstxtResponses[keyof PutSettingsStorefrontRobotstxtResponses];
 
 export type GetSettingsStorefrontSearchData = {
     body?: never;
@@ -1525,7 +1541,7 @@ export type GetSettingsStorefrontSearchData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -1544,7 +1560,7 @@ export type GetSettingsStorefrontSearchResponses = {
 
 export type GetSettingsStorefrontSearchResponse = GetSettingsStorefrontSearchResponses[keyof GetSettingsStorefrontSearchResponses];
 
-export type UpdateSettingsStorefrontSearchData = {
+export type PutSettingsStorefrontSearchData = {
     body?: StorefrontSearchSettings;
     headers: {
         /**
@@ -1559,14 +1575,14 @@ export type UpdateSettingsStorefrontSearchData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/storefront/search';
 };
 
-export type UpdateSettingsStorefrontSearchResponses = {
+export type PutSettingsStorefrontSearchResponses = {
     /**
      * OK
      */
@@ -1576,7 +1592,7 @@ export type UpdateSettingsStorefrontSearchResponses = {
     };
 };
 
-export type UpdateSettingsStorefrontSearchResponse = UpdateSettingsStorefrontSearchResponses[keyof UpdateSettingsStorefrontSearchResponses];
+export type PutSettingsStorefrontSearchResponse = PutSettingsStorefrontSearchResponses[keyof PutSettingsStorefrontSearchResponses];
 
 export type GetSettingsStorefrontSecurityData = {
     body?: never;
@@ -1589,7 +1605,7 @@ export type GetSettingsStorefrontSecurityData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -1608,7 +1624,7 @@ export type GetSettingsStorefrontSecurityResponses = {
 
 export type GetSettingsStorefrontSecurityResponse = GetSettingsStorefrontSecurityResponses[keyof GetSettingsStorefrontSecurityResponses];
 
-export type UpdateSettingsStorefrontSecurityData = {
+export type PutSettingsStorefrontSecurityData = {
     body?: StorefrontSecuritySettings;
     headers: {
         /**
@@ -1623,14 +1639,14 @@ export type UpdateSettingsStorefrontSecurityData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/storefront/security';
 };
 
-export type UpdateSettingsStorefrontSecurityResponses = {
+export type PutSettingsStorefrontSecurityResponses = {
     /**
      * OK
      */
@@ -1640,7 +1656,7 @@ export type UpdateSettingsStorefrontSecurityResponses = {
     };
 };
 
-export type UpdateSettingsStorefrontSecurityResponse = UpdateSettingsStorefrontSecurityResponses[keyof UpdateSettingsStorefrontSecurityResponses];
+export type PutSettingsStorefrontSecurityResponse = PutSettingsStorefrontSecurityResponses[keyof PutSettingsStorefrontSecurityResponses];
 
 export type GetSettingsStorefrontSeoData = {
     body?: never;
@@ -1653,7 +1669,7 @@ export type GetSettingsStorefrontSeoData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -1672,7 +1688,7 @@ export type GetSettingsStorefrontSeoResponses = {
 
 export type GetSettingsStorefrontSeoResponse = GetSettingsStorefrontSeoResponses[keyof GetSettingsStorefrontSeoResponses];
 
-export type UpdateSettingsStorefrontSeoData = {
+export type PutSettingsStorefrontSeoData = {
     body?: SeoSettings;
     headers: {
         /**
@@ -1687,14 +1703,14 @@ export type UpdateSettingsStorefrontSeoData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/storefront/seo';
 };
 
-export type UpdateSettingsStorefrontSeoErrors = {
+export type PutSettingsStorefrontSeoErrors = {
     422: {
         errors?: {
             ''?: string;
@@ -1705,9 +1721,9 @@ export type UpdateSettingsStorefrontSeoErrors = {
     };
 };
 
-export type UpdateSettingsStorefrontSeoError = UpdateSettingsStorefrontSeoErrors[keyof UpdateSettingsStorefrontSeoErrors];
+export type PutSettingsStorefrontSeoError = PutSettingsStorefrontSeoErrors[keyof PutSettingsStorefrontSeoErrors];
 
-export type UpdateSettingsStorefrontSeoResponses = {
+export type PutSettingsStorefrontSeoResponses = {
     /**
      * OK
      */
@@ -1717,7 +1733,7 @@ export type UpdateSettingsStorefrontSeoResponses = {
     };
 };
 
-export type UpdateSettingsStorefrontSeoResponse = UpdateSettingsStorefrontSeoResponses[keyof UpdateSettingsStorefrontSeoResponses];
+export type PutSettingsStorefrontSeoResponse = PutSettingsStorefrontSeoResponses[keyof PutSettingsStorefrontSeoResponses];
 
 export type GetSettingsStorefrontStatusData = {
     body?: never;
@@ -1730,7 +1746,7 @@ export type GetSettingsStorefrontStatusData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -1749,7 +1765,7 @@ export type GetSettingsStorefrontStatusResponses = {
 
 export type GetSettingsStorefrontStatusResponse = GetSettingsStorefrontStatusResponses[keyof GetSettingsStorefrontStatusResponses];
 
-export type UpdateSettingsStorefrontStatusData = {
+export type PutSettingsStorefrontStatusData = {
     body?: StorefrontStatus;
     headers: {
         /**
@@ -1764,14 +1780,14 @@ export type UpdateSettingsStorefrontStatusData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/storefront/status';
 };
 
-export type UpdateSettingsStorefrontStatusResponses = {
+export type PutSettingsStorefrontStatusResponses = {
     /**
      * OK
      */
@@ -1781,7 +1797,7 @@ export type UpdateSettingsStorefrontStatusResponses = {
     };
 };
 
-export type UpdateSettingsStorefrontStatusResponse = UpdateSettingsStorefrontStatusResponses[keyof UpdateSettingsStorefrontStatusResponses];
+export type PutSettingsStorefrontStatusResponse = PutSettingsStorefrontStatusResponses[keyof PutSettingsStorefrontStatusResponses];
 
 export type GetSettingsInventoryData = {
     body?: never;
@@ -1794,7 +1810,7 @@ export type GetSettingsInventoryData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
@@ -1812,7 +1828,7 @@ export type GetSettingsInventoryError = GetSettingsInventoryErrors[keyof GetSett
 
 export type GetSettingsInventoryResponses = {
     /**
-     * OK, null indicates that a particular field has not been overridden on a channel level when channel level settings are requested.
+     * OK, null indicates that a particular field has not been overridden on a channel level when channel level settings are requested
      */
     200: {
         data?: InventorySettings;
@@ -1822,7 +1838,7 @@ export type GetSettingsInventoryResponses = {
 
 export type GetSettingsInventoryResponse = GetSettingsInventoryResponses[keyof GetSettingsInventoryResponses];
 
-export type UpdateSettingsInventoryData = {
+export type PutSettingsInventoryData = {
     /**
      * null set for a particular field removes override on a channel level and means inheritance from a global level
      */
@@ -1840,14 +1856,14 @@ export type UpdateSettingsInventoryData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/inventory';
 };
 
-export type UpdateSettingsInventoryResponses = {
+export type PutSettingsInventoryResponses = {
     /**
      * OK, null indicates that a particular field has not been overridden on a channel level when channel level settings are requested
      */
@@ -1857,30 +1873,30 @@ export type UpdateSettingsInventoryResponses = {
     };
 };
 
-export type UpdateSettingsInventoryResponse = UpdateSettingsInventoryResponses[keyof UpdateSettingsInventoryResponses];
+export type PutSettingsInventoryResponse = PutSettingsInventoryResponses[keyof PutSettingsInventoryResponses];
 
-export type GetSettingsMeasurementUnitsData = {
+export type GetSettingsStoreUnitsOfMeasurementData = {
     body?: never;
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/store/units-of-measurement';
 };
 
-export type GetSettingsMeasurementUnitsErrors = {
+export type GetSettingsStoreUnitsOfMeasurementErrors = {
     /**
      * The provided settings could not be applied. See detailed errors in the response.
      */
     422: ErrorResponse;
 };
 
-export type GetSettingsMeasurementUnitsError = GetSettingsMeasurementUnitsErrors[keyof GetSettingsMeasurementUnitsErrors];
+export type GetSettingsStoreUnitsOfMeasurementError = GetSettingsStoreUnitsOfMeasurementErrors[keyof GetSettingsStoreUnitsOfMeasurementErrors];
 
-export type GetSettingsMeasurementUnitsResponses = {
+export type GetSettingsStoreUnitsOfMeasurementResponses = {
     /**
      * OK. When you request channel-level settings, `null` indicates that a channel does not have overrides.
      */
@@ -1892,21 +1908,21 @@ export type GetSettingsMeasurementUnitsResponses = {
     };
 };
 
-export type GetSettingsMeasurementUnitsResponse = GetSettingsMeasurementUnitsResponses[keyof GetSettingsMeasurementUnitsResponses];
+export type GetSettingsStoreUnitsOfMeasurementResponse = GetSettingsStoreUnitsOfMeasurementResponses[keyof GetSettingsStoreUnitsOfMeasurementResponses];
 
-export type UpdateSettingsMeasurementUnitsData = {
+export type PutSettingsStoreUnitsOfMeasurementData = {
     body?: MeasurementUnitsSettings;
     path?: never;
     query?: {
         /**
-         * Channel ID to use for channel-specific settings. If omitted, you will interact with the global settings only.
+         * Channel ID to use for channel-specific setting. If omitted, you will interact with the global setting only.
          */
         channel_id?: number;
     };
     url: '/settings/store/units-of-measurement';
 };
 
-export type UpdateSettingsMeasurementUnitsResponses = {
+export type PutSettingsStoreUnitsOfMeasurementResponses = {
     /**
      * OK. When you request channel-level settings, `null` indicates that a channel does not have overrides.
      */
@@ -1918,4 +1934,4 @@ export type UpdateSettingsMeasurementUnitsResponses = {
     };
 };
 
-export type UpdateSettingsMeasurementUnitsResponse = UpdateSettingsMeasurementUnitsResponses[keyof UpdateSettingsMeasurementUnitsResponses];
+export type PutSettingsStoreUnitsOfMeasurementResponse = PutSettingsStoreUnitsOfMeasurementResponses[keyof PutSettingsStoreUnitsOfMeasurementResponses];

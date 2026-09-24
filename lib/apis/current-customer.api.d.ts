@@ -5,5 +5,5 @@ export * as CurrentCustomerApiSpecs from '../generated/current-customer';
 export declare class CurrentCustomerApi {
     private readonly request;
     constructor(request: RequestService);
-    getCurrentCustomer(query?: CurrentCustomerApiSpecs.GetCurrentCustomerData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, string>>;
+    getCurrentCustomer(query?: CurrentCustomerApiSpecs.GetCurrentCustomerData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, void>>;
 }

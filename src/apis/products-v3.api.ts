@@ -27,14 +27,13 @@ export class ProductsV3Api {
     /**
      * Create a Product
      *
-     * Creates a *Product*. Only one product can be created at a time; however, you can create multiple product variants using the `variants` array.
+     * Creates a *Product*. Only one product can be created at a time.
 
      **Required Fields:**
      - `name`
      - `type`
      - `weight`
      - `price`
-     - `categories` (required when you enable the V2 product experience in the control panel)
 
      **Read-Only Fields**
      - `id`
@@ -48,7 +47,6 @@ export class ProductsV3Api {
      - A product can have up to 1000 images. Each image file or image uploaded by URL can be up to 8 MB.
 
      **Usage Notes**
-     * You can create multiple product variants using the `variants` array.
      * This endpoint accepts a `video` array. To create a product video that accepts a `video` object, see [Create a Product Video](/docs/rest-catalog/products/videos#create-a-product-video) for information.
      */
     createProduct(
@@ -99,7 +97,7 @@ export class ProductsV3Api {
      > The maximum number of products you can delete at one time is 250.
 
      **Example**:
-     To delete products with IDs 1,2 and 3, use `DELETE /v3/catalog/products?id:in=1,2,3`.
+     To delete products with the id's of 1,2 and 3, use `DELETE /v3/catalog/products?id:in=1,2,3`.
      */
     deleteProducts(
         query?: ProductsV3ApiSpecs.DeleteProductsData['query'],
@@ -115,14 +113,21 @@ export class ProductsV3Api {
      *
      * Returns a single *Product*. Optional parameters can be passed in.
      */
-    getProduct(
-        productId: ProductsV3ApiSpecs.GetProductData['path']['product_id'],
-        query?: ProductsV3ApiSpecs.GetProductData['query'],
+    getProductById(
+        productId: ProductsV3ApiSpecs.GetProductByIdData['path']['product_id'],
+        query?: ProductsV3ApiSpecs.GetProductByIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductByIdResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductByIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getProductById` instead.
+     */
+    getProduct(...args: Parameters<ProductsV3Api['getProductById']>) {
+        return this.getProductById(...args);
     }
 
     /**
@@ -159,12 +164,19 @@ export class ProductsV3Api {
      *
      * Deletes a *Product*.
      */
-    deleteProduct(
-        productId: ProductsV3ApiSpecs.DeleteProductData['path']['product_id'],
+    deleteProductById(
+        productId: ProductsV3ApiSpecs.DeleteProductByIdData['path']['product_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductByIdResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteProductById` instead.
+     */
+    deleteProduct(...args: Parameters<ProductsV3Api['deleteProductById']>) {
+        return this.deleteProductById(...args);
     }
 
     /**
@@ -193,7 +205,7 @@ export class ProductsV3Api {
 
      **Usage Notes**
      - `image_url` - `255` character limit
-     - `Content-Type` - For `image_file`, use the `multipart/form-data` media type. For `image_url`, use the `application/json` type. See [Adding product images](/docs/store-operations/catalog#adding-product-images) for more information.
+     - For file uploads, use the `multipart/form-data` media type.
      - You can create only one image at a time. A product can have up to 1000 images.
      - Supported image file types are BMP, GIF, JPEG, PNG, WBMP, XBM, and WEBP.
      - Each image file or image uploaded by URL can be up to 8 MB.
@@ -214,15 +226,22 @@ export class ProductsV3Api {
      *
      * Returns a single *Product Image*. Optional parameters can be passed in.
      */
-    getProductImage(
-        productId: ProductsV3ApiSpecs.GetProductImageData['path']['product_id'],
-        imageId: ProductsV3ApiSpecs.GetProductImageData['path']['image_id'],
-        query?: ProductsV3ApiSpecs.GetProductImageData['query'],
+    getProductImageById(
+        productId: ProductsV3ApiSpecs.GetProductImageByIdData['path']['product_id'],
+        imageId: ProductsV3ApiSpecs.GetProductImageByIdData['path']['image_id'],
+        query?: ProductsV3ApiSpecs.GetProductImageByIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductImageResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductImageErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductImageByIdResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductImageByIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}/images/${imageId}`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getProductImageById` instead.
+     */
+    getProductImage(...args: Parameters<ProductsV3Api['getProductImageById']>) {
+        return this.getProductImageById(...args);
     }
 
     /**
@@ -240,7 +259,7 @@ export class ProductsV3Api {
         imageId: ProductsV3ApiSpecs.UpdateProductImageData['path']['image_id'],
         requestBody: ProductsV3ApiSpecs.UpdateProductImageData['body'],
     ) {
-        return this.request.put<(RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductImageResponses[200]>> | RequestSuccessResponse<201, Required<ProductsV3ApiSpecs.UpdateProductImageResponses[201]>>),(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.UpdateProductImageErrors[400]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateProductImageErrors[404]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateProductImageErrors[422]>>)>({
+        return this.request.put<(RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductImageResponses[200]>> | RequestSuccessResponse<201, Required<ProductsV3ApiSpecs.UpdateProductImageResponses[201]>>),(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.UpdateProductImageErrors[400]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateProductImageErrors[404]>>)>({
             path: `v3/catalog/products/${productId}/images/${imageId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -288,9 +307,7 @@ export class ProductsV3Api {
      * id
 
      Publicly accessible URLs are valid parameters.
-
-     The Catalog API integrates with third-party YouTube, and you must load videos through YouTube.
-     The [YouTube Terms of Service](https://www.youtube.com/t/terms) and [Google Privacy Policy](https://policies.google.com/privacy) apply, as indicated in our [Privacy Policy](https://www.bigcommerce.com/privacy/) and [Terms of Service](https://www.bigcommerce.com/terms/).
+     Videos must be loaded through YouTube at this time.
      */
     createProductVideo(
         productId: ProductsV3ApiSpecs.CreateProductVideoData['path']['product_id'],
@@ -308,15 +325,22 @@ export class ProductsV3Api {
      *
      * Returns a single *Product Video*. Optional parameters can be passed in.
      */
-    getProductVideo(
-        productId: ProductsV3ApiSpecs.GetProductVideoData['path']['product_id'],
-        id: ProductsV3ApiSpecs.GetProductVideoData['path']['id'],
-        query?: ProductsV3ApiSpecs.GetProductVideoData['query'],
+    getProductVideoById(
+        productId: ProductsV3ApiSpecs.GetProductVideoByIdData['path']['product_id'],
+        id: ProductsV3ApiSpecs.GetProductVideoByIdData['path']['id'],
+        query?: ProductsV3ApiSpecs.GetProductVideoByIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductVideoResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductVideoErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductVideoByIdResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductVideoByIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}/videos/${id}`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getProductVideoById` instead.
+     */
+    getProductVideo(...args: Parameters<ProductsV3Api['getProductVideoById']>) {
+        return this.getProductVideoById(...args);
     }
 
     /**
@@ -329,9 +353,6 @@ export class ProductsV3Api {
 
      **Read-Only Fields**
      * id
-
-     The Catalog API integrates with third-party YouTube, and you must load videos through YouTube.
-     The [YouTube Terms of Service](https://www.youtube.com/t/terms) and [Google Privacy Policy](https://policies.google.com/privacy) apply, as indicated in our [Privacy Policy](https://www.bigcommerce.com/privacy/) and [Terms of Service](https://www.bigcommerce.com/terms/).
      */
     updateProductVideo(
         productId: ProductsV3ApiSpecs.UpdateProductVideoData['path']['product_id'],
@@ -364,14 +385,21 @@ export class ProductsV3Api {
      *
      * Returns a list of all product *Complex Rules*. Optional parameters may be passed in.
      */
-    getProductComplexRules(
-        productId: ProductsV3ApiSpecs.GetProductComplexRulesData['path']['product_id'],
-        query?: ProductsV3ApiSpecs.GetProductComplexRulesData['query'],
+    getComplexRules(
+        productId: ProductsV3ApiSpecs.GetComplexRulesData['path']['product_id'],
+        query?: ProductsV3ApiSpecs.GetComplexRulesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductComplexRulesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetComplexRulesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/complex-rules`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getComplexRules` instead.
+     */
+    getProductComplexRules(...args: Parameters<ProductsV3Api['getComplexRules']>) {
+        return this.getComplexRules(...args);
     }
 
     /**
@@ -391,11 +419,11 @@ export class ProductsV3Api {
      - combination_id
      - id
      */
-    createProductComplexRule(
-        productId: ProductsV3ApiSpecs.CreateProductComplexRuleData['path']['product_id'],
-        requestBody: ProductsV3ApiSpecs.CreateProductComplexRuleData['body'],
+    createComplexRule(
+        productId: ProductsV3ApiSpecs.CreateComplexRuleData['path']['product_id'],
+        requestBody: ProductsV3ApiSpecs.CreateComplexRuleData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductComplexRuleResponses[200]>>,(RequestErrorResponse<409, Required<ProductsV3ApiSpecs.CreateProductComplexRuleErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductComplexRuleErrors[422]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateComplexRuleResponses[200]>>,(RequestErrorResponse<409, Required<ProductsV3ApiSpecs.CreateComplexRuleErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateComplexRuleErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/complex-rules`,
             contentType: 'application/json',
             body: requestBody,
@@ -403,23 +431,37 @@ export class ProductsV3Api {
     }
 
     /**
-     * Get a Product Complex Rule
+     * @deprecated Use `createComplexRule` instead.
+     */
+    createProductComplexRule(...args: Parameters<ProductsV3Api['createComplexRule']>) {
+        return this.createComplexRule(...args);
+    }
+
+    /**
+     * Get a Complex Rule
      *
      * Returns a single *Complex Rule*. Optional parameters can be passed in.
      */
-    getProductComplexRule(
-        productId: ProductsV3ApiSpecs.GetProductComplexRuleData['path']['product_id'],
-        complexRuleId: ProductsV3ApiSpecs.GetProductComplexRuleData['path']['complex_rule_id'],
-        query?: ProductsV3ApiSpecs.GetProductComplexRuleData['query'],
+    getComplexRuleById(
+        productId: ProductsV3ApiSpecs.GetComplexRuleByIdData['path']['product_id'],
+        complexRuleId: ProductsV3ApiSpecs.GetComplexRuleByIdData['path']['complex_rule_id'],
+        query?: ProductsV3ApiSpecs.GetComplexRuleByIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductComplexRuleResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductComplexRuleErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetComplexRuleByIdResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetComplexRuleByIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}/complex-rules/${complexRuleId}`,
             query,
         });
     }
 
     /**
-     * Update a Product Complex Rule
+     * @deprecated Use `getComplexRuleById` instead.
+     */
+    getProductComplexRule(...args: Parameters<ProductsV3Api['getComplexRuleById']>) {
+        return this.getComplexRuleById(...args);
+    }
+
+    /**
+     * Update a Complex Rule
      *
      * Updates a *Complex Rule*.
 
@@ -433,12 +475,12 @@ export class ProductsV3Api {
      - combination_id
      - id
      */
-    updateProductComplexRule(
-        productId: ProductsV3ApiSpecs.UpdateProductComplexRuleData['path']['product_id'],
-        complexRuleId: ProductsV3ApiSpecs.UpdateProductComplexRuleData['path']['complex_rule_id'],
-        requestBody: ProductsV3ApiSpecs.UpdateProductComplexRuleData['body'],
+    updateComplexRule(
+        productId: ProductsV3ApiSpecs.UpdateComplexRuleData['path']['product_id'],
+        complexRuleId: ProductsV3ApiSpecs.UpdateComplexRuleData['path']['complex_rule_id'],
+        requestBody: ProductsV3ApiSpecs.UpdateComplexRuleData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductComplexRuleResponses[200]>>,(RequestErrorResponse<409, Required<ProductsV3ApiSpecs.UpdateProductComplexRuleErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateProductComplexRuleErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateComplexRuleResponses[200]>>,(RequestErrorResponse<409, Required<ProductsV3ApiSpecs.UpdateComplexRuleErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateComplexRuleErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/complex-rules/${complexRuleId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -446,36 +488,60 @@ export class ProductsV3Api {
     }
 
     /**
-     * Delete a Product Complex Rule
+     * @deprecated Use `updateComplexRule` instead.
+     */
+    updateProductComplexRule(...args: Parameters<ProductsV3Api['updateComplexRule']>) {
+        return this.updateComplexRule(...args);
+    }
+
+    /**
+     * Delete a Complex Rule
      *
      * Deletes a product *Complex Rule*.
      */
-    deleteProductComplexRule(
-        productId: ProductsV3ApiSpecs.DeleteProductComplexRuleData['path']['product_id'],
-        complexRuleId: ProductsV3ApiSpecs.DeleteProductComplexRuleData['path']['complex_rule_id'],
+    deleteComplexRuleById(
+        productId: ProductsV3ApiSpecs.DeleteComplexRuleByIdData['path']['product_id'],
+        complexRuleId: ProductsV3ApiSpecs.DeleteComplexRuleByIdData['path']['complex_rule_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductComplexRuleResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteComplexRuleByIdResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/complex-rules/${complexRuleId}`,
         });
     }
 
     /**
-     * Get Product Custom Fields
-     *
-     * Returns a list of product *Custom Fields*. You can pass in optional parameters.
+     * @deprecated Use `deleteComplexRuleById` instead.
      */
-    getProductCustomFields(
-        productId: ProductsV3ApiSpecs.GetProductCustomFieldsData['path']['product_id'],
-        query?: ProductsV3ApiSpecs.GetProductCustomFieldsData['query'],
+    deleteProductComplexRule(...args: Parameters<ProductsV3Api['deleteComplexRuleById']>) {
+        return this.deleteComplexRuleById(...args);
+    }
+
+    /**
+     * Get Custom Fields
+     *
+     * Returns a list of product *Custom Fields*. Optional parameters can be passed in.
+
+     **Note:**
+     The default rate limit for this endpoint is 40 concurrent requests.
+     */
+    getCustomFields(
+        productId: ProductsV3ApiSpecs.GetCustomFieldsData['path']['product_id'],
+        query?: ProductsV3ApiSpecs.GetCustomFieldsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductCustomFieldsResponses[200]>>,(RequestErrorResponse<401, Required<ProductsV3ApiSpecs.GetProductCustomFieldsErrors[401]>> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.GetProductCustomFieldsErrors[403]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductCustomFieldsErrors[404]>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.GetProductCustomFieldsErrors[405]>>)>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetCustomFieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/custom-fields`,
             query,
         });
     }
 
     /**
-     * Create a Product Custom Field
+     * @deprecated Use `getCustomFields` instead.
+     */
+    getProductCustomFields(...args: Parameters<ProductsV3Api['getCustomFields']>) {
+        return this.getCustomFields(...args);
+    }
+
+    /**
+     * Create a Custom Fields
      *
      * Creates a *Custom Field*.
 
@@ -483,21 +549,17 @@ export class ProductsV3Api {
      - name
      - value
 
-     **Name-Value Pair Uniqueness**
-     - Every name-value pair must be unique inside a product.
-
      **Read-Only:**
      - id
 
-     **Limits**
-     - 200 custom fields per product limit.
-     - 250 characters per custom field limit.
+     **Note:**
+     The default rate limit for this endpoint is 40 concurrent requests. 
      */
-    createProductCustomField(
-        productId: ProductsV3ApiSpecs.CreateProductCustomFieldData['path']['product_id'],
-        requestBody: ProductsV3ApiSpecs.CreateProductCustomFieldData['body'],
+    createCustomField(
+        productId: ProductsV3ApiSpecs.CreateCustomFieldData['path']['product_id'],
+        requestBody: ProductsV3ApiSpecs.CreateCustomFieldData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductCustomFieldResponses[200]>>,(RequestErrorResponse<401, Required<ProductsV3ApiSpecs.CreateProductCustomFieldErrors[401]>> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.CreateProductCustomFieldErrors[403]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.CreateProductCustomFieldErrors[404]>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.CreateProductCustomFieldErrors[405]>> | RequestErrorResponse<415, Required<ProductsV3ApiSpecs.CreateProductCustomFieldErrors[415]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductCustomFieldErrors[422]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateCustomFieldResponses[200]>>,(RequestErrorResponse<404, Required<ProductsV3ApiSpecs.CreateCustomFieldErrors[404]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateCustomFieldErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/custom-fields`,
             contentType: 'application/json',
             body: requestBody,
@@ -505,46 +567,52 @@ export class ProductsV3Api {
     }
 
     /**
-     * Get a Product Custom Field
-     *
-     * Returns a *Custom Field*.
-
+     * @deprecated Use `createCustomField` instead.
      */
-    getProductCustomField(
-        productId: ProductsV3ApiSpecs.GetProductCustomFieldData['path']['product_id'],
-        customFieldId: ProductsV3ApiSpecs.GetProductCustomFieldData['path']['custom_field_id'],
-        query?: ProductsV3ApiSpecs.GetProductCustomFieldData['query'],
+    createProductCustomField(...args: Parameters<ProductsV3Api['createCustomField']>) {
+        return this.createCustomField(...args);
+    }
+
+    /**
+     * Get a Custom Field
+     *
+     * Returns a single *Custom Field*. Optional parameters can be passed in.
+     */
+    getCustomFieldById(
+        productId: ProductsV3ApiSpecs.GetCustomFieldByIdData['path']['product_id'],
+        customFieldId: ProductsV3ApiSpecs.GetCustomFieldByIdData['path']['custom_field_id'],
+        query?: ProductsV3ApiSpecs.GetCustomFieldByIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductCustomFieldResponses[200]>>,(RequestErrorResponse<401, Required<ProductsV3ApiSpecs.GetProductCustomFieldErrors[401]>> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.GetProductCustomFieldErrors[403]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductCustomFieldErrors[404]>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.GetProductCustomFieldErrors[405]>>)>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetCustomFieldByIdResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetCustomFieldByIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}/custom-fields/${customFieldId}`,
             query,
         });
     }
 
     /**
-     * Update a Product Custom Field
+     * @deprecated Use `getCustomFieldById` instead.
+     */
+    getProductCustomField(...args: Parameters<ProductsV3Api['getCustomFieldById']>) {
+        return this.getCustomFieldById(...args);
+    }
+
+    /**
+     * Update a Custom Field
      *
      * Updates a *Custom Field*.
 
      **Required Fields**
      - none
 
-     **Name-Value Pair Uniqueness**
-     - Every name-value pair must be unique inside a product.
-
      **Read-Only**
      - id
-
-      **Limits**
-     - 200 custom fields per product limit.
-     - 250 characters per custom field limit.
      */
-    updateProductCustomField(
-        productId: ProductsV3ApiSpecs.UpdateProductCustomFieldData['path']['product_id'],
-        customFieldId: ProductsV3ApiSpecs.UpdateProductCustomFieldData['path']['custom_field_id'],
-        requestBody: ProductsV3ApiSpecs.UpdateProductCustomFieldData['body'],
+    updateCustomField(
+        productId: ProductsV3ApiSpecs.UpdateCustomFieldData['path']['product_id'],
+        customFieldId: ProductsV3ApiSpecs.UpdateCustomFieldData['path']['custom_field_id'],
+        requestBody: ProductsV3ApiSpecs.UpdateCustomFieldData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldResponses[200]>>,(RequestErrorResponse<401, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldErrors[401]>> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldErrors[403]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldErrors[404]>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldErrors[405]>> | RequestErrorResponse<415, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldErrors[415]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateProductCustomFieldErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateCustomFieldResponses[200]>>,(RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateCustomFieldErrors[404]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateCustomFieldErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/custom-fields/${customFieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -552,47 +620,85 @@ export class ProductsV3Api {
     }
 
     /**
-     * Delete a Product Custom Field
+     * @deprecated Use `updateCustomField` instead.
+     */
+    updateProductCustomField(...args: Parameters<ProductsV3Api['updateCustomField']>) {
+        return this.updateCustomField(...args);
+    }
+
+    /**
+     * Delete a Custom Field
      *
      * Deletes a product *Custom Field*.
+
+     **Note:**
+     The default rate limit for this endpoint is 40 concurrent requests.
      */
-    deleteProductCustomField(
-        productId: ProductsV3ApiSpecs.DeleteProductCustomFieldData['path']['product_id'],
-        customFieldId: ProductsV3ApiSpecs.DeleteProductCustomFieldData['path']['custom_field_id'],
+    deleteCustomFieldById(
+        productId: ProductsV3ApiSpecs.DeleteCustomFieldByIdData['path']['product_id'],
+        customFieldId: ProductsV3ApiSpecs.DeleteCustomFieldByIdData['path']['custom_field_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductCustomFieldResponses[204]>>,(RequestErrorResponse<401, Required<ProductsV3ApiSpecs.DeleteProductCustomFieldErrors[401]>> | RequestErrorResponse<403, Required<ProductsV3ApiSpecs.DeleteProductCustomFieldErrors[403]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.DeleteProductCustomFieldErrors[404]>> | RequestErrorResponse<405, Required<ProductsV3ApiSpecs.DeleteProductCustomFieldErrors[405]>>)>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteCustomFieldByIdResponses[204]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.DeleteCustomFieldByIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}/custom-fields/${customFieldId}`,
         });
     }
 
     /**
-     * Get all Bulk Pricing Rules
-     *
-     * Returns all *Bulk Pricing Rules*. Optional parameters can be passed in.
+     * @deprecated Use `deleteCustomFieldById` instead.
      */
-    getAllBulkPricingRules(
-        productId: ProductsV3ApiSpecs.GetAllBulkPricingRulesData['path']['product_id'],
-        query?: ProductsV3ApiSpecs.GetAllBulkPricingRulesData['query'],
+    deleteProductCustomField(...args: Parameters<ProductsV3Api['deleteCustomFieldById']>) {
+        return this.deleteCustomFieldById(...args);
+    }
+
+    /**
+     * Get All Bulk Pricing Rules
+     *
+     * Returns a list of *Bulk Pricing Rules*. Optional parameters can be passed in.
+     */
+    getBulkPricingRules(
+        productId: ProductsV3ApiSpecs.GetBulkPricingRulesData['path']['product_id'],
+        query?: ProductsV3ApiSpecs.GetBulkPricingRulesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetAllBulkPricingRulesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetBulkPricingRulesResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetBulkPricingRulesErrors[404]>>>({
             path: `v3/catalog/products/${productId}/bulk-pricing-rules`,
             query,
         });
     }
 
     /**
+     * @deprecated Use `getBulkPricingRules` instead.
+     */
+    getAllBulkPricingRules(...args: Parameters<ProductsV3Api['getBulkPricingRules']>) {
+        return this.getBulkPricingRules(...args);
+    }
+
+    /**
      * Create a Bulk Pricing Rule
      *
      * Creates a *Bulk Pricing Rule*.
+
+     **Required Fields**
+     - quantity_min
+     - quantity_max
+     - type
+     - amount
+
+     **Read-Only Fields**
+     - id
+
+     **Limits**
+     - 50 bulk pricing rule per product limit.
      */
     createBulkPricingRule(
         productId: ProductsV3ApiSpecs.CreateBulkPricingRuleData['path']['product_id'],
         requestBody: ProductsV3ApiSpecs.CreateBulkPricingRuleData['body'],
+        query?: ProductsV3ApiSpecs.CreateBulkPricingRuleData['query'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateBulkPricingRuleResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateBulkPricingRuleResponses[200]>>,(RequestErrorResponse<404, Required<ProductsV3ApiSpecs.CreateBulkPricingRuleErrors[404]>> | RequestErrorResponse<409, Required<ProductsV3ApiSpecs.CreateBulkPricingRuleErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateBulkPricingRuleErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/bulk-pricing-rules`,
             contentType: 'application/json',
             body: requestBody,
+            query,
         });
     }
 
@@ -601,15 +707,22 @@ export class ProductsV3Api {
      *
      * Returns a single *Bulk Pricing Rule*. Optional parameters can be passed in.
      */
-    getBulkPricingRule(
-        productId: ProductsV3ApiSpecs.GetBulkPricingRuleData['path']['product_id'],
-        bulkPricingRuleId: ProductsV3ApiSpecs.GetBulkPricingRuleData['path']['bulk_pricing_rule_id'],
-        query?: ProductsV3ApiSpecs.GetBulkPricingRuleData['query'],
+    getBulkPricingRuleById(
+        productId: ProductsV3ApiSpecs.GetBulkPricingRuleByIdData['path']['product_id'],
+        bulkPricingRuleId: ProductsV3ApiSpecs.GetBulkPricingRuleByIdData['path']['bulk_pricing_rule_id'],
+        query?: ProductsV3ApiSpecs.GetBulkPricingRuleByIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetBulkPricingRuleResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetBulkPricingRuleErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetBulkPricingRuleByIdResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetBulkPricingRuleByIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}/bulk-pricing-rules/${bulkPricingRuleId}`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getBulkPricingRuleById` instead.
+     */
+    getBulkPricingRule(...args: Parameters<ProductsV3Api['getBulkPricingRuleById']>) {
+        return this.getBulkPricingRuleById(...args);
     }
 
     /**
@@ -640,28 +753,42 @@ export class ProductsV3Api {
      *
      * Deletes a *Bulk Pricing Rule*.
      */
-    deleteBulkPricingRule(
-        productId: ProductsV3ApiSpecs.DeleteBulkPricingRuleData['path']['product_id'],
-        bulkPricingRuleId: ProductsV3ApiSpecs.DeleteBulkPricingRuleData['path']['bulk_pricing_rule_id'],
+    deleteBulkPricingRuleById(
+        productId: ProductsV3ApiSpecs.DeleteBulkPricingRuleByIdData['path']['product_id'],
+        bulkPricingRuleId: ProductsV3ApiSpecs.DeleteBulkPricingRuleByIdData['path']['bulk_pricing_rule_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteBulkPricingRuleResponses[204]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.DeleteBulkPricingRuleErrors[404]>>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteBulkPricingRuleByIdResponses[204]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.DeleteBulkPricingRuleByIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}/bulk-pricing-rules/${bulkPricingRuleId}`,
         });
     }
 
     /**
-     * Get Product Metafields
+     * @deprecated Use `deleteBulkPricingRuleById` instead.
+     */
+    deleteBulkPricingRule(...args: Parameters<ProductsV3Api['deleteBulkPricingRuleById']>) {
+        return this.deleteBulkPricingRuleById(...args);
+    }
+
+    /**
+     * Get All Product Metafields
      *
      * Returns a list of *Product Metafields*. Optional parameters can be passed in.
      */
-    getProductMetafields(
-        productId: ProductsV3ApiSpecs.GetProductMetafieldsData['path']['product_id'],
-        query?: ProductsV3ApiSpecs.GetProductMetafieldsData['query'],
+    getProductMetafieldsByProductId(
+        productId: ProductsV3ApiSpecs.GetProductMetafieldsByProductIdData['path']['product_id'],
+        query?: ProductsV3ApiSpecs.GetProductMetafieldsByProductIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductMetafieldsByProductIdResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductMetafieldsByProductIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}/metafields`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getProductMetafieldsByProductId` instead.
+     */
+    getProductMetafields(...args: Parameters<ProductsV3Api['getProductMetafieldsByProductId']>) {
+        return this.getProductMetafieldsByProductId(...args);
     }
 
     /**
@@ -681,7 +808,7 @@ export class ProductsV3Api {
         productId: ProductsV3ApiSpecs.CreateProductMetafieldData['path']['product_id'],
         requestBody: ProductsV3ApiSpecs.CreateProductMetafieldData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.CreateProductMetafieldErrors[400]>> | RequestErrorResponse<409, Required<ProductsV3ApiSpecs.CreateProductMetafieldErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductMetafieldErrors[422]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductMetafieldResponses[200]>>,(RequestErrorResponse<409, Required<ProductsV3ApiSpecs.CreateProductMetafieldErrors[409]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductMetafieldErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
@@ -693,15 +820,22 @@ export class ProductsV3Api {
      *
      * Returns a single *Product Metafield*. Optional parameters can be passed in.
      */
-    getProductMetafield(
-        productId: ProductsV3ApiSpecs.GetProductMetafieldData['path']['product_id'],
-        metafieldId: ProductsV3ApiSpecs.GetProductMetafieldData['path']['metafield_id'],
-        query?: ProductsV3ApiSpecs.GetProductMetafieldData['query'],
+    getProductMetafieldByProductId(
+        productId: ProductsV3ApiSpecs.GetProductMetafieldByProductIdData['path']['product_id'],
+        metafieldId: ProductsV3ApiSpecs.GetProductMetafieldByProductIdData['path']['metafield_id'],
+        query?: ProductsV3ApiSpecs.GetProductMetafieldByProductIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductMetafieldResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductMetafieldErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductMetafieldByProductIdResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductMetafieldByProductIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}/metafields/${metafieldId}`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getProductMetafieldByProductId` instead.
+     */
+    getProductMetafield(...args: Parameters<ProductsV3Api['getProductMetafieldByProductId']>) {
+        return this.getProductMetafieldByProductId(...args);
     }
 
     /**
@@ -728,7 +862,7 @@ export class ProductsV3Api {
         metafieldId: ProductsV3ApiSpecs.UpdateProductMetafieldData['path']['metafield_id'],
         requestBody: ProductsV3ApiSpecs.UpdateProductMetafieldData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.UpdateProductMetafieldErrors[400]>> | RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateProductMetafieldErrors[404]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductMetafieldResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.UpdateProductMetafieldErrors[404]>>>({
             path: `v3/catalog/products/${productId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -740,13 +874,20 @@ export class ProductsV3Api {
      *
      * Deletes a *Product Metafield*.
      */
-    deleteProductMetafield(
-        productId: ProductsV3ApiSpecs.DeleteProductMetafieldData['path']['product_id'],
-        metafieldId: ProductsV3ApiSpecs.DeleteProductMetafieldData['path']['metafield_id'],
+    deleteProductMetafieldById(
+        productId: ProductsV3ApiSpecs.DeleteProductMetafieldByIdData['path']['product_id'],
+        metafieldId: ProductsV3ApiSpecs.DeleteProductMetafieldByIdData['path']['metafield_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductMetafieldResponses[204]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.DeleteProductMetafieldErrors[404]>>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductsV3ApiSpecs.DeleteProductMetafieldByIdResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/metafields/${metafieldId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `deleteProductMetafieldById` instead.
+     */
+    deleteProductMetafield(...args: Parameters<ProductsV3Api['deleteProductMetafieldById']>) {
+        return this.deleteProductMetafieldById(...args);
     }
 
     /**
@@ -792,15 +933,22 @@ export class ProductsV3Api {
      *
      * Returns a single *Product Review*. Optional parameters maybe passed in.
      */
-    getProductReview(
-        productId: ProductsV3ApiSpecs.GetProductReviewData['path']['product_id'],
-        reviewId: ProductsV3ApiSpecs.GetProductReviewData['path']['review_id'],
-        query?: ProductsV3ApiSpecs.GetProductReviewData['query'],
+    getProductReviewById(
+        productId: ProductsV3ApiSpecs.GetProductReviewByIdData['path']['product_id'],
+        reviewId: ProductsV3ApiSpecs.GetProductReviewByIdData['path']['review_id'],
+        query?: ProductsV3ApiSpecs.GetProductReviewByIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductReviewResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductReviewErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductReviewByIdResponses[200]>>,RequestErrorResponse<404, Required<ProductsV3ApiSpecs.GetProductReviewByIdErrors[404]>>>({
             path: `v3/catalog/products/${productId}/reviews/${reviewId}`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getProductReviewById` instead.
+     */
+    getProductReview(...args: Parameters<ProductsV3Api['getProductReviewById']>) {
+        return this.getProductReviewById(...args);
     }
 
     /**
@@ -858,11 +1006,6 @@ export class ProductsV3Api {
      * Create Products Channel Assignments
      *
      * Creates products channel assignments.
-
-     Notes:
-      * Avoid parallel assignment requests if possible.
-      * Do not make parallel assignment requests with the same product IDs.
-
      */
     createProductsChannelAssignments(
         requestBody: ProductsV3ApiSpecs.CreateProductsChannelAssignmentsData['body'],
@@ -903,7 +1046,7 @@ export class ProductsV3Api {
     }
 
     /**
-     * Create Products Category Assignments
+     * Create Products Category Assignments.
      *
      * Creates products category assignments.
      */
@@ -952,65 +1095,6 @@ export class ProductsV3Api {
     ) {
         return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetCatalogSummaryResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/catalog/summary',
-        });
-    }
-
-    /**
-     * Get All Product Metafields
-     *
-     * Get all product metafields.
-     */
-    getProductsMetafields(
-        query?: ProductsV3ApiSpecs.GetProductsMetafieldsData['query'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.GetProductsMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: 'v3/catalog/products/metafields',
-            query,
-        });
-    }
-
-    /**
-     * Create multiple Metafields
-     *
-     * Create multiple metafields.
-     */
-    createProductsMetafields(
-        requestBody: ProductsV3ApiSpecs.CreateProductsMetafieldsData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.CreateProductsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.CreateProductsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.CreateProductsMetafieldsErrors[422]>>)>({
-            path: 'v3/catalog/products/metafields',
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Update multiple Metafields
-     *
-     * Update multiple metafields.
-     */
-    updateProductsMetafields(
-        requestBody: ProductsV3ApiSpecs.UpdateProductsMetafieldsData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.UpdateProductsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.UpdateProductsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.UpdateProductsMetafieldsErrors[422]>>)>({
-            path: 'v3/catalog/products/metafields',
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Delete Multiple Metafields
-     *
-     * Delete all product metafields.
-     */
-    deleteProductsMetafields(
-        requestBody: ProductsV3ApiSpecs.DeleteProductsMetafieldsData['body'],
-    ) {
-        return this.request.delete<RequestSuccessResponse<200, Required<ProductsV3ApiSpecs.DeleteProductsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ProductsV3ApiSpecs.DeleteProductsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ProductsV3ApiSpecs.DeleteProductsMetafieldsErrors[422]>>)>({
-            path: 'v3/catalog/products/metafields',
-            contentType: 'application/json',
-            body: requestBody,
         });
     }
 }

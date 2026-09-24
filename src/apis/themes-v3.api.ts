@@ -30,14 +30,21 @@ export class ThemesV3Api {
      **Required Fields**
      * file
      */
-    uploadStoreTheme(
-        requestBody: ThemesV3ApiSpecs.UploadStoreThemeData['body'],
+    uploadTheme(
+        requestBody: ThemesV3ApiSpecs.UploadThemeData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<ThemesV3ApiSpecs.UploadStoreThemeResponses[201]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<201, Required<ThemesV3ApiSpecs.UploadThemeResponses[201]>>,RequestErrorResponse<400, void>>({
             path: 'v3/themes',
             contentType: 'multipart/form-data',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `uploadTheme` instead.
+     */
+    uploadStoreTheme(...args: Parameters<ThemesV3Api['uploadTheme']>) {
+        return this.uploadTheme(...args);
     }
 
     /**
@@ -72,15 +79,22 @@ export class ThemesV3Api {
      *
      * Downloads a stores *Theme*.
      */
-    downloadStoreTheme(
-        uuid: ThemesV3ApiSpecs.DownloadStoreThemeData['path']['uuid'],
-        requestBody: ThemesV3ApiSpecs.DownloadStoreThemeData['body'],
+    downloadTheme(
+        uuid: ThemesV3ApiSpecs.DownloadThemeData['path']['uuid'],
+        requestBody: ThemesV3ApiSpecs.DownloadThemeData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.DownloadStoreThemeResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.DownloadThemeResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/${uuid}/actions/download`,
             contentType: 'application/json',
             body: requestBody,
         });
+    }
+
+    /**
+     * @deprecated Use `downloadTheme` instead.
+     */
+    downloadStoreTheme(...args: Parameters<ThemesV3Api['downloadTheme']>) {
+        return this.downloadTheme(...args);
     }
 
     /**
@@ -92,13 +106,11 @@ export class ThemesV3Api {
      */
     activateStoreTheme(
         requestBody: ThemesV3ApiSpecs.ActivateStoreThemeData['body'],
-        query?: ThemesV3ApiSpecs.ActivateStoreThemeData['query'],
     ) {
         return this.request.post<RequestSuccessResponse<204, Required<ThemesV3ApiSpecs.ActivateStoreThemeResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/themes/actions/activate',
             contentType: 'application/json',
             body: requestBody,
-            query,
         });
     }
 
@@ -107,12 +119,19 @@ export class ThemesV3Api {
      *
      * Returns a theme *Job*. When the job is complete, the results array provides a generated link to access the theme. The link is active for 60 seconds.
      */
-    getStoreThemeJob(
-        jobId: ThemesV3ApiSpecs.GetStoreThemeJobData['path']['job_id'],
+    getJob(
+        jobId: ThemesV3ApiSpecs.GetJobData['path']['job_id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetStoreThemeJobResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetJobResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/jobs/${jobId}`,
         });
+    }
+
+    /**
+     * @deprecated Use `getJob` instead.
+     */
+    getStoreThemeJob(...args: Parameters<ThemesV3Api['getJob']>) {
+        return this.getJob(...args);
     }
 
     /**
@@ -123,14 +142,21 @@ export class ThemesV3Api {
      **Usage Notes**:
      * At least one filter must be provided.
      */
-    getThemeConfiguration(
-        uuid: ThemesV3ApiSpecs.GetThemeConfigurationData['path']['uuid'],
-        query?: ThemesV3ApiSpecs.GetThemeConfigurationData['query'],
+    getThemesByUuidConfigurations(
+        uuid: ThemesV3ApiSpecs.GetThemesByUuidConfigurationsData['path']['uuid'],
+        query?: ThemesV3ApiSpecs.GetThemesByUuidConfigurationsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetThemeConfigurationResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetThemesByUuidConfigurationsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/${uuid}/configurations`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getThemesByUuidConfigurations` instead.
+     */
+    getThemeConfiguration(...args: Parameters<ThemesV3Api['getThemesByUuidConfigurations']>) {
+        return this.getThemesByUuidConfigurations(...args);
     }
 
     /**
@@ -138,11 +164,11 @@ export class ThemesV3Api {
      *
      * Validates a theme configuration against the theme's schema without creating it. Useful for testing schemas before creation.
      */
-    validateThemeConfiguration(
-        uuid: ThemesV3ApiSpecs.ValidateThemeConfigurationData['path']['uuid'],
-        requestBody: ThemesV3ApiSpecs.ValidateThemeConfigurationData['body'],
+    postThemesByUuidConfigurationsValidate(
+        uuid: ThemesV3ApiSpecs.PostThemesByUuidConfigurationsValidateData['path']['uuid'],
+        requestBody: ThemesV3ApiSpecs.PostThemesByUuidConfigurationsValidateData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.ValidateThemeConfigurationResponses[200]>>,RequestErrorResponse<422, Required<ThemesV3ApiSpecs.ValidateThemeConfigurationErrors[422]>>>({
+        return this.request.post<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.PostThemesByUuidConfigurationsValidateResponses[200]>>,RequestErrorResponse<422, Required<ThemesV3ApiSpecs.PostThemesByUuidConfigurationsValidateErrors[422]>>>({
             path: `v3/themes/${uuid}/configurations/validate`,
             contentType: 'application/json',
             body: requestBody,
@@ -150,15 +176,29 @@ export class ThemesV3Api {
     }
 
     /**
+     * @deprecated Use `postThemesByUuidConfigurationsValidate` instead.
+     */
+    validateThemeConfiguration(...args: Parameters<ThemesV3Api['postThemesByUuidConfigurationsValidate']>) {
+        return this.postThemesByUuidConfigurationsValidate(...args);
+    }
+
+    /**
      * Get Custom Templates
      *
      * Enumerate available custom templates for in the theme files in a specific theme version for each supported entity type.
      */
-    getThemeCustomTemplates(
-        versionUuid: ThemesV3ApiSpecs.GetThemeCustomTemplatesData['path']['version_uuid'],
+    getThemesThemeUuidCustomTemplates(
+        versionUuid: ThemesV3ApiSpecs.GetThemesThemeUuidCustomTemplatesData['path']['version_uuid'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetThemeCustomTemplatesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetThemesThemeUuidCustomTemplatesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/custom-templates/${versionUuid}`,
         });
+    }
+
+    /**
+     * @deprecated Use `getThemesThemeUuidCustomTemplates` instead.
+     */
+    getThemeCustomTemplates(...args: Parameters<ThemesV3Api['getThemesThemeUuidCustomTemplates']>) {
+        return this.getThemesThemeUuidCustomTemplates(...args);
     }
 }

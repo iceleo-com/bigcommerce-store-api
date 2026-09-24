@@ -1,8 +1,6 @@
 export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2' | (string & {});
 };
-export type ShippingProviderStandard = 'auspost' | 'canadapost' | 'endicia' | 'usps' | 'fedex' | 'ups' | 'upsready' | 'upsonline' | 'shipperhq' | 'royalmail' | '';
-export type ShippingProviderCustom = string;
 export type OrderResp = OrderRespOnly & OrderShared;
 export type OrdersCountFull = {
     statuses?: Array<OrdersCountStatus>;
@@ -25,7 +23,7 @@ export type OrderProducts = {
     order_address_id?: number;
     name?: string;
     sku?: string;
-    type?: 'physical' | 'digital' | 'giftcertificate';
+    type?: 'physical' | 'digital';
     base_price?: string;
     price_ex_tax?: string;
     price_inc_tax?: string;
@@ -39,15 +37,11 @@ export type OrderProducts = {
     cost_price_inc_tax?: string;
     cost_price_ex_tax?: string;
     weight?: number | string;
-    width?: string;
-    height?: string;
-    depth?: string;
     cost_price_tax?: string;
     is_refunded?: boolean;
     quantity_refunded?: number;
-    refund_amount?: string;
+    refunded_amount?: string;
     return_id?: number;
-    wrapping_id?: number;
     wrapping_name?: string | null;
     base_wrapping_cost?: string | number;
     wrapping_cost_ex_tax?: string;
@@ -68,10 +62,6 @@ export type OrderProducts = {
     brand?: string;
     applied_discounts?: Array<OrderProductAppliedDiscounts>;
     product_options?: Array<OrderProductOptions>;
-    configurable_fields?: Array<{
-        name?: string;
-        value?: string;
-    }>;
     upc?: string;
     variant_id?: number;
     name_customer?: string;
@@ -101,23 +91,19 @@ export type OrderShippingAddress = {
     shipping_zone_name?: string;
     form_fields?: Array<FormFields>;
     shipping_quotes?: ShippingQuotesResource;
-} & ShippingAddressBase & {
-    shipping_method?: string;
-};
+} & ShippingAddressBase;
 export type OrderTaxesBase = {
     id?: number;
     order_id?: number;
     order_address_id?: number;
     tax_rate_id?: number;
-    sales_tax_id?: string;
-    tax_class_id?: number | null;
+    tax_class_id?: number;
     name?: string;
     class?: string;
     rate?: string;
     priority?: number;
     priority_amount?: string;
     line_amount?: string;
-    order_pickup_method_id?: number;
     order_product_id?: string;
     line_item_type?: 'item' | 'shipping' | 'handling' | 'gift-wrapping';
 };
@@ -128,9 +114,8 @@ export type OrderShipment = {
     order_address_id?: number;
     date_created?: string;
     tracking_number?: string;
-    merchant_shipping_cost?: string;
     shipping_method?: string;
-    shipping_provider?: ShippingProviderStandard | ShippingProviderCustom;
+    shipping_provider?: 'auspost' | 'canadapost' | 'carrier_{your_carrier_id} (only used if the carrier is a [third-party Shipping Provider](/docs/integrations/shipping))' | 'endicia' | 'usps' | 'fedex' | 'ups' | 'upsready' | 'upsonline' | 'shipperhq' | '';
     tracking_carrier?: string;
     tracking_link?: string;
     comments?: string;
@@ -145,10 +130,6 @@ export type OrderShipment = {
     generated_tracking_link?: string;
 };
 export type OrderConsignmentsResource = {
-    readonly url?: string;
-    readonly resource?: string;
-};
-export type OrderFeesResource = {
     readonly url?: string;
     readonly resource?: string;
 };
@@ -215,9 +196,7 @@ export type ShippingQuotesBase = {
     uuid?: string;
     timestamp?: string;
     shipping_provider_id?: string;
-    shipping_provider_quote?: Array<{
-        [key: string]: unknown;
-    }>;
+    shipping_provider_quote?: Array<unknown>;
     provider_code?: string;
     carrier_code?: string;
     rate_code?: string;
@@ -228,9 +207,8 @@ export type OrderShipmentPost = {
     order_address_id?: number;
     tracking_number?: string;
     tracking_link?: string;
-    merchant_shipping_cost?: string;
     shipping_method?: string;
-    shipping_provider?: ShippingProviderStandard | ShippingProviderCustom;
+    shipping_provider?: 'auspost' | 'canadapost' | 'carrier_{your_carrier_id} (only used if the carrier is a [third-party Shipping Provider](/docs/integrations/shipping))' | 'endicia' | 'usps' | 'fedex' | 'ups' | 'upsready' | 'upsonline' | 'shipperhq';
     tracking_carrier?: string;
     comments?: string;
     items?: Array<{
@@ -241,9 +219,8 @@ export type OrderShipmentPost = {
 export type OrderShipmentPut = {
     order_address_id?: number;
     tracking_number?: string;
-    merchant_shipping_cost?: string;
     shipping_method?: string;
-    shipping_provider?: ShippingProviderStandard | ShippingProviderCustom;
+    shipping_provider?: 'auspost' | 'canadapost' | 'carrier_{your_carrier_id} (only used if the carrier is a [third-party Shipping Provider](/docs/integrations/shipping))' | 'endicia' | 'usps' | 'fedex' | 'ups' | 'upsready' | 'upsonline' | 'shipperhq';
     tracking_carrier?: string;
     tracking_link?: string;
     comments?: string;
@@ -263,12 +240,13 @@ export type OrderShared = {
     base_handling_cost?: string;
     base_shipping_cost?: string;
     base_wrapping_cost?: string;
+    billing_address?: BillingAddressBase;
     channel_id?: number;
     customer_id?: number;
     customer_message?: string;
     date_created?: string;
+    default_currency_code?: string;
     discount_amount?: string;
-    order_source?: string;
     ebay_order_id?: string;
     readonly external_id?: string | null;
     external_merchant_id?: string | null;
@@ -279,10 +257,11 @@ export type OrderShared = {
     handling_cost_inc_tax?: string;
     ip_address?: string;
     ip_address_v6?: string;
+    is_deleted?: boolean;
     items_shipped?: number;
     items_total?: number;
     order_is_digital?: boolean;
-    payment_method?: string;
+    payment_method?: 'Credit Card' | 'Cash' | 'Test Payment Gateway' | 'Manual';
     payment_provider_id?: string | number;
     refunded_amount?: string;
     shipping_cost_ex_tax?: string;
@@ -291,7 +270,7 @@ export type OrderShared = {
     status_id?: number;
     subtotal_ex_tax?: string;
     subtotal_inc_tax?: string;
-    tax_provider_id?: string;
+    tax_provider_id?: 'BasicTaxProvider' | 'AvaTaxProvider' | '';
     customer_locale?: string;
     external_order_id?: string;
     total_ex_tax?: string;
@@ -326,6 +305,7 @@ export type ShippingAddressBase = {
     country_iso2?: string;
     phone?: string;
     email?: string;
+    shipping_method?: string;
 };
 export type OrderRespOnly = {
     id?: number;
@@ -340,7 +320,7 @@ export type OrderRespOnly = {
     handling_cost_tax_class_id?: number;
     wrapping_cost_tax?: string;
     wrapping_cost_tax_class_id?: number;
-    payment_status?: 'authorized' | 'captured' | 'capture pending' | 'declined' | 'held for review' | 'paid' | 'partially refunded' | 'pending' | 'refunded' | 'void' | 'void pending' | '';
+    payment_status?: 'authorized' | 'captured' | 'capture pending' | 'declined' | 'held for review' | 'paid' | 'partially refunded' | 'pending' | 'refunded' | 'void' | 'void pending';
     store_credit_amount?: string;
     gift_certificate_amount?: string;
     currency_id?: number;
@@ -352,18 +332,16 @@ export type OrderRespOnly = {
     store_default_to_transactional_exchange_rate?: string;
     coupon_discount?: string;
     shipping_address_count?: number;
-    is_deleted?: boolean;
-    total_tax?: string;
-    is_tax_inclusive_pricing?: boolean;
     is_email_opt_in?: boolean;
     order_source?: string;
-    consignments?: OrderConsignmentsResource | OrderConsignmentGet;
+    consignments?: OrderConsignmentsResource;
     products?: ProductsResource;
     shipping_addresses?: ShippingAddressesResource;
     coupons?: CouponsResource;
     status_id?: number;
-    billing_address?: BillingAddressResp;
-    fees?: OrderFeesResource | Array<OrderFeesResp>;
+    billing_address?: {
+        form_fields?: Array<FormFields>;
+    };
 };
 export type OrderCustomProductPut = {
     name: string;
@@ -436,7 +414,6 @@ export type OrderPut = {
     date_created?: string;
     readonly default_currency_code?: string;
     discount_amount?: string;
-    order_source?: string;
     ebay_order_id?: string;
     readonly external_id?: string | null;
     external_merchant_id?: string | null;
@@ -447,6 +424,7 @@ export type OrderPut = {
     handling_cost_inc_tax?: string;
     ip_address?: string;
     ip_address_v6?: string;
+    is_deleted?: boolean;
     items_shipped?: number;
     items_total?: number;
     order_is_digital?: boolean;
@@ -463,34 +441,23 @@ export type OrderPut = {
     status_id?: number;
     subtotal_ex_tax?: string;
     subtotal_inc_tax?: string;
-    tax_provider_id?: string;
+    tax_provider_id?: 'BasicTaxProvider' | 'AvaTaxProvider' | '';
     customer_locale?: string;
     external_order_id?: string | null;
     total_ex_tax?: string;
     total_inc_tax?: string;
     wrapping_cost_ex_tax?: string;
     wrapping_cost_inc_tax?: string;
-    fees?: Array<OrderFeesPut>;
 };
 export type OrderPost = {
-    billing_address?: BillingAddressBase;
-    default_currency_code?: string;
     products?: Array<OrderCatalogProductPost | OrderCustomProductPost>;
-    shipping_addresses?: Array<ShippingAddressBase & {
-        shipping_method?: string;
-    }>;
+    shipping_addresses?: Array<ShippingAddressBase>;
     consignments?: OrderConsignmentPost;
-    fees?: Array<OrderFeesPost>;
 } & OrderShared;
 export type ShippingAddressPut = ShippingAddressBase & {
-    shipping_method?: string;
-} & {
     form_fields?: Array<FormFields>;
 };
 export type BillingAddressPut = BillingAddressBase & {
-    form_fields?: Array<FormFields>;
-};
-export type BillingAddressResp = BillingAddressBase & {
     form_fields?: Array<FormFields>;
 };
 export type OrderConsignmentPut = {
@@ -543,14 +510,14 @@ export type OrderConsignmentGet = {
 };
 export type GiftCertificateConsignmentGet = {
     recipient_email?: string;
-    line_items?: Array<ProductsResource> | Array<OrderProducts>;
+    line_items?: Array<ProductsResource>;
 };
 export type PickupConsignmentGet = {
     id?: number;
     pickup_method_id?: number;
 } & PickupConsignmentBase & {
     location?: PickupConsignmentLocationGet;
-    line_items?: Array<ProductsResource> | Array<OrderProducts>;
+    line_items?: Array<ProductsResource>;
 };
 export type PickupConsignmentLocationGet = {
     id?: number;
@@ -558,7 +525,7 @@ export type PickupConsignmentLocationGet = {
 export type ShippingConsignmentGet = {
     id?: number;
 } & ShippingConsignmentBase & {
-    line_items?: Array<ProductsResource> | Array<OrderProducts>;
+    line_items?: Array<ProductsResource>;
     items_total?: number;
     items_shipped?: number;
     shipping_method?: string;
@@ -597,40 +564,7 @@ export type ShippingQuotesConsignmentResource = {
 };
 export type DigitalConsignmentGet = {
     recipient_email?: string;
-    line_items?: Array<ProductsResource> | Array<OrderProducts>;
-};
-export type OrderFeesResp = {
-    id?: number;
-    type?: 'custom_fee';
-    display_name_customer?: string;
-    display_name_merchant?: string;
-    source?: string;
-    base_cost?: string | number;
-    cost_ex_tax?: string | number;
-    cost_inc_tax?: string | number;
-    cost_tax?: string | number;
-    tax_class_id?: number | null;
-};
-export type OrderFeesPost = {
-    type?: 'custom_fee';
-    display_name_customer?: string;
-    display_name_merchant?: string;
-    source?: string;
-    cost_ex_tax?: string | number;
-    cost_inc_tax?: string | number;
-    cost_tax?: string | number;
-    tax_class_id?: number | null;
-};
-export type OrderFeesPut = {
-    id?: number;
-    type?: 'custom_fee';
-    display_name_customer?: string;
-    display_name_merchant?: string;
-    source?: string;
-    cost_ex_tax?: string | number;
-    cost_inc_tax?: string | number;
-    cost_tax?: string | number;
-    tax_class_id?: number | null;
+    line_items?: Array<ProductsResource>;
 };
 export type OrderProductsWritable = {
     id?: number;
@@ -640,7 +574,7 @@ export type OrderProductsWritable = {
     order_address_id?: number;
     name?: string;
     sku?: string;
-    type?: 'physical' | 'digital' | 'giftcertificate';
+    type?: 'physical' | 'digital';
     base_price?: string;
     price_ex_tax?: string;
     price_inc_tax?: string;
@@ -654,15 +588,11 @@ export type OrderProductsWritable = {
     cost_price_inc_tax?: string;
     cost_price_ex_tax?: string;
     weight?: number | string;
-    width?: string;
-    height?: string;
-    depth?: string;
     cost_price_tax?: string;
     is_refunded?: boolean;
     quantity_refunded?: number;
-    refund_amount?: string;
+    refunded_amount?: string;
     return_id?: number;
-    wrapping_id?: number;
     wrapping_name?: string | null;
     base_wrapping_cost?: string | number;
     wrapping_cost_ex_tax?: string;
@@ -682,10 +612,6 @@ export type OrderProductsWritable = {
     brand?: string;
     applied_discounts?: Array<OrderProductAppliedDiscounts>;
     product_options?: Array<OrderProductOptions>;
-    configurable_fields?: Array<{
-        name?: string;
-        value?: string;
-    }>;
     upc?: string;
     variant_id?: number;
     name_customer?: string;
@@ -711,9 +637,7 @@ export type OrderShippingAddressWritable = {
     shipping_zone_id?: number;
     shipping_zone_name?: string;
     form_fields?: Array<FormFields>;
-} & ShippingAddressBase & {
-    shipping_method?: string;
-};
+} & ShippingAddressBase;
 export type OrderShipmentWritable = {
     id?: number;
     order_id?: number;
@@ -721,9 +645,8 @@ export type OrderShipmentWritable = {
     order_address_id?: number;
     date_created?: string;
     tracking_number?: string;
-    merchant_shipping_cost?: string;
     shipping_method?: string;
-    shipping_provider?: ShippingProviderStandard | ShippingProviderCustom;
+    shipping_provider?: 'auspost' | 'canadapost' | 'carrier_{your_carrier_id} (only used if the carrier is a [third-party Shipping Provider](/docs/integrations/shipping))' | 'endicia' | 'usps' | 'fedex' | 'ups' | 'upsready' | 'upsonline' | 'shipperhq' | '';
     tracking_carrier?: string;
     tracking_link?: string;
     comments?: string;
@@ -740,12 +663,13 @@ export type OrderSharedWritable = {
     base_handling_cost?: string;
     base_shipping_cost?: string;
     base_wrapping_cost?: string;
+    billing_address?: BillingAddressBase;
     channel_id?: number;
     customer_id?: number;
     customer_message?: string;
     date_created?: string;
+    default_currency_code?: string;
     discount_amount?: string;
-    order_source?: string;
     ebay_order_id?: string;
     external_merchant_id?: string | null;
     external_source?: string | null;
@@ -755,10 +679,11 @@ export type OrderSharedWritable = {
     handling_cost_inc_tax?: string;
     ip_address?: string;
     ip_address_v6?: string;
+    is_deleted?: boolean;
     items_shipped?: number;
     items_total?: number;
     order_is_digital?: boolean;
-    payment_method?: string;
+    payment_method?: 'Credit Card' | 'Cash' | 'Test Payment Gateway' | 'Manual';
     payment_provider_id?: string | number;
     refunded_amount?: string;
     shipping_cost_ex_tax?: string;
@@ -767,7 +692,7 @@ export type OrderSharedWritable = {
     status_id?: number;
     subtotal_ex_tax?: string;
     subtotal_inc_tax?: string;
-    tax_provider_id?: string;
+    tax_provider_id?: 'BasicTaxProvider' | 'AvaTaxProvider' | '';
     customer_locale?: string;
     external_order_id?: string;
     total_ex_tax?: string;
@@ -788,7 +713,7 @@ export type OrderRespOnlyWritable = {
     handling_cost_tax_class_id?: number;
     wrapping_cost_tax?: string;
     wrapping_cost_tax_class_id?: number;
-    payment_status?: 'authorized' | 'captured' | 'capture pending' | 'declined' | 'held for review' | 'paid' | 'partially refunded' | 'pending' | 'refunded' | 'void' | 'void pending' | '';
+    payment_status?: 'authorized' | 'captured' | 'capture pending' | 'declined' | 'held for review' | 'paid' | 'partially refunded' | 'pending' | 'refunded' | 'void' | 'void pending';
     store_credit_amount?: string;
     gift_certificate_amount?: string;
     currency_id?: number;
@@ -800,15 +725,12 @@ export type OrderRespOnlyWritable = {
     store_default_to_transactional_exchange_rate?: string;
     coupon_discount?: string;
     shipping_address_count?: number;
-    is_deleted?: boolean;
-    total_tax?: string;
-    is_tax_inclusive_pricing?: boolean;
     is_email_opt_in?: boolean;
     order_source?: string;
-    consignments?: OrderConsignmentGet;
     status_id?: number;
-    billing_address?: BillingAddressResp;
-    fees?: Array<OrderFeesResp>;
+    billing_address?: {
+        form_fields?: Array<FormFields>;
+    };
 };
 export type OrderRemoveProductPutWritable = {
     id?: number;
@@ -829,7 +751,6 @@ export type OrderPutWritable = {
     customer_message?: string;
     date_created?: string;
     discount_amount?: string;
-    order_source?: string;
     ebay_order_id?: string;
     external_merchant_id?: string | null;
     external_source?: string | null;
@@ -839,6 +760,7 @@ export type OrderPutWritable = {
     handling_cost_inc_tax?: string;
     ip_address?: string;
     ip_address_v6?: string;
+    is_deleted?: boolean;
     items_shipped?: number;
     items_total?: number;
     order_is_digital?: boolean;
@@ -855,30 +777,18 @@ export type OrderPutWritable = {
     status_id?: number;
     subtotal_ex_tax?: string;
     subtotal_inc_tax?: string;
-    tax_provider_id?: string;
+    tax_provider_id?: 'BasicTaxProvider' | 'AvaTaxProvider' | '';
     customer_locale?: string;
     external_order_id?: string | null;
     total_ex_tax?: string;
     total_inc_tax?: string;
     wrapping_cost_ex_tax?: string;
     wrapping_cost_inc_tax?: string;
-    fees?: Array<OrderFeesPut>;
-};
-export type GiftCertificateConsignmentGetWritable = {
-    recipient_email?: string;
-    line_items?: Array<unknown> | Array<OrderProductsWritable>;
-};
-export type PickupConsignmentGetWritable = {
-    id?: number;
-    pickup_method_id?: number;
-} & PickupConsignmentBase & {
-    location?: PickupConsignmentLocationGet;
-    line_items?: Array<unknown> | Array<OrderProductsWritable>;
 };
 export type ShippingConsignmentGetWritable = {
     id?: number;
 } & ShippingConsignmentBase & {
-    line_items?: Array<unknown> | Array<OrderProductsWritable>;
+    line_items?: Array<unknown>;
     items_total?: number;
     items_shipped?: number;
     shipping_method?: string;
@@ -895,13 +805,8 @@ export type ShippingConsignmentGetWritable = {
     shipping_zone_id?: number;
     shipping_zone_name?: string;
 };
-export type DigitalConsignmentGetWritable = {
-    recipient_email?: string;
-    line_items?: Array<unknown> | Array<OrderProductsWritable>;
-};
 export type Accept = string;
 export type ContentType = string;
-export type ExternalOrderId = string;
 export type MinId = number;
 export type MaxId = number;
 export type MinTotal = number;
@@ -911,7 +816,8 @@ export type Email = string;
 export type StatusId = number;
 export type StatusIdPath = number;
 export type CartId = string;
-export type PaymentMethod = string;
+export type IsDeleted = boolean;
+export type PaymentMethod = 'Manual' | 'Cash on Delivery' | 'Credit Card' | 'Test Payment Gateway' | 'Pay In Store';
 export type MinDateCreated = string;
 export type MaxDateCreated = string;
 export type MinDateModified = string;
@@ -927,9 +833,8 @@ export type ShippingAddressIdPath = number;
 export type ShipmentIdPath = number;
 export type ChannelId = number;
 export type ShippingConsignmentId = number;
-export type ConsignmentStructure = 'object';
-export type OrderIncludes = Array<'consignments' | 'consignments.line_items' | 'fees'>;
-export type DeleteOrderData = {
+export type OrderIncludes = 'consignments' | 'consignments.line_items';
+export type DeleteAnOrderData = {
     body?: never;
     headers: {
         Accept: string;
@@ -940,11 +845,11 @@ export type DeleteOrderData = {
     query?: never;
     url: '/orders/{order_id}';
 };
-export type DeleteOrderResponses = {
+export type DeleteAnOrderResponses = {
     204: void;
 };
-export type DeleteOrderResponse = DeleteOrderResponses[keyof DeleteOrderResponses];
-export type GetOrderData = {
+export type DeleteAnOrderResponse = DeleteAnOrderResponses[keyof DeleteAnOrderResponses];
+export type GetAnOrderData = {
     body?: never;
     headers: {
         Accept: string;
@@ -953,20 +858,19 @@ export type GetOrderData = {
         order_id: number;
     };
     query?: {
-        include?: Array<'consignments' | 'consignments.line_items' | 'fees'>;
-        consignment_structure?: 'object';
+        include?: 'consignments' | 'consignments.line_items';
     };
     url: '/orders/{order_id}';
 };
-export type GetOrderErrors = {
+export type GetAnOrderErrors = {
     404: unknown;
 };
-export type GetOrderResponses = {
+export type GetAnOrderResponses = {
     200: OrderResp;
 };
-export type GetOrderResponse = GetOrderResponses[keyof GetOrderResponses];
-export type UpdateOrderData = {
-    body?: OrderPutWritable;
+export type GetAnOrderResponse = GetAnOrderResponses[keyof GetAnOrderResponses];
+export type UpdateAnOrderData = {
+    body: OrderPutWritable;
     headers: {
         Accept: string;
         'Content-Type': string;
@@ -977,40 +881,24 @@ export type UpdateOrderData = {
     query?: never;
     url: '/orders/{order_id}';
 };
-export type UpdateOrderResponses = {
+export type UpdateAnOrderResponses = {
     200: OrderResp;
 };
-export type UpdateOrderResponse = UpdateOrderResponses[keyof UpdateOrderResponses];
-export type GetOrdersCountData = {
+export type UpdateAnOrderResponse = UpdateAnOrderResponses[keyof UpdateAnOrderResponses];
+export type GetCountOrderData = {
     body?: never;
     headers: {
         Accept: string;
     };
     path?: never;
-    query?: {
-        min_id?: number;
-        max_id?: number;
-        min_total?: number;
-        max_total?: number;
-        customer_id?: number;
-        email?: string;
-        status_id?: number;
-        cart_id?: string;
-        payment_method?: string;
-        min_date_created?: string;
-        max_date_created?: string;
-        min_date_modified?: string;
-        max_date_modified?: string;
-        channel_id?: number;
-        external_order_id?: string;
-    };
+    query?: never;
     url: '/orders/count';
 };
-export type GetOrdersCountResponses = {
+export type GetCountOrderResponses = {
     200: OrdersCountFull;
 };
-export type GetOrdersCountResponse = GetOrdersCountResponses[keyof GetOrdersCountResponses];
-export type DeleteOrdersData = {
+export type GetCountOrderResponse = GetCountOrderResponses[keyof GetCountOrderResponses];
+export type DeleteAllOrdersData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1021,11 +909,11 @@ export type DeleteOrdersData = {
     };
     url: '/orders';
 };
-export type DeleteOrdersResponses = {
+export type DeleteAllOrdersResponses = {
     204: void;
 };
-export type DeleteOrdersResponse = DeleteOrdersResponses[keyof DeleteOrdersResponses];
-export type GetOrdersData = {
+export type DeleteAllOrdersResponse = DeleteAllOrdersResponses[keyof DeleteAllOrdersResponses];
+export type GetAllOrdersData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1040,7 +928,7 @@ export type GetOrdersData = {
         email?: string;
         status_id?: number;
         cart_id?: string;
-        payment_method?: string;
+        payment_method?: 'Manual' | 'Cash on Delivery' | 'Credit Card' | 'Test Payment Gateway' | 'Pay In Store';
         min_date_created?: string;
         max_date_created?: string;
         min_date_modified?: string;
@@ -1048,18 +936,17 @@ export type GetOrdersData = {
         page?: number;
         limit?: number;
         sort?: 'id' | 'customer_id' | 'date_created' | 'date_modified' | 'status_id' | 'channel_id' | 'external_id';
+        is_deleted?: boolean;
         channel_id?: number;
-        include?: Array<'consignments' | 'consignments.line_items' | 'fees'>;
-        consignment_structure?: 'object';
-        external_order_id?: string;
+        include?: 'consignments' | 'consignments.line_items';
     };
     url: '/orders';
 };
-export type GetOrdersResponses = {
+export type GetAllOrdersResponses = {
     200: Array<OrderResp>;
 };
-export type GetOrdersResponse = GetOrdersResponses[keyof GetOrdersResponses];
-export type CreateOrderData = {
+export type GetAllOrdersResponse = GetAllOrdersResponses[keyof GetAllOrdersResponses];
+export type CreateAnOrderData = {
     body: OrderPost;
     headers: {
         Accept: string;
@@ -1067,16 +954,15 @@ export type CreateOrderData = {
     };
     path?: never;
     query?: {
-        include?: Array<'consignments' | 'consignments.line_items' | 'fees'>;
-        consignment_structure?: 'object';
+        include?: 'consignments' | 'consignments.line_items';
     };
     url: '/orders';
 };
-export type CreateOrderResponses = {
+export type CreateAnOrderResponses = {
     200: OrderResp;
 };
-export type CreateOrderResponse = CreateOrderResponses[keyof CreateOrderResponses];
-export type GetOrderCouponsData = {
+export type CreateAnOrderResponse = CreateAnOrderResponses[keyof CreateAnOrderResponses];
+export type GetAllOrderCouponsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1090,11 +976,11 @@ export type GetOrderCouponsData = {
     };
     url: '/orders/{order_id}/coupons';
 };
-export type GetOrderCouponsResponses = {
+export type GetAllOrderCouponsResponses = {
     200: Array<OrderCouponsBase>;
 };
-export type GetOrderCouponsResponse = GetOrderCouponsResponses[keyof GetOrderCouponsResponses];
-export type GetOrderProductsData = {
+export type GetAllOrderCouponsResponse = GetAllOrderCouponsResponses[keyof GetAllOrderCouponsResponses];
+export type GetAllOrderProductsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1109,11 +995,11 @@ export type GetOrderProductsData = {
     };
     url: '/orders/{order_id}/products';
 };
-export type GetOrderProductsResponses = {
+export type GetAllOrderProductsResponses = {
     200: Array<OrderProducts>;
 };
-export type GetOrderProductsResponse = GetOrderProductsResponses[keyof GetOrderProductsResponses];
-export type GetOrderShippingAddressesData = {
+export type GetAllOrderProductsResponse = GetAllOrderProductsResponses[keyof GetAllOrderProductsResponses];
+export type GetAllShippingAddressesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1127,11 +1013,11 @@ export type GetOrderShippingAddressesData = {
     };
     url: '/orders/{order_id}/shipping_addresses';
 };
-export type GetOrderShippingAddressesResponses = {
+export type GetAllShippingAddressesResponses = {
     200: Array<OrderShippingAddress>;
 };
-export type GetOrderShippingAddressesResponse = GetOrderShippingAddressesResponses[keyof GetOrderShippingAddressesResponses];
-export type GetOrderStatusesData = {
+export type GetAllShippingAddressesResponse = GetAllShippingAddressesResponses[keyof GetAllShippingAddressesResponses];
+export type GetOrderStatusData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1140,11 +1026,11 @@ export type GetOrderStatusesData = {
     query?: never;
     url: '/order_statuses';
 };
-export type GetOrderStatusesResponses = {
+export type GetOrderStatusResponses = {
     200: Array<OrderStatusBase>;
 };
-export type GetOrderStatusesResponse = GetOrderStatusesResponses[keyof GetOrderStatusesResponses];
-export type GetOrderStatusesStatusData = {
+export type GetOrderStatusResponse = GetOrderStatusResponses[keyof GetOrderStatusResponses];
+export type GetAOrderStatusData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1155,10 +1041,10 @@ export type GetOrderStatusesStatusData = {
     query?: never;
     url: '/order_statuses/{status_id}';
 };
-export type GetOrderStatusesStatusResponses = {
+export type GetAOrderStatusResponses = {
     200: OrderStatusBase;
 };
-export type GetOrderStatusesStatusResponse = GetOrderStatusesStatusResponses[keyof GetOrderStatusesStatusResponses];
+export type GetAOrderStatusResponse = GetAOrderStatusResponses[keyof GetAOrderStatusResponses];
 export type GetOrderTaxesData = {
     body?: never;
     headers: {
@@ -1178,7 +1064,7 @@ export type GetOrderTaxesResponses = {
     200: Array<OrderTaxesBase>;
 };
 export type GetOrderTaxesResponse = GetOrderTaxesResponses[keyof GetOrderTaxesResponses];
-export type DeleteOrderShipmentsData = {
+export type DeleteAllOrderShipmentsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1189,11 +1075,11 @@ export type DeleteOrderShipmentsData = {
     query?: never;
     url: '/orders/{order_id}/shipments';
 };
-export type DeleteOrderShipmentsResponses = {
+export type DeleteAllOrderShipmentsResponses = {
     204: void;
 };
-export type DeleteOrderShipmentsResponse = DeleteOrderShipmentsResponses[keyof DeleteOrderShipmentsResponses];
-export type GetOrderShipmentsData = {
+export type DeleteAllOrderShipmentsResponse = DeleteAllOrderShipmentsResponses[keyof DeleteAllOrderShipmentsResponses];
+export type GetAllOrderShipmentsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1207,11 +1093,10 @@ export type GetOrderShipmentsData = {
     };
     url: '/orders/{order_id}/shipments';
 };
-export type GetOrderShipmentsResponses = {
+export type GetAllOrderShipmentsResponses = {
     200: Array<OrderShipment>;
-    204: void;
 };
-export type GetOrderShipmentsResponse = GetOrderShipmentsResponses[keyof GetOrderShipmentsResponses];
+export type GetAllOrderShipmentsResponse = GetAllOrderShipmentsResponses[keyof GetAllOrderShipmentsResponses];
 export type CreateOrderShipmentsData = {
     body: OrderShipmentPost;
     headers: {
@@ -1228,7 +1113,7 @@ export type CreateOrderShipmentsResponses = {
     201: OrderShipment;
 };
 export type CreateOrderShipmentsResponse = CreateOrderShipmentsResponses[keyof CreateOrderShipmentsResponses];
-export type GetOrderShipmentsCountData = {
+export type GetCountShipmentsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1239,10 +1124,10 @@ export type GetOrderShipmentsCountData = {
     query?: never;
     url: '/orders/{order_id}/shipments/count';
 };
-export type GetOrderShipmentsCountResponses = {
+export type GetCountShipmentsResponses = {
     200: OrderCount;
 };
-export type GetOrderShipmentsCountResponse = GetOrderShipmentsCountResponses[keyof GetOrderShipmentsCountResponses];
+export type GetCountShipmentsResponse = GetCountShipmentsResponses[keyof GetCountShipmentsResponses];
 export type DeleteOrderShipmentData = {
     body?: never;
     headers: {
@@ -1317,7 +1202,7 @@ export type GetOrderMessagesResponses = {
     200: OrderMessages;
 };
 export type GetOrderMessagesResponse = GetOrderMessagesResponses[keyof GetOrderMessagesResponses];
-export type GetOrderProductData = {
+export type GetAnOrderProductData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1329,11 +1214,11 @@ export type GetOrderProductData = {
     query?: never;
     url: '/orders/{order_id}/products/{product_id}';
 };
-export type GetOrderProductResponses = {
+export type GetAnOrderProductResponses = {
     200: OrderProducts;
 };
-export type GetOrderProductResponse = GetOrderProductResponses[keyof GetOrderProductResponses];
-export type GetOrderShippingAddressData = {
+export type GetAnOrderProductResponse = GetAnOrderProductResponses[keyof GetAnOrderProductResponses];
+export type GetAShippingAddressData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1345,11 +1230,11 @@ export type GetOrderShippingAddressData = {
     query?: never;
     url: '/orders/{order_id}/shipping_addresses/{id}';
 };
-export type GetOrderShippingAddressResponses = {
+export type GetAShippingAddressResponses = {
     200: OrderShippingAddress;
 };
-export type GetOrderShippingAddressResponse = GetOrderShippingAddressResponses[keyof GetOrderShippingAddressResponses];
-export type UpdateOrderShippingAddressData = {
+export type GetAShippingAddressResponse = GetAShippingAddressResponses[keyof GetAShippingAddressResponses];
+export type UpdateAShippingAddressData = {
     body?: ShippingAddressPut;
     headers: {
         Accept: string;
@@ -1362,7 +1247,7 @@ export type UpdateOrderShippingAddressData = {
     query?: never;
     url: '/orders/{order_id}/shipping_addresses/{id}';
 };
-export type UpdateOrderShippingAddressErrors = {
+export type UpdateAShippingAddressErrors = {
     400: Array<{
         status?: number;
         message?: string;
@@ -1372,12 +1257,12 @@ export type UpdateOrderShippingAddressErrors = {
         message?: string;
     }>;
 };
-export type UpdateOrderShippingAddressError = UpdateOrderShippingAddressErrors[keyof UpdateOrderShippingAddressErrors];
-export type UpdateOrderShippingAddressResponses = {
+export type UpdateAShippingAddressError = UpdateAShippingAddressErrors[keyof UpdateAShippingAddressErrors];
+export type UpdateAShippingAddressResponses = {
     200: OrderShippingAddress;
 };
-export type UpdateOrderShippingAddressResponse = UpdateOrderShippingAddressResponses[keyof UpdateOrderShippingAddressResponses];
-export type GetOrderShippingAddressShippingQuotesData = {
+export type UpdateAShippingAddressResponse = UpdateAShippingAddressResponses[keyof UpdateAShippingAddressResponses];
+export type GetShippingQuotesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -1389,32 +1274,32 @@ export type GetOrderShippingAddressShippingQuotesData = {
     query?: never;
     url: '/orders/{order_id}/shipping_addresses/{shipping_address_id}/shipping_quotes';
 };
-export type GetOrderShippingAddressShippingQuotesResponses = {
+export type GetShippingQuotesResponses = {
     200: ShippingQuotesBase;
 };
-export type GetOrderShippingAddressShippingQuotesResponse = GetOrderShippingAddressShippingQuotesResponses[keyof GetOrderShippingAddressShippingQuotesResponses];
-export type GetOrderConsignmentsData = {
+export type GetShippingQuotesResponse = GetShippingQuotesResponses[keyof GetShippingQuotesResponses];
+export type GetOrdersOrderIdConsignmentsData = {
     body?: never;
     path: {
         order_id: number;
     };
     query?: {
-        include?: Array<'consignments.line_items'>;
+        include?: 'consignments.line_items';
     };
     url: '/orders/{order_id}/consignments';
 };
-export type GetOrderConsignmentsErrors = {
+export type GetOrdersOrderIdConsignmentsErrors = {
     404: Array<{
         status?: number;
         message?: string;
     }>;
 };
-export type GetOrderConsignmentsError = GetOrderConsignmentsErrors[keyof GetOrderConsignmentsErrors];
-export type GetOrderConsignmentsResponses = {
+export type GetOrdersOrderIdConsignmentsError = GetOrdersOrderIdConsignmentsErrors[keyof GetOrdersOrderIdConsignmentsErrors];
+export type GetOrdersOrderIdConsignmentsResponses = {
     200: OrderConsignmentGet;
 };
-export type GetOrderConsignmentsResponse = GetOrderConsignmentsResponses[keyof GetOrderConsignmentsResponses];
-export type GetOrderConsignmentShippingQuotesData = {
+export type GetOrdersOrderIdConsignmentsResponse = GetOrdersOrderIdConsignmentsResponses[keyof GetOrdersOrderIdConsignmentsResponses];
+export type GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesData = {
     body?: never;
     path: {
         order_id: number;
@@ -1423,33 +1308,14 @@ export type GetOrderConsignmentShippingQuotesData = {
     query?: never;
     url: '/orders/{order_id}/consignments/shipping/{shipping_consignment_id}/shipping_quotes';
 };
-export type GetOrderConsignmentShippingQuotesErrors = {
+export type GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesErrors = {
     404: Array<{
         status?: number;
         message?: string;
     }>;
 };
-export type GetOrderConsignmentShippingQuotesError = GetOrderConsignmentShippingQuotesErrors[keyof GetOrderConsignmentShippingQuotesErrors];
-export type GetOrderConsignmentShippingQuotesResponses = {
+export type GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesError = GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesErrors[keyof GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesErrors];
+export type GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesResponses = {
     200: ShippingQuotesBase;
 };
-export type GetOrderConsignmentShippingQuotesResponse = GetOrderConsignmentShippingQuotesResponses[keyof GetOrderConsignmentShippingQuotesResponses];
-export type GetOrderFeesData = {
-    body?: never;
-    path: {
-        order_id: number;
-    };
-    query?: never;
-    url: '/orders/{order_id}/fees';
-};
-export type GetOrderFeesErrors = {
-    404: Array<{
-        status?: number;
-        message?: string;
-    }>;
-};
-export type GetOrderFeesError = GetOrderFeesErrors[keyof GetOrderFeesErrors];
-export type GetOrderFeesResponses = {
-    200: OrderFeesResp;
-};
-export type GetOrderFeesResponse = GetOrderFeesResponses[keyof GetOrderFeesResponses];
+export type GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesResponse = GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesResponses[keyof GetOrdersOrderIdConsignmentsShippingShippingIdShippingQuotesResponses];

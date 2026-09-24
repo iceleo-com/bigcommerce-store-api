@@ -27,7 +27,6 @@ tags:
   - name: Checkout Orders
   - name: Checkout Settings
   - name: Checkout Token
-  - name: Checkout Fees
 security:
   - X-Auth-Token: []
 paths:
@@ -45,9 +44,22 @@ paths:
         **Notes**
 
         The cart ID and checkout ID are the same.
-      operationId: getCheckout
+      operationId: CheckoutsByCheckoutIdGet
       parameters:
-        - $ref: '#/components/parameters/IncludeGeneral'
+        - name: include
+          in: query
+          description: |-
+            * `cart.line_items.physical_items.options` - physical options
+            * `cart.line_items.digital_items.options` - digital options
+            * `consignments.available_shipping_options` - shipping options
+            * `promotions.banners` - promotion options
+          schema:
+            type: string
+            enum:
+              - cart.line_items.physical_items.options
+              - cart.line_items.digital_items.options
+              - consignments.available_shipping_options
+              - promotions.banners
       responses:
         '200':
           description: ''
@@ -80,7 +92,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 0.9
                     discounts:
                       - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
@@ -181,12 +192,7 @@ paths:
                   taxes:
                     - name: Tax
                       amount: 1.28
-                  coupons:
-                    - id: 1
-                      code: SHOP20
-                      coupon_type: percentage_discount
-                      display_name: 20% Off
-                      discounted_amount: 0.9
+                  coupons: []
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
                   handling_cost_total_inc_tax: 0
@@ -331,7 +337,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 13.4
                     discounts:
                       - id: 985c79a3-4c94-4104-923a-2e3d4572e72d
@@ -413,7 +418,6 @@ paths:
                     - id: 1
                       code: SHOP20
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 13.4
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
@@ -626,7 +630,6 @@ paths:
                       - code: string
                         id: 0
                         coupon_type: string
-                        display_name: string
                         discounted_amount: 0
                     discounts:
                       - id: string
@@ -779,7 +782,6 @@ paths:
                     - code: SHOPNOW
                       id: 1
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 0.9
                   order_id: string
                   shipping_cost_total_inc_tax: 0
@@ -801,7 +803,6 @@ paths:
                             - homepage
                             - cartpage
                           text: Some text
-                  version: 1
         '404':
           description: Error code that is displayed when a given checkout ID is not found.
           content:
@@ -839,7 +840,7 @@ paths:
 
         **Limits:**
         * 2000 characters for customer message
-      operationId: updateCheckout
+      operationId: CheckoutsByCheckoutIdPut
       parameters:
         - $ref: '#/components/parameters/Content-Type'
       requestBody:
@@ -880,7 +881,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 0.9
                     discounts:
                       - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
@@ -981,12 +981,7 @@ paths:
                   taxes:
                     - name: Tax
                       amount: 1.28
-                  coupons:
-                    - id: 1
-                      code: SHOP20
-                      coupon_type: percentage_discount
-                      display_name: 20% Off
-                      discounted_amount: 0.9
+                  coupons: []
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
                   handling_cost_total_inc_tax: 0
@@ -998,7 +993,6 @@ paths:
                   created_time: '2019-08-05T15:38:14+00:00'
                   updated_time: '2019-08-05T15:41:28+00:00'
                   customer_message: ''
-                  version: 1
                 meta: {}
             Selected Shipping Options:
               example:
@@ -1112,7 +1106,6 @@ paths:
                   created_time: '2019-08-05T15:38:14+00:00'
                   updated_time: '2019-08-05T15:41:28+00:00'
                   customer_message: ''
-                  version: 1
                 meta: {}
             Coupon Applied:
               example:
@@ -1133,7 +1126,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 13.4
                     discounts:
                       - id: 985c79a3-4c94-4104-923a-2e3d4572e72d
@@ -1215,7 +1207,6 @@ paths:
                     - id: 1
                       code: SHOP20
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 13.4
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
@@ -1228,7 +1219,6 @@ paths:
                   created_time: '2021-11-08T22:46:23+00:00'
                   updated_time: '2021-11-09T16:08:01+00:00'
                   customer_message: ''
-                  version: 1
                 meta: {}
             No Coupon Applied:
               example:
@@ -1315,7 +1305,6 @@ paths:
                   created_time: '2021-11-08T22:46:23+00:00'
                   updated_time: '2021-11-09T16:06:56+00:00'
                   customer_message: ''
-                  version: 1
                 meta: {}
             Include promotions:
               example:
@@ -1410,7 +1399,6 @@ paths:
                             - homepage
                             - cartpage
                           text: Some text
-                  version: 1
                 meta: {}
             example-1:
               example:
@@ -1431,7 +1419,6 @@ paths:
                       - code: string
                         id: 0
                         coupon_type: string
-                        display_name: string
                         discounted_amount: 0
                     discounts:
                       - id: string
@@ -1584,7 +1571,6 @@ paths:
                     - code: SHOPNOW
                       id: 1
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 0.9
                   order_id: string
                   shipping_cost_total_inc_tax: 0
@@ -1606,9 +1592,6 @@ paths:
                             - homepage
                             - cartpage
                           text: Some text
-                  version: 1
-        '409':
-          $ref: '#/components/responses/CartConflictErrorResponse'
       x-unitTests: []
       x-operation-settings:
         CollectParameters: false
@@ -1621,22 +1604,15 @@ paths:
         - Checkout Discounts
       summary: Add Discount to Checkout
       description: |-
-        Adds a discount to an existing checkout.
-        
-        Use this endpoint to apply the following discounts:
-        * Apply a manual discount to a cart. In this case, you can distribute the discount between each line item in the cart based on the item value.
-        * Apply a manual discount against a specific line item.
-        * Apply a manual discount at the item-level with a cart-level discount.
+        Adds a discount to an existing *checkout*.
 
-        Notes:
-        * When you call this API, you clear out all existing discounts applied to line items, including product and order-based discounts.
-        * You cannot apply a manual discount to a specific line item if you have already applied a coupon or automatic promotion to it.
+        This discount only applies to `line_items`. When you call this API, you clear out all existing discounts applied to line items, including product and order-based discounts.
 
-        Required Fields:
-        * `discounted_amount` at the cart-level or at the item-level
+        This endpoint splits the discount between line items based on the item value.
 
-        To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
-      operationId: addCheckoutDiscount
+        Required Fields
+        * discounted_amount
+      operationId: post-store_hash-v3-checkouts-checkoutId-discounts
       parameters:
         - $ref: '#/components/parameters/checkoutId'
         - $ref: '#/components/parameters/Accept'
@@ -1660,26 +1636,9 @@ paths:
                           discounted_amount:
                             type: number
                             example: 10
-                    line_items:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                              id:
-                                type: string
-                                example: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
-                              discounted_amount:
-                                type: number
-                                example: 15
-                    version:
-                      type: integer
-                      description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-                      example: 1
-            example:
-              cart:
-                discounts: 
-                  - discounted_amount: 10
-              version: 1
+                          name:
+                            type: string
+                            example: manual
         required: false
       responses:
         '200':
@@ -1693,84 +1652,6 @@ paths:
                     $ref: '#/components/schemas/Checkout'
                   meta:
                     $ref: '#/components/schemas/MetaOpen'
-              example: 
-                data:
-                  id: 306d57d7-124e-4112-82cd-35e060c0d4d9
-                  cart:
-                    id: 306d57d7-124e-4112-82cd-35e060c0d4d9
-                    customer_id: 11
-                    channel_id: 1
-                    email: janedoe@example.com
-                    currency:
-                      code: USD
-                    tax_included: false
-                    base_amount: 31.95
-                    discount_amount: 0
-                    manual_discount_amount: 10
-                    cart_amount_inc_tax: 33.23
-                    cart_amount_ex_tax: 31.95
-                    coupons: []
-                    discounts:
-                      - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
-                        discounted_amount: 13.6
-                    line_items:
-                      physical_items:
-                        - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
-                          parent_id: 123
-                          variant_id: 359
-                          product_id: 188
-                          sku: DUST1
-                          name: Hello
-                          url: 'https://{store_hash}/all/dustpan-brush/'
-                          quantity: 1
-                          is_taxable: true
-                          image_url: 'https://cdn11.bigcommerce.com/s-{store_hash}/products/188/images/460/dustpan1_1024x1024_1024x1024__43447__69128.1534344539.330.500.jpg?c=2'
-                          discounts: 
-                           - id: 18
-                             discounted_amount: 13.6
-                           - id: 49
-                             discounted_amount: 2.4
-                           - id: "manual-discount"
-                             discounted_amount: 10
-                          coupons: []
-                          discount_amount: 0
-                          coupon_amount: 0
-                          original_price: 35.95
-                          list_price: 31.95
-                          sale_price: 33.23
-                          extended_list_price: 31.95
-                          extended_sale_price: 33.23
-                          comparison_price: 33.23
-                          extended_comparison_price: 33.23
-                          is_require_shipping: true
-                          gift_wrapping: {}
-                          is_mutable: true
-                      digital_items: []
-                      gift_certificates: []
-                      custom_items: []
-                    created_time: '2019-08-05T15:38:14+00:00'
-                    updated_time: '2019-08-05T15:41:28+00:00'
-                  billing_address: {}
-                  consignments: []
-                  taxes:
-                    - name: Tax
-                      amount: 1.28
-                  coupons: []
-                  order_id: null
-                  shipping_cost_total_inc_tax: 0
-                  shipping_cost_total_ex_tax: 0
-                  handling_cost_total_inc_tax: 0
-                  handling_cost_total_ex_tax: 0
-                  tax_total: 1.28
-                  subtotal_inc_tax: 33.23
-                  subtotal_ex_tax: 31.95
-                  grand_total: 33.23
-                  created_time: '2019-08-05T15:38:14+00:00'
-                  updated_time: '2019-08-05T15:41:28+00:00'
-                  customer_message: ''
-                  staff_note: " "
-                  fees: []
-                meta: {}
             Available Shipping Options:
               example:
                 data:
@@ -1790,7 +1671,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 0.9
                     discounts:
                       - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
@@ -1891,12 +1771,7 @@ paths:
                   taxes:
                     - name: Tax
                       amount: 1.28
-                  coupons:
-                    - id: 1
-                      code: SHOP20
-                      coupon_type: percentage_discount
-                      display_name: 20% Off
-                      discounted_amount: 0.9
+                  coupons: []
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
                   handling_cost_total_inc_tax: 0
@@ -2041,7 +1916,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 13.4
                     discounts:
                       - id: 985c79a3-4c94-4104-923a-2e3d4572e72d
@@ -2123,7 +1997,6 @@ paths:
                     - id: 1
                       code: SHOP20
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 13.4
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
@@ -2336,7 +2209,6 @@ paths:
                       - code: string
                         id: 0
                         coupon_type: string
-                        display_name: string
                         discounted_amount: 0
                     discounts:
                       - id: string
@@ -2489,7 +2361,6 @@ paths:
                     - code: SHOPNOW
                       id: 1
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 0.9
                   order_id: string
                   shipping_cost_total_inc_tax: 0
@@ -2511,9 +2382,6 @@ paths:
                             - homepage
                             - cartpage
                           text: Some text
-                  version: 1
-        '409':
-          $ref: '#/components/responses/CartConflictErrorResponse'
   '/checkouts/{checkoutId}/billing-address':
     post:
       tags:
@@ -2525,9 +2393,7 @@ paths:
         **Required Fields**
         * email
         * country_code
-
-        To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
-      operationId: addCheckoutBillingAddress
+      operationId: CheckoutsBillingAddressByCheckoutIdPost
       parameters:
         - $ref: '#/components/parameters/checkoutId'
         - $ref: '#/components/parameters/Accept'
@@ -2569,7 +2435,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 0.9
                     discounts:
                       - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
@@ -2670,12 +2535,7 @@ paths:
                   taxes:
                     - name: Tax
                       amount: 1.28
-                  coupons:
-                    - id: 1
-                      code: SHOP20
-                      coupon_type: percentage_discount
-                      display_name: 20% Off
-                      discounted_amount: 0.9
+                  coupons: []
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
                   handling_cost_total_inc_tax: 0
@@ -2687,7 +2547,6 @@ paths:
                   created_time: '2019-08-05T15:38:14+00:00'
                   updated_time: '2019-08-05T15:41:28+00:00'
                   customer_message: ''
-                  version: 1
                 meta: {}
             Selected Shipping Options:
               example:
@@ -2801,7 +2660,6 @@ paths:
                   created_time: '2019-08-05T15:38:14+00:00'
                   updated_time: '2019-08-05T15:41:28+00:00'
                   customer_message: ''
-                  version: 1
                 meta: {}
             Coupon Applied:
               example:
@@ -2822,7 +2680,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 13.4
                     discounts:
                       - id: 985c79a3-4c94-4104-923a-2e3d4572e72d
@@ -2904,7 +2761,6 @@ paths:
                     - id: 1
                       code: SHOP20
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 13.4
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
@@ -2917,7 +2773,6 @@ paths:
                   created_time: '2021-11-08T22:46:23+00:00'
                   updated_time: '2021-11-09T16:08:01+00:00'
                   customer_message: ''
-                  version: 1
                 meta: {}
             No Coupon Applied:
               example:
@@ -3004,7 +2859,6 @@ paths:
                   created_time: '2021-11-08T22:46:23+00:00'
                   updated_time: '2021-11-09T16:06:56+00:00'
                   customer_message: ''
-                  version: 1
                 meta: {}
             Include promotions:
               example:
@@ -3099,7 +2953,6 @@ paths:
                             - homepage
                             - cartpage
                           text: Some text
-                  version: 1
                 meta: {}
             example-1:
               example:
@@ -3120,7 +2973,6 @@ paths:
                       - code: string
                         id: 0
                         coupon_type: string
-                        display_name: string
                         discounted_amount: 0
                     discounts:
                       - id: string
@@ -3273,7 +3125,6 @@ paths:
                     - code: SHOPNOW
                       id: 1
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 0.9
                   order_id: string
                   shipping_cost_total_inc_tax: 0
@@ -3295,9 +3146,6 @@ paths:
                             - homepage
                             - cartpage
                           text: Some text
-                  version: 1
-        '409':
-          $ref: '#/components/responses/CartConflictErrorResponse'
       x-unitTests: []
       x-operation-settings:
         CollectParameters: false
@@ -3309,11 +3157,8 @@ paths:
       tags:
         - Checkout Billing Address
       summary: Update Checkout Billing Address
-      description: |-
-        Updates an existing billing address on a checkout.
-
-        To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
-      operationId: updateCheckoutBillingAddress
+      description: Updates an existing billing address on a checkout.
+      operationId: CheckoutsBillingAddressByCheckoutIdAndAddressIdPut
       parameters:
         - $ref: '#/components/parameters/checkoutId'
         - $ref: '#/components/parameters/Accept'
@@ -3360,7 +3205,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 0.9
                     discounts:
                       - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
@@ -3461,12 +3305,7 @@ paths:
                   taxes:
                     - name: Tax
                       amount: 1.28
-                  coupons:
-                    - id: 1
-                      code: SHOP20
-                      coupon_type: percentage_discount
-                      display_name: 20% Off
-                      discounted_amount: 0.9
+                  coupons: []
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
                   handling_cost_total_inc_tax: 0
@@ -3478,7 +3317,6 @@ paths:
                   created_time: '2019-08-05T15:38:14+00:00'
                   updated_time: '2019-08-05T15:41:28+00:00'
                   customer_message: ''
-                  version: 1
                 meta: {}
             Selected Shipping Options:
               example:
@@ -3592,7 +3430,6 @@ paths:
                   created_time: '2019-08-05T15:38:14+00:00'
                   updated_time: '2019-08-05T15:41:28+00:00'
                   customer_message: ''
-                  version: 1
                 meta: {}
             Coupon Applied:
               example:
@@ -3613,7 +3450,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 13.4
                     discounts:
                       - id: 985c79a3-4c94-4104-923a-2e3d4572e72d
@@ -3695,7 +3531,6 @@ paths:
                     - id: 1
                       code: SHOP20
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 13.4
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
@@ -3708,7 +3543,6 @@ paths:
                   created_time: '2021-11-08T22:46:23+00:00'
                   updated_time: '2021-11-09T16:08:01+00:00'
                   customer_message: ''
-                  version: 1
                 meta: {}
             No Coupon Applied:
               example:
@@ -3795,7 +3629,6 @@ paths:
                   created_time: '2021-11-08T22:46:23+00:00'
                   updated_time: '2021-11-09T16:06:56+00:00'
                   customer_message: ''
-                  version: 1
                 meta: {}
             Include promotions:
               example:
@@ -3890,7 +3723,6 @@ paths:
                             - homepage
                             - cartpage
                           text: Some text
-                  version: 1
                 meta: {}
             example-1:
               example:
@@ -3911,7 +3743,6 @@ paths:
                       - code: string
                         id: 0
                         coupon_type: string
-                        display_name: string
                         discounted_amount: 0
                     discounts:
                       - id: string
@@ -4064,7 +3895,6 @@ paths:
                     - code: SHOPNOW
                       id: 1
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 0.9
                   order_id: string
                   shipping_cost_total_inc_tax: 0
@@ -4086,9 +3916,6 @@ paths:
                             - homepage
                             - cartpage
                           text: Some text
-                  version: 1
-        '409':
-          $ref: '#/components/responses/CartConflictErrorResponse'
       x-unitTests: []
       x-operation-settings:
         CollectParameters: false
@@ -4104,7 +3931,7 @@ paths:
         Adds a new consignment to a checkout.
 
 
-        To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
+        Please note that this API endpoint is not concurrent safe, meaning multiple simultaneous requests could result in unexpected and inconsistent results.
 
         For more information about working with consignments, see [Checkout consignment](/docs/storefront/cart-checkout/guide/consignments).  
 
@@ -4121,13 +3948,17 @@ paths:
 
         * `postal_code`
         * `state_or_province`
-        
-      operationId: addCheckoutConsignment
+      operationId: CheckoutsConsignmentsByCheckoutIdPost
       parameters:
         - $ref: '#/components/parameters/checkoutId'
         - $ref: '#/components/parameters/Accept'
         - $ref: '#/components/parameters/Content-Type'
-        - $ref: '#/components/parameters/IncludeShippingOptions'
+        - name: include
+          in: query
+          schema:
+            type: string
+            enum:
+              - consignments.available_shipping_options
       requestBody:
         content:
           application/json:
@@ -4152,18 +3983,16 @@ paths:
                       custom_fields:
                         - field_id: "string"
                           field_value: "string"
-                    line_items: 
-                      - item_id: "118f8774-387c-485e-a095-6ef76d5f1bbd"
-                        quantity: 1
-                    version: 1
+                      line_items:
+                          item_id: "118f8774-387c-485e-a095-6ef76d5f1bbd"
+                          quantity: 1 
               Pickup Consignment:
                 value: 
                   - line_items:
                       - item_id: "118f8774-387c-485e-a095-6ef76d5f1bbd"
                         quantity: 1
                     pickup_option:
-                      pickup_method_id: 1
-                    version: 1
+                      pickup_method_id: 1                 
       responses:
         '200':
           description: ''
@@ -4195,7 +4024,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 0.9
                     discounts:
                       - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
@@ -4296,12 +4124,7 @@ paths:
                   taxes:
                     - name: Tax
                       amount: 1.28
-                  coupons:
-                    - id: 1
-                      code: SHOP20
-                      coupon_type: percentage_discount
-                      display_name: 20% Off
-                      discounted_amount: 0.9
+                  coupons: []
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
                   handling_cost_total_inc_tax: 0
@@ -4446,7 +4269,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 13.4
                     discounts:
                       - id: 985c79a3-4c94-4104-923a-2e3d4572e72d
@@ -4528,7 +4350,6 @@ paths:
                     - id: 1
                       code: SHOP20
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 13.4
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
@@ -4741,7 +4562,6 @@ paths:
                       - code: string
                         id: 0
                         coupon_type: string
-                        display_name: string
                         discounted_amount: 0
                     discounts:
                       - id: string
@@ -4894,7 +4714,6 @@ paths:
                     - code: SHOPNOW
                       id: 1
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 0.9
                   order_id: string
                   shipping_cost_total_inc_tax: 0
@@ -4916,9 +4735,6 @@ paths:
                             - homepage
                             - cartpage
                           text: Some text
-                  version: 1
-        '409':
-          $ref: '#/components/responses/CartConflictErrorResponse'
       x-unitTests: []
       x-operation-settings:
         CollectParameters: false
@@ -4950,14 +4766,24 @@ paths:
         
         To update an existing address and line item IDs, assign a new address and line item IDs by sending a `PUT` request.
 
-        To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
+        Please note that this API endpoint is not concurrent safe, meaning multiple simultaneous requests could result in unexpected and inconsistent results.
         
-
-        2. Assign a shipping option to the new consignment by sending a `PUT` request to update the consignment's `shipping_option_id` with a returned value from `data.consignments[N].available_shipping_option[N].id` obtained in Step One. 
-      operationId: updateCheckoutConsignment
+      operationId: CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPut
       parameters:
         - $ref: '#/components/parameters/Content-Type'
-        - $ref: '#/components/parameters/IncludeShippingOptions'
+        - name: include
+          in: query
+          description: Include to get available shipping options.
+          schema:
+            type: string
+            enum:
+              - consignments.available_shipping_options
+            x-enum-elements:
+              - name: Enum_consignments.availableShippingOptions
+                description: ''
+          x-enum-elements:
+            - name: Enum_consignments.availableShippingOptions
+              description: ''
       requestBody:
         content:
           application/json:
@@ -4995,7 +4821,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 0.9
                     discounts:
                       - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
@@ -5096,12 +4921,7 @@ paths:
                   taxes:
                     - name: Tax
                       amount: 1.28
-                  coupons:
-                    - id: 1
-                      code: SHOP20
-                      coupon_type: percentage_discount
-                      display_name: 20% Off
-                      discounted_amount: 0.9
+                  coupons: []
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
                   handling_cost_total_inc_tax: 0
@@ -5246,7 +5066,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 13.4
                     discounts:
                       - id: 985c79a3-4c94-4104-923a-2e3d4572e72d
@@ -5328,7 +5147,6 @@ paths:
                     - id: 1
                       code: SHOP20
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 13.4
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
@@ -5541,7 +5359,6 @@ paths:
                       - code: string
                         id: 0
                         coupon_type: string
-                        display_name: string
                         discounted_amount: 0
                     discounts:
                       - id: string
@@ -5694,7 +5511,6 @@ paths:
                     - code: SHOPNOW
                       id: 1
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 0.9
                   order_id: string
                   shipping_cost_total_inc_tax: 0
@@ -5716,9 +5532,6 @@ paths:
                             - homepage
                             - cartpage
                           text: Some text
-                  version: 1
-        '409':
-          $ref: '#/components/responses/CartConflictErrorResponse'
     delete:
       tags:
         - Checkout Consignments
@@ -5726,13 +5539,8 @@ paths:
       description: |-
         Removes an existing consignment from a checkout.
 
-        To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
-      operationId: deleteCheckoutConsignment
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DeleteConsignmentRequest'
+        Removing the last consignment will remove the cart from the customer it is assigned to. Create a new redirect URL for the customer so they can access the cart again.
+      operationId: CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDelete
       responses:
         '200':
           description: ''
@@ -5764,7 +5572,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 0.9
                     discounts:
                       - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
@@ -5865,12 +5672,7 @@ paths:
                   taxes:
                     - name: Tax
                       amount: 1.28
-                  coupons:
-                    - id: 1
-                      code: SHOP20
-                      coupon_type: percentage_discount
-                      display_name: 20% Off
-                      discounted_amount: 0.9
+                  coupons: []
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
                   handling_cost_total_inc_tax: 0
@@ -6015,7 +5817,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 13.4
                     discounts:
                       - id: 985c79a3-4c94-4104-923a-2e3d4572e72d
@@ -6097,7 +5898,6 @@ paths:
                     - id: 1
                       code: SHOP20
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 13.4
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
@@ -6310,7 +6110,6 @@ paths:
                       - code: string
                         id: 0
                         coupon_type: string
-                        display_name: 20% Off
                         discounted_amount: 0
                     discounts:
                       - id: string
@@ -6463,7 +6262,6 @@ paths:
                     - code: SHOPNOW
                       id: 1
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 0.9
                   order_id: string
                   shipping_cost_total_inc_tax: 0
@@ -6485,25 +6283,20 @@ paths:
                             - homepage
                             - cartpage
                           text: Some text
-                  version: 1
   '/checkouts/{checkoutId}/coupons':
     post:
       tags:
         - Checkout Coupons
       summary: Add Coupon to Checkout
       description: |-
-        Adds a coupon code to a checkout. 
-        
-        You can use multiple coupons by using this endpoint to apply one coupon at a time on your storefront. Ensure you enable the [Promotion Settings](https://support.bigcommerce.com/s/article/Store-Settings?language=en_US#promotion) in your control panel to allow for multiple coupons per order.
+        Adds a coupon code to a checkout.
 
         **Required Fields**
         * coupon_code
 
         **Limits**
-        * Coupon codes have a 50-character limit.
-
-        To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
-      operationId: addCheckoutCoupon
+        * Coupon codes have a 50-character limit. 
+      operationId: CheckoutsCouponsByCheckoutIdPost
       parameters:
         - $ref: '#/components/parameters/checkoutId'
         - $ref: '#/components/parameters/Accept'
@@ -6545,7 +6338,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 0.9
                     discounts:
                       - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
@@ -6646,12 +6438,7 @@ paths:
                   taxes:
                     - name: Tax
                       amount: 1.28
-                  coupons:
-                    - id: 1
-                      code: SHOP20
-                      coupon_type: percentage_discount
-                      display_name: 20% Off
-                      discounted_amount: 0.9
+                  coupons: []
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
                   handling_cost_total_inc_tax: 0
@@ -6796,7 +6583,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 13.4
                     discounts:
                       - id: 985c79a3-4c94-4104-923a-2e3d4572e72d
@@ -6878,7 +6664,6 @@ paths:
                     - id: 1
                       code: SHOP20
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 13.4
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
@@ -7091,7 +6876,6 @@ paths:
                       - code: string
                         id: 0
                         coupon_type: string
-                        display_name: string
                         discounted_amount: 0
                     discounts:
                       - id: string
@@ -7244,7 +7028,6 @@ paths:
                     - code: SHOPNOW
                       id: 1
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 0.9
                   order_id: string
                   shipping_cost_total_inc_tax: 0
@@ -7266,9 +7049,6 @@ paths:
                             - homepage
                             - cartpage
                           text: Some text
-                  version: 1
-        '409':
-          $ref: '#/components/responses/CartConflictErrorResponse'
       x-unitTests: []
       x-operation-settings:
         CollectParameters: false
@@ -7280,11 +7060,8 @@ paths:
       tags:
         - Checkout Coupons
       summary: Delete Checkout Coupon
-      description: |-
-        Deletes a coupon code from a checkout.
-
-        To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
-      operationId: deleteCheckoutCoupon
+      description: Deletes a coupon code from a checkout.
+      operationId: CheckoutsCouponsByCheckoutIdAndCouponCodeDelete
       parameters:
         - $ref: '#/components/parameters/checkoutId'
         - $ref: '#/components/parameters/Accept'
@@ -7294,11 +7071,6 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DeleteCouponCodeRequest'
       responses:
         '200':
           description: ''
@@ -7330,7 +7102,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 0.9
                     discounts:
                       - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
@@ -7576,7 +7347,6 @@ paths:
                       - id: 1
                         code: SHOP20
                         coupon_type: percentage_discount
-                        display_name: 20% Off
                         discounted_amount: 13.4
                     discounts:
                       - id: 985c79a3-4c94-4104-923a-2e3d4572e72d
@@ -7658,7 +7428,6 @@ paths:
                     - id: 1
                       code: SHOP20
                       coupon_type: percentage_discount
-                      display_name: 20% Off
                       discounted_amount: 13.4
                   shipping_cost_total_inc_tax: 0
                   shipping_cost_total_ex_tax: 0
@@ -7852,108 +7621,6 @@ paths:
                             - cartpage
                           text: Some text
                 meta: {}
-        '409':
-          $ref: '#/components/responses/CartConflictErrorResponse'
-  '/checkouts/{checkoutId}/fees':
-    post:
-      tags:
-        - Checkout Fees
-      summary: Add order level fees to a checkout
-      description: |-
-        Adds order level fees to a checkout. 
-        
-        Limits: 
-          - Maximum of 5 fees per checkout.
-      operationId: CheckoutsFeesByCheckoutIdPost
-      parameters:
-        - $ref: '#/components/parameters/checkoutId'
-        - $ref: '#/components/parameters/Accept'
-        - $ref: '#/components/parameters/Content-Type'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddFeesRequest'
-        required: true
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/Checkout'
-                  meta:
-                    $ref: '#/components/schemas/MetaOpen'
-      x-unitTests: []
-      x-operation-settings:
-        CollectParameters: false
-        AllowDynamicQueryParameters: false
-        AllowDynamicFormParameters: false
-        IsMultiContentStreaming: false
-      x-codegen-request-body-name: body
-    put:
-      tags:
-        - Checkout Fees
-      summary: Update order level fees in a checkout
-      description: |-
-        Updates order level fees in a checkout.
-        > We do not support partial updates, so please send the total entity values for each fee to be updated.
-      operationId: CheckoutsFeesByCheckoutIdPut
-      parameters:
-        - $ref: '#/components/parameters/checkoutId'
-        - $ref: '#/components/parameters/Accept'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateFeesRequest'
-        required: true
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/Checkout'
-                  meta:
-                    $ref: '#/components/schemas/MetaOpen'
-    delete:
-      tags:
-        - Checkout Fees
-      summary: Delete order level fees from a checkout.
-      description: |
-        Delete fees from a checkout.
-
-        > #### Note 
-        > * The `Try It` feature is not currently supported for this endpoint.  
-      operationId: CheckoutsFeesByCheckoutIdDelete
-      parameters:
-        - $ref: '#/components/parameters/checkoutId'
-        - $ref: '#/components/parameters/Accept'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DeleteFeesRequest'
-        required: true
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/Checkout'
-                  meta:
-                    $ref: '#/components/schemas/MetaOpen'
   '/checkouts/{checkoutId}/orders':
     post:
       tags:
@@ -7968,7 +7635,7 @@ paths:
         * Order duplication copies the existing order, assigns a new order number, and sets the new order status to `incomplete`.
         * Once the order is paid, the cart is deleted.
         * Cart deletion occurs if you are using BigCommerce to accept payments on orders.
-      operationId: createOrder
+      operationId: createAnOrder
       parameters:
         - $ref: '#/components/parameters/checkoutId'
         - $ref: '#/components/parameters/Accept'
@@ -7997,7 +7664,7 @@ paths:
         - Checkout Settings
       summary: Get Checkout Settings
       description: Get checkout settings
-      operationId: getCheckoutSettings
+      operationId: GetCheckoutSettings
       responses:
         '200':
           description: ''
@@ -8016,8 +7683,6 @@ paths:
                   order_confirmation_use_custom_checkout_script: false
                   custom_order_confirmation_script_url: 'https://example.com/custom-order-confirmation-script.js'
                   custom_checkout_supports_uco_settings: false
-                  custom_checkout_sri_hash: 'sha256-1234567890'
-                  order_confirmation_sri_hash: 'sha256-0987654321'
                 meta: {}
             WebDAV protocol:
               example:
@@ -8031,7 +7696,7 @@ paths:
         - Checkout Settings
       summary: Update Checkout Settings
       description: Update checkout settings
-      operationId: updateCheckoutSettings
+      operationId: UpdateCheckoutSettings
       parameters:
         - $ref: '#/components/parameters/Content-Type'
       requestBody:
@@ -8058,8 +7723,6 @@ paths:
                   order_confirmation_use_custom_checkout_script: false
                   custom_order_confirmation_script_url: 'https://example.com/custom-order-confirmation-script.js'
                   custom_checkout_supports_uco_settings: false
-                  custom_checkout_sri_hash: 'sha256-1234567890'
-                  order_confirmation_sri_hash: 'sha256-0987654321'
                 meta: {}
             WebDAV protocol:
               example:
@@ -8068,62 +7731,6 @@ paths:
                   order_confirmation_use_custom_checkout_script: false
                   custom_order_confirmation_script_url: 'webdav:vtz-order-confirmation/dist/auto-loader.js'
                 meta: {}
-  /checkouts/settings/channels/{channelId}:
-    parameters:
-      - name: channelId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      summary: Get Channel-Specific Checkout Settings
-      description: Returns the checkout settings for a given channel (storefront) by channelId.
-      tags:
-        - Checkout Settings
-      operationId: get-channel-checkout-settings
-      responses:
-        '200':
-          description: Channel checkout settings retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/ChannelCheckoutsSettings'
-                  meta:
-                    $ref: '#/components/schemas/MetaOpen'
-        '422':
-          description: Invalid channelId or invalid request
-  
-    put:
-      summary: Update Channel-Specific Checkout Settings
-      description: |-
-        Updates the checkout settings for a given channel (storefront) by channelId.
-        
-        This endpoint will update all settings included in the request body. Any settings excluded will remain unchanged. All non-boolean 
-      tags:
-        - Checkout Settings
-      operationId: put-channel-checkout-settings
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChannelCheckoutsSettings'
-      responses:
-        '200':
-          description: Channel checkout settings updated successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/ChannelCheckoutsSettings'
-                  meta:
-                    $ref: '#/components/schemas/MetaOpen'
-        '422':
-          description: Invalid channelId or invalid request
   '/checkouts/{checkoutId}/token':
     parameters:
       
@@ -8133,7 +7740,7 @@ paths:
       tags:
         - Checkout Token
       summary: Create Checkout Token
-      operationId: createCheckoutToken
+      operationId: checkout-token
       parameters:
         - $ref: '#/components/parameters/Content-Type'
       responses:
@@ -8178,8 +7785,6 @@ paths:
                     example: 'https://developer.bigcommerce.com/api-docs/getting-started/api-status-codes'
                   errors:
                     type: object
-                    properties: {}
-                    additionalProperties: true
         '422':
           description: Invalid JSON request body - missing or invalid data.
           content:
@@ -8263,11 +7868,8 @@ components:
               properties:
                 code:
                   type: string
-                  description: 'ISO-4217 currency code. (See: https://www.iso.org/iso-4217-currency-codes.html.)'
+                  description: 'ISO-4217 currency code. (See: http://en.wikipedia.org/wiki/ISO_4217.)'
                   example: USD
-            tax_included:
-              type: boolean
-              description: 'Indicates whether product prices are shown inclusive of sales tax.'
             base_amount:
               type: number
               description: 'Sum of cart line-item amounts before cart-level discounts, coupons, or taxes are applied.'
@@ -8278,7 +7880,7 @@ components:
               description: ID of channel
             discount_amount:
               type: number
-              description: The amount includes order-level automatic promotions plus manual discounts and excludes coupon and product-based discounts.
+              description: Order-based discounted amount only - Excludes coupon discounts and product-based discounts.
               format: double
               example: 0.5
             cart_amount_inc_tax:
@@ -8315,10 +7917,6 @@ components:
                     description: The discounted amount applied within a given context.
                     format: float
                     example: 0.9
-                  display_name:
-                    type: string
-                    description: The display name of the coupon.
-                    example: 20% Off
                 required:
                   - code
             discounts:
@@ -8386,10 +7984,8 @@ components:
                           type: object
                           properties:
                             id:
-                              anyOf:
-                                - type: string
-                                - type: integer
-                              description: The string value is always equal to "manual-discount" regardless of the input.
+                              type: integer
+                              description: ID of the applied discount.
                             discounted_amount:
                               type: number
                               description: The discounted amount applied within a given context.
@@ -8421,24 +8017,12 @@ components:
                         type: number
                         description: Sale price of the item multiplied by the quantity.
                         format: double
-                      comparison_price:
-                        type: number
-                        description: The price of a single product used for strike-through.
-                        format: double
-                      extended_comparison_price:
-                        type: number
-                        description: The price of a line item (product * quantity) used for strike-through.
-                        format: double
                       is_require_shipping:
                         type: boolean
                         description: ''
                       is_mutable:
                         type: boolean
                         description: ''
-                      added_by_promotion:
-                        type: boolean
-                        example: false
-                        description: Whether or not a promotion added an additional item.
                       parent_id:
                         type: number
                         description: ''
@@ -8505,10 +8089,6 @@ components:
                       is_require_shipping:
                         type: boolean
                         description: ''
-                      added_by_promotion:
-                        type: boolean
-                        example: false
-                        description: Whether or not a promotion added an additional item.
                       is_taxable:
                         type: boolean
                         description: ''
@@ -8556,14 +8136,6 @@ components:
                       extended_sale_price:
                         type: number
                         description: Sale price of the item multiplied by the quantity.
-                        format: double
-                      comparison_price:
-                        type: number
-                        description: The price of a single product used for strike-through.
-                        format: double
-                      extended_comparison_price:
-                        type: number
-                        description: The price of a line item (product * quantity) used for strike-through.
                         format: double
                     required:
                       - quantity
@@ -8653,7 +8225,6 @@ components:
           title: Address Response
           allOf:
             - title: Address Properties
-              type: object
               properties:
                 first_name:
                   type: string
@@ -8705,11 +8276,11 @@ components:
                       field_value:
                         type: string
                         description: 'This can also be an array for fields that need to support a list of values (e.g., a set of check boxes.)'
-            - type: object
-              properties:
+            - properties:
                 id:
                   type: string
                   description: ''
+          type: object
         consignments:
           type: array
           description: ''
@@ -8723,14 +8294,11 @@ components:
                 description: ''
               shippingAddress:
                 type: object
-                properties: {}
-                additionalProperties: true
                 x-deprecated: true
               address:
                 title: Address Response
                 allOf:
                   - title: Address Properties
-                    type: object
                     properties:
                       first_name:
                         type: string
@@ -8785,11 +8353,11 @@ components:
                     required:
                       - email
                       - country_code
-                  - type: object
-                    properties:
+                  - properties:
                       id:
                         type: string
                         description: ''
+                type: object
               available_shipping_options:
                 type: array
                 description: This is available only when "include=consignments.available_shipping_options" is presented in the URL.
@@ -8912,11 +8480,6 @@ components:
           description: Coupons applied at checkout level.
           items:
             $ref: '#/components/schemas/AppliedCoupon'
-        fees:
-          type: array
-          description: Fees applied at the checkout level.
-          items:
-            $ref: '#/components/schemas/CheckoutFee'
         order_id:
           type: string
           description: ''
@@ -8987,10 +8550,6 @@ components:
                     text:
                       type: string
                       description: Text of the banner.
-        version:
-          type: integer
-          description: The current version of the checkout increments with each successful update. You can use it to enable optimistic concurrency control for subsequent updates.
-          example: 1
     Checkout_Put:
       title: Checkout_Put
       required:
@@ -9000,10 +8559,6 @@ components:
         customer_message:
           type: string
           description: ''
-        version:
-          type: integer
-          description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-          example: 1
       x-internal: false
     AppliedCoupon:
       title: Applied Coupon
@@ -9023,55 +8578,11 @@ components:
           type: string
           description: Key name to identify the type of coupon.
           example: percentage_discount
-        display_name:
-          type: string
-          description: The display name of the coupon.
-          example: 20% Off
         discounted_amount:
           type: number
           description: The discounted amount applied within a given context.
           format: float
           example: 0.9
-      x-internal: false
-    CheckoutFee:
-      title: Checkout Fee
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The fee ID.
-          example: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-        type:
-          type: string
-          description: The type of the fee.
-          enum:
-            - custom_fee
-        name:
-          type: string
-          description: Name of the fee.
-          example: AAINS
-        display_name:
-          type: string
-          description: Display name of the fee targeting customers/shoppers.
-          example: Package Protection Insurance
-        cost_inc_tax:
-          type: number
-          description: Cost of the fee including tax.
-          example: 10.0
-        cost_ex_tax:
-          type: number
-          description: Cost of the fee excluding tax.
-          example: 9.9
-        source:
-          type: string
-          description: The source of the request.
-          example: AA
-        tax_class_id:
-          type: integer
-          nullable: true
-          description: The tax class ID.
-          example: 1
       x-internal: false
     AddressProperties:
       title: Address Properties
@@ -9130,10 +8641,6 @@ components:
               field_value:
                 type: string
                 description: 'This can also be an array for fields that need to support a list of values (e.g., a set of check boxes.)'
-        version:
-          type: integer
-          description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-          example: 1
       x-internal: false
     CreateConsignmentRequest:
       title: Create Consignment Request
@@ -9146,8 +8653,6 @@ components:
             required:
               - country_code
               - email
-              - state_or_province
-              - postal_code
             type: object
             properties:
               first_name:
@@ -9224,20 +8729,7 @@ components:
             properties:
               pickup_method_id:
                 type: integer
-                example: 1
-          version:
-            type: integer
-            description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-            example: 1
-      x-internal: false
-    DeleteConsignmentRequest:
-      title: Delete Consignment Request
-      type: object
-      properties:
-        version:
-          type: integer
-          description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-          example: 1
+                example: 1                  
       x-internal: false
     UpdateConsignmentRequest:
       title: Update Consignment Request
@@ -9326,19 +8818,6 @@ components:
               pickup_method_id:
                 type: integer
                 example: 1
-          custom_shipping:
-            type: object
-            properties:
-              price:
-                type: number
-                example: 12.9
-              description:
-                type: string
-                example: "custom shipping"
-          version:
-            type: integer
-            description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-            example: 1
       description: One or more of these three fields are mandatory. `address` and `line_items` can be updated in one request. `shipping_option_id` has to be updated in a separate request because changing the address or line items can invalidate the previously available shipping options.
       x-internal: false
     CouponCodeRequest:
@@ -9348,111 +8827,6 @@ components:
         coupon_code:
           type: string
           description: Coupon codes have a 50-character limit.
-        version:
-          type: integer
-          description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-          example: 1
-      x-internal: false
-    BaseFee:
-      type: object
-      required:
-        - type
-        - name
-        - display_name
-        - cost
-        - source
-      properties:
-        type:
-          type: string
-          description: The type of the fee.
-          enum:
-            - custom_fee
-        name:
-          type: string
-          minLength: 1
-          maxLength: 50
-          description: The name of the fee.
-          example: AAINS
-        display_name:
-          type: string
-          minLength: 1
-          maxLength: 200
-          description: The display name of the fee targeting customers/shoppers.
-          example: Package Protection Insurance
-        cost:
-          type: number
-          description: The cost of the fee.
-          example: 7.12
-        source:
-          type: string
-          minLength: 1
-          maxLength: 50
-          description: The source of the request.
-          example: AA
-        tax_class_id:
-          type: integer
-          description: The tax class ID applied to this fee (you can retrieve the tax class ID from our management API - v2/tax_classes). If the tax class is not provided or is null, the tax class set in the control panel is applied.
-          example: 1
-    FeeWithId:
-      allOf:
-        - $ref: '#/components/schemas/BaseFee'
-        - type: object
-          properties:
-            id:
-              type: string
-              description: ID of the fee.
-              example: 3c26f3e6-146d-4dce-8159-2a77c0bba409
-          required:
-            - id
-    AddFeesRequest:
-      title: Fees POST request
-      type: object
-      required:
-        - fees
-      properties:
-        fees:
-          type: array
-          description: The fees to be added to a checkout.
-          items:
-            $ref: '#/components/schemas/BaseFee'
-          minItems: 1
-      x-internal: false
-    UpdateFeesRequest:
-      title: Fees PUT request
-      type: object
-      required:
-        - fees
-      properties:
-        fees:
-          type: array
-          description: The fees to be updated in a checkout.
-          items:
-            $ref: '#/components/schemas/FeeWithId'
-          minItems: 1
-      x-internal: false
-    DeleteFeesRequest:
-      title: Fees DELETE request
-      type: object
-      required:
-        - ids
-      properties:
-        ids:
-          type: array
-          description: The IDs of the fees to be deleted from a checkout.
-          items:
-            type: string
-            description: The ID of the fee.
-            example: 3c26f3e6-146d-4dce-8159-2a77c0bba409
-          minItems: 1
-      x-internal: false
-    DeleteCouponCodeRequest:
-      title: Delete Coupon Request
-      type: object
-      properties:
-        version:
-          type: integer
-          description: The cart version that you expect to apply the updates. If the provided version doesn't match the current cart version, you will receive a conflict error. This field is optional; if not provided, optimistic concurrency control will not apply.
-          example: 1
       x-internal: false
     Order:
       title: Order
@@ -9475,36 +8849,6 @@ components:
           type: string
         custom_checkout_supports_uco_settings:
           type: boolean
-        custom_checkout_sri_hash:
-          type: string
-        custom_order_confirmation_sri_hash:
-          type: string
-    ChannelCheckoutsSettings:
-      title: Channel-Specific Checkouts Settings
-      allOf:
-        - type: object
-          properties:
-            checkout_type:
-              type: string
-            guest_checkout_type:
-              type: string
-            guest_checkout_for_existing_accounts:
-              type: string
-            policy_consent:
-              type: string
-            order_confirmation_contact_email:
-              type: string
-            is_order_terms_and_conditions_enabled:
-              type: boolean
-            order_terms_and_conditions_type:
-              type: string
-            order_terms_and_conditions_link:
-              type: string
-            order_terms_and_conditions_textarea:
-              type: string
-            should_redirect_to_storefront_for_auth: 
-              type: boolean
-        - $ref: "#/components/schemas/CheckoutsSettings"
     CheckoutsSettingsRequest:
       title: Checkouts settings request
       type: object
@@ -9521,12 +8865,6 @@ components:
         custom_checkout_supports_uco_settings:
           type: boolean
           description: Boolean value that specifies whether this checkout supports Optimized One-Page Checkout settings.
-        custom_checkout_sri_hash:
-          type: string
-          description: 'The Subresource Integrity (SRI) hash for the custom checkout script URL.'
-        custom_order_confirmation_sri_hash:
-          type: string
-          description: 'The Subresource Integrity (SRI) hash for the custom order confirmation script URL.'
       description: ''
     PickupOption:
       type: object
@@ -9569,7 +8907,6 @@ components:
                   - id: 1
                     code: SHOP20
                     coupon_type: percentage_discount
-                    display_name: 20% Off
                     discounted_amount: 0.9
                 discounts:
                   - id: 8edef915-8e8e-4ebd-bece-31fbb1191a7e
@@ -9670,12 +9007,7 @@ components:
               taxes:
                 - name: Tax
                   amount: 1.28
-              coupons:
-                - id: 1
-                  code: SHOP20
-                  coupon_type: percentage_discount
-                  display_name: 20% Off
-                  discounted_amount: 0.9
+              coupons: []
               shipping_cost_total_inc_tax: 0
               shipping_cost_total_ex_tax: 0
               handling_cost_total_inc_tax: 0
@@ -9820,7 +9152,6 @@ components:
                   - id: 1
                     code: SHOP20
                     coupon_type: percentage_discount
-                    display_name: 20% Off
                     discounted_amount: 13.4
                 discounts:
                   - id: 985c79a3-4c94-4104-923a-2e3d4572e72d
@@ -9902,7 +9233,6 @@ components:
                 - id: 1
                   code: SHOP20
                   coupon_type: percentage_discount
-                  display_name: 20% Off
                   discounted_amount: 13.4
               shipping_cost_total_inc_tax: 0
               shipping_cost_total_ex_tax: 0
@@ -10115,7 +9445,6 @@ components:
                   - code: string
                     id: 0
                     coupon_type: string
-                    display_name: string
                     discounted_amount: 0
                 discounts:
                   - id: string
@@ -10268,7 +9597,6 @@ components:
                 - code: SHOPNOW
                   id: 1
                   coupon_type: percentage_discount
-                  display_name: 20% Off
                   discounted_amount: 0.9
               order_id: string
               shipping_cost_total_inc_tax: 0
@@ -10290,24 +9618,6 @@ components:
                         - homepage
                         - cartpage
                       text: Some text
-              version: 1
-    CartConflictErrorResponse:
-      description: 'Cart conflict'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status:
-                type: integer
-              title:
-                type: string
-              type:
-                type: string
-          example:
-            status: 409
-            title: The request cannot be processed due to a possible conflict. Please review the changes and try again.
-            type: https://developer.bigcommerce.com/api-docs/getting-started/api-status-codes
     checkout_settings_resp:
       description: ''
       content:
@@ -10393,34 +9703,13 @@ components:
       schema:
         type: string
         default: application/json
-    IncludeShippingOptions:
+    includeShippingOption:
       name: include
       in: query
-      required: false
-      description: Include the shipping options available to this checkout.
       schema:
         type: string
         enum:
           - consignments.available_shipping_options
-    IncludeGeneral:
-      name: include
-      in: query
-      description: |-
-        * `cart.line_items.physical_items.options` - physical options
-        * `cart.line_items.digital_items.options` - digital options
-        * `consignments.available_shipping_options` - shipping options
-        * `promotions.banners` - promotion options
-      style: form
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-          enum:
-            - cart.line_items.physical_items.options
-            - cart.line_items.digital_items.options
-            - consignments.available_shipping_options
-            - promotions.banners
   securitySchemes:
     X-Auth-Token:
       name: X-Auth-Token

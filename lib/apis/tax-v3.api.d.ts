@@ -5,7 +5,10 @@ export * as TaxV3ApiSpecs from '../generated/tax-v3';
 export declare class TaxV3Api {
     private readonly request;
     constructor(request: RequestService);
-    getTaxProviderConnection(providerId: TaxV3ApiSpecs.GetTaxProviderConnectionData['path']['provider_id']): Promise<RequestErrorResponse<404, Required<unknown>> | RequestSuccessResponse<200, Required<TaxV3ApiSpecs.ResponseConnection>>>;
-    updateTaxProviderConnection(providerId: TaxV3ApiSpecs.UpdateTaxProviderConnectionData['path']['provider_id'], requestBody: TaxV3ApiSpecs.UpdateTaxProviderConnectionData['body']): Promise<RequestErrorResponse<404, Required<unknown>> | RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<TaxV3ApiSpecs.ResponseConnection>>>;
-    deleteTaxProviderConnection(providerId: TaxV3ApiSpecs.DeleteTaxProviderConnectionData['path']['provider_id']): Promise<RequestErrorResponse<404, Required<unknown>> | RequestSuccessResponse<200, Required<TaxV3ApiSpecs.ResponseConnection>>>;
+    providerConnectionGet(providerId: TaxV3ApiSpecs.ProviderConnectionGetData['path']['provider_id']): Promise<RequestErrorResponse<404, Required<unknown>> | RequestSuccessResponse<200, Required<TaxV3ApiSpecs.ResponseConnection>>>;
+    getTaxProviderConnection(...args: Parameters<TaxV3Api['providerConnectionGet']>): Promise<RequestErrorResponse<404, Required<unknown>> | RequestSuccessResponse<200, Required<TaxV3ApiSpecs.ResponseConnection>>>;
+    providerConnectionPut(providerId: TaxV3ApiSpecs.ProviderConnectionPutData['path']['provider_id'], requestBody: TaxV3ApiSpecs.ProviderConnectionPutData['body']): Promise<RequestErrorResponse<404, Required<unknown>> | RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<TaxV3ApiSpecs.ResponseConnection>>>;
+    updateTaxProviderConnection(...args: Parameters<TaxV3Api['providerConnectionPut']>): Promise<RequestErrorResponse<404, Required<unknown>> | RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<TaxV3ApiSpecs.ResponseConnection>>>;
+    providerConnectionDelete(providerId: TaxV3ApiSpecs.ProviderConnectionDeleteData['path']['provider_id']): Promise<RequestErrorResponse<404, Required<unknown>> | RequestSuccessResponse<200, Required<TaxV3ApiSpecs.ResponseConnection>>>;
+    deleteTaxProviderConnection(...args: Parameters<TaxV3Api['providerConnectionDelete']>): Promise<RequestErrorResponse<404, Required<unknown>> | RequestSuccessResponse<200, Required<TaxV3ApiSpecs.ResponseConnection>>>;
 }

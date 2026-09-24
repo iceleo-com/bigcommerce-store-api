@@ -487,7 +487,7 @@ export type WidgetSchemaTab = {
              */
             conditional?: {
                 /**
-                 * The ID of the `settings` object the conditional attribute is related to. The key must be defined within the same settings array as the conditional property. This ensures the conditional logic is scoped to the relevant settings group.
+                 * The ID of the `setting` object the conditional attribute is related to.
                  */
                 key?: string;
                 /**
@@ -627,7 +627,7 @@ export type WidgetSchemaHidden = {
          */
         conditional?: {
             /**
-             * The ID of the `settings` object the conditional attribute is related to. You must define the key within the same settings array as the conditional property to scope the conditional logic to the relevant settings group.
+             * The ID of the `setting` object the conditional attribute is related to.
              */
             key?: string;
             /**
@@ -656,7 +656,7 @@ export type WidgetSchemaTabSectionsSettings = {
  */
 export type WidgetSchemaConditional = {
     /**
-     * The ID of the `settings` object the conditional attribute is related to. You must define the key within the same settings array as the conditional property to scope the conditional logic to the relevant settings group.
+     * The ID of the `setting` object the conditional attribute is related to.
      */
     key?: string;
     /**
@@ -668,11 +668,6 @@ export type WidgetSchemaConditional = {
      */
     value?: Array<unknown>;
 };
-
-/**
- * The channel ID.
- */
-export type ChannelId = string;
 
 /**
  * The identifier for a specific template.
@@ -688,11 +683,6 @@ export type FilterWidgetTemplateUuidParam = string;
  * The kind of widget template.
  */
 export type FilterWidgetTemplateKindParam = string;
-
-/**
- * The URL-encoded name of the widget.
- */
-export type FilterWidgetNameParam = string;
 
 /**
  * The template file, for example: `pages/home`.
@@ -737,11 +727,6 @@ export type PageParam = number;
 export type LimitParam = number;
 
 /**
- * This is an optional query parameter used to fetch a specific widget template version.
- */
-export type FilterVersionUuid = string;
-
-/**
  * The query string associated with a widget's name and description.
  *
  */
@@ -760,17 +745,12 @@ export type ContentType = string;
 /**
  * A comma-separated list of channel ids to filter the results by.
  */
-export type ChannelIdInParam = Array<number>;
+export type ChannelIdInParam = string;
 
 /**
  * A comma-separated list of site IDs to filter the results by.
  */
-export type SiteIdInParam = Array<number>;
-
-/**
- * Use to pass in comma-separated list of widget names. Example: `/widgets?name:in=test-widget-name,header%20images`
- */
-export type NameInParam = Array<string>;
+export type SiteIdInParam = string;
 
 export type GetWidgetTemplatesData = {
     body?: never;
@@ -801,9 +781,9 @@ export type GetWidgetTemplatesData = {
          */
         widget_template_kind?: string;
         /**
-         * A comma-separated list of channel ids to filter the results by.
+         * Filter items by channel_id.
          */
-        'channel_id:in'?: Array<number>;
+        'channel_id:in'?: number;
     };
     url: '/content/widget-templates';
 };
@@ -857,6 +837,7 @@ export type CreateWidgetTemplateError = CreateWidgetTemplateErrors[keyof CreateW
 export type CreateWidgetTemplateResponses = {
     200: {
         data?: WidgetTemplateFull;
+    } & {
         meta?: Meta;
     };
 };
@@ -952,7 +933,7 @@ export type GetWidgetTemplateData = {
     };
     query?: {
         /**
-         * This is an optional query parameter used to fetch a specific widget template version.
+         * This is an optional query parameter used to attempt to fetch a specific Widget Template version.
          */
         version_uuid?: string;
     };
@@ -976,6 +957,7 @@ export type GetWidgetTemplateError = GetWidgetTemplateErrors[keyof GetWidgetTemp
 export type GetWidgetTemplateResponses = {
     200: {
         data?: WidgetTemplateFull;
+    } & {
         meta?: Meta;
     };
 };
@@ -1021,6 +1003,7 @@ export type UpdateWidgetTemplateError = UpdateWidgetTemplateErrors[keyof UpdateW
 export type UpdateWidgetTemplateResponses = {
     200: {
         data?: WidgetTemplateFull;
+    } & {
         meta?: Meta;
     };
 };
@@ -1056,21 +1039,21 @@ export type GetWidgetsData = {
          */
         widget_template_uuid?: string;
         /**
-         * The URL-encoded name of the widget.
+         * The URL encoded name of the widget.
          */
         name?: string;
         /**
          * Use to pass in comma-separated list of widget names. Example: `/widgets?name:in=test-widget-name,header%20images`
          */
-        'name:in'?: Array<string>;
+        'name:in'?: Array<unknown>;
         /**
-         * A comma-separated list of channel ids to filter the results by.
+         * Filter items by channel_id.
          */
-        'channel_id:in'?: Array<number>;
+        'channel_id:in'?: number;
         /**
-         * A comma-separated list of site IDs to filter the results by.
+         * A comma-separated list of site ids to filter the results by.
          */
-        'site_id:in'?: Array<number>;
+        'site_id:in'?: string;
     };
     url: '/content/widgets';
 };
@@ -1296,11 +1279,11 @@ export type GetPlacementsData = {
         /**
          * A comma-separated list of channel ids to filter the results by.
          */
-        'channel_id:in'?: Array<number>;
+        'channel_id:in'?: string;
         /**
          * A comma-separated list of site IDs to filter the results by.
          */
-        'site_id:in'?: Array<number>;
+        'site_id:in'?: string;
     };
     url: '/content/placements';
 };
@@ -1501,10 +1484,6 @@ export type GetContentRegionsData = {
          * The template file, for example: `templateFile=pages/home`.
          */
         template_file: string;
-        /**
-         * The channel ID.
-         */
-        channel_id?: string;
     };
     url: '/content/regions';
 };

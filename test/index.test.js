@@ -85,3 +85,26 @@ describe('BigCommerceStoreApi', () => {
         }
     });
 });
+
+describe('Legacy aliases', () => {
+    test('should forward to the renamed methods', () => {
+        const apiClient = new BigCommerceStoreApi({
+            storeHash: 'storeHash',
+            accessToken: 'accessToken',
+        });
+
+        const cases = [
+            [apiClient.v3.brands, 'getBrand', 'getBrandById'],
+            [apiClient.v3.products, 'getProduct', 'getProductById'],
+        ];
+
+        cases.forEach(([api, aliasName, targetName]) => {
+            expect(typeof api[aliasName]).toBe('function');
+
+            const spy = jest.spyOn(api, targetName).mockReturnValue('result');
+            expect(api[aliasName](1, { include_fields: 'name' })).toBe('result');
+            expect(spy).toHaveBeenCalledWith(1, { include_fields: 'name' });
+            spy.mockRestore();
+        });
+    });
+});

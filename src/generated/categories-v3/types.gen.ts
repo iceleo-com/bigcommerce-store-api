@@ -16,15 +16,15 @@ export type CategoryFull = {
      */
     readonly id?: number;
     /**
-     * The unique numeric ID of the categoryʼs parent. This field controls where the category sits in the tree of categories that organize the catalog.
+     * The unique numeric ID of the category's parent. This field controls where the category sits in the tree of categories that organize the catalog.
      * Required in a POST if creating a child category.
      */
-    parent_id?: number;
+    parent_id: number;
     /**
-     * The name displayed for the category. Name is unique with respect to the categoryʼs siblings.
+     * The name displayed for the category. Name is unique with respect to the category's siblings.
      * Required in a POST.
      */
-    name?: string;
+    name: string;
     /**
      * The product description, which can include HTML formatting.
      *
@@ -51,12 +51,12 @@ export type CategoryFull = {
      */
     search_keywords?: string;
     /**
-     * Custom meta keywords for the category page. If not defined, the storeʼs default keywords will be used. Must post as an array like: ["awesome","sauce"].
+     * Custom meta keywords for the category page. If not defined, the store's default keywords will be used. Must post as an array like: ["awesome","sauce"].
      *
      */
     meta_keywords?: Array<string>;
     /**
-     * Custom meta description for the category page. If not defined, the storeʼs default meta description will be used.
+     * Custom meta description for the category page. If not defined, the store's default meta description will be used.
      *
      */
     meta_description?: string;
@@ -254,7 +254,7 @@ export type MetafieldFull = {
      */
     resource_id?: number;
     /**
-     * Date and time of the metafieldʼs creation. Read-Only.
+     * Date and time of the metafield's creation. Read-Only.
      *
      */
     readonly date_created?: string;
@@ -267,15 +267,14 @@ export type MetafieldFull = {
 
 /**
  * productSortOrder
+ *
+ * The relative priority of the product among other products inside the category.
  */
 export type ProductSortOrder = {
     /**
      * The ID of the associated product.
      */
     product_id: number;
-    /**
-     * The relative priority of the product among other products inside the category.
-     */
     sort_order: number;
 };
 
@@ -307,7 +306,7 @@ export type DefaultProductSort = {
  */
 export type Name = {
     /**
-     * The name displayed for the category. Name is unique with respect to the categoryʼs siblings.
+     * The name displayed for the category. Name is unique with respect to the category's siblings.
      * Required in a POST.
      */
     name?: string;
@@ -373,7 +372,7 @@ export type SearchKeywords = {
  */
 export type MetaKeywords = {
     /**
-     * Custom meta keywords for the category page. If not defined, the storeʼs default keywords will be used. Must post as an array like: ["awesome","sauce"].
+     * Custom meta keywords for the category page. If not defined, the store's default keywords will be used. Must post as an array like: ["awesome","sauce"].
      *
      */
     meta_keywords?: Array<string>;
@@ -417,7 +416,7 @@ export type ImageUrl = {
  */
 export type MetaDescription = {
     /**
-     * Custom meta description for the category page. If not defined, the storeʼs default meta description will be used.
+     * Custom meta description for the category page. If not defined, the store's default meta description will be used.
      *
      */
     meta_description?: string;
@@ -439,394 +438,10 @@ export type Id = {
  */
 export type ParentId = {
     /**
-     * The unique numeric ID of the categoryʼs parent. This field controls where the category sits in the tree of categories that organize the catalog.
+     * The unique numeric ID of the category's parent. This field controls where the category sits in the tree of categories that organize the catalog.
      * Required in a POST if creating a child category.
      */
     parent_id?: number;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type Metafield = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    /**
-     * The unique identifier for the resource with which the metafield is associated.
-     *
-     */
-    readonly resource_id?: number;
-    /**
-     * The unique identifier for the metafield.
-     */
-    id?: number;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created?: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified?: string;
-    /**
-     * Client ID for the metafieldʼs creator.
-     */
-    readonly owner_client_id?: string;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponse = {
-    data?: Array<Metafield>;
-    meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePostPut = {
-    data?: Array<Metafield>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionPartialSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Error response payload for the BigCommerce API.
- *
- */
-export type _Error = {
-    /**
-     * The HTTP status code for the error.
-     *
-     */
-    status?: number;
-    /**
-     * The error title.
-     *
-     */
-    title?: string;
-    /**
-     * The error type.
-     *
-     */
-    type?: string;
-    errors?: ErrorDetail;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-
-/**
- * Collection Meta
- *
- * Data about the response, including pagination and collection totals.
- */
-export type CollectionMeta = {
-    /**
-     * Pagination
-     *
-     * Data about the response, including pagination and collection totals.
-     */
-    pagination?: {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    };
-    [key: string]: unknown | {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    } | undefined;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBasePost = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBasePut = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
 };
 
 /**
@@ -836,15 +451,15 @@ export type MetafieldBasePut = {
  */
 export type CategoryFullWritable = {
     /**
-     * The unique numeric ID of the categoryʼs parent. This field controls where the category sits in the tree of categories that organize the catalog.
+     * The unique numeric ID of the category's parent. This field controls where the category sits in the tree of categories that organize the catalog.
      * Required in a POST if creating a child category.
      */
-    parent_id?: number;
+    parent_id: number;
     /**
-     * The name displayed for the category. Name is unique with respect to the categoryʼs siblings.
+     * The name displayed for the category. Name is unique with respect to the category's siblings.
      * Required in a POST.
      */
-    name?: string;
+    name: string;
     /**
      * The product description, which can include HTML formatting.
      *
@@ -871,12 +486,12 @@ export type CategoryFullWritable = {
      */
     search_keywords?: string;
     /**
-     * Custom meta keywords for the category page. If not defined, the storeʼs default keywords will be used. Must post as an array like: ["awesome","sauce"].
+     * Custom meta keywords for the category page. If not defined, the store's default keywords will be used. Must post as an array like: ["awesome","sauce"].
      *
      */
     meta_keywords?: Array<string>;
     /**
-     * Custom meta description for the category page. If not defined, the storeʼs default meta description will be used.
+     * Custom meta description for the category page. If not defined, the store's default meta description will be used.
      *
      */
     meta_description?: string;
@@ -936,70 +551,6 @@ export type CategoryWritable = ParentId & Name & Description & Views & SortOrder
 };
 
 /**
- * Common Metafield properties.
- *
- */
-export type MetafieldWritable = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    /**
-     * The unique identifier for the metafield.
-     */
-    id?: number;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created?: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified?: string;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
-};
-
-/**
  * The ID of the `Category` to which the resource belongs.
  *
  */
@@ -1012,12 +563,6 @@ export type CategoryIdParam = number;
 export type MetafieldIdParam = number;
 
 /**
- * Filter items by metafield ID.
- *
- */
-export type IdMetafieldQueryParam = number;
-
-/**
  * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
  */
 export type Accept = string;
@@ -1026,165 +571,6 @@ export type Accept = string;
  * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
  */
 export type ContentType = string;
-
-/**
- * Specifies the page number in a limited (paginated) list of results.
- *
- */
-export type PageParam = number;
-
-/**
- * Controls the sort order of the response, for example, `sort=name`.
- *
- * Allowed values:
- * - `name`: sort categories in alphabetical order by category name.
- * - `id`: sort in ascending order by category ID.
- * - `parent_id`: sort in ascending order by the ID of the parent category.
- * - `sort_order`: sort in ascending order by sort order value.
- */
-export type SortParam = 'name' | 'id' | 'parent_id' | 'sort_order';
-
-/**
- * Filter based on a metafieldʼs key.
- */
-export type MetafieldKeyParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
- */
-export type MetafieldKeyInParam = Array<string>;
-
-/**
- * Filter based on a metafieldʼs namespaces.
- */
-export type MetafieldNamespaceParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter.
- */
-export type MetafieldNamespaceInParam = Array<string>;
-
-/**
- * Controls the number of items per page in a limited (paginated) list of results.
- *
- */
-export type LimitParam = number;
-
-/**
- * Sort direction. Acceptable values are: `asc`, `desc`.
- *
- */
-export type DirectionParam = 'asc' | 'desc';
-
-/**
- * 'Query parameter that lets you filter by the minimum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.'
- *
- */
-export type DateCreatedMin = string;
-
-/**
- * 'Query parameter that lets you filter by the maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.'
- *
- */
-export type DateCreatedMax = string;
-
-/**
- * 'Query parameter that lets you filter by the maximum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.'
- *
- */
-export type DateModifiedMax = string;
-
-/**
- * 'Query parameter that lets you filter by the minimum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.'
- *
- */
-export type DateModifiedMin = string;
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParam = Array<string>;
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-
-/**
- * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
- */
-export type ExcludeFieldsParam = Array<string>;
-
-/**
- * Filter items by keywords found in the `name`, `description`, or `sku` fields, or in the brand name.
- */
-export type KeywordParam = string;
-
-/**
- * Filter items based on whether the product is currently visible on the storefront.
- */
-export type IsVisibleParam = boolean;
-
-/**
- * Filter items by name.
- *
- */
-export type NameParam = string;
-
-/**
- * Filter items by substring in the name property. `name:like=stick` returns both `Stickers` and `Lipstick colors`.
- */
-export type NameLikeParam = string;
-
-/**
- * Filter items by substring in the page title property. `page_title:like=oil` returns both `Soil and mulch` and `Oil pastels`.
- */
-export type PageTitleLikeParam = string;
-
-/**
- * Filter items by page_title.
- *
- */
-export type PageTitleParam = string;
-
-export type ParentIdInParam = Array<number>;
-
-/**
- * Filter items by parent_id. If the category is a child or sub-category it can be filtered with the parent_id.
- */
-export type ParentIdParam = number;
-
-export type ParentIdMinParam = number;
-
-export type ParentIdMaxParam = number;
-
-export type ParentIdGreaterParam = number;
-
-export type ParentIdLessParam = number;
-
-/**
- * Filter items by category ID.
- *
- */
-export type IdCategoryQueryParam = number;
-
-/**
- * Explicitly include objects by passing a comma-separated list of IDs.
- */
-export type IdInParam = Array<number>;
-
-/**
- * Exclude objects by passing a comma-separated list of IDs.
- */
-export type IdNotInParam = Array<number>;
-
-export type IdMinParam = number;
-
-export type IdMaxParam = number;
-
-export type IdGreaterParam = number;
-
-export type IdLessParam = number;
 
 export type DeleteCategoriesData = {
     body?: never;
@@ -1197,29 +583,22 @@ export type DeleteCategoriesData = {
     path?: never;
     query?: {
         /**
-         * Filter items by category ID.
-         *
+         * Filter items by ID.
          */
         id?: number;
-        /**
-         * Explicitly include objects by passing a comma-separated list of IDs.
-         */
         'id:in'?: Array<number>;
-        /**
-         * Exclude objects by passing a comma-separated list of IDs.
-         */
         'id:not_in'?: Array<number>;
-        'id:min'?: number;
-        'id:max'?: number;
-        'id:greater'?: number;
-        'id:less'?: number;
+        'id:min'?: Array<number>;
+        'id:max'?: Array<number>;
+        'id:greater'?: Array<number>;
+        'id:less'?: Array<number>;
         /**
          * Filter items by name.
          *
          */
         name?: string;
         /**
-         * Filter items by parent_id. If the category is a child or sub-category it can be filtered with the parent_id.
+         * Filter items by parent_id. If the category is a child or sub category it can be filtered with the parent_id.
          */
         parent_id?: number;
         /**
@@ -1228,26 +607,20 @@ export type DeleteCategoriesData = {
          */
         page_title?: string;
         /**
-         * Filter items by keywords found in the `name`, `description`, or `sku` fields, or in the brand name.
+         * Filter items by keywords. eg. new, towel, bath
          */
         keyword?: string;
         /**
-         * Filter items based on whether the product is currently visible on the storefront.
+         * Filter items by if visible on the storefront.
          */
         is_visible?: boolean;
-        /**
-         * Filter items by substring in the name property. `name:like=stick` returns both `Stickers` and `Lipstick colors`.
-         */
-        'name:like'?: string;
+        'name:like'?: Array<string>;
         'parent_id:in'?: Array<number>;
-        'parent_id:min'?: number;
-        'parent_id:max'?: number;
-        'parent_id:greater'?: number;
-        'parent_id:less'?: number;
-        /**
-         * Filter items by substring in the page title property. `page_title:like=oil` returns both `Soil and mulch` and `Oil pastels`.
-         */
-        'page_title:like'?: string;
+        'parent_id:min'?: Array<number>;
+        'parent_id:max'?: Array<number>;
+        'parent_id:greater'?: Array<number>;
+        'parent_id:less'?: Array<number>;
+        'page_title:like'?: Array<string>;
     };
     url: '/catalog/categories';
 };
@@ -1269,57 +642,61 @@ export type GetCategoriesData = {
     path?: never;
     query?: {
         /**
-         * Filter items by category ID.
+         * Filter items by ID.
          *
          */
         id?: number;
-        /**
-         * Explicitly include objects by passing a comma-separated list of IDs.
-         */
         'id:in'?: Array<number>;
-        /**
-         * Exclude objects by passing a comma-separated list of IDs.
-         */
         'id:not_in'?: Array<number>;
-        'id:min'?: number;
-        'id:max'?: number;
-        'id:greater'?: number;
-        'id:less'?: number;
+        'id:min'?: Array<number>;
+        'id:max'?: Array<number>;
+        'id:greater'?: Array<number>;
+        'id:less'?: Array<number>;
         /**
          * Filter items by name.
          *
          */
         name?: string;
+        'name:like'?: Array<string>;
         /**
-         * Filter items by substring in the name property. `name:like=stick` returns both `Stickers` and `Lipstick colors`.
-         */
-        'name:like'?: string;
-        /**
-         * Filter items by parent_id. If the category is a child or sub-category it can be filtered with the parent_id.
+         * Filter items by parent_id. If the category is a child or sub category it can be filtered with the parent_id.
          */
         parent_id?: number;
         'parent_id:in'?: Array<number>;
-        'parent_id:min'?: number;
-        'parent_id:max'?: number;
-        'parent_id:greater'?: number;
-        'parent_id:less'?: number;
+        'parent_id:min'?: Array<number>;
+        'parent_id:max'?: Array<number>;
+        'parent_id:greater'?: Array<number>;
+        'parent_id:less'?: Array<number>;
         /**
          * Filter items by page_title.
          *
          */
         page_title?: string;
+        'page_title:like'?: Array<string>;
         /**
-         * Filter items by substring in the page title property. `page_title:like=oil` returns both `Soil and mulch` and `Oil pastels`.
-         */
-        'page_title:like'?: string;
-        /**
-         * Filter items by keywords found in the `name`, `description`, or `sku` fields, or in the brand name.
+         * Filter items by keywords. eg. new, towel, bath
          */
         keyword?: string;
         /**
-         * Filter items based on whether the product is currently visible on the storefront.
+         * Filter items by if visible on the storefront.
          */
         is_visible?: boolean;
+        /**
+         * Specifies the page number in a limited (paginated) list of products.
+         */
+        page?: number;
+        /**
+         * Controls the number of items per page in a limited (paginated) list of products.
+         */
+        limit?: number;
+        /**
+         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
+         */
+        include_fields?: string;
+        /**
+         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
+         */
+        exclude_fields?: string;
         /**
          * Controls the sort order of the response, for example, `sort=name`.
          *
@@ -1329,25 +706,7 @@ export type GetCategoriesData = {
          * - `parent_id`: sort in ascending order by the ID of the parent category.
          * - `sort_order`: sort in ascending order by sort order value.
          */
-        sort?: 'name' | 'id' | 'parent_id' | 'sort_order';
-        /**
-         * Specifies the page number in a limited (paginated) list of results.
-         *
-         */
-        page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of results.
-         *
-         */
-        limit?: number;
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<string>;
-        /**
-         * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
-         */
-        exclude_fields?: Array<string>;
+        sort?: string;
     };
     url: '/catalog/categories';
 };
@@ -1372,16 +731,17 @@ export type CreateCategoryData = {
      */
     body: {
         /**
-         * The unique numeric ID of the categoryʼs parent. This field controls where the category sits in the tree of categories that organize the catalog.
+         * The unique numeric ID of the category's parent. This field controls where the category sits in the tree of categories that organize the catalog.
          * Required in a POST if creating a child category.
          */
         parent_id: number;
         /**
-         * The name displayed for the category. The name must be unique with respect to the category of siblings on the same level (you can duplicate the name for other siblings on another level). Required in a POST.
+         * The name displayed for the category. Name is unique with respect to the category's siblings.
+         * Required in a POST.
          */
         name: string;
         /**
-         * The category description, which can include HTML formatting.
+         * The product description, which can include HTML formatting.
          *
          */
         description?: string;
@@ -1406,12 +766,12 @@ export type CreateCategoryData = {
          */
         search_keywords?: string;
         /**
-         * Custom meta keywords for the category page. If not defined, the storeʼs default keywords will be used. Must post as an array like: ["awesome","sauce"].
+         * Custom meta keywords for the category page. If not defined, the store's default keywords will be used. Must post as an array like: ["awesome","sauce"].
          *
          */
         meta_keywords?: Array<string>;
         /**
-         * Custom meta description for the category page. If not defined, the storeʼs default meta description will be used.
+         * Custom meta description for the category page. If not defined, the store's default meta description will be used.
          *
          */
         meta_description?: string;
@@ -1438,7 +798,7 @@ export type CreateCategoryData = {
         /**
          * Custom Url Category
          *
-         * The custom URL for the category on the storefront. If not provided, the URL will be autogenerated from the category name.
+         * The custom URL for the category on the storefront.
          */
         custom_url?: {
             /**
@@ -1541,7 +901,7 @@ export type CreateCategoryResponses = {
 
 export type CreateCategoryResponse = CreateCategoryResponses[keyof CreateCategoryResponses];
 
-export type DeleteCategoryData = {
+export type DeleteCategoryByIdData = {
     body?: never;
     headers: {
         /**
@@ -1560,13 +920,13 @@ export type DeleteCategoryData = {
     url: '/catalog/categories/{category_id}';
 };
 
-export type DeleteCategoryResponses = {
+export type DeleteCategoryByIdResponses = {
     204: void;
 };
 
-export type DeleteCategoryResponse = DeleteCategoryResponses[keyof DeleteCategoryResponses];
+export type DeleteCategoryByIdResponse = DeleteCategoryByIdResponses[keyof DeleteCategoryByIdResponses];
 
-export type GetCategoryData = {
+export type GetCategoryByIdData = {
     body?: never;
     headers: {
         /**
@@ -1585,16 +945,16 @@ export type GetCategoryData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<string>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/categories/{category_id}';
 };
 
-export type GetCategoryErrors = {
+export type GetCategoryByIdErrors = {
     /**
      * Not Found
      *
@@ -1615,9 +975,9 @@ export type GetCategoryErrors = {
     };
 };
 
-export type GetCategoryError = GetCategoryErrors[keyof GetCategoryErrors];
+export type GetCategoryByIdError = GetCategoryByIdErrors[keyof GetCategoryByIdErrors];
 
-export type GetCategoryResponses = {
+export type GetCategoryByIdResponses = {
     /**
      * Category Response
      */
@@ -1627,7 +987,7 @@ export type GetCategoryResponses = {
     };
 };
 
-export type GetCategoryResponse = GetCategoryResponses[keyof GetCategoryResponses];
+export type GetCategoryByIdResponse = GetCategoryByIdResponses[keyof GetCategoryByIdResponses];
 
 export type UpdateCategoryData = {
     /**
@@ -1642,12 +1002,13 @@ export type UpdateCategoryData = {
          */
         readonly id?: number;
         /**
-         * The unique numeric ID of the categoryʼs parent. This field controls where the category sits in the tree of categories that organize the catalog.
+         * The unique numeric ID of the category's parent. This field controls where the category sits in the tree of categories that organize the catalog.
          * Required in a POST if creating a child category.
          */
         parent_id: number;
         /**
-         * The name displayed for the category. The name must be unique with respect to the category of siblings on the same level (you can duplicate the name for other siblings on another level). Required in a POST.
+         * The name displayed for the category. Name is unique with respect to the category's siblings.
+         * Required in a POST.
          */
         name: string;
         /**
@@ -1676,12 +1037,12 @@ export type UpdateCategoryData = {
          */
         search_keywords?: string;
         /**
-         * Custom meta keywords for the category page. If not defined, the storeʼs default keywords will be used. Must post as an array like: ["awesome","sauce"].
+         * Custom meta keywords for the category page. If not defined, the store's default keywords will be used. Must post as an array like: ["awesome","sauce"].
          *
          */
         meta_keywords?: Array<string>;
         /**
-         * Custom meta description for the category page. If not defined, the storeʼs default meta description will be used.
+         * Custom meta description for the category page. If not defined, the store's default meta description will be used.
          *
          */
         meta_description?: string;
@@ -1834,15 +1195,15 @@ export type UpdateCategoryResponses = {
              */
             readonly id?: number;
             /**
-             * The unique numeric ID of the categoryʼs parent. This field controls where the category sits in the tree of categories that organize the catalog.
+             * The unique numeric ID of the category's parent. This field controls where the category sits in the tree of categories that organize the catalog.
              * Required in a POST if creating a child category.
              */
-            parent_id?: number;
+            parent_id: number;
             /**
-             * The name displayed for the category. Name is unique with respect to the categoryʼs siblings.
+             * The name displayed for the category. Name is unique with respect to the category's siblings.
              * Required in a POST.
              */
-            name?: string;
+            name: string;
             /**
              * The product description, which can include HTML formatting.
              *
@@ -1869,12 +1230,12 @@ export type UpdateCategoryResponses = {
              */
             search_keywords?: string;
             /**
-             * Custom meta keywords for the category page. If not defined, the storeʼs default keywords will be used. Must post as an array like: ["awesome","sauce"].
+             * Custom meta keywords for the category page. If not defined, the store's default keywords will be used. Must post as an array like: ["awesome","sauce"].
              *
              */
             meta_keywords?: Array<string>;
             /**
-             * Custom meta description for the category page. If not defined, the storeʼs default meta description will be used.
+             * Custom meta description for the category page. If not defined, the store's default meta description will be used.
              *
              */
             meta_description?: string;
@@ -1933,7 +1294,7 @@ export type UpdateCategoryResponses = {
 
 export type UpdateCategoryResponse = UpdateCategoryResponses[keyof UpdateCategoryResponses];
 
-export type GetCategoryMetafieldsData = {
+export type GetCategoryMetafieldsByCategoryIdData = {
     body?: never;
     headers: {
         /**
@@ -1950,53 +1311,69 @@ export type GetCategoryMetafieldsData = {
     };
     query?: {
         /**
-         * Filter items by metafield ID.
+         * Filter items by ID.
          *
          */
         id?: number;
-        /**
-         * Explicitly include objects by passing a comma-separated list of IDs.
-         */
         'id:in'?: Array<number>;
-        /**
-         * Exclude objects by passing a comma-separated list of IDs.
-         */
         'id:not_in'?: Array<number>;
-        'id:min'?: number;
-        'id:max'?: number;
-        'id:greater'?: number;
-        'id:less'?: number;
+        'id:min'?: Array<number>;
+        'id:max'?: Array<number>;
+        'id:greater'?: Array<number>;
+        'id:less'?: Array<number>;
         /**
-         * Filter based on a metafieldʼs key.
-         */
-        key?: string;
-        /**
-         * Filter based on a metafieldʼs namespaces.
-         */
-        namespace?: string;
-        /**
-         * Specifies the page number in a limited (paginated) list of results.
-         *
+         * Specifies the page number in a limited (paginated) list of products.
          */
         page?: number;
         /**
-         * Controls the number of items per page in a limited (paginated) list of results.
-         *
+         * Controls the number of items per page in a limited (paginated) list of products.
          */
         limit?: number;
         /**
+         * Filter based on a metafield's key.
+         *
+         */
+        key?: string;
+        /**
+         * Filter based on a metafield's namespace.
+         */
+        namespace?: string;
+        /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<string>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/categories/{category_id}/metafields';
 };
 
-export type GetCategoryMetafieldsResponses = {
+export type GetCategoryMetafieldsByCategoryIdErrors = {
+    /**
+     * Not Found
+     *
+     * Error payload for the BigCommerce API.
+     */
+    404: {
+        /**
+         * 404 HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         */
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+
+export type GetCategoryMetafieldsByCategoryIdError = GetCategoryMetafieldsByCategoryIdErrors[keyof GetCategoryMetafieldsByCategoryIdErrors];
+
+export type GetCategoryMetafieldsByCategoryIdResponses = {
     /**
      * Meta Field Collection Response
      */
@@ -2006,7 +1383,7 @@ export type GetCategoryMetafieldsResponses = {
     };
 };
 
-export type GetCategoryMetafieldsResponse = GetCategoryMetafieldsResponses[keyof GetCategoryMetafieldsResponses];
+export type GetCategoryMetafieldsByCategoryIdResponse = GetCategoryMetafieldsByCategoryIdResponses[keyof GetCategoryMetafieldsByCategoryIdResponses];
 
 export type CreateCategoryMetafieldData = {
     body: MetafieldBase;
@@ -2032,16 +1409,10 @@ export type CreateCategoryMetafieldData = {
 };
 
 export type CreateCategoryMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
     /**
      * Error Response
      *
-     * The `Metafield` was in conflict with another `Metafield`. This can be the result of duplicate, unique key combinations of the appʼs client id, namespace, key, resource_type, and resource_id.
+     * The `Metafield` was in conflict with another `Metafield`. This can be the result of duplicate, unique key combinations of the app's client id, namespace, key, resource_type, and resource_id.
      *
      */
     409: {
@@ -2106,7 +1477,7 @@ export type CreateCategoryMetafieldResponses = {
 
 export type CreateCategoryMetafieldResponse = CreateCategoryMetafieldResponses[keyof CreateCategoryMetafieldResponses];
 
-export type DeleteCategoryMetafieldData = {
+export type DeleteCategoryMetafieldByIdData = {
     body?: never;
     headers: {
         /**
@@ -2130,36 +1501,13 @@ export type DeleteCategoryMetafieldData = {
     url: '/catalog/categories/{category_id}/metafields/{metafield_id}';
 };
 
-export type DeleteCategoryMetafieldErrors = {
-    /**
-     * Not Found
-     *
-     * Error payload for the BigCommerce API.
-     */
-    404: {
-        /**
-         * 404 HTTP status code.
-         *
-         */
-        status?: number;
-        /**
-         * The error title describing the particular error.
-         */
-        title?: string;
-        type?: string;
-        instance?: string;
-    };
-};
-
-export type DeleteCategoryMetafieldError = DeleteCategoryMetafieldErrors[keyof DeleteCategoryMetafieldErrors];
-
-export type DeleteCategoryMetafieldResponses = {
+export type DeleteCategoryMetafieldByIdResponses = {
     204: void;
 };
 
-export type DeleteCategoryMetafieldResponse = DeleteCategoryMetafieldResponses[keyof DeleteCategoryMetafieldResponses];
+export type DeleteCategoryMetafieldByIdResponse = DeleteCategoryMetafieldByIdResponses[keyof DeleteCategoryMetafieldByIdResponses];
 
-export type GetCategoryMetafieldData = {
+export type GetCategoryMetafieldByCategoryIdData = {
     body?: never;
     headers: {
         /**
@@ -2183,16 +1531,16 @@ export type GetCategoryMetafieldData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<string>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/categories/{category_id}/metafields/{metafield_id}';
 };
 
-export type GetCategoryMetafieldErrors = {
+export type GetCategoryMetafieldByCategoryIdErrors = {
     /**
      * Not Found
      *
@@ -2213,9 +1561,9 @@ export type GetCategoryMetafieldErrors = {
     };
 };
 
-export type GetCategoryMetafieldError = GetCategoryMetafieldErrors[keyof GetCategoryMetafieldErrors];
+export type GetCategoryMetafieldByCategoryIdError = GetCategoryMetafieldByCategoryIdErrors[keyof GetCategoryMetafieldByCategoryIdErrors];
 
-export type GetCategoryMetafieldResponses = {
+export type GetCategoryMetafieldByCategoryIdResponses = {
     /**
      * Metafield Response
      */
@@ -2225,7 +1573,7 @@ export type GetCategoryMetafieldResponses = {
     };
 };
 
-export type GetCategoryMetafieldResponse = GetCategoryMetafieldResponses[keyof GetCategoryMetafieldResponses];
+export type GetCategoryMetafieldByCategoryIdResponse = GetCategoryMetafieldByCategoryIdResponses[keyof GetCategoryMetafieldByCategoryIdResponses];
 
 export type UpdateCategoryMetafieldData = {
     body: MetafieldBase;
@@ -2256,12 +1604,6 @@ export type UpdateCategoryMetafieldData = {
 };
 
 export type UpdateCategoryMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
     /**
      * Not Found
      *
@@ -2315,37 +1657,6 @@ export type DeleteCategoryImageData = {
     url: '/catalog/categories/{category_id}/image';
 };
 
-export type DeleteCategoryImageErrors = {
-    /**
-     * Unauthorized
-     */
-    401: string;
-    /**
-     * Forbidden
-     */
-    403: _Error;
-    /**
-     * Not Found
-     *
-     * Error payload for the BigCommerce API.
-     */
-    404: {
-        /**
-         * 404 HTTP status code.
-         *
-         */
-        status?: number;
-        /**
-         * The error title describing the particular error.
-         */
-        title?: string;
-        type?: string;
-        instance?: string;
-    };
-};
-
-export type DeleteCategoryImageError = DeleteCategoryImageErrors[keyof DeleteCategoryImageErrors];
-
 export type DeleteCategoryImageResponses = {
     204: void;
 };
@@ -2361,6 +1672,10 @@ export type CreateCategoryImageData = {
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+         */
+        'Content-Type': string;
     };
     path: {
         /**
@@ -2375,21 +1690,11 @@ export type CreateCategoryImageData = {
 
 export type CreateCategoryImageErrors = {
     /**
-     * Error Response
-     *
      * Bad Request. The requested resource could not be downloaded and may be invalid. Possible reasons include malformed request syntax or the file host blocking requests.
      */
     400: {
         [key: string]: unknown;
     };
-    /**
-     * Unauthorized
-     */
-    401: string;
-    /**
-     * Forbidden
-     */
-    403: _Error;
     /**
      * Not Found
      *
@@ -2439,9 +1744,6 @@ export type CreateCategoryImageErrors = {
 export type CreateCategoryImageError = CreateCategoryImageErrors[keyof CreateCategoryImageErrors];
 
 export type CreateCategoryImageResponses = {
-    /**
-     * Create Image Response
-     */
     200: {
         data?: {
             image_url?: string;
@@ -2452,7 +1754,7 @@ export type CreateCategoryImageResponses = {
 
 export type CreateCategoryImageResponse = CreateCategoryImageResponses[keyof CreateCategoryImageResponses];
 
-export type GetCategorySortOrdersData = {
+export type GetsortordersData = {
     body?: never;
     headers: {
         /**
@@ -2467,49 +1769,29 @@ export type GetCategorySortOrdersData = {
          */
         category_id: number;
     };
-    query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of results.
-         *
-         */
-        page?: number;
-    };
+    query?: never;
     url: '/catalog/categories/{category_id}/products/sort-order';
 };
 
-export type GetCategorySortOrdersErrors = {
-    /**
-     * Unauthorized
-     */
-    401: string;
-    /**
-     * Forbidden
-     */
-    403: _Error;
+export type GetsortordersErrors = {
     /**
      * The requested category was not found.
      */
     404: ErrorBase;
 };
 
-export type GetCategorySortOrdersError = GetCategorySortOrdersErrors[keyof GetCategorySortOrdersErrors];
+export type GetsortordersError = GetsortordersErrors[keyof GetsortordersErrors];
 
-export type GetCategorySortOrdersResponses = {
-    /**
-     * Product Sort Order Response
-     */
-    200: {
-        data?: Array<ProductSortOrder>;
-        meta?: MetaCollectionFull;
-    };
+export type GetsortordersResponses = {
+    200: Array<{
+        product_id?: number;
+        sort_order?: number;
+    }>;
 };
 
-export type GetCategorySortOrdersResponse = GetCategorySortOrdersResponses[keyof GetCategorySortOrdersResponses];
+export type GetsortordersResponse = GetsortordersResponses[keyof GetsortordersResponses];
 
-export type UpdateCategorySortOrdersData = {
-    /**
-     * Product Sort Order Request
-     */
+export type UpdatesortorderData = {
     body?: Array<ProductSortOrder>;
     headers: {
         /**
@@ -2528,33 +1810,15 @@ export type UpdateCategorySortOrdersData = {
          */
         category_id: number;
     };
-    query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of results.
-         *
-         */
-        page?: number;
-    };
+    query?: never;
     url: '/catalog/categories/{category_id}/products/sort-order';
 };
 
-export type UpdateCategorySortOrdersErrors = {
-    /**
-     * Unauthorized
-     */
-    401: string;
-    /**
-     * Forbidden
-     */
-    403: _Error;
+export type UpdatesortorderErrors = {
     /**
      * The requested category was not found.
      */
     404: ErrorBase;
-    /**
-     * Unsupported Media Type
-     */
-    415: string;
     /**
      * Unprocessable entity.
      *
@@ -2565,232 +1829,10 @@ export type UpdateCategorySortOrdersErrors = {
     422: ErrorBase;
 };
 
-export type UpdateCategorySortOrdersError = UpdateCategorySortOrdersErrors[keyof UpdateCategorySortOrdersErrors];
+export type UpdatesortorderError = UpdatesortorderErrors[keyof UpdatesortorderErrors];
 
-export type UpdateCategorySortOrdersResponses = {
-    /**
-     * Product Sort Order Response
-     */
+export type UpdatesortorderResponses = {
     200: Array<ProductSortOrder>;
 };
 
-export type UpdateCategorySortOrdersResponse = UpdateCategorySortOrdersResponses[keyof UpdateCategorySortOrdersResponses];
-
-export type DeleteCategoriesMetafieldsData = {
-    /**
-     * List of metafield IDs.
-     */
-    body?: Array<number>;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-    };
-    path?: never;
-    query?: never;
-    url: '/catalog/categories/metafields';
-};
-
-export type DeleteCategoriesMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields deletion with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-
-export type DeleteCategoriesMetafieldsError = DeleteCategoriesMetafieldsErrors[keyof DeleteCategoriesMetafieldsErrors];
-
-export type DeleteCategoriesMetafieldsResponses = {
-    /**
-     * Response object for metafields deletion with success.
-     *
-     */
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-
-export type DeleteCategoriesMetafieldsResponse = DeleteCategoriesMetafieldsResponses[keyof DeleteCategoriesMetafieldsResponses];
-
-export type GetCategoriesMetafieldsData = {
-    body?: never;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of results.
-         *
-         */
-        page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of results.
-         *
-         */
-        limit?: number;
-        /**
-         * Filter based on a metafieldʼs key.
-         */
-        key?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
-         */
-        'key:in'?: Array<string>;
-        /**
-         * Filter based on a metafieldʼs namespaces.
-         */
-        namespace?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter.
-         */
-        'namespace:in'?: Array<string>;
-        /**
-         * Sort direction. Acceptable values are: `asc`, `desc`.
-         *
-         */
-        direction?: 'asc' | 'desc';
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-        /**
-         * 'Query parameter that lets you filter by the minimum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.'
-         *
-         */
-        'date_modified:min'?: string;
-        /**
-         * 'Query parameter that lets you filter by the maximum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.'
-         *
-         */
-        'date_modified:max'?: string;
-        /**
-         * 'Query parameter that lets you filter by the minimum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.'
-         *
-         */
-        'date_created:min'?: string;
-        /**
-         * 'Query parameter that lets you filter by the maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.'
-         *
-         */
-        'date_created:max'?: string;
-    };
-    url: '/catalog/categories/metafields';
-};
-
-export type GetCategoriesMetafieldsResponses = {
-    /**
-     * List of `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponse;
-};
-
-export type GetCategoriesMetafieldsResponse = GetCategoriesMetafieldsResponses[keyof GetCategoriesMetafieldsResponses];
-
-export type CreateCategoriesMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        /**
-         * The ID for the category with which the metafield is associated.
-         *
-         */
-        resource_id: number;
-    }>;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
-    };
-    path?: never;
-    query?: never;
-    url: '/catalog/categories/metafields';
-};
-
-export type CreateCategoriesMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type CreateCategoriesMetafieldsError = CreateCategoriesMetafieldsErrors[keyof CreateCategoriesMetafieldsErrors];
-
-export type CreateCategoriesMetafieldsResponses = {
-    /**
-     * List of created `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponsePostPut;
-};
-
-export type CreateCategoriesMetafieldsResponse = CreateCategoriesMetafieldsResponses[keyof CreateCategoriesMetafieldsResponses];
-
-export type UpdateCategoriesMetafieldsData = {
-    body?: Array<MetafieldBasePut & {
-        /**
-         * The ID of metafield to update.
-         *
-         */
-        id: number;
-    }>;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
-    };
-    path?: never;
-    query?: never;
-    url: '/catalog/categories/metafields';
-};
-
-export type UpdateCategoriesMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type UpdateCategoriesMetafieldsError = UpdateCategoriesMetafieldsErrors[keyof UpdateCategoriesMetafieldsErrors];
-
-export type UpdateCategoriesMetafieldsResponses = {
-    /**
-     * List of updated `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponsePostPut;
-};
-
-export type UpdateCategoriesMetafieldsResponse = UpdateCategoriesMetafieldsResponses[keyof UpdateCategoriesMetafieldsResponses];
+export type UpdatesortorderResponse = UpdatesortorderResponses[keyof UpdatesortorderResponses];

@@ -26,7 +26,7 @@ paths:
         - Tax Settings
       summary: Get Tax Settings
       description: Retrieves global-level tax settings.
-      operationId: getTaxSettings
+      operationId: get-tax-settings
       responses:
         '200':
           description: OK
@@ -44,7 +44,7 @@ paths:
         - Tax Settings
       summary: Update Tax Settings
       description: Updates global-level tax settings.
-      operationId: updateTaxSettings
+      operationId: set-tax-settings
       parameters:
       - $ref: '#/components/parameters/ContentType'
       requestBody:
@@ -124,13 +124,9 @@ components:
           type: object
           description: Settings that describe how prices display at the global level.
           properties:
-            control_panel_price_display_strategy:
-              type: string
-              description: Whether to show prices as tax inclusive or tax exclusive in the BigCommerce control panel, or use the order's tax zone for price display.
-              enum:
-                - ZONE
-                - INCLUSIVE
-                - EXCLUSIVE
+            show_inclusive_in_control_panel:
+              type: boolean
+              description: Whether to show prices as tax inclusive or tax exclusive in the BigCommerce control panel.
             invoice_price_display_strategy:
               type: string
               description: 'Whether to show prices as tax inclusive or tax exclusive across all invoices, or use the shopperʼs tax zone for price display on invoices.'
@@ -163,13 +159,6 @@ components:
           default: 1
           type: integer
           description: ID for the tax zone a store uses when subtracting store tax. This setting applies only if a merchant enters tax-inclusive prices and subtracts store tax before tax calculation.
-        document_submission_strategy:
-          default: ON_PAYMENT_CAPTURE
-          type: string
-          description: This setting determines whether BigCommerce submits tax documents to third-party tax providers when orders are created or when payments are captured online. 
-          enum:
-            - ON_PAYMENT_CAPTURE
-            - ON_ORDER_CREATION
     MetaOpen:
       title: Response meta
       type: object

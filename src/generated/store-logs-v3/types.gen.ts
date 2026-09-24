@@ -62,7 +62,7 @@ export type SystemLog = {
     date_created?: string;
 };
 
-export type GetStoreSystemLogsData = {
+export type GetSitesData = {
     body?: never;
     path?: never;
     query?: {
@@ -103,22 +103,22 @@ export type GetStoreSystemLogsData = {
          */
         'severity:max'?: number;
         /**
-         * A comma-separated list of log IDs by which to filter. For example, `?id:in=3,4,6`.
+         * Query parameter that lets you filter by a list of log IDs, as a CSV. For example ?id:in=3,4,6
          */
-        'id:in'?: Array<number>;
+        'id:in'?: string;
         /**
-         * The log key by which to sort results. If left blank, results will be reported in order of creation. This parameter is case-sensitive.
+         * Query parameter that lets you filter by the minimum date created in [Unix time](https://www.unixtimestamp.com/), for example, `?date_created:min=1657688400`. Returns logs created after this date.
          */
-        sort?: 'date_created' | 'type';
+        'date_created:min'?: string;
         /**
-         * The direction in which to sort results. Defaults to ascending (`asc`). This parameter is case-sensitive.
+         * Query parameter that lets you filter by the maximum date created in [Unix time](https://www.unixtimestamp.com/), for example, `?date_created:min=1658379600`. Returns logs created before this date.
          */
-        direction?: 'asc' | 'desc';
+        'date_created:max'?: string;
     };
     url: '/store/systemlogs';
 };
 
-export type GetStoreSystemLogsResponses = {
+export type GetSitesResponses = {
     /**
      * The request completed successfully.
      */
@@ -128,4 +128,4 @@ export type GetStoreSystemLogsResponses = {
     };
 };
 
-export type GetStoreSystemLogsResponse = GetStoreSystemLogsResponses[keyof GetStoreSystemLogsResponses];
+export type GetSitesResponse = GetSitesResponses[keyof GetSitesResponses];

@@ -20,7 +20,7 @@ export class CategoryTreesV3Api {
     getAllCategories(
         query?: CategoryTreesV3ApiSpecs.GetAllCategoriesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CategoryTreesV3ApiSpecs.GetAllCategoriesResponses[200]>>,(RequestErrorResponse<400, Required<CategoryTreesV3ApiSpecs.GetAllCategoriesErrors[400]>> | RequestErrorResponse<401, Required<CategoryTreesV3ApiSpecs.GetAllCategoriesErrors[401]>> | RequestErrorResponse<403, Required<CategoryTreesV3ApiSpecs.GetAllCategoriesErrors[403]>> | RequestErrorResponse<422, Required<CategoryTreesV3ApiSpecs.GetAllCategoriesErrors[422]>>)>({
+        return this.request.get<RequestSuccessResponse<200, Required<CategoryTreesV3ApiSpecs.GetAllCategoriesResponses[200]>>,(RequestErrorResponse<400, Required<CategoryTreesV3ApiSpecs.GetAllCategoriesErrors[400]>> | RequestErrorResponse<500, Required<CategoryTreesV3ApiSpecs.GetAllCategoriesErrors[500]>>)>({
             path: 'v3/catalog/trees/categories',
             query,
         });
@@ -31,21 +31,15 @@ export class CategoryTreesV3Api {
      *
      * Creates new categories. 
 
-     Limits: 
-     - 16,000 categories per store limit.
-     - 1,000 categories per product limit.
-     - 50 characters category name length.
-     - 8 levels of child categories depth limit.
-     - 65,535 characters category description length limit.
-
      Creating a category requires:
       - `name`
-      - `tree_id` or `parent_id`
+      - `url` 
+      - `tree_id` or `parent_id` 
      */
     createCategories(
         requestBody: CategoryTreesV3ApiSpecs.CreateCategoriesData['body'],
     ) {
-        return this.request.post<(RequestSuccessResponse<201, Required<CategoryTreesV3ApiSpecs.CreateCategoriesResponses[201]>> | RequestSuccessResponse<207, Required<CategoryTreesV3ApiSpecs.CreateCategoriesResponses[207]>>),(RequestErrorResponse<400, Required<CategoryTreesV3ApiSpecs.CreateCategoriesErrors[400]>> | RequestErrorResponse<401, Required<CategoryTreesV3ApiSpecs.CreateCategoriesErrors[401]>> | RequestErrorResponse<403, Required<CategoryTreesV3ApiSpecs.CreateCategoriesErrors[403]>> | RequestErrorResponse<422, Required<CategoryTreesV3ApiSpecs.CreateCategoriesErrors[422]>>)>({
+        return this.request.post<(RequestSuccessResponse<201, Required<CategoryTreesV3ApiSpecs.CreateCategoriesResponses[201]>> | RequestSuccessResponse<207, Required<CategoryTreesV3ApiSpecs.CreateCategoriesResponses[207]>>),(RequestErrorResponse<400, Required<CategoryTreesV3ApiSpecs.CreateCategoriesErrors[400]>> | RequestErrorResponse<422, Required<CategoryTreesV3ApiSpecs.CreateCategoriesErrors[422]>> | RequestErrorResponse<500, Required<CategoryTreesV3ApiSpecs.CreateCategoriesErrors[500]>>)>({
             path: 'v3/catalog/trees/categories',
             contentType: 'application/json',
             body: requestBody,
@@ -57,12 +51,12 @@ export class CategoryTreesV3Api {
      *
      * Updates existing categories. 
 
-     To update a specific category in a tree, provide a `category id`.
+      To update a specific category in a tree, provide a category id.
      */
     updateCategories(
         requestBody: CategoryTreesV3ApiSpecs.UpdateCategoriesData['body'],
     ) {
-        return this.request.put<(RequestSuccessResponse<200, Required<CategoryTreesV3ApiSpecs.UpdateCategoriesResponses[200]>> | RequestSuccessResponse<207, Required<CategoryTreesV3ApiSpecs.UpdateCategoriesResponses[207]>>),(RequestErrorResponse<400, Required<CategoryTreesV3ApiSpecs.UpdateCategoriesErrors[400]>> | RequestErrorResponse<401, Required<CategoryTreesV3ApiSpecs.UpdateCategoriesErrors[401]>> | RequestErrorResponse<403, Required<CategoryTreesV3ApiSpecs.UpdateCategoriesErrors[403]>> | RequestErrorResponse<422, Required<CategoryTreesV3ApiSpecs.UpdateCategoriesErrors[422]>>)>({
+        return this.request.put<(RequestSuccessResponse<200, Required<CategoryTreesV3ApiSpecs.UpdateCategoriesResponses[200]>> | RequestSuccessResponse<204, Required<CategoryTreesV3ApiSpecs.UpdateCategoriesResponses[204]>> | RequestSuccessResponse<207, Required<CategoryTreesV3ApiSpecs.UpdateCategoriesResponses[207]>>),(RequestErrorResponse<400, Required<CategoryTreesV3ApiSpecs.UpdateCategoriesErrors[400]>> | RequestErrorResponse<422, Required<CategoryTreesV3ApiSpecs.UpdateCategoriesErrors[422]>> | RequestErrorResponse<500, Required<CategoryTreesV3ApiSpecs.UpdateCategoriesErrors[500]>>)>({
             path: 'v3/catalog/trees/categories',
             contentType: 'application/json',
             body: requestBody,
@@ -70,7 +64,7 @@ export class CategoryTreesV3Api {
     }
 
     /**
-     * Delete categories
+     * Delete Categories
      *
      * Deletes categories. 
 
@@ -79,42 +73,41 @@ export class CategoryTreesV3Api {
     deleteTreeCategories(
         query?: CategoryTreesV3ApiSpecs.DeleteTreeCategoriesData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<202, Required<CategoryTreesV3ApiSpecs.DeleteTreeCategoriesResponses[202]>>,(RequestErrorResponse<400, Required<CategoryTreesV3ApiSpecs.DeleteTreeCategoriesErrors[400]>> | RequestErrorResponse<401, Required<CategoryTreesV3ApiSpecs.DeleteTreeCategoriesErrors[401]>> | RequestErrorResponse<403, Required<CategoryTreesV3ApiSpecs.DeleteTreeCategoriesErrors[403]>> | RequestErrorResponse<422, Required<CategoryTreesV3ApiSpecs.DeleteTreeCategoriesErrors[422]>>)>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CategoryTreesV3ApiSpecs.DeleteTreeCategoriesResponses[204]>>,(RequestErrorResponse<400, Required<CategoryTreesV3ApiSpecs.DeleteTreeCategoriesErrors[400]>> | RequestErrorResponse<500, Required<CategoryTreesV3ApiSpecs.DeleteTreeCategoriesErrors[500]>>)>({
             path: 'v3/catalog/trees/categories',
             query,
         });
     }
 
     /**
-     * Get all category trees
+     * Get All Category Trees
      *
-     * Returns a list of category trees.
+     * Returns a list of *Category Trees*.
      */
     getCategoryTrees(
         query?: CategoryTreesV3ApiSpecs.GetCategoryTreesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CategoryTreesV3ApiSpecs.GetCategoryTreesResponses[200]>>,(RequestErrorResponse<401, Required<CategoryTreesV3ApiSpecs.GetCategoryTreesErrors[401]>> | RequestErrorResponse<403, Required<CategoryTreesV3ApiSpecs.GetCategoryTreesErrors[403]>> | RequestErrorResponse<422, Required<CategoryTreesV3ApiSpecs.GetCategoryTreesErrors[422]>>)>({
+        return this.request.get<RequestSuccessResponse<200, Required<CategoryTreesV3ApiSpecs.GetCategoryTreesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/catalog/trees',
             query,
         });
     }
 
     /**
-     * Upsert category trees
+     * Upsert Category Trees
      *
-     * Upserts category trees. 
+     * Upserts *Category Trees*. 
 
      This single endpoint updates and creates category trees. If a tree object contains an ID, it is processed as an update operation using that ID. If you do not provide an ID, a new tree is created. The category tree `name` field is required to create trees, but is not required on the update.
 
      **Usage Notes**
-     * Channel ID in the `channels` field is required to create a category tree. You can only assign a category tree to one channel.
-     * The `channels` field must be absent when updating a category tree. This field is currently unsupported during a category tree update.
+     * `channel_id` is required to create a *Category Tree*. You can assign one `channel_id` to one category tree.
 
      */
     upsertCategoryTrees(
         requestBody: CategoryTreesV3ApiSpecs.UpsertCategoryTreesData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CategoryTreesV3ApiSpecs.UpsertCategoryTreesResponses[200]>>,(RequestErrorResponse<401, Required<CategoryTreesV3ApiSpecs.UpsertCategoryTreesErrors[401]>> | RequestErrorResponse<403, Required<CategoryTreesV3ApiSpecs.UpsertCategoryTreesErrors[403]>> | RequestErrorResponse<422, Required<CategoryTreesV3ApiSpecs.UpsertCategoryTreesErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<CategoryTreesV3ApiSpecs.UpsertCategoryTreesResponses[200]>>,RequestErrorResponse<422, Required<CategoryTreesV3ApiSpecs.UpsertCategoryTreesErrors[422]>>>({
             path: 'v3/catalog/trees',
             contentType: 'application/json',
             body: requestBody,
@@ -122,34 +115,38 @@ export class CategoryTreesV3Api {
     }
 
     /**
-     * Delete category trees
+     * Delete Category Trees
      *
-     * Deletes category trees. A filter must be supplied with the endpoint.
+     * Deletes *Category Trees*. A filter must be supplied with the endpoint.
      */
     deleteCategoryTrees(
         query?: CategoryTreesV3ApiSpecs.DeleteCategoryTreesData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CategoryTreesV3ApiSpecs.DeleteCategoryTreesResponses[204]>>,(RequestErrorResponse<401, Required<CategoryTreesV3ApiSpecs.DeleteCategoryTreesErrors[401]>> | RequestErrorResponse<403, Required<CategoryTreesV3ApiSpecs.DeleteCategoryTreesErrors[403]>> | RequestErrorResponse<422, Required<CategoryTreesV3ApiSpecs.DeleteCategoryTreesErrors[422]>>)>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CategoryTreesV3ApiSpecs.DeleteCategoryTreesResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/catalog/trees',
             query,
         });
     }
 
     /**
-     * Get a category tree
+     * Get a Category Tree
      *
-     * Returns a category tree.
-
-     **Note:**
-     The default rate limit for this endpoint is 1 concurrent request.
+     * Returns a *Category Tree*.
      */
-    getCategoryTree(
-        treeId: CategoryTreesV3ApiSpecs.GetCategoryTreeData['path']['tree_id'],
-        query?: CategoryTreesV3ApiSpecs.GetCategoryTreeData['query'],
+    getCategoryTreeByTreeId(
+        treeId: CategoryTreesV3ApiSpecs.GetCategoryTreeByTreeIdData['path']['tree_id'],
+        query?: CategoryTreesV3ApiSpecs.GetCategoryTreeByTreeIdData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CategoryTreesV3ApiSpecs.GetCategoryTreeResponses[200]>>,(RequestErrorResponse<401, Required<CategoryTreesV3ApiSpecs.GetCategoryTreeErrors[401]>> | RequestErrorResponse<403, Required<CategoryTreesV3ApiSpecs.GetCategoryTreeErrors[403]>> | RequestErrorResponse<404, Required<CategoryTreesV3ApiSpecs.GetCategoryTreeErrors[404]>>)>({
+        return this.request.get<RequestSuccessResponse<200, Required<CategoryTreesV3ApiSpecs.GetCategoryTreeByTreeIdResponses[200]>>,RequestErrorResponse<404, Required<CategoryTreesV3ApiSpecs.GetCategoryTreeByTreeIdErrors[404]>>>({
             path: `v3/catalog/trees/${treeId}/categories`,
             query,
         });
+    }
+
+    /**
+     * @deprecated Use `getCategoryTreeByTreeId` instead.
+     */
+    getCategoryTree(...args: Parameters<CategoryTreesV3Api['getCategoryTreeByTreeId']>) {
+        return this.getCategoryTreeByTreeId(...args);
     }
 }

@@ -11,7 +11,7 @@ export type ClientOptions = {
  */
 export type BrandFull = {
     /**
-     * Unique ID of the brand.
+     * Unique ID of the *Brand*. Read-Only.
      */
     readonly id?: number;
     /**
@@ -25,7 +25,7 @@ export type BrandFull = {
      */
     page_title?: string;
     /**
-     * An array of meta keywords to include in the HTML.
+     * Comma-separated list of meta keywords to include in the HTML.
      *
      */
     meta_keywords?: Array<string>;
@@ -195,6 +195,7 @@ export type ErrorBase = {
      */
     title?: string;
     type?: string;
+    instance?: string;
 };
 
 /**
@@ -202,7 +203,7 @@ export type ErrorBase = {
  */
 export type MetafieldFull = {
     /**
-     * Unique ID of the metafield.
+     * Unique ID of the *Metafield*. Read-Only.
      */
     readonly id?: number;
 } & MetafieldBase & {
@@ -217,457 +218,15 @@ export type MetafieldFull = {
      */
     resource_id?: number;
     /**
-     * Date and time of the metafieldʼs creation.
+     * Date and time of the metafield's creation. Read-Only.
      *
      */
     readonly date_created?: string;
     /**
-     * Date and time when the metafield was last updated.
+     * Date and time when the metafield was last updated. Read-Only.
      *
      */
     readonly date_modified?: string;
-    /**
-     * Client ID for the metafieldʼs creator.
-     */
-    readonly owner_client_id?: string;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type Metafield = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    /**
-     * The unique identifier for the resource with which the metafield is associated.
-     *
-     */
-    readonly resource_id?: number;
-    /**
-     * The unique identifier for the metafield.
-     */
-    id?: number;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created?: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified?: string;
-    /**
-     * Client ID for the metafieldʼs creator.
-     */
-    readonly owner_client_id?: string;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponse = {
-    data?: Array<Metafield>;
-    meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePostPut = {
-    data?: Array<Metafield>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: CollectionMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-
-/**
- * Response payload for the BigCommerce API.
- *
- */
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    /**
-     * Empty for 200 responses.
-     */
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionPartialSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Collection Meta
- *
- * Additional data about the response.
- */
-export type WriteCollectionSuccessMeta = {
-    /**
-     * Total number of items in the result set.
-     *
-     */
-    total?: number;
-    /**
-     * Total number of items that were successfully deleted.
-     *
-     */
-    success?: number;
-    /**
-     * Total number of items that failed to be deleted.
-     *
-     */
-    failed?: number;
-};
-
-/**
- * Total number of items in the result set.
- *
- */
-export type Total = number;
-
-/**
- * Error response payload for the BigCommerce API.
- *
- */
-export type _Error = {
-    /**
-     * The HTTP status code for the error.
-     *
-     */
-    status?: number;
-    /**
-     * The error title.
-     *
-     */
-    title?: string;
-    /**
-     * The error type.
-     *
-     */
-    type?: string;
-    errors?: ErrorDetail;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-
-/**
- * Collection Meta
- *
- * Data about the response, including pagination and collection totals.
- */
-export type CollectionMeta = {
-    /**
-     * Pagination
-     *
-     * Data about the response, including pagination and collection totals.
-     */
-    pagination?: {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    };
-    [key: string]: unknown | {
-        /**
-         * Total number of items in the result set.
-         *
-         */
-        total?: number;
-        /**
-         * Total number of items in the collection response.
-         *
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         *
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         *
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         *
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         *
-         */
-        links?: {
-            /**
-             * Link to the previous page returned in the response.
-             *
-             */
-            previous?: string;
-            /**
-             * Link to the current page returned in the response.
-             *
-             */
-            current?: string;
-            /**
-             * Link to the next page returned in the response.
-             *
-             */
-            next?: string;
-        };
-    } | undefined;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBasePost = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-};
-
-/**
- * The model for a POST to create metafield.
- *
- */
-export type MetafieldPost = MetafieldBasePost & {
-    /**
-     * The ID for the resource with which the metafield is associated.
-     *
-     */
-    resource_id: number;
-};
-
-/**
- * Common Metafield properties.
- *
- */
-export type MetafieldBasePut = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-};
-
-/**
- * Error Response
- */
-export type NotFoundError = {
-    /**
-     * The HTTP status code.
-     */
-    status: number;
-    /**
-     * The error title describing the particular error.
-     */
-    title: string;
-    type: string;
-};
-
-/**
- * Error response
- */
-export type Conflict = {
-    /**
-     * The HTTP status code.
-     */
-    status?: number;
-    /**
-     * The error title describing the particular error.
-     */
-    title?: string;
-    type?: string;
-    /**
-     * Detailed Errors
-     */
-    errors?: {
-        [key: string]: unknown;
-    };
 };
 
 /**
@@ -687,7 +246,7 @@ export type BrandFullWritable = {
      */
     page_title?: string;
     /**
-     * An array of meta keywords to include in the HTML.
+     * Comma-separated list of meta keywords to include in the HTML.
      *
      */
     meta_keywords?: Array<string>;
@@ -735,207 +294,16 @@ export type MetafieldFullWritable = MetafieldBase & {
 };
 
 /**
- * Common Metafield properties.
+ * The ID of the `Brand` to which the resource belongs.
  *
  */
-export type MetafieldWritable = {
-    /**
-     * Determines the visibility and writeability of the field by other API consumers.
-     * | Value | Description |
-     * | :--- | :--- |
-     * | `app_only` | Private to the app that owns the field. |
-     * | `read` | Visible to other API consumers. |
-     * | `write` | Open for reading and writing by other API consumers. |
-     * | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-     * | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-     *
-     */
-    permission_set?: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    /**
-     * Namespace for the metafield, for organizational purposes.
-     *
-     */
-    namespace?: string;
-    /**
-     * The name of the field, for example: `location_id`, `color`.
-     *
-     */
-    key?: string;
-    /**
-     * The value of the field, for example: `1`, `blue`.
-     *
-     */
-    value?: string;
-    /**
-     * Description for the metafields.
-     *
-     */
-    description?: string;
-    /**
-     * The type of resource with which the metafield is associated.
-     *
-     */
-    resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'channel' | 'location' | 'order' | 'customer';
-    /**
-     * The unique identifier for the metafield.
-     */
-    id?: number;
-    /**
-     * Date and time of the metafieldʼs creation.
-     */
-    date_created?: string;
-    /**
-     * Date and time when the metafield was last updated.
-     */
-    date_modified?: string;
-};
-
-/**
- * Error detail response payload for the BigCommerce API.
- *
- */
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
-};
-
-/**
- * Sort direction. Acceptable values are: `asc`, `desc`.
- *
- */
-export type DirectionQuery = 'asc' | 'desc';
-
-/**
- * The ID of the brand to which the resource belongs.
- *
- */
-export type BrandIdPath = number;
+export type BrandIdParam = number;
 
 /**
  * The ID of the `Metafield`.
  *
  */
-export type MetafieldIdPath = number;
-
-/**
- * Filter based on a metafieldʼs key.
- */
-export type MetafieldKeyParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
- */
-export type MetafieldKeyInParam = Array<string>;
-
-/**
- * Filter based on a metafieldʼs namespaces.
- */
-export type MetafieldNamespaceParam = string;
-
-/**
- * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter.
- */
-export type MetafieldNamespaceInParam = Array<string>;
-
-/**
- * 'Query parameter that lets you filter by the minimum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.'
- *
- */
-export type DateCreatedMin = string;
-
-/**
- * 'Query parameter that lets you filter by the maximum date created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.'
- *
- */
-export type DateCreatedMax = string;
-
-/**
- * 'Query parameter that lets you filter by the maximum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.'
- *
- */
-export type DateModifiedMax = string;
-
-/**
- * 'Query parameter that lets you filter by the minimum date modified created, for example, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.'
- *
- */
-export type DateModifiedMin = string;
-
-/**
- * Sort direction. Acceptable values are: `asc`, `desc`.
- *
- */
-export type DirectionParam = 'asc' | 'desc';
-
-/**
- * Filter items by ID.
- *
- */
-export type IdQuery = number;
-
-export type IdInQuery = Array<number>;
-
-export type IdNotInQuery = Array<number>;
-
-export type IdMinQuery = Array<number>;
-
-export type IdMaxQuery = Array<number>;
-
-export type IdGreaterQuery = Array<number>;
-
-export type IdLessQuery = Array<number>;
-
-/**
- * Filter items by name.
- *
- */
-export type NameQuery = string;
-
-/**
- * Filter items by name.
- *
- */
-export type NameRequired = string;
-
-/**
- * Filter items by part of a name. For example, `name:like=new` returns brands with names that include `new`.
- */
-export type NameLikeQuery = string;
-
-/**
- * Filter items by page_title.
- *
- */
-export type PageTitleQuery = string;
-
-/**
- * Specifies the page number in a limited (paginated) list of products.
- */
-export type PageQuery = number;
-
-/**
- * Controls the number of items per page in a limited (paginated) list of products.
- */
-export type LimitQuery = number;
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsQuery = Array<string>;
-
-/**
- * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
- */
-export type ExcludeFieldsQuery = Array<string>;
-
-/**
- * Field name to sort by.
- */
-export type SortQuery = 'name';
-
-/**
- * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
- */
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
+export type MetafieldIdParam = number;
 
 /**
  * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -970,17 +338,6 @@ export type DeleteBrandsData = {
     };
     url: '/catalog/brands';
 };
-
-export type DeleteBrandsErrors = {
-    /**
-     * Unauthorized
-     */
-    401: string;
-    403: ErrorBase;
-    422: ErrorBase;
-};
-
-export type DeleteBrandsError = DeleteBrandsErrors[keyof DeleteBrandsErrors];
 
 export type DeleteBrandsResponses = {
     204: void;
@@ -1034,33 +391,18 @@ export type GetBrandsData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<string>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
         /**
          * Field name to sort by.
          */
         sort?: 'name';
-        /**
-         * Sort direction. Acceptable values are: `asc`, `desc`.
-         *
-         */
-        direction?: 'asc' | 'desc';
     };
     url: '/catalog/brands';
 };
-
-export type GetBrandsErrors = {
-    /**
-     * Unauthorized
-     */
-    401: string;
-    403: ErrorBase;
-};
-
-export type GetBrandsError = GetBrandsErrors[keyof GetBrandsErrors];
 
 export type GetBrandsResponses = {
     /**
@@ -1092,7 +434,7 @@ export type CreateBrandData = {
          */
         page_title?: string;
         /**
-         * An array of meta keywords to include in the HTML.
+         * Comma-separated list of meta keywords to include in the HTML.
          *
          */
         meta_keywords?: Array<string>;
@@ -1114,7 +456,7 @@ export type CreateBrandData = {
         /**
          * Custom Url Brand
          *
-         * The custom URL for the brand on the storefront. If not provided, the URL will be autogenerated from the brand name.
+         * The custom URL for the brand on the storefront.
          */
         custom_url?: {
             /**
@@ -1146,15 +488,6 @@ export type CreateBrandData = {
 
 export type CreateBrandErrors = {
     /**
-     * Unauthorized
-     */
-    401: string;
-    403: ErrorBase;
-    /**
-     * Not Found
-     */
-    404: NotFoundError;
-    /**
      * Error Response
      *
      * Brand was in conflict with another brand. This is the result of duplicate unique fields such as name.
@@ -1166,6 +499,7 @@ export type CreateBrandErrors = {
         errors?: {
             [key: string]: unknown;
         };
+        instance?: string;
         /**
          * The HTTP status code.
          *
@@ -1190,6 +524,7 @@ export type CreateBrandErrors = {
         errors?: {
             [key: string]: unknown;
         };
+        instance?: string;
         /**
          * The HTTP status code.
          *
@@ -1223,7 +558,7 @@ export type CreateBrandResponses = {
          */
         data?: {
             /**
-             * Unique ID of the brand.
+             * Unique ID of the *Brand*. Read-Only.
              */
             readonly id?: number;
             /**
@@ -1237,7 +572,7 @@ export type CreateBrandResponses = {
              */
             page_title?: string;
             /**
-             * An array of meta keywords to include in the HTML.
+             * Comma-separated list of meta keywords to include in the HTML.
              *
              */
             meta_keywords?: Array<string>;
@@ -1277,20 +612,14 @@ export type CreateBrandResponses = {
         meta?: MetaEmptyFull;
     };
     /**
-     * Multi_Status
-     *
-     * Multi-status. Multiple operations have taken place and the status for each operation can be viewed in the body of the response. Typically indicates that a partial failure has occurred, such as when a `POST` or `PUT` request is successful, but the URL or inventory data failed to save.
+     * Multi-status. Multiple operations have taken place and the status for each operation can be viewed in the body of the response. Typically indicates that a partial failure has occured, such as when a `POST` or `PUT` request is successful, but saving the URL or inventory data has failed.
      */
-    207: {
-        data?: Array<BrandFull>;
-        errors?: _Error;
-        meta?: WriteCollectionSuccessMeta;
-    };
+    207: ErrorBase;
 };
 
 export type CreateBrandResponse = CreateBrandResponses[keyof CreateBrandResponses];
 
-export type DeleteBrandData = {
+export type DeleteBrandByIdData = {
     body?: never;
     headers: {
         /**
@@ -1300,7 +629,7 @@ export type DeleteBrandData = {
     };
     path: {
         /**
-         * The ID of the brand to which the resource belongs.
+         * The ID of the `Brand` to which the resource belongs.
          *
          */
         brand_id: number;
@@ -1309,27 +638,13 @@ export type DeleteBrandData = {
     url: '/catalog/brands/{brand_id}';
 };
 
-export type DeleteBrandErrors = {
-    /**
-     * Unauthorized
-     */
-    401: string;
-    403: ErrorBase;
-    /**
-     * Not Found
-     */
-    404: NotFoundError;
-};
-
-export type DeleteBrandError = DeleteBrandErrors[keyof DeleteBrandErrors];
-
-export type DeleteBrandResponses = {
+export type DeleteBrandByIdResponses = {
     204: void;
 };
 
-export type DeleteBrandResponse = DeleteBrandResponses[keyof DeleteBrandResponses];
+export type DeleteBrandByIdResponse = DeleteBrandByIdResponses[keyof DeleteBrandByIdResponses];
 
-export type GetBrandData = {
+export type GetBrandByIdData = {
     body?: never;
     headers: {
         /**
@@ -1339,7 +654,7 @@ export type GetBrandData = {
     };
     path: {
         /**
-         * The ID of the brand to which the resource belongs.
+         * The ID of the `Brand` to which the resource belongs.
          *
          */
         brand_id: number;
@@ -1348,21 +663,16 @@ export type GetBrandData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<string>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/brands/{brand_id}';
 };
 
-export type GetBrandErrors = {
-    /**
-     * Unauthorized
-     */
-    401: string;
-    403: ErrorBase;
+export type GetBrandByIdErrors = {
     /**
      * Not Found
      *
@@ -1381,16 +691,11 @@ export type GetBrandErrors = {
         type?: string;
         instance?: string;
     };
-    /**
-     * Conflict
-     */
-    409: Conflict;
-    422: _Error;
 };
 
-export type GetBrandError = GetBrandErrors[keyof GetBrandErrors];
+export type GetBrandByIdError = GetBrandByIdErrors[keyof GetBrandByIdErrors];
 
-export type GetBrandResponses = {
+export type GetBrandByIdResponses = {
     /**
      * Brand Response
      *
@@ -1403,19 +708,9 @@ export type GetBrandResponses = {
         data?: BrandFull;
         meta?: MetaEmptyFull;
     };
-    /**
-     * Multi_Status
-     *
-     * Multi-status. Multiple operations have taken place and the status for each operation can be viewed in the body of the response. Typically indicates that a partial failure has occurred, such as when a `POST` or `PUT` request is successful, but the URL or inventory data failed to save.
-     */
-    207: {
-        data?: Array<BrandFull>;
-        errors?: _Error;
-        meta?: WriteCollectionSuccessMeta;
-    };
 };
 
-export type GetBrandResponse = GetBrandResponses[keyof GetBrandResponses];
+export type GetBrandByIdResponse = GetBrandByIdResponses[keyof GetBrandByIdResponses];
 
 export type UpdateBrandData = {
     /**
@@ -1425,7 +720,7 @@ export type UpdateBrandData = {
      */
     body: {
         /**
-         * Unique ID of the brand.
+         * Unique ID of the *Brand*. Read-Only.
          */
         readonly id?: number;
         /**
@@ -1439,7 +734,7 @@ export type UpdateBrandData = {
          */
         page_title?: string;
         /**
-         * An array of meta keywords to include in the HTML.
+         * Comma-separated list of meta keywords to include in the HTML.
          *
          */
         meta_keywords?: Array<string>;
@@ -1488,7 +783,7 @@ export type UpdateBrandData = {
     };
     path: {
         /**
-         * The ID of the brand to which the resource belongs.
+         * The ID of the `Brand` to which the resource belongs.
          *
          */
         brand_id: number;
@@ -1498,11 +793,6 @@ export type UpdateBrandData = {
 };
 
 export type UpdateBrandErrors = {
-    /**
-     * Unauthorized
-     */
-    401: string;
-    403: ErrorBase;
     /**
      * Not Found
      *
@@ -1519,6 +809,7 @@ export type UpdateBrandErrors = {
          */
         title?: string;
         type?: string;
+        instance?: string;
     };
     /**
      * Error Response
@@ -1533,6 +824,7 @@ export type UpdateBrandErrors = {
         errors?: {
             [key: string]: unknown;
         };
+        instance?: string;
         /**
          * The HTTP status code.
          *
@@ -1558,6 +850,7 @@ export type UpdateBrandErrors = {
         errors?: {
             [key: string]: unknown;
         };
+        instance?: string;
         /**
          * The HTTP status code.
          *
@@ -1591,7 +884,7 @@ export type UpdateBrandResponses = {
          */
         data?: {
             /**
-             * Unique ID of the brand.
+             * Unique ID of the *Brand*. Read-Only.
              */
             readonly id?: number;
             /**
@@ -1605,7 +898,7 @@ export type UpdateBrandResponses = {
              */
             page_title?: string;
             /**
-             * An array of meta keywords to include in the HTML.
+             * Comma-separated list of meta keywords to include in the HTML.
              *
              */
             meta_keywords?: Array<string>;
@@ -1645,20 +938,14 @@ export type UpdateBrandResponses = {
         meta?: MetaEmptyFull;
     };
     /**
-     * Multi_Status
-     *
-     * Multi-status. Multiple operations have taken place and the status for each operation can be viewed in the body of the response. Typically indicates that a partial failure has occurred, such as when a `POST` or `PUT` request is successful, but the URL or inventory data failed to save.
+     * Multi-status. Multiple operations have taken place and the status for each operation can be viewed in the body of the response. Typically indicates that a partial failure has occured, such as when a `POST` or `PUT` request is successful, but saving the URL or inventory data has failed.
      */
-    207: {
-        data?: Array<BrandFull>;
-        errors?: _Error;
-        meta?: WriteCollectionSuccessMeta;
-    };
+    207: ErrorBase;
 };
 
 export type UpdateBrandResponse = UpdateBrandResponses[keyof UpdateBrandResponses];
 
-export type GetBrandMetafieldsData = {
+export type GetBrandMetafieldsByBrandIdData = {
     body?: never;
     headers: {
         /**
@@ -1668,7 +955,7 @@ export type GetBrandMetafieldsData = {
     };
     path: {
         /**
-         * The ID of the brand to which the resource belongs.
+         * The ID of the `Brand` to which the resource belongs.
          *
          */
         brand_id: number;
@@ -1694,28 +981,52 @@ export type GetBrandMetafieldsData = {
          */
         limit?: number;
         /**
-         * Filter based on a metafieldʼs key.
+         * Filter based on a metafield's key.
+         *
          */
         key?: string;
         /**
-         * Filter based on a metafieldʼs namespaces.
+         * Filter based on a metafield's namespace.
          */
         namespace?: string;
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<string>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/brands/{brand_id}/metafields';
 };
 
-export type GetBrandMetafieldsResponses = {
+export type GetBrandMetafieldsByBrandIdErrors = {
     /**
-     * Metafield Collection Response
+     * Not Found
+     *
+     * Error payload for the BigCommerce API.
+     */
+    404: {
+        /**
+         * 404 HTTP status code.
+         *
+         */
+        status?: number;
+        /**
+         * The error title describing the particular error.
+         */
+        title?: string;
+        type?: string;
+        instance?: string;
+    };
+};
+
+export type GetBrandMetafieldsByBrandIdError = GetBrandMetafieldsByBrandIdErrors[keyof GetBrandMetafieldsByBrandIdErrors];
+
+export type GetBrandMetafieldsByBrandIdResponses = {
+    /**
+     * Meta Field Collection Response
      */
     200: {
         data?: Array<MetafieldFull>;
@@ -1723,7 +1034,7 @@ export type GetBrandMetafieldsResponses = {
     };
 };
 
-export type GetBrandMetafieldsResponse = GetBrandMetafieldsResponses[keyof GetBrandMetafieldsResponses];
+export type GetBrandMetafieldsByBrandIdResponse = GetBrandMetafieldsByBrandIdResponses[keyof GetBrandMetafieldsByBrandIdResponses];
 
 export type CreateBrandMetafieldData = {
     body: MetafieldBase;
@@ -1739,7 +1050,7 @@ export type CreateBrandMetafieldData = {
     };
     path: {
         /**
-         * The ID of the brand to which the resource belongs.
+         * The ID of the `Brand` to which the resource belongs.
          *
          */
         brand_id: number;
@@ -1749,16 +1060,10 @@ export type CreateBrandMetafieldData = {
 };
 
 export type CreateBrandMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
     /**
      * Error Response
      *
-     * The `Metafield` was in conflict with another `Metafield`. This can be the result of duplicate unique key combination of the appʼs client id, namespace, key, resource_type, and resource_id.
+     * The `Metafield` was in conflict with another `Metafield`. This can be the result of duplicate unique key combination of the app's client id, namespace, key, resource_type, and resource_id.
      *
      */
     409: {
@@ -1830,7 +1135,7 @@ export type CreateBrandMetafieldResponses = {
 
 export type CreateBrandMetafieldResponse = CreateBrandMetafieldResponses[keyof CreateBrandMetafieldResponses];
 
-export type DeleteBrandMetafieldData = {
+export type DeleteBrandMetafieldByIdData = {
     body?: never;
     headers: {
         /**
@@ -1840,7 +1145,7 @@ export type DeleteBrandMetafieldData = {
     };
     path: {
         /**
-         * The ID of the brand to which the resource belongs.
+         * The ID of the `Brand` to which the resource belongs.
          *
          */
         brand_id: number;
@@ -1854,36 +1159,13 @@ export type DeleteBrandMetafieldData = {
     url: '/catalog/brands/{brand_id}/metafields/{metafield_id}';
 };
 
-export type DeleteBrandMetafieldErrors = {
-    /**
-     * Not Found
-     *
-     * Error payload for the BigCommerce API.
-     */
-    404: {
-        /**
-         * 404 HTTP status code.
-         *
-         */
-        status?: number;
-        /**
-         * The error title describing the particular error.
-         */
-        title?: string;
-        type?: string;
-        instance?: string;
-    };
-};
-
-export type DeleteBrandMetafieldError = DeleteBrandMetafieldErrors[keyof DeleteBrandMetafieldErrors];
-
-export type DeleteBrandMetafieldResponses = {
+export type DeleteBrandMetafieldByIdResponses = {
     204: void;
 };
 
-export type DeleteBrandMetafieldResponse = DeleteBrandMetafieldResponses[keyof DeleteBrandMetafieldResponses];
+export type DeleteBrandMetafieldByIdResponse = DeleteBrandMetafieldByIdResponses[keyof DeleteBrandMetafieldByIdResponses];
 
-export type GetBrandMetafieldData = {
+export type GetBrandMetafieldByBrandIdData = {
     body?: never;
     headers: {
         /**
@@ -1893,7 +1175,7 @@ export type GetBrandMetafieldData = {
     };
     path: {
         /**
-         * The ID of the brand to which the resource belongs.
+         * The ID of the `Brand` to which the resource belongs.
          *
          */
         brand_id: number;
@@ -1907,16 +1189,16 @@ export type GetBrandMetafieldData = {
         /**
          * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
          */
-        include_fields?: Array<string>;
+        include_fields?: string;
         /**
          * Fields to exclude, in a comma-separated list. The specified fields will be excluded from a response. The ID cannot be excluded.
          */
-        exclude_fields?: Array<string>;
+        exclude_fields?: string;
     };
     url: '/catalog/brands/{brand_id}/metafields/{metafield_id}';
 };
 
-export type GetBrandMetafieldErrors = {
+export type GetBrandMetafieldByBrandIdErrors = {
     /**
      * Not Found
      *
@@ -1937,9 +1219,9 @@ export type GetBrandMetafieldErrors = {
     };
 };
 
-export type GetBrandMetafieldError = GetBrandMetafieldErrors[keyof GetBrandMetafieldErrors];
+export type GetBrandMetafieldByBrandIdError = GetBrandMetafieldByBrandIdErrors[keyof GetBrandMetafieldByBrandIdErrors];
 
-export type GetBrandMetafieldResponses = {
+export type GetBrandMetafieldByBrandIdResponses = {
     /**
      * Metafield Response
      */
@@ -1949,10 +1231,10 @@ export type GetBrandMetafieldResponses = {
     };
 };
 
-export type GetBrandMetafieldResponse = GetBrandMetafieldResponses[keyof GetBrandMetafieldResponses];
+export type GetBrandMetafieldByBrandIdResponse = GetBrandMetafieldByBrandIdResponses[keyof GetBrandMetafieldByBrandIdResponses];
 
 export type UpdateBrandMetafieldData = {
-    body: MetafieldBasePut;
+    body: MetafieldBase;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
@@ -1965,7 +1247,7 @@ export type UpdateBrandMetafieldData = {
     };
     path: {
         /**
-         * The ID of the brand to which the resource belongs.
+         * The ID of the `Brand` to which the resource belongs.
          *
          */
         brand_id: number;
@@ -1980,12 +1262,6 @@ export type UpdateBrandMetafieldData = {
 };
 
 export type UpdateBrandMetafieldErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
     /**
      * Not Found
      *
@@ -2030,7 +1306,7 @@ export type DeleteBrandImageData = {
     };
     path: {
         /**
-         * The ID of the brand to which the resource belongs.
+         * The ID of the `Brand` to which the resource belongs.
          *
          */
         brand_id: number;
@@ -2054,10 +1330,14 @@ export type CreateBrandImageData = {
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
+        /**
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+         */
+        'Content-Type': string;
     };
     path: {
         /**
-         * The ID of the brand to which the resource belongs.
+         * The ID of the `Brand` to which the resource belongs.
          *
          */
         brand_id: number;
@@ -2121,9 +1401,6 @@ export type CreateBrandImageErrors = {
 export type CreateBrandImageError = CreateBrandImageErrors[keyof CreateBrandImageErrors];
 
 export type CreateBrandImageResponses = {
-    /**
-     * Brand Image Response
-     */
     200: {
         data?: {
             image_url?: string;
@@ -2133,219 +1410,3 @@ export type CreateBrandImageResponses = {
 };
 
 export type CreateBrandImageResponse = CreateBrandImageResponses[keyof CreateBrandImageResponses];
-
-export type DeleteBrandsMetafieldsData = {
-    /**
-     * List of metafield IDs.
-     */
-    body?: Array<number>;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-    };
-    path?: never;
-    query?: never;
-    url: '/catalog/brands/metafields';
-};
-
-export type DeleteBrandsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields deletion with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessDelete;
-};
-
-export type DeleteBrandsMetafieldsError = DeleteBrandsMetafieldsErrors[keyof DeleteBrandsMetafieldsErrors];
-
-export type DeleteBrandsMetafieldsResponses = {
-    /**
-     * Response object for metafields deletion with success.
-     *
-     */
-    200: MetaFieldCollectionDeleteResponseSuccess;
-};
-
-export type DeleteBrandsMetafieldsResponse = DeleteBrandsMetafieldsResponses[keyof DeleteBrandsMetafieldsResponses];
-
-export type GetBrandsMetafieldsData = {
-    body?: never;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Specifies the page number in a limited (paginated) list of products.
-         */
-        page?: number;
-        /**
-         * Controls the number of items per page in a limited (paginated) list of products.
-         */
-        limit?: number;
-        /**
-         * Filter based on a metafieldʼs key.
-         */
-        key?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
-         */
-        'key:in'?: Array<string>;
-        /**
-         * Filter based on a metafieldʼs namespaces.
-         */
-        namespace?: string;
-        /**
-         * Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter.
-         */
-        'namespace:in'?: Array<string>;
-        /**
-         * Sort direction. Acceptable values are: `asc`, `desc`.
-         *
-         */
-        direction?: 'asc' | 'desc';
-        /**
-         * Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-         */
-        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date_modified'>;
-    };
-    url: '/catalog/brands/metafields';
-};
-
-export type GetBrandsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        errors?: unknown;
-    };
-};
-
-export type GetBrandsMetafieldsError = GetBrandsMetafieldsErrors[keyof GetBrandsMetafieldsErrors];
-
-export type GetBrandsMetafieldsResponses = {
-    /**
-     * List of `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponse;
-};
-
-export type GetBrandsMetafieldsResponse = GetBrandsMetafieldsResponses[keyof GetBrandsMetafieldsResponses];
-
-export type CreateBrandsMetafieldsData = {
-    body?: Array<MetafieldBasePost & {
-        /**
-         * The ID for the brand with which the metafield is associated.
-         *
-         */
-        resource_id: number;
-    }>;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
-    };
-    path?: never;
-    query?: never;
-    url: '/catalog/brands/metafields';
-};
-
-export type CreateBrandsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
-    /**
-     * Response object for metafields creation with partial success.
-     *
-     */
-    422: MetaFieldCollectionResponsePartialSuccessPostPut;
-};
-
-export type CreateBrandsMetafieldsError = CreateBrandsMetafieldsErrors[keyof CreateBrandsMetafieldsErrors];
-
-export type CreateBrandsMetafieldsResponses = {
-    /**
-     * List of created `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponsePostPut;
-};
-
-export type CreateBrandsMetafieldsResponse = CreateBrandsMetafieldsResponses[keyof CreateBrandsMetafieldsResponses];
-
-export type UpdateBrandsMetafieldsData = {
-    body?: Array<MetafieldBasePut & {
-        /**
-         * The ID of metafield to update.
-         *
-         */
-        id: number;
-    }>;
-    headers: {
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
-         */
-        Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
-    };
-    path?: never;
-    query?: never;
-    url: '/catalog/brands/metafields';
-};
-
-export type UpdateBrandsMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        errors?: {
-            [key: string]: unknown;
-        };
-    };
-    422: {
-        status?: number;
-        title?: string;
-        type?: string;
-        /**
-         * Empty for 200 responses.
-         */
-        errors?: {
-            [key: string]: unknown;
-        };
-    };
-};
-
-export type UpdateBrandsMetafieldsError = UpdateBrandsMetafieldsErrors[keyof UpdateBrandsMetafieldsErrors];
-
-export type UpdateBrandsMetafieldsResponses = {
-    /**
-     * List of updated `Metafield` objects.
-     *
-     */
-    200: MetaFieldCollectionResponsePostPut;
-};
-
-export type UpdateBrandsMetafieldsResponse = UpdateBrandsMetafieldsResponses[keyof UpdateBrandsMetafieldsResponses];

@@ -11,23 +11,21 @@ export class AbandonedCartsV3Api {
     }
 
     /**
-     * Get global abandoned cart settings
+     * Get Global Abandoned Cart Settings
      *
-     * Return the global abandoned cart settings of a store.
+     * Returns the global abandoned cart settings of a store.
      */
     getGlobalAbandonedCartSettings(
-        query?: AbandonedCartsV3ApiSpecs.GetGlobalAbandonedCartSettingsData['query'],
     ) {
         return this.request.get<RequestSuccessResponse<200, Required<AbandonedCartsV3ApiSpecs.GetGlobalAbandonedCartSettingsResponses[200]>>,RequestErrorResponse<401, Required<AbandonedCartsV3ApiSpecs.GetGlobalAbandonedCartSettingsErrors[401]>>>({
             path: 'v3/abandoned-carts/settings',
-            query,
         });
     }
 
     /**
-     * Update global abandoned cart settings
+     * Update Global Abandoned Cart Settings
      *
-     * Update the global abandoned cart settings of a store.
+     * Updates the global abandoned cart settings of a store.
      */
     updateGlobalAbandonedCartSettings(
         requestBody: AbandonedCartsV3ApiSpecs.UpdateGlobalAbandonedCartSettingsData['body'],
@@ -40,9 +38,9 @@ export class AbandonedCartsV3Api {
     }
 
     /**
-     * Get channel abandoned cart settings
+     * Get Channel Abandoned Cart Settings
      *
-     * Return the per-channel overrides for the abandoned cart settings of a store.
+     * Returns the per-channel overrides for the abandoned cart settings of a store.
      */
     getChannelAbandonedCartSettings(
         channelId: AbandonedCartsV3ApiSpecs.GetChannelAbandonedCartSettingsData['path']['channel_id'],
@@ -53,7 +51,7 @@ export class AbandonedCartsV3Api {
     }
 
     /**
-     * Update channel abandoned cart settings
+     * Update Channel Abandoned Cart Settings
      *
      * Updates the per-channel overrides for the abandoned cart settings of a store.
 
@@ -74,9 +72,9 @@ export class AbandonedCartsV3Api {
     }
 
     /**
-     * Get an abandoned cart
+     * Get an Abandoned Cart
      *
-     * Return the `cart_id` corresponding to the abandoned cart `{token}` passed in.
+     * Returns the `cart_id` corresponding to the abandoned cart `{token}` passed in.
 
      **Usage Notes**:
      * `{token}` is the token in the query string of the abandoned cart link found in abandoned cart email notifications to shoppers
