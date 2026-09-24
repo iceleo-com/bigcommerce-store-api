@@ -1,6 +1,6 @@
 {
   "name": "bigcommerce-store-api",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "BigCommerce Store API Client",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -9,12 +9,13 @@
   ],
   "scripts": {
     "build": "rimraf lib && tsc",
+    "pull:references": "node ./scripts/pull-references.js",
     "generate:apis": "node ./scripts/generate.js",
     "clean": "rimraf lib",
     "test": "jest"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20.18.1"
   },
   "jest": {
     "globalSetup": "<rootDir>/jest/global-setup.js"
@@ -53,6 +54,7 @@
     "yaml": "^2.7.0"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "undici": "^7.29.1"
   }
 }

@@ -1,13 +1,21 @@
+import { request as httpRequest } from 'undici';
 import { BigCommerceStoreApiConfig } from '../../index.types';
 import {
     RequestErrorResponse,
     RequestMethod,
     RequestOptions,
     RequestSuccessResponse,
+    ResponseHeaders,
 } from './request-service.types';
-import { buildPath, parseBody } from './request-service.helpers';
+import { buildPath, isFormData, parseBody } from './request-service.helpers';
 
-const apiEndpoint = 'https://api.bigcommerce.com/stores';
+const apiHost = 'api.bigcommerce.com';
+const apiEndpoint = `https://${apiHost}/stores`;
+
+// strip the scheme and trailing slashes, so `https://example.com/` works as a domain too
+function normalizeDomain(domain?: string) {
+    return (domain || '').replace(/^https?:\/\//i, '').replace(/\/+$/, '');
+}
 
 class RequestService {
     config: BigCommerceStoreApiConfig;
@@ -16,13 +24,31 @@ class RequestService {
         this.config = config;
     }
 
+    // relative paths go to the API gateway, absolute URLs (payments, storefront, provider apps) are used as they are
+    private resolveUrl(normalizedPath: string): string {
+        if (!/^https?:\/\//i.test(normalizedPath)) {
+            return `${apiEndpoint}/${this.config.storeHash}/${normalizedPath}`;
+        }
+
+        const placeholders: Record<string, string> = {
+            store_hash: this.config.storeHash,
+            store_domain: normalizeDomain(this.config.storeDomain),
+            app_domain: normalizeDomain(this.config.appDomain),
+        };
+
+        const url = normalizedPath.replace(/\{(\w+)\}/g, (match, name) => placeholders[name] || match);
+
+        const unresolved = url.split('?')[0]!.match(/\{(\w+)\}/);
+        if (unresolved) {
+            throw new Error(`Cannot resolve {${unresolved[1]}} in ${normalizedPath}, check the client config`);
+        }
+
+        return url;
+    }
+
     private async request<T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(
         method: RequestMethod,
         options: RequestOptions,
-        // path: string,
-        // method: RequestMethod,
-        // contentType: RequestContentType,
-        // body?: RequestBody,
     ): Promise<T_Success | T_Error> {
         const {
             path,
@@ -31,37 +57,43 @@ class RequestService {
             query,
         } = options;
 
-        // build the full URL
-        const normalizedPath = buildPath(path, query);
-        const url = `${apiEndpoint}/${this.config.storeHash}/${normalizedPath}`;
+        let responseHeaders: ResponseHeaders = {};
+        let responseText = '';
+        let statusCode: number;
 
-        // set the headers
-        const headers = {
-            'X-Auth-Token': this.config.accessToken,
-            'Accept': 'application/json',
-        };
+        try {
+            // build the full URL
+            const url = this.resolveUrl(buildPath(path, query));
 
-        if (!(body instanceof FormData) && contentType) {
-            headers['Content-Type'] = contentType;
-        }
+            // set the headers
+            const headers: Record<string, string> = {
+                'Accept': 'application/json',
+            };
 
-        // make the request
-        let responseError = '';
+            // only send the access token to the API gateway, never to storefront or app domains
+            if (new URL(url).host === apiHost) {
+                headers['X-Auth-Token'] = this.config.accessToken;
+            }
 
-        const response = await fetch(url, {
-            method,
-            headers,
-            body: parseBody(
-                body,
-                (contentType || 'application/json'),
-            ),
-        })
-            .catch((error) => {
-                responseError = error.message;
+            const requestBody = parseBody(body, contentType || 'application/json');
+
+            // undici sets the multipart boundary itself
+            if (requestBody !== undefined && !isFormData(requestBody)) {
+                headers['Content-Type'] = contentType || 'application/json';
+            }
+
+            // make the request
+            const response = await httpRequest(url, {
+                method,
+                headers,
+                body: requestBody instanceof URLSearchParams ? requestBody.toString() : requestBody,
             });
 
-        // handle the error
-        if (!response) {
+            statusCode = response.statusCode;
+            responseHeaders = response.headers;
+            responseText = await response.body.text();
+        } catch (error) {
+            // network errors, unresolved URLs, interrupted responses
             return {
                 status: 'error',
                 http_status: 500,
@@ -70,43 +102,51 @@ class RequestService {
                     title: 'Internal Server Error',
                     type: 'internal_server_error',
                     errors: {
-                        message: responseError,
+                        message: error instanceof Error ? error.message : String(error),
                     },
                 },
+                headers: responseHeaders,
+                response_text: responseText,
             } as T_Error;
         }
 
         // parse the response
-        const responseBodyContents = await response.text();
-
         let result: any = {};
+        let isJson = true;
 
-        if (responseBodyContents.trim() !== '') {
+        if (responseText.trim() !== '') {
             try {
-                result = JSON.parse(responseBodyContents);
-            } catch (error) {
-                console.error(error);
+                result = JSON.parse(responseText);
+            } catch {
+                isJson = false;
+                result = responseText;
             }
         }
 
-        if (response.status >= 400) {
+        const isObject = typeof result === 'object' && result !== null && !Array.isArray(result);
+
+        if (statusCode >= 400) {
             // handle the 4xx - 5xx error
             return {
                 status: 'error',
-                http_status: response.status,
-                errors: typeof result === 'object' && result !== null ? result : {
-                    status: response.status,
-                    title: responseBodyContents,
-                    type: 'internal_server_error',
+                http_status: statusCode,
+                errors: isJson && result !== null && typeof result === 'object' ? result : {
+                    status: statusCode,
+                    title: responseText,
+                    type: 'http_error',
                 },
+                headers: responseHeaders,
+                response_text: responseText,
             } as T_Error;
         }
 
         return {
             status: 'success',
-            http_status: response.status,
-            data: result.data ? result.data : result,
-            meta: result.meta,
+            http_status: statusCode,
+            data: isObject && 'data' in result ? result.data : result,
+            meta: isObject ? result.meta : undefined,
+            headers: responseHeaders,
+            response_text: responseText,
         } as T_Success;
     }
 

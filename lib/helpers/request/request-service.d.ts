@@ -3,6 +3,7 @@ import { RequestErrorResponse, RequestOptions, RequestSuccessResponse } from './
 declare class RequestService {
     config: BigCommerceStoreApiConfig;
     constructor(config: BigCommerceStoreApiConfig);
+    private resolveUrl;
     private request;
     get: <T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(options: RequestOptions) => Promise<T_Success | T_Error>;
     post: <T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(options: RequestOptions) => Promise<T_Success | T_Error>;

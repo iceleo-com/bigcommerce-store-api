@@ -20,6 +20,10 @@ import BigCommerceStoreApi from 'bigcommerce-store-api';
 const apiClient = new BigCommerceStoreApi({
     storeHash: 'storeHash',
     accessToken: 'accessToken',
+    // optional, only needed by the Current Customer API
+    storeDomain: 'store.example.com',
+    // optional, only needed by the Shipping Provider and Tax Provider APIs
+    appDomain: 'app.example.com',
 });
 
 const response = await apiClient.v3.products.getProducts({
@@ -69,6 +73,16 @@ const response = await apiClient.v3.products.getProduct(1234);
 if (response.status === 'error') {
     console.log(response.errors);
 }
+```
+
+Every response, success or error, also includes the response `headers` and the raw `response_text` to help with debugging:
+
+```typescript
+const response = await apiClient.v3.products.getProducts();
+
+console.log(response.http_status);
+console.log(response.headers['x-rate-limit-requests-left']);
+console.log(response.response_text);
 ```
 
 But for program safety, I recommend implementing a try catch to ensure your code is not interrupted by a library bug. For example:
