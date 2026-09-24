@@ -11,7 +11,7 @@ export class TaxCustomersV3Api {
     }
 
     /**
-     * Get Tax Customers
+     * List Tax Customers
      *
      * Retrieves a list of customer tax data.
      */

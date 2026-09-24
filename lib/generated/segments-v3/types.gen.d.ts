@@ -1,44 +1,5 @@
 export type ClientOptions = {
-    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
-};
-export type SegmentsResponse = {
-    data?: Array<Segment>;
-    meta?: {
-        [key: string]: unknown;
-    };
-};
-export type SegmentsPostRequest = Array<SegmentPost>;
-export type SegmentsPutRequest = Array<SegmentPut>;
-export type SegmentPost = {
-    name: string;
-    description?: string;
-};
-export type SegmentPut = {
-    id: string;
-    name?: string;
-    description?: string;
-};
-export type Pagination = {
-    total?: number;
-    count?: number;
-    per_page?: number;
-    current_page?: number;
-    total_pages?: number;
-};
-export type CollectionMeta = {
-    pagination?: Pagination;
-};
-export type ErrorResponse = BaseError & {
-    errors?: DetailedErrors;
-};
-export type BaseError = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-};
-export type DetailedErrors = {
-    [key: string]: string;
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3' | (string & {});
 };
 export type Segment = {
     id?: string;
@@ -47,9 +8,98 @@ export type Segment = {
     created_at?: string;
     updated_at?: string;
 };
+export type PaginationLinks = {
+    previous?: string;
+    current?: string;
+    next?: string;
+};
+export type Pagination = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: PaginationLinks;
+};
+export type CollectionMeta = {
+    pagination?: Pagination;
+};
 export type SegmentCollectionResponse = {
     data?: Array<Segment>;
     meta?: CollectionMeta;
+};
+export type SegmentPost = {
+    name: string;
+    description?: string;
+};
+export type SegmentsPostRequest = Array<SegmentPost>;
+export type BatchResultMeta = {
+    total?: number;
+    success?: number;
+    failed?: number;
+};
+export type SegmentsResponse = {
+    data?: Array<Segment>;
+    meta?: BatchResultMeta;
+};
+export type SegmentsPostResponsesContentApplicationJsonSchemaDataItems = {
+    [key: string]: unknown;
+};
+export type SegmentsPostResponsesContentApplicationJsonSchemaErrorsItemsErrors = {
+    [key: string]: unknown;
+};
+export type SegmentsPostResponsesContentApplicationJsonSchemaErrorsItems = {
+    status: number;
+    title?: string;
+    type?: string;
+    errors?: SegmentsPostResponsesContentApplicationJsonSchemaErrorsItemsErrors;
+};
+export type SegmentsPostResponsesContentApplicationJsonSchemaMeta = {
+    total?: number;
+    success?: number;
+    failed?: number;
+};
+export type SegmentsPostRequestRequestConflictError = {
+    data: Array<SegmentsPostResponsesContentApplicationJsonSchemaDataItems>;
+    errors: Array<SegmentsPostResponsesContentApplicationJsonSchemaErrorsItems>;
+    meta: SegmentsPostResponsesContentApplicationJsonSchemaMeta;
+};
+export type DetailedErrors = {
+    [key: string]: unknown;
+};
+export type ErrorResponse = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: DetailedErrors;
+};
+export type SegmentsWithErrorsResponse = {
+    data?: Array<Segment>;
+    meta?: BatchResultMeta;
+    errors?: Array<ErrorResponse>;
+};
+export type SegmentPut = {
+    id: string;
+    name?: string;
+    description?: string;
+};
+export type SegmentsPutRequest = Array<SegmentPut>;
+export type SegmentsRemoveResponseDataItems = {
+    [key: string]: unknown;
+};
+export type SegmentsRemoveResponse = {
+    data?: Array<SegmentsRemoveResponseDataItems>;
+    errors?: Array<ErrorResponse>;
+    meta?: BatchResultMeta;
+};
+export type SegmentsRemoveWithErrorsResponseDataItems = {
+    [key: string]: unknown;
+};
+export type SegmentsRemoveWithErrorsResponse = {
+    data?: Array<SegmentsRemoveWithErrorsResponseDataItems>;
+    errors?: Array<ErrorResponse>;
+    meta?: BatchResultMeta;
 };
 export type ShopperProfile = {
     id?: string;
@@ -57,35 +107,77 @@ export type ShopperProfile = {
     created_at?: string;
     updated_at?: string;
 };
-export type ShopperProfilesAddRequest = Array<string>;
-export type ShopperProfilesAddResponse = {
+export type ShopperProfilesCollectionResponse = {
     data?: Array<ShopperProfile>;
+    meta?: CollectionMeta;
+};
+export type ShopperProfilePost = {
+    customer_id?: number;
+};
+export type ShopperProfilesPostRequest = Array<ShopperProfilePost>;
+export type ShopperProfilesResponse = {
+    data?: Array<ShopperProfile>;
+    errors?: Array<ErrorResponse>;
+    meta?: BatchResultMeta;
+};
+export type ShopperProfilesWithErrorsResponse = {
+    data?: Array<ShopperProfile>;
+    errors?: Array<ErrorResponse>;
+    meta?: BatchResultMeta;
+};
+export type ShopperProfilesRemoveResponseDataItems = {
+    [key: string]: unknown;
+};
+export type ShopperProfilesRemoveResponse = {
+    data?: Array<ShopperProfilesRemoveResponseDataItems>;
+    errors?: Array<ErrorResponse>;
+    meta?: BatchResultMeta;
+};
+export type ShopperProfilesRemoveWithErrorsResponseDataItems = {
+    [key: string]: unknown;
+};
+export type ShopperProfilesRemoveWithErrorsResponse = {
+    data?: Array<ShopperProfilesRemoveWithErrorsResponseDataItems>;
+    errors?: Array<ErrorResponse>;
+    meta?: BatchResultMeta;
 };
 export type ShopperProfilesGetResponse = {
     data?: Array<ShopperProfile>;
     meta?: CollectionMeta;
 };
-export type ShopperProfilesCollectionResponse = {
+export type ShopperProfilesAddRequest = Array<string>;
+export type ShopperProfilesAddResponse = {
     data?: Array<ShopperProfile>;
-    meta?: CollectionMeta;
+    errors?: Array<ErrorResponse>;
+    meta?: BatchResultMeta;
 };
-export type ShopperProfilesPostRequest = Array<ShopperProfilePost>;
-export type ShopperProfilePost = {
-    customer_id?: number;
+export type SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaDataItems = {
+    [key: string]: unknown;
 };
-export type ShopperProfilesResponse = {
+export type SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaErrorsItemsErrors = {
+    0?: string;
+};
+export type SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaErrorsItems = {
+    status?: number;
+    title?: string;
+    type?: string;
+    errors?: SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaErrorsItemsErrors;
+};
+export type SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaMeta = {
+    total: number;
+    success: number;
+    failed: number;
+};
+export type PostShopperProfileRequestConflictError = {
+    data: Array<SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaDataItems>;
+    errors: Array<SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaErrorsItems>;
+    meta: SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaMeta;
+};
+export type ShopperProfilesAddWithErrorsResponse = {
     data?: Array<ShopperProfile>;
-    meta?: {
-        [key: string]: unknown;
-    };
+    errors?: Array<ErrorResponse>;
+    meta?: BatchResultMeta;
 };
-export type Accept = string;
-export type ContentType = string;
-export type SegmentIdPathParam = string;
-export type ShopperIdPathParam = string;
-export type FilterIdParam = Array<string>;
-export type FilterPageParam = number;
-export type FilterLimitParam = number;
 export type DeleteStoreSegmentData = {
     body?: never;
     headers: {
@@ -97,8 +189,12 @@ export type DeleteStoreSegmentData = {
     };
     url: '/segments';
 };
+export type DeleteStoreSegmentErrors = {
+    422: SegmentsRemoveWithErrorsResponse;
+};
+export type DeleteStoreSegmentError = DeleteStoreSegmentErrors[keyof DeleteStoreSegmentErrors];
 export type DeleteStoreSegmentResponses = {
-    204: void;
+    200: SegmentsRemoveResponse;
 };
 export type DeleteStoreSegmentResponse = DeleteStoreSegmentResponses[keyof DeleteStoreSegmentResponses];
 export type GetPaginatedSegmentsListData = {
@@ -119,35 +215,17 @@ export type GetPaginatedSegmentsListResponses = {
 };
 export type GetPaginatedSegmentsListResponse = GetPaginatedSegmentsListResponses[keyof GetPaginatedSegmentsListResponses];
 export type SegmentsPostRequestData = {
-    body: SegmentsPostRequest;
+    body?: SegmentsPostRequest;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/segments';
 };
 export type SegmentsPostRequestErrors = {
-    400: ErrorResponse;
-    409: {
-        data: Array<{
-            [key: string]: unknown;
-        }>;
-        errors: Array<{
-            status: number;
-            title?: string;
-            type?: string;
-            errors?: {
-                [key: string]: unknown;
-            };
-        }>;
-        meta: {
-            total?: number;
-            success?: number;
-            failed?: number;
-        };
-    };
+    409: SegmentsPostRequestRequestConflictError;
+    422: SegmentsWithErrorsResponse;
 };
 export type SegmentsPostRequestError = SegmentsPostRequestErrors[keyof SegmentsPostRequestErrors];
 export type SegmentsPostRequestResponses = {
@@ -155,23 +233,92 @@ export type SegmentsPostRequestResponses = {
 };
 export type SegmentsPostRequestResponse = SegmentsPostRequestResponses[keyof SegmentsPostRequestResponses];
 export type PutSegmentObjectsData = {
-    body: SegmentsPutRequest;
+    body?: SegmentsPutRequest;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/segments';
 };
 export type PutSegmentObjectsErrors = {
-    400: ErrorResponse;
+    422: SegmentsWithErrorsResponse;
 };
 export type PutSegmentObjectsError = PutSegmentObjectsErrors[keyof PutSegmentObjectsErrors];
 export type PutSegmentObjectsResponses = {
     201: SegmentsResponse;
 };
 export type PutSegmentObjectsResponse = PutSegmentObjectsResponses[keyof PutSegmentObjectsResponses];
+export type GetListShopperProfileData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        shopperProfileId: string;
+    };
+    query?: {
+        page?: number;
+        limit?: number;
+    };
+    url: '/shopper-profiles/{shopperProfileId}/segments';
+};
+export type GetListShopperProfileResponses = {
+    200: SegmentCollectionResponse;
+};
+export type GetListShopperProfileResponse = GetListShopperProfileResponses[keyof GetListShopperProfileResponses];
+export type DeleteStoreShopperProfileData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: {
+        'id:in'?: Array<string>;
+    };
+    url: '/shopper-profiles';
+};
+export type DeleteStoreShopperProfileErrors = {
+    422: ShopperProfilesRemoveWithErrorsResponse;
+};
+export type DeleteStoreShopperProfileError = DeleteStoreShopperProfileErrors[keyof DeleteStoreShopperProfileErrors];
+export type DeleteStoreShopperProfileResponses = {
+    200: ShopperProfilesRemoveResponse;
+};
+export type DeleteStoreShopperProfileResponse = DeleteStoreShopperProfileResponses[keyof DeleteStoreShopperProfileResponses];
+export type GetShopperListData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: {
+        page?: number;
+        limit?: number;
+    };
+    url: '/shopper-profiles';
+};
+export type GetShopperListResponses = {
+    200: ShopperProfilesCollectionResponse;
+};
+export type GetShopperListResponse = GetShopperListResponses[keyof GetShopperListResponses];
+export type ShopperProfilesRequestData = {
+    body?: ShopperProfilesPostRequest;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/shopper-profiles';
+};
+export type ShopperProfilesRequestErrors = {
+    422: ShopperProfilesWithErrorsResponse;
+};
+export type ShopperProfilesRequestError = ShopperProfilesRequestErrors[keyof ShopperProfilesRequestErrors];
+export type ShopperProfilesRequestResponses = {
+    201: ShopperProfilesResponse;
+};
+export type ShopperProfilesRequestResponse = ShopperProfilesRequestResponses[keyof ShopperProfilesRequestResponses];
 export type DeleteShopperProfileData = {
     body?: never;
     headers: {
@@ -185,8 +332,12 @@ export type DeleteShopperProfileData = {
     };
     url: '/segments/{segmentId}/shopper-profiles';
 };
+export type DeleteShopperProfileErrors = {
+    422: ShopperProfilesRemoveWithErrorsResponse;
+};
+export type DeleteShopperProfileError = DeleteShopperProfileErrors[keyof DeleteShopperProfileErrors];
 export type DeleteShopperProfileResponses = {
-    204: void;
+    200: ShopperProfilesRemoveResponse;
 };
 export type DeleteShopperProfileResponse = DeleteShopperProfileResponses[keyof DeleteShopperProfileResponses];
 export type GetSegmentProfilesData = {
@@ -211,7 +362,6 @@ export type PostShopperProfileData = {
     body?: ShopperProfilesAddRequest;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path: {
         segmentId: string;
@@ -220,94 +370,11 @@ export type PostShopperProfileData = {
     url: '/segments/{segmentId}/shopper-profiles';
 };
 export type PostShopperProfileErrors = {
-    409: {
-        data: Array<{
-            [key: string]: unknown;
-        }>;
-        errors: Array<{
-            status?: number;
-            title?: string;
-            type?: string;
-            errors?: {
-                0?: string;
-            };
-        }>;
-        meta: {
-            total: number;
-            success: number;
-            failed: number;
-        };
-    };
+    409: PostShopperProfileRequestConflictError;
+    422: ShopperProfilesAddWithErrorsResponse;
 };
 export type PostShopperProfileError = PostShopperProfileErrors[keyof PostShopperProfileErrors];
 export type PostShopperProfileResponses = {
     201: ShopperProfilesAddResponse;
 };
 export type PostShopperProfileResponse = PostShopperProfileResponses[keyof PostShopperProfileResponses];
-export type DeleteStoreShopperProfileData = {
-    body?: never;
-    headers: {
-        Accept: string;
-    };
-    path?: never;
-    query?: {
-        'id:in'?: Array<string>;
-    };
-    url: '/shopper-profiles';
-};
-export type DeleteStoreShopperProfileResponses = {
-    204: void;
-};
-export type DeleteStoreShopperProfileResponse = DeleteStoreShopperProfileResponses[keyof DeleteStoreShopperProfileResponses];
-export type GetShopperListData = {
-    body?: never;
-    headers: {
-        Accept: string;
-    };
-    path?: never;
-    query?: {
-        page?: number;
-        limit?: number;
-    };
-    url: '/shopper-profiles';
-};
-export type GetShopperListResponses = {
-    200: ShopperProfilesCollectionResponse;
-};
-export type GetShopperListResponse = GetShopperListResponses[keyof GetShopperListResponses];
-export type ShopperProfilesRequestData = {
-    body: ShopperProfilesPostRequest;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path?: never;
-    query?: never;
-    url: '/shopper-profiles';
-};
-export type ShopperProfilesRequestErrors = {
-    400: ErrorResponse;
-};
-export type ShopperProfilesRequestError = ShopperProfilesRequestErrors[keyof ShopperProfilesRequestErrors];
-export type ShopperProfilesRequestResponses = {
-    201: ShopperProfilesResponse;
-};
-export type ShopperProfilesRequestResponse = ShopperProfilesRequestResponses[keyof ShopperProfilesRequestResponses];
-export type GetListShopperProfileData = {
-    body?: never;
-    headers: {
-        Accept: string;
-    };
-    path: {
-        shopperProfileId: string;
-    };
-    query?: {
-        page?: number;
-        limit?: number;
-    };
-    url: '/shopper-profiles/{shopperProfileId}/segments';
-};
-export type GetListShopperProfileResponses = {
-    200: SegmentCollectionResponse;
-};
-export type GetListShopperProfileResponse = GetListShopperProfileResponses[keyof GetListShopperProfileResponses];

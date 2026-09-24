@@ -11,30 +11,23 @@ export class ChannelsV3Api {
     }
 
     /**
-     * Get All Channels
+     * List Channels
      *
      * Returns a list of *Channels*.
 
      Will always return the default BigCommerce storefront with an ID of `1`. This storefront is created by default when you provision a BigCommerce store.
      */
-    listChannels(
-        query?: ChannelsV3ApiSpecs.ListChannelsData['query'],
+    getChannels(
+        query?: ChannelsV3ApiSpecs.GetChannelsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.ListChannelsResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.ListChannelsErrors[422]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelsResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.GetChannelsErrors[422]>>>({
             path: 'v3/channels',
             query,
         });
     }
 
     /**
-     * @deprecated Use `listChannels` instead.
-     */
-    getChannels(...args: Parameters<ChannelsV3Api['listChannels']>) {
-        return this.listChannels(...args);
-    }
-
-    /**
-     * Create a Channel
+     * Create Channel
      *
      * Creates a *Channel*.
      */
@@ -49,7 +42,7 @@ export class ChannelsV3Api {
     }
 
     /**
-     * Get a Channel
+     * Get Channel
      *
      * Returns a *Channel*. Channel ID `1` returns the default BigCommerce storefront.
      */
@@ -64,7 +57,7 @@ export class ChannelsV3Api {
     }
 
     /**
-     * Update a Channel
+     * Update Channel
      *
      * Updates a *Channel*.
 
@@ -76,7 +69,6 @@ export class ChannelsV3Api {
      * `status`
      * `is_listable_from_ui`
      * `is_visible`
-     * `config_meta`
 
      > #### Note
      > * Partial updates are supported. In most cases, if a field that *cannot* be updated is passed in, the API **will not** respond with an error. It returns a 200 response with the object, in which you will see the field(s) were not updated.
@@ -95,7 +87,7 @@ export class ChannelsV3Api {
     }
 
     /**
-     * Get a Channel Active Theme
+     * Get Channel Active Theme
      *
      * Returns details of the theme active on the specified channel.
      Does not support active Blueprint (legacy) themes.
@@ -109,22 +101,74 @@ export class ChannelsV3Api {
     }
 
     /**
-     * Get All Channels Currency Assignments
+     * List Channel Metafields
      *
-     * Returns a list of currency assignments for all channels.
+     * Get all channel metafields.
      */
-    listAllCurrencyAssignments(
+    getChannelsMetafields(
+        query?: ChannelsV3ApiSpecs.GetChannelsMetafieldsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.ListAllCurrencyAssignmentsResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: 'v3/channels/currency-assignments',
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelsMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: 'v3/channels/metafields',
+            query,
         });
     }
 
     /**
-     * @deprecated Use `listAllCurrencyAssignments` instead.
+     * Create Multiple Metafields
+     *
+     * Create multiple metafields.
      */
-    getAllCurrencyAssignments(...args: Parameters<ChannelsV3Api['listAllCurrencyAssignments']>) {
-        return this.listAllCurrencyAssignments(...args);
+    createChannelsMetafields(
+        requestBody: ChannelsV3ApiSpecs.CreateChannelsMetafieldsData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.CreateChannelsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.CreateChannelsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.CreateChannelsMetafieldsErrors[422]>>)>({
+            path: 'v3/channels/metafields',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Update Multiple Metafields
+     *
+     * Update multiple metafields.
+     */
+    updateChannelsMetafields(
+        requestBody: ChannelsV3ApiSpecs.UpdateChannelsMetafieldsData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.UpdateChannelsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.UpdateChannelsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.UpdateChannelsMetafieldsErrors[422]>>)>({
+            path: 'v3/channels/metafields',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete Multiple Metafields
+     *
+     * Delete all channel metafields.
+     */
+    deleteChannelsMetafields(
+        requestBody: ChannelsV3ApiSpecs.DeleteChannelsMetafieldsData['body'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.DeleteChannelsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.DeleteChannelsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.DeleteChannelsMetafieldsErrors[422]>>)>({
+            path: 'v3/channels/metafields',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * List Channels Currency Assignments
+     *
+     * Returns a list of currency assignments for all channels.
+     */
+    getAllCurrencyAssignments(
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetAllCurrencyAssignmentsResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: 'v3/channels/currency-assignments',
+        });
     }
 
     /**
@@ -158,7 +202,7 @@ export class ChannelsV3Api {
     }
 
     /**
-     * Get Channel Currency Assignments
+     * List Channel Currency Assignments
      *
      * Returns a list of currency assignments for a specific channel.
      */
@@ -216,31 +260,24 @@ export class ChannelsV3Api {
     }
 
     /**
-     * Get Channel Listings
+     * List Channel Listings
      *
-     * Returns a list of all *Channel Listings* for a specific channel. Note that if the *Channel* is not found or there is no listing associated to the *Channel*, it will return a 200 response with empty data.
+     * Returns a list of all *Channel Listings* for a specific channel. We recommend using this endpoint for non-storefront channels like marketplaces, marketing channels, and point of sale (POS) channels. Note that if the *Channel* is not found or there is no listing associated with the *Channel*, it will return a 200 response with empty data.
      */
-    listChannelListings(
-        channelId: ChannelsV3ApiSpecs.ListChannelListingsData['path']['channel_id'],
-        query?: ChannelsV3ApiSpecs.ListChannelListingsData['query'],
+    getChannelListings(
+        channelId: ChannelsV3ApiSpecs.GetChannelListingsData['path']['channel_id'],
+        query?: ChannelsV3ApiSpecs.GetChannelListingsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.ListChannelListingsResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.ListChannelListingsErrors[400]>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.ListChannelListingsErrors[422]>>)>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelListingsResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.GetChannelListingsErrors[400]>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.GetChannelListingsErrors[422]>>)>({
             path: `v3/channels/${channelId}/listings`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `listChannelListings` instead.
-     */
-    getChannelListings(...args: Parameters<ChannelsV3Api['listChannelListings']>) {
-        return this.listChannelListings(...args);
-    }
-
-    /**
      * Create Channel Listings
      *
-     * Creates one or more *Channel Listings* for a specific channel.
+     * Creates one or more *Channel Listings* for a specific channel. We recommend using this endpoint for non-storefront channels like marketplaces, marketing channels, and point of sale (POS) channels.
      */
     createChannelListings(
         channelId: ChannelsV3ApiSpecs.CreateChannelListingsData['path']['channel_id'],
@@ -256,7 +293,7 @@ export class ChannelsV3Api {
     /**
      * Update Channel Listings
      *
-     * Updates one or more *Channel Listings* for a specific channel.
+     * Updates one or more *Channel Listings* for a specific channel. We recommend using this endpoint for non-storefront channels like marketplaces, marketing channels, and point of sale (POS) channels. 
 
      > #### Note
      > * Partial updates are supported. In most cases, if a field that *cannot* be updated is passed in, the API **will not** respond with an error. It returns a 200 response with the object, in which you will see the field(s) were not updated.
@@ -278,9 +315,9 @@ export class ChannelsV3Api {
     }
 
     /**
-     * Get a Channel Listing
+     * Get Channel Listing
      *
-     * Returns a *Channel Listing* for a specific channel.
+     * Returns a *Channel Listing* for a specific channel. We recommend using this endpoint for non-storefront channels like marketplaces, marketing channels, and point of sale (POS) channels.
      */
     getChannelListing(
         channelId: ChannelsV3ApiSpecs.GetChannelListingData['path']['channel_id'],
@@ -292,120 +329,9 @@ export class ChannelsV3Api {
     }
 
     /**
-     * Upsert a Site's Checkout URL
+     * List Channel Menus
      *
-     * Creates or updates (upserts) a site's checkout URL
-     */
-    putCheckoutUrl(
-        channelId: ChannelsV3ApiSpecs.PutCheckoutUrlData['path']['channel_id'],
-        requestBody: ChannelsV3ApiSpecs.PutCheckoutUrlData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.PutCheckoutUrlResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.PutCheckoutUrlErrors[422]>>>({
-            path: `v3/channels/${channelId}/site/checkout-url`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * @deprecated Use `putCheckoutUrl` instead.
-     */
-    updateCheckoutUrl(...args: Parameters<ChannelsV3Api['putCheckoutUrl']>) {
-        return this.putCheckoutUrl(...args);
-    }
-
-    /**
-     * Delete a Site's Checkout URL
-     *
-     * Deletes a siteʼs checkout URL. After deletion, a shared checkout URL is used.
-     */
-    deleteCheckoutUrl(
-        channelId: ChannelsV3ApiSpecs.DeleteCheckoutUrlData['path']['channel_id'],
-    ) {
-        return this.request.delete<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.DeleteCheckoutUrlResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/channels/${channelId}/site/checkout-url`,
-        });
-    }
-
-    /**
-     * Get a Channel Site
-     *
-     * Alias of `GET /sites?channel_id=channel_id`
-
-     Returns site data for the specified channel.
-
-     */
-    getChannelSite(
-        channelId: ChannelsV3ApiSpecs.GetChannelSiteData['path']['channel_id'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelSiteResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/channels/${channelId}/site`,
-        });
-    }
-
-    /**
-     * Create a Channel Site
-     *
-     * Alias of POST `/sites`. Creates a site for provided channel.
-     */
-    postChannelSite(
-        channelId: ChannelsV3ApiSpecs.PostChannelSiteData['path']['channel_id'],
-        requestBody: ChannelsV3ApiSpecs.PostChannelSiteData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.PostChannelSiteResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/channels/${channelId}/site`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * @deprecated Use `postChannelSite` instead.
-     */
-    createChannelSite(...args: Parameters<ChannelsV3Api['postChannelSite']>) {
-        return this.postChannelSite(...args);
-    }
-
-    /**
-     * Update a Channel Site
-     *
-     * Updates a site for provided channel.
-     */
-    putChannelSite(
-        channelId: ChannelsV3ApiSpecs.PutChannelSiteData['path']['channel_id'],
-        requestBody: ChannelsV3ApiSpecs.PutChannelSiteData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.PutChannelSiteResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/channels/${channelId}/site`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * @deprecated Use `putChannelSite` instead.
-     */
-    updateChannelSite(...args: Parameters<ChannelsV3Api['putChannelSite']>) {
-        return this.putChannelSite(...args);
-    }
-
-    /**
-     * Delete a Channel Site
-     *
-     * Deletes the Channel's site.
-     */
-    deleteChannelSite(
-        channelId: ChannelsV3ApiSpecs.DeleteChannelSiteData['path']['channel_id'],
-    ) {
-        return this.request.delete<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.DeleteChannelSiteResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/channels/${channelId}/site`,
-        });
-    }
-
-    /**
-     * Get Channel Menus
-     *
-     * Returns list of Control Panel side navigation menus for a channel.
+     * Returns a list of control panel side navigation menus for a channel.
 
      */
     getChannelMenus(
@@ -419,24 +345,17 @@ export class ChannelsV3Api {
     /**
      * Create Channel Menus
      *
-     * Creates or replaces list of control panel side navigation menus for a channel.
+     * Creates or replaces the list of control panel side navigation menus for a channel.
      */
-    postChannelMenus(
-        channelId: ChannelsV3ApiSpecs.PostChannelMenusData['path']['channel_id'],
-        requestBody: ChannelsV3ApiSpecs.PostChannelMenusData['body'],
+    createChannelMenus(
+        channelId: ChannelsV3ApiSpecs.CreateChannelMenusData['path']['channel_id'],
+        requestBody: ChannelsV3ApiSpecs.CreateChannelMenusData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.PostChannelMenusResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.CreateChannelMenusResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.CreateChannelMenusErrors[422]>>>({
             path: `v3/channels/${channelId}/channel-menus`,
             contentType: 'application/json',
             body: requestBody,
         });
-    }
-
-    /**
-     * @deprecated Use `postChannelMenus` instead.
-     */
-    createChannelMenus(...args: Parameters<ChannelsV3Api['postChannelMenus']>) {
-        return this.postChannelMenus(...args);
     }
 
     /**
@@ -453,39 +372,32 @@ export class ChannelsV3Api {
     }
 
     /**
-     * Get Channel Metafields
+     * List Channel Metafields
      *
      * Returns a list of metafields on a channel. Optional filter parameters can be passed in.
      */
-    getChannelsChannelIdMetafields(
-        channelId: ChannelsV3ApiSpecs.GetChannelsChannelIdMetafieldsData['path']['channel_id'],
-        query?: ChannelsV3ApiSpecs.GetChannelsChannelIdMetafieldsData['query'],
+    getChannelMetafields(
+        channelId: ChannelsV3ApiSpecs.GetChannelMetafieldsData['path']['channel_id'],
+        query?: ChannelsV3ApiSpecs.GetChannelMetafieldsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelsChannelIdMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/channels/${channelId}/metafields`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `getChannelsChannelIdMetafields` instead.
-     */
-    getChannelMetafields(...args: Parameters<ChannelsV3Api['getChannelsChannelIdMetafields']>) {
-        return this.getChannelsChannelIdMetafields(...args);
-    }
-
-    /**
-     * Create a Channel Metafield
+     * Create Channel Metafield
      *
      * Creates a channel metafield.
 
      **Note:** The maxiumum number of metafields allowed on each order, product, category, variant, channel, or brand is 250 per client ID. For more information, see [Platform Limits](https://support.bigcommerce.com/s/article/Platform-Limits) in the Help Center.
      */
-    postChannelsChannelIdMetafields(
-        channelId: ChannelsV3ApiSpecs.PostChannelsChannelIdMetafieldsData['path']['channel_id'],
-        requestBody: ChannelsV3ApiSpecs.PostChannelsChannelIdMetafieldsData['body'],
+    createChannelMetafield(
+        channelId: ChannelsV3ApiSpecs.CreateChannelMetafieldData['path']['channel_id'],
+        requestBody: ChannelsV3ApiSpecs.CreateChannelMetafieldData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.PostChannelsChannelIdMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.CreateChannelMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.CreateChannelMetafieldErrors[400]>> | RequestErrorResponse<409, Required<ChannelsV3ApiSpecs.CreateChannelMetafieldErrors[409]>> | RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.CreateChannelMetafieldErrors[422]>>)>({
             path: `v3/channels/${channelId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
@@ -493,47 +405,33 @@ export class ChannelsV3Api {
     }
 
     /**
-     * @deprecated Use `postChannelsChannelIdMetafields` instead.
-     */
-    createChannelMetafield(...args: Parameters<ChannelsV3Api['postChannelsChannelIdMetafields']>) {
-        return this.postChannelsChannelIdMetafields(...args);
-    }
-
-    /**
-     * Get a Channel Metafield
+     * Get Channel Metafield
      *
      * Returns a single channel metafield.
      */
-    getChannelsChannelIdMetafieldsMetafieldId(
-        channelId: ChannelsV3ApiSpecs.GetChannelsChannelIdMetafieldsMetafieldIdData['path']['channel_id'],
-        metafieldId: ChannelsV3ApiSpecs.GetChannelsChannelIdMetafieldsMetafieldIdData['path']['metafield_id'],
+    getChannelMetafield(
+        channelId: ChannelsV3ApiSpecs.GetChannelMetafieldData['path']['channel_id'],
+        metafieldId: ChannelsV3ApiSpecs.GetChannelMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelsChannelIdMetafieldsMetafieldIdResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelMetafieldResponses[200]>>,RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.GetChannelMetafieldErrors[404]>>>({
             path: `v3/channels/${channelId}/metafields/${metafieldId}`,
         });
     }
 
     /**
-     * @deprecated Use `getChannelsChannelIdMetafieldsMetafieldId` instead.
-     */
-    getChannelMetafield(...args: Parameters<ChannelsV3Api['getChannelsChannelIdMetafieldsMetafieldId']>) {
-        return this.getChannelsChannelIdMetafieldsMetafieldId(...args);
-    }
-
-    /**
-     * Update a Channel Metafield
+     * Update Channel Metafield
      *
      * Updates a single channel metafield.
 
      **Usage Notes**
      * Attempting to modify `namespace`, `key`, and `permission_set` fields using a client ID different from the one used to create those metafields will result in a `403` error message. 
      */
-    putChannelsChannelIdMetafieldsMetafieldId(
-        channelId: ChannelsV3ApiSpecs.PutChannelsChannelIdMetafieldsMetafieldIdData['path']['channel_id'],
-        metafieldId: ChannelsV3ApiSpecs.PutChannelsChannelIdMetafieldsMetafieldIdData['path']['metafield_id'],
-        requestBody: ChannelsV3ApiSpecs.PutChannelsChannelIdMetafieldsMetafieldIdData['body'],
+    updateChannelMetafield(
+        channelId: ChannelsV3ApiSpecs.UpdateChannelMetafieldData['path']['channel_id'],
+        metafieldId: ChannelsV3ApiSpecs.UpdateChannelMetafieldData['path']['metafield_id'],
+        requestBody: ChannelsV3ApiSpecs.UpdateChannelMetafieldData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.PutChannelsChannelIdMetafieldsMetafieldIdResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.UpdateChannelMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<ChannelsV3ApiSpecs.UpdateChannelMetafieldErrors[400]>> | RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.UpdateChannelMetafieldErrors[404]>>)>({
             path: `v3/channels/${channelId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -541,30 +439,134 @@ export class ChannelsV3Api {
     }
 
     /**
-     * @deprecated Use `putChannelsChannelIdMetafieldsMetafieldId` instead.
-     */
-    updateChannelMetafield(...args: Parameters<ChannelsV3Api['putChannelsChannelIdMetafieldsMetafieldId']>) {
-        return this.putChannelsChannelIdMetafieldsMetafieldId(...args);
-    }
-
-    /**
-     * Delete a Channel Metafield
+     * Delete Channel Metafield
      *
      * Deletes a single channel metafield.
      */
-    deleteChannelsChannelIdMetafieldsMetafieldId(
-        channelId: ChannelsV3ApiSpecs.DeleteChannelsChannelIdMetafieldsMetafieldIdData['path']['channel_id'],
-        metafieldId: ChannelsV3ApiSpecs.DeleteChannelsChannelIdMetafieldsMetafieldIdData['path']['metafield_id'],
+    deleteChannelMetafield(
+        channelId: ChannelsV3ApiSpecs.DeleteChannelMetafieldData['path']['channel_id'],
+        metafieldId: ChannelsV3ApiSpecs.DeleteChannelMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<ChannelsV3ApiSpecs.DeleteChannelsChannelIdMetafieldsMetafieldIdResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ChannelsV3ApiSpecs.DeleteChannelMetafieldResponses[204]>>,RequestErrorResponse<404, Required<ChannelsV3ApiSpecs.DeleteChannelMetafieldErrors[404]>>>({
             path: `v3/channels/${channelId}/metafields/${metafieldId}`,
         });
     }
 
     /**
-     * @deprecated Use `deleteChannelsChannelIdMetafieldsMetafieldId` instead.
+     * Get Channel Site
+     *
+     * Alias of `GET /sites?channel_id=channel_id`
+
+     Returns site data for the specified channel.
+
+     <Callout type="info">
+       For the "urls" object, we no longer modify the `www` prefix of the primary URL. The API returns URLs exactly as the customer enters them, similar to the "url" field.
+
+         * If the customer saves a URL with `www`, the API returns it with `www`.
+         * If the customer saves a URL without `www`, the API returns it without `www`.
+     </Callout>
+
      */
-    deleteChannelMetafield(...args: Parameters<ChannelsV3Api['deleteChannelsChannelIdMetafieldsMetafieldId']>) {
-        return this.deleteChannelsChannelIdMetafieldsMetafieldId(...args);
+    getChannelSite(
+        channelId: ChannelsV3ApiSpecs.GetChannelSiteData['path']['channel_id'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.GetChannelSiteResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/channels/${channelId}/site`,
+        });
+    }
+
+    /**
+     * Create Channel Site
+     *
+     * Alias of POST `/sites`. Creates a site for provided channel.
+
+      <Callout type="info">
+         For the "urls" object, we no longer modify the `www` prefix of the primary URL. The API returns URLs exactly as the customer enters them, similar to the "url" field.
+
+           * If the customer saves a URL with `www`, the API returns it with `www`.
+           * If the customer saves a URL without `www`, the API returns it without `www`.
+       </Callout>
+     */
+    createChannelSite(
+        channelId: ChannelsV3ApiSpecs.CreateChannelSiteData['path']['channel_id'],
+        requestBody: ChannelsV3ApiSpecs.CreateChannelSiteData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.CreateChannelSiteResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/channels/${channelId}/site`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Update Channel Site
+     *
+     * Updates a site for provided channel.
+
+       <Callout type="info">
+         For the "urls" object, we no longer modify the `www` prefix of the primary URL. The API returns URLs exactly as the customer enters them, similar to the "url" field.
+
+           * If the customer saves a URL with `www`, the API returns it with `www`.
+           * If the customer saves a URL without `www`, the API returns it without `www`.
+       </Callout>
+     */
+    updateChannelSite(
+        channelId: ChannelsV3ApiSpecs.UpdateChannelSiteData['path']['channel_id'],
+        requestBody: ChannelsV3ApiSpecs.UpdateChannelSiteData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.UpdateChannelSiteResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/channels/${channelId}/site`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete Channel Site
+     *
+     * Deletes the Channelʼs site.
+     */
+    deleteChannelSite(
+        channelId: ChannelsV3ApiSpecs.DeleteChannelSiteData['path']['channel_id'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.DeleteChannelSiteResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/channels/${channelId}/site`,
+        });
+    }
+
+    /**
+     * Upsert Siteʼs Checkout URL
+     *
+     * Creates or updates (upserts) a siteʼs checkout URL
+
+     <Callout type="info">
+         For the "urls" object, we no longer modify the `www` prefix of the primary URL. The API returns URLs exactly as the customer enters them, similar to the "url" field.
+
+           * If the customer saves a URL with `www`, the API returns it with `www`.
+           * If the customer saves a URL without `www`, the API returns it without `www`.
+       </Callout>
+     */
+    updateCheckoutUrl(
+        channelId: ChannelsV3ApiSpecs.UpdateCheckoutUrlData['path']['channel_id'],
+        requestBody: ChannelsV3ApiSpecs.UpdateCheckoutUrlData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.UpdateCheckoutUrlResponses[200]>>,RequestErrorResponse<422, Required<ChannelsV3ApiSpecs.UpdateCheckoutUrlErrors[422]>>>({
+            path: `v3/channels/${channelId}/site/checkout-url`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete Siteʼs Checkout URL
+     *
+     * Deletes a siteʼs checkout URL. After deletion, a shared checkout URL is used.
+     */
+    deleteCheckoutUrl(
+        channelId: ChannelsV3ApiSpecs.DeleteCheckoutUrlData['path']['channel_id'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<200, Required<ChannelsV3ApiSpecs.DeleteCheckoutUrlResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/channels/${channelId}/site/checkout-url`,
+        });
     }
 }

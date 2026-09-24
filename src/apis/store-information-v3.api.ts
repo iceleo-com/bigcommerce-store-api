@@ -11,7 +11,7 @@ export class StoreInformationV3Api {
     }
 
     /**
-     * Get All Store Metafields
+     * List Store Metafields
      *
      * Gets all store `metafields`.
      */
@@ -25,7 +25,7 @@ export class StoreInformationV3Api {
     }
 
     /**
-     * Create multiple Metafields
+     * Create Multiple Metafields
      *
      * Create multiple `metafields`.
      */
@@ -40,7 +40,7 @@ export class StoreInformationV3Api {
     }
 
     /**
-     * Update multiple metafields
+     * Update Multiple Metafields
      *
      * Update multiple metafields.
      */
@@ -55,14 +55,14 @@ export class StoreInformationV3Api {
     }
 
     /**
-     * Delete multiple metafields
+     * Delete Multiple Metafields
      *
      * Delete all store metafields.
      */
     deleteStoreMetafields(
         requestBody: StoreInformationV3ApiSpecs.DeleteStoreMetafieldsData['body'],
     ) {
-        return this.request.delete<RequestSuccessResponse<200, Required<StoreInformationV3ApiSpecs.DeleteStoreMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<200, Required<StoreInformationV3ApiSpecs.DeleteStoreMetafieldsResponses[200]>>,RequestErrorResponse<422, Required<StoreInformationV3ApiSpecs.DeleteStoreMetafieldsErrors[422]>>>({
             path: 'v3/store/metafields',
             contentType: 'application/json',
             body: requestBody,
@@ -70,7 +70,7 @@ export class StoreInformationV3Api {
     }
 
     /**
-     * Get a Store Metafield
+     * Get Store Metafield
      *
      * Gets a store `metafield`.
      */
@@ -83,7 +83,7 @@ export class StoreInformationV3Api {
     }
 
     /**
-     * Update a Store Metafield
+     * Update Store Metafield
      *
      * Update a store `Metafield`.
 
@@ -100,7 +100,7 @@ export class StoreInformationV3Api {
     }
 
     /**
-     * Delete a Metafield
+     * Delete Metafield
      *
      * Deletes a store `Metafield`.
 

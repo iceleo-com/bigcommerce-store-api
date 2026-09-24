@@ -75,6 +75,72 @@ function snakeCase(str) {
         .replace(/[\W_]+/g, '_');
 }
 
+// the docs specs use placeholder hosts where the host is store/app specific
+const serverHosts = {
+    'https://your_store.example.com': 'https://{store_domain}',
+    'https://your_app.example.com': 'https://{app_domain}',
+};
+
+// operation ids whose short name was reused upstream for a different endpoint,
+// renamed so existing method names keep calling the same endpoint
+const operationIdOverrides = {};
+
+// Normalize a spec from docs.bigcommerce.com before generating from it:
+// - move `/stores/{store_hash}/vN` from the paths into the server URL
+// - drop the `store_hash` path parameter (the request service adds the store hash)
+// - drop the tag prefix from operation ids (`brands_getBrand` -> `getBrand`)
+function normalizeSpec(spec, overrides = {}) {
+    const server = spec.servers && spec.servers[0];
+    if (server && serverHosts[server.url]) {
+        server.url = serverHosts[server.url];
+    }
+
+    const operations = [];
+    const paths = {};
+
+    for (const [specPath, pathDetails] of Object.entries(spec.paths || {})) {
+        const match = specPath.match(/^\/stores\/\{store_hash\}(\/v\d+)(\/.*)$/);
+        if (match && server) {
+            server.url = `${server.url.replace(/\/+$/, '')}/stores/{store_hash}${match[1]}`;
+        }
+
+        paths[match ? match[2] : specPath] = pathDetails;
+
+        for (const [key, details] of Object.entries(pathDetails)) {
+            if (Array.isArray(details) && key === 'parameters') {
+                pathDetails[key] = details.filter((parameter) => parameter.name !== 'store_hash');
+            }
+
+            if (!validHttpMethods.includes(key) || typeof details !== 'object') {
+                continue;
+            }
+
+            if (Array.isArray(details.parameters)) {
+                details.parameters = details.parameters.filter((parameter) => parameter.name !== 'store_hash');
+            }
+
+            if (overrides[details.operationId]) {
+                details.operationId = overrides[details.operationId];
+            }
+
+            operations.push(details);
+        }
+    }
+
+    spec.paths = paths;
+
+    const shortIds = operations.map((operation) => (operation.operationId || '').replace(/^[A-Za-z0-9]+_/, ''));
+    operations.forEach((operation, index) => {
+        const shortId = shortIds[index];
+        // keep the prefix when dropping it would collide with another operation
+        if (shortId && shortIds.filter((id) => id.toLowerCase() === shortId.toLowerCase()).length === 1) {
+            operation.operationId = shortId;
+        }
+    });
+
+    return spec;
+}
+
 async function main() {
     const basePath = process.cwd();
     const referencePath = path.join(basePath, 'reference');
@@ -141,7 +207,10 @@ async function main() {
 
         const results = await createClient({
             client: '@hey-api/client-fetch',
-            input: file,
+            input: normalizeSpec(
+                yaml.parse(fs.readFileSync(file, 'utf8'), { maxAliasCount: -1 }),
+                operationIdOverrides[fileName],
+            ),
             output: {
                 path: generatedOutput,
                 clean: true,

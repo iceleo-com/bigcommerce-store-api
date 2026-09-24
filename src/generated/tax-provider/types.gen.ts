@@ -5,54 +5,7 @@ export type ClientOptions = {
 };
 
 /**
- * ItemRequest
- *
- * An **ItemRequest** represents required information relating to completing tax calculations for a specific line item.
- */
-export type RequestItem = {
-    /**
-     * A unique identifier for this item used to map responses back to the corresponding item on the order.
-     */
-    id: string;
-    /**
-     * The UPC or SKU of the item. The UPC is used when both UPC and SKU values are available on the item. Empty string if both UPC and SKU are not available.
-     */
-    item_code?: string;
-    /**
-     * The SKU of the item. Empty string if SKU is not available.
-     */
-    item_reference?: string;
-    /**
-     * A display name for this item.
-     */
-    name?: string;
-    /**
-     * The final sale price (after discounts, bulk pricing, price lists, etc.) prior to having taxes calculated. If the merchant lists prices inclusive of tax, this price will already be tax inclusive, and so the tax provider will instead calculate the amount of tax that was already included in this price. For multiple quantities, this price includes that multiplication.
-     */
-    price: {
-        /**
-         * Note: This amount will be **negative** for order-level refunds and may be **zero** for line item refunds.
-         */
-        amount: number;
-        /**
-         * Note: **Tax Inclusive** and **Tax Exclusive** prices cannot be added together.
-         */
-        tax_inclusive: boolean;
-    };
-    quantity: number;
-    tax_class?: TaxClass;
-    /**
-     * Flag whether or not this item is always tax-exempt. For example, gift certificate purchases and order-level refunds are tax-exempt. Tax-exempt items are included in the request for auditing purposes.
-     */
-    tax_exempt?: boolean;
-    /**
-     * Merchants may opt to include additional properties that a tax provider can choose to support, factoring these values into tax calculation.
-     */
-    tax_properties?: Array<RequestItemTaxProperty>;
-};
-
-/**
- * TaxProperty
+ * request-item-tax-property
  *
  * A simple key value pairing allowing merchants to provide an additional input into a tax providerʼs tax calculation.
  */
@@ -68,98 +21,37 @@ export type RequestItemTaxProperty = {
 };
 
 /**
- * DocumentRequest
+ * RequestQuoteCustomer
  *
- * Each **DocumentRequest** represents an order or part of an order of items fulfilled from a single origin address to a single destination address. In addition to shipping and billing details, a document request includes the collection of items in the shipment, with tax-relevant information for each item. Multi-address orders, in which items ship to or from multiple addresses, require at least one **DocumentRequest** per combination of sender-recipient addresses. These are similar to "consignments" or "shipments" in other BigCommerce APIs.
+ * If the shopper is a registered customer in the merchant’s store, basic details for that customer.
  */
-export type RequestDocument = {
+export type RequestQuoteCustomer = {
     /**
-     * A unique identifier for this consignment. This value can be expected to be unique within an individual quote request but may be duplicated within subsequent quote requests. A digital consignment will see a prefix **DigitalDelivery_** followed by the Order ID.
+     * The ID of the shoppers customer account in BigCommerce. May be provided as a UUID.
      */
-    id: string;
-    billing_address?: Address;
-    destination_address: Address;
-    origin_address: Address;
+    customer_id: string;
     /**
-     * Shipping line item present in each document request.
+     * The BigCommerce customer group ID assigned to this customer. The default value will be provided if the customer has no group assigned. May be provided as a UUID.
      */
-    shipping: RequestItem & {
-        type: ShippingType;
-    };
+    customer_group_id: string;
     /**
-     * Handling line item present in each document request.
+     * If applicable, the tax exemption code of the shopper’s customer account. A taxability code is intended to apply to multiple customers. This code should match the exemption codes provided by the third-party integration.
      */
-    handling: RequestItem & {
-        type: HandlingType;
-    };
+    taxability_code?: string;
     /**
-     * Collection of one or more items contained within this consignment that need to be assessed for tax liabilities. An item may or may not have gift wrapping.
+     * Any tax property values that have been associated with this customer. See [Tax Properties API](/developer/api-reference/rest/admin/management/tax/tax-properties) for more information on configuring tax properties.
      */
-    items: Array<RequestItem & {
-        type: ItemType;
-        /**
-         * Optional gift wrapping for items in the consignment.
-         */
-        wrapping?: (RequestItem & {
-            type: WrappingType;
-        }) | null;
-    }>;
+    tax_properties?: Array<RequestItemTaxProperty>;
 };
 
 /**
- * QuoteRequest
- *
- * Each **QuoteRequest** represents an order. In addition to transaction details, it contains a `documents` array of one or more **DocumentRequest** objects, which represent distinct combinations of origin and fulfillment addresses and the tax-relevant contents of those consignments. This is similar to an "order" in other BigCommerce APIs.
+ * AddressType
  */
-export type RequestQuote = {
-    /**
-     * Unique ID of the taxable document (order, cart, quote, etc) this tax quote request is being generated for. Will remain consistent for the lifetime of the entity being estimated.
-     */
-    id: string;
-    /**
-     * ISO 4217 3 character currency code that all prices on this request are in.
-     */
-    currency_code: string;
-    /**
-     * If the shopper is a registered customer in the merchant’s store, basic details for that customer.
-     */
-    customer: {
-        /**
-         * The ID of the shoppers customer account in BigCommerce. May be provided as a UUID.
-         */
-        customer_id: string;
-        /**
-         * The BigCommerce customer group ID assigned to this customer. The default value will be provided if the customer has no group assigned. May be provided as a UUID.
-         */
-        customer_group_id: string;
-        /**
-         * If applicable, the tax exemption code of the shopper’s customer account. A taxability code is intended to apply to multiple customers. This code should match the exemption codes provided by the third-party integration.
-         */
-        taxability_code?: string;
-    };
-    /**
-     * ISO 8601 formatted date the shopper placed this order. Dates will be provided in UTC.
-     */
-    transaction_date: string;
-    /**
-     * One or more consignments containing items being purchased by the shopper, including shipping and handling fees that are charged for each consignment. Most orders will contain a single consignment (to a single shipping address), however the BigCommerce platform also supports "Multi-address orders" which allow shoppers to place a single order with items shipped to different addresses.
-     */
-    documents: Array<RequestDocument>;
-};
+export type AddressType = 'RESIDENTIAL' | 'COMMERCIAL';
 
 /**
- * AdjustRequest
+ * Address
  *
- * An **AdjustRequest** contains the same data as a standard **QuoteRequest** with added detail of the adjustment operation.
- */
-export type RequestAdjust = {
-    /**
-     * Specifies the reason for the adjustment operation, for auditing purposes. May be a custom, user-entered description.
-     */
-    adjust_description?: string;
-} & RequestQuote;
-
-/**
  * Requests may have partial Address data. For example, the BigCommerce Cart page has the "Estimate Shipping & Tax" feature which is only expected to supply Country, Region and Postal Code.
  */
 export type Address = {
@@ -201,12 +93,31 @@ export type Address = {
      * @deprecated
      */
     company_name?: string;
-    type?: 'RESIDENTIAL' | 'COMMERCIAL';
+    type?: AddressType;
 };
 
+/**
+ * RequestDocumentShippingPrice
+ *
+ * The final sale price (after discounts, bulk pricing, price lists, etc.) prior to having taxes calculated. If the merchant lists prices inclusive of tax, this price will already be tax inclusive, and so the tax provider will instead calculate the amount of tax that was already included in this price. For multiple quantities, this price includes that multiplication.
+ */
+export type RequestDocumentShippingPrice = {
+    /**
+     * Note: This amount will be **negative** for order-level refunds and may be **zero** for line item refunds.
+     */
+    amount: number;
+    /**
+     * Note: **Tax Inclusive** and **Tax Exclusive** prices cannot be added together.
+     */
+    tax_inclusive: boolean;
+};
+
+/**
+ * TaxClass
+ */
 export type TaxClass = {
     /**
-     * The provider-specific tax code for this item. Items can be classified with tax codes relevant to each Tax Provider, configured by the merchant, and assigned to their products within BigCommerce. A tax code is intended to apply to multiple products. This code should match the tax codes provided by the third-party integration.
+     * The provider-specific tax code for this item. Items can be classified with tax codes relevant to each tax provider, configured by the merchant, and assigned to their products within BigCommerce. A tax code is intended to apply to multiple products. This code should match the tax codes provided by the third-party integration.
      */
     code: string;
     /**
@@ -220,21 +131,426 @@ export type TaxClass = {
 };
 
 /**
- * Quote
+ * shipping_type
+ *
+ * The type of item for the line item in the document.
  */
-export type ResponseQuote = {
+export type ShippingType = 'shipping';
+
+/**
+ * RequestDocumentShipping
+ *
+ * Shipping line item present in each document request.
+ */
+export type RequestDocumentShipping = {
     /**
-     * The unique identifier of the tax quote that was requested. This must match the ID of the requested quote.
+     * A unique identifier for this item used to map responses back to the corresponding item on the order.
      */
     id: string;
     /**
-     * Represents an order quote or part of an order quote of tax-relevant items fulfilled from a single origin address to a single destination address, including arrays of shipping and handling fee objects for each item. Most order quotes contain a single document; however, BigCommerce supports "multi-address orders", which may come from or go to distinct sets of addresses and thus require multiple documents per quote.
+     * The UPC or SKU of the item. The UPC is used when both UPC and SKU values are available on the item. Empty string if both UPC and SKU are not available.
      */
-    documents: Array<ResponseDocument>;
+    item_code?: string;
+    /**
+     * The SKU of the item. Empty string if SKU is not available.
+     */
+    item_reference?: string;
+    /**
+     * A display name for this item.
+     */
+    name?: string;
+    /**
+     * The final sale price (after discounts, bulk pricing, price lists, etc.) prior to having taxes calculated. If the merchant lists prices inclusive of tax, this price will already be tax inclusive, and so the tax provider will instead calculate the amount of tax that was already included in this price. For multiple quantities, this price includes that multiplication.
+     */
+    price: RequestDocumentShippingPrice;
+    quantity: number;
+    tax_class?: TaxClass;
+    /**
+     * Flag whether or not this item is always tax-exempt. For example, gift certificate purchases and order-level refunds are tax-exempt. Tax-exempt items are included in the request for auditing purposes. Tax-exempt items must have a tax amount of zero within the tax quote response.
+     */
+    tax_exempt?: boolean;
+    /**
+     * Merchants may opt to include additional properties that a tax provider can choose to support, factoring these values into tax calculation. See [Tax Properties API](/developer/api-reference/rest/admin/management/tax/tax-properties) for more information on configuring tax properties.
+     */
+    tax_properties?: Array<RequestItemTaxProperty>;
+    type: ShippingType;
 };
 
 /**
- * Document
+ * RequestDocumentHandlingPrice
+ *
+ * The final sale price (after discounts, bulk pricing, price lists, etc.) prior to having taxes calculated. If the merchant lists prices inclusive of tax, this price will already be tax inclusive, and so the tax provider will instead calculate the amount of tax that was already included in this price. For multiple quantities, this price includes that multiplication.
+ */
+export type RequestDocumentHandlingPrice = {
+    /**
+     * Note: This amount will be **negative** for order-level refunds and may be **zero** for line item refunds.
+     */
+    amount: number;
+    /**
+     * Note: **Tax Inclusive** and **Tax Exclusive** prices cannot be added together.
+     */
+    tax_inclusive: boolean;
+};
+
+/**
+ * handling_type
+ *
+ * The type of item for the line item in the document.
+ */
+export type HandlingType = 'handling';
+
+/**
+ * RequestDocumentHandling
+ *
+ * Handling line item present in each document request.
+ */
+export type RequestDocumentHandling = {
+    /**
+     * A unique identifier for this item used to map responses back to the corresponding item on the order.
+     */
+    id: string;
+    /**
+     * The UPC or SKU of the item. The UPC is used when both UPC and SKU values are available on the item. Empty string if both UPC and SKU are not available.
+     */
+    item_code?: string;
+    /**
+     * The SKU of the item. Empty string if SKU is not available.
+     */
+    item_reference?: string;
+    /**
+     * A display name for this item.
+     */
+    name?: string;
+    /**
+     * The final sale price (after discounts, bulk pricing, price lists, etc.) prior to having taxes calculated. If the merchant lists prices inclusive of tax, this price will already be tax inclusive, and so the tax provider will instead calculate the amount of tax that was already included in this price. For multiple quantities, this price includes that multiplication.
+     */
+    price: RequestDocumentHandlingPrice;
+    quantity: number;
+    tax_class?: TaxClass;
+    /**
+     * Flag whether or not this item is always tax-exempt. For example, gift certificate purchases and order-level refunds are tax-exempt. Tax-exempt items are included in the request for auditing purposes. Tax-exempt items must have a tax amount of zero within the tax quote response.
+     */
+    tax_exempt?: boolean;
+    /**
+     * Merchants may opt to include additional properties that a tax provider can choose to support, factoring these values into tax calculation. See [Tax Properties API](/developer/api-reference/rest/admin/management/tax/tax-properties) for more information on configuring tax properties.
+     */
+    tax_properties?: Array<RequestItemTaxProperty>;
+    type: HandlingType;
+};
+
+/**
+ * RequestDocumentItemsItemsPrice
+ *
+ * The final sale price (after discounts, bulk pricing, price lists, etc.) prior to having taxes calculated. If the merchant lists prices inclusive of tax, this price will already be tax inclusive, and so the tax provider will instead calculate the amount of tax that was already included in this price. For multiple quantities, this price includes that multiplication.
+ */
+export type RequestDocumentItemsItemsPrice = {
+    /**
+     * Note: This amount will be **negative** for order-level refunds and may be **zero** for line item refunds.
+     */
+    amount: number;
+    /**
+     * Note: **Tax Inclusive** and **Tax Exclusive** prices cannot be added together.
+     */
+    tax_inclusive: boolean;
+};
+
+/**
+ * item_type
+ *
+ * The type of item for the line item in the document.
+ *
+ * Tax estimate requests for order-level refunds have an additional line item with the type `refund`.
+ */
+export type ItemType = 'item' | 'refund' | 'fee';
+
+/**
+ * RequestDocumentItemsItemsWrappingPrice
+ *
+ * The final sale price (after discounts, bulk pricing, price lists, etc.) prior to having taxes calculated. If the merchant lists prices inclusive of tax, this price will already be tax inclusive, and so the tax provider will instead calculate the amount of tax that was already included in this price. For multiple quantities, this price includes that multiplication.
+ */
+export type RequestDocumentItemsItemsWrappingPrice = {
+    /**
+     * Note: This amount will be **negative** for order-level refunds and may be **zero** for line item refunds.
+     */
+    amount: number;
+    /**
+     * Note: **Tax Inclusive** and **Tax Exclusive** prices cannot be added together.
+     */
+    tax_inclusive: boolean;
+};
+
+/**
+ * wrapping_type
+ *
+ * The type of item for the line item in the document.
+ */
+export type WrappingType = 'wrapping';
+
+/**
+ * RequestDocumentItemsItemsWrapping
+ *
+ * Optional gift wrapping for items in the consignment.
+ */
+export type RequestDocumentItemsItemsWrapping = {
+    /**
+     * A unique identifier for this item used to map responses back to the corresponding item on the order.
+     */
+    id: string;
+    /**
+     * The UPC or SKU of the item. The UPC is used when both UPC and SKU values are available on the item. Empty string if both UPC and SKU are not available.
+     */
+    item_code?: string;
+    /**
+     * The SKU of the item. Empty string if SKU is not available.
+     */
+    item_reference?: string;
+    /**
+     * A display name for this item.
+     */
+    name?: string;
+    /**
+     * The final sale price (after discounts, bulk pricing, price lists, etc.) prior to having taxes calculated. If the merchant lists prices inclusive of tax, this price will already be tax inclusive, and so the tax provider will instead calculate the amount of tax that was already included in this price. For multiple quantities, this price includes that multiplication.
+     */
+    price: RequestDocumentItemsItemsWrappingPrice;
+    quantity: number;
+    tax_class?: TaxClass;
+    /**
+     * Flag whether or not this item is always tax-exempt. For example, gift certificate purchases and order-level refunds are tax-exempt. Tax-exempt items are included in the request for auditing purposes. Tax-exempt items must have a tax amount of zero within the tax quote response.
+     */
+    tax_exempt?: boolean;
+    /**
+     * Merchants may opt to include additional properties that a tax provider can choose to support, factoring these values into tax calculation. See [Tax Properties API](/developer/api-reference/rest/admin/management/tax/tax-properties) for more information on configuring tax properties.
+     */
+    tax_properties?: Array<RequestItemTaxProperty>;
+    type: WrappingType;
+};
+
+/**
+ * RequestDocumentItemsItems
+ *
+ * An **ItemRequest** represents required information relating to completing tax calculations for a specific line item.
+ */
+export type RequestDocumentItemsItems = {
+    /**
+     * A unique identifier for this item used to map responses back to the corresponding item on the order.
+     */
+    id: string;
+    /**
+     * The UPC or SKU of the item. The UPC is used when both UPC and SKU values are available on the item. Empty string if both UPC and SKU are not available.
+     */
+    item_code?: string;
+    /**
+     * The SKU of the item. Empty string if SKU is not available.
+     */
+    item_reference?: string;
+    /**
+     * A display name for this item.
+     */
+    name?: string;
+    /**
+     * The final sale price (after discounts, bulk pricing, price lists, etc.) prior to having taxes calculated. If the merchant lists prices inclusive of tax, this price will already be tax inclusive, and so the tax provider will instead calculate the amount of tax that was already included in this price. For multiple quantities, this price includes that multiplication.
+     */
+    price: RequestDocumentItemsItemsPrice;
+    quantity: number;
+    tax_class?: TaxClass;
+    /**
+     * Flag whether or not this item is always tax-exempt. For example, gift certificate purchases and order-level refunds are tax-exempt. Tax-exempt items are included in the request for auditing purposes. Tax-exempt items must have a tax amount of zero within the tax quote response.
+     */
+    tax_exempt?: boolean;
+    /**
+     * Merchants may opt to include additional properties that a tax provider can choose to support, factoring these values into tax calculation. See [Tax Properties API](/developer/api-reference/rest/admin/management/tax/tax-properties) for more information on configuring tax properties.
+     */
+    tax_properties?: Array<RequestItemTaxProperty>;
+    type: ItemType;
+    /**
+     * Optional gift wrapping for items in the consignment.
+     */
+    wrapping?: RequestDocumentItemsItemsWrapping;
+};
+
+/**
+ * RequestDocumentDeliveryType
+ *
+ * The method by which the items in this consignment are delivered to the shopper. Digital consignments are always `digital`; physical consignments use the fulfillment method selected at checkout.
+ */
+export type RequestDocumentDeliveryType = 'digital' | 'pickup' | 'courier' | 'postal';
+
+/**
+ * request-document
+ *
+ * Each **DocumentRequest** represents an order or part of an order of items fulfilled from a single origin address to a single destination address. In addition to shipping and billing details, a document request includes the collection of items in the shipment, with tax-relevant information for each item. Multi-address orders, in which items ship to or from multiple addresses, require at least one **DocumentRequest** per combination of sender-recipient addresses. These are similar to "consignments" or "shipments" in other BigCommerce APIs.
+ */
+export type RequestDocument = {
+    /**
+     * A unique identifier for this consignment. This value can be expected to be unique within an individual quote request but may be duplicated within subsequent quote requests. A digital consignment will see a prefix **DigitalDelivery_** followed by the Order ID.
+     */
+    id: string;
+    billing_address?: Address;
+    destination_address: Address;
+    origin_address: Address;
+    /**
+     * Shipping line item present in each document request.
+     */
+    shipping: RequestDocumentShipping;
+    /**
+     * Handling line item present in each document request.
+     */
+    handling: RequestDocumentHandling;
+    /**
+     * Collection of one or more items contained within this consignment that need to be assessed for tax liabilities. An item may or may not have gift wrapping.
+     */
+    items: Array<RequestDocumentItemsItems>;
+    /**
+     * The method by which the items in this consignment are delivered to the shopper. Digital consignments are always `digital`; physical consignments use the fulfillment method selected at checkout.
+     */
+    delivery_type: RequestDocumentDeliveryType;
+};
+
+/**
+ * request-quote
+ *
+ * Each **QuoteRequest** represents an order. In addition to transaction details, it contains a `documents` array of one or more **DocumentRequest** objects, which represent distinct combinations of origin and fulfillment addresses and the tax-relevant contents of those consignments. This is similar to an "order" in other BigCommerce APIs.
+ */
+export type RequestQuote = {
+    /**
+     * Unique ID of the taxable document (order, cart, quote, etc) this tax quote request is being generated for. Will remain consistent for the lifetime of the entity being estimated.
+     */
+    id: string;
+    /**
+     * ISO 4217 3 character currency code that all prices on this request are in.
+     */
+    currency_code: string;
+    /**
+     * If the shopper is a registered customer in the merchant’s store, basic details for that customer.
+     */
+    customer: RequestQuoteCustomer;
+    /**
+     * ISO 8601 formatted date the shopper placed this order. Tax quotes are expected to reflect taxes applicable on this date. Dates will be provided in UTC.
+     */
+    transaction_date: string;
+    /**
+     * One or more consignments containing items being purchased by the shopper, including shipping and handling fees that are charged for each consignment. Most orders will contain a single consignment (to a single shipping address), however the BigCommerce platform also supports "Multi-address orders" which allow shoppers to place a single order with items shipped to different addresses.
+     */
+    documents: Array<RequestDocument>;
+};
+
+/**
+ * SalesTax
+ */
+export type SalesTax = {
+    /**
+     * The human-readable name of this tax. Used for reporting. Depending on store configuration, may also be visible in the itemization of taxes at checkout, on invoices, and in the control panel. May not be empty.
+     */
+    name: string;
+    /**
+     * Decimal tax rate applied by this component tax rate. Tax rates support up to four decimal places. For example "0.1" for 10% and "0.0125" for 1.25%.
+     */
+    rate: number;
+    /**
+     * The absolute amount of tax applied to the item this SalesTax component is attached to, for this component rate. For example, if an item was $10 and this was a 5% component tax rate, the amount would be 0.50 (50 cents)
+     */
+    amount: number;
+    tax_class?: TaxClass;
+    /**
+     * Optional unique identifier for this sales tax, describing the relevant tax classification rule on the tax provider platform.
+     *
+     * Supplying an identifier allows BigCommerce to group related taxes together from all items in the order.
+     *
+     * This identifier is persisted by BigCommerce and may be desirable for auditing purposes between BigCommerce and the tax provider. Currently supports persisting integer values only (the string type indicates we may support UUID values in the future).
+     */
+    id?: string;
+};
+
+/**
+ * response-taxprice
+ */
+export type ResponseTaxprice = {
+    /**
+     * The price of this line item inclusive of tax. Must be equal to **amount_exclusive** + **total_tax**. Although the primary type is `double`, this field also accepts a numeric string (for example, `"675.00"`).
+     */
+    amount_inclusive: number;
+    /**
+     * The price of this line item exclusive of tax. Must be equal to **amount_inclusive** - **total_tax**. Although the primary type is `double`, this field also accepts a numeric string (for example, `"450.00"`).
+     */
+    amount_exclusive: number;
+    /**
+     * The total amount of tax that applied to this line item. Must be equal to **amount_inclusive** - **amount_exclusive**. Although the primary type is `double`, this field also accepts a numeric string (for example, `"225.00"`).
+     */
+    total_tax: number;
+    /**
+     * The total tax rate that applied to this item. This is the aggregated rate of the individual rates in **sales_tax_summary**.
+     */
+    tax_rate: number;
+    /**
+     * Breakdown of the sales taxes that applied to this item.
+     */
+    sales_tax_summary: Array<SalesTax>;
+};
+
+/**
+ * ResponseDocumentItemsItemsWrapping
+ *
+ * Optional gift wrapping for items in the consignment.
+ */
+export type ResponseDocumentItemsItemsWrapping = {
+    /**
+     * A unique identifier for the line item these tax liabilities are calculated for. Must match the corresponding request line item ID.
+     */
+    id: string;
+    price: ResponseTaxprice;
+    type: WrappingType;
+};
+
+/**
+ * ResponseDocumentItemsItems
+ *
+ * The tax liabilities calculated for a specific item.
+ *
+ * Note: Tax liabilities should be calculated with **quantity** accounted for.
+ */
+export type ResponseDocumentItemsItems = {
+    /**
+     * A unique identifier for the line item these tax liabilities are calculated for. Must match the corresponding request line item ID.
+     */
+    id: string;
+    price: ResponseTaxprice;
+    type: ItemType;
+    /**
+     * Optional gift wrapping for items in the consignment.
+     */
+    wrapping?: ResponseDocumentItemsItemsWrapping;
+};
+
+/**
+ * ResponseDocumentShipping
+ *
+ * Shipping line item present in each document request.
+ */
+export type ResponseDocumentShipping = {
+    /**
+     * A unique identifier for the line item these tax liabilities are calculated for. Must match the corresponding request line item ID.
+     */
+    id: string;
+    price: ResponseTaxprice;
+    type: ShippingType;
+};
+
+/**
+ * ResponseDocumentHandling
+ *
+ * Handling line item present in each document request.
+ */
+export type ResponseDocumentHandling = {
+    /**
+     * A unique identifier for the line item these tax liabilities are calculated for. Must match the corresponding request line item ID.
+     */
+    id: string;
+    price: ResponseTaxprice;
+    type: HandlingType;
+};
+
+/**
+ * response-document
  */
 export type ResponseDocument = {
     /**
@@ -248,263 +564,240 @@ export type ResponseDocument = {
     /**
      * Collection of items contained within this consignment that have had tax liabilities calculated. An item may or may not have gift wrapping.
      */
-    items: Array<ResponseItem & {
-        type: ItemType;
-        /**
-         * Optional gift wrapping for items in the consignment.
-         */
-        wrapping?: (ResponseItem & {
-            type: WrappingType;
-        }) | null;
-    }>;
+    items: Array<ResponseDocumentItemsItems>;
     /**
      * Shipping line item present in each document request.
      */
-    shipping: ResponseItem & {
-        type: ShippingType;
-    };
+    shipping: ResponseDocumentShipping;
     /**
      * Handling line item present in each document request.
      */
-    handling: ResponseItem & {
-        type: HandlingType;
-    };
+    handling: ResponseDocumentHandling;
 };
 
 /**
- * Item
- *
- * The tax liabilities calculated for a specific item.
- *
- * Note: Tax liabilities should be calculated with **quantity** accounted for.
+ * response-quote
  */
-export type ResponseItem = {
+export type ResponseQuote = {
     /**
-     * A unique identifier for the line item these tax liabilities are calculated for. Must match the corresponding request line item ID.
+     * The unique identifier of the tax quote that was requested. This value must either match the ID of the requested quote or be an external ID on the tax provider’s system. This value will be used for future adjust and void operations.
      */
     id: string;
-    price: ResponseTaxprice;
+    /**
+     * Represents an order quote or part of an order quote of tax-relevant items fulfilled from a single origin address to a single destination address, including arrays of shipping and handling fee objects for each item. Most order quotes contain a single document; however, BigCommerce supports "multi-address orders", which may come from or go to distinct sets of addresses and thus require multiple documents per quote.
+     */
+    documents: Array<ResponseDocument>;
 };
 
 /**
- * TaxPrice
- */
-export type ResponseTaxprice = {
-    /**
-     * The price of this line item inclusive of tax. Must be equal to **amount_exclusive** + **total_tax**.
-     */
-    amount_inclusive: number;
-    /**
-     * The price of this line item exclusive of tax. Must be equal to **amount_inclusive** - **total_tax**.
-     */
-    amount_exclusive: number;
-    /**
-     * The total amount of tax that applied to this line item. Must be equal to **amount_inclusive** - **amount_exclusive**.
-     */
-    total_tax: number;
-    /**
-     * The total tax rate that applied to this item. This is the aggregated rate of the individual rates in **sales_tax_summary**.
-     */
-    tax_rate: number;
-    /**
-     * Breakdown of the sales taxes that applied to this item.
-     */
-    sales_tax_summary: Array<SalesTax>;
-};
-
-export type SalesTax = {
-    /**
-     * The human-readable name of this tax. Used for reporting. Depending on store configuration, may also be visible in the itemization of taxes at checkout, on invoices, and in control panel views. May not be empty.
-     */
-    name: string;
-    /**
-     * Decimal tax rate applied by this component tax rate. Tax rates support up to four decimal places. For example "0.1" for 10% and "0.0125" for 1.25%.
-     */
-    rate: number;
-    /**
-     * The absolute amount of tax applied to the item this SalesTax component is attached to, for this component rate. For example, if an item was $10 and this was a 5% component tax rate, the amount would be 0.50 (50 cents)
-     */
-    amount: number;
-    tax_class?: TaxClass;
-    /**
-     * Optional unique identifier for this sales tax, describing the relevant tax classification rule on the Tax Provider platform.
-     *
-     * Supplying an identifier allows BigCommerce to group related taxes together from all items in the order.
-     *
-     * This identifier is persisted by BigCommerce and may be desirable for auditing purposes between BigCommerce and the Tax Provider. Currently supports persisting integer values only (the string type indicates we may support UUID values in the future).
-     */
-    id?: string;
-};
-
-/**
- * The type of item for the line item in the document.
+ * Tax Provider_voidTaxQuote_Response_200
  *
- * Tax estimate requests for order-level refunds have an additional line item with the type `refund`.
+ * Empty response body
  */
-export type ItemType = 'item' | 'refund';
+export type TaxProviderVoidTaxQuoteResponse200 = {
+    [key: string]: unknown;
+};
 
 /**
- * The type of item for the line item in the document.
+ * RequestAdjustCustomer
+ *
+ * If the shopper is a registered customer in the merchant’s store, basic details for that customer.
  */
-export type ShippingType = 'shipping';
+export type RequestAdjustCustomer = {
+    /**
+     * The ID of the shoppers customer account in BigCommerce. May be provided as a UUID.
+     */
+    customer_id: string;
+    /**
+     * The BigCommerce customer group ID assigned to this customer. The default value will be provided if the customer has no group assigned. May be provided as a UUID.
+     */
+    customer_group_id: string;
+    /**
+     * If applicable, the tax exemption code of the shopper’s customer account. A taxability code is intended to apply to multiple customers. This code should match the exemption codes provided by the third-party integration.
+     */
+    taxability_code?: string;
+    /**
+     * Any tax property values that have been associated with this customer. See [Tax Properties API](/developer/api-reference/rest/admin/management/tax/tax-properties) for more information on configuring tax properties.
+     */
+    tax_properties?: Array<RequestItemTaxProperty>;
+};
 
 /**
- * The type of item for the line item in the document.
+ * request-adjust
+ *
+ * An **AdjustRequest** contains the same data as a standard **QuoteRequest** with added detail of the adjustment operation.
  */
-export type HandlingType = 'handling';
+export type RequestAdjust = {
+    /**
+     * Specifies the reason for the adjustment operation, for auditing purposes. May be a custom, user-entered description.
+     */
+    adjust_description?: string;
+    /**
+     * Unique ID of the taxable document (order, cart, quote, etc) this tax quote request is being generated for. Will remain consistent for the lifetime of the entity being estimated.
+     */
+    id: string;
+    /**
+     * ISO 4217 3 character currency code that all prices on this request are in.
+     */
+    currency_code: string;
+    /**
+     * If the shopper is a registered customer in the merchant’s store, basic details for that customer.
+     */
+    customer: RequestAdjustCustomer;
+    /**
+     * ISO 8601 formatted date the shopper placed this order. Tax quotes are expected to reflect taxes applicable on this date. Dates will be provided in UTC.
+     */
+    transaction_date: string;
+    /**
+     * One or more consignments containing items being purchased by the shopper, including shipping and handling fees that are charged for each consignment. Most orders will contain a single consignment (to a single shipping address), however the BigCommerce platform also supports "Multi-address orders" which allow shoppers to place a single order with items shipped to different addresses.
+     */
+    documents: Array<RequestDocument>;
+};
 
-/**
- * The type of item for the line item in the document.
- */
-export type WrappingType = 'wrapping';
-
-/**
- * BigCommerce will send through the Store Hash as part of all Tax Provider API operations. Each BigCommerce store on the platform has a unique Store Hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
- */
-export type HeaderStorehash = string;
-
-export type EstimateData = {
+export type EstimateTaxesData = {
     /**
      * Estimates may not always contain complete data as these requests will be fired at different stages of the shopper checkout. For example, the **Estimate Shipping & Tax** function on the **Cart** page is not expected to provide any billing address data, but the tax provider will still be expected to return a valid estimate.
      */
-    body: RequestQuote;
+    body?: RequestQuote;
     headers: {
         /**
-         * BigCommerce will send through the Store Hash as part of all Tax Provider API operations. Each BigCommerce store on the platform has a unique Store Hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
+         * BigCommerce will send through the store hash as part of all tax provider operations. Each BigCommerce store on the platform has a unique store hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
          */
-        'X-BC-Store-Hash': string;
+        'X-Bc-Store-Hash': string;
     };
     path?: never;
     query?: never;
     url: '/estimate';
 };
 
-export type EstimateErrors = {
+export type EstimateTaxesErrors = {
     /**
-     * Fallback Tax will be used for this transaction. General response that points to an issue with the incoming request that means a valid response is unable to be returned.
+     * Any type
      */
     400: unknown;
     /**
-     * Response to indicate that the merchant’s authentication credentials are invalid. The merchant will receive an update in their Store Logs.
+     * Any type
      */
     401: unknown;
     /**
-     * Fallback Tax will be used for this transaction. General response that points to an error on the tax provider side. These types of errors should be promptly resolved by the tax provider.
+     * Any type
      */
     500: unknown;
 };
 
-export type EstimateResponses = {
+export type EstimateTaxesResponses = {
     /**
      * Noteworthy is that the estimate response does not contain an **external ID** since there is no expectation that an estimate will result in any persisted tax documents by the tax provider.
      */
     200: ResponseQuote;
 };
 
-export type EstimateResponse = EstimateResponses[keyof EstimateResponses];
+export type EstimateTaxesResponse = EstimateTaxesResponses[keyof EstimateTaxesResponses];
 
-export type VoidData = {
+export type VoidTaxQuoteData = {
     body?: never;
     headers: {
         /**
-         * BigCommerce will send through the Store Hash as part of all Tax Provider API operations. Each BigCommerce store on the platform has a unique Store Hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
+         * BigCommerce will send through the store hash as part of all tax provider operations. Each BigCommerce store on the platform has a unique store hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
          */
-        'X-BC-Store-Hash': string;
+        'X-Bc-Store-Hash': string;
     };
     path?: never;
     query: {
         /**
-         * Unique ID identifying the existing, persisted Tax Quote that will be voided.
+         * Unique ID identifying the existing, persisted tax quote that will be voided.
          */
         id: string;
     };
     url: '/void';
 };
 
-export type VoidErrors = {
+export type VoidTaxQuoteErrors = {
     /**
-     * General response that points to an issue with the incoming request that means a valid response is unable to be returned.
+     * Any type
      */
     400: unknown;
     /**
-     * Response to indicate that the merchant’s authentication credentials are invalid. The merchant will receive an update in their Store Logs.
+     * Any type
      */
     401: unknown;
     /**
-     * General response that points to an error on the tax provider side. These types of errors should be promptly resolved by the tax provider.
+     * Any type
      */
     500: unknown;
 };
 
-export type VoidResponses = {
+export type VoidTaxQuoteResponses = {
     /**
      * OK
      */
-    200: unknown;
+    200: TaxProviderVoidTaxQuoteResponse200;
 };
 
-export type CommitData = {
-    body: RequestQuote;
+export type VoidTaxQuoteResponse = VoidTaxQuoteResponses[keyof VoidTaxQuoteResponses];
+
+export type CommitTaxQuoteData = {
+    body?: RequestQuote;
     headers: {
         /**
-         * BigCommerce will send through the Store Hash as part of all Tax Provider API operations. Each BigCommerce store on the platform has a unique Store Hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
+         * BigCommerce will send through the store hash as part of all tax provider operations. Each BigCommerce store on the platform has a unique store hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
          */
-        'X-BC-Store-Hash': string;
+        'X-Bc-Store-Hash': string;
     };
     path?: never;
     query?: never;
     url: '/commit';
 };
 
-export type CommitErrors = {
+export type CommitTaxQuoteErrors = {
     /**
-     * General response that points to an issue with the incoming request that means a valid response is unable to be returned.
+     * Any type
      */
     400: unknown;
     /**
-     * Response to indicate that the merchant’s authentication credentials are invalid. The merchant will receive an update in their Store Logs.
+     * Any type
      */
     401: unknown;
     /**
-     * General response that points to an error on the tax provider side. These types of errors should be promptly resolved by the tax provider.
+     * Any type
      */
     500: unknown;
 };
 
-export type CommitResponses = {
+export type CommitTaxQuoteResponses = {
     /**
      * OK
      */
     200: ResponseQuote;
 };
 
-export type CommitResponse = CommitResponses[keyof CommitResponses];
+export type CommitTaxQuoteResponse = CommitTaxQuoteResponses[keyof CommitTaxQuoteResponses];
 
-export type AdjustData = {
+export type AdjustTaxQuoteData = {
     body?: RequestAdjust;
     headers: {
         /**
-         * BigCommerce will send through the Store Hash as part of all Tax Provider API operations. Each BigCommerce store on the platform has a unique Store Hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
+         * BigCommerce will send through the store hash as part of all tax provider operations. Each BigCommerce store on the platform has a unique store hash value for the store’s lifetime. This value can assist in account verification or profile matching responsibilities.
          */
-        'X-BC-Store-Hash': string;
+        'X-Bc-Store-Hash': string;
     };
     path?: never;
     query: {
         /**
-         * Unique ID identifying the existing, persisted Tax Quote that will be adjusted.
+         * Unique ID identifying the existing, persisted tax quote that will be adjusted.
          */
         id: string;
     };
     url: '/adjust';
 };
 
-export type AdjustErrors = {
+export type AdjustTaxQuoteErrors = {
     /**
-     * General response that points to an issue with the incoming request that means a valid response is unable to be returned.
+     * Any type
      */
     400: unknown;
     /**
-     * Response to indicate that the merchant’s authentication credentials are invalid. The merchant will receive an update in their Store Logs.
+     * Any type
      */
     401: unknown;
     /**
@@ -513,13 +806,13 @@ export type AdjustErrors = {
     500: ResponseQuote;
 };
 
-export type AdjustError = AdjustErrors[keyof AdjustErrors];
+export type AdjustTaxQuoteError = AdjustTaxQuoteErrors[keyof AdjustTaxQuoteErrors];
 
-export type AdjustResponses = {
+export type AdjustTaxQuoteResponses = {
     /**
      * Returned Tax Quote response matches the updated QuoteRequest provided to the service method.
      */
-    200: RequestAdjust;
+    200: ResponseQuote;
 };
 
-export type AdjustResponse = AdjustResponses[keyof AdjustResponses];
+export type AdjustTaxQuoteResponse = AdjustTaxQuoteResponses[keyof AdjustTaxQuoteResponses];

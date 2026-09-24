@@ -4,50 +4,101 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
 
-export type _Error = {
-    status?: number;
-    message?: string;
-};
+/**
+ * StorefrontCustomTemplateAssociationsGetParametersType
+ */
+export type StorefrontCustomTemplateAssociationsGetParametersType = 'product' | 'category' | 'brand' | 'page';
 
-export type ErrorResponse400 = {
-    schema?: _Error;
-};
+/**
+ * CustomTemplateAssociationEntityType
+ */
+export type CustomTemplateAssociationEntityType = 'product' | 'category' | 'brand' | 'page';
 
-export type ErrorResponse404 = {
-    schema?: _Error;
-};
-
-export type ErrorResponse409 = {
-    schema?: _Error;
-};
-
-export type ErrorResponse422 = {
-    schema?: _Error;
-};
-
-export type MetaPaginationObject = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            next?: string;
-            current?: string;
-        };
-    };
-};
-
-export type DetailedErrors = {
-    [key: string]: string;
+/**
+ * CustomTemplateAssociation
+ */
+export type CustomTemplateAssociation = {
+    id?: number;
+    channel_id?: number;
+    entity_type?: CustomTemplateAssociationEntityType;
+    entity_id?: number;
+    file_name?: string;
+    /**
+     * An invalid file name does not match with an existing custom layout file in the currently active theme for the channel. When an association is invalid the store will fallback to using the default for that entity type.
+     */
+    is_valid?: boolean;
+    date_created?: string;
+    date_modified?: string;
 };
 
 /**
- * Error payload for the BigCommerce API.
- *
+ * MetaPaginationObjectPaginationLinks
  */
-export type BaseError = {
+export type MetaPaginationObjectPaginationLinks = {
+    next?: string;
+    current?: string;
+};
+
+/**
+ * MetaPaginationObjectPagination
+ */
+export type MetaPaginationObjectPagination = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: MetaPaginationObjectPaginationLinks;
+};
+
+/**
+ * MetaPaginationObject
+ */
+export type MetaPaginationObject = {
+    pagination?: MetaPaginationObjectPagination;
+};
+
+/**
+ * Custom Template Associations_getCustomTemplateAssociations_Response_200
+ */
+export type CustomTemplateAssociationsGetCustomTemplateAssociationsResponse200 = {
+    data?: Array<CustomTemplateAssociation>;
+    meta?: MetaPaginationObject;
+};
+
+/**
+ * CustomTemplateAssociationUpsertEntityType
+ */
+export type CustomTemplateAssociationUpsertEntityType = 'product' | 'category' | 'brand' | 'page';
+
+/**
+ * CustomTemplateAssociationUpsert
+ */
+export type CustomTemplateAssociationUpsert = {
+    channel_id: number;
+    entity_type: CustomTemplateAssociationUpsertEntityType;
+    entity_id: number;
+    file_name: string;
+};
+
+/**
+ * Custom Template Associations_upsertCustomTemplateAssociations_Response_200
+ */
+export type CustomTemplateAssociationsUpsertCustomTemplateAssociationsResponse200 = {
+    [key: string]: unknown;
+};
+
+/**
+ * DetailedErrors
+ */
+export type DetailedErrors = {
+    [key: string]: unknown;
+};
+
+/**
+ * ErrorResponse
+ */
+export type ErrorResponse = {
     /**
      * The HTTP status code.
      *
@@ -60,48 +111,13 @@ export type BaseError = {
     title?: string;
     type?: string;
     instance?: string;
-};
-
-export type ErrorResponse = BaseError & {
     errors?: DetailedErrors;
 };
 
 /**
- * CustomTemplateAssociation
+ * StorefrontCustomTemplateAssociationsDeleteParametersType
  */
-export type CustomTemplateAssociation = {
-    id?: number;
-    channel_id?: number;
-    entity_type?: 'product' | 'category' | 'brand' | 'page';
-    entity_id?: number;
-    file_name?: string;
-    /**
-     * An invalid file name does not match with an existing custom layout file in the currently active theme for the channel. When an association is invalid the store will fallback to using the default for that entity type.
-     */
-    is_valid?: boolean;
-    date_created?: string;
-    date_modified?: string;
-};
-
-/**
- * CustomTemplateAssociation
- */
-export type CustomTemplateAssociationUpsert = {
-    channel_id: number;
-    entity_type: 'product' | 'category' | 'brand' | 'page';
-    entity_id: number;
-    file_name: string;
-};
-
-/**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
- */
-export type Accept = string;
-
-/**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
- */
-export type ContentType = string;
+export type StorefrontCustomTemplateAssociationsDeleteParametersType = 'product' | 'category' | 'brand' | 'page';
 
 export type DeleteCustomTemplateAssociationsData = {
     body?: never;
@@ -114,21 +130,21 @@ export type DeleteCustomTemplateAssociationsData = {
     path?: never;
     query?: {
         /**
-         * List of Association IDs to delete explicitly.
+         * A comma-separated string that specifies a list of association IDs to delete.
          */
-        'id:in'?: number;
+        'id:in'?: Array<number>;
         /**
-         * List of Entity IDs to delete explicitly. Must be used together with "type"
-         */
-        'entity_id:in'?: number;
-        /**
-         * Channel ID provided to delete all custom template associations for a given Channel
+         * Return results or act upon only template associations in the specified channel.
          */
         channel_id?: number;
         /**
-         * Filter associations by type
+         * Filter associations by type.
          */
-        type?: 'product' | 'category' | 'brand' | 'page';
+        type?: StorefrontCustomTemplateAssociationsDeleteParametersType;
+        /**
+         * A comma-separated list of entity IDs to return or act upon. Must be used together with the `type` filter. Currently, all supported entities have integer-type IDs.
+         */
+        'entity_id:in'?: Array<number>;
     };
     url: '/storefront/custom-template-associations';
 };
@@ -137,7 +153,9 @@ export type DeleteCustomTemplateAssociationsResponses = {
     /**
      * No Content
      */
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 
 export type DeleteCustomTemplateAssociationsResponse = DeleteCustomTemplateAssociationsResponses[keyof DeleteCustomTemplateAssociationsResponses];
@@ -153,25 +171,25 @@ export type GetCustomTemplateAssociationsData = {
     path?: never;
     query?: {
         /**
-         * Channel ID to return only custom template associations for a given Channel
+         * Return results or act upon only template associations in the specified channel.
          */
         channel_id?: number;
         /**
-         * Filter by a list of entity IDs. Must be used together with "type" filter.
+         * A comma-separated list of entity IDs to return or act upon. Must be used together with the `type` filter. Currently, all supported entities have integer-type IDs.
          */
-        'entity_id:in'?: string;
+        'entity_id:in'?: Array<number>;
         /**
-         * Number of results to return per page
+         * Filter associations by type.
+         */
+        type?: StorefrontCustomTemplateAssociationsGetParametersType;
+        /**
+         * Number of results to return per page.
          */
         limit?: number;
         /**
-         * Which page number to return, based on the page size. Used to paginate large collections.
+         * Which page number to return, based on the limit value. Used to paginate large collections.
          */
         page?: number;
-        /**
-         * Filter associations by type
-         */
-        type?: 'product' | 'category' | 'brand' | 'page';
         /**
          * Optional toggle to filter for exclusively valid or invalid associations entries. An invalid entry is one where its file name does not match up to an existing custom layout file in the currently active theme for the channel.
          */
@@ -184,10 +202,7 @@ export type GetCustomTemplateAssociationsResponses = {
     /**
      * OK
      */
-    200: {
-        data?: Array<CustomTemplateAssociation>;
-        meta?: MetaPaginationObject;
-    };
+    200: CustomTemplateAssociationsGetCustomTemplateAssociationsResponse200;
 };
 
 export type GetCustomTemplateAssociationsResponse = GetCustomTemplateAssociationsResponses[keyof GetCustomTemplateAssociationsResponses];
@@ -199,10 +214,6 @@ export type UpsertCustomTemplateAssociationsData = {
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -222,9 +233,7 @@ export type UpsertCustomTemplateAssociationsResponses = {
     /**
      * Success response for batch upsert of custom template associations
      */
-    200: {
-        [key: string]: unknown;
-    };
+    200: CustomTemplateAssociationsUpsertCustomTemplateAssociationsResponse200;
 };
 
 export type UpsertCustomTemplateAssociationsResponse = UpsertCustomTemplateAssociationsResponses[keyof UpsertCustomTemplateAssociationsResponses];

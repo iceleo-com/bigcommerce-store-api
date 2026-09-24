@@ -4,6 +4,9 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
 
+/**
+ * GlobalPromotionSettings
+ */
 export type GlobalPromotionSettings = {
     /**
      * - When the property is set to "true", promotions will apply for products with custom pricing.
@@ -29,48 +32,20 @@ export type GlobalPromotionSettings = {
     promotions_applied_on_original_product_price: boolean;
 };
 
-export type ErrorResponse400 = {
-    schema?: BetaErrorResponse400;
-};
-
-export type ErrorResponse403 = {
-    schema?: BetaErrorResponse403;
-};
-
-export type ErrorResponse422 = {
-    schema?: BetaErrorResponse422;
-};
-
-export type BetaErrorResponse400 = BaseError & {
-    error?: {
-        message?: string;
-    };
-};
-
-export type BetaErrorResponse403 = BaseError & {
-    error?: {
-        message?: string;
-    };
-};
-
-export type BetaErrorResponse422 = BaseError & {
-    errors?: Array<{
-        /**
-         * The field that caused the validation error.
-         */
-        field?: string;
-        /**
-         * A specific error message describing the issue.
-         */
-        message?: string;
-    }>;
+/**
+ * BetaErrorResponse400Error
+ */
+export type BetaErrorResponse400Error = {
+    message?: string;
 };
 
 /**
+ * betaErrorResponse400
+ *
  * Error payload for the BigCommerce API.
  *
  */
-export type BaseError = {
+export type BetaErrorResponse400 = {
     /**
      * The HTTP status code.
      *
@@ -81,17 +56,56 @@ export type BaseError = {
      *
      */
     title?: string;
+    error?: BetaErrorResponse400Error;
 };
 
 /**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+ * ErrorResponse400
  */
-export type Accept = string;
+export type ErrorResponse400 = {
+    schema?: BetaErrorResponse400;
+};
 
 /**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+ * BetaErrorResponse422ErrorsItems
  */
-export type ContentType = string;
+export type BetaErrorResponse422ErrorsItems = {
+    /**
+     * The field that caused the validation error.
+     */
+    field?: string;
+    /**
+     * A specific error message describing the issue.
+     */
+    message?: string;
+};
+
+/**
+ * betaErrorResponse422
+ *
+ * Error payload for the BigCommerce API.
+ *
+ */
+export type BetaErrorResponse422 = {
+    /**
+     * The HTTP status code.
+     *
+     */
+    status?: number;
+    /**
+     * The error title describing the particular error.
+     *
+     */
+    title?: string;
+    errors?: Array<BetaErrorResponse422ErrorsItems>;
+};
+
+/**
+ * ErrorResponse422
+ */
+export type ErrorResponse422 = {
+    schema?: BetaErrorResponse422;
+};
 
 export type GetGlobalPromotionSettingsData = {
     body?: never;
@@ -125,16 +139,12 @@ export type GetGlobalPromotionSettingsResponses = {
 export type GetGlobalPromotionSettingsResponse = GetGlobalPromotionSettingsResponses[keyof GetGlobalPromotionSettingsResponses];
 
 export type UpdateGlobalPromotionSettingsData = {
-    body: GlobalPromotionSettings;
+    body?: GlobalPromotionSettings;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
     };
     path?: never;
     query?: never;

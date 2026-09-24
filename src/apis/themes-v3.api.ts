@@ -11,7 +11,7 @@ export class ThemesV3Api {
     }
 
     /**
-     * Get all Themes
+     * List Themes
      *
      * Returns a list of store *Themes*.
      */
@@ -23,17 +23,17 @@ export class ThemesV3Api {
     }
 
     /**
-     * Upload a Theme
+     * Upload Theme
      *
      * Uploads a new *Theme* to your BigCommerce store.
 
      **Required Fields**
      * file
      */
-    uploadTheme(
-        requestBody: ThemesV3ApiSpecs.UploadThemeData['body'],
+    uploadStoreTheme(
+        requestBody: ThemesV3ApiSpecs.UploadStoreThemeData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<ThemesV3ApiSpecs.UploadThemeResponses[201]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<201, Required<ThemesV3ApiSpecs.UploadStoreThemeResponses[201]>>,RequestErrorResponse<400, void>>({
             path: 'v3/themes',
             contentType: 'multipart/form-data',
             body: requestBody,
@@ -41,14 +41,7 @@ export class ThemesV3Api {
     }
 
     /**
-     * @deprecated Use `uploadTheme` instead.
-     */
-    uploadStoreTheme(...args: Parameters<ThemesV3Api['uploadTheme']>) {
-        return this.uploadTheme(...args);
-    }
-
-    /**
-     * Get a Theme
+     * Get Theme
      *
      * Returns a store *Theme*. The theme variation is not available at this endpoint.
      */
@@ -61,7 +54,7 @@ export class ThemesV3Api {
     }
 
     /**
-     * Delete a Theme
+     * Delete Theme
      *
      * Deletes a store *Theme*.
      Theme variations can not be deleted using this endpoint. This will delete the theme and all variations.
@@ -75,15 +68,15 @@ export class ThemesV3Api {
     }
 
     /**
-     * Download a Theme
+     * Download Theme
      *
      * Downloads a stores *Theme*.
      */
-    downloadTheme(
-        uuid: ThemesV3ApiSpecs.DownloadThemeData['path']['uuid'],
-        requestBody: ThemesV3ApiSpecs.DownloadThemeData['body'],
+    downloadStoreTheme(
+        uuid: ThemesV3ApiSpecs.DownloadStoreThemeData['path']['uuid'],
+        requestBody: ThemesV3ApiSpecs.DownloadStoreThemeData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.DownloadThemeResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.DownloadStoreThemeResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/${uuid}/actions/download`,
             contentType: 'application/json',
             body: requestBody,
@@ -91,14 +84,7 @@ export class ThemesV3Api {
     }
 
     /**
-     * @deprecated Use `downloadTheme` instead.
-     */
-    downloadStoreTheme(...args: Parameters<ThemesV3Api['downloadTheme']>) {
-        return this.downloadTheme(...args);
-    }
-
-    /**
-     * Activate a Theme
+     * Activate Theme
      *
      * Actives a store *Theme*.
 
@@ -106,32 +92,14 @@ export class ThemesV3Api {
      */
     activateStoreTheme(
         requestBody: ThemesV3ApiSpecs.ActivateStoreThemeData['body'],
+        query?: ThemesV3ApiSpecs.ActivateStoreThemeData['query'],
     ) {
         return this.request.post<RequestSuccessResponse<204, Required<ThemesV3ApiSpecs.ActivateStoreThemeResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v3/themes/actions/activate',
             contentType: 'application/json',
             body: requestBody,
+            query,
         });
-    }
-
-    /**
-     * Get a Theme Job
-     *
-     * Returns a theme *Job*. When the job is complete, the results array provides a generated link to access the theme. The link is active for 60 seconds.
-     */
-    getJob(
-        jobId: ThemesV3ApiSpecs.GetJobData['path']['job_id'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetJobResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/themes/jobs/${jobId}`,
-        });
-    }
-
-    /**
-     * @deprecated Use `getJob` instead.
-     */
-    getStoreThemeJob(...args: Parameters<ThemesV3Api['getJob']>) {
-        return this.getJob(...args);
     }
 
     /**
@@ -142,21 +110,14 @@ export class ThemesV3Api {
      **Usage Notes**:
      * At least one filter must be provided.
      */
-    getThemesByUuidConfigurations(
-        uuid: ThemesV3ApiSpecs.GetThemesByUuidConfigurationsData['path']['uuid'],
-        query?: ThemesV3ApiSpecs.GetThemesByUuidConfigurationsData['query'],
+    getThemeConfiguration(
+        uuid: ThemesV3ApiSpecs.GetThemeConfigurationData['path']['uuid'],
+        query?: ThemesV3ApiSpecs.GetThemeConfigurationData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetThemesByUuidConfigurationsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetThemeConfigurationResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/${uuid}/configurations`,
             query,
         });
-    }
-
-    /**
-     * @deprecated Use `getThemesByUuidConfigurations` instead.
-     */
-    getThemeConfiguration(...args: Parameters<ThemesV3Api['getThemesByUuidConfigurations']>) {
-        return this.getThemesByUuidConfigurations(...args);
     }
 
     /**
@@ -164,11 +125,11 @@ export class ThemesV3Api {
      *
      * Validates a theme configuration against the theme's schema without creating it. Useful for testing schemas before creation.
      */
-    postThemesByUuidConfigurationsValidate(
-        uuid: ThemesV3ApiSpecs.PostThemesByUuidConfigurationsValidateData['path']['uuid'],
-        requestBody: ThemesV3ApiSpecs.PostThemesByUuidConfigurationsValidateData['body'],
+    validateThemeConfiguration(
+        uuid: ThemesV3ApiSpecs.ValidateThemeConfigurationData['path']['uuid'],
+        requestBody: ThemesV3ApiSpecs.ValidateThemeConfigurationData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.PostThemesByUuidConfigurationsValidateResponses[200]>>,RequestErrorResponse<422, Required<ThemesV3ApiSpecs.PostThemesByUuidConfigurationsValidateErrors[422]>>>({
+        return this.request.post<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.ValidateThemeConfigurationResponses[200]>>,RequestErrorResponse<422, Required<ThemesV3ApiSpecs.ValidateThemeConfigurationErrors[422]>>>({
             path: `v3/themes/${uuid}/configurations/validate`,
             contentType: 'application/json',
             body: requestBody,
@@ -176,29 +137,28 @@ export class ThemesV3Api {
     }
 
     /**
-     * @deprecated Use `postThemesByUuidConfigurationsValidate` instead.
-     */
-    validateThemeConfiguration(...args: Parameters<ThemesV3Api['postThemesByUuidConfigurationsValidate']>) {
-        return this.postThemesByUuidConfigurationsValidate(...args);
-    }
-
-    /**
-     * Get Custom Templates
+     * List Custom Templates
      *
      * Enumerate available custom templates for in the theme files in a specific theme version for each supported entity type.
      */
-    getThemesThemeUuidCustomTemplates(
-        versionUuid: ThemesV3ApiSpecs.GetThemesThemeUuidCustomTemplatesData['path']['version_uuid'],
+    getThemeCustomTemplates(
+        versionUuid: ThemesV3ApiSpecs.GetThemeCustomTemplatesData['path']['version_uuid'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetThemesThemeUuidCustomTemplatesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetThemeCustomTemplatesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/themes/custom-templates/${versionUuid}`,
         });
     }
 
     /**
-     * @deprecated Use `getThemesThemeUuidCustomTemplates` instead.
+     * Get Theme Job
+     *
+     * Returns a theme *Job*. When the job is complete, the results array provides a generated link to access the theme. The link is active for 60 seconds.
      */
-    getThemeCustomTemplates(...args: Parameters<ThemesV3Api['getThemesThemeUuidCustomTemplates']>) {
-        return this.getThemesThemeUuidCustomTemplates(...args);
+    getStoreThemeJob(
+        jobId: ThemesV3ApiSpecs.GetStoreThemeJobData['path']['job_id'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<ThemesV3ApiSpecs.GetStoreThemeJobResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/themes/jobs/${jobId}`,
+        });
     }
 }

@@ -94,8 +94,7 @@ describe('Legacy aliases', () => {
         });
 
         const cases = [
-            [apiClient.v3.brands, 'getBrand', 'getBrandById'],
-            [apiClient.v3.products, 'getProduct', 'getProductById'],
+            [apiClient.v3.abandonedCarts, 'getAbandonedCarts', 'getAbandonedCart'],
         ];
 
         cases.forEach(([api, aliasName, targetName]) => {

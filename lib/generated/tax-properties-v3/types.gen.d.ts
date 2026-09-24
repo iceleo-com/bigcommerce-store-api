@@ -1,18 +1,23 @@
 export type ClientOptions = {
-    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3/stores/{store_hash}/v3' | (string & {});
 };
-export type Property = {
-    readonly id?: number;
-    code?: string;
-    display_name?: string;
-    description?: string;
-    readonly created_at?: string;
-    readonly updated_at?: string;
+export type ProductTaxProperty = {
+    product_id: number;
+    tax_properties: ProductTaxPropertyTaxProperties;
 };
-export type PropertyPost = {
-    code: string;
-    display_name: string;
-    description?: string;
+export type ProductTaxPropertyTaxProperties = {
+    [key: string]: unknown;
+};
+export type ProductTaxPropertiesUpdateProductTaxPropertiesResponse200 = {
+    data?: Array<ProductTaxProperty>;
+    meta?: MetaOpen;
+};
+export type MetaOpen = {
+    [key: string]: unknown;
+};
+export type ProductTaxPropertiesGetProductsTaxPropertiesResponse200 = {
+    data?: Array<ProductTaxProperty>;
+    meta?: MetaOpen;
 };
 export type PropertyPut = {
     id: number;
@@ -20,28 +25,35 @@ export type PropertyPut = {
     display_name?: string;
     description?: string;
 };
-export type ProductTaxProperty = {
-    product_id: number;
-    tax_properties: {
-        [key: string]: unknown;
-    };
+export type TaxPropertiesUpdateTaxPropertiesResponse200 = {
+    data?: Array<Property>;
+    meta?: MetaOpen;
 };
-export type MetaOpen = {
-    [key: string]: unknown;
-};
-export type PropertyWritable = {
+export type Property = {
+    id?: number;
     code?: string;
     display_name?: string;
     description?: string;
+    created_at?: string;
+    updated_at?: string;
+    type?: PropertyType;
 };
-export type MetaOpenWritable = {
-    [key: string]: unknown;
+export type PropertyType = 'PRODUCT' | 'CUSTOMER';
+export type PropertyPost = {
+    code: string;
+    display_name: string;
+    description?: string;
+    type: PropertyPostType;
 };
-export type Accept = string;
-export type ContentType = string;
-export type ProductIdin = string;
-export type Idin = string;
-export type IdinRequired = string;
+export type PropertyPostType = 'PRODUCT' | 'CUSTOMER';
+export type TaxPropertiesCreateTaxPropertiesResponse200 = {
+    data?: Array<Property>;
+    meta?: MetaOpen;
+};
+export type TaxPropertiesGetTaxPropertiesResponse200 = {
+    data?: Array<Property>;
+    meta?: MetaOpen;
+};
 export type DeleteTaxPropertiesData = {
     body?: never;
     headers: {
@@ -49,7 +61,7 @@ export type DeleteTaxPropertiesData = {
     };
     path?: never;
     query: {
-        'id:in': string;
+        'id:in': Array<number>;
     };
     url: '/tax/properties';
 };
@@ -58,7 +70,9 @@ export type DeleteTaxPropertiesErrors = {
     409: unknown;
 };
 export type DeleteTaxPropertiesResponses = {
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 export type DeleteTaxPropertiesResponse = DeleteTaxPropertiesResponses[keyof DeleteTaxPropertiesResponses];
 export type GetTaxPropertiesData = {
@@ -68,7 +82,8 @@ export type GetTaxPropertiesData = {
     };
     path?: never;
     query?: {
-        'id:in'?: string;
+        'id:in'?: Array<number>;
+        'type:in'?: Array<string>;
     };
     url: '/tax/properties';
 };
@@ -76,17 +91,13 @@ export type GetTaxPropertiesErrors = {
     400: unknown;
 };
 export type GetTaxPropertiesResponses = {
-    200: {
-        data?: Array<Property>;
-        meta?: MetaOpen;
-    };
+    200: TaxPropertiesGetTaxPropertiesResponse200;
 };
 export type GetTaxPropertiesResponse = GetTaxPropertiesResponses[keyof GetTaxPropertiesResponses];
 export type CreateTaxPropertiesData = {
-    body: Array<PropertyPost>;
+    body?: Array<PropertyPost>;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -96,17 +107,13 @@ export type CreateTaxPropertiesErrors = {
     422: unknown;
 };
 export type CreateTaxPropertiesResponses = {
-    200: {
-        data?: Array<Property>;
-        meta?: MetaOpen;
-    };
+    200: TaxPropertiesCreateTaxPropertiesResponse200;
 };
 export type CreateTaxPropertiesResponse = CreateTaxPropertiesResponses[keyof CreateTaxPropertiesResponses];
 export type UpdateTaxPropertiesData = {
-    body: Array<PropertyPut>;
+    body?: Array<PropertyPut>;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -116,10 +123,7 @@ export type UpdateTaxPropertiesErrors = {
     422: unknown;
 };
 export type UpdateTaxPropertiesResponses = {
-    200: {
-        data?: Array<Property>;
-        meta?: MetaOpen;
-    };
+    200: TaxPropertiesUpdateTaxPropertiesResponse200;
 };
 export type UpdateTaxPropertiesResponse = UpdateTaxPropertiesResponses[keyof UpdateTaxPropertiesResponses];
 export type DeleteProductTaxPropertiesData = {
@@ -129,7 +133,7 @@ export type DeleteProductTaxPropertiesData = {
     };
     path?: never;
     query: {
-        'product_id:in': string;
+        'product_id:in': Array<number>;
     };
     url: '/tax/products/properties';
 };
@@ -137,35 +141,33 @@ export type DeleteProductTaxPropertiesErrors = {
     400: unknown;
 };
 export type DeleteProductTaxPropertiesResponses = {
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 export type DeleteProductTaxPropertiesResponse = DeleteProductTaxPropertiesResponses[keyof DeleteProductTaxPropertiesResponses];
-export type GetProductTaxPropertiesData = {
+export type GetProductsTaxPropertiesData = {
     body?: never;
     headers: {
         Accept: string;
     };
     path?: never;
     query: {
-        'product_id:in': string;
+        'product_id:in': Array<number>;
     };
     url: '/tax/products/properties';
 };
-export type GetProductTaxPropertiesErrors = {
+export type GetProductsTaxPropertiesErrors = {
     400: unknown;
 };
-export type GetProductTaxPropertiesResponses = {
-    200: {
-        data?: Array<ProductTaxProperty>;
-        meta?: MetaOpen;
-    };
+export type GetProductsTaxPropertiesResponses = {
+    200: ProductTaxPropertiesGetProductsTaxPropertiesResponse200;
 };
-export type GetProductTaxPropertiesResponse = GetProductTaxPropertiesResponses[keyof GetProductTaxPropertiesResponses];
+export type GetProductsTaxPropertiesResponse = GetProductsTaxPropertiesResponses[keyof GetProductsTaxPropertiesResponses];
 export type UpdateProductTaxPropertiesData = {
-    body: Array<ProductTaxProperty>;
+    body?: Array<ProductTaxProperty>;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -175,9 +177,6 @@ export type UpdateProductTaxPropertiesErrors = {
     422: unknown;
 };
 export type UpdateProductTaxPropertiesResponses = {
-    200: {
-        data?: Array<ProductTaxProperty>;
-        meta?: MetaOpen;
-    };
+    200: ProductTaxPropertiesUpdateProductTaxPropertiesResponse200;
 };
 export type UpdateProductTaxPropertiesResponse = UpdateProductTaxPropertiesResponses[keyof UpdateProductTaxPropertiesResponses];

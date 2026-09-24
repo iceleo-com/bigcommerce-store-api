@@ -1,5 +1,5 @@
 export type ClientOptions = {
-    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2' | (string & {});
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2/stores/{store_hash}/v2' | (string & {});
 };
 export type TaxClassFull = {
     id?: string;
@@ -7,25 +7,20 @@ export type TaxClassFull = {
     created_at?: string;
     updated_at?: string;
 };
-export type Accept = string;
-export type ContentType = string;
-export type GetAllTaxClassesData = {
+export type GetTaxClassesData = {
     body?: never;
     headers: {
         Accept: string;
     };
     path?: never;
-    query?: {
-        page?: number;
-        limit?: number;
-    };
+    query?: never;
     url: '/tax_classes';
 };
-export type GetAllTaxClassesResponses = {
+export type GetTaxClassesResponses = {
     200: Array<TaxClassFull>;
 };
-export type GetAllTaxClassesResponse = GetAllTaxClassesResponses[keyof GetAllTaxClassesResponses];
-export type GetATaxClassData = {
+export type GetTaxClassesResponse = GetTaxClassesResponses[keyof GetTaxClassesResponses];
+export type GetTaxClassData = {
     body?: never;
     headers: {
         Accept: string;
@@ -36,7 +31,7 @@ export type GetATaxClassData = {
     query?: never;
     url: '/tax_classes/{id}';
 };
-export type GetATaxClassResponses = {
+export type GetTaxClassResponses = {
     200: TaxClassFull;
 };
-export type GetATaxClassResponse = GetATaxClassResponses[keyof GetATaxClassResponses];
+export type GetTaxClassResponse = GetTaxClassResponses[keyof GetTaxClassResponses];

@@ -11,102 +11,96 @@ export class WidgetsV3Api {
     }
 
     /**
-     * Get All Widget Templates
+     * List Placements
      *
-     * Returns a list of **Widget Templates**.
+     * Returns a list of **Placements**.
      */
-    getWidgetTemplates(
-        query?: WidgetsV3ApiSpecs.GetWidgetTemplatesData['query'],
+    getPlacements(
+        query?: WidgetsV3ApiSpecs.GetPlacementsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetWidgetTemplatesResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetWidgetTemplatesErrors[422]>>>({
-            path: 'v3/content/widget-templates',
+        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetPlacementsResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetPlacementsErrors[422]>>>({
+            path: 'v3/content/placements',
             query,
         });
     }
 
     /**
-     * Create a Widget Template
+     * Create Placement
      *
-     * Creates a **Widget Template**.
+     * Creates a **Placement**.
 
-     ***Note:*** *There is a limit of 1000 custom widget templates per store.*
+     **Template Files**
 
-     **Required Fields**
-     * name
-     * template
+     To view the list of values accepted by the `template_file` property, including **custom** templates, see [Placements](/developer/docs/admin/widgets-and-scripts#placements).
      */
-    createWidgetTemplate(
-        requestBody: WidgetsV3ApiSpecs.CreateWidgetTemplateData['body'],
+    createPlacement(
+        requestBody: WidgetsV3ApiSpecs.CreatePlacementData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.CreateWidgetTemplateResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.CreateWidgetTemplateErrors[422]>>>({
-            path: 'v3/content/widget-templates',
+        return this.request.post<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.CreatePlacementResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.CreatePlacementErrors[422]>>>({
+            path: 'v3/content/placements',
             contentType: 'application/json',
             body: requestBody,
         });
     }
 
     /**
-     * Render a Widget Template
+     * Get Placement
      *
-     * Render a widget template and return the widget html.
+     * Returns a single **Placement**.
      */
-    previewWidget(
-        uuid: WidgetsV3ApiSpecs.PreviewWidgetData['path']['uuid'],
-        requestBody: WidgetsV3ApiSpecs.PreviewWidgetData['body'],
+    getPlacement(
+        uuid: WidgetsV3ApiSpecs.GetPlacementData['path']['uuid'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.PreviewWidgetResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.PreviewWidgetErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.PreviewWidgetErrors[422]>>)>({
-            path: `v3/content/widget-templates/${uuid}/preview`,
+        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetPlacementResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.GetPlacementErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetPlacementErrors[422]>>)>({
+            path: `v3/content/placements/${uuid}`,
+        });
+    }
+
+    /**
+     * Update Placement
+     *
+     * Updates a **Placement**.
+     */
+    updatePlacement(
+        uuid: WidgetsV3ApiSpecs.UpdatePlacementData['path']['uuid'],
+        requestBody: WidgetsV3ApiSpecs.UpdatePlacementData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.UpdatePlacementResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.UpdatePlacementErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.UpdatePlacementErrors[422]>>)>({
+            path: `v3/content/placements/${uuid}`,
             contentType: 'application/json',
             body: requestBody,
         });
     }
 
     /**
-     * Get a Widget Template
+     * Delete Placement
      *
-     * Returns a single **Widget Template**.
+     * Deletes a **Placement**.
      */
-    getWidgetTemplate(
-        uuid: WidgetsV3ApiSpecs.GetWidgetTemplateData['path']['uuid'],
-        query?: WidgetsV3ApiSpecs.GetWidgetTemplateData['query'],
+    deletePlacement(
+        uuid: WidgetsV3ApiSpecs.DeletePlacementData['path']['uuid'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetWidgetTemplateResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.GetWidgetTemplateErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetWidgetTemplateErrors[422]>>)>({
-            path: `v3/content/widget-templates/${uuid}`,
+        return this.request.delete<RequestSuccessResponse<204, Required<WidgetsV3ApiSpecs.DeletePlacementResponses[204]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.DeletePlacementErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.DeletePlacementErrors[422]>>)>({
+            path: `v3/content/placements/${uuid}`,
+        });
+    }
+
+    /**
+     * List Theme Regions
+     *
+     * Returns a list of unique **Theme Regions** in a file.
+     */
+    getContentRegions(
+        query?: WidgetsV3ApiSpecs.GetContentRegionsData['query'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetContentRegionsResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.GetContentRegionsErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetContentRegionsErrors[422]>>)>({
+            path: 'v3/content/regions',
             query,
         });
     }
 
     /**
-     * Update a Widget Template
-     *
-     * Updates a **Widget Template**.
-     */
-    updateWidgetTemplate(
-        uuid: WidgetsV3ApiSpecs.UpdateWidgetTemplateData['path']['uuid'],
-        requestBody: WidgetsV3ApiSpecs.UpdateWidgetTemplateData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.UpdateWidgetTemplateResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.UpdateWidgetTemplateErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.UpdateWidgetTemplateErrors[422]>>)>({
-            path: `v3/content/widget-templates/${uuid}`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Delete A Widget Template
-     *
-     * Deletes a **Widget Template**.
-     */
-    deleteWidgetTemplate(
-        uuid: WidgetsV3ApiSpecs.DeleteWidgetTemplateData['path']['uuid'],
-    ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<WidgetsV3ApiSpecs.DeleteWidgetTemplateResponses[204]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.DeleteWidgetTemplateErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.DeleteWidgetTemplateErrors[422]>>)>({
-            path: `v3/content/widget-templates/${uuid}`,
-        });
-    }
-
-    /**
-     * Get All Widgets
+     * List Widgets
      *
      * Returns a list of **Widgets**. Optional parameters can be passed in.
      */
@@ -120,7 +114,7 @@ export class WidgetsV3Api {
     }
 
     /**
-     * Create a Widget
+     * Create Widget
      *
      * Creates a **Widget**.
 
@@ -137,7 +131,7 @@ export class WidgetsV3Api {
     }
 
     /**
-     * Get a Widget
+     * Get Widget
      *
      * Returns a single **Widget**.
      */
@@ -150,7 +144,7 @@ export class WidgetsV3Api {
     }
 
     /**
-     * Update a Widget
+     * Update Widget
      *
      * Updates a **Widget**.
      */
@@ -166,7 +160,7 @@ export class WidgetsV3Api {
     }
 
     /**
-     * Delete a Widget
+     * Delete Widget
      *
      * Deletes a **Widget**.
      */
@@ -179,91 +173,97 @@ export class WidgetsV3Api {
     }
 
     /**
-     * Get All Placements
+     * List Widget Templates
      *
-     * Returns a list of **Placements**.
+     * Returns a list of **Widget Templates**.
      */
-    getPlacements(
-        query?: WidgetsV3ApiSpecs.GetPlacementsData['query'],
+    getWidgetTemplates(
+        query?: WidgetsV3ApiSpecs.GetWidgetTemplatesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetPlacementsResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetPlacementsErrors[422]>>>({
-            path: 'v3/content/placements',
+        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetWidgetTemplatesResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetWidgetTemplatesErrors[422]>>>({
+            path: 'v3/content/widget-templates',
             query,
         });
     }
 
     /**
-     * Create a Placement
+     * Create Widget Template
      *
-     * Creates a **Placement**.
+     * Creates a **Widget Template**.
 
-     **Template Files**
+     ***Note:*** *There is a limit of 1000 custom widget templates per channel, and a limit of 5000 across all channels.*
 
-     To view the list of values accepted by the `template_file` property, including **custom** templates, see [Placements](/docs/storefront/widgets#placements).
+     **Required Fields**
+     * name
+     * template
      */
-    createPlacement(
-        requestBody: WidgetsV3ApiSpecs.CreatePlacementData['body'],
+    createWidgetTemplate(
+        requestBody: WidgetsV3ApiSpecs.CreateWidgetTemplateData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.CreatePlacementResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.CreatePlacementErrors[422]>>>({
-            path: 'v3/content/placements',
+        return this.request.post<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.CreateWidgetTemplateResponses[200]>>,RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.CreateWidgetTemplateErrors[422]>>>({
+            path: 'v3/content/widget-templates',
             contentType: 'application/json',
             body: requestBody,
         });
     }
 
     /**
-     * Get a Placement
+     * Render Widget Template
      *
-     * Returns a single **Placement**.
+     * Render a widget template and return the widget html.
      */
-    getPlacement(
-        uuid: WidgetsV3ApiSpecs.GetPlacementData['path']['uuid'],
+    previewWidget(
+        uuid: WidgetsV3ApiSpecs.PreviewWidgetData['path']['uuid'],
+        requestBody: WidgetsV3ApiSpecs.PreviewWidgetData['body'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetPlacementResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.GetPlacementErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetPlacementErrors[422]>>)>({
-            path: `v3/content/placements/${uuid}`,
-        });
-    }
-
-    /**
-     * Update a Placement
-     *
-     * Updates a **Placement**.
-     */
-    updatePlacement(
-        uuid: WidgetsV3ApiSpecs.UpdatePlacementData['path']['uuid'],
-        requestBody: WidgetsV3ApiSpecs.UpdatePlacementData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.UpdatePlacementResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.UpdatePlacementErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.UpdatePlacementErrors[422]>>)>({
-            path: `v3/content/placements/${uuid}`,
+        return this.request.post<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.PreviewWidgetResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.PreviewWidgetErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.PreviewWidgetErrors[422]>>)>({
+            path: `v3/content/widget-templates/${uuid}/preview`,
             contentType: 'application/json',
             body: requestBody,
         });
     }
 
     /**
-     * Delete a Placement
+     * Get Widget Template
      *
-     * Deletes a **Placement**.
+     * Returns a single **Widget Template**.
      */
-    deletePlacement(
-        uuid: WidgetsV3ApiSpecs.DeletePlacementData['path']['uuid'],
+    getWidgetTemplate(
+        uuid: WidgetsV3ApiSpecs.GetWidgetTemplateData['path']['uuid'],
+        query?: WidgetsV3ApiSpecs.GetWidgetTemplateData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<WidgetsV3ApiSpecs.DeletePlacementResponses[204]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.DeletePlacementErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.DeletePlacementErrors[422]>>)>({
-            path: `v3/content/placements/${uuid}`,
+        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetWidgetTemplateResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.GetWidgetTemplateErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetWidgetTemplateErrors[422]>>)>({
+            path: `v3/content/widget-templates/${uuid}`,
+            query,
         });
     }
 
     /**
-     * Get Theme Regions
+     * Update Widget Template
      *
-     * Returns a list of unique **Theme Regions** in a file.
+     * Updates a **Widget Template**.
      */
-    getContentRegions(
-        query?: WidgetsV3ApiSpecs.GetContentRegionsData['query'],
+    updateWidgetTemplate(
+        uuid: WidgetsV3ApiSpecs.UpdateWidgetTemplateData['path']['uuid'],
+        requestBody: WidgetsV3ApiSpecs.UpdateWidgetTemplateData['body'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.GetContentRegionsResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.GetContentRegionsErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.GetContentRegionsErrors[422]>>)>({
-            path: 'v3/content/regions',
-            query,
+        return this.request.put<RequestSuccessResponse<200, Required<WidgetsV3ApiSpecs.UpdateWidgetTemplateResponses[200]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.UpdateWidgetTemplateErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.UpdateWidgetTemplateErrors[422]>>)>({
+            path: `v3/content/widget-templates/${uuid}`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete Widget Template
+     *
+     * Deletes a **Widget Template**.
+     */
+    deleteWidgetTemplate(
+        uuid: WidgetsV3ApiSpecs.DeleteWidgetTemplateData['path']['uuid'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<204, Required<WidgetsV3ApiSpecs.DeleteWidgetTemplateResponses[204]>>,(RequestErrorResponse<404, Required<WidgetsV3ApiSpecs.DeleteWidgetTemplateErrors[404]>> | RequestErrorResponse<422, Required<WidgetsV3ApiSpecs.DeleteWidgetTemplateErrors[422]>>)>({
+            path: `v3/content/widget-templates/${uuid}`,
         });
     }
 }

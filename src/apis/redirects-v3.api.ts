@@ -11,9 +11,9 @@ export class RedirectsV3Api {
     }
 
     /**
-     * Get Redirects
+     * List Redirects
      *
-     * Returns a collection of the storeʼs 301 redirects across all sites.
+     * Returns a collection of the store's 301 redirects across all sites.
      */
     getRedirects(
         query?: RedirectsV3ApiSpecs.GetRedirectsData['query'],
@@ -32,7 +32,7 @@ export class RedirectsV3Api {
     upsertRedirects(
         requestBody: RedirectsV3ApiSpecs.UpsertRedirectsData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<201, Required<RedirectsV3ApiSpecs.UpsertRedirectsResponses[201]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<201, Required<RedirectsV3ApiSpecs.UpsertRedirectsResponses[201]>>,RequestErrorResponse<422, Required<RedirectsV3ApiSpecs.UpsertRedirectsErrors[422]>>>({
             path: 'v3/storefront/redirects',
             contentType: 'application/json',
             body: requestBody,
@@ -54,7 +54,7 @@ export class RedirectsV3Api {
     }
 
     /**
-     * Get Redirect Import-Export Jobs
+     * List Redirect Import-Export Jobs
      *
      * Returns a collection of the storeʼs 301 redirects across all sites.
      */

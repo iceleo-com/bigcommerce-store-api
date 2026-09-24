@@ -5,8 +5,6 @@ export * as StoreInformationV2ApiSpecs from '../generated/store-information-v2';
 export declare class StoreInformationV2Api {
     private readonly request;
     constructor(request: RequestService);
-    getStore(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<unknown>>>;
-    getStoreInformation(...args: Parameters<StoreInformationV2Api['getStore']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<unknown>>>;
-    getTime(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.TimeStampFull>>>;
-    getSystemTimestamp(...args: Parameters<StoreInformationV2Api['getTime']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.TimeStampFull>>>;
+    getStoreInformation(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.StoreInformation>>>;
+    getSystemTimestamp(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.TimeStampFull>>>;
 }

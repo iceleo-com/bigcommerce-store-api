@@ -13,20 +13,13 @@ export class StoreInformationV2Api {
     /**
      * Get Store Information
      *
-     * Returns metadata about a store.
+     * Returns metadata about the global settings for a store. Some of these values are independently configurable on a per-storefront or per-channel basis. For channel overrides, see [Store Settings](/developer/api-reference/rest/admin/management/settings).
      */
-    getStore(
+    getStoreInformation(
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.GetStoreResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.GetStoreInformationResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/store',
         });
-    }
-
-    /**
-     * @deprecated Use `getStore` instead.
-     */
-    getStoreInformation(...args: Parameters<StoreInformationV2Api['getStore']>) {
-        return this.getStore(...args);
     }
 
     /**
@@ -34,17 +27,10 @@ export class StoreInformationV2Api {
      *
      * Returns the system timestamp at the time of the request. The time resource is useful for validating API authentication details and testing client connections.
      */
-    getTime(
+    getSystemTimestamp(
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.GetTimeResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<StoreInformationV2ApiSpecs.GetSystemTimestampResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/time',
         });
-    }
-
-    /**
-     * @deprecated Use `getTime` instead.
-     */
-    getSystemTimestamp(...args: Parameters<StoreInformationV2Api['getTime']>) {
-        return this.getTime(...args);
     }
 }

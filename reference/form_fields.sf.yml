@@ -1,46 +1,29 @@
-openapi: '3.0.1'
+openapi: 3.1.0
 info:
-  title: Storefront Form Fields (Beta)
-  description: |-
-    Read form fields on a BigCommerce hosted storefront.
-
-    For info about API accounts, see our [Guide to API Accounts](/docs/start/authentication/api-accounts).
-        
-    For info about authenticating BigCommerce APIs, see [Authentication and Example Requests](/docs/start/authentication#same-origin-cors-authentication).
-
-    > #### Warning
-    > Breaking changes may be introduced to this endpoint while in beta.
-  version: ''
-servers:
-  - url: 'https://{store_domain}/api/storefront'
-    variables:
-      store_domain:
-        default: your_store.example.com
-        description: 'The [URL authority](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/What_is_a_URL#authority) of the storefront.'
-tags:
-  - name: Form Fields
+  title: Storefront Form Fields
+  version: 1.0.0
 paths:
   /form-fields:
     get:
-      tags:
-        - Form Fields
-      summary: Get Form Fields
-      operationId: getFormFields
+      operationId: formFields_getFormFields
+      summary: List Form Fields
       description: |-
         Gets form fields.
 
         > #### Note
         > * Substitute your storefront domain for `yourstore.example.com`. 
         > * The Send a Test Request feature is not currently supported for this endpoint.
+      tags:
+        - formFields
       parameters:
         - name: filter
           in: query
+          description: Filter the form fields returned.
+          required: false
           schema:
-            type: string
-            enum:
-              - customerAccount
-              - shippingAddress
-              - billingAddress
+            type: array
+            items:
+              $ref: '#/components/schemas/FormFieldsGetParametersFilterSchemaItems'
       responses:
         '200':
           description: Returns an object with form fields groups.
@@ -48,26 +31,79 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FormFieldGroups'
+tags:
+  - name: formFields
+    description: Retrieve the custom form fields configured for storefront forms.
+servers:
+  - url: https://your_store.example.com/api/storefront
+    description: https://{store_domain}/api/storefront
 components:
   schemas:
-    FormFieldGroups:
+    FormFieldsGetParametersFilterSchemaItems:
+      type: string
+      enum:
+        - customerAccount
+        - shippingAddress
+        - billingAddress
+      title: FormFieldsGetParametersFilterSchemaItems
+    FormFieldType:
+      type: string
+      enum:
+        - integer
+        - string
+        - array
+        - date
+      description: Type of the value hold by the field
+      title: FormFieldType
+    FormFieldFieldType:
+      type: string
+      enum:
+        - checkbox
+        - text
+        - date
+        - multiline
+        - radio
+        - dropdown
+      description: Type of the field
+      title: FormFieldFieldType
+    FormFieldRequirements:
       type: object
-      description: Group of form field groups
-      x-internal: false
-      x-examples: {}
       properties:
-        customerAccount:
-          $ref: '#/components/schemas/FormFields'
-        shippingAddress:
-          $ref: '#/components/schemas/FormFields'
-        billingAddress:
-          $ref: '#/components/schemas/FormFields'
-    FormFields:
-      type: array
-      description: List of form fields for the group
-      items:
-        $ref: '#/components/schemas/FormField'
-      x-internal: false
+        alpha:
+          type: string
+          description: Regex expression for the required alpha characters.
+        description:
+          type: string
+          description: Description for the password requirements.
+        minlength:
+          type: integer
+          description: Minimum password length.
+        numeric:
+          type: string
+          description: Regex expression for the required numeric characters.
+      description: Password requirements (password field type only).
+      title: FormFieldRequirements
+    FormFieldOptionsItemsItems:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+      title: FormFieldOptionsItemsItems
+    FormFieldOptions:
+      type: object
+      properties:
+        helperLabel:
+          type: string
+          description: Placeholder text for dropdown field type.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormFieldOptionsItemsItems'
+          description: List of possible values for this field.
+      description: Extra data for radio, dropdown and checkbox field types.
+      title: FormFieldOptions
     FormField:
       type: object
       properties:
@@ -90,51 +126,45 @@ components:
           type: string
           description: The field unique ID
         type:
-          type: string
+          $ref: '#/components/schemas/FormFieldType'
           description: Type of the value hold by the field
-          enum:
-            - integer
-            - string
-            - array
-            - date
         fieldType:
-          type: string
+          $ref: '#/components/schemas/FormFieldFieldType'
           description: Type of the field
-          enum:
-            - checkbox
-            - text
-            - date
-            - multiline
-            - radio
-            - dropdown
         min:
           type: string
-          description: The minimun valid value for the field (integer and date type only)
+          description: The minimum valid value for the field (integer and date type only).
         max:
           type: string
-          description: The minimun valid value for the field (integer and date type only)
+          description: The minimum valid value for the field (integer and date type only).
         maxLength:
           type: integer
-          description: The maximum length for the value (string type only)
+          description: The maximum length for the value (string type only).
         secret:
           type: boolean
-          description: Whether the field represents a password field
+          description: Whether the field represents a password field (password field type only).
+        requirements:
+          $ref: '#/components/schemas/FormFieldRequirements'
+          description: Password requirements (password field type only).
         options:
-          type: object
-          properties:
-            helperLabel:
-              type: string
-              description: Placeholder text for dropdown field type.
-            items:
-              type: array
-              description: List of possible values for this field.
-              items:
-                type: object
-                properties:
-                  label:
-                    type: string
-                  value:
-                    type: string
-          description: 'Extra data for radio, dropdown and checkbox field types.'
+          $ref: '#/components/schemas/FormFieldOptions'
+          description: Extra data for radio, dropdown and checkbox field types.
       description: Form Field
-      x-internal: false
+      title: FormField
+    FormFields:
+      type: array
+      items:
+        $ref: '#/components/schemas/FormField'
+      description: List of form fields for the group
+      title: FormFields
+    FormFieldGroups:
+      type: object
+      properties:
+        customerAccount:
+          $ref: '#/components/schemas/FormFields'
+        shippingAddress:
+          $ref: '#/components/schemas/FormFields'
+        billingAddress:
+          $ref: '#/components/schemas/FormFields'
+      description: Group of form field groups
+      title: FormFieldGroups

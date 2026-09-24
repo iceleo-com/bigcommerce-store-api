@@ -4,6 +4,9 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
 
+/**
+ * Tax_Settings
+ */
 export type TaxSettings = {
     /**
      * Whether prices entered on this store include a tax component or not.
@@ -12,20 +15,11 @@ export type TaxSettings = {
     /**
      * Settings that describe how prices display at the global level.
      */
-    price_display_settings?: {
-        /**
-         * Whether to show prices as tax inclusive or tax exclusive in the BigCommerce control panel.
-         */
-        show_inclusive_in_control_panel?: boolean;
-        /**
-         * Whether to show prices as tax inclusive or tax exclusive across all invoices, or use the shopperʼs tax zone for price display on invoices.
-         */
-        invoice_price_display_strategy?: 'ZONE' | 'INCLUSIVE' | 'EXCLUSIVE';
-    };
+    price_display_settings?: TaxSettingsPriceDisplaySettings;
     /**
      * Describes the fallback behavior that applies when a tax provider produces an error. A merchant may decide to use a flat 10% fallback tax rate, their basic tax settings, or to block the transaction until they achieve a successful result.
      */
-    fallback_strategy?: 'FIXED' | 'BASIC' | 'DISABLE';
+    fallback_strategy?: TaxSettingsFallbackStrategy;
     /**
      * This setting applies only if a merchant enters tax-inclusive prices. When enabled, the store subtracts the itemʼs store tax rate before calculating tax using the shopperʼs tax zone. The tax-exclusive amount will be the same across all tax zones. When disabled, the tax-inclusive price remains the same across all tax zones; only the tax amount will vary based on the shopperʼs location. The tax-exclusive amount may vary among tax zones. These calculations are relevant for tax pricing and tax quotations that use basic tax.
      */
@@ -42,10 +36,77 @@ export type TaxSettings = {
      * ID for the tax zone a store uses when subtracting store tax. This setting applies only if a merchant enters tax-inclusive prices and subtracts store tax before tax calculation.
      */
     store_tax_zone_id?: number;
+    /**
+     * This setting determines whether BigCommerce submits tax documents to third-party tax providers when orders are created or when payments are captured online.
+     */
+    document_submission_strategy?: TaxSettingsDocumentSubmissionStrategy;
+    /**
+     * This setting affects the rounding behavior of tax amounts calculated by the basic tax provider. The NO_ROUNDING option offers a high accuracy total tax amount for orders. The RATE_RESULT_ROUNDING option means every resulting tax rate amount has been rounded based on the active currency's precision settings. The UNIT_LEVEL_ROUNDING option means we calculate the rounded amount per unit, and then multiply this amount by the line item quantity. Note that tax is always calculated on the line item amount after discounts.
+     */
+    rounding_strategy?: TaxSettingsRoundingStrategy;
 };
 
 /**
- * Response meta
+ * TaxSettingsRoundingStrategy
+ *
+ * This setting affects the rounding behavior of tax amounts calculated by the basic tax provider. The NO_ROUNDING option offers a high accuracy total tax amount for orders. The RATE_RESULT_ROUNDING option means every resulting tax rate amount has been rounded based on the active currency's precision settings. The UNIT_LEVEL_ROUNDING option means we calculate the rounded amount per unit, and then multiply this amount by the line item quantity. Note that tax is always calculated on the line item amount after discounts.
+ */
+export type TaxSettingsRoundingStrategy = 'NO_ROUNDING' | 'RATE_RESULT_ROUNDING' | 'UNIT_LEVEL_ROUNDING';
+
+/**
+ * TaxSettingsDocumentSubmissionStrategy
+ *
+ * This setting determines whether BigCommerce submits tax documents to third-party tax providers when orders are created or when payments are captured online.
+ */
+export type TaxSettingsDocumentSubmissionStrategy = 'ON_PAYMENT_CAPTURE' | 'ON_ORDER_CREATION';
+
+/**
+ * TaxSettingsFallbackStrategy
+ *
+ * Describes the fallback behavior that applies when a tax provider produces an error. A merchant may decide to use a flat 10% fallback tax rate, their basic tax settings, or to block the transaction until they achieve a successful result.
+ */
+export type TaxSettingsFallbackStrategy = 'FIXED' | 'BASIC' | 'DISABLE';
+
+/**
+ * TaxSettingsPriceDisplaySettings
+ *
+ * Settings that describe how prices display at the global level.
+ */
+export type TaxSettingsPriceDisplaySettings = {
+    /**
+     * Whether to show prices as tax inclusive or tax exclusive in the BigCommerce control panel, or use the order's tax zone for price display.
+     */
+    control_panel_price_display_strategy?: TaxSettingsPriceDisplaySettingsControlPanelPriceDisplayStrategy;
+    /**
+     * Whether to show prices as tax inclusive or tax exclusive across all invoices, or use the shopperʼs tax zone for price display on invoices.
+     */
+    invoice_price_display_strategy?: TaxSettingsPriceDisplaySettingsInvoicePriceDisplayStrategy;
+};
+
+/**
+ * TaxSettingsPriceDisplaySettingsInvoicePriceDisplayStrategy
+ *
+ * Whether to show prices as tax inclusive or tax exclusive across all invoices, or use the shopperʼs tax zone for price display on invoices.
+ */
+export type TaxSettingsPriceDisplaySettingsInvoicePriceDisplayStrategy = 'ZONE' | 'INCLUSIVE' | 'EXCLUSIVE';
+
+/**
+ * TaxSettingsPriceDisplaySettingsControlPanelPriceDisplayStrategy
+ *
+ * Whether to show prices as tax inclusive or tax exclusive in the BigCommerce control panel, or use the order's tax zone for price display.
+ */
+export type TaxSettingsPriceDisplaySettingsControlPanelPriceDisplayStrategy = 'ZONE' | 'INCLUSIVE' | 'EXCLUSIVE';
+
+/**
+ * Tax Settings_updateTaxSettings_Response_200
+ */
+export type TaxSettingsUpdateTaxSettingsResponse200 = {
+    data?: TaxSettings;
+    meta?: MetaOpen;
+};
+
+/**
+ * MetaOpen
  *
  * Response metadata.
  */
@@ -54,14 +115,12 @@ export type MetaOpen = {
 };
 
 /**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+ * Tax Settings_getTaxSettings_Response_200
  */
-export type Accept = string;
-
-/**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
- */
-export type ContentType = string;
+export type TaxSettingsGetTaxSettingsResponse200 = {
+    data?: TaxSettings;
+    meta?: MetaOpen;
+};
 
 export type GetTaxSettingsData = {
     body?: never;
@@ -80,46 +139,36 @@ export type GetTaxSettingsResponses = {
     /**
      * OK
      */
-    200: {
-        data?: TaxSettings;
-        meta?: MetaOpen;
-    };
+    200: TaxSettingsGetTaxSettingsResponse200;
 };
 
 export type GetTaxSettingsResponse = GetTaxSettingsResponses[keyof GetTaxSettingsResponses];
 
-export type SetTaxSettingsData = {
-    body: TaxSettings;
+export type UpdateTaxSettingsData = {
+    body?: TaxSettings;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/tax/settings';
 };
 
-export type SetTaxSettingsErrors = {
+export type UpdateTaxSettingsErrors = {
     /**
-     * The request body does not meet the specification.
+     * Any type
      */
     422: unknown;
 };
 
-export type SetTaxSettingsResponses = {
+export type UpdateTaxSettingsResponses = {
     /**
      * OK
      */
-    200: {
-        data?: TaxSettings;
-        meta?: MetaOpen;
-    };
+    200: TaxSettingsUpdateTaxSettingsResponse200;
 };
 
-export type SetTaxSettingsResponse = SetTaxSettingsResponses[keyof SetTaxSettingsResponses];
+export type UpdateTaxSettingsResponse = UpdateTaxSettingsResponses[keyof UpdateTaxSettingsResponses];

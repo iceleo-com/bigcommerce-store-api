@@ -11,7 +11,7 @@ export class LocationsV3Api {
     }
 
     /**
-     * Get Locations
+     * List Locations
      *
      * List locations. You can use optional filter parameters.
 
@@ -87,29 +87,27 @@ export class LocationsV3Api {
     deleteLocations(
         query?: LocationsV3ApiSpecs.DeleteLocationsData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.DeleteLocationsResponses[200]>>,(RequestErrorResponse<404, Required<LocationsV3ApiSpecs.DeleteLocationsErrors[404]>> | RequestErrorResponse<422, Required<LocationsV3ApiSpecs.DeleteLocationsErrors[422]>>)>({
+        return this.request.delete<RequestSuccessResponse<204, Required<LocationsV3ApiSpecs.DeleteLocationsResponses[204]>>,(RequestErrorResponse<404, Required<LocationsV3ApiSpecs.DeleteLocationsErrors[404]>> | RequestErrorResponse<422, Required<LocationsV3ApiSpecs.DeleteLocationsErrors[422]>>)>({
             path: 'v3/inventory/locations',
             query,
         });
     }
 
     /**
-     * Get Metafields
+     * List Metafields
      *
      * Retrieve metafields for a location.
      */
     getLocationMetafields(
         locationId: LocationsV3ApiSpecs.GetLocationMetafieldsData['path']['location_id'],
-        query?: LocationsV3ApiSpecs.GetLocationMetafieldsData['query'],
     ) {
         return this.request.get<RequestSuccessResponse<200, Required<LocationsV3ApiSpecs.GetLocationMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/inventory/locations/${locationId}/metafields`,
-            query,
         });
     }
 
     /**
-     * Create a Metafield
+     * Create Metafield
      *
      * Create a location metafield.
      */
@@ -125,7 +123,7 @@ export class LocationsV3Api {
     }
 
     /**
-     * Get a Metafield
+     * Get Metafield
      *
      * Get a metafield by location.
      */
@@ -139,7 +137,7 @@ export class LocationsV3Api {
     }
 
     /**
-     * Update a Metafield
+     * Update Metafield
      *
      * Update a metafield.
      */
@@ -156,7 +154,7 @@ export class LocationsV3Api {
     }
 
     /**
-     * Delete a Metafield
+     * Delete Metafield
      *
      * Delete a metafield.
      */
@@ -170,7 +168,7 @@ export class LocationsV3Api {
     }
 
     /**
-     * Get All Metafields
+     * List Metafields
      *
      * Get all location metafields.
      */
@@ -184,7 +182,7 @@ export class LocationsV3Api {
     }
 
     /**
-     * Create multiple Metafields
+     * Create Multiple Metafields
      *
      * Create multiple metafields.
      */
@@ -199,7 +197,7 @@ export class LocationsV3Api {
     }
 
     /**
-     * Update multiple Metafields
+     * Update Multiple Metafields
      *
      * Create multiple metafields.
      */

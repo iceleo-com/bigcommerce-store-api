@@ -3,20 +3,26 @@ export type ClientOptions = {
 };
 export type TaxCustomer = {
     customer_id: number;
-    tax_properties: {
-        [key: string]: unknown;
-    };
+    tax_properties: TaxCustomerTaxProperties;
+};
+export type TaxCustomerTaxProperties = {
+    [key: string]: unknown;
+};
+export type TaxCustomersUpdateTaxCustomersResponse200 = {
+    data?: Array<TaxCustomer>;
+    meta?: MetaOpen;
 };
 export type MetaOpen = {
     [key: string]: unknown;
 };
-export type Accept = string;
-export type ContentType = string;
-export type CustomerIdin = Array<number>;
+export type TaxCustomersGetTaxCustomersResponse200 = {
+    data?: Array<TaxCustomer>;
+    meta?: MetaOpen;
+};
 export type DeleteTaxCustomersData = {
     body?: never;
     headers: {
-        'Content-Type': string;
+        Accept: string;
     };
     path?: never;
     query?: {
@@ -28,13 +34,15 @@ export type DeleteTaxCustomersErrors = {
     400: unknown;
 };
 export type DeleteTaxCustomersResponses = {
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 export type DeleteTaxCustomersResponse = DeleteTaxCustomersResponses[keyof DeleteTaxCustomersResponses];
 export type GetTaxCustomersData = {
     body?: never;
     headers: {
-        'Content-Type': string;
+        Accept: string;
     };
     path?: never;
     query?: {
@@ -46,16 +54,13 @@ export type GetTaxCustomersErrors = {
     400: unknown;
 };
 export type GetTaxCustomersResponses = {
-    200: {
-        data?: Array<TaxCustomer>;
-        meta?: MetaOpen;
-    };
+    200: TaxCustomersGetTaxCustomersResponse200;
 };
 export type GetTaxCustomersResponse = GetTaxCustomersResponses[keyof GetTaxCustomersResponses];
 export type UpdateTaxCustomersData = {
-    body: Array<TaxCustomer>;
+    body?: Array<TaxCustomer>;
     headers: {
-        'Content-Type': string;
+        Accept: string;
     };
     path?: never;
     query?: never;
@@ -65,9 +70,6 @@ export type UpdateTaxCustomersErrors = {
     422: unknown;
 };
 export type UpdateTaxCustomersResponses = {
-    200: {
-        data?: Array<TaxCustomer>;
-        meta?: MetaOpen;
-    };
+    200: TaxCustomersUpdateTaxCustomersResponse200;
 };
 export type UpdateTaxCustomersResponse = UpdateTaxCustomersResponses[keyof UpdateTaxCustomersResponses];

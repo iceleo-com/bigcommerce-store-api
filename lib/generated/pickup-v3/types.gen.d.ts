@@ -1,29 +1,39 @@
 export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
-export type BasePickup = {
-    pickup_method_id?: number;
-    order_id?: number;
+export type PutRequestPickup = {
+    id: number;
+    pickup_id: number;
+    ready_at?: string;
+    collected_at?: string;
+};
+export type PickupPutPickupResponse200 = {
+    data?: Array<Pickup>;
+    meta?: OrdersPickupsPutResponsesContentApplicationJsonSchemaMeta;
+};
+export type OrdersPickupsPutResponsesContentApplicationJsonSchemaMeta = {
+    [key: string]: unknown;
 };
 export type Pickup = {
     id?: number;
-} & BasePickup & {
+    pickup_method_id?: number;
+    order_id?: number;
     ready_at?: string;
     created_at?: string;
     updated_at?: string;
     pickup_items?: Array<PickupItem>;
 };
-export type BasePickupItem = {
-    order_product_id?: number;
-    quantity?: number;
-};
 export type PickupItem = {
     id?: number;
-} & BasePickupItem & {
-    status?: 'AWAITING_COLLECTION' | 'COLLECTED';
+    order_product_id?: number;
+    quantity?: number;
+    status?: PickupItemStatus;
     collected_at?: string | null;
 };
-export type PostRequestPickup = BasePickup & {
+export type PickupItemStatus = 'AWAITING_COLLECTION' | 'COLLECTED';
+export type PostRequestPickup = {
+    pickup_method_id: number;
+    order_id: number;
     ready_at: string;
     collected_at?: string;
     pickup_items: Array<PostRequestPickupItem>;
@@ -32,22 +42,25 @@ export type PostRequestPickupItem = {
     order_product_id: number;
     quantity: number;
 };
-export type PutRequestPickup = {
-    id: number;
-    pickup_id: number;
-    ready_at?: string;
-    collected_at?: string;
-};
 export type ErrorResponse = {
     status?: number;
     title?: string;
     type?: string;
-    errors?: {
-        [key: string]: unknown;
-    };
+    errors?: ErrorResponseErrors;
 };
-export type Accept = string;
-export type ContentType = string;
+export type ErrorResponseErrors = {
+    [key: string]: unknown;
+};
+export type PickupPostPickupResponse200 = {
+    data?: Array<Pickup>;
+    meta?: OrdersPickupsPostResponsesContentApplicationJsonSchemaMeta;
+};
+export type OrdersPickupsPostResponsesContentApplicationJsonSchemaMeta = {
+    [key: string]: unknown;
+};
+export type PickupGetPickupResponse200 = {
+    data?: Array<Pickup>;
+};
 export type DeletePickupData = {
     body?: never;
     headers: {
@@ -60,7 +73,9 @@ export type DeletePickupData = {
     url: '/orders/pickups';
 };
 export type DeletePickupResponses = {
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 export type DeletePickupResponse = DeletePickupResponses[keyof DeletePickupResponses];
 export type GetPickupData = {
@@ -76,16 +91,13 @@ export type GetPickupData = {
     url: '/orders/pickups';
 };
 export type GetPickupResponses = {
-    200: {
-        data?: Array<Pickup>;
-    };
+    200: PickupGetPickupResponse200;
 };
 export type GetPickupResponse = GetPickupResponses[keyof GetPickupResponses];
 export type PostPickupData = {
-    body: Array<PostRequestPickup>;
+    body?: Array<PostRequestPickup>;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -96,19 +108,13 @@ export type PostPickupErrors = {
 };
 export type PostPickupError = PostPickupErrors[keyof PostPickupErrors];
 export type PostPickupResponses = {
-    200: {
-        data?: Array<Pickup>;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: PickupPostPickupResponse200;
 };
 export type PostPickupResponse = PostPickupResponses[keyof PostPickupResponses];
 export type PutPickupData = {
-    body: Array<PutRequestPickup>;
+    body?: Array<PutRequestPickup>;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -119,11 +125,6 @@ export type PutPickupErrors = {
 };
 export type PutPickupError = PutPickupErrors[keyof PutPickupErrors];
 export type PutPickupResponses = {
-    200: {
-        data?: Array<Pickup>;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: PickupPutPickupResponse200;
 };
 export type PutPickupResponse = PutPickupResponses[keyof PutPickupResponses];

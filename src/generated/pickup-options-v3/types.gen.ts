@@ -4,6 +4,9 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
 
+/**
+ * PickupRequestPayload
+ */
 export type PickupRequestPayload = {
     search_area: SearchArea;
     /**
@@ -13,6 +16,16 @@ export type PickupRequestPayload = {
 };
 
 /**
+ * Item
+ */
+export type Item = {
+    variant_id: number;
+    quantity: number;
+};
+
+/**
+ * SearchArea
+ *
  * Area where you are searching for pickup options.
  */
 export type SearchArea = {
@@ -20,13 +33,27 @@ export type SearchArea = {
     /**
      * Radius around the coordinates where you are searching for pickup options.
      */
-    radius: {
-        value: number;
-        unit: 'KM' | 'MI';
-    };
+    radius: SearchAreaRadius;
 };
 
 /**
+ * SearchAreaRadius
+ *
+ * Radius around the coordinates where you are searching for pickup options.
+ */
+export type SearchAreaRadius = {
+    value: number;
+    unit: SearchAreaRadiusUnit;
+};
+
+/**
+ * SearchAreaRadiusUnit
+ */
+export type SearchAreaRadiusUnit = 'KM' | 'MI';
+
+/**
+ * Coordinates
+ *
  * Coordinates where you are searching for pickup options.
  */
 export type Coordinates = {
@@ -34,20 +61,26 @@ export type Coordinates = {
     longitude: number;
 };
 
-export type Item = {
-    variant_id: number;
-    quantity: number;
-};
-
+/**
+ * PickupOptionsResponse
+ */
 export type PickupOptionsResponse = {
-    results?: Array<{
-        /**
-         * Pickup options for the available items.
-         */
-        pickup_options?: Array<PickupOption>;
-    }>;
+    results?: Array<PickupOptionsResponseResultsItems>;
 };
 
+/**
+ * PickupOptionsResponseResultsItems
+ */
+export type PickupOptionsResponseResultsItems = {
+    /**
+     * Pickup options for the available items.
+     */
+    pickup_options?: Array<PickupOption>;
+};
+
+/**
+ * PickupOption
+ */
 export type PickupOption = {
     pickup_method?: PickupMethod;
     /**
@@ -57,6 +90,16 @@ export type PickupOption = {
 };
 
 /**
+ * AvailableItem
+ */
+export type AvailableItem = {
+    variant_id?: number;
+    quantity?: number;
+};
+
+/**
+ * PickupMethod
+ *
  * Pickup method that can be used with the available items.
  */
 export type PickupMethod = {
@@ -67,32 +110,13 @@ export type PickupMethod = {
     collection_time_description?: string;
 };
 
-export type AvailableItem = {
-    variant_id?: number;
-    quantity?: number;
-};
-
-/**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
- */
-export type Accept = string;
-
-/**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
- */
-export type ContentType = string;
-
 export type PostPickupOptionsData = {
-    body: PickupRequestPayload;
+    body?: PickupRequestPayload;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
     };
     path?: never;
     query?: never;

@@ -11,9 +11,9 @@ export class SitesV3Api {
     }
 
     /**
-     * Get Sites
+     * List Sites
      *
-     * Get sites linked to a [headless storefront](/docs/storefront/headless) sales channels.
+     * Get sites linked to a [headless storefront](/developer/docs/storefront/headless) sales channels.
      */
     getSites(
         query?: SitesV3ApiSpecs.GetSitesData['query'],
@@ -25,14 +25,14 @@ export class SitesV3Api {
     }
 
     /**
-     * Create a Site
+     * Create Site
      *
-     * Create a site that links a [headless storefront](/docs/storefront/headless) to a sales [channel](/docs/rest-management/channels).
+     * Create a site that links a [headless storefront](/developer/docs/storefront/headless) to a sales [channel](/developer/api-reference/rest/admin/management/channels).
      */
-    postSite(
-        requestBody: SitesV3ApiSpecs.PostSiteData['body'],
+    createSite(
+        requestBody: SitesV3ApiSpecs.CreateSiteData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<SitesV3ApiSpecs.PostSiteResponses[201]>>,(RequestErrorResponse<400, Required<SitesV3ApiSpecs.PostSiteErrors[400]>> | RequestErrorResponse<403, Required<SitesV3ApiSpecs.PostSiteErrors[403]>> | RequestErrorResponse<404, Required<SitesV3ApiSpecs.PostSiteErrors[404]>> | RequestErrorResponse<502, Required<SitesV3ApiSpecs.PostSiteErrors[502]>> | RequestErrorResponse<504, Required<SitesV3ApiSpecs.PostSiteErrors[504]>>)>({
+        return this.request.post<RequestSuccessResponse<201, Required<SitesV3ApiSpecs.CreateSiteResponses[201]>>,(RequestErrorResponse<400, Required<SitesV3ApiSpecs.CreateSiteErrors[400]>> | RequestErrorResponse<403, Required<SitesV3ApiSpecs.CreateSiteErrors[403]>> | RequestErrorResponse<404, Required<SitesV3ApiSpecs.CreateSiteErrors[404]>> | RequestErrorResponse<422, Required<SitesV3ApiSpecs.CreateSiteErrors[422]>> | RequestErrorResponse<502, Required<SitesV3ApiSpecs.CreateSiteErrors[502]>> | RequestErrorResponse<504, Required<SitesV3ApiSpecs.CreateSiteErrors[504]>>)>({
             path: 'v3/sites',
             contentType: 'application/json',
             body: requestBody,
@@ -40,14 +40,7 @@ export class SitesV3Api {
     }
 
     /**
-     * @deprecated Use `postSite` instead.
-     */
-    createSite(...args: Parameters<SitesV3Api['postSite']>) {
-        return this.postSite(...args);
-    }
-
-    /**
-     * Get a Site
+     * Get Site
      *
      * Get a site with site ID `{site_id}`.
      */
@@ -60,15 +53,15 @@ export class SitesV3Api {
     }
 
     /**
-     * Update a Site
+     * Update Site
      *
      * Update a site with site ID `{site_id}`.
      */
-    putSite(
-        siteId: SitesV3ApiSpecs.PutSiteData['path']['site_id'],
-        requestBody: SitesV3ApiSpecs.PutSiteData['body'],
+    updateSite(
+        siteId: SitesV3ApiSpecs.UpdateSiteData['path']['site_id'],
+        requestBody: SitesV3ApiSpecs.UpdateSiteData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SitesV3ApiSpecs.PutSiteResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SitesV3ApiSpecs.UpdateSiteResponses[200]>>,RequestErrorResponse<422, Required<SitesV3ApiSpecs.UpdateSiteErrors[422]>>>({
             path: `v3/sites/${siteId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -76,16 +69,9 @@ export class SitesV3Api {
     }
 
     /**
-     * @deprecated Use `putSite` instead.
-     */
-    updateSite(...args: Parameters<SitesV3Api['putSite']>) {
-        return this.putSite(...args);
-    }
-
-    /**
-     * Delete a Site
+     * Delete Site
      *
-     * Delete a site with site ID `{site_id}`.
+     * Delete a site with site ID `{site_id}`. Remove the URL set for a given site ID.
      */
     deleteSite(
         siteId: SitesV3ApiSpecs.DeleteSiteData['path']['site_id'],
@@ -96,40 +82,77 @@ export class SitesV3Api {
     }
 
     /**
-     * Get a Site’s Routes
+     * Get Site’s SSL TLS Certificate Information
+     *
+     * Obtain information about a site’s SSL/TLS certificate.
+     */
+    getSiteCertificate(
+        siteId: SitesV3ApiSpecs.GetSiteCertificateData['path']['site_id'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<SitesV3ApiSpecs.GetSiteCertificateResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/sites/${siteId}/certificate`,
+        });
+    }
+
+    /**
+     * Upsert Site’s SSL TLS Certificate Information
+     *
+     * - If a value for `url` is not supplied, the saved certificate is associated with the specified site’s `primary` URL.
+     - Use caution. Because this endpoint upserts, supplying an SSL certificate for a domain that already has a certificate connected overwrites the domain’s extant certificate.'
+     */
+    upsertSiteCertificate(
+        siteId: SitesV3ApiSpecs.UpsertSiteCertificateData['path']['site_id'],
+        requestBody: SitesV3ApiSpecs.UpsertSiteCertificateData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<SitesV3ApiSpecs.UpsertSiteCertificateResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/sites/${siteId}/certificate`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * List Site Certificates
+     *
+     * Return all SSL certificates connected to domains within a store.
+     */
+    getSitesCertificates(
+        query?: SitesV3ApiSpecs.GetSitesCertificatesData['query'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<SitesV3ApiSpecs.GetSitesCertificatesResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: 'v3/sites/certificates',
+            query,
+        });
+    }
+
+    /**
+     * Get Site’s Routes
      *
      * Get a site’s routes.
      */
-    indexSiteRoutes(
-        siteId: SitesV3ApiSpecs.IndexSiteRoutesData['path']['site_id'],
-        query?: SitesV3ApiSpecs.IndexSiteRoutesData['query'],
+    getSiteRoutes(
+        siteId: SitesV3ApiSpecs.GetSiteRoutesData['path']['site_id'],
+        query?: SitesV3ApiSpecs.GetSiteRoutesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SitesV3ApiSpecs.IndexSiteRoutesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<SitesV3ApiSpecs.GetSiteRoutesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/sites/${siteId}/routes`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `indexSiteRoutes` instead.
-     */
-    getSiteRoutes(...args: Parameters<SitesV3Api['indexSiteRoutes']>) {
-        return this.indexSiteRoutes(...args);
-    }
-
-    /**
-     * Create a Site Route
+     * Create Site Route
      *
-     * Create routes that tell BigCommerce how to link to pages on a [headless storefront](/docs/storefront/headless).
+     * Create routes that tell BigCommerce how to link to pages on a [headless storefront](/developer/docs/storefront/headless).
 
      ## Usage Notes
-     * For a list of supported route types, see [Route types](/docs/rest-management/sites#route-types).
+     * For a list of supported route types, see [Route types](/developer/api-reference/rest/admin/management/sites#route-types).
      */
-    postSiteRoute(
-        siteId: SitesV3ApiSpecs.PostSiteRouteData['path']['site_id'],
-        requestBody: SitesV3ApiSpecs.PostSiteRouteData['body'],
+    createSiteRoute(
+        siteId: SitesV3ApiSpecs.CreateSiteRouteData['path']['site_id'],
+        requestBody: SitesV3ApiSpecs.CreateSiteRouteData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<SitesV3ApiSpecs.PostSiteRouteResponses[201]>>,(RequestErrorResponse<422, Required<SitesV3ApiSpecs.PostSiteRouteErrors[422]>> | RequestErrorResponse<502, Required<SitesV3ApiSpecs.PostSiteRouteErrors[502]>>)>({
+        return this.request.post<RequestSuccessResponse<201, Required<SitesV3ApiSpecs.CreateSiteRouteResponses[201]>>,(RequestErrorResponse<422, Required<SitesV3ApiSpecs.CreateSiteRouteErrors[422]>> | RequestErrorResponse<502, Required<SitesV3ApiSpecs.CreateSiteRouteErrors[502]>>)>({
             path: `v3/sites/${siteId}/routes`,
             contentType: 'application/json',
             body: requestBody,
@@ -137,25 +160,18 @@ export class SitesV3Api {
     }
 
     /**
-     * @deprecated Use `postSiteRoute` instead.
-     */
-    createSiteRoute(...args: Parameters<SitesV3Api['postSiteRoute']>) {
-        return this.postSiteRoute(...args);
-    }
-
-    /**
-     * Update a Site’s Routes
+     * Update Site’s Routes
      *
      * Upsert routes for site with ID `{site_id}`.
 
      ## Usage Notes
      * `id` is required when updating an existing route.
      */
-    putSitesBySiteIdRoutes(
-        siteId: SitesV3ApiSpecs.PutSitesBySiteIdRoutesData['path']['site_id'],
-        requestBody: SitesV3ApiSpecs.PutSitesBySiteIdRoutesData['body'],
+    updateSiteRoutes(
+        siteId: SitesV3ApiSpecs.UpdateSiteRoutesData['path']['site_id'],
+        requestBody: SitesV3ApiSpecs.UpdateSiteRoutesData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SitesV3ApiSpecs.PutSitesBySiteIdRoutesResponses[200]>>,RequestErrorResponse<422, Required<SitesV3ApiSpecs.PutSitesBySiteIdRoutesErrors[422]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<SitesV3ApiSpecs.UpdateSiteRoutesResponses[200]>>,RequestErrorResponse<422, Required<SitesV3ApiSpecs.UpdateSiteRoutesErrors[422]>>>({
             path: `v3/sites/${siteId}/routes`,
             contentType: 'application/json',
             body: requestBody,
@@ -163,14 +179,7 @@ export class SitesV3Api {
     }
 
     /**
-     * @deprecated Use `putSitesBySiteIdRoutes` instead.
-     */
-    updateSiteRoutes(...args: Parameters<SitesV3Api['putSitesBySiteIdRoutes']>) {
-        return this.putSitesBySiteIdRoutes(...args);
-    }
-
-    /**
-     * Get a Site Route
+     * Get Site Route
      *
      * Get a site’s route.
      */
@@ -184,17 +193,17 @@ export class SitesV3Api {
     }
 
     /**
-     * Update a Site Route
+     * Update Site Route
      *
      * Update a site’s route.
 
      */
-    putSiteRoute(
-        siteId: SitesV3ApiSpecs.PutSiteRouteData['path']['site_id'],
-        routeId: SitesV3ApiSpecs.PutSiteRouteData['path']['route_id'],
-        requestBody: SitesV3ApiSpecs.PutSiteRouteData['body'],
+    updateSiteRoute(
+        siteId: SitesV3ApiSpecs.UpdateSiteRouteData['path']['site_id'],
+        routeId: SitesV3ApiSpecs.UpdateSiteRouteData['path']['route_id'],
+        requestBody: SitesV3ApiSpecs.UpdateSiteRouteData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<201, Required<SitesV3ApiSpecs.PutSiteRouteResponses[201]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<201, Required<SitesV3ApiSpecs.UpdateSiteRouteResponses[201]>>,RequestErrorResponse<400, void>>({
             path: `v3/sites/${siteId}/routes/${routeId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -202,88 +211,16 @@ export class SitesV3Api {
     }
 
     /**
-     * @deprecated Use `putSiteRoute` instead.
-     */
-    updateSiteRoute(...args: Parameters<SitesV3Api['putSiteRoute']>) {
-        return this.putSiteRoute(...args);
-    }
-
-    /**
-     * Delete a Site Route
+     * Delete Site Route
      *
      * Delete a site’s route.
      */
-    deleteRoute(
-        siteId: SitesV3ApiSpecs.DeleteRouteData['path']['site_id'],
-        routeId: SitesV3ApiSpecs.DeleteRouteData['path']['route_id'],
+    deleteSiteRoute(
+        siteId: SitesV3ApiSpecs.DeleteSiteRouteData['path']['site_id'],
+        routeId: SitesV3ApiSpecs.DeleteSiteRouteData['path']['route_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<SitesV3ApiSpecs.DeleteRouteResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<SitesV3ApiSpecs.DeleteSiteRouteResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/sites/${siteId}/routes/${routeId}`,
-        });
-    }
-
-    /**
-     * @deprecated Use `deleteRoute` instead.
-     */
-    deleteSiteRoute(...args: Parameters<SitesV3Api['deleteRoute']>) {
-        return this.deleteRoute(...args);
-    }
-
-    /**
-     * Get a Site’s SSL/TLS Certificate Information
-     *
-     * Obtain information about a site’s SSL/TLS certificate.
-     */
-    getSitesIdCertificate(
-        siteId: SitesV3ApiSpecs.GetSitesIdCertificateData['path']['site_id'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SitesV3ApiSpecs.GetSitesIdCertificateResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/sites/${siteId}/certificate`,
-        });
-    }
-
-    /**
-     * @deprecated Use `getSitesIdCertificate` instead.
-     */
-    getSiteCertificate(...args: Parameters<SitesV3Api['getSitesIdCertificate']>) {
-        return this.getSitesIdCertificate(...args);
-    }
-
-    /**
-     * Upsert a Site’s SSL/TLS Certificate Information
-     *
-     * - If a value for `url` is not supplied, the saved certificate is associated with the specified site’s `primary` URL.
-     - Use caution. Because this endpoint upserts, supplying an SSL certificate for a domain that already has a certificate connected overwrites the domain’s extant certificate.'
-     */
-    putSiteIdCertificate(
-        siteId: SitesV3ApiSpecs.PutSiteIdCertificateData['path']['site_id'],
-        requestBody: SitesV3ApiSpecs.PutSiteIdCertificateData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<SitesV3ApiSpecs.PutSiteIdCertificateResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/sites/${siteId}/certificate`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * @deprecated Use `putSiteIdCertificate` instead.
-     */
-    upsertSiteCertificate(...args: Parameters<SitesV3Api['putSiteIdCertificate']>) {
-        return this.putSiteIdCertificate(...args);
-    }
-
-    /**
-     * Get Site Certificates
-     *
-     * Return all SSL certificates connected to domains within a store.
-     */
-    getSitesCertificates(
-        query?: SitesV3ApiSpecs.GetSitesCertificatesData['query'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SitesV3ApiSpecs.GetSitesCertificatesResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: 'v3/sites/certificates',
-            query,
         });
     }
 }

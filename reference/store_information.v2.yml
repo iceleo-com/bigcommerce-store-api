@@ -1,430 +1,344 @@
-openapi: '3.0.0'
+openapi: 3.1.0
 info:
-  version: ''
-  title: Store Information
-  description: Get Store Information endpoint, manage store profile settings.
-  termsOfService: 'https://www.bigcommerce.com/terms'
-  contact:
-    name: BigCommerce
-    url: 'https://www.bigcommerce.com'
-    email: support@bigcommerce.com
+  title: 'Admin Management: Store Information V2'
+  version: 1.0.0
 paths:
-  '/store':
+  /stores/{store_hash}/v2/store:
     get:
-      description: Returns metadata about a store.
+      operationId: storeInformation_getStoreInformation
       summary: Get Store Information
+      description: >-
+        Returns metadata about the global settings for a store. Some of these values are independently configurable on a
+        per-storefront or per-channel basis. For channel overrides, see [Store
+        Settings](/developer/api-reference/rest/admin/management/settings).
       tags:
-        - Store Information
+        - storeInformation
       parameters:
-        - name: Accept
-          in: header
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
           required: true
-          description: ''
           schema:
             type: string
-            default: application/json
-        - name: Content-Type
+        - name: Accept
           in: header
-          required: true
-          description: ''
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: false
           schema:
             type: string
             default: application/json
       responses:
         '200':
-          description: ''
+          description: OK
           content:
-            Time:
+            application/json:
               schema:
                 $ref: '#/components/schemas/StoreInformation'
-            application/json:
-              examples:
-                response:
-                  value:
-                    id: abc123
-                    domain: my-awesome.store
-                    secure_url: 'https://my-awesome.stor'
-                    control_panel_base_url: 'https://store-{store_hash}.mybigcommerce.com'
-                    status: live
-                    name: BigCommerce
-                    first_name: Jane
-                    last_name: Doe
-                    address: BigCommerce
-                    country: United States
-                    country_code: US
-                    phone: ''
-                    admin_email: jane.does@example.com
-                    order_email: info@janedoes.mybigcommerce.com
-                    favicon_url: 'https://cdn8.bigcommerce.com/r-8816ba2f48b0bcf4bec0c1a954c00e0fc36b/img/bc_favicon.ico'
-                    timezone:
-                      name: America/Chicago
-                      raw_offset: -21600
-                      dst_offset: -18000
-                      dst_correction: true
-                      date_format:
-                        display: M jS Y
-                        export: M jS Y
-                        extended_display: 'M jS Y @ g:i A'
-                    language: en
-                    currency: USD
-                    currency_symbol: $
-                    decimal_separator: .
-                    thousands_separator: ','
-                    decimal_places: 2
-                    currency_symbol_location: left
-                    weight_units: Ounces
-                    dimension_units: Inches
-                    dimension_decimal_places: 2
-                    dimension_decimal_token: .
-                    dimension_thousands_token: ','
-                    plan_name: Standard
-                    plan_level: Standard
-                    industry: ''
-                    logo:
-                      url: 'https://cdn8.bigcommerce.com/s-{store_hash}/product_images/screen_shot_2018-05-15_at_12.22.26_pm__05547_1529512135.png'
-                    is_price_entered_with_tax: false
-                    active_comparison_modules: []
-                    features:
-                      stencil_enabled: true
-                      sitewidehttps_enabled: false
-                      facebook_catalog_id: ''
-                      checkout_type: optimized
-            Response Schema:
-              examples:
-                response:
-                  value:
-                    id: nostrud pariatur incididunt
-                    domain: consequat ut amet
-                    secure_URL: consectetur ullamco ut Excepteur
-                    name: id qui cupidatat anim tempor
-                    first_name: ut dolore elit
-                    last_name: cupidatat minim
-                    address: tempor
-                    country: ex cupidatat
-                    phone: aliquip dolore pariatur
-                    admin_email: dolor commodo elit do
-                    order_email: ea qui
-                    timezone:
-                      name: 'Australia/Sydney'
-                      raw_offset: 39600
-                      dst_offset: 36000
-                      dst_correction: true
-                      date_format:
-                        display: cupidatat
-                        export: est
-                        extended_display: cillum qui esse aliquip culpa
-                    language: nulla commodo incididunt dolor ipsum
-                    currency: amet in
-                    currency_symbol: cupidatat deserunt est pariatur
-                    decimal_separator: in consectetur nisi officia
-                    thousands_separator: ea irure occaecat qui
-                    decimal_places: {}
-                    currency_symbol_location: est cupidatat
-                    weight_units: minim adipisicing do
-                    dimension_units: deserunt
-                    dimension_decimal_places: 50514826
-                    dimension_decimal_token: deserunt est aliqua Duis
-                    'dimension_thousands_token:': sint voluptate esse tempor
-                    plan_name: Ut
-                    plan_level: pariatur ullamco veniam ad
-                    industry: pariatur culpa est
-                    logo:
-                      url: aliquip in aliqua consectetur ullamco
-                    is_price_entered_with_tax: false
-                    features:
-                      stencil_enabled: true
-                      sitewidehttps_enabled: anim occaecat exercitation conse
-                      facebook_catalog_id: aliquip sed adipisicing quis
-                      checkout_type: qui mollit id aliqua ut
-  '/time':
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v2/time:
     get:
-      description: Returns the system timestamp at the time of the request. The time resource is useful for validating API authentication details and testing client connections.
+      operationId: timeZone_getSystemTimestamp
       summary: Get System Timestamp
+      description: >-
+        Returns the system timestamp at the time of the request. The time resource is useful for validating API
+        authentication details and testing client connections.
+      tags:
+        - timeZone
       parameters:
-        - name: Accept
-          in: header
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
           required: true
-          description: ''
           schema:
             type: string
-            default: application/json
-        - name: Content-Type
+        - name: Accept
           in: header
-          required: true
-          description: ''
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: false
           schema:
             type: string
             default: application/json
       responses:
         '200':
-          description: ''
+          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/timeStamp_Full'
-              examples:
-                response:
-                  value:
-                    time: 1529512970
-      tags:
-        - Time Zone
+      security:
+        - X-Auth-Token: []
 tags:
-  - name: Store Information
-  - name: Time Zone
-security:
-  - X-Auth-Token: []
-
+  - name: storeInformation
+    description: Retrieve a store's profile, address, and configuration details.
+  - name: timeZone
+    description: Retrieve the store's time zone settings.
 servers:
-  - url: 'https://api.bigcommerce.com/stores/{store_hash}/v2'
-    variables:
-      store_hash:
-        default: store_hash
-        description: Permanent ID of the BigCommerce store.
-    description: BigCommerce API Gateway
+  - url: https://api.bigcommerce.com
+    description: https://api.bigcommerce.com
 components:
-  securitySchemes:
-    X-Auth-Token:
-      name: X-Auth-Token
-      description: |-
-        ### OAuth scopes
-
-        | UI Name | Permission | Parameter |
-        |:--------|:-----------|:----------|
-        |  Information & Settings | modify | `store_v2_information` |
-        |  Information & Settings | read-only | `store_v2_information_read_only` |
-
-        ### Authentication header
-        
-        | Header | Argument | Description |
-        |:-------|:---------|:------------|
-        | `X-Auth-Token` | `access_token` | For more about API accounts that generate `access_token`s, see our [Guide to API Accounts](/docs/start/authentication/api-accounts). |
-        
-        ### Further reading
-        
-        For example requests and more information about authenticating BigCommerce APIs, see [Authentication and Example Requests](/docs/start/authentication#x-auth-token-header-example-requests).
-        
-        For more about BigCommerce OAuth scopes, see our [Guide to API Accounts](/docs/start/authentication/api-accounts#oauth-scopes).
-        
-        For a list of API status codes, see [API Status Codes](/docs/start/about/status-codes).
-      type: apiKey
-      in: header
   schemas:
-    StoreInformation:
-      title: Store Information
-      type: object
-      x-tags:
-        - Models
-      properties:
-        id:
-          description: Unique store identifier.
-          example: store_hash
-          type: string
-        domain:
-          description: Primary domain name.
-          example: your-store-url.com
-          type: string
-        secure_url:
-          description: Store’s current HTTPS URL.
-          example: 'https://your-store-url.com'
-          type: string
-        control_panel_base_url:
-          type: string
-          example: '"https://store-abc123.mybigcommerce.com"'
-          description: The secure hostname of the control panel.
-        name:
-          description: Store's name.
-          example: BigCommerce
-          type: string
-        first_name:
-          description: Primary contact’s first name (as defined during the store sign-up process).
-          example: Jane
-          type: string
-        last_name:
-          description: Primary contact’s last name (as defined during the store sign-up process).
-          example: Doe
-          type: string
-        address:
-          description: Display address.
-          example: BigCommerce
-          type: string
-        country:
-          description: Country where the store is located (as defined during the store sign-up process).
-          example: United States
-          type: string
-        phone:
-          description: Display phone number.
-          type: string
-        admin_email:
-          description: Email address of the store administrator/owner.
-          example: janedoes@example.com
-          type: string
-        order_email:
-          description: Email address for orders and fulfillment.
-          example: orders@emai
-          type: string
-        timezone:
-          $ref: '#/components/schemas/Timezone'
-        language:
-          description: Default language code.
-          example: en
-          type: string
-        currency:
-          description: Default currency code
-          example: USD
-          type: string
-        currency_symbol:
-          description: Default symbol for values in the currency.
-          example: $
-          type: string
-        decimal_separator:
-          description: Default decimal separator for values in the currency.
-          example: .
-          type: string
-        thousands_separator:
-          description: Default thousands separator for values in the currency.
-          example: ','
-          type: string
-        decimal_places:
-          description: Default decimal places for values in the currency.
-          example: 2
-          type: integer
-        currency_symbol_location:
-          description: Default position of the currency symbol (left or right).
-          example: left
-          type: string
-        weight_units:
-          description: Default weight units (metric or imperial).
-          example: Ounces
-          type: string
-        dimension_units:
-          description: Default dimension units (metric or imperial).
-          example: Inches
-          type: string
-        dimension_decimal_places:
-          description: The number of decimal places.
-          example: 2
-          type: integer
-        dimension_decimal_token:
-          description: The symbol that separates the whole numbers from the decimal points.
-          example: .
-          type: string
-        'dimension_thousands_token:':
-          description: The symbol used to denote thousands.
-          type: string
-        plan_name:
-          description: Name of the BigCommerce plan to which this store is subscribed.
-          example: Standard
-          type: string
-        plan_level:
-          description: Level of the BigCommerce plan to which this store is subscribed.
-          example: Standard
-          type: string
-        industry:
-          description: 'Industry, or vertical category, in which the business operates. (As selected from drop-down list during the store sign-up process.)'
-          example: Technology
-          type: string
-        logo:
-          type: object
-          properties:
-            url:
-              type: string
-              example: 'https://cdn8.bigcommerce.com/s-{store_hash}/product_images/screen_shot_2018-05-15_at_12.22.26_pm__05547_1529512135.png"'
-        is_price_entered_with_tax:
-          description: A Boolean value that indicates whether or not prices are entered with tax.
-          example: false
-          type: boolean
-        active_comparison_modules:
-          description: ''
-          type: array
-          items: {}
-        features:
-          description: |-
-            + `stencil_enabled`: `true` (boolean)
-            + `sitewidehttps_enabled`: `false` (boolean)
-            + `facebook_catalog_id` (string)
-          type: object
-          properties:
-            checkout_type:
-              type: string
-              example: optimized
-              description: 'What type of checkout is enabled on the store. Possible values returned are optimized, single (one page), single_customizable (one page for developers), klarna.'
-            facebook_catalog_id:
-              type: string
-              description: 'Id of the facebook by meta catalog. If there is none, it returns an empty string.'
-            graphql_storefront_api_enabled:
-              type: boolean
-            stencil_enabled:
-              type: boolean
-              example: true
-              description: Indicates whether a store is using a Stencil theme.
-            sitewidehttps_enabled:
-              type: boolean
-              example: false
-              description: Indicates if there is sitewide https.
-            multi_storefront_enabled:
-              type: boolean
-              description: |-
-                Indicates whether MSF feature flag is enabled on a store.
-
-                Returns `true` when MSF feature flag is enabled.
-                Returns `false` when MSF feature flag is disabled.
-            shopper_consent_tracking_enabled:
-              type: boolean
-            wishlists_enabled:
-              type: boolean
-        account_uuid:
-          type: string
-        default_channel_id:
-          type: integer
-        default_site_id:
-          type: integer
-        plan_is_trial:
-          type: boolean
-        store_id:
-          type: integer
-        status:
-          type: string
-          example: live
-    Timezone:
-      title: Time Zone
-      type: object
-      properties:
-        name:
-          description: 'a string identifying the time zone, in the format: /.'
-          example: America/Chicago
-          type: string
-        raw_offset:
-          description: 'A negative or positive number, identifying the offset from UTC/GMT, in seconds, during winter/standard time.'
-          example: -21600
-          type: integer
-        dst_offset:
-          description: 'A negative or positive number, identifying the offset from UTC/GMT, in seconds, during summer/daylight saving time.'
-          example: -18000
-          type: integer
-        dst_correction:
-          description: A boolean indicating whether this time zone observes daylight saving time.
-          example: true
-          type: boolean
-        date_format:
-          $ref: '#/components/schemas/DateFormat'
-      x-internal: false
     DateFormat:
-      title: Date Format
       type: object
       properties:
         display:
-          description: 'string that defines dates’ display format, in the pattern: M jS Y'
-          example: M jS Y
           type: string
+          description: A string that defines dates’ display format, in the pattern `M jS Y`.
         export:
-          description: 'string that defines the CSV export format for orders, customers, and products, in the pattern: M jS Y'
-          example: M jS Y
           type: string
+          description: A string that defines the CSV export format for orders, customers, and products, in the pattern `M jS Y`.
         extended_display:
-          description: 'string that defines dates’ extended-display format, in the pattern: M jS Y @ g:i A.'
-          example: 'M jS Y @ g:i A'
           type: string
-      x-internal: false
+          description: A string that defines dates’ extended-display format, in the pattern `M jS Y @ g:i A`.
+      title: DateFormat
+    Timezone:
+      type: object
+      properties:
+        name:
+          type: string
+          description: A string identifying the time zone, in the format `Continent/City`.
+        raw_offset:
+          type: integer
+          description: A negative or positive number, identifying the offset from UTC/GMT, in seconds, during winter/standard time.
+        dst_offset:
+          type: integer
+          description: >-
+            A negative or positive number, identifying the offset from UTC/GMT, in seconds, during summer/daylight
+            saving time.
+        dst_correction:
+          type: boolean
+          description: A boolean indicating whether this time zone observes daylight saving time.
+        date_format:
+          $ref: '#/components/schemas/DateFormat'
+      title: Timezone
+    StoreInformationLogo0:
+      type: object
+      properties:
+        url:
+          type: string
+      title: StoreInformationLogo0
+    StoreInformationLogo:
+      oneOf:
+        - $ref: '#/components/schemas/StoreInformationLogo0'
+        - type: array
+          items:
+            description: Any type
+      description: Either an object describing the logo image, or an empty array.
+      title: StoreInformationLogo
+    StoreInformationFeaturesCheckoutType:
+      type: string
+      enum:
+        - optimized
+        - single
+        - single_customizable
+        - klarna
+      description: >-
+        What type of checkout is enabled on the store. Possible values returned are optimized, single (one page),
+        single_customizable (one page for developers), klarna.
+      title: StoreInformationFeaturesCheckoutType
+    StoreInformationFeaturesStorefrontLimits:
+      type: object
+      properties:
+        active:
+          type: integer
+          minimum: 1
+          default: 1
+          description: >-
+            Describes the number of storefronts active on the store. If `multi_storefront_enabled` is `false`, this
+            value is `1`.
+        total_including_inactive:
+          type: integer
+          minimum: 1
+          default: 1
+          description: >-
+            Describes the total number of storefronts associated with the store, including both active and inactive
+            storefronts. The default varies based on store plan.
+      title: StoreInformationFeaturesStorefrontLimits
+    StoreInformationFeatures:
+      type: object
+      properties:
+        stencil_enabled:
+          type: boolean
+          default: true
+          description: Indicates whether a store is using a Stencil theme.
+        sitewidehttps_enabled:
+          type: boolean
+          description: Indicates whether there is site-wide https.
+        facebook_catalog_id:
+          type: string
+          description: The ID of the Facebook by Meta catalog. If there is none, this endpoint returns an empty string.
+        checkout_type:
+          $ref: '#/components/schemas/StoreInformationFeaturesCheckoutType'
+          description: >-
+            What type of checkout is enabled on the store. Possible values returned are optimized, single (one page),
+            single_customizable (one page for developers), klarna.
+        wishlists_enabled:
+          type: boolean
+        graphql_storefront_api_enabled:
+          type: boolean
+          default: true
+          description: >-
+            Describes whether you can use the [GraphQL Storefront
+            API](/developer/docs/storefront/guides/graphql-storefront-api/overview) on this store.
+        shopper_consent_tracking_enabled:
+          type: boolean
+          description: >-
+            Indicates whether the store is tracking the values of the cookie and privacy consent settings that the
+            shopper consented to and configured.
+        multi_storefront_enabled:
+          type: boolean
+          default: false
+          description: >-
+            Indicates whether the storeʼs plan provides the possibility of using more than one storefront or sales
+            channel. Internally, this value indicates whether the store has the MSF feature flag enabled. 
+        storefront_limits:
+          $ref: '#/components/schemas/StoreInformationFeaturesStorefrontLimits'
+      description: >-
+        Describes some aspects of the storeʼs tech stack and configuration settings that affect the features available
+        for the store to use.
+      title: StoreInformationFeatures
+    StoreInformation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The store hash, a unique store identifier.
+        account_uuid:
+          type: string
+          format: uuid
+          description: The UUID of the account to which the store belongs.
+        domain:
+          type: string
+          description: Primary domain name.
+        secure_url:
+          type: string
+          description: Store’s current HTTPS URL.
+        control_panel_base_url:
+          type: string
+          description: The secure hostname of the control panel.
+        status:
+          type: string
+          description: The status of the store.
+        name:
+          type: string
+          description: Store’s name.
+        first_name:
+          type: string
+          description: Primary contact’s first name (as defined during the store sign-up process).
+        last_name:
+          type: string
+          description: Primary contact’s last name (as defined during the store sign-up process).
+        address:
+          type: string
+          description: Display address.
+        country:
+          type: string
+          description: Country where the store is located (as defined during the store sign-up process).
+        country_code:
+          type: string
+          description: Two-letter ISO 3166-1 country code
+        infrastructure_region:
+          type: string
+          description: >-
+            The infrastructure region where the store is located. Use this to determine where to place supporting
+            infrastructure for minimum latency to the store. Compare against GCP regions on
+            https://cloud.google.com/compute/docs/regions-zones
+        phone:
+          type: string
+          description: Display phone number.
+        admin_email:
+          type: string
+          description: Email address of the store administrator/owner.
+        order_email:
+          type: string
+          description: Email address for orders and fulfillment.
+        favicon_url:
+          type: string
+          description: >-
+            The URL of the favicon image associated with the website. This should be a valid URL pointing to an `.ico`
+            or other supported icon format file.
+        timezone:
+          $ref: '#/components/schemas/Timezone'
+        language:
+          type: string
+          description: Default language code.
+        currency:
+          type: string
+          description: Default currency code.
+        currency_symbol:
+          type: string
+          description: Default symbol for values in the currency.
+        decimal_separator:
+          type: string
+          description: Default decimal separator for values in the currency.
+        thousands_separator:
+          type: string
+          description: Default thousands separator for values in the currency.
+        decimal_places:
+          type: integer
+          description: Default decimal places for values in the currency.
+        currency_symbol_location:
+          type: string
+          description: Default position of the currency symbol (left or right).
+        weight_units:
+          type: string
+          description: Default weight units (metric or imperial).
+        dimension_units:
+          type: string
+          description: Default dimension units (metric or imperial).
+        dimension_decimal_places:
+          type: integer
+          description: The number of decimal places.
+        dimension_decimal_token:
+          type: string
+          description: The symbol that separates the whole numbers from the decimal points.
+        dimension_thousands_token:
+          type: string
+          description: The symbol used to denote thousands.
+        plan_name:
+          type: string
+          description: Name of the BigCommerce plan to which this store is subscribed.
+        plan_level:
+          type: string
+          description: Level of the BigCommerce plan to which this store is subscribed.
+        plan_is_trial:
+          type: boolean
+          description: Whether the payment plan associated with the store is still in the trial phase.
+        industry:
+          type: string
+          description: >-
+            Industry, or vertical category, in which the business operates. (As selected from drop-down list during the
+            store sign-up process.)
+        logo:
+          $ref: '#/components/schemas/StoreInformationLogo'
+          description: Either an object describing the logo image, or an empty array.
+        is_price_entered_with_tax:
+          type: boolean
+          description: A Boolean value that indicates whether or not prices are entered with tax.
+        store_id:
+          type: integer
+          description: The numeric ID of the store. This is a different unique ID than the store hash.
+        default_channel_id:
+          type: integer
+          default: 1
+          description: The ID of the default channel. The ID of the first hosted storefront created on the store is `1`.
+        default_site_id:
+          type: integer
+          description: The BigCommerce ID of the website associated with the default storefront.
+        active_comparison_modules:
+          type: array
+          items:
+            description: Any type
+        features:
+          $ref: '#/components/schemas/StoreInformationFeatures'
+          description: >-
+            Describes some aspects of the storeʼs tech stack and configuration settings that affect the features
+            available for the store to use.
+      title: StoreInformation
     timeStamp_Full:
       type: object
       properties:
@@ -434,4 +348,45 @@ components:
           minimum: 0
       description: Store Time in Unix format.
       title: timeStamp_Full
-      x-internal: false
+  securitySchemes:
+    X-Auth-Token:
+      type: apiKey
+      in: header
+      name: X-Auth-Token
+      description: >-
+        ### OAuth scopes
+
+
+        | UI Name | Permission | Parameter |
+
+        |:--------|:-----------|:----------|
+
+        |  Information & Settings | modify | `store_v2_information` |
+
+        |  Information & Settings | read-only | `store_v2_information_read_only` |
+
+
+        ### Authentication header
+
+
+        | Header | Argument | Description |
+
+        |:-------|:---------|:------------|
+
+        | `X-Auth-Token` | `access_token` | For more about API accounts that generate `access_token`s, see our [Guide to
+        API Accounts](/developer/docs/overview/api-fundamentals/api-accounts#api-accounts). |
+
+
+        ### Further reading
+
+
+        For example requests and more information about authenticating BigCommerce APIs, see [Authentication and Example
+        Requests](/developer/docs/overview/api-fundamentals/api-accounts#x-auth-token-header-example-requests).
+
+
+        For more about BigCommerce OAuth scopes, see our [Guide to API
+        Accounts](/developer/docs/overview/api-fundamentals/api-accounts#oauth-scopes).
+
+
+        For a list of API status codes, see [API Status
+        Codes](/developer/api-reference/rest/overview#rest-http-status-codes).

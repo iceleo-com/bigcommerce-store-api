@@ -5,144 +5,23 @@ export * as CheckoutsV3ApiSpecs from '../generated/checkouts-v3';
 export declare class CheckoutsV3Api {
     private readonly request;
     constructor(request: RequestService);
-    checkoutsByCheckoutIdGet(checkoutId: CheckoutsV3ApiSpecs.CheckoutsByCheckoutIdGetData['path']['checkoutId'], query?: CheckoutsV3ApiSpecs.CheckoutsByCheckoutIdGetData['query']): Promise<RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>> | RequestErrorResponse<404, Required<{
-        errors?: Array<{
-            status?: number;
-            title?: string;
-            type?: string;
-            detail?: string;
-        }>;
-    }>>>;
-    getCheckout(...args: Parameters<CheckoutsV3Api['checkoutsByCheckoutIdGet']>): Promise<RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>> | RequestErrorResponse<404, Required<{
-        errors?: Array<{
-            status?: number;
-            title?: string;
-            type?: string;
-            detail?: string;
-        }>;
-    }>>>;
-    checkoutsByCheckoutIdPut(checkoutId: CheckoutsV3ApiSpecs.CheckoutsByCheckoutIdPutData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.CheckoutsByCheckoutIdPutData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    updateCheckout(...args: Parameters<CheckoutsV3Api['checkoutsByCheckoutIdPut']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    postStoreHashV3CheckoutsCheckoutIdDiscounts(checkoutId: CheckoutsV3ApiSpecs.PostStoreHashV3CheckoutsCheckoutIdDiscountsData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.PostStoreHashV3CheckoutsCheckoutIdDiscountsData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    addCheckoutDiscount(...args: Parameters<CheckoutsV3Api['postStoreHashV3CheckoutsCheckoutIdDiscounts']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    checkoutsBillingAddressByCheckoutIdPost(checkoutId: CheckoutsV3ApiSpecs.CheckoutsBillingAddressByCheckoutIdPostData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.CheckoutsBillingAddressByCheckoutIdPostData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    addCheckoutBillingAddress(...args: Parameters<CheckoutsV3Api['checkoutsBillingAddressByCheckoutIdPost']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    checkoutsBillingAddressByCheckoutIdAndAddressIdPut(checkoutId: CheckoutsV3ApiSpecs.CheckoutsBillingAddressByCheckoutIdAndAddressIdPutData['path']['checkoutId'], addressId: CheckoutsV3ApiSpecs.CheckoutsBillingAddressByCheckoutIdAndAddressIdPutData['path']['addressId'], requestBody: CheckoutsV3ApiSpecs.CheckoutsBillingAddressByCheckoutIdAndAddressIdPutData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    updateCheckoutBillingAddress(...args: Parameters<CheckoutsV3Api['checkoutsBillingAddressByCheckoutIdAndAddressIdPut']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    checkoutsConsignmentsByCheckoutIdPost(checkoutId: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdPostData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdPostData['body'], query?: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdPostData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    addCheckoutConsignment(...args: Parameters<CheckoutsV3Api['checkoutsConsignmentsByCheckoutIdPost']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    checkoutsConsignmentsByCheckoutIdAndConsignmentIdPut(checkoutId: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutData['path']['checkoutId'], consignmentId: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutData['path']['consignmentId'], requestBody: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutData['body'], query?: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    updateCheckoutConsignment(...args: Parameters<CheckoutsV3Api['checkoutsConsignmentsByCheckoutIdAndConsignmentIdPut']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    checkoutsConsignmentsByCheckoutIdAndConsignmentIdDelete(checkoutId: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteData['path']['checkoutId'], consignmentId: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteData['path']['consignmentId']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    deleteCheckoutConsignment(...args: Parameters<CheckoutsV3Api['checkoutsConsignmentsByCheckoutIdAndConsignmentIdDelete']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    checkoutsCouponsByCheckoutIdPost(checkoutId: CheckoutsV3ApiSpecs.CheckoutsCouponsByCheckoutIdPostData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.CheckoutsCouponsByCheckoutIdPostData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    addCheckoutCoupon(...args: Parameters<CheckoutsV3Api['checkoutsCouponsByCheckoutIdPost']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    checkoutsCouponsByCheckoutIdAndCouponCodeDelete(checkoutId: CheckoutsV3ApiSpecs.CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteData['path']['checkoutId'], couponCode: CheckoutsV3ApiSpecs.CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteData['path']['couponCode']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    deleteCheckoutCoupon(...args: Parameters<CheckoutsV3Api['checkoutsCouponsByCheckoutIdAndCouponCodeDelete']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Checkout;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    createAnOrder(checkoutId: CheckoutsV3ApiSpecs.CreateAnOrderData['path']['checkoutId']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Order;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    createOrder(...args: Parameters<CheckoutsV3Api['createAnOrder']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.Order;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    getCheckoutSettings(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.CheckoutsSettings;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    updateCheckoutSettings(requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutSettingsData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: CheckoutsV3ApiSpecs.CheckoutsSettings;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>>>;
-    checkoutToken(checkoutId: CheckoutsV3ApiSpecs.CheckoutTokenData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.CheckoutTokenData['body']): Promise<RequestSuccessResponse<200, Required<{
-        checkoutToken?: string;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>> | RequestErrorResponse<401, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        errors?: {
-            [key: string]: unknown;
-        };
-    }>> | RequestErrorResponse<422, Required<{
-        status?: string;
-        title?: string;
-        type?: string;
-    }>>>;
-    createCheckoutToken(...args: Parameters<CheckoutsV3Api['checkoutToken']>): Promise<RequestSuccessResponse<200, Required<{
-        checkoutToken?: string;
-        meta?: CheckoutsV3ApiSpecs.MetaOpen;
-    }>> | RequestErrorResponse<401, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        errors?: {
-            [key: string]: unknown;
-        };
-    }>> | RequestErrorResponse<422, Required<{
-        status?: string;
-        title?: string;
-        type?: string;
-    }>>>;
+    getCheckout(checkoutId: CheckoutsV3ApiSpecs.GetCheckoutData['path']['checkoutId'], query?: CheckoutsV3ApiSpecs.GetCheckoutData['query']): Promise<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutGetCheckoutResponse200>> | RequestErrorResponse<404, Required<CheckoutsV3ApiSpecs.GetCheckoutRequestNotFoundError>>>;
+    updateCheckout(checkoutId: CheckoutsV3ApiSpecs.UpdateCheckoutData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutData['body']): Promise<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutUpdateCheckoutResponse200>> | RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.UpdateCheckoutRequestConflictError>>>;
+    addCheckoutBillingAddress(checkoutId: CheckoutsV3ApiSpecs.AddCheckoutBillingAddressData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.AddCheckoutBillingAddressData['body']): Promise<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.BillingAddressAddCheckoutBillingAddressResponse200>> | RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.AddCheckoutBillingAddressRequestConflictError>>>;
+    updateCheckoutBillingAddress(checkoutId: CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressData['path']['checkoutId'], addressId: CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressData['path']['addressId'], requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressData['body']): Promise<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.BillingAddressUpdateCheckoutBillingAddressResponse200>> | RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressRequestConflictError>>>;
+    addCheckoutConsignment(checkoutId: CheckoutsV3ApiSpecs.AddCheckoutConsignmentData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.AddCheckoutConsignmentData['body'], query?: CheckoutsV3ApiSpecs.AddCheckoutConsignmentData['query']): Promise<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.ConsignmentsAddCheckoutConsignmentResponse200>> | RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.AddCheckoutConsignmentRequestConflictError>>>;
+    updateCheckoutConsignment(checkoutId: CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentData['path']['checkoutId'], consignmentId: CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentData['path']['consignmentId'], requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentData['body'], query?: CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentData['query']): Promise<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.ConsignmentsUpdateCheckoutConsignmentResponse200>> | RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentRequestConflictError>>>;
+    deleteCheckoutConsignment(checkoutId: CheckoutsV3ApiSpecs.DeleteCheckoutConsignmentData['path']['checkoutId'], consignmentId: CheckoutsV3ApiSpecs.DeleteCheckoutConsignmentData['path']['consignmentId'], requestBody: CheckoutsV3ApiSpecs.DeleteCheckoutConsignmentData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.ConsignmentsDeleteCheckoutConsignmentResponse200>>>;
+    addCheckoutCoupon(checkoutId: CheckoutsV3ApiSpecs.AddCheckoutCouponData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.AddCheckoutCouponData['body']): Promise<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CouponsAddCheckoutCouponResponse200>> | RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.AddCheckoutCouponRequestConflictError>> | RequestErrorResponse<422, Required<unknown>>>;
+    deleteCheckoutCoupon(checkoutId: CheckoutsV3ApiSpecs.DeleteCheckoutCouponData['path']['checkoutId'], couponCode: CheckoutsV3ApiSpecs.DeleteCheckoutCouponData['path']['couponCode'], requestBody: CheckoutsV3ApiSpecs.DeleteCheckoutCouponData['body']): Promise<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CouponsDeleteCheckoutCouponResponse200>> | RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.DeleteCheckoutCouponRequestConflictError>>>;
+    addCheckoutDiscount(checkoutId: CheckoutsV3ApiSpecs.AddCheckoutDiscountData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.AddCheckoutDiscountData['body']): Promise<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.DiscountsAddCheckoutDiscountResponse200>> | RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.AddCheckoutDiscountRequestConflictError>>>;
+    checkoutsFeesByCheckoutIdPost(checkoutId: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPostData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPostData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.FeesCheckoutsFeesByCheckoutIdPostResponse200>>>;
+    checkoutsFeesByCheckoutIdPut(checkoutId: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPutData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPutData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.FeesCheckoutsFeesByCheckoutIdPutResponse200>>>;
+    checkoutsFeesByCheckoutIdDelete(checkoutId: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdDeleteData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdDeleteData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.FeesCheckoutsFeesByCheckoutIdDeleteResponse200>>>;
+    createOrder(checkoutId: CheckoutsV3ApiSpecs.CreateOrderData['path']['checkoutId']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.OrdersCreateOrderResponse200>>>;
+    getCheckoutSettings(): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.SettingsGetCheckoutSettingsResponse200>>>;
+    updateCheckoutSettings(requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutSettingsData['body']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.SettingsUpdateCheckoutSettingsResponse200>>>;
+    getChannelCheckoutSettings(channelId: CheckoutsV3ApiSpecs.GetChannelCheckoutSettingsData['path']['channelId']): Promise<RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.SettingsGetChannelCheckoutSettingsResponse200>>>;
+    putChannelCheckoutSettings(channelId: CheckoutsV3ApiSpecs.PutChannelCheckoutSettingsData['path']['channelId'], requestBody: CheckoutsV3ApiSpecs.PutChannelCheckoutSettingsData['body']): Promise<RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.SettingsPutChannelCheckoutSettingsResponse200>>>;
+    createCheckoutToken(checkoutId: CheckoutsV3ApiSpecs.CreateCheckoutTokenData['path']['checkoutId'], requestBody: CheckoutsV3ApiSpecs.CreateCheckoutTokenData['body']): Promise<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.TokenCreateCheckoutTokenResponse200>> | RequestErrorResponse<401, Required<CheckoutsV3ApiSpecs.CreateCheckoutTokenRequestUnauthorizedError>> | RequestErrorResponse<422, Required<CheckoutsV3ApiSpecs.CreateCheckoutTokenRequestUnprocessableEntityError>>>;
 }

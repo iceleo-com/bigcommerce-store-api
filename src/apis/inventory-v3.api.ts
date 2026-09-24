@@ -13,11 +13,11 @@ export class InventoryV3Api {
     /**
      * Absolute Adjustment
      *
-     * Override the existing inventory levels for an inventory item at a location. Use absolute adjustments as the default method for updating inventory. This endpoint batches requests, making them more resource friendly than the [Catalog API](/docs/rest-catalog/products#update-products-batch). Absolute adjustments have lower complexity than [relative adjustments](/docs/rest-management/inventory/adjustments#relative-adjustment), which synchronize with orders.
+     * Override the existing inventory levels for an inventory item at a location. Use absolute adjustments as the default method for updating inventory. This endpoint batches requests, making them more resource friendly than the [Catalog API](/developer/api-reference/rest/admin/catalog/products/update-products). Absolute adjustments have lower complexity than [relative adjustments](/developer/api-reference/rest/admin/management/inventory/adjustments/post-relative-adjustment), which synchronize with orders.
 
      **Limits**
-     * For maximum inventory levels, see [Inventory adjustments](/docs/store-operations/catalog/inventory-adjustments#inventory-adjustments). 
-     * Limit of 2000 items for payload length, see [Optimizing performance](/docs/store-operations/catalog/inventory-adjustments#optimizing-performance) for more information.
+     * For maximum inventory levels, see [Inventory adjustments](/developer/docs/admin/catalog-and-inventory/inventory-adjustments#inventory-adjustments). 
+     * Limit of 2000 items for payload length, see [Optimizing performance](/developer/docs/admin/catalog-and-inventory/inventory-adjustments#optimizing-performance) for more information.
 
      */
     putAbsoluteAdjustment(
@@ -33,11 +33,11 @@ export class InventoryV3Api {
     /**
      * Relative Adjustment
      *
-     * Add or subtract inventory for an inventory item at a location. Use this endpoint only when you do not know absolute quantities. For example, making order-related inventory changes through a third-party may require relative adjustments. Otherwise, use the [Absolute adjustment](/docs/rest-management/inventory/adjustments#absolute-adjustment) endpoint for updating inventory.
+     * Add or subtract inventory for an inventory item at a location. Use this endpoint only when you do not know absolute quantities. For example, making order-related inventory changes through a third-party may require relative adjustments. Otherwise, use the [Absolute adjustment](/developer/api-reference/rest/admin/management/inventory/adjustments/put-absolute-adjustment) endpoint for updating inventory.
 
      **Limits**
-     * For maximum inventory levels, see [Inventory adjustments](/docs/store-operations/catalog/inventory-adjustments#inventory-adjustments). 
-     * Limit of 2000 items for payload length, see [Optimizing performance](/docs/store-operations/catalog/inventory-adjustments#optimizing-performance) for more information.
+     * For maximum inventory levels, see [Inventory adjustments](/developer/docs/admin/catalog-and-inventory/inventory-adjustments#inventory-adjustments). 
+     * Limit of 2000 items for payload length, see [Optimizing performance](/developer/docs/admin/catalog-and-inventory/inventory-adjustments#optimizing-performance) for more information.
 
      */
     postRelativeAdjustment(
@@ -51,7 +51,7 @@ export class InventoryV3Api {
     }
 
     /**
-     * Get Inventory at Locations
+     * List Inventory at Locations
      *
      * Return a list of inventory and inventory settings for all items in all locations.
 
@@ -69,7 +69,7 @@ export class InventoryV3Api {
     }
 
     /**
-     * Get Inventory at a Location
+     * Get Inventory at Location
      *
      * Return a list of inventory and inventory settings for all items in a location.
 
@@ -88,7 +88,7 @@ export class InventoryV3Api {
     }
 
     /**
-     * Update Inventory Settings for a Location
+     * Update Inventory Settings for Location
      *
      * 
      Update inventory settings for items at a location.

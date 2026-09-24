@@ -1,94 +1,107 @@
 export type ClientOptions = {
     baseUrl: 'https://{app_domain}' | (string & {});
 };
-export type RateRequestPayload = {
-    base_options: BaseOptions;
-    zone_options?: ZoneOptionsInstance;
-    connection_options?: ConnectionOptionsInstance;
+export type BaseOptionsOriginAddressType = 'RESIDENTIAL' | 'COMMERCIAL';
+export type BaseOptionsOrigin = {
+    street_1?: string;
+    street_2?: string;
+    zip: string;
+    city?: string;
+    state_iso2?: string;
+    country_iso2: string;
+    address_type?: BaseOptionsOriginAddressType;
 };
-export type BaseOptionsSchema = {
-    base_options: {
-        origin: {
-            street_1?: string;
-            street_2?: string;
-            zip: string;
-            city?: string;
-            state_iso2?: string;
-            country_iso2: string;
-            address_type?: 'RESIDENTIAL' | 'COMMERCIAL';
-        };
-        destination: {
-            street_1?: string;
-            street_2?: string;
-            zip: string;
-            city?: string;
-            state_iso2?: string;
-            country_iso2: string;
-            address_type?: 'RESIDENTIAL' | 'COMMERCIAL';
-        };
-        items: Array<{
-            sku?: string;
-            variant_id?: string;
-            product_id?: string;
-            name?: string;
-            length?: {
-                units: 'cm' | 'in';
-                value: number;
-            };
-            width?: {
-                units: 'cm' | 'in';
-                value: number;
-            };
-            height?: {
-                units: 'cm' | 'in';
-                value: number;
-            };
-            weight?: {
-                units: 'oz' | 'g';
-                value: number;
-            };
-            discounted_price?: {
-                currency: string;
-                amount: number;
-            };
-            declared_value?: {
-                currency: string;
-                amount: number;
-            };
-            quantity?: number;
-            attributes?: Array<{
-                key?: string;
-                value?: string;
-                namespace?: string;
-                resource_type?: 'product' | 'variant';
-                resource_id?: string;
-                attribute_type?: 'metafield';
-            }>;
-        }>;
-        customer?: {
-            customer_groups?: Array<{
-                customer_group_id?: number;
-                customer_group_name?: string;
-            }>;
-            customer_id?: number;
-        };
-        store_id: string;
-        request_context?: {
-            reference_values?: Array<{
-                name?: string;
-                value?: string;
-            }>;
-        };
+export type BaseOptionsDestinationAddressType = 'RESIDENTIAL' | 'COMMERCIAL';
+export type FormFieldValue = {
+    id?: string;
+    value?: string;
+};
+export type BaseOptionsDestination = {
+    street_1?: string;
+    street_2?: string;
+    zip: string;
+    city?: string;
+    state_iso2?: string;
+    country_iso2: string;
+    address_type?: BaseOptionsDestinationAddressType;
+    form_fields?: {
+        [key: string]: FormFieldValue;
     };
-    zone_options?: ZoneOptionsInstance;
-    connection_options?: ConnectionOptionsInstance;
 };
-export type CustomerDetails = {
-    customer_groups?: Array<{
-        customer_group_id?: number;
-        customer_group_name?: string;
-    }>;
+export type BaseOptionsItemsItemsLengthUnits = 'cm' | 'in';
+export type BaseOptionsItemsItemsLength = {
+    units: BaseOptionsItemsItemsLengthUnits;
+    value: number;
+};
+export type BaseOptionsItemsItemsWidthUnits = 'cm' | 'in';
+export type BaseOptionsItemsItemsWidth = {
+    units: BaseOptionsItemsItemsWidthUnits;
+    value: number;
+};
+export type BaseOptionsItemsItemsHeightUnits = 'cm' | 'in';
+export type BaseOptionsItemsItemsHeight = {
+    units: BaseOptionsItemsItemsHeightUnits;
+    value: number;
+};
+export type BaseOptionsItemsItemsWeightUnits = 'oz' | 'g';
+export type BaseOptionsItemsItemsWeight = {
+    units: BaseOptionsItemsItemsWeightUnits;
+    value: number;
+};
+export type BaseOptionsItemsItemsDiscountedPrice = {
+    currency: string;
+    amount: number;
+};
+export type BaseOptionsItemsItemsDeclaredValue = {
+    currency: string;
+    amount: number;
+};
+export type BaseOptionsItemsItemsAttributesItemsResourceType = 'product' | 'variant';
+export type BaseOptionsItemsItemsAttributesItemsAttributeType = 'metafield';
+export type BaseOptionsItemsItemsAttributesItems = {
+    key?: string;
+    value?: string;
+    namespace?: string;
+    resource_type?: BaseOptionsItemsItemsAttributesItemsResourceType;
+    resource_id?: string;
+    attribute_type?: BaseOptionsItemsItemsAttributesItemsAttributeType;
+};
+export type BaseOptionsItemsItems = {
+    sku?: string;
+    variant_id?: string;
+    product_id?: string;
+    name?: string;
+    length?: BaseOptionsItemsItemsLength;
+    width?: BaseOptionsItemsItemsWidth;
+    height?: BaseOptionsItemsItemsHeight;
+    weight?: BaseOptionsItemsItemsWeight;
+    discounted_price?: BaseOptionsItemsItemsDiscountedPrice;
+    declared_value?: BaseOptionsItemsItemsDeclaredValue;
+    quantity?: number;
+    attributes?: Array<BaseOptionsItemsItemsAttributesItems>;
+};
+export type BaseOptionsCustomerCustomerGroupsItems = {
+    customer_group_id?: number;
+    customer_group_name?: string;
+};
+export type BaseOptionsCustomer = {
+    customer_groups?: Array<BaseOptionsCustomerCustomerGroupsItems>;
     customer_id?: number;
+};
+export type BaseOptionsRequestContextReferenceValuesItems = {
+    name?: string;
+    value?: string;
+};
+export type BaseOptionsRequestContext = {
+    reference_values?: Array<BaseOptionsRequestContextReferenceValuesItems>;
+};
+export type BaseOptions = {
+    origin: BaseOptionsOrigin;
+    destination: BaseOptionsDestination;
+    items: Array<BaseOptionsItemsItems>;
+    customer?: BaseOptionsCustomer;
+    store_id: string;
+    request_context?: BaseOptionsRequestContext;
 };
 export type ZoneOptionsInstance = {
     [key: string]: unknown;
@@ -96,333 +109,79 @@ export type ZoneOptionsInstance = {
 export type ConnectionOptionsInstance = {
     [key: string]: unknown;
 };
-export type RateOptionsInstance = Array<{
-    key: string;
-    value: string;
-}>;
-export type CustomerGroup = {
-    customer_group_id?: number;
-    customer_group_name?: string;
-};
-export type KeyValuePair = {
+export type RateOptionsInstanceItems = {
     key: string;
     value: string;
 };
-export type RateResponsePayload = {
-    quote_id: string;
-    messages: Array<{
-        text: string;
-        type: 'INFO' | 'WARNING' | 'ERROR';
-    }>;
-    carrier_quotes: Array<{
-        carrier_info?: {
-            code: string;
-            display_name: string;
-        };
-        quotes: Array<{
-            code: string;
-            display_name: string;
-            cost: {
-                currency: string;
-                amount: number;
-            };
-            messages?: Array<{
-                text: string;
-                type: 'INFO' | 'WARNING' | 'ERROR';
-            }>;
-            description?: string;
-            rate_id?: string;
-            discounted_cost?: {
-                currency: string;
-                amount: number;
-            };
-            dispatch_date?: string;
-            transit_time?: {
-                units?: 'BUSINESS_DAYS' | 'DAYS' | 'HOURS';
-                duration?: number;
-            };
-        }>;
-    }>;
+export type RateOptionsInstance = Array<RateOptionsInstanceItems>;
+export type RateRequestPayload = {
+    base_options: BaseOptions;
+    zone_options?: ZoneOptionsInstance;
+    connection_options?: ConnectionOptionsInstance;
+    rate_options?: RateOptionsInstance;
 };
-export type CarrierQuoteObject = {
-    carrier_info?: {
-        code: string;
-        display_name: string;
-    };
-    quotes: Array<{
-        code: string;
-        display_name: string;
-        cost: {
-            currency: string;
-            amount: number;
-        };
-        messages?: Array<{
-            text: string;
-            type: 'INFO' | 'WARNING' | 'ERROR';
-        }>;
-        description?: string;
-        rate_id?: string;
-        discounted_cost?: {
-            currency: string;
-            amount: number;
-        };
-        dispatch_date?: string;
-        transit_time?: {
-            units?: 'BUSINESS_DAYS' | 'DAYS' | 'HOURS';
-            duration?: number;
-        };
-    }>;
-};
-export type RateRequestItem = {
-    sku?: string;
-    variant_id?: string;
-    product_id?: string;
-    name?: string;
-    length?: {
-        units: 'cm' | 'in';
-        value: number;
-    };
-    width?: {
-        units: 'cm' | 'in';
-        value: number;
-    };
-    height?: {
-        units: 'cm' | 'in';
-        value: number;
-    };
-    weight?: {
-        units: 'oz' | 'g';
-        value: number;
-    };
-    discounted_price?: {
-        currency: string;
-        amount: number;
-    };
-    declared_value?: {
-        currency: string;
-        amount: number;
-    };
-    quantity?: number;
-    attributes?: Array<{
-        key?: string;
-        value?: string;
-        namespace?: string;
-        resource_type?: 'product' | 'variant';
-        resource_id?: string;
-        attribute_type?: 'metafield';
-    }>;
-};
-export type RequestContext = {
-    reference_values?: Array<{
-        name?: string;
-        value?: string;
-    }>;
-};
-export type ReferenceValue = {
-    name?: string;
-    value?: string;
-};
-export type Message = {
+export type RateResponsePayloadMessagesItemsType = 'INFO' | 'WARNING' | 'ERROR';
+export type RateResponsePayloadMessagesItems = {
     text: string;
-    type: 'INFO' | 'WARNING' | 'ERROR';
+    type: RateResponsePayloadMessagesItemsType;
 };
-export type RateQuoteObject = {
+export type RateResponsePayloadCarrierQuotesItemsCarrierInfo = {
     code: string;
     display_name: string;
-    cost: {
-        currency: string;
-        amount: number;
-    };
-    messages?: Array<{
-        text: string;
-        type: 'INFO' | 'WARNING' | 'ERROR';
-    }>;
-    description?: string;
-    rate_id?: string;
-    discounted_cost?: {
-        currency: string;
-        amount: number;
-    };
-    dispatch_date?: string;
-    transit_time?: {
-        units?: 'BUSINESS_DAYS' | 'DAYS' | 'HOURS';
-        duration?: number;
-    };
 };
-export type TransitTimeObject = {
-    units?: 'BUSINESS_DAYS' | 'DAYS' | 'HOURS';
-    duration?: number;
-};
-export type AttributeValue = {
-    key?: string;
-    value?: string;
-    namespace?: string;
-    resource_type?: 'product' | 'variant';
-    resource_id?: string;
-    attribute_type?: 'metafield';
-};
-export type MoneyValue = {
+export type RateResponsePayloadCarrierQuotesItemsQuotesItemsCost = {
     currency: string;
     amount: number;
 };
-export type DimensionValue = {
-    units: 'cm' | 'in';
-    value: number;
+export type RateResponsePayloadCarrierQuotesItemsQuotesItemsMessagesItemsType = 'INFO' | 'WARNING' | 'ERROR';
+export type RateResponsePayloadCarrierQuotesItemsQuotesItemsMessagesItems = {
+    text: string;
+    type: RateResponsePayloadCarrierQuotesItemsQuotesItemsMessagesItemsType;
 };
-export type WeightValue = {
-    units: 'oz' | 'g';
-    value: number;
+export type RateResponsePayloadCarrierQuotesItemsQuotesItemsDiscountedCost = {
+    currency: string;
+    amount: number;
 };
-export type RateOptionsSchema = Array<{
+export type RateResponsePayloadCarrierQuotesItemsQuotesItemsTransitTimeUnits = 'BUSINESS_DAYS' | 'DAYS' | 'HOURS';
+export type RateResponsePayloadCarrierQuotesItemsQuotesItemsTransitTime = {
+    units?: RateResponsePayloadCarrierQuotesItemsQuotesItemsTransitTimeUnits;
+    duration?: number;
+};
+export type RateResponsePayloadCarrierQuotesItemsQuotesItems = {
     code: string;
-    label: string;
+    display_name: string;
+    cost: RateResponsePayloadCarrierQuotesItemsQuotesItemsCost;
+    messages?: Array<RateResponsePayloadCarrierQuotesItemsQuotesItemsMessagesItems>;
     description?: string;
-    validation?: string;
-    type: 'date' | 'string' | 'select' | 'code';
-    default_value: string;
-    value_options?: Array<string>;
-    date_ranges?: Array<{
-        from?: {
-            date?: string;
-            timezone?: string;
-        };
-        to?: {
-            date?: string;
-            timezone?: string;
-        };
-    }>;
-}>;
-export type KeyValuePairSchema = {
-    code: string;
-    label: string;
-    description?: string;
-    validation?: string;
-    type: 'date' | 'string' | 'select' | 'code';
-    default_value: string;
-    value_options?: Array<string>;
-    date_ranges?: Array<{
-        from?: {
-            date?: string;
-            timezone?: string;
-        };
-        to?: {
-            date?: string;
-            timezone?: string;
-        };
-    }>;
+    rate_id?: string;
+    discounted_cost?: RateResponsePayloadCarrierQuotesItemsQuotesItemsDiscountedCost;
+    dispatch_date?: string;
+    transit_time?: RateResponsePayloadCarrierQuotesItemsQuotesItemsTransitTime;
 };
-export type ShippingAddress = {
-    street_1?: string;
-    street_2?: string;
-    zip: string;
-    city?: string;
-    state_iso2?: string;
-    country_iso2: string;
-    address_type?: 'RESIDENTIAL' | 'COMMERCIAL';
+export type RateResponsePayloadCarrierQuotesItems = {
+    carrier_info?: RateResponsePayloadCarrierQuotesItemsCarrierInfo;
+    quotes: Array<RateResponsePayloadCarrierQuotesItemsQuotesItems>;
+};
+export type RateResponsePayload = {
+    quote_id: string;
+    ttl?: number;
+    messages: Array<RateResponsePayloadMessagesItems>;
+    carrier_quotes: Array<RateResponsePayloadCarrierQuotesItems>;
 };
 export type CheckConnectionOptionsRequestPayload = {
     connection_options: ConnectionOptionsInstance;
 };
+export type CheckConnectionOptionsResponsePayloadMessagesItemsType = 'INFO' | 'WARNING' | 'ERROR';
+export type CheckConnectionOptionsResponsePayloadMessagesItems = {
+    text: string;
+    type: CheckConnectionOptionsResponsePayloadMessagesItemsType;
+};
 export type CheckConnectionOptionsResponsePayload = {
     valid?: boolean;
-    messages?: Array<{
-        text: string;
-        type: 'INFO' | 'WARNING' | 'ERROR';
-    }>;
+    messages?: Array<CheckConnectionOptionsResponsePayloadMessagesItems>;
 };
-export type DateRange = {
-    from?: {
-        date?: string;
-        timezone?: string;
-    };
-    to?: {
-        date?: string;
-        timezone?: string;
-    };
-};
-export type DateValue = {
-    date?: string;
-    timezone?: string;
-};
-export type BaseOptions = {
-    origin: {
-        street_1?: string;
-        street_2?: string;
-        zip: string;
-        city?: string;
-        state_iso2?: string;
-        country_iso2: string;
-        address_type?: 'RESIDENTIAL' | 'COMMERCIAL';
-    };
-    destination: {
-        street_1?: string;
-        street_2?: string;
-        zip: string;
-        city?: string;
-        state_iso2?: string;
-        country_iso2: string;
-        address_type?: 'RESIDENTIAL' | 'COMMERCIAL';
-        form_fields?: {
-            '<form field global ID>'?: FormFieldValue;
-        };
-    };
-    items: Array<{
-        sku?: string;
-        variant_id?: string;
-        product_id?: string;
-        name?: string;
-        length?: {
-            units: 'cm' | 'in';
-            value: number;
-        };
-        width?: {
-            units: 'cm' | 'in';
-            value: number;
-        };
-        height?: {
-            units: 'cm' | 'in';
-            value: number;
-        };
-        weight?: {
-            units: 'oz' | 'g';
-            value: number;
-        };
-        discounted_price?: {
-            currency: string;
-            amount: number;
-        };
-        declared_value?: {
-            currency: string;
-            amount: number;
-        };
-        quantity?: number;
-        attributes?: Array<{
-            key?: string;
-            value?: string;
-            namespace?: string;
-            resource_type?: 'product' | 'variant';
-            resource_id?: string;
-            attribute_type?: 'metafield';
-        }>;
-    }>;
-    customer?: {
-        customer_groups?: Array<{
-            customer_group_id?: number;
-            customer_group_name?: string;
-        }>;
-        customer_id?: number;
-    };
-    store_id: string;
-    request_context?: {
-        reference_values?: Array<{
-            name?: string;
-            value?: string;
-        }>;
-    };
-};
-export type FormFieldValue = string;
 export type RequestShippingRatesData = {
-    body: RateRequestPayload;
+    body?: RateRequestPayload;
     path?: never;
     query?: never;
     url: '/rate';
@@ -432,7 +191,7 @@ export type RequestShippingRatesResponses = {
 };
 export type RequestShippingRatesResponse = RequestShippingRatesResponses[keyof RequestShippingRatesResponses];
 export type ValidateConnectionOptionsData = {
-    body: CheckConnectionOptionsRequestPayload;
+    body?: CheckConnectionOptionsRequestPayload;
     path?: never;
     query?: never;
     url: '/check_connection_options';

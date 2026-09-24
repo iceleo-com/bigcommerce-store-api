@@ -5,49 +5,29 @@ export type ClientOptions = {
 };
 
 /**
- * BigCommerce meta payload for collection-type responses.
+ * StoreSystemlogsGetParametersType
  */
-export type IndexMeta = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    };
-};
-
-export type ErrorResponse = BaseError & {
-    errors?: DetailedErrors;
-};
+export type StoreSystemlogsGetParametersType = 'general' | 'payment' | 'shipping' | 'tax' | 'notification' | 'emailintegration' | 'ordersettings' | 'design';
 
 /**
- * Error payload for the BigCommerce API.
- *
+ * StoreSystemlogsGetParametersModule
  */
-export type BaseError = {
-    /**
-     * The HTTP status code.
-     *
-     */
-    status?: number;
-    /**
-     * The title of the message describing the particular error.
-     *
-     */
-    title?: string;
-    type?: string;
-    instance?: string;
-};
+export type StoreSystemlogsGetParametersModule = 'export+only' | 'email+message' | 'theme+download' | 'order+status' | 'optimized+checkout';
 
-export type DetailedErrors = {
-    [key: string]: string;
-};
+/**
+ * StoreSystemlogsGetParametersSeverity
+ */
+export type StoreSystemlogsGetParametersSeverity = '1' | '2' | '3' | '4';
+
+/**
+ * StoreSystemlogsGetParametersSort
+ */
+export type StoreSystemlogsGetParametersSort = 'date_created' | 'type';
+
+/**
+ * StoreSystemlogsGetParametersDirection
+ */
+export type StoreSystemlogsGetParametersDirection = 'asc' | 'desc';
 
 /**
  * SystemLog
@@ -62,7 +42,45 @@ export type SystemLog = {
     date_created?: string;
 };
 
-export type GetSitesData = {
+/**
+ * IndexMetaPaginationLinks
+ */
+export type IndexMetaPaginationLinks = {
+    previous?: string;
+    current?: string;
+    next?: string;
+};
+
+/**
+ * IndexMetaPagination
+ */
+export type IndexMetaPagination = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: IndexMetaPaginationLinks;
+};
+
+/**
+ * IndexMeta
+ *
+ * BigCommerce meta payload for collection-type responses.
+ */
+export type IndexMeta = {
+    pagination?: IndexMetaPagination;
+};
+
+/**
+ * System Logs_getStoreSystemLogs_Response_200
+ */
+export type SystemLogsGetStoreSystemLogsResponse200 = {
+    data?: Array<SystemLog>;
+    meta?: IndexMeta;
+};
+
+export type GetStoreSystemLogsData = {
     body?: never;
     path?: never;
     query?: {
@@ -77,7 +95,7 @@ export type GetSitesData = {
         /**
          * Query parameter that lets you filter the results by log type.
          */
-        type?: 'general' | 'payment' | 'shipping' | 'tax' | 'notification' | 'emailintegration' | 'ordersettings' | 'design';
+        type?: StoreSystemlogsGetParametersType;
         /**
          * Query parameter that lets you exclude a log type from the results.
          */
@@ -85,7 +103,7 @@ export type GetSitesData = {
         /**
          * Query parameter that lets you filter the results by module.
          */
-        module?: 'export+only' | 'email+message' | 'theme+download' | 'order+status' | 'optimized+checkout';
+        module?: StoreSystemlogsGetParametersModule;
         /**
          * Query parameter that lets you exclude a log module from the results.
          */
@@ -93,7 +111,7 @@ export type GetSitesData = {
         /**
          * Query parameter that lets you filter results by severity level, as an integer. The following values are possible: Success = 1, Notice = 2, Warning = 3, Error = 4
          */
-        severity?: 1 | 2 | 3 | 4;
+        severity?: StoreSystemlogsGetParametersSeverity;
         /**
          * Query parameter that lets you filter by minimum severity, as an integer.
          */
@@ -103,29 +121,26 @@ export type GetSitesData = {
          */
         'severity:max'?: number;
         /**
-         * Query parameter that lets you filter by a list of log IDs, as a CSV. For example ?id:in=3,4,6
+         * A comma-separated list of log IDs by which to filter. For example, `?id:in=3,4,6`.
          */
-        'id:in'?: string;
+        'id:in'?: Array<number>;
         /**
-         * Query parameter that lets you filter by the minimum date created in [Unix time](https://www.unixtimestamp.com/), for example, `?date_created:min=1657688400`. Returns logs created after this date.
+         * The log key by which to sort results. If left blank, results will be reported in order of creation. This parameter is case-sensitive.
          */
-        'date_created:min'?: string;
+        sort?: StoreSystemlogsGetParametersSort;
         /**
-         * Query parameter that lets you filter by the maximum date created in [Unix time](https://www.unixtimestamp.com/), for example, `?date_created:min=1658379600`. Returns logs created before this date.
+         * The direction in which to sort results. Defaults to ascending (`asc`). This parameter is case-sensitive.
          */
-        'date_created:max'?: string;
+        direction?: StoreSystemlogsGetParametersDirection;
     };
     url: '/store/systemlogs';
 };
 
-export type GetSitesResponses = {
+export type GetStoreSystemLogsResponses = {
     /**
      * The request completed successfully.
      */
-    200: {
-        data?: Array<SystemLog>;
-        meta?: IndexMeta;
-    };
+    200: SystemLogsGetStoreSystemLogsResponse200;
 };
 
-export type GetSitesResponse = GetSitesResponses[keyof GetSitesResponses];
+export type GetStoreSystemLogsResponse = GetStoreSystemLogsResponses[keyof GetStoreSystemLogsResponses];

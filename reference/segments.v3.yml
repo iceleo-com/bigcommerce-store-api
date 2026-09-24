@@ -1,164 +1,91 @@
-openapi: '3.0.3'
+openapi: 3.1.0
 info:
-  title: Segments API
-  version: '1.0'
-  description: |-
-    Group customers into segments to offer them promotions and other customized shopping experiences.
-  termsOfService: 'https://www.bigcommerce.com/terms'
-  contact:
-    name: BigCommerce
-    url: 'https://www.bigcommerce.com'
-    email: support@bigcommerce.com
-servers:
-  - url: 'https://api.bigcommerce.com/stores/{store_hash}/v3'
-    variables:
-      store_hash:
-        default: store_hash
-        description: Permanent ID of the BigCommerce store.
-    description: BigCommerce API Gateway
-security:
-  - X-Auth-Token: []
-tags:
-  - name: Segments
-  - name: Shopper Profiles
-  - name: Shopper Profiles for a Segment
-  - name: Segments for a Shopper Profile
+  title: 'Admin Management: Customer Segmentation'
+  version: 1.0.0
 paths:
-  '/segments':
-    parameters:
-      - $ref: '#/components/parameters/Accept'
+  /stores/{store_hash}/v3/segments:
     get:
-      summary: 'Get All Segments'
-      tags:
-        - Segments
+      operationId: segments_GetPaginatedSegmentsList
+      summary: List Segments
       description: Returns a paginated *Segments List*.
-      operationId: 'GetPaginatedSegmentsList'
+      tags:
+        - segments
       parameters:
-        - $ref: '#/components/parameters/FilterPageParam'
-        - $ref: '#/components/parameters/FilterLimitParam'
-        - $ref: '#/components/parameters/FilterIdParam'
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: |
+            Page number.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: |
+            Items count per page.
+          required: false
+          schema:
+            type: integer
+        - name: id:in
+          in: query
+          description: |
+            Comma separated IDs.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
       responses:
         '200':
-          description: ''
+          description: |
+            A paginated array of *Segments* and collection metadata.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SegmentCollectionResponse'
+      security:
+        - X-Auth-Token: []
     post:
-      summary: 'Create Segments'
-      tags:
-        - Segments
+      operationId: segments_SegmentsPostRequest
+      summary: Create Segments
       description: |
         Creates *Segments*.
 
         **Limits**
         * Limit of 10 concurrent requests.
-        * Max total segements allowed per store is 1000.
-      parameters:
-        - $ref: '#/components/parameters/ContentType'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SegmentsPostRequest'
-          application/xml:
-            schema:
-              type: object
-              properties: {}
-        required: true
-        description: ''
-      responses:
-        '201':
-          description: '|
-            An array of created *Segments*.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SegmentsResponse'
-        '400':
-          description: |
-            The *Segment* was not valid. This is the result of either missing required fields, or because of invalid data. See the response for more details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                x-examples:
-                  example-1:
-                    data: []
-                    errors:
-                      - status: 409
-                        title: Cannot have multiple segments with the same name.
-                        type: 'https://developer.bigcommerce.com/api-docs/getting-started/api-status-codes'
-                        errors: {}
-                    meta:
-                      total: 1
-                      success: 0
-                      failed: 1
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties: {}
-                  errors:
-                    type: array
-                    uniqueItems: true
-                    minItems: 1
-                    items:
-                      type: object
-                      properties:
-                        status:
-                          type: number
-                        title:
-                          type: string
-                          minLength: 1
-                        type:
-                          type: string
-                          minLength: 1
-                        errors:
-                          type: object
-                          properties: {}
-                      required:
-                        - status
-                  meta:
-                    type: object
-                    properties:
-                      total:
-                        type: number
-                      success:
-                        type: number
-                      failed:
-                        type: number
-                required:
-                  - data
-                  - errors
-                  - meta
-      operationId: 'SegmentsPostRequest'
-    put:
-      summary: 'Update Segments'
+        * Max total segments allowed per store is 1000.
       tags:
-        - Segments
-      description: |
-        Updates *Segments*.
-
-         **Limits**
-         * Limit of 10 concurrent requests.
-      operationId: 'PutSegmentObjects'
+        - segments
       parameters:
-        - $ref: '#/components/parameters/ContentType'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SegmentsPutRequest'
-        required: true
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
       responses:
         '201':
           description: |
@@ -167,42 +94,370 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SegmentsResponse'
-        '400':
-          description: |
-            The *Segment* was not valid. This is the result of either missing required fields, or because of invalid data. See the response for more details.
+        '409':
+          description: Conflict
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    delete:
-      summary: 'Delete Segments'
+                $ref: '#/components/schemas/SegmentsPostRequestRequestConflictError'
+        '422':
+          description: >
+            The *Segment* was not valid. This is the result of either missing required fields, or because of invalid
+            data. See the response for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SegmentsWithErrorsResponse'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SegmentsPostRequest'
+      security:
+        - X-Auth-Token: []
+    put:
+      operationId: segments_PutSegmentObjects
+      summary: Update Segments
+      description: |
+        Updates *Segments*.
+
+         **Limits**
+         * Limit of 10 concurrent requests.
       tags:
-        - Segments
+        - segments
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '201':
+          description: |
+            An array of created *Segments*.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SegmentsResponse'
+        '422':
+          description: >
+            The *Segment* was not valid. This is the result of either missing required fields, or because of invalid
+            data. See the response for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SegmentsWithErrorsResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SegmentsPutRequest'
+      security:
+        - X-Auth-Token: []
+    delete:
+      operationId: segments_DeleteStoreSegment
+      summary: Delete Segments
       description: |
         Deletes one or more *Segments* from a store. This will not delete any associated *Shopper Profiles*.
-      operationId: 'DeleteStoreSegment'
-      parameters:
-        - $ref: '#/components/parameters/FilterIdParam'
-      responses:
-        '204':
-          description: |
-            An empty response.
-  '/segments/{segmentId}/shopper-profiles':
-    parameters:
-      - $ref: '#/components/parameters/Accept'
-      - $ref: '#/components/parameters/SegmentIdPathParam'
-    get:
-      summary: 'Get All Shopper Profiles in a Segment'
       tags:
-        - Shopper Profiles for a Segment
+        - segments
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: id:in
+          in: query
+          description: |
+            Comma separated IDs.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
+          description: |
+            The *Segments* were deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SegmentsRemoveResponse'
+        '422':
+          description: |
+            Unable to delete some or all *Segments* due to invalid request data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SegmentsRemoveWithErrorsResponse'
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/shopper-profiles/{shopperProfileId}/segments:
+    get:
+      operationId: segmentsForAShopperProfile_GetListShopperProfile
+      summary: List Segments for Shopper Profile
+      description: Returns a paginated *Segments* list for a *Shopper Profile*.
+      tags:
+        - segmentsForAShopperProfile
+      parameters:
+        - name: shopperProfileId
+          in: path
+          description: The *Shopper Profile* ID.
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: |
+            Page number.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: |
+            Items count per page.
+          required: false
+          schema:
+            type: integer
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
+          description: |
+            An array of *Segments* objects and metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SegmentCollectionResponse'
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/shopper-profiles:
+    get:
+      operationId: shopperProfiles_GetShopperList
+      summary: List Shopper Profiles
+      description: |
+        Returns a paginated *Shopper Profiles* list.
+      tags:
+        - shopperProfiles
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: |
+            Page number.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: |
+            Items count per page.
+          required: false
+          schema:
+            type: integer
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
+          description: |
+            An array of *Shopper Profiles* objects and metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopperProfilesCollectionResponse'
+      security:
+        - X-Auth-Token: []
+    post:
+      operationId: shopperProfiles_ShopperProfilesRequest
+      summary: Create Shopper Profiles
+      description: |
+        Creates a *Shopper Profile*.
+      tags:
+        - shopperProfiles
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '201':
+          description: |
+            An array of created *Shopper Profiles*.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopperProfilesResponse'
+        '422':
+          description: >
+            The *Shopper Profile* was not valid. This is the result of either missing required fields, or because of
+            invalid data. See the response for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopperProfilesWithErrorsResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShopperProfilesPostRequest'
+      security:
+        - X-Auth-Token: []
+    delete:
+      operationId: shopperProfiles_DeleteStoreShopperProfile
+      summary: Delete Shopper Profiles
+      description: |
+        Deletes one or more *Shopper Profiles* from a store.
+      tags:
+        - shopperProfiles
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: id:in
+          in: query
+          description: |
+            Comma separated IDs.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
+          description: |
+            The *Shopper Profiles* were removed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopperProfilesRemoveResponse'
+        '422':
+          description: |
+            Unable to remove some or all *Shopper Profiles* due to invalid request data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopperProfilesRemoveWithErrorsResponse'
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/segments/{segmentId}/shopper-profiles:
+    get:
+      operationId: shopperProfilesForASegment_GetSegmentProfiles
+      summary: List Shopper Profiles in Segment
       description: |
         Returns a list of *Shopper Profiles* that are associated with a given *Segment*.
 
         **NOTE**: The `modify` Customers OAuth scope is a requirement for this endpoint.
-      operationId: 'GetSegmentProfiles'
+      tags:
+        - shopperProfilesForASegment
       parameters:
-        - $ref: '#/components/parameters/FilterPageParam'
-        - $ref: '#/components/parameters/FilterLimitParam'
+        - name: segmentId
+          in: path
+          description: The *Segment* ID.
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: |
+            Page number.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: |
+            Items count per page.
+          required: false
+          schema:
+            type: integer
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
       responses:
         '200':
           description: |
@@ -211,19 +466,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ShopperProfilesGetResponse'
+      security:
+        - X-Auth-Token: []
     post:
-      summary: 'Add Shopper Profiles to a Segment'
-      tags:
-        - Shopper Profiles for a Segment
+      operationId: shopperProfilesForASegment_PostShopperProfile
+      summary: Add Shopper Profiles to Segment
       description: |-
         Add *Shopper Profiles* to a specific *Segment*.
 
         **Limits**
         * Limit of *Shopper Profiles* per request is `50`.
         * Limit of 10 concurrent requests.
-      operationId: 'PostShopperProfile'
+      tags:
+        - shopperProfilesForASegment
       parameters:
-        - $ref: '#/components/parameters/ContentType'
+        - name: segmentId
+          in: path
+          description: The *Segment* ID.
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
       responses:
         '201':
           description: An array of *Shopper Profiles* added to a *Segment*.
@@ -236,366 +514,92 @@ paths:
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                x-examples:
-                  example-1:
-                    data: []
-                    errors:
-                      - status: 409
-                        title: Unable to add shopper profiles to segment due to conflicts.
-                        type: 'https://developer.bigcommerce.com/api-docs/getting-started/api-status-codes'
-                        errors:
-                          '0': Shopper profile `1465bb16-eb7d-4fba-8312-0ea9d88cd6e9` already exists for segment `dfada416-eba1-49cf-ad21-0f48b48d50ad`.
-                    meta:
-                      total: 1
-                      success: 0
-                      failed: 1
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties: {}
-                  errors:
-                    type: array
-                    uniqueItems: true
-                    minItems: 1
-                    items:
-                      type: object
-                      properties:
-                        status:
-                          type: number
-                        title:
-                          type: string
-                          minLength: 1
-                        type:
-                          type: string
-                          minLength: 1
-                        errors:
-                          type: object
-                          properties:
-                            '0':
-                              type: string
-                              minLength: 1
-                  meta:
-                    type: object
-                    required:
-                      - total
-                      - success
-                      - failed
-                    properties:
-                      total:
-                        type: number
-                      success:
-                        type: number
-                      failed:
-                        type: number
-                required:
-                  - data
-                  - errors
-                  - meta
-              examples:
-                shopper-profile-conflict:
-                  value:
-                    data: []
-                    errors:
-                      - status: 409
-                        title: Unable to add shopper profiles to segment due to conflicts.
-                        type: 'https://developer.bigcommerce.com/api-docs/getting-started/api-status-codes'
-                        errors:
-                          '0': Shopper profile `1465bb16-eb7d-4fba-8312-0ea9d88cd6e9` already exists for segment `dfada416-eba1-49cf-ad21-0f48b48d50ad`.
-                    meta:
-                      total: 1
-                      success: 0
-                      failed: 1
+                $ref: '#/components/schemas/PostShopperProfileRequestConflictError'
+        '422':
+          description: |
+            Unable to add some or all *Shopper Profiles* to the *Segment* due to invalid request data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopperProfilesAddWithErrorsResponse'
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/ShopperProfilesAddRequest'
+      security:
+        - X-Auth-Token: []
     delete:
-      summary: 'Remove Shopper Profiles from a Segment'
+      operationId: shopperProfilesForASegment_DeleteShopperProfile
+      summary: Remove Shopper Profiles from Segment
+      description: >
+        Remove one or more *Shopper Profiles* that are associated with a *Segment*. This operation only removes the
+        association; it doesn't delete the *Shopper Profiles*.
       tags:
-        - Shopper Profiles for a Segment
-      description: |
-        Remove one or more *Shopper Profiles* that are associated with a *Segment*. This operation only removes the association; it doesn't delete the *Shopper Profiles*.
-      operationId: 'DeleteShopperProfile'
+        - shopperProfilesForASegment
       parameters:
-        - $ref: '#/components/parameters/FilterIdParam'
-      responses:
-        '204':
-          description: |
-            An empty response.
-  '/shopper-profiles':
-    parameters:
-      - $ref: '#/components/parameters/Accept'
-    get:
-      summary: 'Get All Shopper Profiles'
-      tags:
-        - Shopper Profiles
-      description: |
-          Returns a paginated *Shopper Profiles* list.
-
-      operationId: 'GetShopperList'
-      parameters:
-        - $ref: '#/components/parameters/FilterPageParam'
-        - $ref: '#/components/parameters/FilterLimitParam'
-      responses:
-        '200':
-          description: |
-            An array of *Shopper Profiles* objects and metadata.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ShopperProfilesCollectionResponse'
-    post:
-      summary: 'Create Shopper Profiles'
-      tags:
-        - Shopper Profiles
-      description: |
-        Creates a *Shopper Profile*.
-      operationId: 'ShopperProfilesRequest'
-      parameters:
-        - $ref: '#/components/parameters/ContentType'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ShopperProfilesPostRequest'
-        required: true
-      responses:
-        '201':
-          description: |
-            An array of created *Shopper Profiles*.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ShopperProfilesResponse'
-        '400':
-          description: |
-            The *Segment* was not valid. This is the result of either missing required fields, or because of invalid data. See the response for more details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    delete:
-      summary: 'Delete Shopper Profiles'
-      tags:
-        - Shopper Profiles
-      description: |
-        Deletes one or more *Shopper Profiles* from a store.
-      operationId: 'DeleteStoreShopperProfile'
-      parameters:
-        - $ref: '#/components/parameters/FilterIdParam'
-      responses:
-        '204':
-          description: |
-            An empty response.
-  '/shopper-profiles/{shopperProfileId}/segments':
-    parameters:
-      - $ref: '#/components/parameters/Accept'
-      - $ref: '#/components/parameters/ShopperIdPathParam'
-    get:
-      summary: 'Get All Segments for a Shopper Profile'
-      tags:
-        - Segments for a Shopper Profile
-      description: Returns a paginated *Segments* list for a *Shopper Profile*.
-      operationId: 'GetListShopperProfile'
-      parameters:
-        - $ref: '#/components/parameters/FilterPageParam'
-        - $ref: '#/components/parameters/FilterLimitParam'
-      responses:
-        '200':
-          description: |
-            An array of *Segments* objects and metadata.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SegmentCollectionResponse'
-components:
-  parameters:
-    Accept:
-      name: Accept
-      in: header
-      required: true
-      description: 'The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.'
-      schema:
-        type: string
-        default: 'application/json'
-    ContentType:
-      name: Content-Type
-      in: header
-      required: true
-      description: 'The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.'
-      schema:
-        type: string
-        default: 'application/json'
-    SegmentIdPathParam:
-      name: segmentId
-      description: The *Segment* ID.
-      in: path
-      schema:
-        type: string
-        format: uuid
-      required: true
-    ShopperIdPathParam:
-      name: shopperProfileId
-      description: The *Shopper Profile* ID.
-      in: path
-      schema:
-        type: string
-        format: uuid
-      required: true
-    FilterIdParam:
-      name: 'id:in'
-      description: |
-        Comma separated IDs.
-      required: false
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-      explode: true
-    FilterPageParam:
-      name: page
-      in: query
-      description: |
-        Page number.
-      required: false
-      schema:
-        type: integer
-    FilterLimitParam:
-      name: limit
-      in: query
-      description: |
-        Items count per page.
-      required: false
-      schema:
-        type: integer
-  schemas:
-    SegmentsResponse:
-      description: |
-        Response payload for the BigCommerce API.
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Segment'
-        meta:
-          type: object
-          properties: {}
-      title: ''
-    SegmentsPostRequest:
-      description: |
-        Request payload for the BigCommerce API.
-      type: array
-      items:
-        $ref: '#/components/schemas/SegmentPost'
-    SegmentsPutRequest:
-      description: |
-        Request payload for the BigCommerce API.
-      type: array
-      items:
-        $ref: '#/components/schemas/SegmentPut'
-    SegmentPost:
-      type: object
-      properties:
-          name:
+        - name: segmentId
+          in: path
+          description: The *Segment* ID.
+          required: true
+          schema:
             type: string
-            description: Name of the segment
-            example: My Segment
-          description:
-            type: string
-            description: Description of the segment
-            example: Description
-      required:
-        - name
-    SegmentPut:
-      type: object
-      properties:
-          id:
-            type: string
-            description: ID of the segment.
             format: uuid
-          name:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: id:in
+          in: query
+          description: |
+            Comma separated IDs.
+          required: false
+          schema:
+            type: array
+            items:
               type: string
-              description: Name of the segment.
-              example: My Segment
-          description:
-              type: string
-              description: Description of the segment.
-              example: Description
-      required:
-        - id
-    Pagination:
-      type: object
-      description: |
-        Data about the response including pagination, and collection totals.
-      properties:
-        total:
-          type: integer
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
           description: |
-            Total number of items in the result set.
-          example: 1
-        count:
-          type: integer
+            The *Shopper Profiles* were removed from the *Segment* successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopperProfilesRemoveResponse'
+        '422':
           description: |
-            Total number of items in the collection response.
-          example: 1
-        per_page:
-          type: integer
-          description: |
-            The amount of items returned in the collection per page, controlled by the limit parameter.
-          example: 50
-        current_page:
-          type: integer
-          description: |
-            The page you are currently on within the collection.
-          example: 1
-        total_pages:
-          type: integer
-          description: |
-            The total number of pages in the collection.
-          example: 1
-    CollectionMeta:
-      type: object
-      description: |
-        Data about the response including pagination, and collection totals.
-      properties:
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    ErrorResponse:
-      allOf:
-        - $ref: '#/components/schemas/BaseError'
-        - type: object
-          properties:
-            errors:
-              $ref: '#/components/schemas/DetailedErrors'
-    BaseError:
-      type: object
-      description: |
-        Error payload for the BigCommerce API.
-      properties:
-        status:
-          description: |
-            The HTTP status code.
-          type: integer
-        title:
-          description: |
-            The error title describing the particular error.
-          type: string
-        type:
-          type: string
-        instance:
-          type: string
-    DetailedErrors:
-      type: object
-      properties: {}
-      additionalProperties:
-        type: string
+            Unable to remove some or all *Shopper Profiles* due to invalid request data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopperProfilesRemoveWithErrorsResponse'
+      security:
+        - X-Auth-Token: []
+tags:
+  - name: segments
+    description: Create, list, update, and delete customer *Segments*.
+  - name: segmentsForAShopperProfile
+    description: List the *Segments* that a specific *Shopper Profile* belongs to.
+  - name: shopperProfiles
+    description: Create, list, and delete *Shopper Profiles* for a store.
+  - name: shopperProfilesForASegment
+    description: Manage the *Shopper Profiles* associated with a specific *Segment*.
+servers:
+  - url: https://api.bigcommerce.com
+    description: https://api.bigcommerce.com
+components:
+  schemas:
     Segment:
       type: object
       properties:
@@ -608,27 +612,78 @@ components:
           type: string
           description: |
             The name of the segment.
-          example: My Segment
         description:
           type: string
           description: |
             The description of the segment.
-          example: Description
         created_at:
           type: string
           format: date-time
           description: |
             The date of which the segment was created.
-          example: 2022-09-15T23:44:05Z
         updated_at:
           type: string
           format: date-time
           description: |
             The date of which the segment was updated.
-          example: 2022-09-15T23:44:05Z
-    SegmentCollectionResponse:
+      title: Segment
+    PaginationLinks:
+      type: object
+      properties:
+        previous:
+          type: string
+          description: |
+            Link to the previous page returned in the response.
+        current:
+          type: string
+          description: |
+            Link to the current page returned in the response.
+        next:
+          type: string
+          description: |
+            Link to the next page returned in the response.
       description: |
-        Response payload for the BigCommerce API.
+        Pagination links for the previous and next parts of the whole collection.
+      title: PaginationLinks
+    Pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: |
+            Total number of items in the result set.
+        count:
+          type: integer
+          description: |
+            Total number of items in the collection response.
+        per_page:
+          type: integer
+          description: |
+            The amount of items returned in the collection per page, controlled by the limit parameter.
+        current_page:
+          type: integer
+          description: |
+            The page you are currently on within the collection.
+        total_pages:
+          type: integer
+          description: |
+            The total number of pages in the collection.
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+          description: |
+            Pagination links for the previous and next parts of the whole collection.
+      description: |
+        Data about the response including pagination, and collection totals.
+      title: Pagination
+    CollectionMeta:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      description: |
+        Data about the response including pagination, and collection totals.
+      title: CollectionMeta
+    SegmentCollectionResponse:
       type: object
       properties:
         data:
@@ -637,6 +692,223 @@ components:
             $ref: '#/components/schemas/Segment'
         meta:
           $ref: '#/components/schemas/CollectionMeta'
+      description: |
+        Response payload for the BigCommerce API.
+      title: SegmentCollectionResponse
+    SegmentPost:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the segment
+        description:
+          type: string
+          description: Description of the segment
+      required:
+        - name
+      title: SegmentPost
+    SegmentsPostRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/SegmentPost'
+      description: |
+        Request payload for the BigCommerce API.
+      title: SegmentsPostRequest
+    BatchResultMeta:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The number of items in the batch request.
+        success:
+          type: integer
+          description: The number of items that were processed successfully.
+        failed:
+          type: integer
+          description: The number of items that were not processed successfully.
+      description: |
+        The number of items (total, successes, failures) in a batch request.
+      title: BatchResultMeta
+    SegmentsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Segment'
+        meta:
+          $ref: '#/components/schemas/BatchResultMeta'
+      description: |
+        Response payload for the BigCommerce API.
+      title: SegmentsResponse
+    SegmentsPostResponsesContentApplicationJsonSchemaDataItems:
+      type: object
+      properties: {}
+      title: SegmentsPostResponsesContentApplicationJsonSchemaDataItems
+    SegmentsPostResponsesContentApplicationJsonSchemaErrorsItemsErrors:
+      type: object
+      properties: {}
+      title: SegmentsPostResponsesContentApplicationJsonSchemaErrorsItemsErrors
+    SegmentsPostResponsesContentApplicationJsonSchemaErrorsItems:
+      type: object
+      properties:
+        status:
+          type: number
+          format: double
+        title:
+          type: string
+          minLength: 1
+        type:
+          type: string
+          minLength: 1
+        errors:
+          $ref: '#/components/schemas/SegmentsPostResponsesContentApplicationJsonSchemaErrorsItemsErrors'
+      required:
+        - status
+      title: SegmentsPostResponsesContentApplicationJsonSchemaErrorsItems
+    SegmentsPostResponsesContentApplicationJsonSchemaMeta:
+      type: object
+      properties:
+        total:
+          type: number
+          format: double
+        success:
+          type: number
+          format: double
+        failed:
+          type: number
+          format: double
+      title: SegmentsPostResponsesContentApplicationJsonSchemaMeta
+    SegmentsPostRequestRequestConflictError:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentsPostResponsesContentApplicationJsonSchemaDataItems'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentsPostResponsesContentApplicationJsonSchemaErrorsItems'
+        meta:
+          $ref: '#/components/schemas/SegmentsPostResponsesContentApplicationJsonSchemaMeta'
+      required:
+        - data
+        - errors
+        - meta
+      title: SegmentsPostRequestRequestConflictError
+    DetailedErrors:
+      type: object
+      properties: {}
+      title: DetailedErrors
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: |
+            The HTTP status code.
+        title:
+          type: string
+          description: |
+            The error title describing the particular error.
+        type:
+          type: string
+        instance:
+          type: string
+        errors:
+          $ref: '#/components/schemas/DetailedErrors'
+      description: |
+        Error payload for the BigCommerce API.
+      title: ErrorResponse
+    SegmentsWithErrorsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Segment'
+        meta:
+          $ref: '#/components/schemas/BatchResultMeta'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponse'
+      description: |
+        A partial-success response returned when some items in the batch fail validation.
+      title: SegmentsWithErrorsResponse
+    SegmentPut:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the segment.
+        name:
+          type: string
+          description: Name of the segment.
+        description:
+          type: string
+          description: Description of the segment.
+      required:
+        - id
+      title: SegmentPut
+    SegmentsPutRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/SegmentPut'
+      description: |
+        Request payload for the BigCommerce API.
+      title: SegmentsPutRequest
+    SegmentsRemoveResponseDataItems:
+      type: object
+      properties: {}
+      title: SegmentsRemoveResponseDataItems
+    SegmentsRemoveResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentsRemoveResponseDataItems'
+          description: |
+            Empty on success.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            Empty on success. Populated when one or more *Segments* could not be deleted.
+        meta:
+          $ref: '#/components/schemas/BatchResultMeta'
+      description: |
+        The response payload returned when *Segments* are deleted.
+      title: SegmentsRemoveResponse
+    SegmentsRemoveWithErrorsResponseDataItems:
+      type: object
+      properties: {}
+      title: SegmentsRemoveWithErrorsResponseDataItems
+    SegmentsRemoveWithErrorsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentsRemoveWithErrorsResponseDataItems'
+          description: |
+            Empty on success.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            Empty on success. Populated when one or more *Segments* could not be deleted.
+        meta:
+          $ref: '#/components/schemas/BatchResultMeta'
+      description: >
+        A partial-success response returned when some *Segments* cannot be deleted. The `errors` array is populated and
+        `meta.failed` is greater than zero.
+      title: SegmentsRemoveWithErrorsResponse
     ShopperProfile:
       type: object
       properties:
@@ -647,7 +919,6 @@ components:
             The ID of the *Shopper Profile*.
         customer_id:
           type: integer
-          example: 1
           description: |
             The ID of the registered *Customer* associated with this *Shopper Profile*.
         created_at:
@@ -660,20 +931,120 @@ components:
           format: date-time
           description: |
             The date and time when the *Shopper Profile* was last updated.
-    ShopperProfilesAddRequest:
-      type: array
-      description: A list of *Shopper Profiles* to associate with the segment.
-      items:
-        type: string
-        format: uuid
-        description: 'The ID of a *Shopper Profile*.'
-    ShopperProfilesAddResponse:
+      title: ShopperProfile
+    ShopperProfilesCollectionResponse:
       type: object
       properties:
         data:
           type: array
           items:
             $ref: '#/components/schemas/ShopperProfile'
+        meta:
+          $ref: '#/components/schemas/CollectionMeta'
+      description: |
+        Response payload for the BigCommerce API.
+      title: ShopperProfilesCollectionResponse
+    ShopperProfilePost:
+      type: object
+      properties:
+        customer_id:
+          type: number
+          format: double
+          description: The ID of a registered Customer to associate with the new *Shopper Profile*.
+      title: ShopperProfilePost
+    ShopperProfilesPostRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/ShopperProfilePost'
+      description: |
+        Request payload for the BigCommerce API.
+      title: ShopperProfilesPostRequest
+    ShopperProfilesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopperProfile'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            Empty on success. Populated when one or more *Shopper Profiles* fail validation.
+        meta:
+          $ref: '#/components/schemas/BatchResultMeta'
+      description: |
+        Response payload for the BigCommerce API.
+      title: ShopperProfilesResponse
+    ShopperProfilesWithErrorsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopperProfile'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            Empty on success. Populated when one or more *Shopper Profiles* fail validation.
+        meta:
+          $ref: '#/components/schemas/BatchResultMeta'
+      description: >
+        A partial-success response returned when some items in the batch fail validation. The `errors` array is
+        populated and `meta.failed` is greater than zero.
+      title: ShopperProfilesWithErrorsResponse
+    ShopperProfilesRemoveResponseDataItems:
+      type: object
+      properties: {}
+      title: ShopperProfilesRemoveResponseDataItems
+    ShopperProfilesRemoveResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopperProfilesRemoveResponseDataItems'
+          description: |
+            Empty on success.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            Empty on success. Populated when one or more *Shopper Profiles* could not be removed.
+        meta:
+          $ref: '#/components/schemas/BatchResultMeta'
+      description: |
+        The response payload returned when *Shopper Profiles* are removed.
+      title: ShopperProfilesRemoveResponse
+    ShopperProfilesRemoveWithErrorsResponseDataItems:
+      type: object
+      properties: {}
+      title: ShopperProfilesRemoveWithErrorsResponseDataItems
+    ShopperProfilesRemoveWithErrorsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopperProfilesRemoveWithErrorsResponseDataItems'
+          description: |
+            Empty on success.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            Empty on success. Populated when one or more *Shopper Profiles* could not be removed.
+        meta:
+          $ref: '#/components/schemas/BatchResultMeta'
+      description: >
+        A partial-success response returned when some *Shopper Profiles* cannot be removed. The `errors` array is
+        populated and `meta.failed` is greater than zero.
+      title: ShopperProfilesRemoveWithErrorsResponse
     ShopperProfilesGetResponse:
       type: object
       properties:
@@ -683,66 +1054,154 @@ components:
             $ref: '#/components/schemas/ShopperProfile'
         meta:
           $ref: '#/components/schemas/CollectionMeta'
-    ShopperProfilesCollectionResponse:
-      description: |
-        Response payload for the BigCommerce API.
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShopperProfile'
-        meta:
-          $ref: '#/components/schemas/CollectionMeta'
-    ShopperProfilesPostRequest:
-      description: |
-        Request payload for the BigCommerce API.
+      title: ShopperProfilesGetResponse
+    ShopperProfilesAddRequest:
       type: array
       items:
-        $ref: '#/components/schemas/ShopperProfilePost'
-    ShopperProfilePost:
-      type: object
-      properties:
-        customer_id:
-          type: number
-          description: The ID of a registered Customer to associate with the new *Shopper Profile*.
-          example: 1
-    ShopperProfilesResponse:
-      description: |
-        Response payload for the BigCommerce API.
+        type: string
+        format: uuid
+      description: A list of *Shopper Profiles* to associate with the segment.
+      title: ShopperProfilesAddRequest
+    ShopperProfilesAddResponse:
       type: object
       properties:
         data:
           type: array
           items:
             $ref: '#/components/schemas/ShopperProfile'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            Empty on success. Populated when one or more *Shopper Profiles* could not be added to the *Segment*.
         meta:
-          type: object
-          properties: {}
+          $ref: '#/components/schemas/BatchResultMeta'
+      title: ShopperProfilesAddResponse
+    SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaDataItems:
+      type: object
+      properties: {}
+      title: SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaDataItems
+    SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaErrorsItemsErrors:
+      type: object
+      properties:
+        '0':
+          type: string
+          minLength: 1
+      title: SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaErrorsItemsErrors
+    SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaErrorsItems:
+      type: object
+      properties:
+        status:
+          type: number
+          format: double
+        title:
+          type: string
+          minLength: 1
+        type:
+          type: string
+          minLength: 1
+        errors:
+          $ref: >-
+            #/components/schemas/SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaErrorsItemsErrors
+      title: SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaErrorsItems
+    SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaMeta:
+      type: object
+      properties:
+        total:
+          type: number
+          format: double
+        success:
+          type: number
+          format: double
+        failed:
+          type: number
+          format: double
+      required:
+        - total
+        - success
+        - failed
+      title: SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaMeta
+    PostShopperProfileRequestConflictError:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaDataItems'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaErrorsItems'
+        meta:
+          $ref: '#/components/schemas/SegmentsSegmentIdShopperProfilesPostResponsesContentApplicationJsonSchemaMeta'
+      required:
+        - data
+        - errors
+        - meta
+      title: PostShopperProfileRequestConflictError
+    ShopperProfilesAddWithErrorsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopperProfile'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            Empty on success. Populated when one or more *Shopper Profiles* could not be added to the *Segment*.
+        meta:
+          $ref: '#/components/schemas/BatchResultMeta'
+      description: >
+        A partial-success response returned when some *Shopper Profiles* cannot be added to the *Segment*. The `errors`
+        array is populated and `meta.failed` is greater than zero.
+      title: ShopperProfilesAddWithErrorsResponse
   securitySchemes:
     X-Auth-Token:
+      type: apiKey
+      in: header
       name: X-Auth-Token
-      description: |-
+      description: >-
         ### OAuth scopes
+
         | UI Name | Permission | Parameter |
+
         |:--------|:-----------|:----------|
+
         | Customers | modify | `store_v2_customers` |
+
         | Customers | read-only | `store_v2_customers_read_only` |
 
-        **NOTE**: GET endpoints require only read-only permission, except for the [Get All Shopper Profiles in a Segment](/docs/rest-management/customer-segmentation/shopper-profiles-for-a-segment#get-all-shopper-profiles-in-a-segment) endpoint which requires modify permission.
+
+        **NOTE**: GET endpoints require only read-only permission, except for the [Get All Shopper Profiles in a
+        Segment](/developer/api-reference/rest/admin/management/customer-segmentation/shopper-profiles-for-a-segment/get-segment-profiles)
+        endpoint which requires modify permission.
+
 
         ### Authentication header
 
+
         | Header | Argument | Description |
+
         |:-------|:---------|:------------|
-        | `X-Auth-Token` | `access_token` | For more about API accounts that generate `access_token`s, see [API Accounts and OAuth Scopes](/docs/start/authentication). |
+
+        | `X-Auth-Token` | `access_token` | For more about API accounts that generate `access_token`s, see [API Accounts
+        and OAuth Scopes](/developer/docs/overview/api-fundamentals/api-accounts). |
+
 
         ### Further reading
 
-        For example requests and more information about authenticating BigCommerce APIs, see [Authentication and Example Requests](/docs/start/authentication#x-auth-token-header-example-requests).
 
-        For more about BigCommerce OAuth scopes, see [API Accounts and OAuth Scopes](/docs/start/authentication#oauth-scopes).
+        For example requests and more information about authenticating BigCommerce APIs, see [Authentication and Example
+        Requests](/developer/docs/overview/api-fundamentals/api-accounts#x-auth-token-header-example-requests).
 
-        For a list of API status codes, see [API Status Codes](/docs/start/about/status-codes).
-      type: apiKey
-      in: header
+
+        For more about BigCommerce OAuth scopes, see [API Accounts and OAuth
+        Scopes](/developer/docs/overview/api-fundamentals/api-accounts#oauth-scopes).
+
+
+        For a list of API status codes, see [API Status
+        Codes](/developer/api-reference/rest/overview#rest-http-status-codes).

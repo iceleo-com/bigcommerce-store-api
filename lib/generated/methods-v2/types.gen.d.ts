@@ -6,7 +6,6 @@ export type PaymentBase = {
     name?: string;
     test_mode?: boolean;
 };
-export type Accept = string;
 export type GetAllPaymentMethodsData = {
     body?: never;
     headers: {

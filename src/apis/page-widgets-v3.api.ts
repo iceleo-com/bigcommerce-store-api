@@ -11,7 +11,7 @@ export class PageWidgetsV3Api {
     }
 
     /**
-     * Get a page snapshot
+     * Get Page Snapshot
      *
      * Get a snapshot of all the page widget regions for a given channel, template file, or entity.
      */
@@ -25,7 +25,7 @@ export class PageWidgetsV3Api {
     }
 
     /**
-     * Publish or overwrite page content
+     * Publish or Overwrite Page Content
      *
      * Publish or overwrite the content of a page that uses page widgets.
      */

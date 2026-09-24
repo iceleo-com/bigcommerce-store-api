@@ -1,10 +1,110 @@
 export type ClientOptions = {
-    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3/stores/{store_hash}/v3' | (string & {});
 };
-export type ResponseErrorBrief = {
-    status: number;
-    title?: string;
-    type?: string;
+export type ContentPagesGetParametersIncludeSchemaItems = 'body';
+export type TypePageType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypePage = {
+    id?: number;
+    channel_id?: number;
+    name: string;
+    is_visible?: boolean;
+    parent_id?: number;
+    sort_order?: number;
+    type: TypePageType;
+    is_homepage?: boolean;
+    is_customers_only?: boolean;
+    url?: string;
+    meta_title?: string | null;
+    meta_keywords?: string | null;
+    meta_description?: string | null;
+    search_keywords?: string | null;
+};
+export type TypeBlogType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypeBlog = {
+    id?: number;
+    channel_id?: number;
+    name: string;
+    is_visible?: boolean;
+    parent_id?: number;
+    sort_order?: number;
+    type: TypeBlogType;
+    is_homepage?: boolean;
+    is_customers_only?: boolean;
+    url?: string;
+    meta_title?: string | null;
+    meta_keywords?: string | null;
+    meta_description?: string | null;
+    search_keywords?: string | null;
+};
+export type TypeContactFormType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypeContactForm = {
+    id?: number;
+    channel_id?: number;
+    name: string;
+    is_visible?: boolean;
+    parent_id?: number;
+    sort_order?: number;
+    type: TypeContactFormType;
+    is_homepage?: boolean;
+    is_customers_only?: boolean;
+    url?: string;
+    meta_title?: string | null;
+    meta_keywords?: string | null;
+    meta_description?: string | null;
+    search_keywords?: string | null;
+    email?: string;
+    contact_fields?: string;
+};
+export type TypeRawType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypeRaw = {
+    id?: number;
+    channel_id?: number;
+    name: string;
+    is_visible?: boolean;
+    parent_id?: number;
+    sort_order?: number;
+    type: TypeRawType;
+    is_homepage?: boolean;
+    is_customers_only?: boolean;
+    url?: string;
+    search_keywords?: string | null;
+    body: string | null;
+    content_type?: string;
+};
+export type TypeLinkType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
+export type TypeLink = {
+    id?: number;
+    channel_id?: number;
+    name: string;
+    is_visible?: boolean;
+    parent_id?: number;
+    sort_order?: number;
+    type: TypeLinkType;
+    is_homepage?: boolean;
+    is_customers_only?: boolean;
+    url?: string;
+    link: string;
+};
+export type PagesCollectionResponseDataItems = TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+export type ResponseMetaPaginationLinks = {
+    previous?: string;
+    current?: string;
+    next?: string;
+};
+export type ResponseMetaPagination = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: ResponseMetaPaginationLinks;
+};
+export type ResponseMeta = {
+    pagination?: ResponseMetaPagination;
+};
+export type PagesCollectionResponse = {
+    data?: Array<PagesCollectionResponseDataItems>;
+    meta?: ResponseMeta;
 };
 export type ResponseErrorDetailed = {
     status: number;
@@ -18,190 +118,95 @@ export type ResponseErrorItemized = {
     type?: string;
     errors?: Array<string>;
 };
-export type ResponseMeta = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    };
-};
-export type PagesCollectionResponse = {
-    data?: Array<TypePage | TypeBlog | TypeContactForm | TypeFeed | TypeRaw | TypeLink>;
+export type ContentPagesPostParametersIncludeSchemaItems = 'body';
+export type PagesBulkCreatePagesRequest0 = TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+export type ContentPagesPostRequestBodyContentApplicationJsonSchemaOneOf1Items = TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+export type PagesBulkCreatePagesRequest1 = Array<ContentPagesPostRequestBodyContentApplicationJsonSchemaOneOf1Items>;
+export type PagesBulkCreatePagesRequest = PagesBulkCreatePagesRequest0 | PagesBulkCreatePagesRequest1;
+export type ContentPagesPostResponsesContentApplicationJsonSchemaData = TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+export type PagesBulkCreatePagesResponse201 = {
+    data?: ContentPagesPostResponsesContentApplicationJsonSchemaData;
     meta?: ResponseMeta;
 };
-export type PageResponse = {
-    data?: {
-        [key: string]: unknown;
-    };
-    meta?: ResponseMeta;
-};
-export type ContactFields = {
-    fullname?: string;
-    phone?: string;
-    companyname?: string;
-    orderno?: string;
-    rma?: string;
-};
+export type ContentPagesPutParametersIncludeSchemaItems = 'body';
+export type PagePutObjType = 'page' | 'raw' | 'contact_form' | 'link' | 'blog';
 export type PagePutBulk = {
+    channel_id?: number;
     name?: string;
     is_visible?: boolean;
     parent_id?: number;
     sort_order?: number;
-    type?: 'page' | 'raw' | 'contact_form' | 'feed' | 'link' | 'blog';
+    type?: PagePutObjType;
+    body?: string | null;
     is_homepage?: boolean;
     is_customers_only?: boolean;
+    email?: string;
+    meta_title?: string | null;
+    link?: string;
+    contact_fields?: string;
+    meta_keywords?: string | null;
+    meta_description?: string | null;
+    search_keywords?: string | null;
+    url?: string;
     id: number;
-    email?: string;
-    meta_title?: string | null;
-    body?: string | null;
-    feed?: string;
-    link?: string;
-    contact_fields?: string;
-    meta_keywords?: string | null;
-    meta_description?: string | null;
-    search_keywords?: string | null;
-    url?: string;
-    channel_id?: number;
 };
-export type PagePut = {
+export type PagesBulkUpdatePagesRequest1 = Array<PagePutBulk>;
+export type PagesBulkUpdatePagesRequest = PagePutBulk | PagesBulkUpdatePagesRequest1;
+export type ResponseErrorBrief = {
+    status: number;
+    title?: string;
+    type?: string;
+};
+export type ContentPagesPageIdGetParametersIncludeSchemaItems = 'body';
+export type SinglePageResponseData = TypePage | TypeBlog | TypeContactForm | TypeRaw | TypeLink;
+export type SinglePageResponse = {
+    data?: SinglePageResponseData;
+    meta?: ResponseMeta;
+};
+export type ContentPagesPageIdPutParametersIncludeSchemaItems = 'body';
+export type PagePutObj = {
+    channel_id?: number;
     name?: string;
     is_visible?: boolean;
     parent_id?: number;
     sort_order?: number;
-    type?: 'page' | 'raw' | 'contact_form' | 'feed' | 'link' | 'blog';
+    type?: PagePutObjType;
+    body?: string | null;
     is_homepage?: boolean;
     is_customers_only?: boolean;
     email?: string;
     meta_title?: string | null;
-    body?: string | null;
-    feed?: string;
     link?: string;
     contact_fields?: string;
     meta_keywords?: string | null;
     meta_description?: string | null;
     search_keywords?: string | null;
     url?: string;
-    channel_id?: number;
 };
-export type Page = {
-    email?: string;
-    meta_title?: string | null;
-    body?: string | null;
-    feed?: string;
-    link?: string;
-    contact_fields?: string;
-    meta_keywords?: string | null;
-    meta_description?: string | null;
-    search_keywords?: string | null;
-    url?: string;
-    channel_id?: number;
-} & PageBase;
-export type PageBase = {
-    name: string;
-    is_visible?: boolean;
-    parent_id?: number;
-    sort_order?: number;
-    type: 'page' | 'raw' | 'contact_form' | 'feed' | 'link' | 'blog';
-    is_homepage?: boolean;
-    is_customers_only?: boolean;
-};
-export type AnyTypePage = {
-    readonly id?: number;
-    readonly channel_id?: number;
-    name: string;
-    is_visible?: boolean;
-    parent_id?: number;
-    sort_order?: number;
-    type: 'page' | 'raw' | 'contact_form' | 'feed' | 'link' | 'blog';
-    is_homepage?: boolean;
-    is_customers_only?: boolean;
-    url?: string;
-};
-export type TypePage = AnyTypePage & PageMeta & SearchKeywords;
-export type TypeBlog = AnyTypePage & PageMeta & SearchKeywords & {
-    url?: string;
-};
-export type TypeContactForm = AnyTypePage & PageMeta & SearchKeywords & {
-    email?: string;
-    contact_fields?: string;
-};
-export type TypeFeed = AnyTypePage & PageMeta & SearchKeywords & {
-    feed: string;
-};
-export type TypeRaw = AnyTypePage & SearchKeywords & {
-    body: string | null;
-    content_type?: string;
-};
-export type TypeLink = AnyTypePage & {
-    link: string;
-};
-export type PageMeta = {
-    meta_title?: string | null;
-    meta_keywords?: string | null;
-    meta_description?: string | null;
-};
-export type SearchKeywords = {
-    search_keywords?: string | null;
-};
-export type ReadShared = {
-    name: string;
-    is_visible?: boolean;
-    parent_id?: number;
-    sort_order?: number;
-    type: 'page' | 'contact_form' | 'raw' | 'blog' | 'feed' | 'link';
-    is_homepage?: boolean;
-    is_customers_only?: boolean;
-};
-export type AnyTypePageWritable = {
-    name: string;
-    is_visible?: boolean;
-    parent_id?: number;
-    sort_order?: number;
-    type: 'page' | 'raw' | 'contact_form' | 'feed' | 'link' | 'blog';
-    is_homepage?: boolean;
-    is_customers_only?: boolean;
-    url?: string;
-};
-export type Accept = string;
-export type ContentType = string;
-export type StoreHashPath = string;
-export type PageIdPath = string;
-export type IncludeQuery = 'body';
-export type ChannelIdQuery = number;
-export type IdInQueryGet = string;
-export type IdInQueryDelete = string;
-export type NameQuery = string;
-export type NameLikeQuery = string;
-export type LimitQuery = number;
-export type PageQuery = number;
-export type ContentPagesDeleteData = {
+export type DeletePagesData = {
     body?: never;
     headers: {
         Accept: string;
     };
     path?: never;
     query: {
-        'id:in': string;
+        'id:in': Array<number>;
+        delete_children?: boolean;
     };
     url: '/content/pages';
 };
-export type ContentPagesDeleteErrors = {
+export type DeletePagesErrors = {
     404: ResponseErrorBrief;
     422: ResponseErrorDetailed;
 };
-export type ContentPagesDeleteError = ContentPagesDeleteErrors[keyof ContentPagesDeleteErrors];
-export type ContentPagesDeleteResponses = {
-    204: void;
+export type DeletePagesError = DeletePagesErrors[keyof DeletePagesErrors];
+export type DeletePagesResponses = {
+    204: {
+        [key: string]: unknown;
+    };
 };
-export type ContentPagesDeleteResponse = ContentPagesDeleteResponses[keyof ContentPagesDeleteResponses];
-export type ContentPagesGetData = {
+export type DeletePagesResponse = DeletePagesResponses[keyof DeletePagesResponses];
+export type GetPagesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -209,70 +214,64 @@ export type ContentPagesGetData = {
     path?: never;
     query?: {
         channel_id?: number;
-        'id:in'?: string;
+        'id:in'?: Array<number>;
         name?: string;
         'name:like'?: string;
         limit?: number;
         page?: number;
-        include?: 'body';
+        include?: Array<ContentPagesGetParametersIncludeSchemaItems>;
     };
     url: '/content/pages';
 };
-export type ContentPagesGetErrors = {
+export type GetPagesErrors = {
     400: ResponseErrorDetailed;
     422: ResponseErrorItemized;
 };
-export type ContentPagesGetError = ContentPagesGetErrors[keyof ContentPagesGetErrors];
-export type ContentPagesGetResponses = {
+export type GetPagesError = GetPagesErrors[keyof GetPagesErrors];
+export type GetPagesResponses = {
     200: PagesCollectionResponse;
 };
-export type ContentPagesGetResponse = ContentPagesGetResponses[keyof ContentPagesGetResponses];
-export type ContentPagesPostData = {
-    body: Page;
+export type GetPagesResponse = GetPagesResponses[keyof GetPagesResponses];
+export type CreatePagesData = {
+    body?: PagesBulkCreatePagesRequest;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: {
-        include?: 'body';
+        include?: Array<ContentPagesPostParametersIncludeSchemaItems>;
     };
     url: '/content/pages';
 };
-export type ContentPagesPostErrors = {
+export type CreatePagesErrors = {
     422: ResponseErrorDetailed;
 };
-export type ContentPagesPostError = ContentPagesPostErrors[keyof ContentPagesPostErrors];
-export type ContentPagesPostResponses = {
-    201: {
-        data?: TypePage | TypeBlog | TypeContactForm | TypeFeed | TypeRaw | TypeLink;
-        meta?: ResponseMeta;
-    };
-    207: unknown;
+export type CreatePagesError = CreatePagesErrors[keyof CreatePagesErrors];
+export type CreatePagesResponses = {
+    201: PagesBulkCreatePagesResponse201;
 };
-export type ContentPagesPostResponse = ContentPagesPostResponses[keyof ContentPagesPostResponses];
-export type ContentPagesPutData = {
-    body?: PagePutBulk | Array<PagePutBulk>;
+export type CreatePagesResponse = CreatePagesResponses[keyof CreatePagesResponses];
+export type UpdatePagesData = {
+    body?: PagesBulkUpdatePagesRequest;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: {
-        include?: 'body';
+        include?: Array<ContentPagesPutParametersIncludeSchemaItems>;
     };
     url: '/content/pages';
 };
-export type ContentPagesPutErrors = {
+export type UpdatePagesErrors = {
     404: ResponseErrorBrief;
     422: ResponseErrorDetailed;
 };
-export type ContentPagesPutError = ContentPagesPutErrors[keyof ContentPagesPutErrors];
-export type ContentPagesPutResponses = {
+export type UpdatePagesError = UpdatePagesErrors[keyof UpdatePagesErrors];
+export type UpdatePagesResponses = {
     200: PagesCollectionResponse;
 };
-export type ContentPagesPutResponse = ContentPagesPutResponses[keyof ContentPagesPutResponses];
-export type ContentPageDeleteData = {
+export type UpdatePagesResponse = UpdatePagesResponses[keyof UpdatePagesResponses];
+export type DeletePageData = {
     body?: never;
     headers: {
         Accept: string;
@@ -283,15 +282,17 @@ export type ContentPageDeleteData = {
     query?: never;
     url: '/content/pages/{pageId}';
 };
-export type ContentPageDeleteErrors = {
+export type DeletePageErrors = {
     404: ResponseErrorBrief;
 };
-export type ContentPageDeleteError = ContentPageDeleteErrors[keyof ContentPageDeleteErrors];
-export type ContentPageDeleteResponses = {
-    204: void;
+export type DeletePageError = DeletePageErrors[keyof DeletePageErrors];
+export type DeletePageResponses = {
+    204: {
+        [key: string]: unknown;
+    };
 };
-export type ContentPageDeleteResponse = ContentPageDeleteResponses[keyof ContentPageDeleteResponses];
-export type ContentPageGetData = {
+export type DeletePageResponse = DeletePageResponses[keyof DeletePageResponses];
+export type GetPageData = {
     body?: never;
     headers: {
         Accept: string;
@@ -300,40 +301,39 @@ export type ContentPageGetData = {
         pageId: string;
     };
     query?: {
-        include?: 'body';
+        include?: Array<ContentPagesPageIdGetParametersIncludeSchemaItems>;
     };
     url: '/content/pages/{pageId}';
 };
-export type ContentPageGetErrors = {
+export type GetPageErrors = {
     404: ResponseErrorBrief;
     422: ResponseErrorItemized;
 };
-export type ContentPageGetError = ContentPageGetErrors[keyof ContentPageGetErrors];
-export type ContentPageGetResponses = {
-    200: PageResponse;
+export type GetPageError = GetPageErrors[keyof GetPageErrors];
+export type GetPageResponses = {
+    200: SinglePageResponse;
 };
-export type ContentPageGetResponse = ContentPageGetResponses[keyof ContentPageGetResponses];
-export type ContentPagePutData = {
-    body: PagePut;
+export type GetPageResponse = GetPageResponses[keyof GetPageResponses];
+export type UpdatePageData = {
+    body?: PagePutObj;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path: {
         pageId: string;
     };
     query?: {
-        include?: 'body';
+        include?: Array<ContentPagesPageIdPutParametersIncludeSchemaItems>;
     };
     url: '/content/pages/{pageId}';
 };
-export type ContentPagePutErrors = {
+export type UpdatePageErrors = {
     400: ResponseErrorDetailed;
     404: ResponseErrorBrief;
     422: ResponseErrorDetailed;
 };
-export type ContentPagePutError = ContentPagePutErrors[keyof ContentPagePutErrors];
-export type ContentPagePutResponses = {
-    200: PageResponse;
+export type UpdatePageError = UpdatePageErrors[keyof UpdatePageErrors];
+export type UpdatePageResponses = {
+    200: SinglePageResponse;
 };
-export type ContentPagePutResponse = ContentPagePutResponses[keyof ContentPagePutResponses];
+export type UpdatePageResponse = UpdatePageResponses[keyof UpdatePageResponses];

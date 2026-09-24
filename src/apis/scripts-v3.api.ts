@@ -11,7 +11,7 @@ export class ScriptsV3Api {
     }
 
     /**
-     * Get All Scripts
+     * List Scripts
      *
      * Returns a list of *Scripts*. Optional parameters can be passed in.
 
@@ -27,7 +27,7 @@ export class ScriptsV3Api {
     }
 
     /**
-     * Create a Script
+     * Create Script
      *
      * Creates a *Script*.
 
@@ -49,7 +49,7 @@ export class ScriptsV3Api {
        * Specify the `html` property.
        * Do not specify the `src` field.
      * Each app can have 10 scripts installed.
-     * Multiple scripts can be created [per call](/docs/integrations/scripts#notes). 
+     * Multiple scripts can be created [per call](/developer/docs/integrations/scripts#notes). 
      */
     createScript(
         requestBody: ScriptsV3ApiSpecs.CreateScriptData['body'],
@@ -62,7 +62,7 @@ export class ScriptsV3Api {
     }
 
     /**
-     * Get a Script
+     * Get Script
      *
      * Returns a single *Script*.
      */
@@ -75,7 +75,7 @@ export class ScriptsV3Api {
     }
 
     /**
-     * Update a Script
+     * Update Script
      *
      * Updates a *Script*.
      */
@@ -91,7 +91,7 @@ export class ScriptsV3Api {
     }
 
     /**
-     * Delete a Script
+     * Delete Script
      *
      * Deletes a *Script*.
      */

@@ -1,17 +1,10 @@
 export type ClientOptions = {
     baseUrl: 'https://{store_domain}' | (string & {});
 };
-export type CustomerLoginSso = {
-    iss?: string;
-    iat?: number;
-    jti?: string;
-    operation?: string;
-    store_hash?: string;
-    customer_id?: number;
-    redirect_to?: string;
-    request_ip?: string;
+export type LoginTokenGetCustomerLoginResponse200 = {
+    [key: string]: unknown;
 };
-export type GetLoginTokenByJwtTokenData = {
+export type GetCustomerLoginData = {
     body?: never;
     path: {
         jwt_token: string;
@@ -19,9 +12,7 @@ export type GetLoginTokenByJwtTokenData = {
     query?: never;
     url: '/login/token/{jwt_token}';
 };
-export type GetLoginTokenByJwtTokenResponses = {
-    200: {
-        [key: string]: unknown;
-    };
+export type GetCustomerLoginResponses = {
+    200: LoginTokenGetCustomerLoginResponse200;
 };
-export type GetLoginTokenByJwtTokenResponse = GetLoginTokenByJwtTokenResponses[keyof GetLoginTokenByJwtTokenResponses];
+export type GetCustomerLoginResponse = GetCustomerLoginResponses[keyof GetCustomerLoginResponses];

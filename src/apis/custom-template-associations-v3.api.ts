@@ -11,9 +11,9 @@ export class CustomTemplateAssociationsV3Api {
     }
 
     /**
-     * Get Custom Template Associations
+     * List Custom Template Associations
      *
-     * Get a collection of the storeʼs custom template associations across all storefronts
+     * Get a collection of the storeʼs custom template associations across all storefronts.
      */
     getCustomTemplateAssociations(
         query?: CustomTemplateAssociationsV3ApiSpecs.GetCustomTemplateAssociationsData['query'],

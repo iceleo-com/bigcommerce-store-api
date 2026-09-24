@@ -5,12 +5,9 @@ export * as CustomTemplateAssociationsV3ApiSpecs from '../generated/custom-templ
 export declare class CustomTemplateAssociationsV3Api {
     private readonly request;
     constructor(request: RequestService);
-    getCustomTemplateAssociations(query?: CustomTemplateAssociationsV3ApiSpecs.GetCustomTemplateAssociationsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: Array<CustomTemplateAssociationsV3ApiSpecs.CustomTemplateAssociation>;
-        meta?: CustomTemplateAssociationsV3ApiSpecs.MetaPaginationObject;
-    }>>>;
-    upsertCustomTemplateAssociations(requestBody: CustomTemplateAssociationsV3ApiSpecs.UpsertCustomTemplateAssociationsData['body']): Promise<RequestSuccessResponse<200, Required<{
+    getCustomTemplateAssociations(query?: CustomTemplateAssociationsV3ApiSpecs.GetCustomTemplateAssociationsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CustomTemplateAssociationsV3ApiSpecs.CustomTemplateAssociationsGetCustomTemplateAssociationsResponse200>>>;
+    upsertCustomTemplateAssociations(requestBody: CustomTemplateAssociationsV3ApiSpecs.UpsertCustomTemplateAssociationsData['body']): Promise<RequestSuccessResponse<200, Required<CustomTemplateAssociationsV3ApiSpecs.CustomTemplateAssociationsUpsertCustomTemplateAssociationsResponse200>> | RequestErrorResponse<422, Required<CustomTemplateAssociationsV3ApiSpecs.ErrorResponse>>>;
+    deleteCustomTemplateAssociations(query?: CustomTemplateAssociationsV3ApiSpecs.DeleteCustomTemplateAssociationsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, Required<{
         [key: string]: unknown;
-    }>> | RequestErrorResponse<422, Required<CustomTemplateAssociationsV3ApiSpecs.ErrorResponse>>>;
-    deleteCustomTemplateAssociations(query?: CustomTemplateAssociationsV3ApiSpecs.DeleteCustomTemplateAssociationsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
+    }>>>;
 }

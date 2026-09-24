@@ -11,7 +11,7 @@ export class SegmentsV3Api {
     }
 
     /**
-     * Get All Segments
+     * List Segments
      *
      * Returns a paginated *Segments List*.
      */
@@ -31,13 +31,13 @@ export class SegmentsV3Api {
 
      **Limits**
      * Limit of 10 concurrent requests.
-     * Max total segements allowed per store is 1000.
+     * Max total segments allowed per store is 1000.
 
      */
     segmentsPostRequest(
         requestBody: SegmentsV3ApiSpecs.SegmentsPostRequestData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<SegmentsV3ApiSpecs.SegmentsPostRequestResponses[201]>>,(RequestErrorResponse<400, Required<SegmentsV3ApiSpecs.SegmentsPostRequestErrors[400]>> | RequestErrorResponse<409, Required<SegmentsV3ApiSpecs.SegmentsPostRequestErrors[409]>>)>({
+        return this.request.post<RequestSuccessResponse<201, Required<SegmentsV3ApiSpecs.SegmentsPostRequestResponses[201]>>,(RequestErrorResponse<409, Required<SegmentsV3ApiSpecs.SegmentsPostRequestErrors[409]>> | RequestErrorResponse<422, Required<SegmentsV3ApiSpecs.SegmentsPostRequestErrors[422]>>)>({
             path: 'v3/segments',
             contentType: 'application/json',
             body: requestBody,
@@ -56,7 +56,7 @@ export class SegmentsV3Api {
     putSegmentObjects(
         requestBody: SegmentsV3ApiSpecs.PutSegmentObjectsData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<201, Required<SegmentsV3ApiSpecs.PutSegmentObjectsResponses[201]>>,RequestErrorResponse<400, Required<SegmentsV3ApiSpecs.PutSegmentObjectsErrors[400]>>>({
+        return this.request.put<RequestSuccessResponse<201, Required<SegmentsV3ApiSpecs.PutSegmentObjectsResponses[201]>>,RequestErrorResponse<422, Required<SegmentsV3ApiSpecs.PutSegmentObjectsErrors[422]>>>({
             path: 'v3/segments',
             contentType: 'application/json',
             body: requestBody,
@@ -72,68 +72,29 @@ export class SegmentsV3Api {
     deleteStoreSegment(
         query?: SegmentsV3ApiSpecs.DeleteStoreSegmentData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<SegmentsV3ApiSpecs.DeleteStoreSegmentResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<200, Required<SegmentsV3ApiSpecs.DeleteStoreSegmentResponses[200]>>,RequestErrorResponse<422, Required<SegmentsV3ApiSpecs.DeleteStoreSegmentErrors[422]>>>({
             path: 'v3/segments',
             query,
         });
     }
 
     /**
-     * Get All Shopper Profiles in a Segment
+     * List Segments for Shopper Profile
      *
-     * Returns a list of *Shopper Profiles* that are associated with a given *Segment*.
-
-     **NOTE**: The `modify` Customers OAuth scope is a requirement for this endpoint.
-
+     * Returns a paginated *Segments* list for a *Shopper Profile*.
      */
-    getSegmentProfiles(
-        segmentId: SegmentsV3ApiSpecs.GetSegmentProfilesData['path']['segmentId'],
-        query?: SegmentsV3ApiSpecs.GetSegmentProfilesData['query'],
+    getListShopperProfile(
+        shopperProfileId: SegmentsV3ApiSpecs.GetListShopperProfileData['path']['shopperProfileId'],
+        query?: SegmentsV3ApiSpecs.GetListShopperProfileData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SegmentsV3ApiSpecs.GetSegmentProfilesResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/segments/${segmentId}/shopper-profiles`,
+        return this.request.get<RequestSuccessResponse<200, Required<SegmentsV3ApiSpecs.GetListShopperProfileResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/shopper-profiles/${shopperProfileId}/segments`,
             query,
         });
     }
 
     /**
-     * Add Shopper Profiles to a Segment
-     *
-     * Add *Shopper Profiles* to a specific *Segment*.
-
-     **Limits**
-     * Limit of *Shopper Profiles* per request is `50`.
-     * Limit of 10 concurrent requests.
-     */
-    postShopperProfile(
-        segmentId: SegmentsV3ApiSpecs.PostShopperProfileData['path']['segmentId'],
-        requestBody: SegmentsV3ApiSpecs.PostShopperProfileData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<201, Required<SegmentsV3ApiSpecs.PostShopperProfileResponses[201]>>,RequestErrorResponse<409, Required<SegmentsV3ApiSpecs.PostShopperProfileErrors[409]>>>({
-            path: `v3/segments/${segmentId}/shopper-profiles`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Remove Shopper Profiles from a Segment
-     *
-     * Remove one or more *Shopper Profiles* that are associated with a *Segment*. This operation only removes the association; it doesn't delete the *Shopper Profiles*.
-
-     */
-    deleteShopperProfile(
-        segmentId: SegmentsV3ApiSpecs.DeleteShopperProfileData['path']['segmentId'],
-        query?: SegmentsV3ApiSpecs.DeleteShopperProfileData['query'],
-    ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<SegmentsV3ApiSpecs.DeleteShopperProfileResponses[204]>>,RequestErrorResponse<400, void>>({
-            path: `v3/segments/${segmentId}/shopper-profiles`,
-            query,
-        });
-    }
-
-    /**
-     * Get All Shopper Profiles
+     * List Shopper Profiles
      *
      * Returns a paginated *Shopper Profiles* list.
 
@@ -156,7 +117,7 @@ export class SegmentsV3Api {
     shopperProfilesRequest(
         requestBody: SegmentsV3ApiSpecs.ShopperProfilesRequestData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<SegmentsV3ApiSpecs.ShopperProfilesRequestResponses[201]>>,RequestErrorResponse<400, Required<SegmentsV3ApiSpecs.ShopperProfilesRequestErrors[400]>>>({
+        return this.request.post<RequestSuccessResponse<201, Required<SegmentsV3ApiSpecs.ShopperProfilesRequestResponses[201]>>,RequestErrorResponse<422, Required<SegmentsV3ApiSpecs.ShopperProfilesRequestErrors[422]>>>({
             path: 'v3/shopper-profiles',
             contentType: 'application/json',
             body: requestBody,
@@ -172,23 +133,62 @@ export class SegmentsV3Api {
     deleteStoreShopperProfile(
         query?: SegmentsV3ApiSpecs.DeleteStoreShopperProfileData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<SegmentsV3ApiSpecs.DeleteStoreShopperProfileResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<200, Required<SegmentsV3ApiSpecs.DeleteStoreShopperProfileResponses[200]>>,RequestErrorResponse<422, Required<SegmentsV3ApiSpecs.DeleteStoreShopperProfileErrors[422]>>>({
             path: 'v3/shopper-profiles',
             query,
         });
     }
 
     /**
-     * Get All Segments for a Shopper Profile
+     * List Shopper Profiles in Segment
      *
-     * Returns a paginated *Segments* list for a *Shopper Profile*.
+     * Returns a list of *Shopper Profiles* that are associated with a given *Segment*.
+
+     **NOTE**: The `modify` Customers OAuth scope is a requirement for this endpoint.
+
      */
-    getListShopperProfile(
-        shopperProfileId: SegmentsV3ApiSpecs.GetListShopperProfileData['path']['shopperProfileId'],
-        query?: SegmentsV3ApiSpecs.GetListShopperProfileData['query'],
+    getSegmentProfiles(
+        segmentId: SegmentsV3ApiSpecs.GetSegmentProfilesData['path']['segmentId'],
+        query?: SegmentsV3ApiSpecs.GetSegmentProfilesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<SegmentsV3ApiSpecs.GetListShopperProfileResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/shopper-profiles/${shopperProfileId}/segments`,
+        return this.request.get<RequestSuccessResponse<200, Required<SegmentsV3ApiSpecs.GetSegmentProfilesResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/segments/${segmentId}/shopper-profiles`,
+            query,
+        });
+    }
+
+    /**
+     * Add Shopper Profiles to Segment
+     *
+     * Add *Shopper Profiles* to a specific *Segment*.
+
+     **Limits**
+     * Limit of *Shopper Profiles* per request is `50`.
+     * Limit of 10 concurrent requests.
+     */
+    postShopperProfile(
+        segmentId: SegmentsV3ApiSpecs.PostShopperProfileData['path']['segmentId'],
+        requestBody: SegmentsV3ApiSpecs.PostShopperProfileData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<201, Required<SegmentsV3ApiSpecs.PostShopperProfileResponses[201]>>,(RequestErrorResponse<409, Required<SegmentsV3ApiSpecs.PostShopperProfileErrors[409]>> | RequestErrorResponse<422, Required<SegmentsV3ApiSpecs.PostShopperProfileErrors[422]>>)>({
+            path: `v3/segments/${segmentId}/shopper-profiles`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Remove Shopper Profiles from Segment
+     *
+     * Remove one or more *Shopper Profiles* that are associated with a *Segment*. This operation only removes the association; it doesn't delete the *Shopper Profiles*.
+
+     */
+    deleteShopperProfile(
+        segmentId: SegmentsV3ApiSpecs.DeleteShopperProfileData['path']['segmentId'],
+        query?: SegmentsV3ApiSpecs.DeleteShopperProfileData['query'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<200, Required<SegmentsV3ApiSpecs.DeleteShopperProfileResponses[200]>>,RequestErrorResponse<422, Required<SegmentsV3ApiSpecs.DeleteShopperProfileErrors[422]>>>({
+            path: `v3/segments/${segmentId}/shopper-profiles`,
             query,
         });
     }

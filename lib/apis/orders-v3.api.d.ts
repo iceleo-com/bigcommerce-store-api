@@ -5,123 +5,28 @@ export * as OrdersV3ApiSpecs from '../generated/orders-v3';
 export declare class OrdersV3Api {
     private readonly request;
     constructor(request: RequestService);
-    paymentactioncapture(orderId: OrdersV3ApiSpecs.PaymentactioncaptureData['path']['order_id']): Promise<RequestSuccessResponse<201, Required<{
+    getOrderTransactions(orderId: OrdersV3ApiSpecs.GetOrderTransactionsData['path']['order_id']): Promise<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.TransactionsGetOrderTransactionsResponse200>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.GetOrderTransactionsRequestNotFoundError>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.GetOrderTransactionsRequestServiceUnavailableError>>>;
+    getOrdersMetafields(query?: OrdersV3ApiSpecs.GetOrdersMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetaFieldCollectionResponse>>>;
+    createOrdersMetafields(requestBody: OrdersV3ApiSpecs.CreateOrdersMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetaFieldCollectionResponsePostPut>> | RequestErrorResponse<400, Required<OrdersV3ApiSpecs.CreateOrdersMetafieldsRequestBadRequestError>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>>>;
+    updateOrdersMetafields(requestBody: OrdersV3ApiSpecs.UpdateOrdersMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetaFieldCollectionResponsePostPut>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>> | RequestErrorResponse<400, Required<OrdersV3ApiSpecs.UpdateOrdersMetafieldsRequestBadRequestError>>>;
+    deleteOrdersMetafields(requestBody: OrdersV3ApiSpecs.DeleteOrdersMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetaFieldCollectionDeleteResponseSuccess>> | RequestErrorResponse<400, Required<OrdersV3ApiSpecs.DeleteOrdersMetafieldsRequestBadRequestError>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessDelete>>>;
+    getOrderMetafields(orderId: OrdersV3ApiSpecs.GetOrderMetafieldsData['path']['order_id'], query?: OrdersV3ApiSpecs.GetOrderMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetaFieldCollectionResponse>>>;
+    createOrderMetafield(orderId: OrdersV3ApiSpecs.CreateOrderMetafieldData['path']['order_id'], requestBody: OrdersV3ApiSpecs.CreateOrderMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetafieldResponse>> | RequestErrorResponse<400, Required<OrdersV3ApiSpecs.CreateOrderMetafieldRequestBadRequestError>> | RequestErrorResponse<409, Required<OrdersV3ApiSpecs.ErrorResponse>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse>>>;
+    getOrderMetafield(orderId: OrdersV3ApiSpecs.GetOrderMetafieldData['path']['order_id'], metafieldId: OrdersV3ApiSpecs.GetOrderMetafieldData['path']['metafield_id']): Promise<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetafieldResponse>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.NotFound>>>;
+    updateOrderMetafield(orderId: OrdersV3ApiSpecs.UpdateOrderMetafieldData['path']['order_id'], metafieldId: OrdersV3ApiSpecs.UpdateOrderMetafieldData['path']['metafield_id'], requestBody: OrdersV3ApiSpecs.UpdateOrderMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetafieldResponse>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.NotFound>> | RequestErrorResponse<400, Required<OrdersV3ApiSpecs.UpdateOrderMetafieldRequestBadRequestError>>>;
+    deleteOrderMetafield(orderId: OrdersV3ApiSpecs.DeleteOrderMetafieldData['path']['order_id'], metafieldId: OrdersV3ApiSpecs.DeleteOrderMetafieldData['path']['metafield_id']): Promise<RequestErrorResponse<404, Required<OrdersV3ApiSpecs.NotFound>> | RequestSuccessResponse<204, Required<{
         [key: string]: unknown;
-    }>> | RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse>> | RequestErrorResponse<502, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<504, Required<OrdersV3ApiSpecs.ErrorDetailedFull>>>;
-    captureOrderPayment(...args: Parameters<OrdersV3Api['paymentactioncapture']>): Promise<RequestSuccessResponse<201, Required<{
-        [key: string]: unknown;
-    }>> | RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse>> | RequestErrorResponse<502, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<504, Required<OrdersV3ApiSpecs.ErrorDetailedFull>>>;
-    paymentactionvoid(orderId: OrdersV3ApiSpecs.PaymentactionvoidData['path']['order_id']): Promise<RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse>> | RequestErrorResponse<502, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<504, Required<OrdersV3ApiSpecs.ErrorDetailedFull>> | RequestSuccessResponse<201, Required<{
-        [key: string]: unknown;
     }>>>;
-    voidOrderPayment(...args: Parameters<OrdersV3Api['paymentactionvoid']>): Promise<RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse>> | RequestErrorResponse<502, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<504, Required<OrdersV3ApiSpecs.ErrorDetailedFull>> | RequestSuccessResponse<201, Required<{
-        [key: string]: unknown;
-    }>>>;
-    getTransactions(orderId: OrdersV3ApiSpecs.GetTransactionsData['path']['order_id']): Promise<RequestSuccessResponse<200, Required<{
-        data?: Array<OrdersV3ApiSpecs.Transaction>;
-        meta?: OrdersV3ApiSpecs.MetaCollectionFull;
-    }>> | RequestSuccessResponse<204, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>>>;
-    getOrderTransactions(...args: Parameters<OrdersV3Api['getTransactions']>): Promise<RequestSuccessResponse<200, Required<{
-        data?: Array<OrdersV3ApiSpecs.Transaction>;
-        meta?: OrdersV3ApiSpecs.MetaCollectionFull;
-    }>> | RequestSuccessResponse<204, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>>>;
-    postrefundquote(orderId: OrdersV3ApiSpecs.PostrefundquoteData['path']['order_id'], requestBody: OrdersV3ApiSpecs.PostrefundquoteData['body']): Promise<RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<201, Required<{
-        data?: OrdersV3ApiSpecs.RefundQuoteFull;
-        meta?: OrdersV3ApiSpecs.MetaEmptyFull;
-    }>>>;
-    createOrderRefundQuotes(...args: Parameters<OrdersV3Api['postrefundquote']>): Promise<RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<201, Required<{
-        data?: OrdersV3ApiSpecs.RefundQuoteFull;
-        meta?: OrdersV3ApiSpecs.MetaEmptyFull;
-    }>>>;
-    getorderrefunds(orderId: OrdersV3ApiSpecs.GetorderrefundsData['path']['order_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: Array<OrdersV3ApiSpecs.Refund>;
-        meta?: OrdersV3ApiSpecs.MetaEmptyFull;
-    }>>>;
-    getOrderRefunds(...args: Parameters<OrdersV3Api['getorderrefunds']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: Array<OrdersV3ApiSpecs.Refund>;
-        meta?: OrdersV3ApiSpecs.MetaEmptyFull;
-    }>>>;
-    postrefund(orderId: OrdersV3ApiSpecs.PostrefundData['path']['order_id'], requestBody: OrdersV3ApiSpecs.PostrefundData['body']): Promise<RequestSuccessResponse<201, Required<{
-        data?: OrdersV3ApiSpecs.Refund;
-        meta?: OrdersV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<422, Required<{
-        data?: Array<OrdersV3ApiSpecs.ErrorResponse>;
-    }>> | RequestErrorResponse<503, Required<{
-        data?: Array<OrdersV3ApiSpecs.FailedQuoteError>;
-        meta?: OrdersV3ApiSpecs.Meta;
-    }>>>;
-    createOrderRefund(...args: Parameters<OrdersV3Api['postrefund']>): Promise<RequestSuccessResponse<201, Required<{
-        data?: OrdersV3ApiSpecs.Refund;
-        meta?: OrdersV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<422, Required<{
-        data?: Array<OrdersV3ApiSpecs.ErrorResponse>;
-    }>> | RequestErrorResponse<503, Required<{
-        data?: Array<OrdersV3ApiSpecs.FailedQuoteError>;
-        meta?: OrdersV3ApiSpecs.Meta;
-    }>>>;
-    refundIdget(refundId: OrdersV3ApiSpecs.RefundIdGetData['path']['refund_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.RefundIdGet>>>;
-    getOrderRefund(...args: Parameters<OrdersV3Api['refundIdget']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.RefundIdGet>>>;
-    getrefunds(query?: OrdersV3ApiSpecs.GetrefundsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: Array<OrdersV3ApiSpecs.Refund>;
-        meta?: OrdersV3ApiSpecs.MetaEmptyFull;
-    }>>>;
-    getOrdersRefunds(...args: Parameters<OrdersV3Api['getrefunds']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: Array<OrdersV3ApiSpecs.Refund>;
-        meta?: OrdersV3ApiSpecs.MetaEmptyFull;
-    }>>>;
-    postrefundquotes(requestBody: OrdersV3ApiSpecs.PostrefundquotesData['body']): Promise<RequestSuccessResponse<201, Required<{
-        data?: Array<OrdersV3ApiSpecs.RefundQuoteFull>;
-        errors?: Array<OrdersV3ApiSpecs.FailedQuoteError>;
-        meta?: OrdersV3ApiSpecs.Meta;
-    }>> | RequestErrorResponse<422, Required<{
-        data?: Array<OrdersV3ApiSpecs.RefundQuoteFull>;
-        errors?: Array<OrdersV3ApiSpecs.FailedQuoteError>;
-        meta?: OrdersV3ApiSpecs.Meta;
-    }>> | RequestErrorResponse<503, Required<{
-        data?: Array<OrdersV3ApiSpecs.RefundQuoteFull>;
-        errors?: Array<OrdersV3ApiSpecs.FailedQuoteError>;
-        meta?: OrdersV3ApiSpecs.Meta;
-    }>>>;
-    getOrderMetafieldsByOrderId(orderId: OrdersV3ApiSpecs.GetOrderMetafieldsByOrderIdData['path']['order_id'], query?: OrdersV3ApiSpecs.GetOrderMetafieldsByOrderIdData['query']): Promise<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetaFieldCollectionResponse>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.NotFound>>>;
-    getOrderMetafields(...args: Parameters<OrdersV3Api['getOrderMetafieldsByOrderId']>): Promise<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetaFieldCollectionResponse>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.NotFound>>>;
-    createOrderMetafield(orderId: OrdersV3ApiSpecs.CreateOrderMetafieldData['path']['order_id'], requestBody: OrdersV3ApiSpecs.CreateOrderMetafieldData['body']): Promise<RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetafieldResponse>> | RequestErrorResponse<409, Required<OrdersV3ApiSpecs.ErrorResponse>>>;
-    getOrderMetafieldByOrderIdAndMetafieldId(orderId: OrdersV3ApiSpecs.GetOrderMetafieldByOrderIdAndMetafieldIdData['path']['order_id'], metafieldId: OrdersV3ApiSpecs.GetOrderMetafieldByOrderIdAndMetafieldIdData['path']['metafield_id']): Promise<RequestErrorResponse<404, Required<OrdersV3ApiSpecs.NotFound>> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetafieldResponse>>>;
-    getOrderMetafield(...args: Parameters<OrdersV3Api['getOrderMetafieldByOrderIdAndMetafieldId']>): Promise<RequestErrorResponse<404, Required<OrdersV3ApiSpecs.NotFound>> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetafieldResponse>>>;
-    updateOrderMetafield(orderId: OrdersV3ApiSpecs.UpdateOrderMetafieldData['path']['order_id'], metafieldId: OrdersV3ApiSpecs.UpdateOrderMetafieldData['path']['metafield_id'], requestBody: OrdersV3ApiSpecs.UpdateOrderMetafieldData['body']): Promise<RequestErrorResponse<404, Required<OrdersV3ApiSpecs.NotFound>> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.MetafieldResponse>>>;
-    deleteOrderMetafieldById(orderId: OrdersV3ApiSpecs.DeleteOrderMetafieldByIdData['path']['order_id'], metafieldId: OrdersV3ApiSpecs.DeleteOrderMetafieldByIdData['path']['metafield_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    deleteOrderMetafield(...args: Parameters<OrdersV3Api['deleteOrderMetafieldById']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    getGlobalOrderSettings(): Promise<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.GlobalOrderSettings & {
-        meta?: OrdersV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorResponse400>>>;
-    updateGlobalOrderSettings(requestBody: OrdersV3ApiSpecs.UpdateGlobalOrderSettingsData['body']): Promise<RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorResponse400>> | RequestSuccessResponse<200, Required<{
-        [key: string]: unknown;
-    } & OrdersV3ApiSpecs.GlobalOrderSettings & {
-        meta?: OrdersV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse422>>>;
-    getChannelOrderSettings(channelId: OrdersV3ApiSpecs.GetChannelOrderSettingsData['path']['channel_id']): Promise<RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorResponse400>> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.ChannelOrderSettings & {
-        meta?: OrdersV3ApiSpecs.MetaEmptyFull;
-    }>>>;
-    updateChannelOrderSettings(channelId: OrdersV3ApiSpecs.UpdateChannelOrderSettingsData['path']['channel_id'], requestBody: OrdersV3ApiSpecs.UpdateChannelOrderSettingsData['body']): Promise<RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorResponse400>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse422>> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.ChannelOrderSettings & {
-        meta?: OrdersV3ApiSpecs.MetaEmptyFull;
-    }>>>;
+    getGlobalOrderSettings(): Promise<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.OrderSettingsGetGlobalOrderSettingsResponse200>> | RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorResponse400>>>;
+    updateGlobalOrderSettings(requestBody: OrdersV3ApiSpecs.UpdateGlobalOrderSettingsData['body']): Promise<RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorResponse400>> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.OrderSettingsUpdateGlobalOrderSettingsResponse200>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse422>>>;
+    getChannelOrderSettings(channelId: OrdersV3ApiSpecs.GetChannelOrderSettingsData['path']['channel_id']): Promise<RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorResponse400>> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.OrderSettingsGetChannelOrderSettingsResponse200>>>;
+    updateChannelOrderSettings(channelId: OrdersV3ApiSpecs.UpdateChannelOrderSettingsData['path']['channel_id'], requestBody: OrdersV3ApiSpecs.UpdateChannelOrderSettingsData['body']): Promise<RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorResponse400>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse422>> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.OrderSettingsUpdateChannelOrderSettingsResponse200>>>;
+    captureOrderPayment(orderId: OrdersV3ApiSpecs.CaptureOrderPaymentData['path']['order_id']): Promise<RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.PaymentActionsCaptureOrderPaymentResponse201>> | RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<502, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<504, Required<OrdersV3ApiSpecs.ErrorDetailedFull>>>;
+    voidOrderPayment(orderId: OrdersV3ApiSpecs.VoidOrderPaymentData['path']['order_id']): Promise<RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse>> | RequestErrorResponse<400, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<404, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<502, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.ErrorBase>> | RequestErrorResponse<504, Required<OrdersV3ApiSpecs.ErrorDetailedFull>> | RequestSuccessResponse<201, Required<OrdersV3ApiSpecs.PaymentActionsVoidOrderPaymentResponse201>>>;
+    createOrderRefundQuotes(orderId: OrdersV3ApiSpecs.CreateOrderRefundQuotesData['path']['order_id'], requestBody: OrdersV3ApiSpecs.CreateOrderRefundQuotesData['body']): Promise<RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.PaymentActionsCreateOrderRefundQuotesResponse200>>>;
+    getOrderRefunds(orderId: OrdersV3ApiSpecs.GetOrderRefundsData['path']['order_id'], query?: OrdersV3ApiSpecs.GetOrderRefundsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.PaymentActionsGetOrderRefundsResponse200>>>;
+    createOrderRefund(orderId: OrdersV3ApiSpecs.CreateOrderRefundData['path']['order_id'], requestBody: OrdersV3ApiSpecs.CreateOrderRefundData['body'], query?: OrdersV3ApiSpecs.CreateOrderRefundData['query']): Promise<RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.PaymentActionsCreateOrderRefundResponse200>> | RequestErrorResponse<422, Required<OrdersV3ApiSpecs.CreateOrderRefundRequestUnprocessableEntityError>> | RequestErrorResponse<503, Required<OrdersV3ApiSpecs.CreateOrderRefundRequestServiceUnavailableError>>>;
+    getOrderRefundById(orderId: OrdersV3ApiSpecs.GetOrderRefundByIdData['path']['order_id'], refundId: OrdersV3ApiSpecs.GetOrderRefundByIdData['path']['refund_id']): Promise<RequestErrorResponse<422, Required<OrdersV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.RefundIdGet>>>;
+    getOrderRefund(refundId: OrdersV3ApiSpecs.GetOrderRefundData['path']['refund_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.RefundIdGet>>>;
+    getOrdersRefunds(query?: OrdersV3ApiSpecs.GetOrdersRefundsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<OrdersV3ApiSpecs.PaymentActionsGetOrdersRefundsResponse200>>>;
 }

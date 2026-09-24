@@ -1,44 +1,61 @@
 export type ClientOptions = {
-    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3/stores/{store_hash}/v3' | (string & {});
 };
-export type ErrorResponse = BaseError & {
-    errors?: DetailedErrors;
+export type EmailTemplateTypeId = 'abandoned_cart_email' | 'account_details_changed_email' | 'combined_order_status_email' | 'createaccount_email' | 'createguestaccount_email' | 'giftcertificate_email' | 'invoice_email' | 'ordermessage_notification' | 'return_confirmation_email' | 'return_statuschange_email' | 'product_review_email' | 'account_reset_password_email';
+export type LocaleObjectKeys = {
+    [key: string]: unknown;
 };
-export type BaseError = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
+export type LocaleObject = {
+    locale?: string;
+    keys?: LocaleObjectKeys;
 };
-export type DetailedErrors = {
-    [key: string]: string;
-};
-export type EmailTemplatesCollection = Array<EmailTemplate>;
+export type LocaleCollection = Array<LocaleObject>;
 export type EmailTemplate = {
-    type_id?: 'abandoned_cart_email' | 'account_details_changed_email' | 'combined_order_status_email' | 'createaccount_email' | 'createguestaccount_email' | 'giftcertificate_email' | 'invoice_email' | 'ordermessage_notification' | 'return_confirmation_email' | 'return_statuschange_email' | 'product_review_email' | 'account_reset_password_email';
+    type_id?: EmailTemplateTypeId;
     body?: string;
     translations?: LocaleCollection;
     subject?: string;
 };
-export type LocaleObject = {
-    locale?: string;
-    keys?: {
-        [key: string]: unknown;
-    };
+export type EmailTemplatesCollection = Array<EmailTemplate>;
+export type MarketingEmailTemplatesGetResponsesContentApplicationJsonSchemaMeta = {
+    [key: string]: unknown;
 };
-export type LocaleCollection = Array<LocaleObject>;
+export type EmailTemplatesGetEmailTemplatesResponse200 = {
+    data?: EmailTemplatesCollection;
+    meta?: MarketingEmailTemplatesGetResponsesContentApplicationJsonSchemaMeta;
+};
+export type MarketingEmailTemplatesTemplateNameGetResponsesContentApplicationJsonSchemaMeta = {
+    [key: string]: unknown;
+};
+export type EmailTemplatesGetEmailTemplateResponse200 = {
+    data?: EmailTemplate;
+    meta?: MarketingEmailTemplatesTemplateNameGetResponsesContentApplicationJsonSchemaMeta;
+};
 export type EmailTemplateUpdate = {
     body: string;
     translations?: LocaleCollection;
     subject: string;
 };
-export type Scratch = {
-    id?: string;
+export type MarketingEmailTemplatesTemplateNamePutResponsesContentApplicationJsonSchemaMeta = {
+    [key: string]: unknown;
 };
-export type Accept = string;
-export type ContentType = string;
-export type ChannelIdParam = number;
-export type RequiredChannelIdParamForDelete = number;
+export type EmailTemplatesUpdateEmailTemplateResponse200 = {
+    data?: EmailTemplate;
+    meta?: MarketingEmailTemplatesTemplateNamePutResponsesContentApplicationJsonSchemaMeta;
+};
+export type DetailedErrors = {
+    [key: string]: unknown;
+};
+export type ErrorResponse = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: DetailedErrors;
+};
+export type EmailTemplatesDeleteEmailTemplateOverrideResponse200 = {
+    [key: string]: unknown;
+};
 export type GetEmailTemplatesData = {
     body?: never;
     headers: {
@@ -51,12 +68,7 @@ export type GetEmailTemplatesData = {
     url: '/marketing/email-templates';
 };
 export type GetEmailTemplatesResponses = {
-    200: {
-        data?: EmailTemplatesCollection;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: EmailTemplatesGetEmailTemplatesResponse200;
 };
 export type GetEmailTemplatesResponse = GetEmailTemplatesResponses[keyof GetEmailTemplatesResponses];
 export type DeleteEmailTemplateOverrideData = {
@@ -73,8 +85,9 @@ export type DeleteEmailTemplateOverrideData = {
     url: '/marketing/email-templates/{template-name}';
 };
 export type DeleteEmailTemplateOverrideResponses = {
-    200: unknown;
+    200: EmailTemplatesDeleteEmailTemplateOverrideResponse200;
 };
+export type DeleteEmailTemplateOverrideResponse = DeleteEmailTemplateOverrideResponses[keyof DeleteEmailTemplateOverrideResponses];
 export type GetEmailTemplateData = {
     body?: never;
     headers: {
@@ -89,19 +102,13 @@ export type GetEmailTemplateData = {
     url: '/marketing/email-templates/{template-name}';
 };
 export type GetEmailTemplateResponses = {
-    200: {
-        data?: EmailTemplate;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: EmailTemplatesGetEmailTemplateResponse200;
 };
 export type GetEmailTemplateResponse = GetEmailTemplateResponses[keyof GetEmailTemplateResponses];
 export type UpdateEmailTemplateData = {
-    body?: EmailTemplate;
+    body?: EmailTemplateUpdate;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path: {
         'template-name': string;
@@ -116,11 +123,6 @@ export type UpdateEmailTemplateErrors = {
 };
 export type UpdateEmailTemplateError = UpdateEmailTemplateErrors[keyof UpdateEmailTemplateErrors];
 export type UpdateEmailTemplateResponses = {
-    200: {
-        data?: EmailTemplate;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: EmailTemplatesUpdateEmailTemplateResponse200;
 };
 export type UpdateEmailTemplateResponse = UpdateEmailTemplateResponses[keyof UpdateEmailTemplateResponses];

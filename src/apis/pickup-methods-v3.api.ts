@@ -11,7 +11,7 @@ export class PickupMethodsV3Api {
     }
 
     /**
-     * Get Pickup Methods
+     * List Pickup Methods
      *
      * Retrieves a list of pickup methods.
 

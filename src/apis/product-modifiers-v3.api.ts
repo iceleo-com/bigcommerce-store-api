@@ -11,48 +11,38 @@ export class ProductModifiersV3Api {
     }
 
     /**
-     * Get All Product Modifiers
+     * List Product Modifiers
      *
-     * Returns a list of all *Product Modifiers*. Optional parameters can be passed in.
+     * Returns a list of all product modifiers. Optional parameters can be passed in.
      */
-    getModifiers(
-        productId: ProductModifiersV3ApiSpecs.GetModifiersData['path']['product_id'],
-        query?: ProductModifiersV3ApiSpecs.GetModifiersData['query'],
+    getProductModifiers(
+        productId: ProductModifiersV3ApiSpecs.GetProductModifiersData['path']['product_id'],
+        query?: ProductModifiersV3ApiSpecs.GetProductModifiersData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.GetModifiersResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.GetProductModifiersResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/modifiers`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `getModifiers` instead.
-     */
-    getProductModifiers(...args: Parameters<ProductModifiersV3Api['getModifiers']>) {
-        return this.getModifiers(...args);
-    }
-
-    /**
-     * Create a Product Modifier
+     * Create Product Modifier
      *
-     * Creates a *Product Modifier*.
-
-     **Required Fields**
-     * `required`
-     * `display_name`
-     * `type`
-
-     **Read-Only Fields**
-     * `id`
+     * Creates a product modifier.
 
      **Notes**
      It takes two separate requests to create a new checkbox modifier with option values. Perform a request to create a modifier, then perform a second request to update option values.
+
+     Date modifiers are required to be provided in [ISO-8601 ATOM](https://www.php.net/manual/en/class.datetimeinterface.php#datetimeinterface.constants.atom) format. Excluding them in a request will throw a server error.
+
+     **Setting an option value image**
+     `adjusters.image_url` is read-only on this endpoint. To attach or replace the image shown on the storefront for an option value, upload it via [Create Product Modifier Image](/developer/api-reference/rest/admin/catalog/product-modifiers/images/create-product-modifier-image). The upload binds the image to the value automatically; no follow-up call is needed.
      */
-    createModifier(
-        productId: ProductModifiersV3ApiSpecs.CreateModifierData['path']['product_id'],
-        requestBody: ProductModifiersV3ApiSpecs.CreateModifierData['body'],
+    createProductModifier(
+        productId: ProductModifiersV3ApiSpecs.CreateProductModifierData['path']['product_id'],
+        requestBody: ProductModifiersV3ApiSpecs.CreateProductModifierData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.CreateModifierResponses[200]>>,(RequestErrorResponse<409, Required<ProductModifiersV3ApiSpecs.CreateModifierErrors[409]>> | RequestErrorResponse<422, Required<ProductModifiersV3ApiSpecs.CreateModifierErrors[422]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.CreateProductModifierResponses[200]>>,(RequestErrorResponse<409, Required<ProductModifiersV3ApiSpecs.CreateProductModifierErrors[409]>> | RequestErrorResponse<422, Required<ProductModifiersV3ApiSpecs.CreateProductModifierErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/modifiers`,
             contentType: 'application/json',
             body: requestBody,
@@ -60,46 +50,37 @@ export class ProductModifiersV3Api {
     }
 
     /**
-     * @deprecated Use `createModifier` instead.
-     */
-    createProductModifier(...args: Parameters<ProductModifiersV3Api['createModifier']>) {
-        return this.createModifier(...args);
-    }
-
-    /**
-     * Get a Modifier
+     * Get Product Modifier
      *
-     * Returns a single *Product Modifier*. Optional parameters can be passed in.
+     * Returns a single product modifier. Optional parameters can be passed in.
      */
-    getModifierById(
-        productId: ProductModifiersV3ApiSpecs.GetModifierByIdData['path']['product_id'],
-        modifierId: ProductModifiersV3ApiSpecs.GetModifierByIdData['path']['modifier_id'],
-        query?: ProductModifiersV3ApiSpecs.GetModifierByIdData['query'],
+    getProductModifier(
+        productId: ProductModifiersV3ApiSpecs.GetProductModifierData['path']['product_id'],
+        modifierId: ProductModifiersV3ApiSpecs.GetProductModifierData['path']['modifier_id'],
+        query?: ProductModifiersV3ApiSpecs.GetProductModifierData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.GetModifierByIdResponses[200]>>,RequestErrorResponse<404, Required<ProductModifiersV3ApiSpecs.GetModifierByIdErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.GetProductModifierResponses[200]>>,RequestErrorResponse<404, Required<ProductModifiersV3ApiSpecs.GetProductModifierErrors[404]>>>({
             path: `v3/catalog/products/${productId}/modifiers/${modifierId}`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `getModifierById` instead.
-     */
-    getProductModifier(...args: Parameters<ProductModifiersV3Api['getModifierById']>) {
-        return this.getModifierById(...args);
-    }
-
-    /**
-     * Update a Modifier
+     * Update Product Modifier
      *
-     * Updates a *Product Modifier*.
+     * Updates a product modifier.
+
+     Date modifiers are required to be provided in [ISO-8601 ATOM](https://www.php.net/manual/en/class.datetimeinterface.php#datetimeinterface.constants.atom) format. Excluding them in a request will throw a server error.
+
+     **Setting an option value image**
+     `adjusters.image_url` is read-only on this endpoint. To attach or replace the image shown on the storefront for an option value, upload it via [Create Product Modifier Image](/developer/api-reference/rest/admin/catalog/product-modifiers/images/create-product-modifier-image). The upload binds the image to the value automatically; no follow-up call is needed.
      */
-    updateModifier(
-        productId: ProductModifiersV3ApiSpecs.UpdateModifierData['path']['product_id'],
-        modifierId: ProductModifiersV3ApiSpecs.UpdateModifierData['path']['modifier_id'],
-        requestBody: ProductModifiersV3ApiSpecs.UpdateModifierData['body'],
+    updateProductModifier(
+        productId: ProductModifiersV3ApiSpecs.UpdateProductModifierData['path']['product_id'],
+        modifierId: ProductModifiersV3ApiSpecs.UpdateProductModifierData['path']['modifier_id'],
+        requestBody: ProductModifiersV3ApiSpecs.UpdateProductModifierData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.UpdateModifierResponses[200]>>,(RequestErrorResponse<409, Required<ProductModifiersV3ApiSpecs.UpdateModifierErrors[409]>> | RequestErrorResponse<422, Required<ProductModifiersV3ApiSpecs.UpdateModifierErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.UpdateProductModifierResponses[200]>>,(RequestErrorResponse<409, Required<ProductModifiersV3ApiSpecs.UpdateProductModifierErrors[409]>> | RequestErrorResponse<422, Required<ProductModifiersV3ApiSpecs.UpdateProductModifierErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/modifiers/${modifierId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -107,181 +88,33 @@ export class ProductModifiersV3Api {
     }
 
     /**
-     * @deprecated Use `updateModifier` instead.
-     */
-    updateProductModifier(...args: Parameters<ProductModifiersV3Api['updateModifier']>) {
-        return this.updateModifier(...args);
-    }
-
-    /**
-     * Delete a Modifier
+     * Delete Product Modifier
      *
-     * Deletes a *Product Modifier*.
+     * Deletes a product modifier.
      */
-    deleteModifierById(
-        productId: ProductModifiersV3ApiSpecs.DeleteModifierByIdData['path']['product_id'],
-        modifierId: ProductModifiersV3ApiSpecs.DeleteModifierByIdData['path']['modifier_id'],
+    deleteProductModifier(
+        productId: ProductModifiersV3ApiSpecs.DeleteProductModifierData['path']['product_id'],
+        modifierId: ProductModifiersV3ApiSpecs.DeleteProductModifierData['path']['modifier_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<ProductModifiersV3ApiSpecs.DeleteModifierByIdResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductModifiersV3ApiSpecs.DeleteProductModifierResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/modifiers/${modifierId}`,
         });
     }
 
     /**
-     * @deprecated Use `deleteModifierById` instead.
-     */
-    deleteProductModifier(...args: Parameters<ProductModifiersV3Api['deleteModifierById']>) {
-        return this.deleteModifierById(...args);
-    }
-
-    /**
-     * Get All Modifier Values
-     *
-     * Returns a list of all product *Modifier Values*. Optional parameters can be passed in.
-     */
-    getModifierValues(
-        productId: ProductModifiersV3ApiSpecs.GetModifierValuesData['path']['product_id'],
-        modifierId: ProductModifiersV3ApiSpecs.GetModifierValuesData['path']['modifier_id'],
-        query?: ProductModifiersV3ApiSpecs.GetModifierValuesData['query'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.GetModifierValuesResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/catalog/products/${productId}/modifiers/${modifierId}/values`,
-            query,
-        });
-    }
-
-    /**
-     * @deprecated Use `getModifierValues` instead.
-     */
-    getProductModifierValues(...args: Parameters<ProductModifiersV3Api['getModifierValues']>) {
-        return this.getModifierValues(...args);
-    }
-
-    /**
-     * Create Modifier Value
-     *
-     * Creates a *Modifier Value*.
-
-     **Required Fields**
-     * label
-     * sort_order
-
-     **Read-Only Fields**
-     * id
-     */
-    createModifierValue(
-        productId: ProductModifiersV3ApiSpecs.CreateModifierValueData['path']['product_id'],
-        modifierId: ProductModifiersV3ApiSpecs.CreateModifierValueData['path']['modifier_id'],
-        requestBody: ProductModifiersV3ApiSpecs.CreateModifierValueData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.CreateModifierValueResponses[200]>>,RequestErrorResponse<422, Required<ProductModifiersV3ApiSpecs.CreateModifierValueErrors[422]>>>({
-            path: `v3/catalog/products/${productId}/modifiers/${modifierId}/values`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * @deprecated Use `createModifierValue` instead.
-     */
-    createProductModifierValue(...args: Parameters<ProductModifiersV3Api['createModifierValue']>) {
-        return this.createModifierValue(...args);
-    }
-
-    /**
-     * Get a Modifier Value
-     *
-     * Returns a single *Modifier Value*. Optional parameters can be passed in.
-     */
-    getModifierValueById(
-        productId: ProductModifiersV3ApiSpecs.GetModifierValueByIdData['path']['product_id'],
-        modifierId: ProductModifiersV3ApiSpecs.GetModifierValueByIdData['path']['modifier_id'],
-        valueId: ProductModifiersV3ApiSpecs.GetModifierValueByIdData['path']['value_id'],
-        query?: ProductModifiersV3ApiSpecs.GetModifierValueByIdData['query'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.GetModifierValueByIdResponses[200]>>,RequestErrorResponse<404, Required<ProductModifiersV3ApiSpecs.GetModifierValueByIdErrors[404]>>>({
-            path: `v3/catalog/products/${productId}/modifiers/${modifierId}/values/${valueId}`,
-            query,
-        });
-    }
-
-    /**
-     * @deprecated Use `getModifierValueById` instead.
-     */
-    getProductModifierValue(...args: Parameters<ProductModifiersV3Api['getModifierValueById']>) {
-        return this.getModifierValueById(...args);
-    }
-
-    /**
-     * Update a Modifier Value
-     *
-     * Updates a *Modifier Value*.
-
-     **Required Fields**
-     * none
-
-     **Read-Only Fields**
-     * id
-     */
-    updateModifierValue(
-        productId: ProductModifiersV3ApiSpecs.UpdateModifierValueData['path']['product_id'],
-        modifierId: ProductModifiersV3ApiSpecs.UpdateModifierValueData['path']['modifier_id'],
-        valueId: ProductModifiersV3ApiSpecs.UpdateModifierValueData['path']['value_id'],
-        requestBody: ProductModifiersV3ApiSpecs.UpdateModifierValueData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.UpdateModifierValueResponses[200]>>,RequestErrorResponse<422, Required<ProductModifiersV3ApiSpecs.UpdateModifierValueErrors[422]>>>({
-            path: `v3/catalog/products/${productId}/modifiers/${modifierId}/values/${valueId}`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * @deprecated Use `updateModifierValue` instead.
-     */
-    updateProductModifierValue(...args: Parameters<ProductModifiersV3Api['updateModifierValue']>) {
-        return this.updateModifierValue(...args);
-    }
-
-    /**
-     * Delete Modifier Value
-     *
-     * Deletes a *Modifier Value*.
-     */
-    deleteModifierValueById(
-        productId: ProductModifiersV3ApiSpecs.DeleteModifierValueByIdData['path']['product_id'],
-        modifierId: ProductModifiersV3ApiSpecs.DeleteModifierValueByIdData['path']['modifier_id'],
-        valueId: ProductModifiersV3ApiSpecs.DeleteModifierValueByIdData['path']['value_id'],
-    ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<ProductModifiersV3ApiSpecs.DeleteModifierValueByIdResponses[204]>>,RequestErrorResponse<400, void>>({
-            path: `v3/catalog/products/${productId}/modifiers/${modifierId}/values/${valueId}`,
-        });
-    }
-
-    /**
-     * @deprecated Use `deleteModifierValueById` instead.
-     */
-    deleteProductModifierValue(...args: Parameters<ProductModifiersV3Api['deleteModifierValueById']>) {
-        return this.deleteModifierValueById(...args);
-    }
-
-    /**
-     * Create Modifier Image
+     * Create Product Modifier Image
      *
      * Creates a *Modifier Image*.
 
-     The image will show on the storefront when the value is selected.
-
-      **Required Fields**
-     - image_file: Form posts are the only accepted upload option.
+     The image will show on the storefront when the value is selected. Upload via multipart form post; this is the only accepted upload method.
      */
-    createModifierImage(
-        productId: ProductModifiersV3ApiSpecs.CreateModifierImageData['path']['product_id'],
-        modifierId: ProductModifiersV3ApiSpecs.CreateModifierImageData['path']['modifier_id'],
-        valueId: ProductModifiersV3ApiSpecs.CreateModifierImageData['path']['value_id'],
-        requestBody: ProductModifiersV3ApiSpecs.CreateModifierImageData['body'],
+    createProductModifierImage(
+        productId: ProductModifiersV3ApiSpecs.CreateProductModifierImageData['path']['product_id'],
+        modifierId: ProductModifiersV3ApiSpecs.CreateProductModifierImageData['path']['modifier_id'],
+        valueId: ProductModifiersV3ApiSpecs.CreateProductModifierImageData['path']['value_id'],
+        requestBody: ProductModifiersV3ApiSpecs.CreateProductModifierImageData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.CreateModifierImageResponses[200]>>,(RequestErrorResponse<400, Required<ProductModifiersV3ApiSpecs.CreateModifierImageErrors[400]>> | RequestErrorResponse<404, Required<ProductModifiersV3ApiSpecs.CreateModifierImageErrors[404]>> | RequestErrorResponse<422, Required<ProductModifiersV3ApiSpecs.CreateModifierImageErrors[422]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.CreateProductModifierImageResponses[200]>>,(RequestErrorResponse<400, Required<ProductModifiersV3ApiSpecs.CreateProductModifierImageErrors[400]>> | RequestErrorResponse<404, Required<ProductModifiersV3ApiSpecs.CreateProductModifierImageErrors[404]>> | RequestErrorResponse<422, Required<ProductModifiersV3ApiSpecs.CreateProductModifierImageErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/modifiers/${modifierId}/values/${valueId}/image`,
             contentType: 'multipart/form-data',
             body: requestBody,
@@ -289,9 +122,101 @@ export class ProductModifiersV3Api {
     }
 
     /**
-     * @deprecated Use `createModifierImage` instead.
+     * List Product Modifier Values
+     *
+     * Returns a list of all product *Modifier Values*. Optional parameters can be passed in.
      */
-    createProductModifierImage(...args: Parameters<ProductModifiersV3Api['createModifierImage']>) {
-        return this.createModifierImage(...args);
+    getProductModifierValues(
+        productId: ProductModifiersV3ApiSpecs.GetProductModifierValuesData['path']['product_id'],
+        modifierId: ProductModifiersV3ApiSpecs.GetProductModifierValuesData['path']['modifier_id'],
+        query?: ProductModifiersV3ApiSpecs.GetProductModifierValuesData['query'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.GetProductModifierValuesResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/catalog/products/${productId}/modifiers/${modifierId}/values`,
+            query,
+        });
+    }
+
+    /**
+     * Create Product Modifier Value
+     *
+     * Creates a modifier value.
+
+     **Read-Only Fields**
+     * is_default
+
+     **Setting an option value image**
+     `adjusters.image_url` is read-only on this endpoint. To attach the image shown on the storefront for the value, upload it via [Create Product Modifier Image](/developer/api-reference/rest/admin/catalog/product-modifiers/images/create-product-modifier-image) after creating the value.
+
+     > `is_default` is derived from the parent modifier configuration and cannot be set on individual values. To change which value is the default, use [Update Product Modifier](/developer/api-reference/rest/admin/catalog/product-modifiers/update-product-modifier) and include the full `option_values` array with the desired `is_default` flags.
+     */
+    createProductModifierValue(
+        productId: ProductModifiersV3ApiSpecs.CreateProductModifierValueData['path']['product_id'],
+        modifierId: ProductModifiersV3ApiSpecs.CreateProductModifierValueData['path']['modifier_id'],
+        requestBody: ProductModifiersV3ApiSpecs.CreateProductModifierValueData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.CreateProductModifierValueResponses[200]>>,RequestErrorResponse<422, Required<ProductModifiersV3ApiSpecs.CreateProductModifierValueErrors[422]>>>({
+            path: `v3/catalog/products/${productId}/modifiers/${modifierId}/values`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Get Product Modifier Value
+     *
+     * Returns a single modifier value. Optional parameters can be passed in.
+     */
+    getProductModifierValue(
+        productId: ProductModifiersV3ApiSpecs.GetProductModifierValueData['path']['product_id'],
+        modifierId: ProductModifiersV3ApiSpecs.GetProductModifierValueData['path']['modifier_id'],
+        valueId: ProductModifiersV3ApiSpecs.GetProductModifierValueData['path']['value_id'],
+        query?: ProductModifiersV3ApiSpecs.GetProductModifierValueData['query'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.GetProductModifierValueResponses[200]>>,RequestErrorResponse<404, Required<ProductModifiersV3ApiSpecs.GetProductModifierValueErrors[404]>>>({
+            path: `v3/catalog/products/${productId}/modifiers/${modifierId}/values/${valueId}`,
+            query,
+        });
+    }
+
+    /**
+     * Update Product Modifier Value
+     *
+     * Updates a modifier value.
+
+     **Read-Only Fields**
+     * is_default
+
+     **Setting an option value image**
+     `adjusters.image_url` is read-only on this endpoint. To replace the image shown on the storefront for the value, upload a new image via [Create Product Modifier Image](/developer/api-reference/rest/admin/catalog/product-modifiers/images/create-product-modifier-image). The upload binds the image to the value automatically; no follow-up call is needed.
+
+     > `is_default` is derived from the parent modifier configuration and cannot be set on individual values. To change which value is the default, use [Update Product Modifier](/developer/api-reference/rest/admin/catalog/product-modifiers/update-product-modifier) and include the full `option_values` array with the desired `is_default` flags.
+     */
+    updateProductModifierValue(
+        productId: ProductModifiersV3ApiSpecs.UpdateProductModifierValueData['path']['product_id'],
+        modifierId: ProductModifiersV3ApiSpecs.UpdateProductModifierValueData['path']['modifier_id'],
+        valueId: ProductModifiersV3ApiSpecs.UpdateProductModifierValueData['path']['value_id'],
+        requestBody: ProductModifiersV3ApiSpecs.UpdateProductModifierValueData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<ProductModifiersV3ApiSpecs.UpdateProductModifierValueResponses[200]>>,RequestErrorResponse<422, Required<ProductModifiersV3ApiSpecs.UpdateProductModifierValueErrors[422]>>>({
+            path: `v3/catalog/products/${productId}/modifiers/${modifierId}/values/${valueId}`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete Product Modifier Value
+     *
+     * Deletes a modifier value.
+     */
+    deleteProductModifierValue(
+        productId: ProductModifiersV3ApiSpecs.DeleteProductModifierValueData['path']['product_id'],
+        modifierId: ProductModifiersV3ApiSpecs.DeleteProductModifierValueData['path']['modifier_id'],
+        valueId: ProductModifiersV3ApiSpecs.DeleteProductModifierValueData['path']['value_id'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductModifiersV3ApiSpecs.DeleteProductModifierValueResponses[204]>>,RequestErrorResponse<400, void>>({
+            path: `v3/catalog/products/${productId}/modifiers/${modifierId}/values/${valueId}`,
+        });
     }
 }

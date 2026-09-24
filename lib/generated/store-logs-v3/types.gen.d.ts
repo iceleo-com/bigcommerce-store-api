@@ -1,32 +1,11 @@
 export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
-export type IndexMeta = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    };
-};
-export type ErrorResponse = BaseError & {
-    errors?: DetailedErrors;
-};
-export type BaseError = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-};
-export type DetailedErrors = {
-    [key: string]: string;
-};
+export type StoreSystemlogsGetParametersType = 'general' | 'payment' | 'shipping' | 'tax' | 'notification' | 'emailintegration' | 'ordersettings' | 'design';
+export type StoreSystemlogsGetParametersModule = 'export+only' | 'email+message' | 'theme+download' | 'order+status' | 'optimized+checkout';
+export type StoreSystemlogsGetParametersSeverity = '1' | '2' | '3' | '4';
+export type StoreSystemlogsGetParametersSort = 'date_created' | 'type';
+export type StoreSystemlogsGetParametersDirection = 'asc' | 'desc';
 export type SystemLog = {
     id?: number;
     type?: string;
@@ -36,29 +15,46 @@ export type SystemLog = {
     message?: string;
     date_created?: string;
 };
-export type GetSitesData = {
+export type IndexMetaPaginationLinks = {
+    previous?: string;
+    current?: string;
+    next?: string;
+};
+export type IndexMetaPagination = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: IndexMetaPaginationLinks;
+};
+export type IndexMeta = {
+    pagination?: IndexMetaPagination;
+};
+export type SystemLogsGetStoreSystemLogsResponse200 = {
+    data?: Array<SystemLog>;
+    meta?: IndexMeta;
+};
+export type GetStoreSystemLogsData = {
     body?: never;
     path?: never;
     query?: {
         limit?: number;
         page?: number;
-        type?: 'general' | 'payment' | 'shipping' | 'tax' | 'notification' | 'emailintegration' | 'ordersettings' | 'design';
+        type?: StoreSystemlogsGetParametersType;
         'type:not'?: string;
-        module?: 'export+only' | 'email+message' | 'theme+download' | 'order+status' | 'optimized+checkout';
+        module?: StoreSystemlogsGetParametersModule;
         'module:not'?: string;
-        severity?: 1 | 2 | 3 | 4;
+        severity?: StoreSystemlogsGetParametersSeverity;
         'severity:min'?: number;
         'severity:max'?: number;
-        'id:in'?: string;
-        'date_created:min'?: string;
-        'date_created:max'?: string;
+        'id:in'?: Array<number>;
+        sort?: StoreSystemlogsGetParametersSort;
+        direction?: StoreSystemlogsGetParametersDirection;
     };
     url: '/store/systemlogs';
 };
-export type GetSitesResponses = {
-    200: {
-        data?: Array<SystemLog>;
-        meta?: IndexMeta;
-    };
+export type GetStoreSystemLogsResponses = {
+    200: SystemLogsGetStoreSystemLogsResponse200;
 };
-export type GetSitesResponse = GetSitesResponses[keyof GetSitesResponses];
+export type GetStoreSystemLogsResponse = GetStoreSystemLogsResponses[keyof GetStoreSystemLogsResponses];

@@ -27,20 +27,13 @@ export class TaxSettingsV3Api {
      *
      * Updates global-level tax settings.
      */
-    setTaxSettings(
-        requestBody: TaxSettingsV3ApiSpecs.SetTaxSettingsData['body'],
+    updateTaxSettings(
+        requestBody: TaxSettingsV3ApiSpecs.UpdateTaxSettingsData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<TaxSettingsV3ApiSpecs.SetTaxSettingsResponses[200]>>,RequestErrorResponse<422, Required<TaxSettingsV3ApiSpecs.SetTaxSettingsErrors[422]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<TaxSettingsV3ApiSpecs.UpdateTaxSettingsResponses[200]>>,RequestErrorResponse<422, Required<TaxSettingsV3ApiSpecs.UpdateTaxSettingsErrors[422]>>>({
             path: 'v3/tax/settings',
             contentType: 'application/json',
             body: requestBody,
         });
-    }
-
-    /**
-     * @deprecated Use `setTaxSettings` instead.
-     */
-    updateTaxSettings(...args: Parameters<TaxSettingsV3Api['setTaxSettings']>) {
-        return this.setTaxSettings(...args);
     }
 }

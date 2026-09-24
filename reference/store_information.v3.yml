@@ -1,34 +1,135 @@
-openapi: '3.0.0'
+openapi: 3.1.0
 info:
-  version: ''
-  title: Store Information
-  description: |
-    Provides endpoints to manage store metafields. Use this API to create, read, update, and delete custom metadata associated with store resources. Supports both individual and batch operations for efficient metafield management.
-  termsOfService: 'https://www.bigcommerce.com/terms'
-  contact:
-    name: BigCommerce
-    url: 'https://www.bigcommerce.com'
-    email: support@bigcommerce.com
-servers:
-  - url: 'https://api.bigcommerce.com/stores/{store_hash}/v3'
-    variables:
-      store_hash:
-        default: store_hash
-        description: Permanent ID of the BigCommerce store.
-    description: BigCommerce API Gateway
-security:
-  - X-Auth-Token: []
-tags:
-  - name: Metafields
-  - name: Batch metafields
+  title: 'Admin Management: Store Information V3'
+  version: 1.0.0
 paths:
-  '/store/metafields':
+  /stores/{store_hash}/v3/store/metafields:
     get:
-      summary: Get All Store Metafields
-      tags:
-        - Batch metafields
+      operationId: batchMetafields_getStoreMetafields
+      summary: List Store Metafields
       description: Gets all store `metafields`.
-      operationId: getStoreMetafields
+      tags:
+        - batchMetafields
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: |
+            Specifies the page number in a limited (paginated) list of products.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: |
+            Controls the number of items per page in a limited (paginated) list of products.
+          required: false
+          schema:
+            type: integer
+        - name: key
+          in: query
+          description: Filter based on a metafieldʼs key.
+          required: false
+          schema:
+            type: string
+        - name: key:in
+          in: query
+          description: Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: namespace
+          in: query
+          description: Filter based on a metafieldʼs namespaces.
+          required: false
+          schema:
+            type: string
+        - name: namespace:in
+          in: query
+          description: >-
+            Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query
+            parameter
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: include_fields
+          in: query
+          description: Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/StoreMetafieldsGetParametersIncludeFieldsSchemaItems'
+        - name: date_modified:min
+          in: query
+          description: >
+            'Query parameter that lets you filter by the minimum date modified, for example, `2024-05-14T09:34:00`,
+            `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.'
+          required: false
+          schema:
+            type: string
+        - name: date_modified:max
+          in: query
+          description: >
+            'Query parameter that lets you filter by the maximum date modified, for example, `2024-05-14T09:34:00`,
+            `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.'
+          required: false
+          schema:
+            type: string
+        - name: date_created:min
+          in: query
+          description: >
+            'Query parameter that lets you filter by the minimum date created, for example, `2024-05-14T09:34:00`,
+            `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.'
+          required: false
+          schema:
+            type: string
+        - name: date_created:max
+          in: query
+          description: >
+            'Query parameter that lets you filter by the maximum date created, for example, `2024-05-14T09:34:00`,
+            `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.'
+          required: false
+          schema:
+            type: string
+        - name: direction
+          in: query
+          description: |
+            Sort direction. Acceptable values are: `asc`, `desc`.
+          required: false
+          schema:
+            $ref: '#/components/schemas/StoreMetafieldsGetParametersDirection'
+        - name: before
+          in: query
+          description: >-
+            A cursor indicating where to start retrieving the previous page of results. Use this parameter to paginate
+            backward. Not required for the initial request. For subsequent requests, use the end_cursor value returned
+            in meta.cursor_pagination from the previous response. Works with limit, direction, and other supported query
+            parameters. When specified, offset-based pagination (page) is ignored. Cannot be used in combination with
+            the after parameter.
+          required: false
+          schema:
+            type: string
+        - name: after
+          in: query
+          description: >-
+            A cursor indicating where to start retrieving the next page of results. Use this parameter to paginate
+            forward. Not required for the initial request. For subsequent requests, use the start_cursor value returned
+            in meta.cursor_pagination from the previous response. Works with limit, direction, and other supported query
+            parameters. When specified, offset-based pagination (page) is ignored. Cannot be used in combination with
+            the before parameter.
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: |
@@ -37,61 +138,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MetaFieldCollectionResponse_Batch'
-              examples:
-                response:
-                  value:
-                    data:
-                      - id: '69'
-                        key: key2
-                        value: value
-                        namespace: test2
-                        permission_set: write_and_sf_access
-                        resource_type: store
-                        resource_id: '1001197568'
-                        description: ''
-                        date_created: 2024-08-27T18:58:43+00:00
-                        date_modified: 2024-08-27T18:58:43+00:00
-                        owner_client_id: k8l7zz0ynkd1bfbxx02p2k7pnk3n8ov
-                    meta:
-                      pagination:
-                        total: 4
-                        count: 4
-                        per_page: 50
-                        current_page: 1
-                        total_pages: 1
-                        links:
-                          current: ?limit=50&page=1
-      parameters:
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/LimitParam'
-        - $ref: '#/components/parameters/MetafieldKeyParam'
-        - $ref: '#/components/parameters/MetafieldKeyInParam'
-        - $ref: '#/components/parameters/MetafieldNamespaceParam'
-        - $ref: '#/components/parameters/MetafieldNamespaceInParam'
-        - $ref: '#/components/parameters/IncludeFieldsParamMetafields'
-        - $ref: '#/components/parameters/date_modified_min'
-        - $ref: '#/components/parameters/date_modified_max'
-        - $ref: '#/components/parameters/date_created_min'
-        - $ref: '#/components/parameters/date_created_max'
-        - $ref: '#/components/parameters/DirectionParam'
-        - $ref: '#/components/parameters/BeforeCursorParam'
-        - $ref: '#/components/parameters/AfterCursorParam'
+      security:
+        - X-Auth-Token: []
     post:
-      summary: Create multiple Metafields
-      tags:
-        - Batch metafields
+      operationId: batchMetafields_createStoresMetafields
+      summary: Create Multiple Metafields
       description: Create multiple `metafields`.
-      operationId: createStoresMetafields
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                allOf:
-                  - $ref: '#/components/schemas/MetafieldBase_Post_Put'
-        required: true
-        description: A `metafield` object.
+      tags:
+        - batchMetafields
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: |
@@ -107,30 +168,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MetaFieldCollectionResponsePartialSuccess_POST_PUT'
-    put:
-      summary: Update multiple metafields
-      tags:
-        - Batch metafields
-      description: Update multiple metafields.
-      operationId: updateStoreMetafields
       requestBody:
+        description: A `metafield` object.
         content:
           application/json:
             schema:
               type: array
               items:
-                allOf:
-                  - $ref: '#/components/schemas/MetafieldBase_Post_Put'
-                  - type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 42
-                        description: |
-                          The ID of metafield to update.
-                    required:
-                      - id
-        description: ''
+                $ref: '#/components/schemas/MetafieldBase_Post_Put'
+      security:
+        - X-Auth-Token: []
+    put:
+      operationId: batchMetafields_updateStoreMetafields
+      summary: Update Multiple Metafields
+      description: Update multiple metafields.
+      tags:
+        - batchMetafields
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Response payload for the BigCommerce API.
@@ -143,25 +203,7 @@ paths:
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  status:
-                    type: number
-                  title:
-                    type: string
-                    minLength: 1
-                  type:
-                    type: string
-                    minLength: 1
-                  detail:
-                    type: string
-                    minLength: 1
-              example:
-                status: 400
-                title: Input is invalid
-                type: 'https://developer.bigcommerce.com/api-docs/getting-started/api-status-codes'
-                detail: Syntax error
+                $ref: '#/components/schemas/UpdateStoreMetafieldsRequestBadRequestError'
         '422':
           description: |
             Response object for metafields creation with partial success.
@@ -169,21 +211,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MetaFieldCollectionResponsePartialSuccess_POST_PUT'
-    delete:
-      summary: Delete multiple metafields
-      tags:
-        - Batch metafields
-      description: Delete all store metafields.
-      operationId: deleteStoreMetafields
       requestBody:
+        description: ''
         content:
           application/json:
             schema:
               type: array
               items:
-                type: integer
-            example: [69, 70]
-        description: Metafields ID list.
+                $ref: '#/components/schemas/StoreMetafieldsPutRequestBodyContentApplicationJsonSchemaItems'
+      security:
+        - X-Auth-Token: []
+    delete:
+      operationId: batchMetafields_deleteStoreMetafields
+      summary: Delete Multiple Metafields
+      description: Delete all store metafields.
+      tags:
+        - batchMetafields
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: |
@@ -192,13 +242,53 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MetaFieldCollectionDeleteResponseSuccess'
-  '/store/metafields/{metafieldId}':
+        '422':
+          description: |
+            Response object for metafields deletion with partial success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetaFieldCollectionResponsePartialSuccess_DELETE'
+      requestBody:
+        description: Metafields ID list.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/store/metafields/{metafieldId}:
     get:
-      summary: Get a Store Metafield
-      tags:
-        - Metafields
+      operationId: metafields_getStoreMetafield
+      summary: Get Store Metafield
       description: Gets a store `metafield`.
-      operationId: getStoreMetafield
+      tags:
+        - metafields
+      parameters:
+        - name: metafieldId
+          in: path
+          description: |
+            The ID of the `Metafield`.
+          required: true
+          schema:
+            type: integer
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: false
+          schema:
+            type: string
+            default: application/json
       responses:
         '200':
           description: |
@@ -214,22 +304,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
+      security:
+        - X-Auth-Token: []
     put:
-      summary: Update a Store Metafield
-      tags:
-        - Metafields
+      operationId: metafields_updateStoreMetafield
+      summary: Update Store Metafield
       description: |
         Update a store `Metafield`.
-      operationId: updateStoreMetafield
+      tags:
+        - metafields
       parameters:
-        - $ref: '#/components/parameters/ContentType'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MetafieldBase_Post_Put'
-        description: |
-          A `Metafield` object.
+        - name: metafieldId
+          in: path
+          description: |
+            The ID of the `Metafield`.
+          required: true
+          schema:
+            type: integer
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: false
+          schema:
+            type: string
+            default: application/json
       responses:
         '200':
           description: |
@@ -245,22 +351,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
-              example:
-                value:
-                  status: 404
-                  title: There was no metafield found with ID 1010
-                  type: 'https://developer.bigcommerce.com/api-docs/getting-started/api-status-codes'
+      requestBody:
+        description: |
+          A `Metafield` object.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetafieldBase_Post_Put'
+      security:
+        - X-Auth-Token: []
     delete:
-      summary: Delete a Metafield
-      tags:
-        - Metafields
+      operationId: metafields_deleteStoreMetafield
+      summary: Delete Metafield
       description: |
         Deletes a store `Metafield`.
-      operationId: deleteStoreMetafield
+      tags:
+        - metafields
+      parameters:
+        - name: metafieldId
+          in: path
+          description: |
+            The ID of the `Metafield`.
+          required: true
+          schema:
+            type: integer
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: false
+          schema:
+            type: string
+            default: application/json
       responses:
         '204':
           description: |
             An empty response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
         '404':
           description: |
             Not found (A metafield was not found with this query).
@@ -268,330 +406,244 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
-    parameters:
-      - $ref: '#/components/parameters/Accept'
-      - $ref: '#/components/parameters/MetafieldIdParam'
+      security:
+        - X-Auth-Token: []
+tags:
+  - name: batchMetafields
+    description: Create, update, and delete store metafields in bulk.
+  - name: metafields
+    description: Attach custom metafield data at the store level.
+servers:
+  - url: https://api.bigcommerce.com
+    description: https://api.bigcommerce.com
 components:
-  securitySchemes:
-    X-Auth-Token:
-      name: X-Auth-Token
-      description: |-
-        ### OAuth scopes
-
-        | UI Name | Permission | Parameter |
-        |:--------|:-----------|:----------|
-        |  Information & Settings | modify | `store_v2_information` |
-        |  Information & Settings | read-only | `store_v2_information_read_only` |
-
-        ### Authentication header
-
-        | Header | Argument | Description |
-        |:-------|:---------|:------------|
-        | `X-Auth-Token` | `access_token` | For more about API accounts that generate `access_token`s, see our [Guide to API Accounts](/docs/start/authentication/api-accounts). |
-
-        ### Further reading
-
-        For example requests and more information about authenticating BigCommerce APIs, see [Authentication and Example Requests](/docs/start/authentication#x-auth-token-header-example-requests).
-
-        For more about BigCommerce OAuth scopes, see our [Guide to API Accounts](/docs/start/authentication/api-accounts#oauth-scopes).
-
-        For a list of API status codes, see [API Status Codes](/docs/start/about/status-codes).
-      type: apiKey
-      in: header
   schemas:
+    StoreMetafieldsGetParametersIncludeFieldsSchemaItems:
+      type: string
+      enum:
+        - resource_id
+        - key
+        - value
+        - namespace
+        - permission_set
+        - resource_type
+        - description
+        - owner_client_id
+        - date_created
+        - date modified
+      title: StoreMetafieldsGetParametersIncludeFieldsSchemaItems
+    StoreMetafieldsGetParametersDirection:
+      type: string
+      enum:
+        - asc
+        - desc
+      title: StoreMetafieldsGetParametersDirection
+    MetafieldBasePermissionSet:
+      type: string
+      enum:
+        - app_only
+        - read
+        - write
+        - read_and_sf_access
+        - write_and_sf_access
+      description: |
+        Determines the visibility and writeability of the field by other API consumers.
+
+        | Value | Description |
+        | :--- | :--- |
+        | `app_only` | Private to the app that owns the field. |
+        | `read` | Visible to other API consumers. |
+        | `write` | Open for reading and writing by other API consumers. |
+        | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
+        | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
+      title: MetafieldBasePermissionSet
+    MetafieldBaseResourceType:
+      type: string
+      enum:
+        - brand
+        - product
+        - variant
+        - category
+        - cart
+        - store
+      description: |
+        The type of resource with which the metafield is associated.
+      title: MetafieldBaseResourceType
+    Metafield:
+      type: object
+      properties:
+        permission_set:
+          $ref: '#/components/schemas/MetafieldBasePermissionSet'
+          description: >
+            Determines the visibility and writeability of the field by other API consumers.
+
+
+            | Value | Description |
+
+            | :--- | :--- |
+
+            | `app_only` | Private to the app that owns the field. |
+
+            | `read` | Visible to other API consumers. |
+
+            | `write` | Open for reading and writing by other API consumers. |
+
+            | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
+
+            | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront.
+            |
+        namespace:
+          type: string
+          minLength: 1
+          maxLength: 64
+          description: |
+            Namespace for the metafield, for organizational purposes.
+        key:
+          type: string
+          minLength: 1
+          maxLength: 64
+          description: |
+            The name of the field, for example: `location_id`, `color`.
+        value:
+          type: string
+          minLength: 1
+          maxLength: 65535
+          description: |
+            The value of the field, for example: `1`, `blue`.
+        description:
+          type: string
+          minLength: 0
+          maxLength: 255
+          description: |
+            Description for the metafields.
+        resource_type:
+          $ref: '#/components/schemas/MetafieldBaseResourceType'
+          description: |
+            The type of resource with which the metafield is associated.
+        resource_id:
+          type: string
+          description: |
+            The unique identifier for the resource with which the metafield is associated.
+        id:
+          type: string
+          description: The unique identifier for the metafield.
+        date_created:
+          type: string
+          format: date-time
+          description: Date and time of the metafieldʼs creation.
+        date_modified:
+          type: string
+          format: date-time
+          description: Date and time when the metafield was last updated.
+        owner_client_id:
+          type: string
+          description: Client ID for the metafieldʼs creator.
+      required:
+        - permission_set
+      description: |
+        Allows app partners to write custom data to various resources in the API.
+      title: Metafield
+    PaginationLinks:
+      type: object
+      properties:
+        previous:
+          type: string
+          description: |
+            Link to the previous page returned in the response.
+        current:
+          type: string
+          description: |
+            Link to the current page returned in the response.
+        next:
+          type: string
+          description: |
+            Link to the next page returned in the response.
+      description: |
+        Pagination links for the previous and next parts of the whole collection.
+      title: PaginationLinks
     Pagination:
       type: object
-      description: Data about the response, including pagination and collection totals.
-      title: Pagination
       properties:
         total:
           type: integer
           description: |
             Total number of items in the result set.
-          example: 36
         count:
           type: integer
           description: |
             Total number of items in the collection response.
-          example: 36
         per_page:
           type: integer
           description: |
             The amount of items returned in the collection per page, controlled by the limit parameter.
-          example: 50
         current_page:
           type: integer
           description: |
             The page you are currently on within the collection.
-          example: 1
         total_pages:
           type: integer
           description: |
             The total number of pages in the collection.
-          example: 1
         links:
-          type: object
+          $ref: '#/components/schemas/PaginationLinks'
           description: |
             Pagination links for the previous and next parts of the whole collection.
-          properties:
-            previous:
-              type: string
-              description: |
-                Link to the previous page returned in the response.
-            current:
-              type: string
-              description: |
-                Link to the current page returned in the response.
-              example: '?page=1&limit=50'
-            next:
-              type: string
-              description: |
-                Link to the next page returned in the response.
-      x-internal: false
+      description: Data about the response, including pagination and collection totals.
+      title: Pagination
+    CursorPaginationLinks:
+      type: object
+      properties:
+        previous:
+          type: string
+          description: |
+            Cursor to the previous page returned in the response.
+        current:
+          type: string
+          description: |
+            Cursor to the current page returned in the response.
+        next:
+          type: string
+          description: |
+            Cursor to the next page returned in the response.
+      description: |
+        Pagination links for the previous and next parts of the whole collection.
+      title: CursorPaginationLinks
     CursorPagination:
       type: object
-      description: Data about the response, including cursor pagination and collection totals.
-      title: CursorPagination
       properties:
         count:
           type: integer
           description: |
             Total number of items in the collection response.
-          example: 36
         per_page:
           type: integer
           description: |
             The amount of items returned in the collection per page, controlled by the limit parameter.
-          example: 50
         start_cursor:
           type: string
           description: |
             Cursor that is referring to a start of current page.
-          example: "aWQ6Nw=="
         end_cursor:
           type: string
           description: |
             Cursor that is referring to a end of current page. Should be used to fetch next page.
-          example: "aWQ6Nw=="
         links:
-          type: object
+          $ref: '#/components/schemas/CursorPaginationLinks'
           description: |
             Pagination links for the previous and next parts of the whole collection.
-          properties:
-            previous:
-              type: string
-              description: |
-                Cursor to the previous page returned in the response.
-              example: '?page=1&after=aWQ6Nw%3D%3D'
-            current:
-              type: string
-              description: |
-                Cursor to the current page returned in the response.
-              example: '?page=1&after=aWQ6Nw%3D%3D'
-            next:
-              type: string
-              description: |
-                Cursor to the next page returned in the response.
-              example: '?page=1&after=aWQ6Nw%3D%3D'
-      x-internal: false
-    NotFound:
-      description: Error payload for the BigCommerce API.
+      description: Data about the response, including cursor pagination and collection totals.
+      title: CursorPagination
+    CollectionMeta:
       type: object
       properties:
-        status:
-          description: |
-            404 HTTP status code.
-          type: integer
-          example: 404
-        title:
-          description: The error title describing the particular error.
-          type: string
-          example: The resource at that URL is not found.
-        type:
-          type: string
-          example: 'https://developer.bigcommerce.com/api-docs/getting-started/api-status-codes'
-      title: Not Found
-      x-internal: false
-    MetafieldResponse:
-      description: |
-        Response payload for the BigCommerce API.
-      x-internal: false
-      allOf:
-        - type: object
-          properties:
-            data:
-              $ref: '#/components/schemas/Metafield'
-            meta:
-              $ref: '#/components/schemas/metaCollection_open'
-    Metafield:
-      description: |
-        Allows app partners to write custom data to various resources in the API.
-      allOf:
-        - $ref: '#/components/schemas/MetafieldBase'
-        - type: object
-          properties:
-            id:
-              type: string
-              description: The unique identifier for the metafield.
-            date_created:
-              type: string
-              format: date-time
-              description: Date and time of the metafieldʼs creation.
-              example: '2022-06-16T18:39:00+00:00'
-            date_modified:
-              type: string
-              format: date-time
-              description: Date and time when the metafield was last updated.
-              example: '2022-06-16T18:39:00+00:00'
-            owner_client_id:
-              type: string
-              description: Client ID for the metafieldʼs creator.
-              example: asdfasdfasdfasdfasdfasdfasdf
-              readOnly: true
-      x-internal: false
-    MetafieldBase:
-      type: object
-      description: |
-        Common Metafield properties.
-      x-internal: false
-      properties:
-        permission_set:
-          type: string
-          description: |
-            Determines the visibility and writeability of the field by other API consumers.
-
-            | Value | Description |
-            | :--- | :--- |
-            | `app_only` | Private to the app that owns the field. |
-            | `read` | Visible to other API consumers. |
-            | `write` | Open for reading and writing by other API consumers. |
-            | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-            | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-          enum:
-            - app_only
-            - read
-            - write
-            - read_and_sf_access
-            - write_and_sf_access
-        namespace:
-          type: string
-          description: |
-            Namespace for the metafield, for organizational purposes.
-          example: Sales Department
-          minLength: 1
-          maxLength: 64
-        key:
-          type: string
-          description: |
-            The name of the field, for example: `location_id`, `color`.
-          minLength: 1
-          maxLength: 64
-          example: Staff Name
-        value:
-          type: string
-          description: |
-            The value of the field, for example: `1`, `blue`.
-          minLength: 1
-          maxLength: 65535
-          example: Ronaldo
-        description:
-          type: string
-          description: |
-            Description for the metafields.
-          example: order
-          minLength: 0
-          maxLength: 255
-        resource_type:
-          type: string
-          description: |
-            The type of resource with which the metafield is associated.
-          enum:
-            - brand
-            - product
-            - variant
-            - category
-            - cart
-            - store
-          example: store
-        resource_id:
-          type: string
-          description: |
-            The unique identifier for the resource with which the metafield is associated.
-          example: '0'
-          readOnly: true
-      required:
-        - permission_set
-    MetafieldBase_Post_Put:
-      type: object
-      description: |
-        Common Metafield properties.
-      x-internal: false
-      properties:
-        permission_set:
-          type: string
-          description: |
-            Determines the visibility and writeability of the field by other API consumers.
-
-            | Value | Description |
-            | :--- | :--- |
-            | `app_only` | Private to the app that owns the field. |
-            | `read` | Visible to other API consumers. |
-            | `write` | Open for reading and writing by other API consumers. |
-            | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
-            | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
-          enum:
-            - app_only
-            - read
-            - write
-            - read_and_sf_access
-            - write_and_sf_access
-        namespace:
-          type: string
-          description: |
-            Namespace for the metafield, for organizational purposes.
-          example: Sales Department
-          minLength: 1
-          maxLength: 64
-        key:
-          type: string
-          description: |
-            The name of the field, for example: `location_id`, `color`.
-          minLength: 1
-          maxLength: 64
-          example: Staff Name
-        value:
-          type: string
-          description: |
-            The value of the field, for example: `1`, `blue`.
-          minLength: 1
-          maxLength: 65535
-          example: Ronaldo
-        description:
-          type: string
-          description: |
-            Description for the metafields.
-          minLength: 0
-          maxLength: 255
-          example: Name of Staff Member
-      required:
-        - permission_set
-        - namespace
-        - key
-        - value
-    MetaFieldCollectionResponse:
-      type: object
-      description: |
-        Response payload for the BigCommerce API.
-      properties:
-        data:
-          $ref: '#/components/schemas/Metafield'
-        meta:
-          $ref: '#/components/schemas/metaCollection_open'
-      x-internal: false
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        cursor_pagination:
+          $ref: '#/components/schemas/CursorPagination'
+      description: Data about the response, including pagination and collection totals.
+      title: CollectionMeta
     MetaFieldCollectionResponse_Batch:
       type: object
-      description: |
-        Response payload for the BigCommerce API.
       properties:
         data:
           type: array
@@ -599,10 +651,102 @@ components:
             $ref: '#/components/schemas/Metafield'
         meta:
           $ref: '#/components/schemas/CollectionMeta'
+      description: |
+        Response payload for the BigCommerce API.
+      title: MetaFieldCollectionResponse_Batch
+    MetafieldBasePostPutPermissionSet:
+      type: string
+      enum:
+        - app_only
+        - read
+        - write
+        - read_and_sf_access
+        - write_and_sf_access
+      description: |
+        Determines the visibility and writeability of the field by other API consumers.
+
+        | Value | Description |
+        | :--- | :--- |
+        | `app_only` | Private to the app that owns the field. |
+        | `read` | Visible to other API consumers. |
+        | `write` | Open for reading and writing by other API consumers. |
+        | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
+        | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
+      title: MetafieldBasePostPutPermissionSet
+    MetafieldBase_Post_Put:
+      type: object
+      properties:
+        permission_set:
+          $ref: '#/components/schemas/MetafieldBasePostPutPermissionSet'
+          description: >
+            Determines the visibility and writeability of the field by other API consumers.
+
+
+            | Value | Description |
+
+            | :--- | :--- |
+
+            | `app_only` | Private to the app that owns the field. |
+
+            | `read` | Visible to other API consumers. |
+
+            | `write` | Open for reading and writing by other API consumers. |
+
+            | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
+
+            | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront.
+            |
+        namespace:
+          type: string
+          minLength: 1
+          maxLength: 64
+          description: |
+            Namespace for the metafield, for organizational purposes.
+        key:
+          type: string
+          minLength: 1
+          maxLength: 64
+          description: |
+            The name of the field, for example: `location_id`, `color`.
+        value:
+          type: string
+          minLength: 1
+          maxLength: 65535
+          description: |
+            The value of the field, for example: `1`, `blue`.
+        description:
+          type: string
+          minLength: 0
+          maxLength: 255
+          description: |
+            Description for the metafields.
+      required:
+        - permission_set
+        - namespace
+        - key
+        - value
+      description: |
+        Common Metafield properties.
+      title: MetafieldBase_Post_Put
+    WriteCollectionSuccessMeta:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: |
+            Total number of items in the result set.
+        success:
+          type: integer
+          description: |
+            Total number of items that were successfully deleted.
+        failed:
+          type: integer
+          description: |
+            Total number of items that failed to be deleted.
+      description: Additional data about the response.
+      title: WriteCollectionSuccessMeta
     MetaFieldCollectionResponse_Batch_POST_PUT:
       type: object
-      description: |
-        Response payload for the BigCommerce API.
       properties:
         data:
           type: array
@@ -610,309 +754,278 @@ components:
             $ref: '#/components/schemas/Metafield'
         errors:
           type: array
-          items: {}
+          items:
+            description: Any type
           description: Empty for 200 responses.
-          example: []
         meta:
           $ref: '#/components/schemas/WriteCollectionSuccessMeta'
-    MetaFieldCollectionDeleteResponseSuccess:
-      type: object
       description: |
         Response payload for the BigCommerce API.
+      title: MetaFieldCollectionResponse_Batch_POST_PUT
+    ErrorDetail:
+      type: object
+      properties: {}
+      description: |
+        Error detail response payload for the BigCommerce API.
+      title: ErrorDetail
+    Error:
+      type: object
       properties:
-        data:
-          type: array
-          items:
-            type: integer
-            description: |
-              The unique identifier for the metafield.
-          example:
-            - 123
-            - 124
-            - 125
+        status:
+          type: integer
+          description: |
+            The HTTP status code for the error.
+        title:
+          type: string
+          description: |
+            The error title.
+        type:
+          type: string
+          description: |
+            The error type.
         errors:
-          type: array
-          items: {}
-          description: Empty for 200 responses.
-          example: []
-        meta:
-          $ref: '#/components/schemas/WriteCollectionSuccessMeta'
-      x-internal: false
+          $ref: '#/components/schemas/ErrorDetail'
+      description: |
+        Error response payload for the BigCommerce API.
+      title: Error
+    WriteCollectionPartialSuccessMeta:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: |
+            Total number of items in the result set.
+        success:
+          type: integer
+          description: |
+            Total number of items that were successfully deleted.
+        failed:
+          type: integer
+          description: |
+            Total number of items that failed to be deleted.
+      description: Additional data about the response.
+      title: WriteCollectionPartialSuccessMeta
     MetaFieldCollectionResponsePartialSuccess_POST_PUT:
       type: object
-      description: |
-        Response payload for the BigCommerce API.
       properties:
         data:
           type: array
           items:
             $ref: '#/components/schemas/Metafield'
           description: Empty for 200 responses.
-          example: []
         errors:
           $ref: '#/components/schemas/Error'
         meta:
           $ref: '#/components/schemas/WriteCollectionPartialSuccessMeta'
-    MetaFieldCollectionResponsePartialSuccess_DELETE:
-      type: object
       description: |
         Response payload for the BigCommerce API.
+      title: MetaFieldCollectionResponsePartialSuccess_POST_PUT
+    StoreMetafieldsPutRequestBodyContentApplicationJsonSchemaItemsPermissionSet:
+      type: string
+      enum:
+        - app_only
+        - read
+        - write
+        - read_and_sf_access
+        - write_and_sf_access
+      description: |
+        Determines the visibility and writeability of the field by other API consumers.
+
+        | Value | Description |
+        | :--- | :--- |
+        | `app_only` | Private to the app that owns the field. |
+        | `read` | Visible to other API consumers. |
+        | `write` | Open for reading and writing by other API consumers. |
+        | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
+        | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront. |
+      title: StoreMetafieldsPutRequestBodyContentApplicationJsonSchemaItemsPermissionSet
+    StoreMetafieldsPutRequestBodyContentApplicationJsonSchemaItems:
+      type: object
+      properties:
+        permission_set:
+          $ref: '#/components/schemas/StoreMetafieldsPutRequestBodyContentApplicationJsonSchemaItemsPermissionSet'
+          description: >
+            Determines the visibility and writeability of the field by other API consumers.
+
+
+            | Value | Description |
+
+            | :--- | :--- |
+
+            | `app_only` | Private to the app that owns the field. |
+
+            | `read` | Visible to other API consumers. |
+
+            | `write` | Open for reading and writing by other API consumers. |
+
+            | `read_and_sf_access` | Visible to other API consumers, including on the storefront. |
+
+            | `write_and_sf_access` | Open for reading and writing by other API consumers, including on the storefront.
+            |
+        namespace:
+          type: string
+          minLength: 1
+          maxLength: 64
+          description: |
+            Namespace for the metafield, for organizational purposes.
+        key:
+          type: string
+          minLength: 1
+          maxLength: 64
+          description: |
+            The name of the field, for example: `location_id`, `color`.
+        value:
+          type: string
+          minLength: 1
+          maxLength: 65535
+          description: |
+            The value of the field, for example: `1`, `blue`.
+        description:
+          type: string
+          minLength: 0
+          maxLength: 255
+          description: |
+            Description for the metafields.
+        id:
+          type: integer
+          description: |
+            The ID of metafield to update.
+      required:
+        - permission_set
+        - namespace
+        - key
+        - value
+        - id
+      description: |
+        Common Metafield properties.
+      title: StoreMetafieldsPutRequestBodyContentApplicationJsonSchemaItems
+    UpdateStoreMetafieldsRequestBadRequestError:
+      type: object
+      properties:
+        status:
+          type: number
+          format: double
+        title:
+          type: string
+          minLength: 1
+        type:
+          type: string
+          minLength: 1
+        detail:
+          type: string
+          minLength: 1
+      title: UpdateStoreMetafieldsRequestBadRequestError
+    MetaFieldCollectionDeleteResponseSuccess:
+      type: object
       properties:
         data:
           type: array
           items:
             type: integer
-            description: |
-              The unique identifier for the metafield.
-          example:
-            - 123
+        errors:
+          type: array
+          items:
+            description: Any type
+          description: Empty for 200 responses.
+        meta:
+          $ref: '#/components/schemas/WriteCollectionSuccessMeta'
+      description: |
+        Response payload for the BigCommerce API.
+      title: MetaFieldCollectionDeleteResponseSuccess
+    MetaFieldCollectionResponsePartialSuccess_DELETE:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: integer
         errors:
           type: array
           items:
             $ref: '#/components/schemas/Error'
         meta:
           $ref: '#/components/schemas/WriteCollectionPartialSuccessMeta'
-      x-internal: false
-    Error:
-      type: object
       description: |
-        Error response payload for the BigCommerce API.
+        Response payload for the BigCommerce API.
+      title: MetaFieldCollectionResponsePartialSuccess_DELETE
+    metaCollection_open:
+      type: object
+      properties: {}
+      description: Response metadata.
+      title: metaCollection_open
+    MetafieldResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Metafield'
+        meta:
+          $ref: '#/components/schemas/metaCollection_open'
+      description: |
+        Response payload for the BigCommerce API.
+      title: MetafieldResponse
+    NotFound:
+      type: object
       properties:
         status:
           type: integer
           description: |
-            The HTTP status code for the error.
-          example: 422
+            404 HTTP status code.
         title:
           type: string
-          description: |
-            The error title.
-          example: Bulk operation has failed
+          description: The error title describing the particular error.
         type:
           type: string
-          description: |
-            The error type.
-          example: https://developer.bigcommerce.com/api-docs/getting-started/api-status-codes
-        errors:
-          $ref: '#/components/schemas/ErrorDetail'
-    ErrorDetail:
+      description: Error payload for the BigCommerce API.
+      title: NotFound
+    MetaFieldCollectionResponse:
       type: object
-      properties: {}
-      additionalProperties: true
-      description: |
-        Error detail response payload for the BigCommerce API.
-      example:
-        '0': 'Entity already exists'
-        '1': 'Unauthorized to delete'
-        '2': 'Metafield does not exist'
-    WriteCollectionSuccessMeta:
-      type: object
-      description: Additional data about the response.
       properties:
-        total:
-          type: integer
-          description: |
-            Total number of items in the result set.
-          example: 3
-        success:
-          type: integer
-          description: |
-            Total number of items that were successfully deleted.
-          example: 3
-        failed:
-          type: integer
-          description: |
-            Total number of items that failed to be deleted.
-          example: 0
-      title: Collection Meta
-      x-internal: false
-    WriteCollectionPartialSuccessMeta:
-      type: object
-      description: Additional data about the response.
-      properties:
-        total:
-          type: integer
-          description: |
-            Total number of items in the result set.
-          example: 3
-        success:
-          type: integer
-          description: |
-            Total number of items that were successfully deleted.
-          example: 1
-        failed:
-          type: integer
-          description: |
-            Total number of items that failed to be deleted.
-          example: 2
-      title: Collection Meta
-      x-internal: false
-    CollectionMeta:
-      type: object
-      description: Data about the response, including pagination and collection totals.
-      properties:
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-        cursor_pagination:
-          $ref: '#/components/schemas/CursorPagination'
-      additionalProperties: true
-      title: Collection Meta
-      x-internal: false
-    metaCollection_open:
-      title: Response meta
-      type: object
-      properties: {}
-      description: Response metadata.
-  parameters:
-    IncludeFieldsParamMetafields:
-      name: include_fields
-      in: query
-      description: Fields to include, in a comma-separated list. The ID and the specified fields will be returned.
-      style: form
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-          enum:
-            - resource_id
-            - key
-            - value
-            - namespace
-            - permission_set
-            - resource_type
-            - description
-            - owner_client_id
-            - date_created
-            - date modified
-    date_created_min:
-      name: 'date_created:min'
+        data:
+          $ref: '#/components/schemas/Metafield'
+        meta:
+          $ref: '#/components/schemas/metaCollection_open'
       description: |
-        'Query parameter that lets you filter by the minimum date created, for example, `2024-05-14T09:34:00`, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created after this date.'
-      required: false
-      in: query
-      schema:
-        type: string
-    date_created_max:
-      name: 'date_created:max'
-      description: |
-        'Query parameter that lets you filter by the maximum date created, for example, `2024-05-14T09:34:00`, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields created before this date.'
-      required: false
-      in: query
-      schema:
-        type: string
-    date_modified_max:
-      name: 'date_modified:max'
-      description: |
-        'Query parameter that lets you filter by the maximum date modified, for example, `2024-05-14T09:34:00`, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified before this date.'
-      required: false
-      in: query
-      schema:
-        type: string
-    date_modified_min:
-      name: 'date_modified:min'
-      description: |
-        'Query parameter that lets you filter by the minimum date modified, for example, `2024-05-14T09:34:00`, `2024-05-14T09:34:00` or `2024-05-14`. Returns metafields modified after this date.'
-      required: false
-      in: query
-      schema:
-        type: string
-    BeforeCursorParam:
-      name: 'before'
-      description: 'A cursor indicating where to start retrieving the previous page of results. Use this parameter to paginate backward. Not required for the initial request. For subsequent requests, use the end_cursor value returned in meta.cursor_pagination from the previous response. Works with limit, direction, and other supported query parameters. When specified, offset-based pagination (page) is ignored. Cannot be used in combination with the after parameter.'
-      in: query
-      required: false
-      schema:
-        type: string
-    AfterCursorParam:
-      name: 'after'
-      description: 'A cursor indicating where to start retrieving the next page of results. Use this parameter to paginate forward. Not required for the initial request. For subsequent requests, use the start_cursor value returned in meta.cursor_pagination from the previous response. Works with limit, direction, and other supported query parameters. When specified, offset-based pagination (page) is ignored. Cannot be used in combination with the before parameter.'
-      in: query
-      required: false
-      schema:
-        type: string
-    ContentType:
-      name: Content-Type
+        Response payload for the BigCommerce API.
+      title: MetaFieldCollectionResponse
+  securitySchemes:
+    X-Auth-Token:
+      type: apiKey
       in: header
-      schema:
-        type: string
-        default: application/json
-    PageParam:
-      name: page
-      description: |
-        Specifies the page number in a limited (paginated) list of products.
-      required: false
-      in: query
-      schema:
-        type: integer
-    MetafieldIdParam:
-      name: metafieldId
-      in: path
-      description: |
-        The ID of the `Metafield`.
-      required: true
-      schema:
-        type: integer
-    MetafieldKeyParam:
-      name: key
-      in: query
-      description: Filter based on a metafieldʼs key.
-      required: false
-      schema:
-        type: string
-    MetafieldKeyInParam:
-      name: key:in
-      in: query
-      description: Filter based on comma-separated metafieldʼs keys. Could be used with vanilla `key` query parameter.
-      required: false
-      style: form
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-    MetafieldNamespaceParam:
-      name: namespace
-      in: query
-      description: Filter based on a metafieldʼs namespaces.
-      required: false
-      schema:
-        type: string
-    MetafieldNamespaceInParam:
-      name: namespace:in
-      in: query
-      description: Filter based on comma-separated metafieldʼs namespaces. Could be used with vanilla `namespace` query parameter
-      required: false
-      style: form
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-    LimitParam:
-      name: limit
-      description: |
-        Controls the number of items per page in a limited (paginated) list of products.
-      required: false
-      in: query
-      schema:
-        type: integer
-    DirectionParam:
-      name: direction
-      description: |
-        Sort direction. Acceptable values are: `asc`, `desc`.
-      required: false
-      in: query
-      schema:
-        type: string
-        enum:
-          - asc
-          - desc
-    Accept:
-      name: Accept
-      in: header
-      required: false
-      description: 'The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.'
-      schema:
-        type: string
-        default: application/json
+      name: X-Auth-Token
+      description: >-
+        ### OAuth scopes
+
+
+        | UI Name | Permission | Parameter |
+
+        |:--------|:-----------|:----------|
+
+        |  Information & Settings | modify | `store_v2_information` |
+
+        |  Information & Settings | read-only | `store_v2_information_read_only` |
+
+
+        ### Authentication header
+
+
+        | Header | Argument | Description |
+
+        |:-------|:---------|:------------|
+
+        | `X-Auth-Token` | `access_token` | For more about API accounts that generate `access_token`s, see our [Guide to
+        API Accounts](/developer/docs/overview/api-fundamentals/api-accounts#api-accounts). |
+
+
+        ### Further reading
+
+
+        For example requests and more information about authenticating BigCommerce APIs, see [Authentication and Example
+        Requests](/developer/docs/overview/api-fundamentals/api-accounts#x-auth-token-header-example-requests).
+
+
+        For more about BigCommerce OAuth scopes, see our [Guide to API
+        Accounts](/developer/docs/overview/api-fundamentals/api-accounts#oauth-scopes).
+
+
+        For a list of API status codes, see [API Status
+        Codes](/developer/api-reference/rest/overview#rest-http-status-codes).

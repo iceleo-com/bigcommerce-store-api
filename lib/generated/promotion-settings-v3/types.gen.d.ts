@@ -7,37 +7,29 @@ export type GlobalPromotionSettings = {
     number_of_coupons_allowed_at_checkout: number;
     promotions_applied_on_original_product_price: boolean;
 };
+export type BetaErrorResponse400Error = {
+    message?: string;
+};
+export type BetaErrorResponse400 = {
+    status?: number;
+    title?: string;
+    error?: BetaErrorResponse400Error;
+};
 export type ErrorResponse400 = {
     schema?: BetaErrorResponse400;
 };
-export type ErrorResponse403 = {
-    schema?: BetaErrorResponse403;
+export type BetaErrorResponse422ErrorsItems = {
+    field?: string;
+    message?: string;
+};
+export type BetaErrorResponse422 = {
+    status?: number;
+    title?: string;
+    errors?: Array<BetaErrorResponse422ErrorsItems>;
 };
 export type ErrorResponse422 = {
     schema?: BetaErrorResponse422;
 };
-export type BetaErrorResponse400 = BaseError & {
-    error?: {
-        message?: string;
-    };
-};
-export type BetaErrorResponse403 = BaseError & {
-    error?: {
-        message?: string;
-    };
-};
-export type BetaErrorResponse422 = BaseError & {
-    errors?: Array<{
-        field?: string;
-        message?: string;
-    }>;
-};
-export type BaseError = {
-    status?: number;
-    title?: string;
-};
-export type Accept = string;
-export type ContentType = string;
 export type GetGlobalPromotionSettingsData = {
     body?: never;
     headers: {
@@ -56,10 +48,9 @@ export type GetGlobalPromotionSettingsResponses = {
 };
 export type GetGlobalPromotionSettingsResponse = GetGlobalPromotionSettingsResponses[keyof GetGlobalPromotionSettingsResponses];
 export type UpdateGlobalPromotionSettingsData = {
-    body: GlobalPromotionSettings;
+    body?: GlobalPromotionSettings;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;

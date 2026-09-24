@@ -5,26 +5,122 @@ export type ClientOptions = {
 };
 
 /**
- * Publish or overwrite request
+ * LayoutConfiguration
+ *
+ * JSON object of necessary configuration to construct a layout.
  */
-export type Publish = {
-    regions: Array<Region>;
-    /**
-     * The template file that you would like to target. Leave it empty if the request is for Global regions.
-     */
-    template_file?: string;
-    /**
-     * The identifier of a page you would like to target. For product pages, choose product ID. For category pages, choose category ID. Home page does not support `entity_id`. Leave it empty if the request is for Global regions.
-     */
-    entity_id?: string;
-    /**
-     * The id of the channel on which to create this placement. Defaults to the first channel created on the store.
-     */
-    channel_id?: number;
+export type LayoutConfiguration = {
+    [key: string]: unknown;
 };
 
 /**
- * Region object
+ * DropzoneConfiguration
+ *
+ * JSON object of necessary configuration to construct a dropzone.
+ */
+export type DropzoneConfiguration = {
+    [key: string]: unknown;
+};
+
+/**
+ * WidgetConfiguration
+ *
+ * JSON object of necessary configuration to construct a widget.
+ */
+export type WidgetConfiguration = {
+    [key: string]: unknown;
+};
+
+/**
+ * WidgetStorefrontApiQueryParams
+ *
+ * A set of parameters used to query the GraphQL Storefront API. Used when the parent widget template is configured to request data directly from the GraphQL Storefront API; in this case, the parent widget template has the `storefront_api_query` property.
+ */
+export type WidgetStorefrontApiQueryParams = {
+    [key: string]: unknown;
+};
+
+/**
+ * WidgetType
+ */
+export type WidgetType = 'widget';
+
+/**
+ * widget
+ */
+export type Widget = {
+    /**
+     * The unique identifier of the parent widget template; set by the store or channel where the widget template originated.
+     */
+    widget_template_uuid?: string;
+    /**
+     * JSON object of necessary configuration to construct a widget.
+     */
+    configuration?: WidgetConfiguration;
+    /**
+     * A set of parameters used to query the GraphQL Storefront API. Used when the parent widget template is configured to request data directly from the GraphQL Storefront API; in this case, the parent widget template has the `storefront_api_query` property.
+     */
+    storefront_api_query_params?: WidgetStorefrontApiQueryParams;
+    /**
+     * A human-readable label for the widget. Retrievable using either the [Get a widget](/developer/api-reference/rest/admin/content/widgets/widget/get-widget) or the [Get all widgets](/developer/api-reference/rest/admin/content/widgets/widget/get-widgets) endpoint.
+     */
+    name?: string;
+    /**
+     * A description of the widget. Retrievable using either the [Get a widget](/developer/api-reference/rest/admin/content/widgets/widget/get-widget) or the [Get all widgets](/developer/api-reference/rest/admin/content/widgets/widget/get-widgets) endpoint.
+     */
+    description?: string;
+    type?: WidgetType;
+};
+
+/**
+ * dropzone
+ */
+export type Dropzone = {
+    /**
+     * JSON object of necessary configuration to construct a dropzone.
+     */
+    configuration?: DropzoneConfiguration;
+    /**
+     * Consists of [widget](#widgets) objects.
+     */
+    widgets?: Array<Widget>;
+};
+
+/**
+ * LayoutType
+ */
+export type LayoutType = 'layout';
+
+/**
+ * layout
+ */
+export type Layout = {
+    /**
+     * Set by BigCommerce. Read-only.
+     */
+    layout_template_uuid?: string;
+    /**
+     * JSON object of necessary configuration to construct a layout.
+     */
+    configuration?: LayoutConfiguration;
+    /**
+     * A human-readable label for the layout; displays in Page Builder.
+     */
+    name?: string;
+    /**
+     * Consists of dropzone objects.
+     */
+    dropzones?: Array<Dropzone>;
+    type?: LayoutType;
+};
+
+/**
+ * RegionChildrenItems
+ */
+export type RegionChildrenItems = Layout | Widget;
+
+/**
+ * region
  */
 export type Region = {
     /**
@@ -34,74 +130,42 @@ export type Region = {
     /**
      * Consists of layout and widget objects.
      */
-    children?: Array<Layout | Widget>;
+    children?: Array<RegionChildrenItems>;
 };
 
 /**
- * Layout object
+ * ContentPageWidgetsGetResponsesContentApplicationJsonSchemaData
  */
-export type Layout = {
-    /**
-     * Set by BigCommerce. Read-only.
-     */
-    readonly layout_template_uuid?: string;
-    /**
-     * A human-readable label for the layout; displays in Page Builder.
-     */
-    name?: string;
-    /**
-     * Consists of dropzone objects.
-     */
-    dropzones?: Array<Dropzone>;
-    type?: 'layout';
+export type ContentPageWidgetsGetResponsesContentApplicationJsonSchemaData = {
+    regions?: Array<Region>;
 };
 
 /**
- * Dropzone object
- */
-export type Dropzone = {
-    /**
-     * Consists of [widget](#widgets) objects.
-     */
-    widgets?: Array<Widget>;
-};
-
-/**
- * Widget object
- */
-export type Widget = {
-    /**
-     * The unique identifier of the parent widget template; set by the store or channel where the widget template originated.
-     */
-    readonly widget_template_uuid?: string;
-    /**
-     * A set of parameters used to query the GraphQL Storefront API. Used when the parent widget template is configured to request data directly from the GraphQL Storefront API; in this case, the parent widget template has the `storefront_api_query` property.
-     */
-    storefront_api_query_params?: {
-        [key: string]: unknown;
-    };
-    /**
-     * A human-readable label for the widget. Retrievable using either the [Get a widget](/docs/rest-content/widgets/widget#get-a-widget) or the [Get all widgets](/docs/rest-content/widgets/widget#get-all-widgets) endpoint.
-     */
-    name?: string;
-    /**
-     * A description of the widget. Retrievable using either the [Get a widget](/docs/rest-content/widgets/widget#get-a-widget) or the [Get all widgets](/docs/rest-content/widgets/widget#get-all-widgets) endpoint.
-     */
-    description?: string;
-    type?: 'widget';
-};
-
-/**
- * Meta object
+ * PaginationLinks
  *
- * Data about the response, including pagination and collection totals.
+ * Pagination links for the previous and next parts of the whole collection.
+ *
  */
-export type MetaCollection = {
-    pagination?: Pagination;
+export type PaginationLinks = {
+    /**
+     * Link to the previous page returned in the response.
+     *
+     */
+    previous?: string;
+    /**
+     * Link to the current page returned in the response.
+     *
+     */
+    current?: string;
+    /**
+     * Link to the next page returned in the response.
+     *
+     */
+    next?: string;
 };
 
 /**
- * Pagination object
+ * pagination
  *
  * Data about the response, including pagination and collection totals.
  *
@@ -136,39 +200,40 @@ export type Pagination = {
      * Pagination links for the previous and next parts of the whole collection.
      *
      */
-    links?: {
-        /**
-         * Link to the previous page returned in the response.
-         *
-         */
-        previous?: string;
-        /**
-         * Link to the current page returned in the response.
-         *
-         */
-        current?: string;
-        /**
-         * Link to the next page returned in the response.
-         *
-         */
-        next?: string;
-    };
+    links?: PaginationLinks;
 };
 
 /**
- * Error response
+ * metaCollection
+ *
+ * Data about the response, including pagination and collection totals.
  */
-export type ErrorResponse = BaseError & {
-    errors?: DetailedErrors;
+export type MetaCollection = {
+    pagination?: Pagination;
 };
 
 /**
- * Base error
+ * Page Widgets_getPageWidgets_Response_200
+ */
+export type PageWidgetsGetPageWidgetsResponse200 = {
+    data?: ContentPageWidgetsGetResponsesContentApplicationJsonSchemaData;
+    meta?: MetaCollection;
+};
+
+/**
+ * DetailedErrors
+ */
+export type DetailedErrors = {
+    [key: string]: unknown;
+};
+
+/**
+ * ErrorResponse
  *
  * Error payload for the BigCommerce API.
  *
  */
-export type BaseError = {
+export type ErrorResponse = {
     /**
      * The HTTP status code.
      *
@@ -181,104 +246,27 @@ export type BaseError = {
     title?: string;
     type?: string;
     instance?: string;
+    errors?: DetailedErrors;
 };
 
 /**
- * Detailed errors
+ * publish
  */
-export type DetailedErrors = {
-    [key: string]: unknown;
+export type Publish = {
+    regions: Array<Region>;
+    /**
+     * The template file that you would like to target. Leave it empty if the request is for Global regions.
+     */
+    template_file?: string;
+    /**
+     * The identifier of a page you would like to target. For product pages, choose product ID. For category pages, choose category ID. Home page does not support `entity_id`. Leave it empty if the request is for Global regions.
+     */
+    entity_id?: string;
+    /**
+     * The id of the channel on which to create this placement. Defaults to the first channel created on the store.
+     */
+    channel_id?: number;
 };
-
-/**
- * Layout object
- */
-export type LayoutWritable = {
-    /**
-     * A human-readable label for the layout; displays in Page Builder.
-     */
-    name?: string;
-    /**
-     * Consists of dropzone objects.
-     */
-    dropzones?: Array<DropzoneWritable>;
-    type?: 'layout';
-};
-
-/**
- * Dropzone object
- */
-export type DropzoneWritable = {
-    /**
-     * Consists of [widget](#widgets) objects.
-     */
-    widgets?: Array<WidgetWritable>;
-};
-
-/**
- * Widget object
- */
-export type WidgetWritable = {
-    /**
-     * A set of parameters used to query the GraphQL Storefront API. Used when the parent widget template is configured to request data directly from the GraphQL Storefront API; in this case, the parent widget template has the `storefront_api_query` property.
-     */
-    storefront_api_query_params?: {
-        [key: string]: unknown;
-    };
-    /**
-     * A human-readable label for the widget. Retrievable using either the [Get a widget](/docs/rest-content/widgets/widget#get-a-widget) or the [Get all widgets](/docs/rest-content/widgets/widget#get-all-widgets) endpoint.
-     */
-    name?: string;
-    /**
-     * A description of the widget. Retrievable using either the [Get a widget](/docs/rest-content/widgets/widget#get-a-widget) or the [Get all widgets](/docs/rest-content/widgets/widget#get-all-widgets) endpoint.
-     */
-    description?: string;
-    type?: 'widget';
-};
-
-/**
- * Detailed errors
- */
-export type DetailedErrorsWritable = {
-    [key: string]: unknown;
-};
-
-/**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
- */
-export type Accept = string;
-
-/**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
- */
-export type ContentType = string;
-
-/**
- * Please specify a user agent to identify your integration or client.
- */
-export type UserAgent = string;
-
-/**
- * An identifier unique to a set of related requests. For use on headless storefronts, excluding BigCommerce for WordPress. For more information, see [Best Practices](/docs/start/best-practices#correlating-requests) or the [Headless Guide](/docs/storefront/headless#correlating-requests).
- */
-export type XCorrelationId = string;
-
-/**
- * The ID of the channel for which you want to retrieve page widgets. Defaults to the first channel created on the store.
- */
-export type ChannelId = number;
-
-/**
- * The template file that you would like to target. Leave it empty if the request is for Global regions.
- */
-export type TemplateFile = string;
-
-/**
- * The identifier of a page you would like to target. For product pages, choose product ID. For category pages, choose category ID. Home page does not support `entity_id`. Leave empty if the request is for global regions.
- */
-export type EntityId = string;
-
-export type PublishOrOverwriteRequest = Publish;
 
 export type GetPageWidgetsData = {
     body?: never;
@@ -288,11 +276,7 @@ export type GetPageWidgetsData = {
          */
         Accept: string;
         /**
-         * Please specify a user agent to identify your integration or client.
-         */
-        'User-Agent': string;
-        /**
-         * An identifier unique to a set of related requests. For use on headless storefronts, excluding BigCommerce for WordPress. For more information, see [Best Practices](/docs/start/best-practices#correlating-requests) or the [Headless Guide](/docs/storefront/headless#correlating-requests).
+         * An identifier unique to a set of related requests. For use on headless storefronts, excluding BigCommerce for WordPress. For more information, see [Best Practices](/developer/docs/storefront/headless#correlating-requests) or the [Headless Guide](/developer/docs/storefront/headless#correlating-requests).
          */
         'X-Correlation-Id'?: string;
     };
@@ -324,35 +308,25 @@ export type GetPageWidgetsErrors = {
 export type GetPageWidgetsError = GetPageWidgetsErrors[keyof GetPageWidgetsErrors];
 
 export type GetPageWidgetsResponses = {
-    200: {
-        data?: {
-            regions?: Array<Region>;
-        };
-        meta?: MetaCollection;
-    };
+    /**
+     * The page snapshot.
+     */
+    200: PageWidgetsGetPageWidgetsResponse200;
 };
 
 export type GetPageWidgetsResponse = GetPageWidgetsResponses[keyof GetPageWidgetsResponses];
 
 export type CreatePageWidgetsData = {
-    body?: PublishOrOverwriteRequest;
+    body?: Publish;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
         /**
-         * Please specify a user agent to identify your integration or client.
-         */
-        'User-Agent': string;
-        /**
-         * An identifier unique to a set of related requests. For use on headless storefronts, excluding BigCommerce for WordPress. For more information, see [Best Practices](/docs/start/best-practices#correlating-requests) or the [Headless Guide](/docs/storefront/headless#correlating-requests).
+         * An identifier unique to a set of related requests. For use on headless storefronts, excluding BigCommerce for WordPress. For more information, see [Best Practices](/developer/docs/storefront/headless#correlating-requests) or the [Headless Guide](/developer/docs/storefront/headless#correlating-requests).
          */
         'X-Correlation-Id'?: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -372,7 +346,9 @@ export type CreatePageWidgetsResponses = {
     /**
      * The request was successful. No response body is returned.
      */
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 
 export type CreatePageWidgetsResponse = CreatePageWidgetsResponses[keyof CreatePageWidgetsResponses];

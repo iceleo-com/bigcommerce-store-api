@@ -1,168 +1,206 @@
-openapi: '3.0.1'
+openapi: 3.1.0
 info:
-  title: Storefront Token
-  description: |-
-    Get and manage tokens used to authenticate cross-origin requests to the [GraphQL Storefront API](/docs/storefront/graphql).
-
-    ## [API tokens](/docs/rest-authentication/tokens#create-a-token)
-
-    Generate tokens (JWT) for authenticating cross-origin requests to the [GraphQL Storefront API](/docs/storefront/graphql). To [create a token](/docs/rest-authentication/tokens#create-a-token), send a `POST` request to `/stores/{{STORE_HASH}}/v3/storefront/api-token`.
-
-    ```http
-    POST https://api.bigcommerce.com/stores/{{STORE_HASH}}/v3/storefront/api-token
-    X-Auth-Token: {{ACCESS_TOKEN}}
-    Content-Type: application/json
-    Accept: application/json
-
-    {
-      "channel_id": 1,
-      "expires_at": 1602288000,
-      "allowed_cors_origins": 
-        ["https://store.example.com"]
-      
-    }
-    ```
-
-    |Property|Type|Description|
-    |-|-|-|
-    |`channel_id`|int| Must be a valid channel ID on the store (required) |
-    |`expires_at`|int| Unix timestamp in seconds (required). Does not support milliseconds, microseconds, or nanoseconds. |
-    |`allowed_cors_origins`|array[str]| Allowed origins for cross origin requests (required) |
-
-    [**Response:**](/docs/rest-authentication/tokens#create-a-token)
-
-    ```json
-    {
-      "token":"...eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9...",
-      "meta": {
-        // ...
-      }
-    }
-    ```
-
-
-
-    ## [Customer impersonation tokens](/docs/rest-authentication/tokens/customer-impersonation-token#create-a-token)
-
-    Generate tokens that can make queries from the perspective of a particular customer in headless or server-side code using the [GraphQL Storefront API](/docs/storefront/graphql#customer-impersonation-tokens). To [create a customer impersonation token](/docs/rest-authentication/tokens/customer-impersonation-token#create-a-token), send a `POST` request to `/v3/storefront/api-token-customer-impersonation`.
-
-    ```http
-    POST https://api.bigcommerce.com/stores/{STORE_HASH}/v3/storefront/api-token-customer-impersonation
-    X-Auth-Token: {{ACCESS_TOKEN}}
-    Accept: application/json
-    Content-Type: application/json
-    ```
-
-    [**Response:**](/docs/rest-authentication/tokens/customer-impersonation-token#create-a-token)
-
-    ```json
-    {
-      "data":
-      {
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-      }
-      "meta": {}
-    }
-    ```
-
-    Customer impersonation token authenticated requests made to the GraphQL API receive store information from the perspective of the customer with the ID specified in the `X-Bc-Customer-Id` header sent with the GraphQL `POST` request. Pricing, product availability, customer account, and customer details will be reflected. Consider this sample request using a [customer impersonation token](/docs/rest-authentication/tokens/customer-impersonation-token#create-a-token) to run a request in the context of customer ID `123`.
-
-    ```http
-    POST https://store.example.com/graphql
-    Authorization: Bearer {{CUSTOMER_IMPERSONATION_TOKEN}}
-    X-Bc-Customer-Id: 123
-
-    {
-        "query": "query CustomerInformation {\n  customer {\n    firstName\n    lastName\n    email\n  }\n}"
-    }
-    ```
-
-
-    > #### Warning
-    > * Customer impersonation tokens should **never** be exposed publicly, for example, to JavaScript or HTML. These tokens should **not** be used for frontend requests.
-    > * Unlike normal GraphQL API tokens, these tokens are sensitive and should be treated like secrets, just as you might treat an OAuth token.
-    > * Attempts to run requests using these tokens from a web browser will be rejected.
-
-
-    ## Revoking tokens
-    To [revoke a token](/docs/rest-authentication/tokens#revoke-a-token), send a `DELETE` request to `/v3/storefront/api-token`.
-
-    ```http
-    DELETE /stores/{{STORE_HASH}}/v3/storefront/api-token-customer-impersonation
-    host: api.bigcommerce.com
-    x-Auth-Token: {{ACCESS_TOKEN}}
-    Sf-Api-Token: {{CUSTOMER_ID}}
-    ```
-
-    ## Additional information
-
-    * [GraphQL API Overview](/docs/storefront/graphql)
-  termsOfService: 'https://www.bigcommerce.com/terms'
-  contact:
-    name: BigCommerce
-    url: 'https://www.bigcommerce.com'
-    email: support@bigcommerce.com
-  version: ''
-servers:
-  - url: 'https://api.bigcommerce.com/stores/{store_hash}/v3'
-    variables:
-      store_hash:
-        default: store_hash
-        description: Permanent ID of the BigCommerce store.
-    description: BigCommerce API Gateway
-security:
-  - X-Auth-Token: []
-tags:
-  - name: API Token
-  - name: Customer Impersonation Token
+  title: 'Admin Authentication: Storefront API Tokens'
+  version: 1.0.0
 paths:
-  '/storefront/api-token':
-    parameters:
-      - $ref: '#/components/parameters/Accept'
-    post:
-      tags:
-        - API Token
-      summary: Create a Token
-      description: |-
-        Creates a Storefront API token.
+  /stores/{store_hash}/v3/storefront/api-token:
+    get:
+      operationId: apiToken_listTokens
+      summary: List tokens
+      description: >-
+        Returns a paginated list of the storefront API tokens your API account has issued. The token's JWT string is
+        never returned; each entry includes a `jti` identifier that you use to revoke the token, as well as `is_revoked`
+        and `is_expired` flags. Revoked and expired tokens are included in the list.
+
 
         **Required Scopes**
+
         * `Manage` `Storefront API Tokens`
-      operationId: createToken
+
+
+        > NOTE: This endpoint only returns tokens issued by the API account making the request, and only tokens of the
+        family named in its path segment. Tokens issued by another API account are never returned. Customer
+        impersonation tokens require the `Storefront API Customer Impersonation Tokens` scope and are never returned
+        here.
+      tags:
+        - apiToken
       parameters:
-        - $ref: '#/components/parameters/ContentType'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/TokenPostSimple'
-                - $ref: '#/components/schemas/TokenPostImpersonation'
-        required: false
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: The page of results to return.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: The number of results to return per page. Values above 250 are capped at 250.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 250
+            default: 50
+        - name: sort
+          in: query
+          description: The field to sort the results by.
+          required: false
+          schema:
+            $ref: '#/components/schemas/StorefrontApiTokenGetParametersSort'
+            default: issued_at
+        - name: direction
+          in: query
+          description: The direction to sort the results by.
+          required: false
+          schema:
+            $ref: '#/components/schemas/StorefrontApiTokenGetParametersDirection'
+            default: asc
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
       responses:
         '200':
-          description: ''
+          description: A paginated list of issued tokens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssuedTokens_Response'
+        '422':
+          description: Unrecognized `sort` field, `direction` value, or query parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - X-Auth-Token: []
+    post:
+      operationId: apiToken_createToken
+      summary: Create a token
+      description: >-
+        Creates a Storefront API token. This endpoint creates storefront tokens that support CORS via
+        `allowed_cors_origins` and are intended for browser-based applications.
+
+
+        For server-to-server integrations, you must use the [private token
+        endpoint](/developer/api-reference/rest/admin/authentication-apis/storefront-api-tokens/private-api-token/create-private-token)
+        instead.
+
+
+        **Required Scopes**
+
+        * `Manage` `Storefront API Tokens`
+
+
+        > NOTE: While neither `channel_id` nor `channel_ids` is labelled as required, one must be included in the
+        request body. Including neither will throw an error, and including both will result in unexpected behaviors.
+      tags:
+        - apiToken
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
+          description: The newly created storefront API token.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Token_Full'
-        '401':
-          description: Unauthorized - the v3 Auth client ID or token in the request are not a valid combination for this store.
-          content: {}
-        '403':
-          description: Missing scope - the v3 Auth token is valid but does not have proper permissions to access this endpoint.
-          content: {}
-        '422':
-          description: Invalid JSON request body - missing or invalid data.
-          content: {}
-      x-codegen-request-body-name: body
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                allowed_cors_origins:
+                  type: array
+                  items:
+                    type: string
+                    minLength: 1
+                  description: >-
+                    List of allowed domains for Cross-Origin Request Sharing. Currently accepts a maximum of two domains
+                    per created token.
+                expires_at:
+                  type: integer
+                  minimum: 0
+                  description: >-
+                    Unix timestamp (UTC time) defining when the token should expire. Supports seconds, but does not
+                    support milliseconds, microseconds, or nanoseconds.
+                name:
+                  type: string
+                  maxLength: 120
+                  description: >-
+                    Optional label for the token. Surfaced by the list endpoints to help you identify tokens. Trimmed
+                    server-side and never included in the JWT. Must not contain 4-byte characters such as emoji.
+                channel_ids:
+                  type: array
+                  items:
+                    type: integer
+                  description: >-
+                    A list of channel IDs that are valid for the requested token. Use this field for one or more channel
+                    IDs. One of `channel_id` or `channel_ids` is required; including neither returns an error, and
+                    including both results in unexpected behavior.
+                channel_id:
+                  type: integer
+                  minimum: 1
+                  description: >-
+                    Channel ID that is valid for the requested token. Use this field to enter a single channel ID. We
+                    support this field for backwards compatibility, but `channel_ids` is preferred. One of `channel_id`
+                    or `channel_ids` is required; including neither returns an error, and including both results in
+                    unexpected behavior.
+              required:
+                - expires_at
+      security:
+        - X-Auth-Token: []
     delete:
+      operationId: apiToken_revokeToken
+      summary: Revoke a token
+      description: >-
+        Revoke access for a storefront API token or a private API token. Only revoke compromised tokens under emergency
+        situations. Let uncompromised short-lived tokens expire naturally, as you do not need to revoke these.
       tags:
-        - API Token
-      summary: Revoke a Token
-      description: Revoke access for a Storefront API token. Only revoke compromised tokens under emergency situations. Let uncompromised short-lived tokens expire naturally, as you do not need to revoke these.
-      operationId: revokeToken
+        - apiToken
       parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
         - name: Sf-Api-Token
           in: header
           description: An existing JWT token that you want to revoke.
@@ -171,135 +209,828 @@ paths:
             type: string
       responses:
         '200':
-          description: A storefront API token revocation has been scheduled.
-          content: {}
-        '401':
-          description: Unauthorized - the v3 Auth client ID or token in the request are not a valid combination for this store.
-          content: {}
-        '403':
-          description: Missing scope - the v3 Auth token is valid but does not have proper permissions to access this endpoint.
-          content: {}
+          description: A storefront API token or private API token revocation has been scheduled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API_Token_revokeToken_Response_200'
         '422':
-          description: Invalid JWT Token provided or missing JWT token header
-          content: {}
-  '/storefront/api-token-customer-impersonation':
-    parameters:
-      - $ref: '#/components/parameters/Accept'
-    post:
-      tags:
-        - Customer Impersonation Token
-      summary: Create a Token
-      description: |-
-        Returns a Storefront API token that allows your application to impersonate customers when making GraphQL `POST` requests. For more information on how to use the returned token, see [customer impersonation tokens](/docs/rest-authentication/tokens/customer-impersonation-token#create-a-token).
+          description: >-
+            One of the following:
+
+            * The `Sf-Api-Token` header is missing (`Sf-Api-Token header has to be provided.`).
+
+            * The supplied JWT is invalid.
+
+            * The supplied token was issued by a different API account (`The token doesn't belong to the client`).
+
+            * The store has reached its limit of revoked tokens (`Store cannot revoke more tokens. Limit # of revoked
+            tokens already reached.`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/storefront/api-token/{jti}:
+    delete:
+      operationId: apiToken_revokeTokenByJti
+      summary: Revoke a token by ID
+      description: >-
+        Revokes a single storefront API token identified by its `jti`. You do not need the token's JWT string to revoke
+        it - only the `jti` returned by the [List tokens](#operation/listTokens) endpoint.
+
+
+        You can only revoke tokens that your own API account issued through this token family. Supplying a `jti` issued
+        by a different API account, or belonging to a different token family, returns `404 Not Found`.
+
+
+        Each store can hold a limited number of revoked tokens that have not yet expired. Once that limit is reached,
+        this endpoint returns `422 Unprocessable Entity` until some revoked tokens expire. The revoke-all endpoint is
+        not subject to this limit.
+
+
+        Revocation can take up to approximately 60 seconds to fully propagate because revoked identifiers are held in a
+        short-lived cache, so a revoked token may briefly continue to authenticate.
+
 
         **Required Scopes**
-        * `Manage` `Storefront API Customer Impersonation Tokens`
-      operationId: createTokenWithCustomerImpersonation
+
+        * `Manage` `Storefront API Tokens`
+      tags:
+        - apiToken
       parameters:
-        - $ref: '#/components/parameters/ContentType'
+        - name: jti
+          in: path
+          description: Unique identifier (the JWT `jti` claim) of the token to revoke.
+          required: true
+          schema:
+            type: string
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '204':
+          description: The token has been revoked.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: The `jti` path parameter is blank (`jti cannot be blank`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: >-
+            No token with the supplied `jti` was issued by this API account in this token family (`No token found for
+            the supplied jti.`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: >-
+            The store has reached its limit of revoked tokens that have not yet expired (`Store cannot revoke more
+            tokens. Limit # of revoked jtis already reached.`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/storefront/api-token/revoke-all:
+    post:
+      operationId: apiToken_revokeAllTokens
+      summary: Revoke all tokens
+      description: >-
+        Revokes every active storefront API token that your API account has issued. Only tokens issued by the API
+        account making the request are revoked, and only tokens in this family (matching the path segment); tokens
+        issued by another API account and tokens of other families are unaffected.
+
+
+        Revocation can take up to approximately 60 seconds to fully propagate because revoked identifiers are held in a
+        short-lived cache, so a revoked token may briefly continue to authenticate.
+
+
+        **Required Scopes**
+
+        * `Manage` `Storefront API Tokens`
+      tags:
+        - apiToken
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '204':
+          description: All storefront API tokens issued by this API account have been revoked.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/storefront/api-token-customer-impersonation:
+    get:
+      operationId: customerImpersonationToken_listCustomerImpersonationTokens
+      summary: List customer impersonation tokens
+      description: >-
+        Returns a paginated list of the customer impersonation tokens your API account has issued. The token's JWT
+        string is never returned; each entry includes a `jti` identifier that you use to revoke the token, as well as
+        `is_revoked` and `is_expired` flags. Revoked and expired tokens are included in the list.
+
+
+        **Required Scopes**
+
+        * `Manage` `Storefront API Customer Impersonation Tokens`
+
+
+        > NOTE: This endpoint only returns customer impersonation tokens issued by the API account making the request.
+        Tokens issued by another API account are never returned. Storefront and private tokens require the `Storefront
+        API Tokens` scope and are never returned here.
+      tags:
+        - customerImpersonationToken
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: The page of results to return.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: The number of results to return per page. Values above 250 are capped at 250.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 250
+            default: 50
+        - name: sort
+          in: query
+          description: The field to sort the results by.
+          required: false
+          schema:
+            $ref: '#/components/schemas/StorefrontApiTokenCustomerImpersonationGetParametersSort'
+            default: issued_at
+        - name: direction
+          in: query
+          description: The direction to sort the results by.
+          required: false
+          schema:
+            $ref: '#/components/schemas/StorefrontApiTokenCustomerImpersonationGetParametersDirection'
+            default: asc
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
+          description: A paginated list of issued tokens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssuedTokens_Response'
+        '422':
+          description: Unrecognized `sort` field, `direction` value, or query parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - X-Auth-Token: []
+    post:
+      operationId: customerImpersonationToken_createTokenWithCustomerImpersonation
+      summary: Create a token
+      description: >-
+        Returns a Storefront API token that allows your application to impersonate customers when making GraphQL `POST`
+        requests. For more information on how to use the returned token, see [customer impersonation
+        tokens](/developer/docs/storefront/guides/graphql-storefront-api/authentication#customer-impersonation-tokens).
+
+
+        **Required Scopes**
+
+        * `Manage` `Storefront API Customer Impersonation Tokens`
+
+
+        > NOTE: While neither `channel_id` nor `channel_ids` is labelled as required, one must be included in the
+        request body. Including neither will throw an error, and including both will result in unexpected behaviors.
+      tags:
+        - customerImpersonationToken
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
+          description: The newly created customer impersonation token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token_Full'
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/TokenPostImpersonation'
-        required: false
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/storefront/api-token-customer-impersonation/{jti}:
+    delete:
+      operationId: customerImpersonationToken_revokeCustomerImpersonationTokenByJti
+      summary: Revoke a customer impersonation token by ID
+      description: >-
+        Revokes a single customer impersonation token identified by its `jti`. You do not need the token's JWT string to
+        revoke it - only the `jti` returned by the [List customer impersonation
+        tokens](#operation/listCustomerImpersonationTokens) endpoint.
+
+
+        You can only revoke tokens that your own API account issued through this token family. Supplying a `jti` issued
+        by a different API account, or belonging to a different token family, returns `404 Not Found`.
+
+
+        Each store can hold a limited number of revoked tokens that have not yet expired. Once that limit is reached,
+        this endpoint returns `422 Unprocessable Entity` until some revoked tokens expire. The revoke-all endpoint is
+        not subject to this limit.
+
+
+        Revocation can take up to approximately 60 seconds to fully propagate because revoked identifiers are held in a
+        short-lived cache, so a revoked token may briefly continue to authenticate.
+
+
+        **Required Scopes**
+
+        * `Manage` `Storefront API Customer Impersonation Tokens`
+      tags:
+        - customerImpersonationToken
+      parameters:
+        - name: jti
+          in: path
+          description: Unique identifier (the JWT `jti` claim) of the token to revoke.
+          required: true
+          schema:
+            type: string
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '204':
+          description: The token has been revoked.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: The `jti` path parameter is blank (`jti cannot be blank`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: >-
+            No token with the supplied `jti` was issued by this API account in this token family (`No token found for
+            the supplied jti.`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: >-
+            The store has reached its limit of revoked tokens that have not yet expired (`Store cannot revoke more
+            tokens. Limit # of revoked jtis already reached.`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/storefront/api-token-customer-impersonation/revoke-all:
+    post:
+      operationId: customerImpersonationToken_revokeAllCustomerImpersonationTokens
+      summary: Revoke all customer impersonation tokens
+      description: >-
+        Revokes every active customer impersonation token that your API account has issued. Only tokens issued by the
+        API account making the request are revoked, and only tokens in this family (matching the path segment); tokens
+        issued by another API account and tokens of other families are unaffected.
+
+
+        Revocation can take up to approximately 60 seconds to fully propagate because revoked identifiers are held in a
+        short-lived cache, so a revoked token may briefly continue to authenticate.
+
+
+        **Required Scopes**
+
+        * `Manage` `Storefront API Customer Impersonation Tokens`
+      tags:
+        - customerImpersonationToken
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '204':
+          description: All customer impersonation tokens issued by this API account have been revoked.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/storefront/api-token-private:
+    get:
+      operationId: privateApiToken_listPrivateTokens
+      summary: List private tokens
+      description: >-
+        Returns a paginated list of the private API tokens your API account has issued. The token's JWT string is never
+        returned; each entry includes a `jti` identifier that you use to revoke the token, as well as `is_revoked` and
+        `is_expired` flags. Revoked and expired tokens are included in the list.
+
+
+        **Required Scopes**
+
+        * `Manage` `Storefront API Tokens`
+
+
+        > NOTE: This endpoint only returns tokens issued by the API account making the request, and only tokens of the
+        family named in its path segment. Tokens issued by another API account are never returned. Customer
+        impersonation tokens require the `Storefront API Customer Impersonation Tokens` scope and are never returned
+        here.
+      tags:
+        - privateApiToken
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: The page of results to return.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: The number of results to return per page. Values above 250 are capped at 250.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 250
+            default: 50
+        - name: sort
+          in: query
+          description: The field to sort the results by.
+          required: false
+          schema:
+            $ref: '#/components/schemas/StorefrontApiTokenPrivateGetParametersSort'
+            default: issued_at
+        - name: direction
+          in: query
+          description: The direction to sort the results by.
+          required: false
+          schema:
+            $ref: '#/components/schemas/StorefrontApiTokenPrivateGetParametersDirection'
+            default: asc
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
       responses:
         '200':
-          description: ''
+          description: A paginated list of issued tokens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssuedTokens_Response'
+        '422':
+          description: Unrecognized `sort` field, `direction` value, or query parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - X-Auth-Token: []
+    post:
+      operationId: privateApiToken_createPrivateToken
+      summary: Create a private API token
+      description: >-
+        Creates a private token for server-to-server integrations. Private tokens are always stateless (no session
+        required) and provide better performance for server-to-server use cases. The API will reject private
+        token-authenticated requests that originate from web browsers.
+
+
+        **Required Scopes**
+
+        * `Manage` `Storefront API Tokens`
+
+
+        > NOTE: While neither `channel_id` nor `channel_ids` is labelled as required, one must be included in the
+        request body. Including neither will throw an error, and including both will result in unexpected behaviors.
+      tags:
+        - privateApiToken
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
+          description: The newly created private storefront API token.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Token_Full'
-        '401':
-          description: Unauthorized - the v3 Auth client ID or token in the request are not a valid combination for this store.
-          content: {}
-        '403':
-          description: Missing scope - the v3 Auth token is valid but does not have proper permissions to access this endpoint.
-          content: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenPostPrivate'
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/storefront/api-token-private/{jti}:
+    delete:
+      operationId: privateApiToken_revokePrivateTokenByJti
+      summary: Revoke a private token by ID
+      description: >-
+        Revokes a single private API token identified by its `jti`. You do not need the token's JWT string to revoke it
+        - only the `jti` returned by the [List private tokens](#operation/listPrivateTokens) endpoint.
+
+
+        You can only revoke tokens that your own API account issued through this token family. Supplying a `jti` issued
+        by a different API account, or belonging to a different token family, returns `404 Not Found`.
+
+
+        Each store can hold a limited number of revoked tokens that have not yet expired. Once that limit is reached,
+        this endpoint returns `422 Unprocessable Entity` until some revoked tokens expire. The revoke-all endpoint is
+        not subject to this limit.
+
+
+        Revocation can take up to approximately 60 seconds to fully propagate because revoked identifiers are held in a
+        short-lived cache, so a revoked token may briefly continue to authenticate.
+
+
+        **Required Scopes**
+
+        * `Manage` `Storefront API Tokens`
+      tags:
+        - privateApiToken
+      parameters:
+        - name: jti
+          in: path
+          description: Unique identifier (the JWT `jti` claim) of the token to revoke.
+          required: true
+          schema:
+            type: string
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '204':
+          description: The token has been revoked.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: The `jti` path parameter is blank (`jti cannot be blank`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: >-
+            No token with the supplied `jti` was issued by this API account in this token family (`No token found for
+            the supplied jti.`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '422':
-          description: Invalid JSON request body - missing or invalid data
-          content: {}
+          description: >-
+            The store has reached its limit of revoked tokens that have not yet expired (`Store cannot revoke more
+            tokens. Limit # of revoked jtis already reached.`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/storefront/api-token-private/revoke-all:
+    post:
+      operationId: privateApiToken_revokeAllPrivateTokens
+      summary: Revoke all private tokens
+      description: >-
+        Revokes every active private API token that your API account has issued. Only tokens issued by the API account
+        making the request are revoked, and only tokens in this family (matching the path segment); tokens issued by
+        another API account and tokens of other families are unaffected.
+
+
+        Revocation can take up to approximately 60 seconds to fully propagate because revoked identifiers are held in a
+        short-lived cache, so a revoked token may briefly continue to authenticate.
+
+
+        **Required Scopes**
+
+        * `Manage` `Storefront API Tokens`
+      tags:
+        - privateApiToken
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '204':
+          description: All private API tokens issued by this API account have been revoked.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      security:
+        - X-Auth-Token: []
+tags:
+  - name: apiToken
+    description: Create, list, and revoke storefront API tokens for browser-based access to the GraphQL Storefront API.
+  - name: customerImpersonationToken
+    description: >-
+      Create, list, and revoke customer impersonation tokens for querying the GraphQL Storefront API from a specific
+      customer's perspective.
+  - name: privateApiToken
+    description: Create, list, and revoke private storefront API tokens for server-to-server access to the GraphQL Storefront API.
+servers:
+  - url: https://api.bigcommerce.com
+    description: https://api.bigcommerce.com
 components:
-  parameters:
-    Accept:
-      name: Accept
-      in: header
-      required: true
-      description: 'The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.'
-      schema:
-        type: string
-        default: 'application/json'
-    ContentType:
-      name: Content-Type
-      in: header
-      required: true
-      description: 'The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.'
-      schema:
-        type: string
-        default: 'application/json'
   schemas:
-    TokenPostImpersonation:
+    StorefrontApiTokenGetParametersSort:
+      type: string
+      enum:
+        - issued_at
+        - expires_at
+      default: issued_at
+      title: StorefrontApiTokenGetParametersSort
+    StorefrontApiTokenGetParametersDirection:
+      type: string
+      enum:
+        - asc
+        - desc
+      default: asc
+      title: StorefrontApiTokenGetParametersDirection
+    IssuedTokenType:
+      type: string
+      enum:
+        - simple
+        - private
+        - customer_impersonation
+      description: The token family.
+      title: IssuedTokenType
+    IssuedTokenScopesItems:
+      type: string
+      enum:
+        - Unauthenticated
+        - Customer
+        - B2B
+      title: IssuedTokenScopesItems
+    IssuedTokenPrincipal:
       type: object
-      x-internal: false
-      x-examples: {}
       properties:
-        channel_id:
+        id:
+          type: string
+          description: ID of the principal that created the token. For an API account, this is the client ID.
+        type:
+          type: string
+          description: Type of the principal that created the token.
+      description: The identity that created the token. Only present when available.
+      title: IssuedTokenPrincipal
+    IssuedToken:
+      type: object
+      properties:
+        jti:
+          type: string
+          description: Unique token identifier (the JWT `jti` claim). Use this value to revoke the token.
+        type:
+          $ref: '#/components/schemas/IssuedTokenType'
+          description: The token family.
+        name:
+          type: string
+          maxLength: 120
+          description: Optional label set by the store owner. Only present when set. Never included in the JWT.
+        channel_ids:
+          type: array
+          items:
+            type: integer
+          description: Channel IDs the token is valid for.
+        allowed_cors_origins:
+          type: array
+          items:
+            type: string
+          description: Allowed CORS origins for the token. Empty for private and customer impersonation tokens.
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssuedTokenScopesItems'
+          description: Access scopes granted to the token. Populated for private tokens; empty for other token types.
+        is_revoked:
+          type: boolean
+          description: Whether the token has been revoked.
+        is_expired:
+          type: boolean
+          description: >-
+            Whether the token has expired, evaluated against the server clock when the request is served. A token counts
+            as expired from its `expires_at` second onward, matching the JWT `exp` semantics. Independent of
+            `is_revoked`.
+        principal:
+          $ref: '#/components/schemas/IssuedTokenPrincipal'
+          description: The identity that created the token. Only present when available.
+        issued_at:
           type: integer
-          minimum: 1
-          description: Channel ID for requested token
-          example: 1
+          format: int64
+          description: Unix timestamp (UTC, seconds) when the token was issued. Only present when available.
         expires_at:
           type: integer
-          description: Unix timestamp (UTC time) defining when the token should expire. Supports seconds, but does not support milliseconds, microseconds, or nanoseconds.
-          example: 1885635176
-          minimum: 0
+          format: int64
+          description: Unix timestamp (UTC, seconds) when the token expires. Only present when set.
+        revoked_at:
+          type: integer
+          format: int64
+          description: Unix timestamp (UTC, seconds) when the token was revoked. Only present for revoked tokens.
       required:
-        - channel_id
-        - expires_at
-    TokenPostSimple:
+        - jti
+        - type
+        - channel_ids
+        - allowed_cors_origins
+        - scopes
+        - is_revoked
+        - is_expired
+      description: >-
+        A storefront API token issued by the requesting API account. The JWT string is never returned; use the `jti` to
+        revoke the token.
+      title: IssuedToken
+    MetaPaginationObjectPagination:
       type: object
       properties:
-        allowed_cors_origins:
-          maxItems: 1
-          minItems: 1
-          type: array
-          description: List of allowed domains for Cross-Origin Request Sharing. Currently only accepts a single element.
-          items:
-            maxLength: 1
-            minLength: 1
-            pattern: '/^https?:\/\/(?=.{1,254}(?::|$))(?:(?!\d|-)(?![a-z0-9\-]{1,62}-(?:\.|:|$))[a-z0-9\-]{1,63}\b(?!\.$)\.?)+(:\d+)?$/i;'
-            type: string
-      x-internal: false
-      x-examples:
-        example-1:
-          allowed_cors_origins:
-            - 'https://www.yourstorefront.com/'
-    Token_Full:
+        total:
+          type: integer
+          description: Total number of items in the result set.
+        count:
+          type: integer
+          description: Number of items returned in the current page.
+        per_page:
+          type: integer
+          description: Number of items returned per page.
+        current_page:
+          type: integer
+          description: The current page number.
+        total_pages:
+          type: integer
+          description: Total number of pages in the result set.
+      title: MetaPaginationObjectPagination
+    MetaPaginationObject:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/MetaPaginationObjectPagination'
+      description: Data about the response, including pagination.
+      title: MetaPaginationObject
+    IssuedTokens_Response:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/Token_Base'
+          type: array
+          items:
+            $ref: '#/components/schemas/IssuedToken'
         meta:
-          type: object
-          properties: {}
-          additionalProperties: true
-          description: Response metadata.
-    Token_Base:
+          $ref: '#/components/schemas/MetaPaginationObject'
+      title: IssuedTokens_Response
+    DetailedErrors:
       type: object
-      properties:
-        token:
-          type: string
-          description: JWT Token for accessing the Storefront API
-      x-internal: false
+      properties: {}
+      title: DetailedErrors
     ErrorResponse:
-      allOf:
-        - $ref: '#/components/schemas/BaseError'
-        - type: object
-          properties:
-            errors:
-              $ref: '#/components/schemas/DetailedErrors'
-      x-internal: false
-    BaseError:
       type: object
       properties:
         status:
@@ -312,45 +1043,181 @@ components:
             The error title describing the particular error.
         type:
           type: string
+        errors:
+          $ref: '#/components/schemas/DetailedErrors'
       description: |
         Error payload for the BigCommerce API.
-      x-internal: false
-    DetailedErrors:
+      title: ErrorResponse
+    Token_Base:
       type: object
-      additionalProperties:
-        type: string
-      x-internal: false
-  responses:
-    TokenResponse:
-      description: ''
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Token_Full'
+      properties:
+        token:
+          type: string
+          description: JWT Token for accessing the Storefront API
+      title: Token_Base
+    TokenFullMeta:
+      type: object
+      properties: {}
+      description: Response metadata.
+      title: TokenFullMeta
+    Token_Full:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Token_Base'
+        meta:
+          $ref: '#/components/schemas/TokenFullMeta'
+          description: Response metadata.
+      title: Token_Full
+    API_Token_revokeToken_Response_200:
+      type: object
+      properties: {}
+      description: Empty response body
+      title: API Token_revokeToken_Response_200
+    StorefrontApiTokenCustomerImpersonationGetParametersSort:
+      type: string
+      enum:
+        - issued_at
+        - expires_at
+      default: issued_at
+      title: StorefrontApiTokenCustomerImpersonationGetParametersSort
+    StorefrontApiTokenCustomerImpersonationGetParametersDirection:
+      type: string
+      enum:
+        - asc
+        - desc
+      default: asc
+      title: StorefrontApiTokenCustomerImpersonationGetParametersDirection
+    TokenPostImpersonation:
+      type: object
+      properties:
+        channel_ids:
+          type: array
+          items:
+            type: integer
+          description: >-
+            A list of channel IDs that are valid for the requested token. Use this field for one or more channel IDs.
+            One of `channel_id` or `channel_ids` is required; including neither returns an error, and including both
+            results in unexpected behavior.
+        channel_id:
+          type: integer
+          minimum: 1
+          description: >-
+            Channel ID that is valid for the requested token. Use this field to enter a single channel ID. We support
+            this field for backwards compatibility, but `channel_ids` is preferred. One of `channel_id` or `channel_ids`
+            is required; including neither returns an error, and including both results in unexpected behavior.
+        expires_at:
+          type: integer
+          minimum: 0
+          description: >-
+            Unix timestamp (UTC time) defining when the token should expire. Supports seconds, but does not support
+            milliseconds, microseconds, or nanoseconds.
+        name:
+          type: string
+          maxLength: 120
+          description: >-
+            Optional label for the token. Surfaced by the list endpoints to help you identify tokens. Trimmed
+            server-side and never included in the JWT. Must not contain 4-byte characters such as emoji.
+      required:
+        - expires_at
+      title: TokenPostImpersonation
+    StorefrontApiTokenPrivateGetParametersSort:
+      type: string
+      enum:
+        - issued_at
+        - expires_at
+      default: issued_at
+      title: StorefrontApiTokenPrivateGetParametersSort
+    StorefrontApiTokenPrivateGetParametersDirection:
+      type: string
+      enum:
+        - asc
+        - desc
+      default: asc
+      title: StorefrontApiTokenPrivateGetParametersDirection
+    TokenPostPrivateScopesItems:
+      type: string
+      enum:
+        - Unauthenticated
+        - Customer
+        - B2B
+      title: TokenPostPrivateScopesItems
+    TokenPostPrivate:
+      type: object
+      properties:
+        expires_at:
+          type: integer
+          minimum: 0
+          description: >-
+            Unix timestamp (UTC time) defining when the token should expire. Supports seconds, but does not support
+            milliseconds, microseconds, or nanoseconds.
+        name:
+          type: string
+          maxLength: 120
+          description: >-
+            Optional label for the token. Surfaced by the list endpoints to help you identify tokens. Trimmed
+            server-side and never included in the JWT. Must not contain 4-byte characters such as emoji.
+        channel_ids:
+          type: array
+          items:
+            type: integer
+          description: >-
+            A list of channel IDs that are valid for the requested token. Use this field for one or more channel IDs.
+            One of `channel_id` or `channel_ids` is required; including neither returns an error, and including both
+            results in unexpected behavior.
+        channel_id:
+          type: integer
+          minimum: 1
+          description: >-
+            Channel ID that is valid for the requested token. Use this field to enter a single channel ID. We support
+            this field for backwards compatibility, but `channel_ids` is preferred. One of `channel_id` or `channel_ids`
+            is required; including neither returns an error, and including both results in unexpected behavior.
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenPostPrivateScopesItems'
+          description: >-
+            Access scope identifiers. Required for private tokens. Include all scopes required by the GraphQL fields you
+            need.
+      required:
+        - expires_at
+        - scopes
+      title: TokenPostPrivate
   securitySchemes:
     X-Auth-Token:
       type: apiKey
-      description: |-
+      in: header
+      name: X-Auth-Token
+      description: >-
         ### OAuth scopes
 
+
         | UI Name | Permission | Parameter |
+
         |:--------|:-----------|:----------|
+
         | Storefront API Customer Impersonation Tokens | manage | `store_storefront_api_customer_impersonation` |
+
         | Storefront API Tokens | manage | `store_storefront_api` |
 
+
         ### Authentication header
-        
+
+
         | Header | Argument | Description |
+
         |:-------|:---------|:------------|
-        | `X-Auth-Token` | `access_token` | For more about API accounts that generate `access_token`s, see our [Guide to API Accounts](/docs/start/authentication/api-accounts). |
+
+        | `X-Auth-Token` | `access_token` | For more about API accounts that generate `access_token`s, see our [Guide to
+        API Accounts](/developer/docs/overview/api-fundamentals/api-accounts). |
+
 
         ### Further reading
-        
-        For example requests and more information about authenticating BigCommerce APIs, see [Authentication and Example Requests](/docs/start/authentication#x-auth-token-header-example-requests).
-        
-        For more about BigCommerce OAuth scopes, see our [Guide to API Accounts](/docs/start/authentication/api-accounts#oauth-scopes).
-        
-        For a list of API status codes, see [API Status Codes](/docs/start/about/status-codes).
-      name: X-Auth-Token
-      in: header
 
+
+        For example requests and more information about authenticating BigCommerce APIs, see [Authentication and Example
+        Requests](/developer/docs/overview/api-fundamentals/api-accounts).
+
+
+        For more about BigCommerce OAuth scopes, see our [Guide to API
+        Accounts](/developer/docs/overview/api-fundamentals/api-accounts#oauth-scopes).

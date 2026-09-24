@@ -1,16 +1,20 @@
 export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
+export type ResponseConnectionDataTarget = {
+    country_codes?: Array<string>;
+    subdivision_codes?: Array<string>;
+};
+export type ResponseConnectionData = {
+    username?: string;
+    configured?: boolean;
+    profile?: string;
+    target?: ResponseConnectionDataTarget;
+};
 export type ResponseConnection = {
-    data?: {
-        username?: string;
-        configured?: boolean;
-    };
+    data?: ResponseConnectionData;
 };
-export type Accept = string;
-export type ContentType = string;
-export type ProviderId = string;
-export type ProviderConnectionDeleteData = {
+export type DeleteTaxProviderConnectionData = {
     body?: never;
     headers: {
         Accept: string;
@@ -21,14 +25,14 @@ export type ProviderConnectionDeleteData = {
     query?: never;
     url: '/tax/providers/{provider_id}/connection';
 };
-export type ProviderConnectionDeleteErrors = {
+export type DeleteTaxProviderConnectionErrors = {
     404: unknown;
 };
-export type ProviderConnectionDeleteResponses = {
+export type DeleteTaxProviderConnectionResponses = {
     200: ResponseConnection;
 };
-export type ProviderConnectionDeleteResponse = ProviderConnectionDeleteResponses[keyof ProviderConnectionDeleteResponses];
-export type ProviderConnectionGetData = {
+export type DeleteTaxProviderConnectionResponse = DeleteTaxProviderConnectionResponses[keyof DeleteTaxProviderConnectionResponses];
+export type GetTaxProviderConnectionData = {
     body?: never;
     headers: {
         Accept: string;
@@ -39,14 +43,14 @@ export type ProviderConnectionGetData = {
     query?: never;
     url: '/tax/providers/{provider_id}/connection';
 };
-export type ProviderConnectionGetErrors = {
+export type GetTaxProviderConnectionErrors = {
     404: unknown;
 };
-export type ProviderConnectionGetResponses = {
+export type GetTaxProviderConnectionResponses = {
     200: ResponseConnection;
 };
-export type ProviderConnectionGetResponse = ProviderConnectionGetResponses[keyof ProviderConnectionGetResponses];
-export type ProviderConnectionPutData = {
+export type GetTaxProviderConnectionResponse = GetTaxProviderConnectionResponses[keyof GetTaxProviderConnectionResponses];
+export type UpdateTaxProviderConnectionData = {
     body?: {
         username?: string;
         password?: string;
@@ -54,7 +58,6 @@ export type ProviderConnectionPutData = {
     };
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path: {
         provider_id: string;
@@ -62,11 +65,11 @@ export type ProviderConnectionPutData = {
     query?: never;
     url: '/tax/providers/{provider_id}/connection';
 };
-export type ProviderConnectionPutErrors = {
+export type UpdateTaxProviderConnectionErrors = {
     404: unknown;
     422: unknown;
 };
-export type ProviderConnectionPutResponses = {
+export type UpdateTaxProviderConnectionResponses = {
     200: ResponseConnection;
 };
-export type ProviderConnectionPutResponse = ProviderConnectionPutResponses[keyof ProviderConnectionPutResponses];
+export type UpdateTaxProviderConnectionResponse = UpdateTaxProviderConnectionResponses[keyof UpdateTaxProviderConnectionResponses];

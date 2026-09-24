@@ -5,760 +5,18 @@ export type ClientOptions = {
 };
 
 /**
- * Rate Request Payload
+ * BaseOptionsOriginAddressType
  *
- * Payload sent to a Shipping Provider to get quotes.
+ * Optional. Defaults to `RESIDENTIAL`.
  */
-export type RateRequestPayload = {
-    base_options: BaseOptions;
-    zone_options?: ZoneOptionsInstance;
-    connection_options?: ConnectionOptionsInstance;
-};
+export type BaseOptionsOriginAddressType = 'RESIDENTIAL' | 'COMMERCIAL';
 
 /**
- * Base Options
- *
- * Payload sent to a Shipping Provider in to get quotes.
- */
-export type BaseOptionsSchema = {
-    /**
-     * Base Rate Request
-     *
-     * The minimum required payload that is sent to retrieve rates.
-     */
-    base_options: {
-        /**
-         * Shipping Address
-         *
-         * Object representing a destination or origin address for items.
-         */
-        origin: {
-            street_1?: string;
-            street_2?: string;
-            zip: string;
-            city?: string;
-            /**
-             * State in ISO_3166 2 format.
-             */
-            state_iso2?: string;
-            /**
-             * Country in ISO_3166 2 format.
-             */
-            country_iso2: string;
-            /**
-             * Optional. Defaults to `RESIDENTIAL`.
-             */
-            address_type?: 'RESIDENTIAL' | 'COMMERCIAL';
-        };
-        /**
-         * Shipping Address
-         *
-         * Object representing a destination or origin address for items.
-         */
-        destination: {
-            street_1?: string;
-            street_2?: string;
-            zip: string;
-            city?: string;
-            /**
-             * State in ISO_3166 2 format.
-             */
-            state_iso2?: string;
-            /**
-             * Country in ISO_3166 2 format.
-             */
-            country_iso2: string;
-            /**
-             * Optional. Defaults to `RESIDENTIAL`.
-             */
-            address_type?: 'RESIDENTIAL' | 'COMMERCIAL';
-        };
-        items: Array<{
-            /**
-             * The variant SKU.
-             */
-            sku?: string;
-            variant_id?: string;
-            product_id?: string;
-            name?: string;
-            /**
-             * Dimension Value
-             *
-             * Value object for a length measurement.
-             */
-            length?: {
-                units: 'cm' | 'in';
-                value: number;
-            };
-            /**
-             * Dimension Value
-             *
-             * Value object for a width measurement.
-             */
-            width?: {
-                units: 'cm' | 'in';
-                value: number;
-            };
-            /**
-             * Dimension Value
-             *
-             * Value object for a height measurement.
-             */
-            height?: {
-                units: 'cm' | 'in';
-                value: number;
-            };
-            /**
-             * Weight Value
-             *
-             * Value object for a weight measurement.
-             */
-            weight?: {
-                units: 'oz' | 'g';
-                value: number;
-            };
-            /**
-             * Money Value
-             *
-             * Value object for a money amount.
-             */
-            discounted_price?: {
-                currency: string;
-                amount: number;
-            };
-            /**
-             * Money Value
-             *
-             * Value object for a money amount.
-             */
-            declared_value?: {
-                currency: string;
-                amount: number;
-            };
-            quantity?: number;
-            /**
-             * A list of arbitrary properties stored as part of the product or product variant meta fields. These consist of public fields specific to the carrier integration.
-             */
-            attributes?: Array<{
-                /**
-                 * The key associated with the meta field.
-                 */
-                key?: string;
-                /**
-                 * The value associated with the meta field.
-                 */
-                value?: string;
-                /**
-                 * The namespace associated with metafields for [products](/docs/rest-catalog/products/metafields#create-a-product-metafield) and [product variants](/docs/rest-catalog/product-variants/metafields). Save the metafield namespace using the format `shipping_carrier_{yourCarrierId}`; otherwise, it will not be recognized as a valid attribute.
-                 */
-                namespace?: string;
-                /**
-                 * The resource type associated with the metafield. Currently, the only values available are `product` and `variant`.
-                 */
-                resource_type?: 'product' | 'variant';
-                /**
-                 * The resource ID of the meta field.
-                 */
-                resource_id?: string;
-                /**
-                 * The attribute type associated with the product or product variant metafield. Currently, the only value available is `metafield`.
-                 */
-                attribute_type?: 'metafield';
-            }>;
-        }>;
-        /**
-         * Customer Details
-         *
-         * The details of the Customer that has made the purchase.
-         */
-        customer?: {
-            customer_groups?: Array<{
-                customer_group_id?: number;
-                customer_group_name?: string;
-            }>;
-            customer_id?: number;
-        };
-        store_id: string;
-        /**
-         * Request Context
-         *
-         * A collection of Reference Value objects.
-         */
-        request_context?: {
-            reference_values?: Array<{
-                name?: string;
-                value?: string;
-            }>;
-        };
-    };
-    zone_options?: ZoneOptionsInstance;
-    connection_options?: ConnectionOptionsInstance;
-};
-
-/**
- * Customer Details
- *
- * The details of the Customer that has made the purchase.
- */
-export type CustomerDetails = {
-    customer_groups?: Array<{
-        customer_group_id?: number;
-        customer_group_name?: string;
-    }>;
-    customer_id?: number;
-};
-
-/**
- * Zone Options Instance
- *
- * Any zone-specific request options declared by the carrier and configured by the merchant to retrieve rates. Optional.
- */
-export type ZoneOptionsInstance = {
-    [key: string]: unknown;
-};
-
-/**
- * Connection Options Instance
- *
- * Any global request options declared by the carrier and configured by the merchant to retrieve rates. Optional.
- */
-export type ConnectionOptionsInstance = {
-    [key: string]: unknown;
-};
-
-/**
- * Rate Options Instance
- *
- * Optional, any checkout specific request options to retrieve rates
- */
-export type RateOptionsInstance = Array<{
-    key: string;
-    value: string;
-}>;
-
-/**
- * Customer Group
- *
- * The Group (if any) that this customer is in. The value will default to zero if the customer is not in a group or is a guest.
- */
-export type CustomerGroup = {
-    customer_group_id?: number;
-    customer_group_name?: string;
-};
-
-/**
- * Key Value Pair
- */
-export type KeyValuePair = {
-    key: string;
-    value: string;
-};
-
-/**
- * Rate Response Payload
- *
- * The response from the Shipping Service. Contains zero or more quotes.
- */
-export type RateResponsePayload = {
-    quote_id: string;
-    messages: Array<{
-        text: string;
-        type: 'INFO' | 'WARNING' | 'ERROR';
-    }>;
-    carrier_quotes: Array<{
-        carrier_info?: {
-            code: string;
-            display_name: string;
-        };
-        quotes: Array<{
-            /**
-             * A code describing the service.
-             */
-            code: string;
-            /**
-             * A display name for the service.
-             */
-            display_name: string;
-            /**
-             * Money Value
-             *
-             * Value object for a money amount.
-             */
-            cost: {
-                currency: string;
-                amount: number;
-            };
-            messages?: Array<{
-                text: string;
-                type: 'INFO' | 'WARNING' | 'ERROR';
-            }>;
-            description?: string;
-            rate_id?: string;
-            /**
-             * Money Value
-             *
-             * Value object for a money amount. Optional field; merchants may request features.
-             */
-            discounted_cost?: {
-                currency: string;
-                amount: number;
-            };
-            /**
-             * Date at which carrier dispatches to the shipping destination. Optional field; merchants may request features.
-             */
-            dispatch_date?: string;
-            /**
-             * Transit Time Object
-             *
-             * Value object for the length of time in transit.
-             */
-            transit_time?: {
-                units?: 'BUSINESS_DAYS' | 'DAYS' | 'HOURS';
-                duration?: number;
-            };
-        }>;
-    }>;
-};
-
-/**
- * Carrier Quote Object
- *
- * A grouping of carrier rates and optionally, info about that carrier.
- */
-export type CarrierQuoteObject = {
-    carrier_info?: {
-        code: string;
-        display_name: string;
-    };
-    quotes: Array<{
-        /**
-         * A code describing the service.
-         */
-        code: string;
-        /**
-         * A display name for the service.
-         */
-        display_name: string;
-        /**
-         * Money Value
-         *
-         * Value object for a money amount.
-         */
-        cost: {
-            currency: string;
-            amount: number;
-        };
-        messages?: Array<{
-            text: string;
-            type: 'INFO' | 'WARNING' | 'ERROR';
-        }>;
-        description?: string;
-        rate_id?: string;
-        /**
-         * Money Value
-         *
-         * Value object for a money amount. Optional field; merchants may request features.
-         */
-        discounted_cost?: {
-            currency: string;
-            amount: number;
-        };
-        /**
-         * Date at which carrier dispatches to the shipping destination. Optional field; merchants may request features.
-         */
-        dispatch_date?: string;
-        /**
-         * Transit Time Object
-         *
-         * Value object for the length of time in transit.
-         */
-        transit_time?: {
-            units?: 'BUSINESS_DAYS' | 'DAYS' | 'HOURS';
-            duration?: number;
-        };
-    }>;
-};
-
-/**
- * Rate Request Item
- *
- * A cart item along with its shipping-specific attributes.
- */
-export type RateRequestItem = {
-    /**
-     * The variant SKU.
-     */
-    sku?: string;
-    variant_id?: string;
-    product_id?: string;
-    name?: string;
-    /**
-     * Dimension Value
-     *
-     * Value object for a length measurement.
-     */
-    length?: {
-        units: 'cm' | 'in';
-        value: number;
-    };
-    /**
-     * Dimension Value
-     *
-     * Value object for a width measurement.
-     */
-    width?: {
-        units: 'cm' | 'in';
-        value: number;
-    };
-    /**
-     * Dimension Value
-     *
-     * Value object for a height measurement.
-     */
-    height?: {
-        units: 'cm' | 'in';
-        value: number;
-    };
-    /**
-     * Weight Value
-     *
-     * Value object for a weight measurement.
-     */
-    weight?: {
-        units: 'oz' | 'g';
-        value: number;
-    };
-    /**
-     * Money Value
-     *
-     * Value object for a money amount.
-     */
-    discounted_price?: {
-        currency: string;
-        amount: number;
-    };
-    /**
-     * Money Value
-     *
-     * Value object for a money amount.
-     */
-    declared_value?: {
-        currency: string;
-        amount: number;
-    };
-    quantity?: number;
-    /**
-     * A list of arbitrary properties stored as part of the product or product variant meta fields. These consist of any public fields specific to the carrier integration.
-     */
-    attributes?: Array<{
-        /**
-         * The key associated with the product or product variant meta field.
-         */
-        key?: string;
-        /**
-         * The value associated with the product or product variant meta field.
-         */
-        value?: string;
-        /**
-         * The namespace associated with metafields for [products](/docs/rest-catalog/products/metafields) and [product variants](/docs/rest-catalog/product-variants/metafields). Save the metafield namespace using the format `shipping_carrier_{yourCarrierId}`; otherwise, it will not be recognized as a valid attribute.
-         */
-        namespace?: string;
-        /**
-         * Resource type associated with the product or product variant meta field. Currently, the only values available are 'product' or 'variant'.
-         */
-        resource_type?: 'product' | 'variant';
-        /**
-         * The resource ID of the product or product variant meta field.
-         */
-        resource_id?: string;
-        /**
-         * Attribute type associated with the product or product variant meta field. Currently, the only value for this is 'metafield'.
-         */
-        attribute_type?: 'metafield';
-    }>;
-};
-
-/**
- * Request Context
- *
- * A collection of Reference Value objects.
- */
-export type RequestContext = {
-    reference_values?: Array<{
-        name?: string;
-        value?: string;
-    }>;
-};
-
-/**
- * Reference Value
- *
- * Value objects contained within the request context.
- */
-export type ReferenceValue = {
-    name?: string;
-    value?: string;
-};
-
-/**
- * Message
- *
- * A simple string/type response for returning information.
- */
-export type Message = {
-    text: string;
-    type: 'INFO' | 'WARNING' | 'ERROR';
-};
-
-/**
- * Rate Quote Object
- *
- * A quote being returned as part of the rate request.
- */
-export type RateQuoteObject = {
-    /**
-     * A code describing the service.
-     */
-    code: string;
-    /**
-     * A display name for the service.
-     */
-    display_name: string;
-    /**
-     * Money Value
-     *
-     * Value object for a money amount.
-     */
-    cost: {
-        currency: string;
-        amount: number;
-    };
-    messages?: Array<{
-        text: string;
-        type: 'INFO' | 'WARNING' | 'ERROR';
-    }>;
-    description?: string;
-    rate_id?: string;
-    /**
-     * Money Value
-     *
-     * Value object for a money amount. Optional field; merchants may request features.
-     */
-    discounted_cost?: {
-        currency: string;
-        amount: number;
-    };
-    /**
-     * Date at which carrier dispatches to the shipping destination. Optional field; merchants may request features.
-     */
-    dispatch_date?: string;
-    /**
-     * Transit Time Object
-     *
-     * Value object for the length of time in transit.
-     */
-    transit_time?: {
-        units?: 'BUSINESS_DAYS' | 'DAYS' | 'HOURS';
-        duration?: number;
-    };
-};
-
-/**
- * Transit Time Object
- *
- * Value object for the length of time in transit.
- */
-export type TransitTimeObject = {
-    units?: 'BUSINESS_DAYS' | 'DAYS' | 'HOURS';
-    duration?: number;
-};
-
-/**
- * Attribute Value
- *
- * Value object for an attribute. This represents a product or product variant meta field.
- */
-export type AttributeValue = {
-    /**
-     * The key associated with the product or product variant meta field.
-     */
-    key?: string;
-    /**
-     * The value associated with the product or product variant meta field.
-     */
-    value?: string;
-    /**
-     * The namespace associated with metafields for [products](/docs/rest-catalog/products/metafields) and [product variants](/docs/rest-catalog/product-variants/metafields). Save the metafield namespace using the format `shipping_carrier_{yourCarrierId}`; otherwise, it will not be recognized as a valid attribute.
-     */
-    namespace?: string;
-    /**
-     * Resource type associated with the product or product variant meta field. Currently, the only values available are 'product' or 'variant'.
-     */
-    resource_type?: 'product' | 'variant';
-    /**
-     * The resource ID of the product or product variant meta field.
-     */
-    resource_id?: string;
-    /**
-     * Attribute type associated with the product or product variant meta field. Currently, the only value for this is 'metafield'.
-     */
-    attribute_type?: 'metafield';
-};
-
-/**
- * Money Value
- *
- * Value object for a money amount.
- */
-export type MoneyValue = {
-    currency: string;
-    amount: number;
-};
-
-/**
- * Dimension Value
- *
- * Value object for a length measurement.
- */
-export type DimensionValue = {
-    units: 'cm' | 'in';
-    value: number;
-};
-
-/**
- * Weight Value
- *
- * Value object for a weight measurement.
- */
-export type WeightValue = {
-    units: 'oz' | 'g';
-    value: number;
-};
-
-/**
- * Rate Options Schema
- *
- * A set of carrier-specific fields that will be displayed to shoppers at checkout.
- */
-export type RateOptionsSchema = Array<{
-    /**
-     * The internal code that represents this input field.
-     */
-    code: string;
-    /**
-     * Display name for this input field.
-     */
-    label: string;
-    /**
-     * Longer description text to be displayed as a tooltip at checkout.
-     */
-    description?: string;
-    /**
-     * Placeholder for any validation we choose to implement.
-     */
-    validation?: string;
-    /**
-     * How this input will be displayed.
-     */
-    type: 'date' | 'string' | 'select' | 'code';
-    /**
-     * A valid default value for this field.
-     */
-    default_value: string;
-    /**
-     * The list of options available for `select` type fields.
-     */
-    value_options?: Array<string>;
-    /**
-     * The set of valid date ranges for `date` type fields.
-     */
-    date_ranges?: Array<{
-        /**
-         * Date Value
-         *
-         * Value Object representing a Date.
-         */
-        from?: {
-            date?: string;
-            timezone?: string;
-        };
-        /**
-         * Date Value
-         *
-         * Value Object representing a Date.
-         */
-        to?: {
-            date?: string;
-            timezone?: string;
-        };
-    }>;
-}>;
-
-/**
- * Key Value Pair Schema
- *
- * Options, ranges, defaults, and validation for a carrier-defined field that displays at checkout.
- */
-export type KeyValuePairSchema = {
-    /**
-     * The internal code that represents this input field.
-     */
-    code: string;
-    /**
-     * Display name for this input field.
-     */
-    label: string;
-    /**
-     * Longer description text to be displayed as a tooltip at checkout.
-     */
-    description?: string;
-    /**
-     * Placeholder for any validation we choose to implement.
-     */
-    validation?: string;
-    /**
-     * How this input will be displayed.
-     */
-    type: 'date' | 'string' | 'select' | 'code';
-    /**
-     * A valid default value for this field.
-     */
-    default_value: string;
-    /**
-     * The list of options available for `select` type fields.
-     */
-    value_options?: Array<string>;
-    /**
-     * For date type fields, a set of valid date ranges available to choose from
-     */
-    date_ranges?: Array<{
-        /**
-         * Date Value
-         *
-         * Value Object representing a Date.
-         */
-        from?: {
-            date?: string;
-            timezone?: string;
-        };
-        /**
-         * Date Value
-         *
-         * Value Object representing a Date.
-         */
-        to?: {
-            date?: string;
-            timezone?: string;
-        };
-    }>;
-};
-
-/**
- * Shipping Address
+ * BaseOptionsOrigin
  *
  * Object representing a destination or origin address for items.
  */
-export type ShippingAddress = {
+export type BaseOptionsOrigin = {
     street_1?: string;
     street_2?: string;
     zip: string;
@@ -774,11 +32,481 @@ export type ShippingAddress = {
     /**
      * Optional. Defaults to `RESIDENTIAL`.
      */
-    address_type?: 'RESIDENTIAL' | 'COMMERCIAL';
+    address_type?: BaseOptionsOriginAddressType;
 };
 
 /**
- * Check Connection Options Request Payload
+ * BaseOptionsDestinationAddressType
+ *
+ * Defaults to residential. Optional.
+ */
+export type BaseOptionsDestinationAddressType = 'RESIDENTIAL' | 'COMMERCIAL';
+
+/**
+ * FormFieldValue
+ *
+ * The value of a [shipping address](/developer/api-reference/rest/admin/management/orders/order-shipping-addresses/get-order-shipping-address) form field.
+ */
+export type FormFieldValue = {
+    /**
+     * The global ID of the shipping address form field.
+     */
+    id?: string;
+    /**
+     * The form field value. Depending on the form field, this could be a user-defined value or the value of a hidden input.
+     */
+    value?: string;
+};
+
+/**
+ * BaseOptionsDestination
+ *
+ * Object representing a destination or origin address for items.
+ */
+export type BaseOptionsDestination = {
+    street_1?: string;
+    street_2?: string;
+    zip: string;
+    city?: string;
+    /**
+     * State in ISO_3166 2 format
+     */
+    state_iso2?: string;
+    /**
+     * Country in ISO_3166 2 format
+     */
+    country_iso2: string;
+    /**
+     * Defaults to residential. Optional.
+     */
+    address_type?: BaseOptionsDestinationAddressType;
+    /**
+     * Describes one or more [custom form fields](/developer/api-reference/rest/storefront/form-fields). Property key is the global ID of a shipping address form field. When no custom fields exist, the object is empty.
+     */
+    form_fields?: {
+        [key: string]: FormFieldValue;
+    };
+};
+
+/**
+ * BaseOptionsItemsItemsLengthUnits
+ */
+export type BaseOptionsItemsItemsLengthUnits = 'cm' | 'in';
+
+/**
+ * BaseOptionsItemsItemsLength
+ *
+ * Value object for a length measurement.
+ */
+export type BaseOptionsItemsItemsLength = {
+    units: BaseOptionsItemsItemsLengthUnits;
+    value: number;
+};
+
+/**
+ * BaseOptionsItemsItemsWidthUnits
+ */
+export type BaseOptionsItemsItemsWidthUnits = 'cm' | 'in';
+
+/**
+ * BaseOptionsItemsItemsWidth
+ *
+ * Value object for a length measurement.
+ */
+export type BaseOptionsItemsItemsWidth = {
+    units: BaseOptionsItemsItemsWidthUnits;
+    value: number;
+};
+
+/**
+ * BaseOptionsItemsItemsHeightUnits
+ */
+export type BaseOptionsItemsItemsHeightUnits = 'cm' | 'in';
+
+/**
+ * BaseOptionsItemsItemsHeight
+ *
+ * Value object for a length measurement.
+ */
+export type BaseOptionsItemsItemsHeight = {
+    units: BaseOptionsItemsItemsHeightUnits;
+    value: number;
+};
+
+/**
+ * BaseOptionsItemsItemsWeightUnits
+ */
+export type BaseOptionsItemsItemsWeightUnits = 'oz' | 'g';
+
+/**
+ * BaseOptionsItemsItemsWeight
+ *
+ * Value object for a weight measurement.
+ */
+export type BaseOptionsItemsItemsWeight = {
+    units: BaseOptionsItemsItemsWeightUnits;
+    value: number;
+};
+
+/**
+ * BaseOptionsItemsItemsDiscountedPrice
+ *
+ * Value object for a money amount.
+ */
+export type BaseOptionsItemsItemsDiscountedPrice = {
+    currency: string;
+    amount: number;
+};
+
+/**
+ * BaseOptionsItemsItemsDeclaredValue
+ *
+ * Value object for a money amount.
+ */
+export type BaseOptionsItemsItemsDeclaredValue = {
+    currency: string;
+    amount: number;
+};
+
+/**
+ * BaseOptionsItemsItemsAttributesItemsResourceType
+ *
+ * Resource type associated with the meta field. Currently, the only values available are 'product' or 'variant'.
+ */
+export type BaseOptionsItemsItemsAttributesItemsResourceType = 'product' | 'variant';
+
+/**
+ * BaseOptionsItemsItemsAttributesItemsAttributeType
+ *
+ * Attribute type associated with the product or product variant meta field. Currently, the only value for this is 'metafield'.
+ */
+export type BaseOptionsItemsItemsAttributesItemsAttributeType = 'metafield';
+
+/**
+ * BaseOptionsItemsItemsAttributesItems
+ */
+export type BaseOptionsItemsItemsAttributesItems = {
+    /**
+     * The key associated with the meta field.
+     */
+    key?: string;
+    /**
+     * The value associated with the meta field.
+     */
+    value?: string;
+    /**
+     * The namespace associated with a [product](/developer/api-reference/rest/admin/catalog/products/metafields) or [product variant](/developer/api-reference/rest/admin/catalog/product-variants/metafields) metafields. You should save a metafield namespace under this format `shipping_carrier_{yourCarrierId}`; otherwise, you will not be able to recognize it as an attribute.
+     */
+    namespace?: string;
+    /**
+     * Resource type associated with the meta field. Currently, the only values available are 'product' or 'variant'.
+     */
+    resource_type?: BaseOptionsItemsItemsAttributesItemsResourceType;
+    /**
+     * The resource ID of the meta field.
+     */
+    resource_id?: string;
+    /**
+     * Attribute type associated with the product or product variant meta field. Currently, the only value for this is 'metafield'.
+     */
+    attribute_type?: BaseOptionsItemsItemsAttributesItemsAttributeType;
+};
+
+/**
+ * BaseOptionsItemsItems
+ *
+ * A cart item along with its shipping-specific attributes.
+ */
+export type BaseOptionsItemsItems = {
+    /**
+     * The variant SKU.
+     */
+    sku?: string;
+    variant_id?: string;
+    product_id?: string;
+    name?: string;
+    /**
+     * Value object for a length measurement.
+     */
+    length?: BaseOptionsItemsItemsLength;
+    /**
+     * Value object for a length measurement.
+     */
+    width?: BaseOptionsItemsItemsWidth;
+    /**
+     * Value object for a length measurement.
+     */
+    height?: BaseOptionsItemsItemsHeight;
+    /**
+     * Value object for a weight measurement.
+     */
+    weight?: BaseOptionsItemsItemsWeight;
+    /**
+     * Value object for a money amount.
+     */
+    discounted_price?: BaseOptionsItemsItemsDiscountedPrice;
+    /**
+     * Value object for a money amount.
+     */
+    declared_value?: BaseOptionsItemsItemsDeclaredValue;
+    quantity?: number;
+    /**
+     * A list of arbitrary properties stored as part of the product or product variant meta fields. These consist of public fields specific to the carrier integration.
+     */
+    attributes?: Array<BaseOptionsItemsItemsAttributesItems>;
+};
+
+/**
+ * BaseOptionsCustomerCustomerGroupsItems
+ *
+ * The Group (if any) that this customer is in. This will default to zero if the customer is not in a group or is a guest.
+ */
+export type BaseOptionsCustomerCustomerGroupsItems = {
+    customer_group_id?: number;
+    customer_group_name?: string;
+};
+
+/**
+ * BaseOptionsCustomer
+ *
+ * The details of the Customer that has made the purchase.
+ */
+export type BaseOptionsCustomer = {
+    customer_groups?: Array<BaseOptionsCustomerCustomerGroupsItems>;
+    customer_id?: number;
+};
+
+/**
+ * BaseOptionsRequestContextReferenceValuesItems
+ *
+ * Value objects contained within the request context.
+ */
+export type BaseOptionsRequestContextReferenceValuesItems = {
+    /**
+     * The property to which the reference value pertains. Examples include `channel_id` and `cart_id`.
+     */
+    name?: string;
+    value?: string;
+};
+
+/**
+ * BaseOptionsRequestContext
+ *
+ * A collection of Reference Value objects.
+ */
+export type BaseOptionsRequestContext = {
+    reference_values?: Array<BaseOptionsRequestContextReferenceValuesItems>;
+};
+
+/**
+ * BaseOptions
+ *
+ * The minimum required payload that is sent to retrieve rates.
+ */
+export type BaseOptions = {
+    /**
+     * Object representing a destination or origin address for items.
+     */
+    origin: BaseOptionsOrigin;
+    /**
+     * Object representing a destination or origin address for items.
+     */
+    destination: BaseOptionsDestination;
+    items: Array<BaseOptionsItemsItems>;
+    /**
+     * The details of the Customer that has made the purchase.
+     */
+    customer?: BaseOptionsCustomer;
+    store_id: string;
+    /**
+     * A collection of Reference Value objects.
+     */
+    request_context?: BaseOptionsRequestContext;
+};
+
+/**
+ * ZoneOptionsInstance
+ *
+ * Any zone-specific request options declared by the carrier and configured by the merchant to retrieve rates. Optional.
+ */
+export type ZoneOptionsInstance = {
+    [key: string]: unknown;
+};
+
+/**
+ * ConnectionOptionsInstance
+ *
+ * Any global request options declared by the carrier and configured by the merchant to retrieve rates. Optional.
+ */
+export type ConnectionOptionsInstance = {
+    [key: string]: unknown;
+};
+
+/**
+ * RateOptionsInstanceItems
+ */
+export type RateOptionsInstanceItems = {
+    key: string;
+    value: string;
+};
+
+/**
+ * RateOptionsInstance
+ *
+ * Checkout-specific request options for retrieving rates, as key/value pairs. Optional. BigCommerce currently sends an empty array.
+ */
+export type RateOptionsInstance = Array<RateOptionsInstanceItems>;
+
+/**
+ * RateRequestPayload
+ *
+ * Payload sent to a Shipping Provider to get quotes.
+ */
+export type RateRequestPayload = {
+    base_options: BaseOptions;
+    zone_options?: ZoneOptionsInstance;
+    connection_options?: ConnectionOptionsInstance;
+    rate_options?: RateOptionsInstance;
+};
+
+/**
+ * RateResponsePayloadMessagesItemsType
+ */
+export type RateResponsePayloadMessagesItemsType = 'INFO' | 'WARNING' | 'ERROR';
+
+/**
+ * RateResponsePayloadMessagesItems
+ *
+ * A simple string/type response for returning information.
+ */
+export type RateResponsePayloadMessagesItems = {
+    text: string;
+    type: RateResponsePayloadMessagesItemsType;
+};
+
+/**
+ * RateResponsePayloadCarrierQuotesItemsCarrierInfo
+ */
+export type RateResponsePayloadCarrierQuotesItemsCarrierInfo = {
+    code: string;
+    display_name: string;
+};
+
+/**
+ * RateResponsePayloadCarrierQuotesItemsQuotesItemsCost
+ *
+ * Value object for a money amount.
+ */
+export type RateResponsePayloadCarrierQuotesItemsQuotesItemsCost = {
+    currency: string;
+    amount: number;
+};
+
+/**
+ * RateResponsePayloadCarrierQuotesItemsQuotesItemsMessagesItemsType
+ */
+export type RateResponsePayloadCarrierQuotesItemsQuotesItemsMessagesItemsType = 'INFO' | 'WARNING' | 'ERROR';
+
+/**
+ * RateResponsePayloadCarrierQuotesItemsQuotesItemsMessagesItems
+ *
+ * A simple string/type response for returning information.
+ */
+export type RateResponsePayloadCarrierQuotesItemsQuotesItemsMessagesItems = {
+    text: string;
+    type: RateResponsePayloadCarrierQuotesItemsQuotesItemsMessagesItemsType;
+};
+
+/**
+ * RateResponsePayloadCarrierQuotesItemsQuotesItemsDiscountedCost
+ *
+ * Value object for a money amount. Optional field; merchants may request features.
+ */
+export type RateResponsePayloadCarrierQuotesItemsQuotesItemsDiscountedCost = {
+    currency: string;
+    amount: number;
+};
+
+/**
+ * RateResponsePayloadCarrierQuotesItemsQuotesItemsTransitTimeUnits
+ */
+export type RateResponsePayloadCarrierQuotesItemsQuotesItemsTransitTimeUnits = 'BUSINESS_DAYS' | 'DAYS' | 'HOURS';
+
+/**
+ * RateResponsePayloadCarrierQuotesItemsQuotesItemsTransitTime
+ *
+ * Value object for the length of time in transit.
+ */
+export type RateResponsePayloadCarrierQuotesItemsQuotesItemsTransitTime = {
+    units?: RateResponsePayloadCarrierQuotesItemsQuotesItemsTransitTimeUnits;
+    duration?: number;
+};
+
+/**
+ * RateResponsePayloadCarrierQuotesItemsQuotesItems
+ *
+ * A quote being returned as part of the rate request.
+ *
+ * Optional fields must be omitted from the response when no value is available.
+ *
+ */
+export type RateResponsePayloadCarrierQuotesItemsQuotesItems = {
+    /**
+     * A code describing the service.
+     */
+    code: string;
+    /**
+     * A display name for the service.
+     */
+    display_name: string;
+    /**
+     * Value object for a money amount.
+     */
+    cost: RateResponsePayloadCarrierQuotesItemsQuotesItemsCost;
+    messages?: Array<RateResponsePayloadCarrierQuotesItemsQuotesItemsMessagesItems>;
+    description?: string;
+    rate_id?: string;
+    /**
+     * Value object for a money amount. Optional field; merchants may request features.
+     */
+    discounted_cost?: RateResponsePayloadCarrierQuotesItemsQuotesItemsDiscountedCost;
+    /**
+     * Date at which carrier dispatches to the shipping destination. Optional field; merchants may request features.
+     */
+    dispatch_date?: string;
+    /**
+     * Value object for the length of time in transit.
+     */
+    transit_time?: RateResponsePayloadCarrierQuotesItemsQuotesItemsTransitTime;
+};
+
+/**
+ * RateResponsePayloadCarrierQuotesItems
+ *
+ * A grouping of carrier rates and optionally, info about that carrier.
+ */
+export type RateResponsePayloadCarrierQuotesItems = {
+    carrier_info?: RateResponsePayloadCarrierQuotesItemsCarrierInfo;
+    quotes: Array<RateResponsePayloadCarrierQuotesItemsQuotesItems>;
+};
+
+/**
+ * RateResponsePayload
+ *
+ * The response from the Shipping Service. Contains zero or more quotes.
+ */
+export type RateResponsePayload = {
+    quote_id: string;
+    /**
+     * Time-to-live (TTL) in seconds
+     */
+    ttl?: number;
+    messages: Array<RateResponsePayloadMessagesItems>;
+    carrier_quotes: Array<RateResponsePayloadCarrierQuotesItems>;
+};
+
+/**
+ * CheckConnectionOptionsRequestPayload
  *
  * The payload sent to a Shipping Provider to check that the store is connected to this provider.
  *
@@ -789,7 +517,22 @@ export type CheckConnectionOptionsRequestPayload = {
 };
 
 /**
- * Check Connection Options Response Payload
+ * CheckConnectionOptionsResponsePayloadMessagesItemsType
+ */
+export type CheckConnectionOptionsResponsePayloadMessagesItemsType = 'INFO' | 'WARNING' | 'ERROR';
+
+/**
+ * CheckConnectionOptionsResponsePayloadMessagesItems
+ *
+ * A simple string/type response for returning information.
+ */
+export type CheckConnectionOptionsResponsePayloadMessagesItems = {
+    text: string;
+    type: CheckConnectionOptionsResponsePayloadMessagesItemsType;
+};
+
+/**
+ * CheckConnectionOptionsResponsePayload
  *
  * The response received back from the Shipping Provider connection check. This allows the store to understand whether the connection was successful.
  */
@@ -798,240 +541,14 @@ export type CheckConnectionOptionsResponsePayload = {
      * Indicates whether or not the connection options are valid.
      */
     valid?: boolean;
-    messages?: Array<{
-        text: string;
-        type: 'INFO' | 'WARNING' | 'ERROR';
-    }>;
+    messages?: Array<CheckConnectionOptionsResponsePayloadMessagesItems>;
 };
-
-/**
- * Date Range
- *
- * Representation of a range of date objects.
- */
-export type DateRange = {
-    /**
-     * Date Value
-     *
-     * Value Object representing a Date.
-     */
-    from?: {
-        date?: string;
-        timezone?: string;
-    };
-    /**
-     * Date Value
-     *
-     * Value Object representing a Date.
-     */
-    to?: {
-        date?: string;
-        timezone?: string;
-    };
-};
-
-/**
- * Date Value
- *
- * Value Object representing a Date.
- */
-export type DateValue = {
-    date?: string;
-    timezone?: string;
-};
-
-/**
- * Base Rate Request
- *
- * The minimum required payload that is sent to retrieve rates.
- */
-export type BaseOptions = {
-    /**
-     * Shipping Address
-     *
-     * Object representing a destination or origin address for items.
-     */
-    origin: {
-        street_1?: string;
-        street_2?: string;
-        zip: string;
-        city?: string;
-        /**
-         * State in ISO_3166 2 format.
-         */
-        state_iso2?: string;
-        /**
-         * Country in ISO_3166 2 format.
-         */
-        country_iso2: string;
-        /**
-         * Optional. Defaults to `RESIDENTIAL`.
-         */
-        address_type?: 'RESIDENTIAL' | 'COMMERCIAL';
-    };
-    /**
-     * Shipping Address
-     *
-     * Object representing a destination or origin address for items.
-     */
-    destination: {
-        street_1?: string;
-        street_2?: string;
-        zip: string;
-        city?: string;
-        /**
-         * State in ISO_3166 2 format
-         */
-        state_iso2?: string;
-        /**
-         * Country in ISO_3166 2 format
-         */
-        country_iso2: string;
-        /**
-         * Defaults to residential. Optional.
-         */
-        address_type?: 'RESIDENTIAL' | 'COMMERCIAL';
-        /**
-         * Describes one or more [custom form fields](/docs/rest-storefront/forms). Property key is the global ID of a shipping address form field. When no custom fields exist, the object is empty.
-         */
-        form_fields?: {
-            '<form field global ID>'?: FormFieldValue;
-        };
-    };
-    items: Array<{
-        /**
-         * The variant SKU.
-         */
-        sku?: string;
-        variant_id?: string;
-        product_id?: string;
-        name?: string;
-        /**
-         * Dimension Value
-         *
-         * Value object for a length measurement.
-         */
-        length?: {
-            units: 'cm' | 'in';
-            value: number;
-        };
-        /**
-         * Dimension Value
-         *
-         * Value object for a length measurement.
-         */
-        width?: {
-            units: 'cm' | 'in';
-            value: number;
-        };
-        /**
-         * Dimension Value
-         *
-         * Value object for a length measurement.
-         */
-        height?: {
-            units: 'cm' | 'in';
-            value: number;
-        };
-        /**
-         * Weight Value
-         *
-         * Value object for a weight measurement.
-         */
-        weight?: {
-            units: 'oz' | 'g';
-            value: number;
-        };
-        /**
-         * Money Value
-         *
-         * Value object for a money amount.
-         */
-        discounted_price?: {
-            currency: string;
-            amount: number;
-        };
-        /**
-         * Money Value
-         *
-         * Value object for a money amount.
-         */
-        declared_value?: {
-            currency: string;
-            amount: number;
-        };
-        quantity?: number;
-        /**
-         * A list of arbitrary properties stored as part of the product or product variant meta fields. These consist of public fields specific to the carrier integration.
-         */
-        attributes?: Array<{
-            /**
-             * The key associated with the meta field.
-             */
-            key?: string;
-            /**
-             * The value associated with the meta field.
-             */
-            value?: string;
-            /**
-             * The namespace associated with a [product](/docs/rest-catalog/products/metafields) or [product variant](/docs/rest-catalog/product-variants/metafields) metafields. You should save a metafield namespace under this format `shipping_carrier_{yourCarrierId}`; otherwise, you will not be able to recognize it as an attribute.
-             */
-            namespace?: string;
-            /**
-             * Resource type associated with the meta field. Currently, the only values available are 'product' or 'variant'.
-             */
-            resource_type?: 'product' | 'variant';
-            /**
-             * The resource ID of the meta field.
-             */
-            resource_id?: string;
-            /**
-             * Attribute type associated with the product or product variant meta field. Currently, the only value for this is 'metafield'.
-             */
-            attribute_type?: 'metafield';
-        }>;
-    }>;
-    /**
-     * Customer Details
-     *
-     * The details of the Customer that has made the purchase.
-     */
-    customer?: {
-        customer_groups?: Array<{
-            customer_group_id?: number;
-            customer_group_name?: string;
-        }>;
-        customer_id?: number;
-    };
-    store_id: string;
-    /**
-     * Request Context
-     *
-     * A collection of Reference Value objects.
-     */
-    request_context?: {
-        reference_values?: Array<{
-            /**
-             * The property to which the reference value pertains. Examples include `channel_id` and `cart_id`.
-             */
-            name?: string;
-            value?: string;
-        }>;
-    };
-};
-
-/**
- * Form Field Value
- *
- * The value of a [shipping address](/docs/rest-management/orders/order-shipping-addresses#get-a-shipping-address) form field. Depending on the form field, this could be a user-defined value or the value of a hidden input.
- */
-export type FormFieldValue = string;
 
 export type RequestShippingRatesData = {
     /**
      * Rate request object.
      */
-    body: RateRequestPayload;
+    body?: RateRequestPayload;
     path?: never;
     query?: never;
     url: '/rate';
@@ -1050,7 +567,7 @@ export type ValidateConnectionOptionsData = {
     /**
      * Check connection options request.
      */
-    body: CheckConnectionOptionsRequestPayload;
+    body?: CheckConnectionOptionsRequestPayload;
     path?: never;
     query?: never;
     url: '/check_connection_options';

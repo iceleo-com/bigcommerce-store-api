@@ -43,6 +43,27 @@ export type PaymentMethodStoredInstrument = {
 };
 
 /**
+ * PaymentMethodFullSupportedInstrumentsItemsInstrumentType
+ *
+ * Type of this instrument
+ */
+export type PaymentMethodFullSupportedInstrumentsItemsInstrumentType = 'VISA' | 'MASTERCARD' | 'DISCOVER' | 'AMEX' | 'DINERS_CLUB' | 'JCB' | 'DANKORT' | 'MAESTRO' | 'STORED_CARD';
+
+/**
+ * PaymentMethodFullSupportedInstrumentsItems
+ */
+export type PaymentMethodFullSupportedInstrumentsItems = {
+    /**
+     * Type of this instrument
+     */
+    instrument_type: PaymentMethodFullSupportedInstrumentsItemsInstrumentType;
+    /**
+     * Whether verification value is required for payment
+     */
+    verification_value_required?: boolean;
+};
+
+/**
  * paymentMethod_Full
  */
 export type PaymentMethodFull = {
@@ -55,18 +76,7 @@ export type PaymentMethodFull = {
      */
     name: string;
     stored_instruments?: Array<PaymentMethodStoredInstrument>;
-    supported_instruments: Array<{
-        /**
-         * InstrumentType
-         *
-         * Type of this instrument
-         */
-        instrument_type: 'VISA' | 'MASTERCARD' | 'DISCOVER' | 'AMEX' | 'DINERS_CLUB' | 'JCB' | 'DANKORT' | 'MAESTRO' | 'STORED_CARD';
-        /**
-         * Whether verification value is required for payment
-         */
-        verification_value_required?: boolean;
-    }>;
+    supported_instruments: Array<PaymentMethodFullSupportedInstrumentsItems>;
     /**
      * Whether this payment method is on test mode
      */
@@ -78,11 +88,141 @@ export type PaymentMethodFull = {
 };
 
 /**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+ * PaymentsMethodsGetResponsesContentApplicationJsonSchemaMeta
+ *
+ * Response metadata.
  */
-export type Accept = string;
+export type PaymentsMethodsGetResponsesContentApplicationJsonSchemaMeta = {
+    [key: string]: unknown;
+};
 
-export type PaymentsMethodsGetData = {
+/**
+ * Methods_getPaymentMethods_Response_200
+ */
+export type MethodsGetPaymentMethodsResponse200 = {
+    data?: Array<PaymentMethodFull>;
+    /**
+     * Response metadata.
+     */
+    meta?: PaymentsMethodsGetResponsesContentApplicationJsonSchemaMeta;
+};
+
+/**
+ * PaymentsMethodsGetResponsesContentApplicationJsonSchemaErrors
+ */
+export type PaymentsMethodsGetResponsesContentApplicationJsonSchemaErrors = {
+    [key: string]: unknown;
+};
+
+/**
+ * GetPaymentMethodsRequestBadRequestError
+ */
+export type GetPaymentMethodsRequestBadRequestError = {
+    /**
+     * HTTP status code
+     */
+    status: number;
+    /**
+     * Short summary describing the particular error
+     */
+    title: string;
+    /**
+     * Detailed summary describing the particular error
+     */
+    detail?: string;
+    /**
+     * Reference that identifies the particular error
+     */
+    type: string;
+    /**
+     * Code representing the particular error
+     */
+    code?: number;
+    errors?: PaymentsMethodsGetResponsesContentApplicationJsonSchemaErrors;
+};
+
+/**
+ * GetPaymentMethodsRequestUnauthorizedError
+ */
+export type GetPaymentMethodsRequestUnauthorizedError = {
+    /**
+     * HTTP status code
+     */
+    status: number;
+    /**
+     * Short summary describing the particular error
+     */
+    title: string;
+    /**
+     * Detailed summary describing the particular error
+     */
+    detail?: string;
+    /**
+     * Reference that identifies the particular error
+     */
+    type: string;
+    /**
+     * Code representing the particular error
+     */
+    code?: number;
+    errors?: PaymentsMethodsGetResponsesContentApplicationJsonSchemaErrors;
+};
+
+/**
+ * GetPaymentMethodsRequestNotFoundError
+ */
+export type GetPaymentMethodsRequestNotFoundError = {
+    /**
+     * HTTP status code
+     */
+    status: number;
+    /**
+     * Short summary describing the particular error
+     */
+    title: string;
+    /**
+     * Detailed summary describing the particular error
+     */
+    detail?: string;
+    /**
+     * Reference that identifies the particular error
+     */
+    type: string;
+    /**
+     * Code representing the particular error
+     */
+    code?: number;
+    errors?: PaymentsMethodsGetResponsesContentApplicationJsonSchemaErrors;
+};
+
+/**
+ * GetPaymentMethodsRequestUnprocessableEntityError
+ */
+export type GetPaymentMethodsRequestUnprocessableEntityError = {
+    /**
+     * HTTP status code
+     */
+    status: number;
+    /**
+     * Short summary describing the particular error
+     */
+    title: string;
+    /**
+     * Detailed summary describing the particular error
+     */
+    detail?: string;
+    /**
+     * Reference that identifies the particular error
+     */
+    type: string;
+    /**
+     * Code representing the particular error
+     */
+    code?: number;
+    errors?: PaymentsMethodsGetResponsesContentApplicationJsonSchemaErrors;
+};
+
+export type GetPaymentMethodsData = {
     body?: never;
     headers: {
         /**
@@ -93,185 +233,43 @@ export type PaymentsMethodsGetData = {
     path?: never;
     query?: {
         /**
-         * Identifier for the order
+         * The ID of the subject order.
          */
         order_id?: number;
         /**
-         * Identifier for the checkout (same as the cart ID)
+         * The ID of the subject checkout; identical to the cart ID.
          */
         checkout_id?: string;
     };
     url: '/payments/methods';
 };
 
-export type PaymentsMethodsGetErrors = {
+export type GetPaymentMethodsErrors = {
     /**
-     * ErrorResponse
-     *
      * Request has been rejected
      */
-    400: {
-        /**
-         * HTTP status code
-         */
-        status: number;
-        /**
-         * Short summary describing the particular error
-         */
-        title: string;
-        /**
-         * Detailed summary describing the particular error
-         */
-        detail?: string;
-        /**
-         * Reference that identifies the particular error
-         */
-        type: string;
-        /**
-         * Code representing the particular error
-         */
-        code?: number;
-        errors?: {
-            [key: string]: string;
-        };
-    };
+    400: GetPaymentMethodsRequestBadRequestError;
     /**
-     * ErrorResponse
-     *
      * Valid authentication required
      */
-    401: {
-        /**
-         * HTTP status code
-         */
-        status: number;
-        /**
-         * Short summary describing the particular error
-         */
-        title: string;
-        /**
-         * Detailed summary describing the particular error
-         */
-        detail?: string;
-        /**
-         * Reference that identifies the particular error
-         */
-        type: string;
-        /**
-         * Code representing the particular error
-         */
-        code?: number;
-        errors?: {
-            [key: string]: string;
-        };
-    };
+    401: GetPaymentMethodsRequestUnauthorizedError;
     /**
-     * ErrorResponse
-     *
      * Request has been rejected due to resource not being found
      */
-    404: {
-        /**
-         * HTTP status code
-         */
-        status: number;
-        /**
-         * Short summary describing the particular error
-         */
-        title: string;
-        /**
-         * Detailed summary describing the particular error
-         */
-        detail?: string;
-        /**
-         * Reference that identifies the particular error
-         */
-        type: string;
-        /**
-         * Code representing the particular error
-         */
-        code?: number;
-        errors?: {
-            [key: string]: string;
-        };
-    };
+    404: GetPaymentMethodsRequestNotFoundError;
     /**
-     * ErrorResponse
-     *
      * Request has been rejected due to missing or invalid data
      */
-    422: {
-        /**
-         * HTTP status code
-         */
-        status: number;
-        /**
-         * Short summary describing the particular error
-         */
-        title: string;
-        /**
-         * Detailed summary describing the particular error
-         */
-        detail?: string;
-        /**
-         * Reference that identifies the particular error
-         */
-        type: string;
-        /**
-         * Code representing the particular error
-         */
-        code?: number;
-        errors?: {
-            [key: string]: string;
-        };
-    };
-    /**
-     * ErrorResponse
-     *
-     * Internal server error
-     */
-    default: {
-        /**
-         * HTTP status code
-         */
-        status: number;
-        /**
-         * Short summary describing the particular error
-         */
-        title: string;
-        /**
-         * Detailed summary describing the particular error
-         */
-        detail?: string;
-        /**
-         * Reference that identifies the particular error
-         */
-        type: string;
-        /**
-         * Code representing the particular error
-         */
-        code?: number;
-        errors?: {
-            [key: string]: string;
-        };
-    };
+    422: GetPaymentMethodsRequestUnprocessableEntityError;
 };
 
-export type PaymentsMethodsGetError = PaymentsMethodsGetErrors[keyof PaymentsMethodsGetErrors];
+export type GetPaymentMethodsError = GetPaymentMethodsErrors[keyof GetPaymentMethodsErrors];
 
-export type PaymentsMethodsGetResponses = {
+export type GetPaymentMethodsResponses = {
     /**
-     * Payments Methods Response
+     * A list of accepted payment methods.
      */
-    200: {
-        data?: Array<PaymentMethodFull>;
-        /**
-         * Response metadata.
-         */
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: MethodsGetPaymentMethodsResponse200;
 };
 
-export type PaymentsMethodsGetResponse = PaymentsMethodsGetResponses[keyof PaymentsMethodsGetResponses];
+export type GetPaymentMethodsResponse = GetPaymentMethodsResponses[keyof GetPaymentMethodsResponses];

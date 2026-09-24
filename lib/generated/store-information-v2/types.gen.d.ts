@@ -1,19 +1,56 @@
 export type ClientOptions = {
-    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2' | (string & {});
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2/stores/{store_hash}/v2' | (string & {});
+};
+export type DateFormat = {
+    display?: string;
+    export?: string;
+    extended_display?: string;
+};
+export type Timezone = {
+    name?: string;
+    raw_offset?: number;
+    dst_offset?: number;
+    dst_correction?: boolean;
+    date_format?: DateFormat;
+};
+export type StoreInformationLogo0 = {
+    url?: string;
+};
+export type StoreInformationLogo = StoreInformationLogo0 | Array<unknown>;
+export type StoreInformationFeaturesCheckoutType = 'optimized' | 'single' | 'single_customizable' | 'klarna';
+export type StoreInformationFeaturesStorefrontLimits = {
+    active?: number;
+    total_including_inactive?: number;
+};
+export type StoreInformationFeatures = {
+    stencil_enabled?: boolean;
+    sitewidehttps_enabled?: boolean;
+    facebook_catalog_id?: string;
+    checkout_type?: StoreInformationFeaturesCheckoutType;
+    wishlists_enabled?: boolean;
+    graphql_storefront_api_enabled?: boolean;
+    shopper_consent_tracking_enabled?: boolean;
+    multi_storefront_enabled?: boolean;
+    storefront_limits?: StoreInformationFeaturesStorefrontLimits;
 };
 export type StoreInformation = {
     id?: string;
+    account_uuid?: string;
     domain?: string;
     secure_url?: string;
     control_panel_base_url?: string;
+    status?: string;
     name?: string;
     first_name?: string;
     last_name?: string;
     address?: string;
     country?: string;
+    country_code?: string;
+    infrastructure_region?: string;
     phone?: string;
     admin_email?: string;
     order_email?: string;
+    favicon_url?: string;
     timezone?: Timezone;
     language?: string;
     currency?: string;
@@ -26,71 +63,45 @@ export type StoreInformation = {
     dimension_units?: string;
     dimension_decimal_places?: number;
     dimension_decimal_token?: string;
-    'dimension_thousands_token:'?: string;
+    dimension_thousands_token?: string;
     plan_name?: string;
     plan_level?: string;
+    plan_is_trial?: boolean;
     industry?: string;
-    logo?: {
-        url?: string;
-    };
+    logo?: StoreInformationLogo;
     is_price_entered_with_tax?: boolean;
-    active_comparison_modules?: Array<unknown>;
-    features?: {
-        checkout_type?: string;
-        facebook_catalog_id?: string;
-        graphql_storefront_api_enabled?: boolean;
-        stencil_enabled?: boolean;
-        sitewidehttps_enabled?: boolean;
-        multi_storefront_enabled?: boolean;
-        shopper_consent_tracking_enabled?: boolean;
-        wishlists_enabled?: boolean;
-    };
-    account_uuid?: string;
+    store_id?: number;
     default_channel_id?: number;
     default_site_id?: number;
-    plan_is_trial?: boolean;
-    store_id?: number;
-    status?: string;
-};
-export type Timezone = {
-    name?: string;
-    raw_offset?: number;
-    dst_offset?: number;
-    dst_correction?: boolean;
-    date_format?: DateFormat;
-};
-export type DateFormat = {
-    display?: string;
-    export?: string;
-    extended_display?: string;
+    active_comparison_modules?: Array<unknown>;
+    features?: StoreInformationFeatures;
 };
 export type TimeStampFull = {
     time?: number;
 };
-export type GetStoreData = {
+export type GetStoreInformationData = {
     body?: never;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
+    headers?: {
+        Accept?: string;
     };
     path?: never;
     query?: never;
     url: '/store';
 };
-export type GetStoreResponses = {
-    200: unknown;
+export type GetStoreInformationResponses = {
+    200: StoreInformation;
 };
-export type GetTimeData = {
+export type GetStoreInformationResponse = GetStoreInformationResponses[keyof GetStoreInformationResponses];
+export type GetSystemTimestampData = {
     body?: never;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
+    headers?: {
+        Accept?: string;
     };
     path?: never;
     query?: never;
     url: '/time';
 };
-export type GetTimeResponses = {
+export type GetSystemTimestampResponses = {
     200: TimeStampFull;
 };
-export type GetTimeResponse = GetTimeResponses[keyof GetTimeResponses];
+export type GetSystemTimestampResponse = GetSystemTimestampResponses[keyof GetSystemTimestampResponses];

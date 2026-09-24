@@ -5,6 +5,8 @@ export type ClientOptions = {
 };
 
 /**
+ * TaxCustomer
+ *
  * Represents a customer and their associated tax-related attributes.
  */
 export type TaxCustomer = {
@@ -17,13 +19,30 @@ export type TaxCustomer = {
      * The tax property must be defined to associate a value.
      * These values will be sent to the active tax provider during Tax Provider API operations whenever the associated customer is included in the operation.
      */
-    tax_properties: {
-        [key: string]: unknown;
-    };
+    tax_properties: TaxCustomerTaxProperties;
 };
 
 /**
- * Response meta
+ * TaxCustomerTaxProperties
+ *
+ * A simple key-value pairing.
+ * The tax property must be defined to associate a value.
+ * These values will be sent to the active tax provider during Tax Provider API operations whenever the associated customer is included in the operation.
+ */
+export type TaxCustomerTaxProperties = {
+    [key: string]: unknown;
+};
+
+/**
+ * Tax Customers_updateTaxCustomers_Response_200
+ */
+export type TaxCustomersUpdateTaxCustomersResponse200 = {
+    data?: Array<TaxCustomer>;
+    meta?: MetaOpen;
+};
+
+/**
+ * MetaOpen
  *
  * Response metadata.
  */
@@ -32,27 +51,20 @@ export type MetaOpen = {
 };
 
 /**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+ * Tax Customers_getTaxCustomers_Response_200
  */
-export type Accept = string;
-
-/**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
- */
-export type ContentType = string;
-
-/**
- * ID of customer. To target multiple customers, provide a comma-separated list of IDs such as `12,34,56`.
- */
-export type CustomerIdin = Array<number>;
+export type TaxCustomersGetTaxCustomersResponse200 = {
+    data?: Array<TaxCustomer>;
+    meta?: MetaOpen;
+};
 
 export type DeleteTaxCustomersData = {
     body?: never;
     headers: {
         /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
-        'Content-Type': string;
+        Accept: string;
     };
     path?: never;
     query?: {
@@ -66,7 +78,7 @@ export type DeleteTaxCustomersData = {
 
 export type DeleteTaxCustomersErrors = {
     /**
-     * Request parameters invalid
+     * Any type
      */
     400: unknown;
 };
@@ -75,7 +87,9 @@ export type DeleteTaxCustomersResponses = {
     /**
      * No Content
      */
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 
 export type DeleteTaxCustomersResponse = DeleteTaxCustomersResponses[keyof DeleteTaxCustomersResponses];
@@ -84,9 +98,9 @@ export type GetTaxCustomersData = {
     body?: never;
     headers: {
         /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
-        'Content-Type': string;
+        Accept: string;
     };
     path?: never;
     query?: {
@@ -100,7 +114,7 @@ export type GetTaxCustomersData = {
 
 export type GetTaxCustomersErrors = {
     /**
-     * Request parameters invalid
+     * Any type
      */
     400: unknown;
 };
@@ -109,21 +123,18 @@ export type GetTaxCustomersResponses = {
     /**
      * OK
      */
-    200: {
-        data?: Array<TaxCustomer>;
-        meta?: MetaOpen;
-    };
+    200: TaxCustomersGetTaxCustomersResponse200;
 };
 
 export type GetTaxCustomersResponse = GetTaxCustomersResponses[keyof GetTaxCustomersResponses];
 
 export type UpdateTaxCustomersData = {
-    body: Array<TaxCustomer>;
+    body?: Array<TaxCustomer>;
     headers: {
         /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
-        'Content-Type': string;
+        Accept: string;
     };
     path?: never;
     query?: never;
@@ -132,7 +143,7 @@ export type UpdateTaxCustomersData = {
 
 export type UpdateTaxCustomersErrors = {
     /**
-     * The request body does not meet specifications.
+     * Any type
      */
     422: unknown;
 };
@@ -141,10 +152,7 @@ export type UpdateTaxCustomersResponses = {
     /**
      * OK
      */
-    200: {
-        data?: Array<TaxCustomer>;
-        meta?: MetaOpen;
-    };
+    200: TaxCustomersUpdateTaxCustomersResponse200;
 };
 
 export type UpdateTaxCustomersResponse = UpdateTaxCustomersResponses[keyof UpdateTaxCustomersResponses];

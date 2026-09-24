@@ -3,21 +3,35 @@ export type ClientOptions = {
 };
 export type TaxSettings = {
     tax_entered_with_prices?: boolean;
-    price_display_settings?: {
-        show_inclusive_in_control_panel?: boolean;
-        invoice_price_display_strategy?: 'ZONE' | 'INCLUSIVE' | 'EXCLUSIVE';
-    };
-    fallback_strategy?: 'FIXED' | 'BASIC' | 'DISABLE';
+    price_display_settings?: TaxSettingsPriceDisplaySettings;
+    fallback_strategy?: TaxSettingsFallbackStrategy;
     should_subtract_store_tax?: boolean;
     should_use_geolocation_to_determine_guest_shopper_tax_zone?: boolean;
     guest_shopper_tax_zone_id?: number;
     store_tax_zone_id?: number;
+    document_submission_strategy?: TaxSettingsDocumentSubmissionStrategy;
+    rounding_strategy?: TaxSettingsRoundingStrategy;
+};
+export type TaxSettingsRoundingStrategy = 'NO_ROUNDING' | 'RATE_RESULT_ROUNDING' | 'UNIT_LEVEL_ROUNDING';
+export type TaxSettingsDocumentSubmissionStrategy = 'ON_PAYMENT_CAPTURE' | 'ON_ORDER_CREATION';
+export type TaxSettingsFallbackStrategy = 'FIXED' | 'BASIC' | 'DISABLE';
+export type TaxSettingsPriceDisplaySettings = {
+    control_panel_price_display_strategy?: TaxSettingsPriceDisplaySettingsControlPanelPriceDisplayStrategy;
+    invoice_price_display_strategy?: TaxSettingsPriceDisplaySettingsInvoicePriceDisplayStrategy;
+};
+export type TaxSettingsPriceDisplaySettingsInvoicePriceDisplayStrategy = 'ZONE' | 'INCLUSIVE' | 'EXCLUSIVE';
+export type TaxSettingsPriceDisplaySettingsControlPanelPriceDisplayStrategy = 'ZONE' | 'INCLUSIVE' | 'EXCLUSIVE';
+export type TaxSettingsUpdateTaxSettingsResponse200 = {
+    data?: TaxSettings;
+    meta?: MetaOpen;
 };
 export type MetaOpen = {
     [key: string]: unknown;
 };
-export type Accept = string;
-export type ContentType = string;
+export type TaxSettingsGetTaxSettingsResponse200 = {
+    data?: TaxSettings;
+    meta?: MetaOpen;
+};
 export type GetTaxSettingsData = {
     body?: never;
     headers: {
@@ -28,29 +42,22 @@ export type GetTaxSettingsData = {
     url: '/tax/settings';
 };
 export type GetTaxSettingsResponses = {
-    200: {
-        data?: TaxSettings;
-        meta?: MetaOpen;
-    };
+    200: TaxSettingsGetTaxSettingsResponse200;
 };
 export type GetTaxSettingsResponse = GetTaxSettingsResponses[keyof GetTaxSettingsResponses];
-export type SetTaxSettingsData = {
-    body: TaxSettings;
+export type UpdateTaxSettingsData = {
+    body?: TaxSettings;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/tax/settings';
 };
-export type SetTaxSettingsErrors = {
+export type UpdateTaxSettingsErrors = {
     422: unknown;
 };
-export type SetTaxSettingsResponses = {
-    200: {
-        data?: TaxSettings;
-        meta?: MetaOpen;
-    };
+export type UpdateTaxSettingsResponses = {
+    200: TaxSettingsUpdateTaxSettingsResponse200;
 };
-export type SetTaxSettingsResponse = SetTaxSettingsResponses[keyof SetTaxSettingsResponses];
+export type UpdateTaxSettingsResponse = UpdateTaxSettingsResponses[keyof UpdateTaxSettingsResponses];

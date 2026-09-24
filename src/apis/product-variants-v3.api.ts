@@ -11,31 +11,24 @@ export class ProductVariantsV3Api {
     }
 
     /**
-     * Get All Product Variants
+     * List Product Variants
      *
-     * Returns a list of product *Variants*. Optional parameters can be passed in.
+     * Returns a list of product variants. Optional parameters can be passed in.
      */
-    getVariantsByProductId(
-        productId: ProductVariantsV3ApiSpecs.GetVariantsByProductIdData['path']['product_id'],
-        query?: ProductVariantsV3ApiSpecs.GetVariantsByProductIdData['query'],
+    getProductVariants(
+        productId: ProductVariantsV3ApiSpecs.GetProductVariantsData['path']['product_id'],
+        query?: ProductVariantsV3ApiSpecs.GetProductVariantsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetVariantsByProductIdResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.GetVariantsByProductIdErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetProductVariantsResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.GetProductVariantsErrors[404]>>>({
             path: `v3/catalog/products/${productId}/variants`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `getVariantsByProductId` instead.
-     */
-    getProductVariants(...args: Parameters<ProductVariantsV3Api['getVariantsByProductId']>) {
-        return this.getVariantsByProductId(...args);
-    }
-
-    /**
-     * Create a Product Variant
+     * Create Product Variant
      *
-     * Creates a *Product Variant*.
+     * Creates a product variant.
 
      **Required Fields**
      * sku
@@ -48,13 +41,13 @@ export class ProductVariantsV3Api {
      * 600 SKUs per product limit.
      * 255 characters SKU length limit.
 
-     Variants need to be created one at a time using this endpoint. To use a variant array and create products and variants in the same call use the [Create Products](/docs/rest-catalog/products#create-a-product) during the initial product creation.
+     Variants need to be created one at a time using this endpoint. To use a variant array, create products, and variants in the same call use the [Create Products](/developer/api-reference/rest/admin/catalog/products/create-product) endpoint during the initial product creation. To obtain the `option_values` to include in this request, use the [Create a product variant option](/developer/api-reference/rest/admin/catalog/product-variant-options/create-product-variant-option) endpoint.
      */
-    createVariant(
-        productId: ProductVariantsV3ApiSpecs.CreateVariantData['path']['product_id'],
-        requestBody: ProductVariantsV3ApiSpecs.CreateVariantData['body'],
+    createProductVariant(
+        productId: ProductVariantsV3ApiSpecs.CreateProductVariantData['path']['product_id'],
+        requestBody: ProductVariantsV3ApiSpecs.CreateProductVariantData['body'],
     ) {
-        return this.request.post<(RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.CreateVariantResponses[200]>> | RequestSuccessResponse<207, Required<ProductVariantsV3ApiSpecs.CreateVariantResponses[207]>>),RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.CreateVariantErrors[404]>>>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.CreateProductVariantResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.CreateProductVariantErrors[404]>>>({
             path: `v3/catalog/products/${productId}/variants`,
             contentType: 'application/json',
             body: requestBody,
@@ -62,46 +55,32 @@ export class ProductVariantsV3Api {
     }
 
     /**
-     * @deprecated Use `createVariant` instead.
-     */
-    createProductVariant(...args: Parameters<ProductVariantsV3Api['createVariant']>) {
-        return this.createVariant(...args);
-    }
-
-    /**
-     * Get a Product Variant
+     * Get Product Variant
      *
-     * Returns a single product *Variant*. Optional parameters can be passed in.
+     * Returns a single product variant. Optional parameters can be passed in.
      */
-    getVariantById(
-        productId: ProductVariantsV3ApiSpecs.GetVariantByIdData['path']['product_id'],
-        variantId: ProductVariantsV3ApiSpecs.GetVariantByIdData['path']['variant_id'],
-        query?: ProductVariantsV3ApiSpecs.GetVariantByIdData['query'],
+    getProductVariant(
+        productId: ProductVariantsV3ApiSpecs.GetProductVariantData['path']['product_id'],
+        variantId: ProductVariantsV3ApiSpecs.GetProductVariantData['path']['variant_id'],
+        query?: ProductVariantsV3ApiSpecs.GetProductVariantData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetVariantByIdResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.GetVariantByIdErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetProductVariantResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.GetProductVariantErrors[404]>>>({
             path: `v3/catalog/products/${productId}/variants/${variantId}`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `getVariantById` instead.
-     */
-    getProductVariant(...args: Parameters<ProductVariantsV3Api['getVariantById']>) {
-        return this.getVariantById(...args);
-    }
-
-    /**
-     * Update a Product Variant
+     * Update Product Variant
      *
-     * Updates a product *Variant*.
+     * Updates a product variant.
      */
-    updateVariant(
-        productId: ProductVariantsV3ApiSpecs.UpdateVariantData['path']['product_id'],
-        variantId: ProductVariantsV3ApiSpecs.UpdateVariantData['path']['variant_id'],
-        requestBody: ProductVariantsV3ApiSpecs.UpdateVariantData['body'],
+    updateProductVariant(
+        productId: ProductVariantsV3ApiSpecs.UpdateProductVariantData['path']['product_id'],
+        variantId: ProductVariantsV3ApiSpecs.UpdateProductVariantData['path']['variant_id'],
+        requestBody: ProductVariantsV3ApiSpecs.UpdateProductVariantData['body'],
     ) {
-        return this.request.put<(RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.UpdateVariantResponses[200]>> | RequestSuccessResponse<207, Required<ProductVariantsV3ApiSpecs.UpdateVariantResponses[207]>>),RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.UpdateVariantErrors[404]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.UpdateProductVariantResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.UpdateProductVariantErrors[404]>>>({
             path: `v3/catalog/products/${productId}/variants/${variantId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -109,58 +88,121 @@ export class ProductVariantsV3Api {
     }
 
     /**
-     * @deprecated Use `updateVariant` instead.
-     */
-    updateProductVariant(...args: Parameters<ProductVariantsV3Api['updateVariant']>) {
-        return this.updateVariant(...args);
-    }
-
-    /**
-     * Delete a Product Variant
+     * Delete Product Variant
      *
-     * Deletes a product *Variant*.
+     * Deletes a product variant.
      */
-    deleteVariantById(
-        productId: ProductVariantsV3ApiSpecs.DeleteVariantByIdData['path']['product_id'],
-        variantId: ProductVariantsV3ApiSpecs.DeleteVariantByIdData['path']['variant_id'],
+    deleteProductVariant(
+        productId: ProductVariantsV3ApiSpecs.DeleteProductVariantData['path']['product_id'],
+        variantId: ProductVariantsV3ApiSpecs.DeleteProductVariantData['path']['variant_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<ProductVariantsV3ApiSpecs.DeleteVariantByIdResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductVariantsV3ApiSpecs.DeleteProductVariantResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/variants/${variantId}`,
         });
     }
 
     /**
-     * @deprecated Use `deleteVariantById` instead.
+     * List Product Variant Metafields
+     *
+     * Get all variant metafields.
      */
-    deleteProductVariant(...args: Parameters<ProductVariantsV3Api['deleteVariantById']>) {
-        return this.deleteVariantById(...args);
+    getVariantsMetafields(
+        query?: ProductVariantsV3ApiSpecs.GetVariantsMetafieldsData['query'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetVariantsMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: 'v3/catalog/variants/metafields',
+            query,
+        });
     }
 
     /**
-     * Get All Product Variant Metafields
+     * Create Multiple Metafields
+     *
+     * Create multiple metafields.
+     */
+    createVariantsMetafields(
+        requestBody: ProductVariantsV3ApiSpecs.CreateVariantsMetafieldsData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.CreateVariantsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.CreateVariantsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.CreateVariantsMetafieldsErrors[422]>>)>({
+            path: 'v3/catalog/variants/metafields',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Update Multiple Metafields
+     *
+     * Create multiple metafields.
+     */
+    updateVariantsMetafields(
+        requestBody: ProductVariantsV3ApiSpecs.UpdateVariantsMetafieldsData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.UpdateVariantsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.UpdateVariantsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.UpdateVariantsMetafieldsErrors[422]>>)>({
+            path: 'v3/catalog/variants/metafields',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete Multiple Metafields
+     *
+     * Delete all variant metafields.
+     */
+    deleteVariantsMetafields(
+        requestBody: ProductVariantsV3ApiSpecs.DeleteVariantsMetafieldsData['body'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.DeleteVariantsMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.DeleteVariantsMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.DeleteVariantsMetafieldsErrors[422]>>)>({
+            path: 'v3/catalog/variants/metafields',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Create Product Variant Image
+     *
+     * Creates a *Variant Image*.
+
+     Only one image can be explicitly associated with a Variant. If the Variant already has an associated image, overwrites the existing Variant Image.
+
+     The image displays on the storefront when the Variant is selected.
+
+      **Required Fields**
+     - image_file: Form posts. Files larger than 1 MB are not accepted
+     - image_url: Any publicly available URL
+     */
+    createProductVariantImage(
+        productId: ProductVariantsV3ApiSpecs.CreateProductVariantImageData['path']['product_id'],
+        variantId: ProductVariantsV3ApiSpecs.CreateProductVariantImageData['path']['variant_id'],
+        requestBody: ProductVariantsV3ApiSpecs.CreateProductVariantImageData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.CreateProductVariantImageResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.CreateProductVariantImageErrors[400]>> | RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.CreateProductVariantImageErrors[404]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.CreateProductVariantImageErrors[422]>> | RequestErrorResponse<500, Required<ProductVariantsV3ApiSpecs.CreateProductVariantImageErrors[500]>>)>({
+            path: `v3/catalog/products/${productId}/variants/${variantId}/image`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * List Product Variant Metafields
      *
      * Returns a list of product variant *Metafields*. Optional parameters can be passed in.
      */
-    getVariantMetafieldsByProductIdAndVariantId(
-        productId: ProductVariantsV3ApiSpecs.GetVariantMetafieldsByProductIdAndVariantIdData['path']['product_id'],
-        variantId: ProductVariantsV3ApiSpecs.GetVariantMetafieldsByProductIdAndVariantIdData['path']['variant_id'],
-        query?: ProductVariantsV3ApiSpecs.GetVariantMetafieldsByProductIdAndVariantIdData['query'],
+    getProductVariantMetafields(
+        productId: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldsData['path']['product_id'],
+        variantId: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldsData['path']['variant_id'],
+        query?: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetVariantMetafieldsByProductIdAndVariantIdResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.GetVariantMetafieldsByProductIdAndVariantIdErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetProductVariantMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/products/${productId}/variants/${variantId}/metafields`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `getVariantMetafieldsByProductIdAndVariantId` instead.
-     */
-    getProductVariantMetafields(...args: Parameters<ProductVariantsV3Api['getVariantMetafieldsByProductIdAndVariantId']>) {
-        return this.getVariantMetafieldsByProductIdAndVariantId(...args);
-    }
-
-    /**
-     * Create a Product Variant Metafield
+     * Create Product Variant Metafield
      *
      * Creates a product variant *Metafield*.
 
@@ -175,12 +217,12 @@ export class ProductVariantsV3Api {
 
      **Note:** The maxiumum number of metafields allowed on each order, product, category, variant, or brand is 250 per client ID. For more information, see [Platform Limits](https://support.bigcommerce.com/s/article/Platform-Limits) in the Help Center.
      */
-    createVariantMetafield(
-        productId: ProductVariantsV3ApiSpecs.CreateVariantMetafieldData['path']['product_id'],
-        variantId: ProductVariantsV3ApiSpecs.CreateVariantMetafieldData['path']['variant_id'],
-        requestBody: ProductVariantsV3ApiSpecs.CreateVariantMetafieldData['body'],
+    createProductVariantMetafield(
+        productId: ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldData['path']['product_id'],
+        variantId: ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldData['path']['variant_id'],
+        requestBody: ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.CreateVariantMetafieldResponses[200]>>,(RequestErrorResponse<409, Required<ProductVariantsV3ApiSpecs.CreateVariantMetafieldErrors[409]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.CreateVariantMetafieldErrors[422]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldErrors[400]>> | RequestErrorResponse<409, Required<ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldErrors[409]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.CreateProductVariantMetafieldErrors[422]>>)>({
             path: `v3/catalog/products/${productId}/variants/${variantId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
@@ -188,34 +230,20 @@ export class ProductVariantsV3Api {
     }
 
     /**
-     * @deprecated Use `createVariantMetafield` instead.
-     */
-    createProductVariantMetafield(...args: Parameters<ProductVariantsV3Api['createVariantMetafield']>) {
-        return this.createVariantMetafield(...args);
-    }
-
-    /**
-     * Get a Product Variant Metafields
+     * Get Product Variant Metafield
      *
      * Returns a single product variant *Metafield*. Optional parameters can be passed in.
      */
-    getVariantMetafieldByProductIdAndVariantId(
-        productId: ProductVariantsV3ApiSpecs.GetVariantMetafieldByProductIdAndVariantIdData['path']['product_id'],
-        variantId: ProductVariantsV3ApiSpecs.GetVariantMetafieldByProductIdAndVariantIdData['path']['variant_id'],
-        metafieldId: ProductVariantsV3ApiSpecs.GetVariantMetafieldByProductIdAndVariantIdData['path']['metafield_id'],
-        query?: ProductVariantsV3ApiSpecs.GetVariantMetafieldByProductIdAndVariantIdData['query'],
+    getProductVariantMetafield(
+        productId: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldData['path']['product_id'],
+        variantId: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldData['path']['variant_id'],
+        metafieldId: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldData['path']['metafield_id'],
+        query?: ProductVariantsV3ApiSpecs.GetProductVariantMetafieldData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetVariantMetafieldByProductIdAndVariantIdResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.GetVariantMetafieldByProductIdAndVariantIdErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.GetProductVariantMetafieldResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.GetProductVariantMetafieldErrors[404]>>>({
             path: `v3/catalog/products/${productId}/variants/${variantId}/metafields/${metafieldId}`,
             query,
         });
-    }
-
-    /**
-     * @deprecated Use `getVariantMetafieldByProductIdAndVariantId` instead.
-     */
-    getProductVariantMetafield(...args: Parameters<ProductVariantsV3Api['getVariantMetafieldByProductIdAndVariantId']>) {
-        return this.getVariantMetafieldByProductIdAndVariantId(...args);
     }
 
     /**
@@ -236,13 +264,13 @@ export class ProductVariantsV3Api {
      **Usage Notes**
      * Attempting to modify `namespace`, `key`, and `permission_set` fields using a client ID different from the one used to create those metafields will result in a 403 error message. 
      */
-    updateVariantMetafield(
-        productId: ProductVariantsV3ApiSpecs.UpdateVariantMetafieldData['path']['product_id'],
-        variantId: ProductVariantsV3ApiSpecs.UpdateVariantMetafieldData['path']['variant_id'],
-        metafieldId: ProductVariantsV3ApiSpecs.UpdateVariantMetafieldData['path']['metafield_id'],
-        requestBody: ProductVariantsV3ApiSpecs.UpdateVariantMetafieldData['body'],
+    updateProductVariantMetafield(
+        productId: ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldData['path']['product_id'],
+        variantId: ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldData['path']['variant_id'],
+        metafieldId: ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldData['path']['metafield_id'],
+        requestBody: ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.UpdateVariantMetafieldResponses[200]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.UpdateVariantMetafieldErrors[404]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldErrors[400]>> | RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.UpdateProductVariantMetafieldErrors[404]>>)>({
             path: `v3/catalog/products/${productId}/variants/${variantId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -250,68 +278,22 @@ export class ProductVariantsV3Api {
     }
 
     /**
-     * @deprecated Use `updateVariantMetafield` instead.
-     */
-    updateProductVariantMetafield(...args: Parameters<ProductVariantsV3Api['updateVariantMetafield']>) {
-        return this.updateVariantMetafield(...args);
-    }
-
-    /**
-     * Delete a Variant Metafield
+     * Delete Product Variant Metafield
      *
      * Deletes a product variant *Metafield*.
      */
-    deleteVariantMetafieldById(
-        productId: ProductVariantsV3ApiSpecs.DeleteVariantMetafieldByIdData['path']['product_id'],
-        variantId: ProductVariantsV3ApiSpecs.DeleteVariantMetafieldByIdData['path']['variant_id'],
-        metafieldId: ProductVariantsV3ApiSpecs.DeleteVariantMetafieldByIdData['path']['metafield_id'],
+    deleteProductVariantMetafield(
+        productId: ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldData['path']['product_id'],
+        variantId: ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldData['path']['variant_id'],
+        metafieldId: ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<ProductVariantsV3ApiSpecs.DeleteVariantMetafieldByIdResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldResponses[204]>>,RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.DeleteProductVariantMetafieldErrors[404]>>>({
             path: `v3/catalog/products/${productId}/variants/${variantId}/metafields/${metafieldId}`,
         });
     }
 
     /**
-     * @deprecated Use `deleteVariantMetafieldById` instead.
-     */
-    deleteProductVariantMetafield(...args: Parameters<ProductVariantsV3Api['deleteVariantMetafieldById']>) {
-        return this.deleteVariantMetafieldById(...args);
-    }
-
-    /**
-     * Create a Variant Image
-     *
-     * Creates a *Variant Image*.
-
-     Only one image can be explicitly associated with a Variant. If the Variant already has an associated image, overwrites the existing Variant Image.
-
-     The image displays on the storefront when the Variant is selected.
-
-      **Required Fields**
-     - image_file: Form posts. Files larger than 1 MB are not accepted
-     - image_url: Any publicly available URL
-     */
-    createVariantImage(
-        productId: ProductVariantsV3ApiSpecs.CreateVariantImageData['path']['product_id'],
-        variantId: ProductVariantsV3ApiSpecs.CreateVariantImageData['path']['variant_id'],
-        requestBody: ProductVariantsV3ApiSpecs.CreateVariantImageData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.CreateVariantImageResponses[200]>>,(RequestErrorResponse<400, Required<ProductVariantsV3ApiSpecs.CreateVariantImageErrors[400]>> | RequestErrorResponse<404, Required<ProductVariantsV3ApiSpecs.CreateVariantImageErrors[404]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.CreateVariantImageErrors[422]>> | RequestErrorResponse<500, Required<ProductVariantsV3ApiSpecs.CreateVariantImageErrors[500]>>)>({
-            path: `v3/catalog/products/${productId}/variants/${variantId}/image`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * @deprecated Use `createVariantImage` instead.
-     */
-    createProductVariantImage(...args: Parameters<ProductVariantsV3Api['createVariantImage']>) {
-        return this.createVariantImage(...args);
-    }
-
-    /**
-     * Get All Variants
+     * List Variants
      *
      * Returns a list of all variants in your catalog. Optional parameters can be passed in.
      */
@@ -325,14 +307,14 @@ export class ProductVariantsV3Api {
     }
 
     /**
-     * Update Variants (Batch)
+     * Update Variants (batch)
      *
      * Updates a batch of `variant` objects. Currently the limit is 50 variants however this is subject to change.
 
      **Required Fields**
 
      To update an existing variant:
-     * id (variant id)
+     * id (variant ID)
 
      To create a new variant:
      * product_id
@@ -344,7 +326,7 @@ export class ProductVariantsV3Api {
     updateVariantsBatch(
         requestBody: ProductVariantsV3ApiSpecs.UpdateVariantsBatchData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.UpdateVariantsBatchResponses[200]>>,(RequestErrorResponse<413, Required<ProductVariantsV3ApiSpecs.UpdateVariantsBatchErrors[413]>> | RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.UpdateVariantsBatchErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<ProductVariantsV3ApiSpecs.UpdateVariantsBatchResponses[200]>>,RequestErrorResponse<422, Required<ProductVariantsV3ApiSpecs.UpdateVariantsBatchErrors[422]>>>({
             path: 'v3/catalog/variants',
             contentType: 'application/json',
             body: requestBody,

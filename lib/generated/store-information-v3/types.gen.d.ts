@@ -1,5 +1,27 @@
 export type ClientOptions = {
-    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3/stores/{store_hash}/v3' | (string & {});
+};
+export type StoreMetafieldsGetParametersIncludeFieldsSchemaItems = 'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date modified';
+export type StoreMetafieldsGetParametersDirection = 'asc' | 'desc';
+export type MetafieldBasePermissionSet = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+export type MetafieldBaseResourceType = 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'store';
+export type Metafield = {
+    permission_set: MetafieldBasePermissionSet;
+    namespace?: string;
+    key?: string;
+    value?: string;
+    description?: string;
+    resource_type?: MetafieldBaseResourceType;
+    resource_id?: string;
+    id?: string;
+    date_created?: string;
+    date_modified?: string;
+    owner_client_id?: string;
+};
+export type PaginationLinks = {
+    previous?: string;
+    current?: string;
+    next?: string;
 };
 export type Pagination = {
     total?: number;
@@ -7,81 +29,48 @@ export type Pagination = {
     per_page?: number;
     current_page?: number;
     total_pages?: number;
-    links?: {
-        previous?: string;
-        current?: string;
-        next?: string;
-    };
+    links?: PaginationLinks;
+};
+export type CursorPaginationLinks = {
+    previous?: string;
+    current?: string;
+    next?: string;
 };
 export type CursorPagination = {
     count?: number;
     per_page?: number;
     start_cursor?: string;
     end_cursor?: string;
-    links?: {
-        previous?: string;
-        current?: string;
-        next?: string;
-    };
+    links?: CursorPaginationLinks;
 };
-export type NotFound = {
-    status?: number;
-    title?: string;
-    type?: string;
+export type CollectionMeta = {
+    pagination?: Pagination;
+    cursor_pagination?: CursorPagination;
 };
-export type MetafieldResponse = {
-    data?: Metafield;
-    meta?: MetaCollectionOpen;
+export type MetaFieldCollectionResponseBatch = {
+    data?: Array<Metafield>;
+    meta?: CollectionMeta;
 };
-export type Metafield = MetafieldBase & {
-    id?: string;
-    date_created?: string;
-    date_modified?: string;
-    readonly owner_client_id?: string;
-};
-export type MetafieldBase = {
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace?: string;
-    key?: string;
-    value?: string;
-    description?: string;
-    resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'store';
-    readonly resource_id?: string;
-};
+export type MetafieldBasePostPutPermissionSet = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
 export type MetafieldBasePostPut = {
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+    permission_set: MetafieldBasePostPutPermissionSet;
     namespace: string;
     key: string;
     value: string;
     description?: string;
 };
-export type MetaFieldCollectionResponse = {
-    data?: Metafield;
-    meta?: MetaCollectionOpen;
-};
-export type MetaFieldCollectionResponseBatch = {
-    data?: Array<Metafield>;
-    meta?: CollectionMeta;
+export type WriteCollectionSuccessMeta = {
+    total?: number;
+    success?: number;
+    failed?: number;
 };
 export type MetaFieldCollectionResponseBatchPostPut = {
     data?: Array<Metafield>;
     errors?: Array<unknown>;
     meta?: WriteCollectionSuccessMeta;
 };
-export type MetaFieldCollectionDeleteResponseSuccess = {
-    data?: Array<number>;
-    errors?: Array<unknown>;
-    meta?: WriteCollectionSuccessMeta;
-};
-export type MetaFieldCollectionResponsePartialSuccessPostPut = {
-    data?: Array<Metafield>;
-    errors?: _Error;
-    meta?: WriteCollectionPartialSuccessMeta;
-};
-export type MetaFieldCollectionResponsePartialSuccessDelete = {
-    data?: Array<number>;
-    errors?: Array<_Error>;
-    meta?: WriteCollectionPartialSuccessMeta;
+export type ErrorDetail = {
+    [key: string]: unknown;
 };
 export type _Error = {
     status?: number;
@@ -89,69 +78,67 @@ export type _Error = {
     type?: string;
     errors?: ErrorDetail;
 };
-export type ErrorDetail = {
-    [key: string]: unknown;
-};
-export type WriteCollectionSuccessMeta = {
-    total?: number;
-    success?: number;
-    failed?: number;
-};
 export type WriteCollectionPartialSuccessMeta = {
     total?: number;
     success?: number;
     failed?: number;
 };
-export type CollectionMeta = {
-    pagination?: Pagination;
-    cursor_pagination?: CursorPagination;
-    [key: string]: unknown | Pagination | CursorPagination | undefined;
+export type MetaFieldCollectionResponsePartialSuccessPostPut = {
+    data?: Array<Metafield>;
+    errors?: _Error;
+    meta?: WriteCollectionPartialSuccessMeta;
+};
+export type StoreMetafieldsPutRequestBodyContentApplicationJsonSchemaItemsPermissionSet = 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
+export type StoreMetafieldsPutRequestBodyContentApplicationJsonSchemaItems = {
+    permission_set: StoreMetafieldsPutRequestBodyContentApplicationJsonSchemaItemsPermissionSet;
+    namespace: string;
+    key: string;
+    value: string;
+    description?: string;
+    id: number;
+};
+export type UpdateStoreMetafieldsRequestBadRequestError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    detail?: string;
+};
+export type MetaFieldCollectionDeleteResponseSuccess = {
+    data?: Array<number>;
+    errors?: Array<unknown>;
+    meta?: WriteCollectionSuccessMeta;
+};
+export type MetaFieldCollectionResponsePartialSuccessDelete = {
+    data?: Array<number>;
+    errors?: Array<_Error>;
+    meta?: WriteCollectionPartialSuccessMeta;
 };
 export type MetaCollectionOpen = {
     [key: string]: unknown;
 };
-export type MetafieldWritable = MetafieldBaseWritable & {
-    id?: string;
-    date_created?: string;
-    date_modified?: string;
+export type MetafieldResponse = {
+    data?: Metafield;
+    meta?: MetaCollectionOpen;
 };
-export type MetafieldBaseWritable = {
-    permission_set: 'app_only' | 'read' | 'write' | 'read_and_sf_access' | 'write_and_sf_access';
-    namespace?: string;
-    key?: string;
-    value?: string;
-    description?: string;
-    resource_type?: 'brand' | 'product' | 'variant' | 'category' | 'cart' | 'store';
+export type NotFound = {
+    status?: number;
+    title?: string;
+    type?: string;
 };
-export type ErrorDetailWritable = {
-    [key: string]: unknown;
+export type MetaFieldCollectionResponse = {
+    data?: Metafield;
+    meta?: MetaCollectionOpen;
 };
-export type MetaCollectionOpenWritable = {
-    [key: string]: unknown;
-};
-export type IncludeFieldsParamMetafields = Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date modified'>;
-export type DateCreatedMin = string;
-export type DateCreatedMax = string;
-export type DateModifiedMax = string;
-export type DateModifiedMin = string;
-export type BeforeCursorParam = string;
-export type AfterCursorParam = string;
-export type ContentType = string;
-export type PageParam = number;
-export type MetafieldIdParam = number;
-export type MetafieldKeyParam = string;
-export type MetafieldKeyInParam = Array<string>;
-export type MetafieldNamespaceParam = string;
-export type MetafieldNamespaceInParam = Array<string>;
-export type LimitParam = number;
-export type DirectionParam = 'asc' | 'desc';
-export type Accept = string;
 export type DeleteStoreMetafieldsData = {
     body?: Array<number>;
     path?: never;
     query?: never;
     url: '/store/metafields';
 };
+export type DeleteStoreMetafieldsErrors = {
+    422: MetaFieldCollectionResponsePartialSuccessDelete;
+};
+export type DeleteStoreMetafieldsError = DeleteStoreMetafieldsErrors[keyof DeleteStoreMetafieldsErrors];
 export type DeleteStoreMetafieldsResponses = {
     200: MetaFieldCollectionDeleteResponseSuccess;
 };
@@ -166,12 +153,12 @@ export type GetStoreMetafieldsData = {
         'key:in'?: Array<string>;
         namespace?: string;
         'namespace:in'?: Array<string>;
-        include_fields?: Array<'resource_id' | 'key' | 'value' | 'namespace' | 'permission_set' | 'resource_type' | 'description' | 'owner_client_id' | 'date_created' | 'date modified'>;
+        include_fields?: Array<StoreMetafieldsGetParametersIncludeFieldsSchemaItems>;
         'date_modified:min'?: string;
         'date_modified:max'?: string;
         'date_created:min'?: string;
         'date_created:max'?: string;
-        direction?: 'asc' | 'desc';
+        direction?: StoreMetafieldsGetParametersDirection;
         before?: string;
         after?: string;
     };
@@ -182,7 +169,7 @@ export type GetStoreMetafieldsResponses = {
 };
 export type GetStoreMetafieldsResponse = GetStoreMetafieldsResponses[keyof GetStoreMetafieldsResponses];
 export type CreateStoresMetafieldsData = {
-    body: Array<MetafieldBasePostPut>;
+    body?: Array<MetafieldBasePostPut>;
     path?: never;
     query?: never;
     url: '/store/metafields';
@@ -196,20 +183,13 @@ export type CreateStoresMetafieldsResponses = {
 };
 export type CreateStoresMetafieldsResponse = CreateStoresMetafieldsResponses[keyof CreateStoresMetafieldsResponses];
 export type UpdateStoreMetafieldsData = {
-    body?: Array<MetafieldBasePostPut & {
-        id: number;
-    }>;
+    body?: Array<StoreMetafieldsPutRequestBodyContentApplicationJsonSchemaItems>;
     path?: never;
     query?: never;
     url: '/store/metafields';
 };
 export type UpdateStoreMetafieldsErrors = {
-    400: {
-        status?: number;
-        title?: string;
-        type?: string;
-        detail?: string;
-    };
+    400: UpdateStoreMetafieldsRequestBadRequestError;
     422: MetaFieldCollectionResponsePartialSuccessPostPut;
 };
 export type UpdateStoreMetafieldsError = UpdateStoreMetafieldsErrors[keyof UpdateStoreMetafieldsErrors];
@@ -233,7 +213,9 @@ export type DeleteStoreMetafieldErrors = {
 };
 export type DeleteStoreMetafieldError = DeleteStoreMetafieldErrors[keyof DeleteStoreMetafieldErrors];
 export type DeleteStoreMetafieldResponses = {
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 export type DeleteStoreMetafieldResponse = DeleteStoreMetafieldResponses[keyof DeleteStoreMetafieldResponses];
 export type GetStoreMetafieldData = {
@@ -259,7 +241,6 @@ export type UpdateStoreMetafieldData = {
     body?: MetafieldBasePostPut;
     headers?: {
         Accept?: string;
-        'Content-Type'?: string;
     };
     path: {
         metafieldId: number;

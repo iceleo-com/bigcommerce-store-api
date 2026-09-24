@@ -11,7 +11,7 @@ export class MethodsV2Api {
     }
 
     /**
-     * Get All Payment Methods
+     * List Payment Methods
      *
      * Gets the list of enabled payment methods. Default sorting is by payment method, alphabetically from A to Z.
 

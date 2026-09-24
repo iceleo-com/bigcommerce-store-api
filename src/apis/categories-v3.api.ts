@@ -11,9 +11,11 @@ export class CategoriesV3Api {
     }
 
     /**
-     * Get All Categories
+     * List Categories
      *
-     * Returns a list of *Categories*. Optional filter parameters can be passed in.
+     * When possible, use the [Catalog Trees - Get all categories](/developer/api-reference/rest/admin/catalog/category-trees/categories/get-all-categories) endpoint instead.
+
+     Returns a list of *Categories*. Optional filter parameters can be passed in.
 
      **Note:**
      The default rate limit for this endpoint is 40 concurrent requests.
@@ -28,13 +30,15 @@ export class CategoriesV3Api {
     }
 
     /**
-     * Create a Category
+     * Create Category
      *
-     * Creates a *Category*.
+     * When possible, use the [Category Trees - Create categories](/developer/api-reference/rest/admin/catalog/category-trees/categories/create-categories) endpoint instead.
+
+     Creates a *Category*.
 
      Use this endpoint when an API only works with categories of a default BigCommerce storefront (`channel_id=1`). 
 
-     Use the [Create Categories](/docs/rest-catalog/category-trees/categories#create-categories) endpoint when an API works with categories across different category trees that belong to different storefront channels.
+     Use the [Create categories](/developer/api-reference/rest/admin/catalog/category-trees/categories/create-categories) endpoint when an API works with categories across different category trees that belong to different storefront channels.
 
      **Required Fields**:
      - `parent_id`: 
@@ -49,17 +53,13 @@ export class CategoriesV3Api {
      - 16,000 categories per store limit.
      - 1,000 categories per product limit.
      - 50 characters category name length.
-     - 8 levels of category depth limit.
-     - 65,642 characters category description length limit.
-
-      **Note:**
-      The default rate limit for this endpoint is 40 concurrent requests.
-
+     - 8 levels of child categories depth limit.
+     - 65,535 characters category description length limit.
      */
     createCategory(
         requestBody: CategoriesV3ApiSpecs.CreateCategoryData['body'],
     ) {
-        return this.request.post<(RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.CreateCategoryResponses[200]>> | RequestSuccessResponse<207, Required<CategoriesV3ApiSpecs.CreateCategoryResponses[207]>>),(RequestErrorResponse<409, Required<CategoriesV3ApiSpecs.CreateCategoryErrors[409]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.CreateCategoryErrors[422]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.CreateCategoryResponses[200]>>,(RequestErrorResponse<409, Required<CategoriesV3ApiSpecs.CreateCategoryErrors[409]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.CreateCategoryErrors[422]>>)>({
             path: 'v3/catalog/categories',
             contentType: 'application/json',
             body: requestBody,
@@ -69,7 +69,9 @@ export class CategoriesV3Api {
     /**
      * Delete Categories
      *
-     * Deletes *Category* objects. At least one filter parameter is required to perform the `DELETE` operation.
+     * When possible, use the [Category Trees - Delete categories](/developer/api-reference/rest/admin/catalog/category-trees/categories/delete-tree-categories) endpoint instead.
+
+     Deletes *Category* objects. At least one filter parameter is required to perform the `DELETE` operation.
 
      **Usage Notes**
 
@@ -86,34 +88,31 @@ export class CategoriesV3Api {
     }
 
     /**
-     * Get a Category
+     * Get Category
      *
-     * Returns a single *Category*. Optional parameters can be passed in.
+     * When possible, use the [Catalog Trees - Get all categories](/developer/api-reference/rest/admin/catalog/category-trees/categories/get-all-categories) endpoint instead. You can provide a category identifier using query parameters to retrieve a single category.
+
+     Returns a single *Category*. Optional parameters can be passed in.
 
      **Note:**
      The default rate limit for this endpoint is 40 concurrent requests.
      */
-    getCategoryById(
-        categoryId: CategoriesV3ApiSpecs.GetCategoryByIdData['path']['category_id'],
-        query?: CategoriesV3ApiSpecs.GetCategoryByIdData['query'],
+    getCategory(
+        categoryId: CategoriesV3ApiSpecs.GetCategoryData['path']['category_id'],
+        query?: CategoriesV3ApiSpecs.GetCategoryData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.GetCategoryByIdResponses[200]>>,RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.GetCategoryByIdErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.GetCategoryResponses[200]>>,RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.GetCategoryErrors[404]>>>({
             path: `v3/catalog/categories/${categoryId}`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `getCategoryById` instead.
-     */
-    getCategory(...args: Parameters<CategoriesV3Api['getCategoryById']>) {
-        return this.getCategoryById(...args);
-    }
-
-    /**
-     * Update a Category
+     * Update Category
      *
-     * Updates a *Category*.
+     * When possible, use the [Catalog Trees - Update categories](/developer/api-reference/rest/admin/catalog/category-trees/categories/update-categories) endpoint instead.
+
+     Updates a *Category*.
 
      **Required Fields**
      * none
@@ -128,7 +127,7 @@ export class CategoriesV3Api {
         categoryId: CategoriesV3ApiSpecs.UpdateCategoryData['path']['category_id'],
         requestBody: CategoriesV3ApiSpecs.UpdateCategoryData['body'],
     ) {
-        return this.request.put<(RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.UpdateCategoryResponses[200]>> | RequestSuccessResponse<207, Required<CategoriesV3ApiSpecs.UpdateCategoryResponses[207]>>),(RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.UpdateCategoryErrors[404]>> | RequestErrorResponse<409, Required<CategoriesV3ApiSpecs.UpdateCategoryErrors[409]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.UpdateCategoryErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.UpdateCategoryResponses[200]>>,(RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.UpdateCategoryErrors[404]>> | RequestErrorResponse<409, Required<CategoriesV3ApiSpecs.UpdateCategoryErrors[409]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.UpdateCategoryErrors[422]>>)>({
             path: `v3/catalog/categories/${categoryId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -136,52 +135,138 @@ export class CategoriesV3Api {
     }
 
     /**
-     * Delete a Category
+     * Delete Category
      *
-     * Deletes a *Category*.
+     * When possible, use the [Category Trees - Delete categories](/developer/api-reference/rest/admin/catalog/category-trees/categories/delete-tree-categories) endpoint instead. You can provide a category identifier using query parameters to delete a single category.
+
+     Deletes a *Category*.
 
      **Note:**
      The default rate limit for this endpoint is 40 concurrent requests.
      */
-    deleteCategoryById(
-        categoryId: CategoriesV3ApiSpecs.DeleteCategoryByIdData['path']['category_id'],
+    deleteCategory(
+        categoryId: CategoriesV3ApiSpecs.DeleteCategoryData['path']['category_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CategoriesV3ApiSpecs.DeleteCategoryByIdResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CategoriesV3ApiSpecs.DeleteCategoryResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/categories/${categoryId}`,
         });
     }
 
     /**
-     * @deprecated Use `deleteCategoryById` instead.
+     * List Category Metafields
+     *
+     * Get all category metafields.
      */
-    deleteCategory(...args: Parameters<CategoriesV3Api['deleteCategoryById']>) {
-        return this.deleteCategoryById(...args);
+    getCategoriesMetafields(
+        query?: CategoriesV3ApiSpecs.GetCategoriesMetafieldsData['query'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.GetCategoriesMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: 'v3/catalog/categories/metafields',
+            query,
+        });
     }
 
     /**
-     * Get All Category Metafields
+     * Create Multiple Metafields
+     *
+     * Create multiple metafields.
+     */
+    createCategoriesMetafields(
+        requestBody: CategoriesV3ApiSpecs.CreateCategoriesMetafieldsData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.CreateCategoriesMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.CreateCategoriesMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.CreateCategoriesMetafieldsErrors[422]>>)>({
+            path: 'v3/catalog/categories/metafields',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Update Multiple Metafields
+     *
+     * Create multiple metafields.
+     */
+    updateCategoriesMetafields(
+        requestBody: CategoriesV3ApiSpecs.UpdateCategoriesMetafieldsData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.UpdateCategoriesMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.UpdateCategoriesMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.UpdateCategoriesMetafieldsErrors[422]>>)>({
+            path: 'v3/catalog/categories/metafields',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete Multiple Metafields
+     *
+     * Delete all category metafields.
+     */
+    deleteCategoriesMetafields(
+        requestBody: CategoriesV3ApiSpecs.DeleteCategoriesMetafieldsData['body'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.DeleteCategoriesMetafieldsResponses[200]>>,(RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.DeleteCategoriesMetafieldsErrors[400]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.DeleteCategoriesMetafieldsErrors[422]>>)>({
+            path: 'v3/catalog/categories/metafields',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Create Category Image
+     *
+     * Create a *Category Image*.
+
+      **Required Fields**
+     - image_file: Form posts are the only accepted upload option.
+
+     Only one image at a time can be created.
+
+     Supported file types are `JPEG/JPG`, `GIF`, `PNG` and `ICO`.
+
+     Limit image size to `8MB`.
+     To update a *Category Image*, use the [Update categories](/developer/api-reference/rest/admin/catalog/category-trees/categories/update-categories) endpoint and an `image_url`.
+     */
+    createCategoryImage(
+        categoryId: CategoriesV3ApiSpecs.CreateCategoryImageData['path']['category_id'],
+        requestBody: CategoriesV3ApiSpecs.CreateCategoryImageData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.CreateCategoryImageResponses[200]>>,(RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.CreateCategoryImageErrors[400]>> | RequestErrorResponse<403, Required<CategoriesV3ApiSpecs.CreateCategoryImageErrors[403]>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.CreateCategoryImageErrors[404]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.CreateCategoryImageErrors[422]>>)>({
+            path: `v3/catalog/categories/${categoryId}/image`,
+            contentType: 'multipart/form-data',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete Category Image
+     *
+     * Deletes a *Category Image*.
+     */
+    deleteCategoryImage(
+        categoryId: CategoriesV3ApiSpecs.DeleteCategoryImageData['path']['category_id'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<204, Required<CategoriesV3ApiSpecs.DeleteCategoryImageResponses[204]>>,(RequestErrorResponse<403, Required<CategoriesV3ApiSpecs.DeleteCategoryImageErrors[403]>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.DeleteCategoryImageErrors[404]>>)>({
+            path: `v3/catalog/categories/${categoryId}/image`,
+        });
+    }
+
+    /**
+     * List Category Metafields
      *
      * Returns a list of *Metafields* on a *Category*. Optional filter parameters can be passed in.
      */
-    getCategoryMetafieldsByCategoryId(
-        categoryId: CategoriesV3ApiSpecs.GetCategoryMetafieldsByCategoryIdData['path']['category_id'],
-        query?: CategoriesV3ApiSpecs.GetCategoryMetafieldsByCategoryIdData['query'],
+    getCategoryMetafields(
+        categoryId: CategoriesV3ApiSpecs.GetCategoryMetafieldsData['path']['category_id'],
+        query?: CategoriesV3ApiSpecs.GetCategoryMetafieldsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.GetCategoryMetafieldsByCategoryIdResponses[200]>>,RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.GetCategoryMetafieldsByCategoryIdErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.GetCategoryMetafieldsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/catalog/categories/${categoryId}/metafields`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `getCategoryMetafieldsByCategoryId` instead.
-     */
-    getCategoryMetafields(...args: Parameters<CategoriesV3Api['getCategoryMetafieldsByCategoryId']>) {
-        return this.getCategoryMetafieldsByCategoryId(...args);
-    }
-
-    /**
-     * Create a Category Metafield
+     * Create Category Metafield
      *
      * Creates a *Category Metafield*.
 
@@ -200,7 +285,7 @@ export class CategoriesV3Api {
         categoryId: CategoriesV3ApiSpecs.CreateCategoryMetafieldData['path']['category_id'],
         requestBody: CategoriesV3ApiSpecs.CreateCategoryMetafieldData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.CreateCategoryMetafieldResponses[200]>>,(RequestErrorResponse<409, Required<CategoriesV3ApiSpecs.CreateCategoryMetafieldErrors[409]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.CreateCategoryMetafieldErrors[422]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.CreateCategoryMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.CreateCategoryMetafieldErrors[400]>> | RequestErrorResponse<409, Required<CategoriesV3ApiSpecs.CreateCategoryMetafieldErrors[409]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.CreateCategoryMetafieldErrors[422]>>)>({
             path: `v3/catalog/categories/${categoryId}/metafields`,
             contentType: 'application/json',
             body: requestBody,
@@ -208,30 +293,23 @@ export class CategoriesV3Api {
     }
 
     /**
-     * Get a Category Metafield
+     * Get Category Metafield
      *
      * Returns a single *Category Metafield*. Optional parameters can be passed in.
      */
-    getCategoryMetafieldByCategoryId(
-        categoryId: CategoriesV3ApiSpecs.GetCategoryMetafieldByCategoryIdData['path']['category_id'],
-        metafieldId: CategoriesV3ApiSpecs.GetCategoryMetafieldByCategoryIdData['path']['metafield_id'],
-        query?: CategoriesV3ApiSpecs.GetCategoryMetafieldByCategoryIdData['query'],
+    getCategoryMetafield(
+        categoryId: CategoriesV3ApiSpecs.GetCategoryMetafieldData['path']['category_id'],
+        metafieldId: CategoriesV3ApiSpecs.GetCategoryMetafieldData['path']['metafield_id'],
+        query?: CategoriesV3ApiSpecs.GetCategoryMetafieldData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.GetCategoryMetafieldByCategoryIdResponses[200]>>,RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.GetCategoryMetafieldByCategoryIdErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.GetCategoryMetafieldResponses[200]>>,RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.GetCategoryMetafieldErrors[404]>>>({
             path: `v3/catalog/categories/${categoryId}/metafields/${metafieldId}`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `getCategoryMetafieldByCategoryId` instead.
-     */
-    getCategoryMetafield(...args: Parameters<CategoriesV3Api['getCategoryMetafieldByCategoryId']>) {
-        return this.getCategoryMetafieldByCategoryId(...args);
-    }
-
-    /**
-     * Update a Category Metafield
+     * Update Category Metafield
      *
      * Updates a *Category Metafield*.
 
@@ -253,7 +331,7 @@ export class CategoriesV3Api {
         metafieldId: CategoriesV3ApiSpecs.UpdateCategoryMetafieldData['path']['metafield_id'],
         requestBody: CategoriesV3ApiSpecs.UpdateCategoryMetafieldData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.UpdateCategoryMetafieldResponses[200]>>,RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.UpdateCategoryMetafieldErrors[404]>>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.UpdateCategoryMetafieldResponses[200]>>,(RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.UpdateCategoryMetafieldErrors[400]>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.UpdateCategoryMetafieldErrors[404]>>)>({
             path: `v3/catalog/categories/${categoryId}/metafields/${metafieldId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -261,59 +339,16 @@ export class CategoriesV3Api {
     }
 
     /**
-     * Delete a Category Metafield
+     * Delete Category Metafield
      *
      * Deletes a *Category Metafield*.
      */
-    deleteCategoryMetafieldById(
-        categoryId: CategoriesV3ApiSpecs.DeleteCategoryMetafieldByIdData['path']['category_id'],
-        metafieldId: CategoriesV3ApiSpecs.DeleteCategoryMetafieldByIdData['path']['metafield_id'],
+    deleteCategoryMetafield(
+        categoryId: CategoriesV3ApiSpecs.DeleteCategoryMetafieldData['path']['category_id'],
+        metafieldId: CategoriesV3ApiSpecs.DeleteCategoryMetafieldData['path']['metafield_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CategoriesV3ApiSpecs.DeleteCategoryMetafieldByIdResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<CategoriesV3ApiSpecs.DeleteCategoryMetafieldResponses[204]>>,RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.DeleteCategoryMetafieldErrors[404]>>>({
             path: `v3/catalog/categories/${categoryId}/metafields/${metafieldId}`,
-        });
-    }
-
-    /**
-     * @deprecated Use `deleteCategoryMetafieldById` instead.
-     */
-    deleteCategoryMetafield(...args: Parameters<CategoriesV3Api['deleteCategoryMetafieldById']>) {
-        return this.deleteCategoryMetafieldById(...args);
-    }
-
-    /**
-     * Create a Category Image
-     *
-     * Create a *Category Image*.
-
-      **Required Fields**
-     - image_file: Form posts are the only accepted upload option.
-
-     Only one image at a time can be created.
-     Limit image size to 1MB.
-     To update a *Category Image*, use the [Update categories](/docs/rest-catalog/category-trees/categories#update-categories) endpoint and an `image_url`.
-     */
-    createCategoryImage(
-        categoryId: CategoriesV3ApiSpecs.CreateCategoryImageData['path']['category_id'],
-        requestBody: CategoriesV3ApiSpecs.CreateCategoryImageData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.CreateCategoryImageResponses[200]>>,(RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.CreateCategoryImageErrors[400]>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.CreateCategoryImageErrors[404]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.CreateCategoryImageErrors[422]>>)>({
-            path: `v3/catalog/categories/${categoryId}/image`,
-            contentType: 'multipart/form-data',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Delete a Category Image
-     *
-     * Deletes a *Category Image*.
-     */
-    deleteCategoryImage(
-        categoryId: CategoriesV3ApiSpecs.DeleteCategoryImageData['path']['category_id'],
-    ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<CategoriesV3ApiSpecs.DeleteCategoryImageResponses[204]>>,RequestErrorResponse<400, void>>({
-            path: `v3/catalog/categories/${categoryId}/image`,
         });
     }
 
@@ -322,28 +357,30 @@ export class CategoriesV3Api {
      *
      * Returns a list of products and their sort order for a specific category.
 
+     **Limits**
+
+     - page=2&limit=250 will return page 2 of the results with 250 items per page.
+
      **Usage Notes**
+
+     * Product sort order only takes effect on the storefront when sorting by **Featured Items** in the category. See [Sort Order](https://support.bigcommerce.com/s/article/Sort-Order) for more information.
      * Data pairs are displayed in ascending order based on products' `sort_order` values.
      * `null` values are allowed for products without specified `sort_order` values.
      * Products with `sort_order` value of `null` will be displayed after products with valid numerical values.
      * The priorities for determining product sort order on a storefront are the following:
-       - Priority 1: Manually specified sort order on Category Level (API).
-       - Priority 2: Manually specified sort order on Product (Global) Level (UI/API).
-       - Priority 3: Default sorting by Product ID (newly added products go first) (UI/API).
-     */
-    getsortorders(
-        categoryId: CategoriesV3ApiSpecs.GetsortordersData['path']['category_id'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.GetsortordersResponses[200]>>,RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.GetsortordersErrors[404]>>>({
-            path: `v3/catalog/categories/${categoryId}/products/sort-order`,
-        });
-    }
+         * Priority 1: Manually specified sort order on Category Level (API).
+         * Priority 2: Manually specified sort order on Product (Global) Level (UI/API).
+         * Priority 3: Default sorting by Product ID (newly added products go first) (UI/API).
 
-    /**
-     * @deprecated Use `getsortorders` instead.
      */
-    getCategorySortOrders(...args: Parameters<CategoriesV3Api['getsortorders']>) {
-        return this.getsortorders(...args);
+    getCategorySortOrders(
+        categoryId: CategoriesV3ApiSpecs.GetCategorySortOrdersData['path']['category_id'],
+        query?: CategoriesV3ApiSpecs.GetCategorySortOrdersData['query'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.GetCategorySortOrdersResponses[200]>>,(RequestErrorResponse<403, Required<CategoriesV3ApiSpecs.GetCategorySortOrdersErrors[403]>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.GetCategorySortOrdersErrors[404]>>)>({
+            path: `v3/catalog/categories/${categoryId}/products/sort-order`,
+            query,
+        });
     }
 
     /**
@@ -351,21 +388,16 @@ export class CategoriesV3Api {
      *
      * Updates sort order of products within a specific category.
      */
-    updatesortorder(
-        categoryId: CategoriesV3ApiSpecs.UpdatesortorderData['path']['category_id'],
-        requestBody: CategoriesV3ApiSpecs.UpdatesortorderData['body'],
+    updateCategorySortOrders(
+        categoryId: CategoriesV3ApiSpecs.UpdateCategorySortOrdersData['path']['category_id'],
+        requestBody: CategoriesV3ApiSpecs.UpdateCategorySortOrdersData['body'],
+        query?: CategoriesV3ApiSpecs.UpdateCategorySortOrdersData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.UpdatesortorderResponses[200]>>,(RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.UpdatesortorderErrors[404]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.UpdatesortorderErrors[422]>>)>({
+        return this.request.put<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.UpdateCategorySortOrdersResponses[200]>>,(RequestErrorResponse<403, Required<CategoriesV3ApiSpecs.UpdateCategorySortOrdersErrors[403]>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.UpdateCategorySortOrdersErrors[404]>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.UpdateCategorySortOrdersErrors[422]>>)>({
             path: `v3/catalog/categories/${categoryId}/products/sort-order`,
             contentType: 'application/json',
             body: requestBody,
+            query,
         });
-    }
-
-    /**
-     * @deprecated Use `updatesortorder` instead.
-     */
-    updateCategorySortOrders(...args: Parameters<CategoriesV3Api['updatesortorder']>) {
-        return this.updatesortorder(...args);
     }
 }

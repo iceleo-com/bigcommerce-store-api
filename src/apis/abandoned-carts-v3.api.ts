@@ -11,9 +11,32 @@ export class AbandonedCartsV3Api {
     }
 
     /**
+     * Get Abandoned Cart
+     *
+     * Return the `cart_id` corresponding to the abandoned cart `{token}` passed in.
+
+     **Usage Notes**:
+     * `{token}` is the token in the query string of the abandoned cart link found in abandoned cart email notifications to shoppers
+     */
+    getAbandonedCart(
+        token: AbandonedCartsV3ApiSpecs.GetAbandonedCartData['path']['token'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartResponses[200]>>,(RequestErrorResponse<400, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartErrors[400]>> | RequestErrorResponse<404, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartErrors[404]>> | RequestErrorResponse<422, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartErrors[422]>> | RequestErrorResponse<502, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartErrors[502]>> | RequestErrorResponse<503, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartErrors[503]>> | RequestErrorResponse<504, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartErrors[504]>>)>({
+            path: `v3/abandoned-carts/${token}`,
+        });
+    }
+
+    /**
+     * @deprecated Use `getAbandonedCart` instead.
+     */
+    getAbandonedCarts(...args: Parameters<AbandonedCartsV3Api['getAbandonedCart']>) {
+        return this.getAbandonedCart(...args);
+    }
+
+    /**
      * Get Global Abandoned Cart Settings
      *
-     * Returns the global abandoned cart settings of a store.
+     * Return the global abandoned cart settings of a store.
      */
     getGlobalAbandonedCartSettings(
     ) {
@@ -25,7 +48,7 @@ export class AbandonedCartsV3Api {
     /**
      * Update Global Abandoned Cart Settings
      *
-     * Updates the global abandoned cart settings of a store.
+     * Update the global abandoned cart settings of a store.
      */
     updateGlobalAbandonedCartSettings(
         requestBody: AbandonedCartsV3ApiSpecs.UpdateGlobalAbandonedCartSettingsData['body'],
@@ -40,7 +63,7 @@ export class AbandonedCartsV3Api {
     /**
      * Get Channel Abandoned Cart Settings
      *
-     * Returns the per-channel overrides for the abandoned cart settings of a store.
+     * Return the per-channel overrides for the abandoned cart settings of a store.
      */
     getChannelAbandonedCartSettings(
         channelId: AbandonedCartsV3ApiSpecs.GetChannelAbandonedCartSettingsData['path']['channel_id'],
@@ -57,7 +80,7 @@ export class AbandonedCartsV3Api {
 
      #### OAuth Scopes
      | UI Name                                      | Permission | Parameter                                     |
-     |----------------------------------------------|------------|-----------------------------------------------|     
+     |----------------------------------------------|------------|-----------------------------------------------|
      | Information & Settings                       | modify     | `store_v2_information`                        |
      */
     updateChannelAbandonedCartSettings(
@@ -68,22 +91,6 @@ export class AbandonedCartsV3Api {
             path: `v3/abandoned-carts/settings/channels/${channelId}`,
             contentType: 'application/json',
             body: requestBody,
-        });
-    }
-
-    /**
-     * Get an Abandoned Cart
-     *
-     * Returns the `cart_id` corresponding to the abandoned cart `{token}` passed in.
-
-     **Usage Notes**:
-     * `{token}` is the token in the query string of the abandoned cart link found in abandoned cart email notifications to shoppers
-     */
-    getAbandonedCarts(
-        token: AbandonedCartsV3ApiSpecs.GetAbandonedCartsData['path']['token'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartsResponses[200]>>,(RequestErrorResponse<400, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartsErrors[400]>> | RequestErrorResponse<404, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartsErrors[404]>> | RequestErrorResponse<422, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartsErrors[422]>> | RequestErrorResponse<502, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartsErrors[502]>> | RequestErrorResponse<503, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartsErrors[503]>> | RequestErrorResponse<504, Required<AbandonedCartsV3ApiSpecs.GetAbandonedCartsErrors[504]>>)>({
-            path: `v3/abandoned-carts/${token}`,
         });
     }
 }

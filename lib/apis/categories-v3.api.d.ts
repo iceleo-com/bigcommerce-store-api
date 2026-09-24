@@ -5,194 +5,31 @@ export * as CategoriesV3ApiSpecs from '../generated/categories-v3';
 export declare class CategoriesV3Api {
     private readonly request;
     constructor(request: RequestService);
-    getCategories(query?: CategoriesV3ApiSpecs.GetCategoriesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<{
-        data?: Array<CategoriesV3ApiSpecs.Category>;
-        meta?: CategoriesV3ApiSpecs.MetaCollectionFull;
-    }>>>;
-    createCategory(requestBody: CategoriesV3ApiSpecs.CreateCategoryData['body']): Promise<RequestSuccessResponse<200, Required<{
-        data?: CategoriesV3ApiSpecs.CategoryFull;
-        meta?: CategoriesV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestSuccessResponse<207, Required<CategoriesV3ApiSpecs.ErrorBase>> | RequestErrorResponse<409, Required<{
-        errors?: {
-            [key: string]: unknown;
-        };
-        instance?: string;
-        status?: number;
-        title?: string;
-        type?: string;
-    }>> | RequestErrorResponse<422, Required<{
-        errors?: {
-            [key: string]: unknown;
-        };
-        instance?: string;
-        status?: number;
-        title?: string;
-        type?: string;
-    }>>>;
-    deleteCategories(query?: CategoriesV3ApiSpecs.DeleteCategoriesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    getCategoryById(categoryId: CategoriesV3ApiSpecs.GetCategoryByIdData['path']['category_id'], query?: CategoriesV3ApiSpecs.GetCategoryByIdData['query']): Promise<RequestSuccessResponse<200, Required<{
-        data?: CategoriesV3ApiSpecs.CategoryFull;
-        meta?: CategoriesV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>>>;
-    getCategory(...args: Parameters<CategoriesV3Api['getCategoryById']>): Promise<RequestSuccessResponse<200, Required<{
-        data?: CategoriesV3ApiSpecs.CategoryFull;
-        meta?: CategoriesV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>>>;
-    updateCategory(categoryId: CategoriesV3ApiSpecs.UpdateCategoryData['path']['category_id'], requestBody: CategoriesV3ApiSpecs.UpdateCategoryData['body']): Promise<RequestSuccessResponse<207, Required<CategoriesV3ApiSpecs.ErrorBase>> | RequestSuccessResponse<200, Required<{
-        data?: {
-            readonly id?: number;
-            parent_id: number;
-            name: string;
-            description?: string;
-            views?: number;
-            sort_order?: number;
-            page_title?: string;
-            search_keywords?: string;
-            meta_keywords?: Array<string>;
-            meta_description?: string;
-            layout_file?: string;
-            is_visible?: boolean;
-            default_product_sort?: "use_store_settings" | "featured" | "newest" | "best_selling" | "alpha_asc" | "alpha_desc" | "avg_customer_review" | "price_asc" | "price_desc";
-            image_url?: string;
-            custom_url?: {
-                url?: string;
-                is_customized?: boolean;
-            };
-        };
-        meta?: {
-            [key: string]: unknown;
-        };
-    }>> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>> | RequestErrorResponse<409, Required<{
-        errors?: {
-            [key: string]: unknown;
-        };
-        instance?: string;
-        status?: number;
-        title?: string;
-        type?: string;
-    }>> | RequestErrorResponse<422, Required<{
-        errors?: {
-            [key: string]: unknown;
-        };
-        instance?: string;
-        status?: number;
-        title?: string;
-        type?: string;
-    }>>>;
-    deleteCategoryById(categoryId: CategoriesV3ApiSpecs.DeleteCategoryByIdData['path']['category_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    deleteCategory(...args: Parameters<CategoriesV3Api['deleteCategoryById']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    getCategoryMetafieldsByCategoryId(categoryId: CategoriesV3ApiSpecs.GetCategoryMetafieldsByCategoryIdData['path']['category_id'], query?: CategoriesV3ApiSpecs.GetCategoryMetafieldsByCategoryIdData['query']): Promise<RequestSuccessResponse<200, Required<{
-        data?: Array<CategoriesV3ApiSpecs.MetafieldFull>;
-        meta?: CategoriesV3ApiSpecs.MetaCollectionFull;
-    }>> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>>>;
-    getCategoryMetafields(...args: Parameters<CategoriesV3Api['getCategoryMetafieldsByCategoryId']>): Promise<RequestSuccessResponse<200, Required<{
-        data?: Array<CategoriesV3ApiSpecs.MetafieldFull>;
-        meta?: CategoriesV3ApiSpecs.MetaCollectionFull;
-    }>> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>>>;
-    createCategoryMetafield(categoryId: CategoriesV3ApiSpecs.CreateCategoryMetafieldData['path']['category_id'], requestBody: CategoriesV3ApiSpecs.CreateCategoryMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<{
-        data?: CategoriesV3ApiSpecs.MetafieldFull;
-        meta?: CategoriesV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<409, Required<{
-        errors?: {
-            [key: string]: unknown;
-        };
-        instance?: string;
-        status?: number;
-        title?: string;
-        type?: string;
-    }>> | RequestErrorResponse<422, Required<{
-        errors?: {
-            [key: string]: unknown;
-        };
-        instance?: string;
-        status?: number;
-        title?: string;
-        type?: string;
-    }>>>;
-    getCategoryMetafieldByCategoryId(categoryId: CategoriesV3ApiSpecs.GetCategoryMetafieldByCategoryIdData['path']['category_id'], metafieldId: CategoriesV3ApiSpecs.GetCategoryMetafieldByCategoryIdData['path']['metafield_id'], query?: CategoriesV3ApiSpecs.GetCategoryMetafieldByCategoryIdData['query']): Promise<RequestSuccessResponse<200, Required<{
-        data?: CategoriesV3ApiSpecs.MetafieldFull;
-        meta?: CategoriesV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>>>;
-    getCategoryMetafield(...args: Parameters<CategoriesV3Api['getCategoryMetafieldByCategoryId']>): Promise<RequestSuccessResponse<200, Required<{
-        data?: CategoriesV3ApiSpecs.MetafieldFull;
-        meta?: CategoriesV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>>>;
-    updateCategoryMetafield(categoryId: CategoriesV3ApiSpecs.UpdateCategoryMetafieldData['path']['category_id'], metafieldId: CategoriesV3ApiSpecs.UpdateCategoryMetafieldData['path']['metafield_id'], requestBody: CategoriesV3ApiSpecs.UpdateCategoryMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<{
-        data?: CategoriesV3ApiSpecs.MetafieldFull;
-        meta?: CategoriesV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>>>;
-    deleteCategoryMetafieldById(categoryId: CategoriesV3ApiSpecs.DeleteCategoryMetafieldByIdData['path']['category_id'], metafieldId: CategoriesV3ApiSpecs.DeleteCategoryMetafieldByIdData['path']['metafield_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    deleteCategoryMetafield(...args: Parameters<CategoriesV3Api['deleteCategoryMetafieldById']>): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    createCategoryImage(categoryId: CategoriesV3ApiSpecs.CreateCategoryImageData['path']['category_id'], requestBody: CategoriesV3ApiSpecs.CreateCategoryImageData['body']): Promise<RequestSuccessResponse<200, Required<{
-        data?: {
-            image_url?: string;
-        };
-        meta?: CategoriesV3ApiSpecs.MetaEmptyFull;
-    }>> | RequestErrorResponse<400, Required<{
+    getCategories(query?: CategoriesV3ApiSpecs.GetCategoriesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.CategoriesGetCategoriesResponse200>>>;
+    createCategory(requestBody: CategoriesV3ApiSpecs.CreateCategoryData['body']): Promise<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.CategoriesCreateCategoryResponse200>> | RequestErrorResponse<409, Required<CategoriesV3ApiSpecs.CreateCategoryRequestConflictError>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.CreateCategoryRequestUnprocessableEntityError>>>;
+    deleteCategories(query?: CategoriesV3ApiSpecs.DeleteCategoriesData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, Required<{
         [key: string]: unknown;
-    }>> | RequestErrorResponse<404, Required<{
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    }>> | RequestErrorResponse<422, Required<{
-        errors?: {
-            [key: string]: unknown;
-        };
-        instance?: string;
-        status?: number;
-        title?: string;
-        type?: string;
     }>>>;
-    deleteCategoryImage(categoryId: CategoriesV3ApiSpecs.DeleteCategoryImageData['path']['category_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, void>>;
-    getsortorders(categoryId: CategoriesV3ApiSpecs.GetsortordersData['path']['category_id']): Promise<RequestSuccessResponse<200, {
-        product_id?: number;
-        sort_order?: number;
-    }[]> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.ErrorBase>>>;
-    getCategorySortOrders(...args: Parameters<CategoriesV3Api['getsortorders']>): Promise<RequestSuccessResponse<200, {
-        product_id?: number;
-        sort_order?: number;
-    }[]> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.ErrorBase>>>;
-    updatesortorder(categoryId: CategoriesV3ApiSpecs.UpdatesortorderData['path']['category_id'], requestBody: CategoriesV3ApiSpecs.UpdatesortorderData['body']): Promise<RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.ErrorBase>> | RequestSuccessResponse<200, CategoriesV3ApiSpecs.ProductSortOrder[]> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.ErrorBase>>>;
-    updateCategorySortOrders(...args: Parameters<CategoriesV3Api['updatesortorder']>): Promise<RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.ErrorBase>> | RequestSuccessResponse<200, CategoriesV3ApiSpecs.ProductSortOrder[]> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.ErrorBase>>>;
+    getCategory(categoryId: CategoriesV3ApiSpecs.GetCategoryData['path']['category_id'], query?: CategoriesV3ApiSpecs.GetCategoryData['query']): Promise<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.CategoriesGetCategoryResponse200>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.GetCategoryRequestNotFoundError>>>;
+    updateCategory(categoryId: CategoriesV3ApiSpecs.UpdateCategoryData['path']['category_id'], requestBody: CategoriesV3ApiSpecs.UpdateCategoryData['body']): Promise<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.CategoriesUpdateCategoryResponse200>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.UpdateCategoryRequestNotFoundError>> | RequestErrorResponse<409, Required<CategoriesV3ApiSpecs.UpdateCategoryRequestConflictError>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.UpdateCategoryRequestUnprocessableEntityError>>>;
+    deleteCategory(categoryId: CategoriesV3ApiSpecs.DeleteCategoryData['path']['category_id']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<204, Required<{
+        [key: string]: unknown;
+    }>>>;
+    getCategoriesMetafields(query?: CategoriesV3ApiSpecs.GetCategoriesMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.MetaFieldCollectionResponse>>>;
+    createCategoriesMetafields(requestBody: CategoriesV3ApiSpecs.CreateCategoriesMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.MetaFieldCollectionResponsePostPut>> | RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.CreateCategoriesMetafieldsRequestBadRequestError>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>>>;
+    updateCategoriesMetafields(requestBody: CategoriesV3ApiSpecs.UpdateCategoriesMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.MetaFieldCollectionResponsePostPut>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessPostPut>> | RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.UpdateCategoriesMetafieldsRequestBadRequestError>>>;
+    deleteCategoriesMetafields(requestBody: CategoriesV3ApiSpecs.DeleteCategoriesMetafieldsData['body']): Promise<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.MetaFieldCollectionDeleteResponseSuccess>> | RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.DeleteCategoriesMetafieldsRequestBadRequestError>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.MetaFieldCollectionResponsePartialSuccessDelete>>>;
+    createCategoryImage(categoryId: CategoriesV3ApiSpecs.CreateCategoryImageData['path']['category_id'], requestBody: CategoriesV3ApiSpecs.CreateCategoryImageData['body']): Promise<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.ImagesCreateCategoryImageResponse200>> | RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.CreateCategoryImageRequestBadRequestError>> | RequestErrorResponse<403, Required<CategoriesV3ApiSpecs._Error>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.CreateCategoryImageRequestNotFoundError>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.CreateCategoryImageRequestUnprocessableEntityError>>>;
+    deleteCategoryImage(categoryId: CategoriesV3ApiSpecs.DeleteCategoryImageData['path']['category_id']): Promise<RequestErrorResponse<403, Required<CategoriesV3ApiSpecs._Error>> | RequestSuccessResponse<204, Required<{
+        [key: string]: unknown;
+    }>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.DeleteCategoryImageRequestNotFoundError>>>;
+    getCategoryMetafields(categoryId: CategoriesV3ApiSpecs.GetCategoryMetafieldsData['path']['category_id'], query?: CategoriesV3ApiSpecs.GetCategoryMetafieldsData['query']): Promise<RequestErrorResponse<400, void> | RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.MetafieldsGetCategoryMetafieldsResponse200>>>;
+    createCategoryMetafield(categoryId: CategoriesV3ApiSpecs.CreateCategoryMetafieldData['path']['category_id'], requestBody: CategoriesV3ApiSpecs.CreateCategoryMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.MetafieldsCreateCategoryMetafieldResponse200>> | RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.CreateCategoryMetafieldRequestBadRequestError>> | RequestErrorResponse<409, Required<CategoriesV3ApiSpecs.CreateCategoryMetafieldRequestConflictError>> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.CreateCategoryMetafieldRequestUnprocessableEntityError>>>;
+    getCategoryMetafield(categoryId: CategoriesV3ApiSpecs.GetCategoryMetafieldData['path']['category_id'], metafieldId: CategoriesV3ApiSpecs.GetCategoryMetafieldData['path']['metafield_id'], query?: CategoriesV3ApiSpecs.GetCategoryMetafieldData['query']): Promise<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.MetafieldsGetCategoryMetafieldResponse200>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.GetCategoryMetafieldRequestNotFoundError>>>;
+    updateCategoryMetafield(categoryId: CategoriesV3ApiSpecs.UpdateCategoryMetafieldData['path']['category_id'], metafieldId: CategoriesV3ApiSpecs.UpdateCategoryMetafieldData['path']['metafield_id'], requestBody: CategoriesV3ApiSpecs.UpdateCategoryMetafieldData['body']): Promise<RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.MetafieldsUpdateCategoryMetafieldResponse200>> | RequestErrorResponse<400, Required<CategoriesV3ApiSpecs.UpdateCategoryMetafieldRequestBadRequestError>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.UpdateCategoryMetafieldRequestNotFoundError>>>;
+    deleteCategoryMetafield(categoryId: CategoriesV3ApiSpecs.DeleteCategoryMetafieldData['path']['category_id'], metafieldId: CategoriesV3ApiSpecs.DeleteCategoryMetafieldData['path']['metafield_id']): Promise<RequestSuccessResponse<204, Required<{
+        [key: string]: unknown;
+    }>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.DeleteCategoryMetafieldRequestNotFoundError>>>;
+    getCategorySortOrders(categoryId: CategoriesV3ApiSpecs.GetCategorySortOrdersData['path']['category_id'], query?: CategoriesV3ApiSpecs.GetCategorySortOrdersData['query']): Promise<RequestErrorResponse<403, Required<CategoriesV3ApiSpecs._Error>> | RequestSuccessResponse<200, Required<CategoriesV3ApiSpecs.SortOrderGetCategorySortOrdersResponse200>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.ErrorBase>>>;
+    updateCategorySortOrders(categoryId: CategoriesV3ApiSpecs.UpdateCategorySortOrdersData['path']['category_id'], requestBody: CategoriesV3ApiSpecs.UpdateCategorySortOrdersData['body'], query?: CategoriesV3ApiSpecs.UpdateCategorySortOrdersData['query']): Promise<RequestErrorResponse<403, Required<CategoriesV3ApiSpecs._Error>> | RequestErrorResponse<404, Required<CategoriesV3ApiSpecs.ErrorBase>> | RequestSuccessResponse<200, CategoriesV3ApiSpecs.ProductSortOrder[]> | RequestErrorResponse<422, Required<CategoriesV3ApiSpecs.ErrorBase>>>;
 }

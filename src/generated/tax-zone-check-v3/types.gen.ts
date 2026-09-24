@@ -4,6 +4,9 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
 
+/**
+ * ZoneCheck
+ */
 export type ZoneCheck = {
     /**
      * Two-letter ISO 3166-1 country code.
@@ -12,7 +15,7 @@ export type ZoneCheck = {
     /**
      * ISO 3166-2 subdivision code, up to three alphanumeric characters.
      */
-    subdivision_codes?: string;
+    subdivision_code?: string;
     /**
      * Postal code.
      */
@@ -23,6 +26,16 @@ export type ZoneCheck = {
     customer_group_id?: number;
 };
 
+/**
+ * Tax Zone Check_zone-check_Response_200
+ */
+export type TaxZoneCheckZoneCheckResponse200 = {
+    data?: Array<TaxZone>;
+};
+
+/**
+ * TaxZone
+ */
 export type TaxZone = {
     /**
      * Tax Zone ID. Internal identifier used to get, update, or delete a specific tax zone.
@@ -39,66 +52,71 @@ export type TaxZone = {
     /**
      * Settings that describe how a store displays prices to shoppers matched with this tax zone.
      */
-    price_display_settings?: {
-        /**
-         * Indicates whether to show prices as tax inclusive or tax exclusive to shoppers matched with this tax zone.
-         */
-        show_inclusive?: boolean;
-        /**
-         * Indicates whether to show both tax inclusive and tax exclusive prices when viewing product detail; for example, on product pages. This view applies to shoppers matched with this tax zone.
-         */
-        show_both_on_detail_view?: boolean;
-        /**
-         * Indicates whether to show both tax inclusive and tax exclusive prices when viewing a list of products; for example, on category and brand pages. This view applies to shoppers matched with this tax zone.
-         */
-        show_both_on_list_view?: boolean;
-    };
+    price_display_settings?: TaxZonePriceDisplaySettings;
     /**
      * Settings that describe which shoppers match this tax zone and help determine the most appropriate target for a shopper. You cannot define shopper target settings for the default tax zone because it must accommodate all shoppers who donʼt qualify for any other zone.
      */
-    shopper_target_settings?: {
-        /**
-         * A tax zone may target shoppers in one or more locations.
-         */
-        locations?: Array<{
-            /**
-             * Two-letter ISO 3166-1 country code
-             */
-            country_code?: string;
-            /**
-             * Three-letter ISO 3166-2 subdivision code
-             */
-            subdivision_codes?: Array<string>;
-            postal_codes?: Array<string>;
-        }>;
-        /**
-         * One or more customer groups that a tax zone targets. Empty array if zone applies to all customers.
-         */
-        customer_groups?: Array<number>;
-    };
+    shopper_target_settings?: TaxZoneShopperTargetSettings;
 };
 
 /**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+ * TaxZoneShopperTargetSettings
+ *
+ * Settings that describe which shoppers match this tax zone and help determine the most appropriate target for a shopper. You cannot define shopper target settings for the default tax zone because it must accommodate all shoppers who donʼt qualify for any other zone.
  */
-export type Accept = string;
+export type TaxZoneShopperTargetSettings = {
+    /**
+     * A tax zone may target shoppers in one or more locations.
+     */
+    locations?: Array<TaxZoneShopperTargetSettingsLocationsItems>;
+    /**
+     * One or more customer groups that a tax zone targets. Empty array if zone applies to all customers.
+     */
+    customer_groups?: Array<number>;
+};
 
 /**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+ * TaxZoneShopperTargetSettingsLocationsItems
  */
-export type ContentType = string;
+export type TaxZoneShopperTargetSettingsLocationsItems = {
+    /**
+     * Two-letter ISO 3166-1 country code
+     */
+    country_code?: string;
+    /**
+     * Three-letter ISO 3166-2 subdivision code
+     */
+    subdivision_codes?: Array<string>;
+    postal_codes?: Array<string>;
+};
+
+/**
+ * TaxZonePriceDisplaySettings
+ *
+ * Settings that describe how a store displays prices to shoppers matched with this tax zone.
+ */
+export type TaxZonePriceDisplaySettings = {
+    /**
+     * Indicates whether to show prices as tax inclusive or tax exclusive to shoppers matched with this tax zone.
+     */
+    show_inclusive?: boolean;
+    /**
+     * Indicates whether to show both tax inclusive and tax exclusive prices when viewing product detail; for example, on product pages. This view applies to shoppers matched with this tax zone.
+     */
+    show_both_on_detail_view?: boolean;
+    /**
+     * Indicates whether to show both tax inclusive and tax exclusive prices when viewing a list of products; for example, on category and brand pages. This view applies to shoppers matched with this tax zone.
+     */
+    show_both_on_list_view?: boolean;
+};
 
 export type ZoneCheckData = {
-    body: Array<ZoneCheck>;
+    body?: Array<ZoneCheck>;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -107,7 +125,7 @@ export type ZoneCheckData = {
 
 export type ZoneCheckErrors = {
     /**
-     * The request body does not meet specifications.
+     * Any type
      */
     422: unknown;
 };
@@ -116,9 +134,7 @@ export type ZoneCheckResponses = {
     /**
      * OK
      */
-    200: {
-        data?: Array<TaxZone>;
-    };
+    200: TaxZoneCheckZoneCheckResponse200;
 };
 
 export type ZoneCheckResponse = ZoneCheckResponses[keyof ZoneCheckResponses];

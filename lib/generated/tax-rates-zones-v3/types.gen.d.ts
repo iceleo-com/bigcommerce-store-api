@@ -1,117 +1,144 @@
 export type ClientOptions = {
-    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
-};
-export type TaxZone = {
-    id?: number;
-    name?: string;
-    enabled?: boolean;
-    price_display_settings?: {
-        show_inclusive?: boolean;
-        show_both_on_detail_view?: boolean;
-        show_both_on_list_view?: boolean;
-    };
-    shopper_target_settings?: {
-        locations?: Array<{
-            country_code?: string;
-            subdivision_codes?: Array<string>;
-            postal_codes?: Array<string>;
-        }>;
-        customer_groups?: Array<number>;
-    };
-};
-export type TaxZonePut = {
-    id: number;
-    name?: string;
-    enabled?: boolean;
-    price_display_settings?: {
-        show_inclusive?: boolean;
-        show_both_on_detail_view?: boolean;
-        show_both_on_list_view?: boolean;
-    };
-    shopper_target_settings?: {
-        locations?: Array<{
-            country_code?: string;
-            subdivision_codes?: Array<string>;
-            postal_codes?: Array<string>;
-        }>;
-        customer_groups?: Array<number>;
-    };
-};
-export type TaxZonePost = {
-    name: string;
-    enabled?: boolean;
-    price_display_settings?: {
-        show_inclusive: boolean;
-        show_both_on_detail_view?: boolean;
-        show_both_on_list_view?: boolean;
-    };
-    shopper_target_settings?: {
-        locations: Array<{
-            country_code?: string;
-            subdivision_codes?: Array<string>;
-            postal_codes?: Array<string>;
-        }>;
-        customer_groups?: Array<number>;
-    };
-};
-export type TaxRate = {
-    class_rates?: Array<{
-        rate?: number;
-        tax_class_id?: number;
-    }>;
-    enabled?: boolean;
-    id?: number;
-    name?: string;
-    priority?: number;
-    tax_zone_id?: number;
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3/stores/{store_hash}/v3' | (string & {});
 };
 export type TaxRatePut = {
-    class_rates?: Array<{
-        rate?: number;
-        tax_class_id?: number;
-    }>;
+    class_rates?: Array<TaxRatePutClassRatesItems>;
     enabled?: boolean;
     id: number;
     name?: string;
     priority?: number;
     tax_zone_id?: number;
 };
+export type TaxRatePutClassRatesItems = {
+    rate?: number;
+    tax_class_id?: number;
+};
+export type TaxRatesUpdateTaxRatesResponse200 = {
+    data?: Array<TaxRate>;
+    meta?: MetaOpen;
+};
+export type MetaOpen = {
+    [key: string]: unknown;
+};
+export type TaxRate = {
+    class_rates?: Array<TaxRateClassRatesItems>;
+    enabled?: boolean;
+    id?: number;
+    name?: string;
+    priority?: number;
+    tax_zone_id?: number;
+};
+export type TaxRateClassRatesItems = {
+    rate?: number;
+    tax_class_id?: number;
+};
 export type TaxRatePost = {
-    class_rates: Array<{
-        rate: number;
-        tax_class_id: number;
-    }>;
+    class_rates: Array<TaxRatePostClassRatesItems>;
     enabled?: boolean;
     name: string;
     priority?: number;
     tax_zone_id: number;
 };
+export type TaxRatePostClassRatesItems = {
+    rate: number;
+    tax_class_id: number;
+};
+export type TaxRatesCreateTaxRatesResponse200 = {
+    data?: Array<TaxRate>;
+    meta?: MetaOpen;
+};
+export type TaxRatesGetTaxRatesResponse200 = {
+    data?: Array<TaxRate>;
+    meta?: Meta;
+};
 export type Meta = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            current?: string;
-        };
-    };
+    pagination?: MetaPagination;
 };
-export type MetaOpen = {
-    [key: string]: unknown;
+export type MetaPagination = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: MetaPaginationLinks;
 };
-export type StoreHash = string;
-export type Accept = string;
-export type ContentType = string;
-export type IdIn = Array<number>;
-export type ZoneIdIn = Array<number>;
-export type RateIdIn = Array<number>;
-export type TaxZoneIdIn = Array<number>;
-export type TaxRateArray = Array<TaxRatePut>;
-export type TaxRateArrayPost = Array<TaxRatePost>;
-export type TaxZoneArray = Array<TaxZonePut>;
-export type TaxZoneArrayPost = Array<TaxZonePost>;
+export type MetaPaginationLinks = {
+    current?: string;
+};
+export type TaxZonePut = {
+    id: number;
+    name?: string;
+    enabled?: boolean;
+    price_display_settings?: TaxZonePutPriceDisplaySettings;
+    shopper_target_settings?: TaxZonePutShopperTargetSettings;
+};
+export type TaxZonePutShopperTargetSettings = {
+    locations?: Array<TaxZonePutShopperTargetSettingsLocationsItems>;
+    customer_groups?: Array<number>;
+};
+export type TaxZonePutShopperTargetSettingsLocationsItems = {
+    country_code?: string;
+    subdivision_codes?: Array<string>;
+    postal_codes?: Array<string>;
+};
+export type TaxZonePutPriceDisplaySettings = {
+    show_inclusive?: boolean;
+    show_both_on_detail_view?: boolean;
+    show_both_on_list_view?: boolean;
+};
+export type TaxZonesUpdateTaxZonesResponse200 = {
+    data?: Array<TaxZone>;
+    meta?: MetaOpen;
+};
+export type TaxZone = {
+    id?: number;
+    name?: string;
+    enabled?: boolean;
+    price_display_settings?: TaxZonePriceDisplaySettings;
+    shopper_target_settings?: TaxZoneShopperTargetSettings;
+};
+export type TaxZoneShopperTargetSettings = {
+    locations?: Array<TaxZoneShopperTargetSettingsLocationsItems>;
+    customer_groups?: Array<number>;
+};
+export type TaxZoneShopperTargetSettingsLocationsItems = {
+    country_code?: string;
+    subdivision_codes?: Array<string>;
+    postal_codes?: Array<string>;
+};
+export type TaxZonePriceDisplaySettings = {
+    show_inclusive?: boolean;
+    show_both_on_detail_view?: boolean;
+    show_both_on_list_view?: boolean;
+};
+export type TaxZonePost = {
+    name: string;
+    enabled?: boolean;
+    price_display_settings?: TaxZonePostPriceDisplaySettings;
+    shopper_target_settings?: TaxZonePostShopperTargetSettings;
+};
+export type TaxZonePostShopperTargetSettings = {
+    locations: Array<TaxZonePostShopperTargetSettingsLocationsItems>;
+    customer_groups?: Array<number>;
+};
+export type TaxZonePostShopperTargetSettingsLocationsItems = {
+    country_code?: string;
+    subdivision_codes?: Array<string>;
+    postal_codes?: Array<string>;
+};
+export type TaxZonePostPriceDisplaySettings = {
+    show_inclusive: boolean;
+    show_both_on_detail_view?: boolean;
+    show_both_on_list_view?: boolean;
+};
+export type TaxZonesCreateTaxZonesResponse200 = {
+    data?: Array<TaxZone>;
+    meta?: MetaOpen;
+};
+export type TaxZonesGetTaxZonesResponse200 = {
+    data?: Array<TaxZone>;
+    meta?: MetaOpen;
+};
 export type DeleteTaxZonesData = {
     body?: never;
     headers: {
@@ -124,7 +151,9 @@ export type DeleteTaxZonesData = {
     url: '/tax/zones';
 };
 export type DeleteTaxZonesResponses = {
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 export type DeleteTaxZonesResponse = DeleteTaxZonesResponses[keyof DeleteTaxZonesResponses];
 export type GetTaxZonesData = {
@@ -139,44 +168,33 @@ export type GetTaxZonesData = {
     url: '/tax/zones';
 };
 export type GetTaxZonesResponses = {
-    200: {
-        data?: Array<TaxZone>;
-        meta?: MetaOpen;
-    };
+    200: TaxZonesGetTaxZonesResponse200;
 };
 export type GetTaxZonesResponse = GetTaxZonesResponses[keyof GetTaxZonesResponses];
 export type CreateTaxZonesData = {
-    body: TaxZoneArrayPost;
+    body?: Array<TaxZonePost>;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/tax/zones';
 };
 export type CreateTaxZonesResponses = {
-    200: {
-        data?: Array<TaxZone>;
-        meta?: MetaOpen;
-    };
+    200: TaxZonesCreateTaxZonesResponse200;
 };
 export type CreateTaxZonesResponse = CreateTaxZonesResponses[keyof CreateTaxZonesResponses];
 export type UpdateTaxZonesData = {
-    body: TaxZoneArray;
+    body?: Array<TaxZonePut>;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/tax/zones';
 };
 export type UpdateTaxZonesResponses = {
-    200: {
-        data?: Array<TaxZone>;
-        meta?: MetaOpen;
-    };
+    200: TaxZonesUpdateTaxZonesResponse200;
 };
 export type UpdateTaxZonesResponse = UpdateTaxZonesResponses[keyof UpdateTaxZonesResponses];
 export type DeleteTaxRatesData = {
@@ -191,7 +209,9 @@ export type DeleteTaxRatesData = {
     url: '/tax/rates';
 };
 export type DeleteTaxRatesResponses = {
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 export type DeleteTaxRatesResponse = DeleteTaxRatesResponses[keyof DeleteTaxRatesResponses];
 export type GetTaxRatesData = {
@@ -207,43 +227,32 @@ export type GetTaxRatesData = {
     url: '/tax/rates';
 };
 export type GetTaxRatesResponses = {
-    200: {
-        data?: Array<TaxRate>;
-        meta?: Meta;
-    };
+    200: TaxRatesGetTaxRatesResponse200;
 };
 export type GetTaxRatesResponse = GetTaxRatesResponses[keyof GetTaxRatesResponses];
 export type CreateTaxRatesData = {
-    body: TaxRateArrayPost;
+    body?: Array<TaxRatePost>;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/tax/rates';
 };
 export type CreateTaxRatesResponses = {
-    200: {
-        data?: Array<TaxRate>;
-        meta?: MetaOpen;
-    };
+    200: TaxRatesCreateTaxRatesResponse200;
 };
 export type CreateTaxRatesResponse = CreateTaxRatesResponses[keyof CreateTaxRatesResponses];
 export type UpdateTaxRatesData = {
-    body: TaxRateArray;
+    body?: Array<TaxRatePut>;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/tax/rates';
 };
 export type UpdateTaxRatesResponses = {
-    200: {
-        data?: Array<TaxRate>;
-        meta?: MetaOpen;
-    };
+    200: TaxRatesUpdateTaxRatesResponse200;
 };
 export type UpdateTaxRatesResponse = UpdateTaxRatesResponses[keyof UpdateTaxRatesResponses];

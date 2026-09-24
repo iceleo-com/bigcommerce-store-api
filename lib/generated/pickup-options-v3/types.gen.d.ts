@@ -5,29 +5,36 @@ export type PickupRequestPayload = {
     search_area: SearchArea;
     items: Array<Item>;
 };
-export type SearchArea = {
-    coordinates?: Coordinates;
-    radius: {
-        value: number;
-        unit: 'KM' | 'MI';
-    };
-};
-export type Coordinates = {
-    latitude: number;
-    longitude: number;
-};
 export type Item = {
     variant_id: number;
     quantity: number;
 };
+export type SearchArea = {
+    coordinates?: Coordinates;
+    radius: SearchAreaRadius;
+};
+export type SearchAreaRadius = {
+    value: number;
+    unit: SearchAreaRadiusUnit;
+};
+export type SearchAreaRadiusUnit = 'KM' | 'MI';
+export type Coordinates = {
+    latitude: number;
+    longitude: number;
+};
 export type PickupOptionsResponse = {
-    results?: Array<{
-        pickup_options?: Array<PickupOption>;
-    }>;
+    results?: Array<PickupOptionsResponseResultsItems>;
+};
+export type PickupOptionsResponseResultsItems = {
+    pickup_options?: Array<PickupOption>;
 };
 export type PickupOption = {
     pickup_method?: PickupMethod;
     available_items?: Array<AvailableItem>;
+};
+export type AvailableItem = {
+    variant_id?: number;
+    quantity?: number;
 };
 export type PickupMethod = {
     id?: number;
@@ -36,17 +43,10 @@ export type PickupMethod = {
     collection_instructions?: string;
     collection_time_description?: string;
 };
-export type AvailableItem = {
-    variant_id?: number;
-    quantity?: number;
-};
-export type Accept = string;
-export type ContentType = string;
 export type PostPickupOptionsData = {
-    body: PickupRequestPayload;
+    body?: PickupRequestPayload;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;

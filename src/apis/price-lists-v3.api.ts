@@ -11,28 +11,21 @@ export class PriceListsV3Api {
     }
 
     /**
-     * Get All Price Lists
+     * List Price Lists
      *
      * Returns a list of *Price Lists*. Optional parameters can be passed in.
      */
-    getPriceListCollection(
-        query?: PriceListsV3ApiSpecs.GetPriceListCollectionData['query'],
+    getPriceLists(
+        query?: PriceListsV3ApiSpecs.GetPriceListsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.GetPriceListCollectionResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.GetPriceListsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v3/pricelists',
             query,
         });
     }
 
     /**
-     * @deprecated Use `getPriceListCollection` instead.
-     */
-    getPriceLists(...args: Parameters<PriceListsV3Api['getPriceListCollection']>) {
-        return this.getPriceListCollection(...args);
-    }
-
-    /**
-     * Create a Price List
+     * Create Price List
      *
      * Creates a *Price List*.
 
@@ -54,39 +47,30 @@ export class PriceListsV3Api {
      *
      * Deletes a *Price List*. All associated price records are also removed. Optional parameters can be passed in.
      */
-    deletePriceListsByFilter(
-        query?: PriceListsV3ApiSpecs.DeletePriceListsByFilterData['query'],
+    deletePriceLists(
+        query?: PriceListsV3ApiSpecs.DeletePriceListsData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<PriceListsV3ApiSpecs.DeletePriceListsByFilterResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<PriceListsV3ApiSpecs.DeletePriceListsResponses[204]>>,RequestErrorResponse<503, Required<PriceListsV3ApiSpecs.DeletePriceListsErrors[503]>>>({
             path: 'v3/pricelists',
             query,
         });
     }
 
     /**
-     * @deprecated Use `deletePriceListsByFilter` instead.
-     */
-    deletePriceLists(...args: Parameters<PriceListsV3Api['deletePriceListsByFilter']>) {
-        return this.deletePriceListsByFilter(...args);
-    }
-
-    /**
-     * Get a Price List
+     * Get Price List
      *
      *  Returns a single *Price List*.
      */
     getPriceList(
         priceListId: PriceListsV3ApiSpecs.GetPriceListData['path']['price_list_id'],
-        query?: PriceListsV3ApiSpecs.GetPriceListData['query'],
     ) {
         return this.request.get<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.GetPriceListResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/pricelists/${priceListId}`,
-            query,
         });
     }
 
     /**
-     * Update a Price List
+     * Update Price List
      *
      * Updates a *Price List*.
      */
@@ -102,7 +86,7 @@ export class PriceListsV3Api {
     }
 
     /**
-     * Delete a Price List
+     * Delete Price List
      *
      * Deletes a *Price List*. All associated price records are also removed.
      **Limits**
@@ -111,20 +95,88 @@ export class PriceListsV3Api {
     deletePriceList(
         priceListId: PriceListsV3ApiSpecs.DeletePriceListData['path']['price_list_id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<PriceListsV3ApiSpecs.DeletePriceListResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<PriceListsV3ApiSpecs.DeletePriceListResponses[204]>>,RequestErrorResponse<503, Required<PriceListsV3ApiSpecs.DeletePriceListErrors[503]>>>({
             path: `v3/pricelists/${priceListId}`,
+        });
+    }
+
+    /**
+     * Get Price List Assignments
+     *
+     * Fetches an array of `Price List Assignments` matching a particular Customer Group and Price List and Channel.
+     */
+    getListOfPriceListAssignments(
+        query?: PriceListsV3ApiSpecs.GetListOfPriceListAssignmentsData['query'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.GetListOfPriceListAssignmentsResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: 'v3/pricelists/assignments',
+            query,
+        });
+    }
+
+    /**
+     * Create Price List Assignments
+     *
+     * Creates a batch of `Price List Assignments`. 
+     **Note:** The batch limit for `Price List Assignments` is 25.
+     */
+    createPriceListAssignments(
+        requestBody: PriceListsV3ApiSpecs.CreatePriceListAssignmentsData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.CreatePriceListAssignmentsResponses[200]>>,RequestErrorResponse<422, Required<PriceListsV3ApiSpecs.CreatePriceListAssignmentsErrors[422]>>>({
+            path: 'v3/pricelists/assignments',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete Price List Assignments
+     *
+     * Deletes one or more `Price List Assignments` objects from BigCommerce using a query parameter. You must use at least one query parameter.
+
+     **Note:** Although each of the query parameters below is individually optional, you must provide at least one of them to identify which assignments to delete.
+     */
+    deletePriceListAssignments(
+        query?: PriceListsV3ApiSpecs.DeletePriceListAssignmentsData['query'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<204, Required<PriceListsV3ApiSpecs.DeletePriceListAssignmentsResponses[204]>>,RequestErrorResponse<400, void>>({
+            path: 'v3/pricelists/assignments',
+            query,
+        });
+    }
+
+    /**
+     * Upsert Price List Assignment
+     *
+     * Upsert a single `Price List Assignment` for a `Price List`.
+     **Note:**
+     * Supports up to 25 simultaneous PUT requests. Running more than the allowed number of requests concurrently on the same store will result in a `429` status error and your additional requests will fail.        
+     */
+    upsertPriceListAssignment(
+        priceListId: PriceListsV3ApiSpecs.UpsertPriceListAssignmentData['path']['price_list_id'],
+        requestBody: PriceListsV3ApiSpecs.UpsertPriceListAssignmentData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.UpsertPriceListAssignmentResponses[200]>>,RequestErrorResponse<404, Required<PriceListsV3ApiSpecs.UpsertPriceListAssignmentErrors[404]>>>({
+            path: `v3/pricelists/${priceListId}/assignments`,
+            contentType: 'application/json',
+            body: requestBody,
         });
     }
 
     /**
      * Create Batch of Price Lists Records
      *
-     * Creates a batch of `Price Lists Records`; may include price list records from more than one price list.  Concurrency limit of 1.
+     * Creates a batch of `Price Lists Records`; may include price list records from more than one price list. Concurrency limit of 10, batch size of 100. Use `PUT` instead to update records that already exist.
+
+     Per-item validation failures — items referencing an unknown price list, unresolved `variant_id` or `sku`, items missing `price`, and items that duplicate another item in the same request — are rejected individually; the remaining valid items are saved, and `meta.saved_records` reflects the saved count.
+
+     If any otherwise-valid item collides with an existing price record (same `price_list_id` + variant + `currency`), the entire batch is rolled back. `meta.saved_records` returns `0`, and the response identifies both the conflicting items and the items that would have been saved so you can fix the conflicts and resend the rest. See the `422` response for details.
      */
-    upsertPriceListRecords(
-        requestBody: PriceListsV3ApiSpecs.UpsertPriceListRecordsData['body'],
+    createPriceListsRecords(
+        requestBody: PriceListsV3ApiSpecs.CreatePriceListsRecordsData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.UpsertPriceListRecordsResponses[200]>>,RequestErrorResponse<422, Required<PriceListsV3ApiSpecs.UpsertPriceListRecordsErrors[422]>>>({
+        return this.request.post<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.CreatePriceListsRecordsResponses[200]>>,RequestErrorResponse<422, Required<PriceListsV3ApiSpecs.CreatePriceListsRecordsErrors[422]>>>({
             path: 'v3/pricelists/records',
             contentType: 'application/json',
             body: requestBody,
@@ -132,14 +184,26 @@ export class PriceListsV3Api {
     }
 
     /**
-     * @deprecated Use `upsertPriceListRecords` instead.
+     * Create or Update Batch of Price Lists Records
+     *
+     * Creates or updates a batch of `Price Lists Records`; may include price list records from more than one price list. Concurrency limit of 1. It is advised to use POST to get better performance when creating price records.
+
+     <Note>
+       Each request must include `price_list_id` and `currency`, plus either `variant_id` or `sku` to identify the variant.
+     </Note>
      */
-    upsertPriceListsRecords(...args: Parameters<PriceListsV3Api['upsertPriceListRecords']>) {
-        return this.upsertPriceListRecords(...args);
+    upsertPriceListsRecords(
+        requestBody: PriceListsV3ApiSpecs.UpsertPriceListsRecordsData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.UpsertPriceListsRecordsResponses[200]>>,RequestErrorResponse<422, Required<PriceListsV3ApiSpecs.UpsertPriceListsRecordsErrors[422]>>>({
+            path: 'v3/pricelists/records',
+            contentType: 'application/json',
+            body: requestBody,
+        });
     }
 
     /**
-     * Get All Price List Records
+     * List Price List Records
      *
      * Returns a list of *Price List Records* associated with a *Price List*.
 
@@ -147,39 +211,35 @@ export class PriceListsV3Api {
      * Supports up to 10 simultaneous GET requests. Running more than the allowed number of requests concurrently on the same store will result in a `429` status error and your additional requests will fail.
      * Store Pricelist Records data to reduce the number of calls and maximize performance.
      */
-    getPriceListRecordCollection(
-        priceListId: PriceListsV3ApiSpecs.GetPriceListRecordCollectionData['path']['price_list_id'],
-        query?: PriceListsV3ApiSpecs.GetPriceListRecordCollectionData['query'],
+    getPriceListRecords(
+        priceListId: PriceListsV3ApiSpecs.GetPriceListRecordsData['path']['price_list_id'],
+        query?: PriceListsV3ApiSpecs.GetPriceListRecordsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.GetPriceListRecordCollectionResponses[200]>>,RequestErrorResponse<429, Required<PriceListsV3ApiSpecs.GetPriceListRecordCollectionErrors[429]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.GetPriceListRecordsResponses[200]>>,RequestErrorResponse<429, Required<PriceListsV3ApiSpecs.GetPriceListRecordsErrors[429]>>>({
             path: `v3/pricelists/${priceListId}/records`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `getPriceListRecordCollection` instead.
-     */
-    getPriceListRecords(...args: Parameters<PriceListsV3Api['getPriceListRecordCollection']>) {
-        return this.getPriceListRecordCollection(...args);
-    }
-
-    /**
-     * Upsert Price List Records
+     * Create Price List Records
      *
-     * Creates or updates *Price List Records*. 
+     * Creates *Price List Records*. 
+
      **Required Fields**
      * currency
+     * one of `variant_id` or `sku`
+
      **Notes**
-     * Batch requests support up to 1,000 items per request.
-     * Up to 2 concurrent batch upsert requests are supported with this API. Running more than the allowed concurrent requests in parallel on the **same store** will cause a `429` error, and your additional requests will fail. You are encouraged to run requests sequentially with as many records per request as possible to maximize performance.
-     * When updating a product with variants, or multiple SKUs, don't include records for the parent product SKU.
+     * Batch requests support up to 100 items per request.
+     * Up to 10 concurrent batch create requests are supported with this API. Running more than the allowed concurrent requests in parallel on the **same store** will cause a `429` error, and your additional requests will fail. You are encouraged to run requests sequentially with as many records per request as possible to maximize performance.
+     * When creating a product with variants, or multiple SKUs, don't include records for the parent product SKU.
      */
-    setPriceListRecordCollection(
-        priceListId: PriceListsV3ApiSpecs.SetPriceListRecordCollectionData['path']['price_list_id'],
-        requestBody: PriceListsV3ApiSpecs.SetPriceListRecordCollectionData['body'],
+    createPriceListRecords(
+        priceListId: PriceListsV3ApiSpecs.CreatePriceListRecordsData['path']['price_list_id'],
+        requestBody: PriceListsV3ApiSpecs.CreatePriceListRecordsData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.SetPriceListRecordCollectionResponses[200]>>,(RequestErrorResponse<422, Required<PriceListsV3ApiSpecs.SetPriceListRecordCollectionErrors[422]>> | RequestErrorResponse<429, Required<PriceListsV3ApiSpecs.SetPriceListRecordCollectionErrors[429]>>)>({
+        return this.request.post<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.CreatePriceListRecordsResponses[200]>>,(RequestErrorResponse<422, Required<PriceListsV3ApiSpecs.CreatePriceListRecordsErrors[422]>> | RequestErrorResponse<429, Required<PriceListsV3ApiSpecs.CreatePriceListRecordsErrors[429]>>)>({
             path: `v3/pricelists/${priceListId}/records`,
             contentType: 'application/json',
             body: requestBody,
@@ -187,29 +247,46 @@ export class PriceListsV3Api {
     }
 
     /**
-     * Delete a Price List Record
+     * Upsert Price List Records
+     *
+     * Creates or updates *Price List Records*. 
+
+     **Required Fields**
+     * currency
+
+     **Notes**
+     * Batch requests support up to 1,000 items per request.
+     * Up to 2 concurrent batch upsert requests are supported with this API. Running more than the allowed concurrent requests in parallel on the **same store** will cause a `429` error, and your additional requests will fail. You are encouraged to run requests sequentially with as many records per request as possible to maximize performance.
+     * When updating a product with variants, or multiple SKUs, don't include records for the parent product SKU.
+     */
+    upsertPriceListRecords(
+        priceListId: PriceListsV3ApiSpecs.UpsertPriceListRecordsData['path']['price_list_id'],
+        requestBody: PriceListsV3ApiSpecs.UpsertPriceListRecordsData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.UpsertPriceListRecordsResponses[200]>>,(RequestErrorResponse<422, Required<PriceListsV3ApiSpecs.UpsertPriceListRecordsErrors[422]>> | RequestErrorResponse<429, Required<PriceListsV3ApiSpecs.UpsertPriceListRecordsErrors[429]>>)>({
+            path: `v3/pricelists/${priceListId}/records`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete Price List Record
      *
      * Deletes a *Price List Record*. Deleting the records does not delete the Price List. Optional parameters can be passed in.
      */
-    deletePriceListRecordsByFilter(
-        priceListId: PriceListsV3ApiSpecs.DeletePriceListRecordsByFilterData['path']['price_list_id'],
-        query?: PriceListsV3ApiSpecs.DeletePriceListRecordsByFilterData['query'],
+    deletePriceListRecords(
+        priceListId: PriceListsV3ApiSpecs.DeletePriceListRecordsData['path']['price_list_id'],
+        query?: PriceListsV3ApiSpecs.DeletePriceListRecordsData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<PriceListsV3ApiSpecs.DeletePriceListRecordsByFilterResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<PriceListsV3ApiSpecs.DeletePriceListRecordsResponses[204]>>,RequestErrorResponse<503, Required<PriceListsV3ApiSpecs.DeletePriceListRecordsErrors[503]>>>({
             path: `v3/pricelists/${priceListId}/records`,
             query,
         });
     }
 
     /**
-     * @deprecated Use `deletePriceListRecordsByFilter` instead.
-     */
-    deletePriceListRecords(...args: Parameters<PriceListsV3Api['deletePriceListRecordsByFilter']>) {
-        return this.deletePriceListRecordsByFilter(...args);
-    }
-
-    /**
-     * Get Price Records by Variant
+     * List Price Records by Variant
      *
      * Returns *Price List Records* using the variant ID. Will also contain currency records.
 
@@ -221,14 +298,16 @@ export class PriceListsV3Api {
     getPriceListRecordsByVariantId(
         priceListId: PriceListsV3ApiSpecs.GetPriceListRecordsByVariantIdData['path']['price_list_id'],
         variantId: PriceListsV3ApiSpecs.GetPriceListRecordsByVariantIdData['path']['variant_id'],
+        query?: PriceListsV3ApiSpecs.GetPriceListRecordsByVariantIdData['query'],
     ) {
         return this.request.get<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.GetPriceListRecordsByVariantIdResponses[200]>>,RequestErrorResponse<429, Required<PriceListsV3ApiSpecs.GetPriceListRecordsByVariantIdErrors[429]>>>({
             path: `v3/pricelists/${priceListId}/records/${variantId}`,
+            query,
         });
     }
 
     /**
-     * Get a Price Record by Currency Code
+     * Get Price Record by Currency Code
      *
      * Returns a *Price List Record* using the currency code. You can use optional parameters.
      **Notes**
@@ -267,7 +346,7 @@ export class PriceListsV3Api {
     }
 
     /**
-     * Delete a Price Record by Currency Code
+     * Delete Price Record by Currency Code
      *
      * Deletes a *Price List Record* using the currency code.
      **Note:**
@@ -278,77 +357,8 @@ export class PriceListsV3Api {
         variantId: PriceListsV3ApiSpecs.DeletePriceListRecordData['path']['variant_id'],
         currencyCode: PriceListsV3ApiSpecs.DeletePriceListRecordData['path']['currency_code'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<PriceListsV3ApiSpecs.DeletePriceListRecordResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<PriceListsV3ApiSpecs.DeletePriceListRecordResponses[204]>>,RequestErrorResponse<503, Required<PriceListsV3ApiSpecs.DeletePriceListRecordErrors[503]>>>({
             path: `v3/pricelists/${priceListId}/records/${variantId}/${currencyCode}`,
-        });
-    }
-
-    /**
-     * Get Price List Assignments
-     *
-     * Fetches an array of `Price List Assignments` matching a particular Customer Group and Price List and Channel.
-     */
-    getListOfPriceListAssignments(
-        query?: PriceListsV3ApiSpecs.GetListOfPriceListAssignmentsData['query'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.GetListOfPriceListAssignmentsResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: 'v3/pricelists/assignments',
-            query,
-        });
-    }
-
-    /**
-     * Create Price List Assignments
-     *
-     * Creates a batch of `Price List Assignments`. 
-     **Note:** The batch limit for `Price List Assignments` is 25.
-     */
-    createPriceListAssignments(
-        requestBody: PriceListsV3ApiSpecs.CreatePriceListAssignmentsData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.CreatePriceListAssignmentsResponses[200]>>,RequestErrorResponse<422, Required<PriceListsV3ApiSpecs.CreatePriceListAssignmentsErrors[422]>>>({
-            path: 'v3/pricelists/assignments',
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * Delete Price List Assignments
-     *
-     * Deletes one or more `Price List Assignments` objects from BigCommerce using a query parameter. You must use at least one query parameter. 
-     */
-    deletePriceListAssignmentsByFilter(
-        query?: PriceListsV3ApiSpecs.DeletePriceListAssignmentsByFilterData['query'],
-    ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<PriceListsV3ApiSpecs.DeletePriceListAssignmentsByFilterResponses[204]>>,RequestErrorResponse<400, void>>({
-            path: 'v3/pricelists/assignments',
-            query,
-        });
-    }
-
-    /**
-     * @deprecated Use `deletePriceListAssignmentsByFilter` instead.
-     */
-    deletePriceListAssignments(...args: Parameters<PriceListsV3Api['deletePriceListAssignmentsByFilter']>) {
-        return this.deletePriceListAssignmentsByFilter(...args);
-    }
-
-    /**
-     * Upsert Price List Assignment
-     *
-     * Upsert a single `Price List Assignment` for a `Price List`.
-     **Note:**
-     * Supports up to 25 simultaneous PUT requests. Running more than the allowed number of requests concurrently on the same store will result in a `429` status error and your additional requests will fail.        
-     */
-    upsertPriceListAssignment(
-        priceListId: PriceListsV3ApiSpecs.UpsertPriceListAssignmentData['path']['price_list_id'],
-        requestBody: PriceListsV3ApiSpecs.UpsertPriceListAssignmentData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<PriceListsV3ApiSpecs.UpsertPriceListAssignmentResponses[200]>>,RequestErrorResponse<404, Required<PriceListsV3ApiSpecs.UpsertPriceListAssignmentErrors[404]>>>({
-            path: `v3/pricelists/${priceListId}/assignments`,
-            contentType: 'application/json',
-            body: requestBody,
         });
     }
 }

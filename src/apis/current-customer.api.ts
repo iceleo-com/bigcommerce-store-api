@@ -13,7 +13,9 @@ export class CurrentCustomerApi {
     /**
      * Get Current Customer
      *
-     * Identify logged-in customers securely via JavaScript.
+     * Identify signed-in customers securely by requesting and decoding a BigCommerce-generated JWT.
+
+     The response body will contain a JWT.
 
      > #### Note
      > The Send a Test Request feature is not currently supported for this endpoint.
@@ -21,7 +23,7 @@ export class CurrentCustomerApi {
     getCurrentCustomer(
         query?: CurrentCustomerApiSpecs.GetCurrentCustomerData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, void>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CurrentCustomerApiSpecs.GetCurrentCustomerResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'https://{store_domain}/customer/current.jwt',
             query,
         });

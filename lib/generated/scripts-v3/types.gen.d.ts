@@ -1,117 +1,162 @@
 export type ClientOptions = {
-    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3/stores/{store_hash}/v3' | (string & {});
 };
-export type CollectionMeta = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            previous?: string;
-            current?: string;
-            next?: string;
-        };
-    };
+export type ScriptBaseLoadMethod = 'default' | 'async' | 'defer';
+export type ScriptBaseLocation = 'head' | 'footer';
+export type ScriptBaseVisibility = 'storefront' | 'all_pages' | 'checkout' | 'order_confirmation';
+export type ScriptBaseKind = 'src' | 'script_tag';
+export type ScriptBaseConsentCategory = 'essential' | 'functional' | 'analytics' | 'targeting';
+export type ScriptPost = {
+    description?: string;
+    html?: string;
+    src?: string;
+    auto_uninstall?: boolean;
+    load_method?: ScriptBaseLoadMethod;
+    location?: ScriptBaseLocation;
+    visibility?: ScriptBaseVisibility;
+    kind?: ScriptBaseKind;
+    api_client_id?: string;
+    consent_category?: ScriptBaseConsentCategory;
+    enabled?: boolean;
+    channel_id?: number;
+    integrity_hashes?: Array<string>;
+    name: string;
 };
-export type Pagination = {
+export type ScriptFull = {
+    description?: string;
+    html?: string;
+    src?: string;
+    auto_uninstall?: boolean;
+    load_method?: ScriptBaseLoadMethod;
+    location?: ScriptBaseLocation;
+    visibility?: ScriptBaseVisibility;
+    kind?: ScriptBaseKind;
+    api_client_id?: string;
+    consent_category?: ScriptBaseConsentCategory;
+    enabled?: boolean;
+    channel_id?: number;
+    integrity_hashes?: Array<string>;
+    name?: string;
+    uuid?: string;
+    date_created?: string;
+    date_modified?: string;
+};
+export type Meta = {
+    [key: string]: unknown;
+};
+export type ScriptResponse = {
+    data?: ScriptFull;
+    meta?: Meta;
+};
+export type ContentScriptsPostResponsesContentApplicationJsonSchemaErrors = {
+    [key: string]: unknown;
+};
+export type CreateScriptRequestUnprocessableEntityError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: ContentScriptsPostResponsesContentApplicationJsonSchemaErrors;
+};
+export type ContentScriptsGetParametersSort = 'name' | 'description' | 'date_created' | 'date_modified';
+export type ContentScriptsGetParametersDirection = 'asc' | 'desc';
+export type CollectionMetaPaginationLinks = {
+    previous?: string;
+    current?: string;
+    next?: string;
+};
+export type CollectionMetaPagination = {
     total?: number;
     count?: number;
     per_page?: number;
     current_page?: number;
     total_pages?: number;
-    links?: {
-        previous?: string;
-        current?: string;
-        next?: string;
-    };
+    links?: CollectionMetaPaginationLinks;
 };
-export type Meta = {
-    [key: string]: unknown;
+export type CollectionMeta = {
+    pagination?: CollectionMetaPagination;
 };
-export type ErrorResponse = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-} & {
-    errors?: {
-        [key: string]: unknown;
-    };
-};
-export type BaseError = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-};
-export type DetailedErrors = {
-    [key: string]: unknown;
-};
-export type NotFound = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-};
-export type NoContent = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-};
-export type ScriptFull = {
-    name?: string;
-    uuid?: string;
-    date_created?: string;
-    date_modified?: string;
-} & ScriptBase;
-export type ScriptPost = {
-    name: string;
-} & ScriptBase;
-export type ScriptPut = {
-    name?: string;
-} & ScriptBase;
-export type ScriptResponse = {
-    data?: ScriptFull;
-    meta?: Meta;
-};
-export type ScriptResponseCollection = {
+export type ScriptsGetScriptsResponse200 = {
     data?: Array<ScriptFull>;
     meta?: CollectionMeta;
 };
-export type ScriptBase = {
+export type ContentScriptsGetResponsesContentApplicationJsonSchemaErrors = {
+    [key: string]: unknown;
+};
+export type GetScriptsRequestUnprocessableEntityError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: ContentScriptsGetResponsesContentApplicationJsonSchemaErrors;
+};
+export type ContentScriptsUuidGetResponsesContentApplicationJsonSchemaErrors = {
+    [key: string]: unknown;
+};
+export type GetScriptRequestNotFoundError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: ContentScriptsUuidGetResponsesContentApplicationJsonSchemaErrors;
+};
+export type GetScriptRequestUnprocessableEntityError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: ContentScriptsUuidGetResponsesContentApplicationJsonSchemaErrors;
+};
+export type ScriptPut = {
     description?: string;
     html?: string;
     src?: string;
     auto_uninstall?: boolean;
-    load_method?: 'default' | 'async' | 'defer';
-    location?: 'head' | 'footer';
-    visibility?: 'storefront' | 'all_pages' | 'checkout' | 'order_confirmation';
-    kind?: 'src' | 'script_tag';
+    load_method?: ScriptBaseLoadMethod;
+    location?: ScriptBaseLocation;
+    visibility?: ScriptBaseVisibility;
+    kind?: ScriptBaseKind;
     api_client_id?: string;
-    consent_category?: 'essential' | 'functional' | 'analytics' | 'targeting';
+    consent_category?: ScriptBaseConsentCategory;
     enabled?: boolean;
     channel_id?: number;
+    integrity_hashes?: Array<string>;
+    name?: string;
 };
-export type FilterWidgetTemplateUuidParam = string;
-export type FilterWidgetTemplateKindParam = string;
-export type PlacementUuid = string;
-export type WidgetUuid = string;
-export type ScriptUuid = string;
-export type FilterWidgetUuidParam = string;
-export type FilterIncludeFieldsParam = string;
-export type FilterExcludeFieldsParam = string;
-export type PageParam = number;
-export type LimitParam = number;
-export type ScriptsSortKeyParam = 'name' | 'description' | 'date_created' | 'date_modified';
-export type DirectionParam = 'asc' | 'desc';
-export type TemplateUuid = string;
-export type RequiredTemplateFile = string;
-export type QueryWidgetsParam = string;
-export type Accept = string;
-export type ContentType = string;
+export type ContentScriptsUuidPutResponsesContentApplicationJsonSchemaErrors = {
+    [key: string]: unknown;
+};
+export type UpdateScriptRequestNotFoundError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: ContentScriptsUuidPutResponsesContentApplicationJsonSchemaErrors;
+};
+export type UpdateScriptRequestUnprocessableEntityError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: ContentScriptsUuidPutResponsesContentApplicationJsonSchemaErrors;
+};
+export type ContentScriptsUuidDeleteResponsesContentApplicationJsonSchemaErrors = {
+    [key: string]: unknown;
+};
+export type DeleteScriptRequestNotFoundError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: ContentScriptsUuidDeleteResponsesContentApplicationJsonSchemaErrors;
+};
+export type DeleteScriptRequestUnprocessableEntityError = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: ContentScriptsUuidDeleteResponsesContentApplicationJsonSchemaErrors;
+};
 export type GetScriptsData = {
     body?: never;
     headers: {
@@ -121,53 +166,31 @@ export type GetScriptsData = {
     query?: {
         page?: number;
         limit?: number;
-        sort?: 'name' | 'description' | 'date_created' | 'date_modified';
-        direction?: 'asc' | 'desc';
-        'channel_id:in'?: Array<unknown>;
+        sort?: ContentScriptsGetParametersSort;
+        direction?: ContentScriptsGetParametersDirection;
+        'channel_id:in'?: Array<number>;
     };
     url: '/content/scripts';
 };
 export type GetScriptsErrors = {
-    422: {
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    } & {
-        errors?: {
-            [key: string]: unknown;
-        };
-    };
+    422: GetScriptsRequestUnprocessableEntityError;
 };
 export type GetScriptsError = GetScriptsErrors[keyof GetScriptsErrors];
 export type GetScriptsResponses = {
-    200: {
-        data?: Array<ScriptFull>;
-        meta?: CollectionMeta;
-    };
+    200: ScriptsGetScriptsResponse200;
 };
 export type GetScriptsResponse = GetScriptsResponses[keyof GetScriptsResponses];
 export type CreateScriptData = {
-    body: ScriptPost;
+    body?: ScriptPost;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/content/scripts';
 };
 export type CreateScriptErrors = {
-    422: {
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    } & {
-        errors?: {
-            [key: string]: unknown;
-        };
-    };
+    422: CreateScriptRequestUnprocessableEntityError;
 };
 export type CreateScriptError = CreateScriptErrors[keyof CreateScriptErrors];
 export type CreateScriptResponses = {
@@ -186,30 +209,14 @@ export type DeleteScriptData = {
     url: '/content/scripts/{uuid}';
 };
 export type DeleteScriptErrors = {
-    404: {
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    } & {
-        errors?: {
-            [key: string]: unknown;
-        };
-    };
-    422: {
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    } & {
-        errors?: {
-            [key: string]: unknown;
-        };
-    };
+    404: DeleteScriptRequestNotFoundError;
+    422: DeleteScriptRequestUnprocessableEntityError;
 };
 export type DeleteScriptError = DeleteScriptErrors[keyof DeleteScriptErrors];
 export type DeleteScriptResponses = {
-    204: NoContent;
+    204: {
+        [key: string]: unknown;
+    };
 };
 export type DeleteScriptResponse = DeleteScriptResponses[keyof DeleteScriptResponses];
 export type GetScriptData = {
@@ -224,26 +231,8 @@ export type GetScriptData = {
     url: '/content/scripts/{uuid}';
 };
 export type GetScriptErrors = {
-    404: {
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    } & {
-        errors?: {
-            [key: string]: unknown;
-        };
-    };
-    422: {
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    } & {
-        errors?: {
-            [key: string]: unknown;
-        };
-    };
+    404: GetScriptRequestNotFoundError;
+    422: GetScriptRequestUnprocessableEntityError;
 };
 export type GetScriptError = GetScriptErrors[keyof GetScriptErrors];
 export type GetScriptResponses = {
@@ -251,10 +240,9 @@ export type GetScriptResponses = {
 };
 export type GetScriptResponse = GetScriptResponses[keyof GetScriptResponses];
 export type UpdateScriptData = {
-    body: ScriptPut;
+    body?: ScriptPut;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path: {
         uuid: string;
@@ -263,26 +251,8 @@ export type UpdateScriptData = {
     url: '/content/scripts/{uuid}';
 };
 export type UpdateScriptErrors = {
-    404: {
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    } & {
-        errors?: {
-            [key: string]: unknown;
-        };
-    };
-    422: {
-        status?: number;
-        title?: string;
-        type?: string;
-        instance?: string;
-    } & {
-        errors?: {
-            [key: string]: unknown;
-        };
-    };
+    404: UpdateScriptRequestNotFoundError;
+    422: UpdateScriptRequestUnprocessableEntityError;
 };
 export type UpdateScriptError = UpdateScriptErrors[keyof UpdateScriptErrors];
 export type UpdateScriptResponses = {

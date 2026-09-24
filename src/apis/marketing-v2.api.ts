@@ -11,9 +11,119 @@ export class MarketingV2Api {
     }
 
     /**
-     * Get All Coupons
+     * List Banners
      *
-     * Returns a list of *Coupons*. Default sorting is by coupon/discount id, from lowest to highest. Optional filter parameters can be passed in.
+     * Returns a list of *Banners*. Default sorting is by banner id, from lowest to highest.
+     */
+    getBanners(
+        query?: MarketingV2ApiSpecs.GetBannersData['query'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetBannersResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: 'v2/banners',
+            query,
+        });
+    }
+
+    /**
+     * Create Banner
+     *
+     * Creates a *Banner*.
+
+     **Required Fields**
+     * name
+     * content
+     * page
+     * location
+     * date_type
+
+     **Read Only Fields**
+     * date_created
+     * id
+     */
+    createBanner(
+        requestBody: MarketingV2ApiSpecs.CreateBannerData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.CreateBannerResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: 'v2/banners',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete All Banners
+     *
+     * By default, it deletes all *Banners*.
+     */
+    deleteBanners(
+    ) {
+        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteBannersResponses[204]>>,RequestErrorResponse<400, void>>({
+            path: 'v2/banners',
+        });
+    }
+
+    /**
+     * Get Banner
+     *
+     * Returns a single *Banner*
+     */
+    getBanner(
+        id: MarketingV2ApiSpecs.GetBannerData['path']['id'],
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetBannerResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v2/banners/${id}`,
+        });
+    }
+
+    /**
+     * Update Banner
+     *
+     * Updates a *Banner*.
+
+     **Read Only Fields**
+     * date_created
+     * id
+     */
+    updateBanner(
+        id: MarketingV2ApiSpecs.UpdateBannerData['path']['id'],
+        requestBody: MarketingV2ApiSpecs.UpdateBannerData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.UpdateBannerResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v2/banners/${id}`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete Banner
+     *
+     * Deletes a *Banner*.
+     */
+    deleteBanner(
+        id: MarketingV2ApiSpecs.DeleteBannerData['path']['id'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteBannerResponses[204]>>,RequestErrorResponse<400, void>>({
+            path: `v2/banners/${id}`,
+        });
+    }
+
+    /**
+     * Get Count of Store Banners
+     *
+     * Returns a count of *Banners*.
+     */
+    getBannersCount(
+    ) {
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetBannersCountResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: 'v2/banners/count',
+        });
+    }
+
+    /**
+     * List Coupons
+     *
+     * Returns a list of *Coupons*. Default sorting is by coupon/discount id, from lowest to highest. You can pass in optional filter parameters. We recommended using `?min_id=x&limit=y` to paginate through a large set of data because it offers better performance.
 
      ## Usage Notes
 
@@ -40,24 +150,17 @@ export class MarketingV2Api {
      ...
      ```
      */
-    getAllCoupons(
-        query?: MarketingV2ApiSpecs.GetAllCouponsData['query'],
+    getCoupons(
+        query?: MarketingV2ApiSpecs.GetCouponsData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetAllCouponsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetCouponsResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/coupons',
             query,
         });
     }
 
     /**
-     * @deprecated Use `getAllCoupons` instead.
-     */
-    getCoupons(...args: Parameters<MarketingV2Api['getAllCoupons']>) {
-        return this.getAllCoupons(...args);
-    }
-
-    /**
-     * Create a New Coupon
+     * Create Coupon
      *
      * Creates a *Coupon*.
 
@@ -84,21 +187,14 @@ export class MarketingV2Api {
 
      Legacy coupon codes only work with the store's default currency. Applying a coupon with any other currency other than the store's default will result in the error: "Coupons only apply to default currency."
      */
-    createAnewCoupon(
-        requestBody: MarketingV2ApiSpecs.CreateANewCouponData['body'],
+    createCoupon(
+        requestBody: MarketingV2ApiSpecs.CreateCouponData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<201, Required<MarketingV2ApiSpecs.CreateANewCouponResponses[201]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<201, Required<MarketingV2ApiSpecs.CreateCouponResponses[201]>>,RequestErrorResponse<400, void>>({
             path: 'v2/coupons',
             contentType: 'application/json',
             body: requestBody,
         });
-    }
-
-    /**
-     * @deprecated Use `createAnewCoupon` instead.
-     */
-    createCoupon(...args: Parameters<MarketingV2Api['createAnewCoupon']>) {
-        return this.createAnewCoupon(...args);
     }
 
     /**
@@ -108,43 +204,29 @@ export class MarketingV2Api {
      * Deleting a coupon via this endpoint will delete the coupon but not the promotion it is attached to
 
      */
-    deleteAllCoupons(
-        query?: MarketingV2ApiSpecs.DeleteAllCouponsData['query'],
+    deleteCoupons(
+        query?: MarketingV2ApiSpecs.DeleteCouponsData['query'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteAllCouponsResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteCouponsResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/coupons',
             query,
         });
     }
 
     /**
-     * @deprecated Use `deleteAllCoupons` instead.
-     */
-    deleteCoupons(...args: Parameters<MarketingV2Api['deleteAllCoupons']>) {
-        return this.deleteAllCoupons(...args);
-    }
-
-    /**
-     * Get a Count of Coupons
+     * Get Count of Coupons
      *
      * Returns a count of all *Coupons* in the store.
      */
-    getAcountOfCoupons(
+    getCouponsCount(
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetACountOfCouponsResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetCouponsCountResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/coupons/count',
         });
     }
 
     /**
-     * @deprecated Use `getAcountOfCoupons` instead.
-     */
-    getCouponsCount(...args: Parameters<MarketingV2Api['getAcountOfCoupons']>) {
-        return this.getAcountOfCoupons(...args);
-    }
-
-    /**
-     * Update a Coupon
+     * Update Coupon
      *
      * Updates a *Coupon*.
 
@@ -158,11 +240,11 @@ export class MarketingV2Api {
 
      If the `applies_to` value is cleared, you can restore it to the coupon by reapplying the `applies_to` value in a new `PUT` request.
      */
-    updateAcoupon(
-        id: MarketingV2ApiSpecs.UpdateACouponData['path']['id'],
-        requestBody: MarketingV2ApiSpecs.UpdateACouponData['body'],
+    updateCoupon(
+        id: MarketingV2ApiSpecs.UpdateCouponData['path']['id'],
+        requestBody: MarketingV2ApiSpecs.UpdateCouponData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.UpdateACouponResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.UpdateCouponResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/coupons/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -170,213 +252,33 @@ export class MarketingV2Api {
     }
 
     /**
-     * @deprecated Use `updateAcoupon` instead.
-     */
-    updateCoupon(...args: Parameters<MarketingV2Api['updateAcoupon']>) {
-        return this.updateAcoupon(...args);
-    }
-
-    /**
-     * Delete a Coupon
+     * Delete Coupon
      *
      * Deletes a *Coupon*.
      */
-    deleteAcoupon(
-        id: MarketingV2ApiSpecs.DeleteACouponData['path']['id'],
+    deleteCoupon(
+        id: MarketingV2ApiSpecs.DeleteCouponData['path']['id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteACouponResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteCouponResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/coupons/${id}`,
         });
     }
 
     /**
-     * @deprecated Use `deleteAcoupon` instead.
-     */
-    deleteCoupon(...args: Parameters<MarketingV2Api['deleteAcoupon']>) {
-        return this.deleteAcoupon(...args);
-    }
-
-    /**
-     * Get All Banners
-     *
-     * Returns a list of *Banners*. Default sorting is by banner id, from lowest to highest.
-     */
-    getAllBanners(
-        query?: MarketingV2ApiSpecs.GetAllBannersData['query'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetAllBannersResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: 'v2/banners',
-            query,
-        });
-    }
-
-    /**
-     * @deprecated Use `getAllBanners` instead.
-     */
-    getBanners(...args: Parameters<MarketingV2Api['getAllBanners']>) {
-        return this.getAllBanners(...args);
-    }
-
-    /**
-     * Create a Banner
-     *
-     * Creates a *Banner*.
-
-     **Required Fields**
-     * name
-     * content
-     * page
-     * location
-     * date_type
-
-     **Read Only Fields**
-     * date_created
-     * id
-     */
-    createAbanner(
-        requestBody: MarketingV2ApiSpecs.CreateABannerData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.CreateABannerResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: 'v2/banners',
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * @deprecated Use `createAbanner` instead.
-     */
-    createBanner(...args: Parameters<MarketingV2Api['createAbanner']>) {
-        return this.createAbanner(...args);
-    }
-
-    /**
-     * Delete All Banners
-     *
-     * By default, it deletes all *Banners*.
-     */
-    deleteAllBanners(
-    ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteAllBannersResponses[204]>>,RequestErrorResponse<400, void>>({
-            path: 'v2/banners',
-        });
-    }
-
-    /**
-     * @deprecated Use `deleteAllBanners` instead.
-     */
-    deleteBanners(...args: Parameters<MarketingV2Api['deleteAllBanners']>) {
-        return this.deleteAllBanners(...args);
-    }
-
-    /**
-     * Get a Banner
-     *
-     * Returns a single *Banner*
-     */
-    getAbanner(
-        id: MarketingV2ApiSpecs.GetABannerData['path']['id'],
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetABannerResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v2/banners/${id}`,
-        });
-    }
-
-    /**
-     * @deprecated Use `getAbanner` instead.
-     */
-    getBanner(...args: Parameters<MarketingV2Api['getAbanner']>) {
-        return this.getAbanner(...args);
-    }
-
-    /**
-     * Update a Banner
-     *
-     * Updates a *Banner*.
-
-     **Read Only Fields**
-     * date_created
-     * id
-     */
-    updateAbanner(
-        id: MarketingV2ApiSpecs.UpdateABannerData['path']['id'],
-        requestBody: MarketingV2ApiSpecs.UpdateABannerData['body'],
-    ) {
-        return this.request.put<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.UpdateABannerResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v2/banners/${id}`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * @deprecated Use `updateAbanner` instead.
-     */
-    updateBanner(...args: Parameters<MarketingV2Api['updateAbanner']>) {
-        return this.updateAbanner(...args);
-    }
-
-    /**
-     * Delete a Banner
-     *
-     * Deletes a *Banner*.
-     */
-    deleteAbanner(
-        id: MarketingV2ApiSpecs.DeleteABannerData['path']['id'],
-    ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteABannerResponses[204]>>,RequestErrorResponse<400, void>>({
-            path: `v2/banners/${id}`,
-        });
-    }
-
-    /**
-     * @deprecated Use `deleteAbanner` instead.
-     */
-    deleteBanner(...args: Parameters<MarketingV2Api['deleteAbanner']>) {
-        return this.deleteAbanner(...args);
-    }
-
-    /**
-     * Get a Count of Store Banners
-     *
-     * Returns a count of *Banners*.
-     */
-    getAcountOfBanners(
-    ) {
-        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetACountOfBannersResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: 'v2/banners/count',
-        });
-    }
-
-    /**
-     * @deprecated Use `getAcountOfBanners` instead.
-     */
-    getBannersCount(...args: Parameters<MarketingV2Api['getAcountOfBanners']>) {
-        return this.getAcountOfBanners(...args);
-    }
-
-    /**
-     * Get a Gift Certificate
+     * Get Gift Certificate
      *
      * Returns a single *Gift Certificate*.
      */
-    getAgiftCertificate(
-        id: MarketingV2ApiSpecs.GetAGiftCertificateData['path']['id'],
+    getGiftCertificate(
+        id: MarketingV2ApiSpecs.GetGiftCertificateData['path']['id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetAGiftCertificateResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetGiftCertificateResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/gift_certificates/${id}`,
         });
     }
 
     /**
-     * @deprecated Use `getAgiftCertificate` instead.
-     */
-    getGiftCertificate(...args: Parameters<MarketingV2Api['getAgiftCertificate']>) {
-        return this.getAgiftCertificate(...args);
-    }
-
-    /**
-     * Update a Gift Certificate
+     * Update Gift Certificate
      *
      * Updates a *Gift Certificate*.
 
@@ -384,11 +286,11 @@ export class MarketingV2Api {
      * id
      * order_id
      */
-    updateAgiftCertificate(
-        id: MarketingV2ApiSpecs.UpdateAGiftCertificateData['path']['id'],
-        requestBody: MarketingV2ApiSpecs.UpdateAGiftCertificateData['body'],
+    updateGiftCertificate(
+        id: MarketingV2ApiSpecs.UpdateGiftCertificateData['path']['id'],
+        requestBody: MarketingV2ApiSpecs.UpdateGiftCertificateData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.UpdateAGiftCertificateResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.UpdateGiftCertificateResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/gift_certificates/${id}`,
             contentType: 'application/json',
             body: requestBody,
@@ -396,34 +298,20 @@ export class MarketingV2Api {
     }
 
     /**
-     * @deprecated Use `updateAgiftCertificate` instead.
-     */
-    updateGiftCertificate(...args: Parameters<MarketingV2Api['updateAgiftCertificate']>) {
-        return this.updateAgiftCertificate(...args);
-    }
-
-    /**
-     * Delete a Gift Certificate
+     * Delete Gift Certificate
      *
      * Deletes a *Gift Certificate*.
      */
-    deleteAgiftCertificate(
-        id: MarketingV2ApiSpecs.DeleteAGiftCertificateData['path']['id'],
+    deleteGiftCertificate(
+        id: MarketingV2ApiSpecs.DeleteGiftCertificateData['path']['id'],
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteAGiftCertificateResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteGiftCertificateResponses[204]>>,RequestErrorResponse<400, void>>({
             path: `v2/gift_certificates/${id}`,
         });
     }
 
     /**
-     * @deprecated Use `deleteAgiftCertificate` instead.
-     */
-    deleteGiftCertificate(...args: Parameters<MarketingV2Api['deleteAgiftCertificate']>) {
-        return this.deleteAgiftCertificate(...args);
-    }
-
-    /**
-     * Get All Gift Certificates
+     * List Gift Certificates
      *
      * Returns a list of *Gift Certificates*. Optional filter parameters can be passed in.
 
@@ -431,24 +319,17 @@ export class MarketingV2Api {
 
      The maximum limit is 250. If a limit isn’t provided, up to 50 gift_certificates are returned by default.
      */
-    getAllGiftCertificates(
-        query?: MarketingV2ApiSpecs.GetAllGiftCertificatesData['query'],
+    getGiftCertificates(
+        query?: MarketingV2ApiSpecs.GetGiftCertificatesData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetAllGiftCertificatesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.GetGiftCertificatesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/gift_certificates',
             query,
         });
     }
 
     /**
-     * @deprecated Use `getAllGiftCertificates` instead.
-     */
-    getGiftCertificates(...args: Parameters<MarketingV2Api['getAllGiftCertificates']>) {
-        return this.getAllGiftCertificates(...args);
-    }
-
-    /**
-     * Create a Gift Certificate
+     * Create Gift Certificate
      *
      * Creates a *Gift Certificate*.
 
@@ -467,10 +348,10 @@ export class MarketingV2Api {
 
      When a gift certificate is created through the API, no email notification is triggered to the specified recipient.
      */
-    createAgiftCertificate(
-        requestBody: MarketingV2ApiSpecs.CreateAGiftCertificateData['body'],
+    createGiftCertificate(
+        requestBody: MarketingV2ApiSpecs.CreateGiftCertificateData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<MarketingV2ApiSpecs.CreateAGiftCertificateResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<201, Required<MarketingV2ApiSpecs.CreateGiftCertificateResponses[201]>>,RequestErrorResponse<400, void>>({
             path: 'v2/gift_certificates',
             contentType: 'application/json',
             body: requestBody,
@@ -478,28 +359,14 @@ export class MarketingV2Api {
     }
 
     /**
-     * @deprecated Use `createAgiftCertificate` instead.
-     */
-    createGiftCertificate(...args: Parameters<MarketingV2Api['createAgiftCertificate']>) {
-        return this.createAgiftCertificate(...args);
-    }
-
-    /**
      * Delete All Gift Certificates
      *
      * By default, it deletes all *Gift Certificates*.
      */
-    deleteAllGiftCertificates(
+    deleteGiftCertificates(
     ) {
-        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteAllGiftCertificatesResponses[204]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<204, Required<MarketingV2ApiSpecs.DeleteGiftCertificatesResponses[204]>>,RequestErrorResponse<400, void>>({
             path: 'v2/gift_certificates',
         });
-    }
-
-    /**
-     * @deprecated Use `deleteAllGiftCertificates` instead.
-     */
-    deleteGiftCertificates(...args: Parameters<MarketingV2Api['deleteAllGiftCertificates']>) {
-        return this.deleteAllGiftCertificates(...args);
     }
 }

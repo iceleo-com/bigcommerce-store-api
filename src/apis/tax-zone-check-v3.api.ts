@@ -11,7 +11,7 @@ export class TaxZoneCheckV3Api {
     }
 
     /**
-     * Check zone given an address.
+     * Check Zone for Address
      *
      * Check the applicable tax zone for a given address and customer group.
      */

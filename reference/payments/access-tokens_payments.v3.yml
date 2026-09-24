@@ -1,394 +1,1178 @@
-openapi: '3.0.0'
+openapi: 3.1.0
 info:
-  version: ''
-  title: Payment Access Token
-  description: |
-    > The Payments API processes payments using payment instruments such as credit cards or PayPal accounts. To learn more about Payments, see the [Payments Overview](/docs/store-operations/payments).
-
-    BigCommerce payments requests require a Payment Access Token, or _PAT_, which is a single use BigCommerce-generated JWT that's tied to the particular **order** for which the shopper authorizes BigCommerce to submit a payment. 
-    
-    To get a valid PAT, submit the order number to the [Create a Payment Access Token](/docs/rest-payments/tokens#create-payment-access-token) endpoint. Authenticate using an [API account access token](/docs/start/authentication/api-accounts#api-accounts) with the [Create payments](/docs/start/authentication/api-accounts#token-creation-scopes) scope as the value of the X-Auth-Token header.
-
-    You can also generate a PAT during checkout by using the `completeCheckout` mutation in the [GraphQL Storefront API](/docs/storefront/cart-checkout/guide/graphql-storefront#handling-payments).
-
-    For a guide through the API call sequence needed to create a PAT and make charges, see the [Payments Overview](/docs/store-operations/payments#compatible-payment-gateways).
-
-    > To learn more about authenticating Payments endpoints, locate the **Authentication** section at the top of each endpoint, then click **Show Details**. 
-
-    ## Resources
-
-    * [Payments Overview](/docs/store-operations/payments)
-    * [Process payments authentication example request](/docs/start/authentication#bigcommerce-generated-jwts)
-    * [Orders Overview](/docs/store-operations/orders)
-    
-    ### Webhooks
-    
-    * [Carts](https://developer.bigcommerce.com/api-docs/channels/guide/webhooks#carts)
-    * [Orders](https://developer.bigcommerce.com/api-docs/store-management/webhooks/webhook-events#orders)
-    * [Price list assignment](https://developer.bigcommerce.com/api-docs/channels/guide/webhooks#price-list-assignments)
-
-
-    ### Additional Payments endpoints
-
-    * [Get accepted payment methods](/docs/rest-payments/methods#get-accepted-payment-methods)
-    * [Process payments](/docs/rest-payments/processing#process-payment)
-    * [Get a customer's stored instruments](/docs/rest-management/customers/customer-stored-instruments#get-stored-instruments)
-  termsOfService: 'https://www.bigcommerce.com/terms'
-  contact:
-    name: BigCommerce
-    url: 'https://www.bigcommerce.com'
-    email: support@bigcommerce.com
-tags:
-  - name: Tokens
-servers:
-  - url: 'https://api.bigcommerce.com/stores/{store_hash}/v3'
-    variables:
-      store_hash:
-        default: store_hash
-        description: Permanent ID of the BigCommerce store.
-    description: BigCommerce API Gateway
-security:
-  - X-Auth-Token: []
+  title: 'Admin Payments: Payment Access Token'
+  version: 1.0.0
 paths:
-  '/payments/access_tokens':
-    parameters:
-      - $ref: '#/components/parameters/Accept'
+  /stores/{store_hash}/v3/payments/access_tokens:
     post:
-      description: |-
-        Use this endpoint to create a payment access token. A payment access token is required to process payments with the BigCommerce API.
+      operationId: tokens_createPaymentAccessToken
+      summary: Create Payment Access Token
+      description: >-
+        Use this endpoint to create a payment access token. A payment access token is required to process payments with
+        the BigCommerce API.
 
-        You can also generate a payment access token during checkout by using the `completeCheckout` mutation in the [GraphQL Storefront API](/docs/storefront/cart-checkout/guide/graphql-storefront#handling-payments).
-
-        After the token is created, use the token to [Process a payment](/docs/rest-payments/processing#process-payment).
 
         **Required Fields**
+
         * order_id
-      summary: Create Payment Access Token
       tags:
-        - Tokens
-      operationId: PaymentsAccessTokensPost
-      deprecated: false
+        - tokens
       parameters:
-        - $ref: '#/components/parameters/ContentType'
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '201':
+          description: Payment access token has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tokens_createPaymentAccessToken_Response_201'
+        '400':
+          description: Request has been rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePaymentAccessTokenRequestBadRequestError'
+        '401':
+          description: Valid authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePaymentAccessTokenRequestUnauthorizedError'
+        '404':
+          description: Request has been rejected due to resource not being found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePaymentAccessTokenRequestNotFoundError'
+        '409':
+          description: Request has been rejected due to conflict with the current state of the target resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePaymentAccessTokenRequestConflictError'
+        '422':
+          description: Request has been rejected due to missing or invalid data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePaymentAccessTokenRequestUnprocessableEntityError'
       requestBody:
         content:
           application/json:
             schema:
-              title: Payment Access Token Request
               type: object
               properties:
                 order:
                   $ref: '#/components/schemas/Order'
               required:
                 - order
-            examples:
-              example-1:
-                value:
-                  order:
-                    id: 1
-                    is_recurring: false
-        required: true
-        x-examples:
-          application/json:
-            order:
-              id: 44796008
-              is_recurring: true
-          Example:
-            order:
-              id: 182
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/payments/stored-instruments/access-tokens:
+    post:
+      operationId: manageInstruments_create-token
+      summary: Create Instrument Access Token
+      description: Creates a token.
+      tags:
+        - manageInstruments
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
       responses:
         '201':
-          description: Payment access token has been successfully created.
-          headers: {}
+          description: Created token.
           content:
             application/json:
               schema:
-                title: Payments Access Tokens Response
-                type: object
-                properties:
-                  data:
-                    title: Payment Access Token
-                    type: object
-                    properties:
-                      id:
-                        description: Payment access token. This token is required in the subsequent request to the [Process a payment](/docs/rest-payments/processing#process-payment) endpoint.
-                        type: string
-                        minLength: 1
-                    required:
-                      - id
-                  meta:
-                    type: object
-                    properties: {}
-                    additionalProperties: true
-                    description: Response metadata.
-              examples:
-                example-1:
-                  value:
-                    data:
-                      id: eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTUyNTA3NTksIm5iZiI6MTYxNTI0Nz E1OSwiaXNzIjoicGF5bWVudHMuYmlnY29tbWVyY2UuY29tIiwic3ViIjoieHNsM3 JoZGYzNiIsImp0aSI6IjNhOGE3NTJjLTBmNWQtNDNmNS05MzdjLTRhMTYzODBlMW YwZCIsImlhdCI6MTYxNTI0NzE1OSwiZGF0YSI6eyJzdG9yZV9pZCI6IjEwMDEzMz YzMjQiLCJvcmRlcl9pZCI6IjE2NiIsImFtb3VudCI6NDU3OTAsImN1cnJlbmN5Ij oiVVNEIn19.dpCDgOfbNrz095VARY20yYBRTOuq-W1F0ETTgf1Zhbs
-                    meta: {}
-        '400':
-          description: Request has been rejected
-          content:
-            application/json:
-              schema:
-                title: ErrorResponse
-                type: object
-                properties:
-                  status:
-                    description: HTTP status code
-                    type: integer
-                    format: int32
-                  title:
-                    description: Short summary describing the particular error
-                    type: string
-                  detail:
-                    description: Detailed summary describing the particular error
-                    type: string
-                  type:
-                    description: Reference that identifies the particular error
-                    type: string
-                  code:
-                    description: Code representing the particular error
-                    type: integer
-                    format: int32
-                  errors:
-                    type: object
-                    additionalProperties:
-                      type: string
-                required:
-                  - status
-                  - title
-                  - type
+                $ref: '#/components/schemas/create_token_response'
         '401':
-          description: Valid authentication required
+          description: Invalid X-Auth-Token
           content:
             application/json:
               schema:
-                title: ErrorResponse
-                type: object
-                properties:
-                  status:
-                    description: HTTP status code
-                    type: integer
-                    format: int32
-                  title:
-                    description: Short summary describing the particular error
-                    type: string
-                  detail:
-                    description: Detailed summary describing the particular error
-                    type: string
-                  type:
-                    description: Reference that identifies the particular error
-                    type: string
-                  code:
-                    description: Code representing the particular error
-                    type: integer
-                    format: int32
-                  errors:
-                    type: object
-                    additionalProperties:
-                      type: string
-                required:
-                  - status
-                  - title
-                  - type
-        '404':
-          description: Request has been rejected due to resource not being found
+                $ref: '#/components/schemas/base_error_response'
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/payments/stored-instruments:
+    get:
+      operationId: manageInstruments_list-instruments-for-store
+      summary: List Instruments
+      description: >-
+        Lists all available stored instruments for a store. This list will include all types of stored instruments
+        namely card, account, and bank_account instruments.
+      tags:
+        - manageInstruments
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: The requested page.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: The maximum number of results.
+          required: false
+          schema:
+            type: integer
+        - name: after
+          in: query
+          description: >-
+            The cursor reference of the last entry for the previous page. Use the `end_cursor` value from the last
+            response to get the next page (`end_cursor` is only returned on the first page or when the request contains
+            query parameter `before` or `after`). For example `after=ODc%3D`.
+          required: false
+          schema:
+            type: string
+        - name: before
+          in: query
+          description: >-
+            The cursor reference of the first entry for the next page. Use the `start_cursor` value from the last
+            response to get the previous page (`start_cursor` is only returned on the first page or when the request
+            contains query parameter `before` or `after`). For example `before=ODg%3D`.
+          required: false
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                title: ErrorResponse
-                type: object
-                properties:
-                  status:
-                    description: HTTP status code
-                    type: integer
-                    format: int32
-                  title:
-                    description: Short summary describing the particular error
-                    type: string
-                  detail:
-                    description: Detailed summary describing the particular error
-                    type: string
-                  type:
-                    description: Reference that identifies the particular error
-                    type: string
-                  code:
-                    description: Code representing the particular error
-                    type: integer
-                    format: int32
-                  errors:
-                    type: object
-                    additionalProperties:
-                      type: string
-                required:
-                  - status
-                  - title
-                  - type
-        '409':
-          description: Request has been rejected due to conflict with the current state of the target resource
+                $ref: '#/components/schemas/get_stored_instruments_response'
+        '401':
+          description: Invalid X-Auth-Token
           content:
             application/json:
               schema:
-                title: ErrorResponse
-                type: object
-                properties:
-                  status:
-                    description: HTTP status code
-                    type: integer
-                    format: int32
-                  title:
-                    description: Short summary describing the particular error
-                    type: string
-                  detail:
-                    description: Detailed summary describing the particular error
-                    type: string
-                  type:
-                    description: Reference that identifies the particular error
-                    type: string
-                  code:
-                    description: Code representing the particular error
-                    type: integer
-                    format: int32
-                  errors:
-                    type: object
-                    additionalProperties:
-                      type: string
-                required:
-                  - status
-                  - title
-                  - type
+                $ref: '#/components/schemas/base_error_response'
+      security:
+        - X-Auth-Token: []
+    post:
+      operationId: manageInstruments_bulk-import-instruments
+      summary: Bulk Import Instruments
+      description: Imports instruments that were vaulted outside the store.
+      tags:
+        - manageInstruments
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
+          description: All instruments were successfully imported.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manage_Instruments_bulk-import-instruments_Response_200'
+        '401':
+          description: Invalid X-Auth-Token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base_error_response'
         '422':
-          description: Request has been rejected due to missing or invalid data
+          description: Failed responses.
           content:
             application/json:
               schema:
-                title: ErrorResponse
-                type: object
-                properties:
-                  status:
-                    description: HTTP status code
-                    type: integer
-                    format: int32
-                  title:
-                    description: Short summary describing the particular error
-                    type: string
-                  detail:
-                    description: Detailed summary describing the particular error
-                    type: string
-                  type:
-                    description: Reference that identifies the particular error
-                    type: string
-                  code:
-                    description: Code representing the particular error
-                    type: integer
-                    format: int32
-                  errors:
-                    type: object
-                    additionalProperties:
-                      type: string
-                required:
-                  - status
-                  - title
-                  - type
-        default:
-          description: Internal server error
+                $ref: '#/components/schemas/Bulk-import-instrumentsRequestUnprocessableEntityError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/import_request_body'
+      security:
+        - X-Auth-Token: []
+    put:
+      operationId: manageInstruments_update-instrument
+      summary: Update Instrument
+      description: >
+        Updates an instrument in store and can update billing address in the provider's vault.
+
+        As of this writing, only the Braintree gateway supports updating customer billing addresses.
+
+        If billing_address is included in the request, an attempt will be made to update the billing address at
+        provider's vault.
+      tags:
+        - manageInstruments
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
+          description: Instrument successfully updated.
           content:
             application/json:
               schema:
-                title: ErrorResponse
+                $ref: '#/components/schemas/Manage_Instruments_update-instrument_Response_200'
+        '401':
+          description: Invalid X-Auth-Token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base_error_response'
+        '404':
+          description: Instrument not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base_error_response'
+        '422':
+          description: Unprocessable entity examples.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base_error_response'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/update_request_body'
+      security:
+        - X-Auth-Token: []
+    delete:
+      operationId: manageInstruments_bulk-delete-instruments
+      summary: Bulk Delete Instruments
+      description: Deletes instruments from the store without triggering deletion on the provider side.
+      tags:
+        - manageInstruments
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: token:in
+          in: query
+          description: Filter by a list of tokens.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
                 type: object
-                properties:
-                  status:
-                    description: HTTP status code
-                    type: integer
-                    format: int32
-                  title:
-                    description: Short summary describing the particular error
-                    type: string
-                  detail:
-                    description: Detailed summary describing the particular error
-                    type: string
-                  type:
-                    description: Reference that identifies the particular error
-                    type: string
-                  code:
-                    description: Code representing the particular error
-                    type: integer
-                    format: int32
-                  errors:
-                    type: object
-                    additionalProperties:
-                      type: string
-                required:
-                  - status
-                  - title
-                  - type
+                properties: {}
+        '401':
+          description: Invalid X-Auth-Token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base_error_response'
+        '404':
+          description: Instrument not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bulk-delete-instrumentsRequestNotFoundError'
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/payments/stored-instruments/{instrument_token}:
+    delete:
+      operationId: manageInstruments_unvault-instrument
+      summary: Remove Instrument from Store and Gateway
+      description: Deletes instrument from store and provider's vault.
+      tags:
+        - manageInstruments
+      parameters:
+        - name: instrument_token
+          in: path
+          description: The token that identifies the stored payment instrument.
+          required: true
+          schema:
+            type: string
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '401':
+          description: Invalid X-Auth-Token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base_error_response'
+        '404':
+          description: Instrument not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base_error_response'
+        '422':
+          description: Failed to load configuration / Invalid configuration.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base_error_response'
+      security:
+        - X-Auth-Token: []
+  /stores/{store_hash}/v3/payments/stored-instruments/methods:
+    get:
+      operationId: manageInstruments_list-methods-for-store
+      summary: List Available Payment Method Ids
+      description: >-
+        Lists all available payment method IDs that support stored instruments. This list will include all types of
+        stored instruments namely card, account, and bank_account instruments.
+      tags:
+        - manageInstruments
+      parameters:
+        - name: store_hash
+          in: path
+          description: Permanent ID of the BigCommerce store.
+          required: true
+          schema:
+            type: string
+        - name: currency_code
+          in: query
+          description: The store hash.
+          required: true
+          schema:
+            type: string
+        - name: Accept
+          in: header
+          description: >-
+            The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response
+            body.
+          required: true
+          schema:
+            type: string
+            default: application/json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_available_methods_response'
+        '401':
+          description: Invalid X-Auth-Token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base_error_response'
+      security:
+        - X-Auth-Token: []
+tags:
+  - name: tokens
+    description: Create the access tokens used to process payments.
+  - name: manageInstruments
+    description: Store, retrieve, and delete a customer's saved payment instruments.
+servers:
+  - url: https://api.bigcommerce.com
+    description: https://api.bigcommerce.com
 components:
-  parameters:
-    Accept:
-      name: Accept
-      in: header
-      required: true
-      description: 'The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.'
-      schema:
-        type: string
-        default: 'application/json'
-    ContentType:
-      name: Content-Type
-      in: header
-      required: true
-      description: 'The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.'
-      schema:
-        type: string
-        default: 'application/json'
   schemas:
     Order:
-      title: Order
       type: object
       properties:
         id:
-          description: Identifier for the order
           type: integer
           minimum: 1
-          format: int32
+          description: Identifier for the order
         is_recurring:
-          description: Whether this is a recurring order. If the order is recurring this field should be set to true in order to let the payment gateway know.
-          example: false
           type: boolean
           default: false
+          description: >-
+            Whether this is a recurring order. If the order is recurring this field should be set to true in order to
+            let the payment gateway know.
       required:
         - id
-      x-examples:
-        example-1:
-          id: 1
-          is_recurring: false
-      x-internal: false
+      title: Order
+    PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaData:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+          description: >-
+            Payment access token. This token is required in the subsequent request to the [Process a
+            payment](/developer/api-reference/rest/admin/payments/processing/payments-post) endpoint.
+      required:
+        - id
+      title: PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaData
+    PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaMeta:
+      type: object
+      properties: {}
+      description: Response metadata.
+      title: PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaMeta
+    Tokens_createPaymentAccessToken_Response_201:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaData'
+        meta:
+          $ref: '#/components/schemas/PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaMeta'
+          description: Response metadata.
+      title: Tokens_createPaymentAccessToken_Response_201
+    PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaErrors:
+      type: object
+      properties: {}
+      title: PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaErrors
+    CreatePaymentAccessTokenRequestBadRequestError:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: HTTP status code
+        title:
+          type: string
+          description: Short summary describing the particular error
+        detail:
+          type: string
+          description: Detailed summary describing the particular error
+        type:
+          type: string
+          description: Reference that identifies the particular error
+        code:
+          type: integer
+          description: Code representing the particular error
+        errors:
+          $ref: '#/components/schemas/PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaErrors'
+      required:
+        - status
+        - title
+        - type
+      title: CreatePaymentAccessTokenRequestBadRequestError
+    CreatePaymentAccessTokenRequestUnauthorizedError:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: HTTP status code
+        title:
+          type: string
+          description: Short summary describing the particular error
+        detail:
+          type: string
+          description: Detailed summary describing the particular error
+        type:
+          type: string
+          description: Reference that identifies the particular error
+        code:
+          type: integer
+          description: Code representing the particular error
+        errors:
+          $ref: '#/components/schemas/PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaErrors'
+      required:
+        - status
+        - title
+        - type
+      title: CreatePaymentAccessTokenRequestUnauthorizedError
+    CreatePaymentAccessTokenRequestNotFoundError:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: HTTP status code
+        title:
+          type: string
+          description: Short summary describing the particular error
+        detail:
+          type: string
+          description: Detailed summary describing the particular error
+        type:
+          type: string
+          description: Reference that identifies the particular error
+        code:
+          type: integer
+          description: Code representing the particular error
+        errors:
+          $ref: '#/components/schemas/PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaErrors'
+      required:
+        - status
+        - title
+        - type
+      title: CreatePaymentAccessTokenRequestNotFoundError
+    CreatePaymentAccessTokenRequestConflictError:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: HTTP status code
+        title:
+          type: string
+          description: Short summary describing the particular error
+        detail:
+          type: string
+          description: Detailed summary describing the particular error
+        type:
+          type: string
+          description: Reference that identifies the particular error
+        code:
+          type: integer
+          description: Code representing the particular error
+        errors:
+          $ref: '#/components/schemas/PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaErrors'
+      required:
+        - status
+        - title
+        - type
+      title: CreatePaymentAccessTokenRequestConflictError
+    CreatePaymentAccessTokenRequestUnprocessableEntityError:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: HTTP status code
+        title:
+          type: string
+          description: Short summary describing the particular error
+        detail:
+          type: string
+          description: Detailed summary describing the particular error
+        type:
+          type: string
+          description: Reference that identifies the particular error
+        code:
+          type: integer
+          description: Code representing the particular error
+        errors:
+          $ref: '#/components/schemas/PaymentsAccessTokensPostResponsesContentApplicationJsonSchemaErrors'
+      required:
+        - status
+        - title
+        - type
+      title: CreatePaymentAccessTokenRequestUnprocessableEntityError
+    create_token_data:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The Instruments Access Token (IAT) for the payments API.
+        expires_at:
+          type: integer
+          description: The expiration time as an integer number of seconds since the Epoch.
+      title: create_token_data
+    meta_empty:
+      type: object
+      properties: {}
+      description: Response metadata.
+      title: meta_empty
+    create_token_response:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/create_token_data'
+        meta:
+          $ref: '#/components/schemas/meta_empty'
+      title: create_token_response
+    detailed_error:
+      type: object
+      properties: {}
+      title: detailed_error
+    base_error_response:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: The HTTP status code.
+        title:
+          type: string
+          description: The error title describing the particular error.
+        type:
+          type: string
+        errors:
+          $ref: '#/components/schemas/detailed_error'
+      description: Error payload for the BigCommerce API.
+      title: base_error_response
+    BillingAddress:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: The first name of the cardholder.
+        last_name:
+          type: string
+          description: The last name of the cardholder.
+        email:
+          type: string
+        company:
+          type: string
+          description: The company of the cardholder.
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        state_or_province:
+          type: string
+          description: Represents the state or province.
+        state_or_province_code:
+          type: string
+        country_code:
+          type: string
+          description: The ISO-3166-1 2 letter country code.
+        phone:
+          type: string
+        postal_code:
+          type: string
+      title: BillingAddress
+    CardInstrument:
+      type: object
+      properties:
+        customer_id:
+          type: integer
+          description: The ID of the customer.
+        token:
+          type: string
+          description: An identifier representing this stored instrument.
+        type:
+          type: string
+          description: Type of instrument.
+        is_default:
+          type: boolean
+          description: Identifies whether this stored instrument is default for the customer.
+        brand:
+          type: string
+          description: The card brand.
+        expiry_month:
+          type: integer
+          minimum: 1
+          maximum: 12
+          description: The expiry month for this card.
+        expiry_year:
+          type: integer
+          description: The expiry year for this card.
+        iin:
+          type: string
+          description: The issuer identification number.
+        last_4:
+          type: string
+          description: The last four digits of this card.
+        billing_address:
+          $ref: '#/components/schemas/BillingAddress'
+      description: Details about a stored card instrument which includes details around billing, last four digits, issuer, etc.
+      title: CardInstrument
+    PayPalAccountInstrument:
+      type: object
+      properties:
+        customer_id:
+          type: integer
+          description: The ID of the customer.
+        token:
+          type: string
+          description: An identifier representing this stored instrument.
+        type:
+          type: string
+          description: Instrument type
+        is_default:
+          type: boolean
+          description: Identifies whether this stored instrument is default for the customer.
+        email:
+          type: string
+          description: The PayPal email address.
+      description: A PayPal account stored instrument
+      title: PayPalAccountInstrument
+    BankAccountInstrument:
+      type: object
+      properties:
+        customer_id:
+          type: integer
+          description: The ID of the customer.
+        token:
+          type: string
+          description: An identifier representing this stored instrument.
+        type:
+          type: string
+          description: Instrument type
+        is_default:
+          type: boolean
+          description: Identifies whether this stored instrument is default for the customer.
+        issuer:
+          type: string
+          description: Account issuer number
+        masked_account_number:
+          type: string
+          description: Masked account number
+      description: A bank account stored instrument
+      title: BankAccountInstrument
+    GetStoredInstrumentsResponseDataItems:
+      oneOf:
+        - $ref: '#/components/schemas/CardInstrument'
+        - $ref: '#/components/schemas/PayPalAccountInstrument'
+        - $ref: '#/components/schemas/BankAccountInstrument'
+      title: GetStoredInstrumentsResponseDataItems
+    Links:
+      type: object
+      properties:
+        previous:
+          type: string
+          description: The link to the previous page is returned in the response.
+        current:
+          type: string
+          description: The link to the current page is returned in the response.
+        next:
+          type: string
+          description: The link to the next page is returned in the response.
+      description: Pagination links for the previous and next parts of the whole collection.
+      title: Links
+    Pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of items in the result set.
+        count:
+          type: integer
+          description: Total number of items in the collection response.
+        per_page:
+          type: integer
+          description: The amount of items returned in the collection per page, controlled by the limit parameter.
+        current_page:
+          type: integer
+          description: The page you are currently on within the collection.
+        total_pages:
+          type: integer
+          description: The total number of pages in the collection.
+        links:
+          $ref: '#/components/schemas/Links'
+      description: Data about the response, including pagination and collection totals.
+      title: Pagination
+    CursorPagination:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: Total number of items in the collection response.
+        per_page:
+          type: integer
+          description: The amount of items returned in the collection per page, controlled by the limit parameter.
+        start_cursor:
+          type: string
+          description: A string representing the cursor reference to the starting item of the current page in the collection.
+        end_cursor:
+          type: string
+          description: A string representing the cursor reference to the last item of the current page in the collection.
+        links:
+          $ref: '#/components/schemas/Links'
+      description: Data about cursor pagination.
+      title: CursorPagination
+    Meta:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        cursor_pagination:
+          $ref: '#/components/schemas/CursorPagination'
+      description: >-
+        Data about the response, including pagination and collection totals. Both `pagination` and `cursor_pagination`
+        would be returned on the first page. Only `pagination` will be returned when you provide the `page` parameter,
+        which is greater than the first page. Only `cursor_pagination` would be returned when you provide the `before`
+        or `after` parameters in the request that are greater than the first page.
+      title: Meta
+    get_stored_instruments_response:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetStoredInstrumentsResponseDataItems'
+        meta:
+          $ref: '#/components/schemas/Meta'
+      title: get_stored_instruments_response
+    CreditCardInstrumentImportParam:
+      type: object
+      properties:
+        vault_token:
+          type: string
+          description: The token from the provider's vault.
+        provider_customer_id:
+          type: string
+          description: The customer ID in the provider's vault.
+        type:
+          type: string
+          description: The instrument type.
+        brand:
+          type: string
+          description: Card brand.
+        expiry_year:
+          type: integer
+          description: Expiration year.
+        expiry_month:
+          type: integer
+          description: Expiration month.
+        last_4:
+          type: string
+          description: Last four digits of card.
+        iin:
+          type: string
+          description: Issuer identification number.
+      title: CreditCardInstrumentImportParam
+    PaypalAccountInstrumentImportParam:
+      type: object
+      properties:
+        vault_token:
+          type: string
+          description: The token from the provider's vault.
+        provider_customer_id:
+          type: string
+          description: The customer ID in the provider's vault.
+        type:
+          type: string
+          description: The instrument type.
+        email:
+          type: string
+          description: account email
+      description: The parameters for an already vaulted PayPal instrument.
+      title: PaypalAccountInstrumentImportParam
+    BankAccountInstrumentImportParam:
+      type: object
+      properties:
+        vault_token:
+          type: string
+          description: The token from the provider's vault.
+        provider_customer_id:
+          type: string
+          description: The customer ID in the provider's vault.
+        type:
+          type: string
+          description: The instrument type.
+        issuer:
+          type: string
+          description: Account issuer number
+        masked_account_number:
+          type: string
+          description: Masked account number
+      description: The parameters for an already vaulted Bank account instrument.
+      title: BankAccountInstrumentImportParam
+    ImportRequestBodyInstrument:
+      oneOf:
+        - $ref: '#/components/schemas/CreditCardInstrumentImportParam'
+        - $ref: '#/components/schemas/PaypalAccountInstrumentImportParam'
+        - $ref: '#/components/schemas/BankAccountInstrumentImportParam'
+      description: The instrument details.
+      title: ImportRequestBodyInstrument
+    BillingAddressCreateParams:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: The first name of the cardholder.
+        last_name:
+          type: string
+          description: The last name of the cardholder.
+        email:
+          type: string
+        company:
+          type: string
+          description: The company of the cardholder.
+        street_1:
+          type: string
+        street_2:
+          type: string
+        city:
+          type: string
+        state_or_province_code:
+          type: string
+          description: The state or province code.
+        country_code:
+          type: string
+          description: The ISO-3166-1 2 letter country code.
+        phone:
+          type: string
+        postal_code:
+          type: string
+          description: The postal code.
+      title: BillingAddressCreateParams
+    import_request_body:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+          description: >-
+            Identifier for the payment method that will be used for this instrument is obtained from the Payment Methods
+            API.
+        currency_code:
+          type: string
+          description: The instrument currency.
+        customer_id:
+          type: integer
+          description: The ID of the customer.
+        instrument:
+          $ref: '#/components/schemas/ImportRequestBodyInstrument'
+          description: The instrument details.
+        billing_address:
+          $ref: '#/components/schemas/BillingAddressCreateParams'
+        trusted_shipping_addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingAddressCreateParams'
+          description: The trusted shipping address for an instrument.
+        default_instrument:
+          type: boolean
+          description: Make instrument default.
+      required:
+        - payment_method_id
+        - currency_code
+        - customer_id
+        - instrument
+        - billing_address
+      title: import_request_body
+    PaymentsStoredInstrumentsPostResponsesContentApplicationJsonSchemaDataItems:
+      oneOf:
+        - $ref: '#/components/schemas/CardInstrument'
+        - $ref: '#/components/schemas/PayPalAccountInstrument'
+      title: PaymentsStoredInstrumentsPostResponsesContentApplicationJsonSchemaDataItems
+    meta_bulk:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: total number of processed items
+        success:
+          type: integer
+          description: number of successfully processed items
+        failed:
+          type: integer
+          description: number of items we were unable to process
+      description: Response metadata.
+      title: meta_bulk
+    Manage_Instruments_bulk-import-instruments_Response_200:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentsStoredInstrumentsPostResponsesContentApplicationJsonSchemaDataItems'
+          description: Successfully imported instruments.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/base_error_response'
+          description: Errors with detailed errors indexed by input parameters.
+        meta:
+          $ref: '#/components/schemas/meta_bulk'
+      title: Manage Instruments_bulk-import-instruments_Response_200
+    Bulk-import-instrumentsRequestUnprocessableEntityError:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentsStoredInstrumentsPostResponsesContentApplicationJsonSchemaDataItems'
+          description: Successfully imported instruments.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/base_error_response'
+          description: Errors with detailed errors indexed by input parameters.
+        meta:
+          $ref: '#/components/schemas/meta_bulk'
+      title: Bulk-import-instrumentsRequestUnprocessableEntityError
+    update_request_body:
+      type: object
+      properties:
+        token:
+          type: string
+        billing_address:
+          $ref: '#/components/schemas/BillingAddressCreateParams'
+        trusted_shipping_addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingAddressCreateParams'
+        make_default:
+          type: boolean
+      required:
+        - token
+      title: update_request_body
+    PaymentsStoredInstrumentsPutResponsesContentApplicationJsonSchemaData:
+      oneOf:
+        - $ref: '#/components/schemas/CardInstrument'
+        - $ref: '#/components/schemas/PayPalAccountInstrument'
+      title: PaymentsStoredInstrumentsPutResponsesContentApplicationJsonSchemaData
+    Manage_Instruments_update-instrument_Response_200:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PaymentsStoredInstrumentsPutResponsesContentApplicationJsonSchemaData'
+        meta:
+          $ref: '#/components/schemas/meta_empty'
+      title: Manage Instruments_update-instrument_Response_200
+    Bulk-delete-instrumentsRequestNotFoundError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/base_error_response'
+          description: Errors with detailed errors indexed by input parameters.
+        meta:
+          $ref: '#/components/schemas/meta_bulk'
+      title: Bulk-delete-instrumentsRequestNotFoundError
+    AvailablePaymentMethodSupportedInstrumentsItems:
+      type: string
+      enum:
+        - raw_card
+        - tokenized_card
+        - tokenized_paypal_account
+      title: AvailablePaymentMethodSupportedInstrumentsItems
+    AvailablePaymentMethod:
+      type: object
+      properties:
+        method_id:
+          type: string
+          description: The payment method ID.
+        test_mode:
+          type: boolean
+          description: Is the method in test mode(sandbox).
+        supported_instruments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailablePaymentMethodSupportedInstrumentsItems'
+          description: The instrument types that supported the method.
+      description: Payment method details
+      title: AvailablePaymentMethod
+    get_available_methods_response:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailablePaymentMethod'
+        meta:
+          $ref: '#/components/schemas/meta_empty'
+      title: get_available_methods_response
   securitySchemes:
     X-Auth-Token:
-      name: X-Auth-Token
-      description: |-
-        ### OAuth scopes
-
-        | UI Name | Permission | Parameter |
-        |:--------|:-----------|:----------|
-        |  Create Payments | create | `store_payments_access_token_create` |
-        |  Get Payment Methods | read-only | `store_payments_methods_read` |
-
-        ### Authentication header
-        
-        | Header | Argument | Description |
-        |:-------|:---------|:------------|
-        | `X-Auth-Token` | `access_token` | For more about API accounts that generate `access_token`s, see our [Guide to API Accounts](/docs/start/authentication/api-accounts). |
-
-        ### Further reading
-        
-        For example requests and more information about authenticating BigCommerce APIs, see [Authentication and Example Requests](/docs/start/authentication#x-auth-token-header-example-requests).
-        
-        For more about BigCommerce OAuth scopes, see our [Guide to API Accounts](/docs/start/authentication/api-accounts#oauth-scopes).
-        
-        For a list of API status codes, see [API Status Codes](/docs/start/about/status-codes).
       type: apiKey
       in: header
+      name: X-Auth-Token
+      description: >-
+        ### OAuth scopes
 
+
+        | UI Name | Permission | Parameter |
+
+        |:--------|:-----------|:----------|
+
+        |  Create Payments | create | `store_payments_access_token_create` |
+
+        |  Get Payment Methods | read-only | `store_payments_methods_read` |
+
+
+        ### Authentication header
+
+
+        | Header | Argument | Description |
+
+        |:-------|:---------|:------------|
+
+        | `X-Auth-Token` | `access_token` | For more about API accounts that generate `access_token`s, see our [Guide to
+        API Accounts](/developer/docs/overview/api-fundamentals/api-accounts#api-accounts). |
+
+
+        ### Further reading
+
+
+        For example requests and more information about authenticating BigCommerce APIs, see [Authentication and Example
+        Requests](/developer/docs/overview/api-fundamentals/api-accounts#x-auth-token-header-example-requests).
+
+
+        For more about BigCommerce OAuth scopes, see our [Guide to API
+        Accounts](/developer/docs/overview/api-fundamentals/api-accounts#oauth-scopes).
+
+
+        For a list of API status codes, see [API Status
+        Codes](/developer/api-reference/rest/overview#rest-http-status-codes).

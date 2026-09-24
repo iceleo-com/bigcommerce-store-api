@@ -1,26 +1,14 @@
 export type ClientOptions = {
-    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3/stores/{store_hash}/v3' | (string & {});
 };
-export type _Error = {
-    status?: number;
-    message?: string;
-};
-export type ErrorResponse400 = {
-    schema?: _Error;
-};
-export type ErrorResponse404 = {
-    schema?: _Error;
-};
-export type ErrorResponse409 = {
-    schema?: _Error;
-};
-export type ErrorResponse422 = {
-    schema?: _Error;
-};
-export type _301RedirectUpsert = {
-    from_path: string;
-    site_id: number;
-    to?: RedirectTo;
+export type StorefrontRedirectsGetParametersSort = 'from_path' | 'type' | 'site_id' | 'id';
+export type StorefrontRedirectsGetParametersDirection = 'asc' | 'desc';
+export type StorefrontRedirectsGetParametersIncludeSchemaItems = 'to_url';
+export type RedirectToType = 'product' | 'brand' | 'category' | 'page' | 'post' | 'url';
+export type RedirectTo = {
+    type?: RedirectToType;
+    entity_id?: number;
+    url?: string;
 };
 export type _301RedirectRead = {
     id?: number;
@@ -29,12 +17,51 @@ export type _301RedirectRead = {
     to?: RedirectTo;
     to_url?: string;
 };
+export type MetaPaginationObjectPaginationLinks = {
+    next?: string;
+    current?: string;
+};
+export type MetaPaginationObjectPagination = {
+    total?: number;
+    count?: number;
+    per_page?: number;
+    current_page?: number;
+    total_pages?: number;
+    links?: MetaPaginationObjectPaginationLinks;
+};
+export type MetaPaginationObject = {
+    pagination?: MetaPaginationObjectPagination;
+};
+export type RedirectsGetRedirectsResponse200 = {
+    data?: Array<_301RedirectRead>;
+    meta?: MetaPaginationObject;
+};
+export type _301RedirectUpsert = {
+    from_path: string;
+    site_id: number;
+    to?: RedirectTo;
+};
+export type RedirectsUpsertRedirectsResponse201 = {
+    data?: Array<_301RedirectRead>;
+    meta?: MetaPaginationObject;
+};
+export type DetailedErrors = {
+    [key: string]: unknown;
+};
+export type ErrorResponse = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: DetailedErrors;
+};
 export type ImportExportJobType = 'import' | 'export';
 export type ImportExportJobStatus = 'new' | 'working' | 'complete' | 'aborted' | 'failed';
-export type ImportErrors = Array<{
+export type ImportErrorsItems = {
     row?: number;
     message?: string;
-}>;
+};
+export type ImportErrors = Array<ImportErrorsItems>;
 export type _301RedirectImportExportJobRead = {
     id?: string;
     type?: ImportExportJobType;
@@ -46,42 +73,16 @@ export type _301RedirectImportExportJobRead = {
     created_at?: string;
     completed_at?: string;
 };
-export type MetaPaginationObject = {
-    pagination?: {
-        total?: number;
-        count?: number;
-        per_page?: number;
-        current_page?: number;
-        total_pages?: number;
-        links?: {
-            next?: string;
-            current?: string;
-        };
-    };
+export type ImportExportGetRedirectImportExportJobsResponse200 = {
+    data?: Array<_301RedirectImportExportJobRead>;
+    meta?: MetaPaginationObject;
 };
-export type RedirectTo = {
-    type?: 'product' | 'brand' | 'category' | 'page' | 'post' | 'url';
-    entity_id?: number;
-    url?: string;
+export type ImportExportCreateRedirectExportJobResponse201 = {
+    id?: string;
 };
-export type DetailedErrors = {
-    [key: string]: unknown;
+export type ImportExportCreateRedirectImportJobResponse201 = {
+    id?: string;
 };
-export type BaseError = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
-};
-export type ErrorResponse = BaseError & {
-    errors?: DetailedErrors;
-};
-export type Accept = string;
-export type AcceptEventStream = string;
-export type ContentType = string;
-export type ContentTypeFormData = string;
-export type ContentTypeCsv = string;
-export type ImportExportIdParam = string;
 export type DeleteRedirectsData = {
     body?: never;
     headers: {
@@ -95,7 +96,9 @@ export type DeleteRedirectsData = {
     url: '/storefront/redirects';
 };
 export type DeleteRedirectsResponses = {
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 export type DeleteRedirectsResponse = DeleteRedirectsResponses[keyof DeleteRedirectsResponses];
 export type GetRedirectsData = {
@@ -106,38 +109,37 @@ export type GetRedirectsData = {
     path?: never;
     query?: {
         site_id?: number;
-        'id:in'?: Array<string>;
+        'id:in'?: Array<number>;
+        'id:min'?: number;
+        'id:max'?: number;
         limit?: number;
         page?: number;
-        sort?: 'from_path' | 'type' | 'site_id' | 'id';
-        direction?: 'asc' | 'desc';
-        include?: 'to_url';
+        sort?: StorefrontRedirectsGetParametersSort;
+        direction?: StorefrontRedirectsGetParametersDirection;
+        include?: Array<StorefrontRedirectsGetParametersIncludeSchemaItems>;
         keyword?: string;
     };
     url: '/storefront/redirects';
 };
 export type GetRedirectsResponses = {
-    200: {
-        data?: Array<_301RedirectRead>;
-        meta?: MetaPaginationObject;
-    };
+    200: RedirectsGetRedirectsResponse200;
 };
 export type GetRedirectsResponse = GetRedirectsResponses[keyof GetRedirectsResponses];
 export type UpsertRedirectsData = {
     body?: Array<_301RedirectUpsert>;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/storefront/redirects';
 };
+export type UpsertRedirectsErrors = {
+    422: ErrorResponse;
+};
+export type UpsertRedirectsError = UpsertRedirectsErrors[keyof UpsertRedirectsErrors];
 export type UpsertRedirectsResponses = {
-    201: {
-        data?: Array<_301RedirectRead>;
-        meta?: MetaPaginationObject;
-    };
+    201: RedirectsUpsertRedirectsResponse201;
 };
 export type UpsertRedirectsResponse = UpsertRedirectsResponses[keyof UpsertRedirectsResponses];
 export type GetRedirectImportExportJobsData = {
@@ -156,21 +158,17 @@ export type GetRedirectImportExportJobsData = {
     url: '/storefront/redirects/imex/jobs';
 };
 export type GetRedirectImportExportJobsResponses = {
-    200: {
-        data?: Array<_301RedirectImportExportJobRead>;
-        meta?: MetaPaginationObject;
-    };
+    200: ImportExportGetRedirectImportExportJobsResponse200;
 };
 export type GetRedirectImportExportJobsResponse = GetRedirectImportExportJobsResponses[keyof GetRedirectImportExportJobsResponses];
 export type CreateRedirectExportJobData = {
-    body: {
+    body?: {
         site_id?: number | null;
         redirect_ids?: Array<number>;
         include_dynamic_target_urls?: boolean;
     };
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -181,18 +179,15 @@ export type CreateRedirectExportJobErrors = {
     429: unknown;
 };
 export type CreateRedirectExportJobResponses = {
-    201: {
-        id?: string;
-    };
+    201: ImportExportCreateRedirectExportJobResponse201;
 };
 export type CreateRedirectExportJobResponse = CreateRedirectExportJobResponses[keyof CreateRedirectExportJobResponses];
 export type CreateRedirectImportJobData = {
-    body: {
+    body?: {
         import_file: Blob | File;
     };
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -204,9 +199,7 @@ export type CreateRedirectImportJobErrors = {
     429: unknown;
 };
 export type CreateRedirectImportJobResponses = {
-    201: {
-        id?: string;
-    };
+    201: ImportExportCreateRedirectImportJobResponse201;
 };
 export type CreateRedirectImportJobResponse = CreateRedirectImportJobResponses[keyof CreateRedirectImportJobResponses];
 export type GetRedirectExportEventsData = {
@@ -247,9 +240,6 @@ export type GetRedirectImportEventsResponses = {
 export type GetRedirectImportEventsResponse = GetRedirectImportEventsResponses[keyof GetRedirectImportEventsResponses];
 export type GetRedirectExportDownloadData = {
     body?: never;
-    headers: {
-        'Content-Type': string;
-    };
     path: {
         uuid: string;
     };

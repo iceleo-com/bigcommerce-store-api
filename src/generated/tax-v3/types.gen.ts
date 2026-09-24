@@ -5,39 +5,55 @@ export type ClientOptions = {
 };
 
 /**
- * Connection Status
+ * ResponseConnectionDataTarget
+ *
+ * The countries and subdivisions in which this tax provider connection is active.
+ */
+export type ResponseConnectionDataTarget = {
+    /**
+     * The list of country codes where the tax provider connection is active. ISO 3166-1 alpha-2.
+     */
+    country_codes?: Array<string>;
+    /**
+     * The list of subdivision codes where the tax provider connection is active. ISO 3166-2.
+     */
+    subdivision_codes?: Array<string>;
+};
+
+/**
+ * ResponseConnectionData
+ */
+export type ResponseConnectionData = {
+    /**
+     * Identifies a unique account on the external tax provider infrastructure. May be used to reconcile the two platforms.
+     */
+    username?: string;
+    /**
+     * Describes whether the stored credentials are considered complete and configured, ready to be used for Tax Provider API requests.
+     *
+     * Merchants may enable any **configured** tax provider for storefront tax quotation.
+     */
+    configured?: boolean;
+    /**
+     * When supported by the tax provider configuration, the profile value is used to generate a unique Tax Provider API request URL for this connection.
+     *
+     * If not set, this value will be blank. Please ensure merchants set this value if using dynamic request URLs, blank values cannot generate valid URLs.
+     */
+    profile?: string;
+    /**
+     * The countries and subdivisions in which this tax provider connection is active.
+     */
+    target?: ResponseConnectionDataTarget;
+};
+
+/**
+ * response-connection
  */
 export type ResponseConnection = {
-    data?: {
-        /**
-         * Identifies a unique account on the external tax provider infrastructure. May be used to reconcile the two platforms.
-         */
-        username?: string;
-        /**
-         * Describes whether the stored credentials are considered complete and configured, ready to be used for Tax Provider API requests.
-         *
-         * Merchants may enable any **configured** tax provider for storefront tax quotation.
-         */
-        configured?: boolean;
-    };
+    data?: ResponseConnectionData;
 };
 
-/**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
- */
-export type Accept = string;
-
-/**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
- */
-export type ContentType = string;
-
-/**
- * Unique key that identifies the Tax Provider on the BigCommerce platform.
- */
-export type ProviderId = string;
-
-export type ProviderConnectionDeleteData = {
+export type DeleteTaxProviderConnectionData = {
     body?: never;
     headers: {
         /**
@@ -47,7 +63,7 @@ export type ProviderConnectionDeleteData = {
     };
     path: {
         /**
-         * The Tax Providerʼs `provider_id` provided by BigCommerce after the provider [shares their provider details](/docs/integrations/tax#sharing-provider-details-with-bigcommerce).
+         * The Tax Providerʼs `provider_id` provided by BigCommerce after the provider [shares their provider details](/developer/docs/integrations/tax-providers#sharing-provider-details-with-bigcommerce).
          */
         provider_id: string;
     };
@@ -55,23 +71,23 @@ export type ProviderConnectionDeleteData = {
     url: '/tax/providers/{provider_id}/connection';
 };
 
-export type ProviderConnectionDeleteErrors = {
+export type DeleteTaxProviderConnectionErrors = {
     /**
-     * Provider or provider connection does not exist
+     * Any type
      */
     404: unknown;
 };
 
-export type ProviderConnectionDeleteResponses = {
+export type DeleteTaxProviderConnectionResponses = {
     /**
      * OK
      */
     200: ResponseConnection;
 };
 
-export type ProviderConnectionDeleteResponse = ProviderConnectionDeleteResponses[keyof ProviderConnectionDeleteResponses];
+export type DeleteTaxProviderConnectionResponse = DeleteTaxProviderConnectionResponses[keyof DeleteTaxProviderConnectionResponses];
 
-export type ProviderConnectionGetData = {
+export type GetTaxProviderConnectionData = {
     body?: never;
     headers: {
         /**
@@ -81,7 +97,7 @@ export type ProviderConnectionGetData = {
     };
     path: {
         /**
-         * The Tax Providerʼs `provider_id` provided by BigCommerce after the provider [shares their provider details](/docs/integrations/tax#sharing-provider-details-with-bigcommerce).
+         * The Tax Providerʼs `provider_id` provided by BigCommerce after the provider [shares their provider details](/developer/docs/integrations/tax-providers#sharing-provider-details-with-bigcommerce).
          */
         provider_id: string;
     };
@@ -89,23 +105,23 @@ export type ProviderConnectionGetData = {
     url: '/tax/providers/{provider_id}/connection';
 };
 
-export type ProviderConnectionGetErrors = {
+export type GetTaxProviderConnectionErrors = {
     /**
-     * Provider does not exist
+     * Any type
      */
     404: unknown;
 };
 
-export type ProviderConnectionGetResponses = {
+export type GetTaxProviderConnectionResponses = {
     /**
      * OK
      */
     200: ResponseConnection;
 };
 
-export type ProviderConnectionGetResponse = ProviderConnectionGetResponses[keyof ProviderConnectionGetResponses];
+export type GetTaxProviderConnectionResponse = GetTaxProviderConnectionResponses[keyof GetTaxProviderConnectionResponses];
 
-export type ProviderConnectionPutData = {
+export type UpdateTaxProviderConnectionData = {
     /**
      * Basic authentication information, associated with a merchant account on the third-party tax providerʼs infrastructure.
      */
@@ -125,14 +141,10 @@ export type ProviderConnectionPutData = {
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
     };
     path: {
         /**
-         * The Tax Providerʼs `provider_id` provided by BigCommerce after the provider [shares their provider details](/docs/integrations/tax#sharing-provider-details-with-bigcommerce).
+         * The Tax Providerʼs `provider_id` provided by BigCommerce after the provider [shares their provider details](/developer/docs/integrations/tax-providers#sharing-provider-details-with-bigcommerce).
          */
         provider_id: string;
     };
@@ -140,22 +152,22 @@ export type ProviderConnectionPutData = {
     url: '/tax/providers/{provider_id}/connection';
 };
 
-export type ProviderConnectionPutErrors = {
+export type UpdateTaxProviderConnectionErrors = {
     /**
-     * Provider does not exist
+     * Any type
      */
     404: unknown;
     /**
-     * Unprocessable Entity, will include a specific error message referencing the issue.
+     * Any type
      */
     422: unknown;
 };
 
-export type ProviderConnectionPutResponses = {
+export type UpdateTaxProviderConnectionResponses = {
     /**
      * OK
      */
     200: ResponseConnection;
 };
 
-export type ProviderConnectionPutResponse = ProviderConnectionPutResponses[keyof ProviderConnectionPutResponses];
+export type UpdateTaxProviderConnectionResponse = UpdateTaxProviderConnectionResponses[keyof UpdateTaxProviderConnectionResponses];

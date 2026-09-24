@@ -5,13 +5,9 @@ export * as TaxCustomersV3ApiSpecs from '../generated/tax-customers-v3';
 export declare class TaxCustomersV3Api {
     private readonly request;
     constructor(request: RequestService);
-    getTaxCustomers(query?: TaxCustomersV3ApiSpecs.GetTaxCustomersData['query']): Promise<RequestErrorResponse<400, Required<unknown>> | RequestSuccessResponse<200, Required<{
-        data?: Array<TaxCustomersV3ApiSpecs.TaxCustomer>;
-        meta?: TaxCustomersV3ApiSpecs.MetaOpen;
+    getTaxCustomers(query?: TaxCustomersV3ApiSpecs.GetTaxCustomersData['query']): Promise<RequestErrorResponse<400, Required<unknown>> | RequestSuccessResponse<200, Required<TaxCustomersV3ApiSpecs.TaxCustomersGetTaxCustomersResponse200>>>;
+    updateTaxCustomers(requestBody: TaxCustomersV3ApiSpecs.UpdateTaxCustomersData['body']): Promise<RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<TaxCustomersV3ApiSpecs.TaxCustomersUpdateTaxCustomersResponse200>>>;
+    deleteTaxCustomers(query?: TaxCustomersV3ApiSpecs.DeleteTaxCustomersData['query']): Promise<RequestErrorResponse<400, Required<unknown>> | RequestSuccessResponse<204, Required<{
+        [key: string]: unknown;
     }>>>;
-    updateTaxCustomers(requestBody: TaxCustomersV3ApiSpecs.UpdateTaxCustomersData['body']): Promise<RequestErrorResponse<422, Required<unknown>> | RequestSuccessResponse<200, Required<{
-        data?: Array<TaxCustomersV3ApiSpecs.TaxCustomer>;
-        meta?: TaxCustomersV3ApiSpecs.MetaOpen;
-    }>>>;
-    deleteTaxCustomers(query?: TaxCustomersV3ApiSpecs.DeleteTaxCustomersData['query']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<400, Required<unknown>>>;
 }

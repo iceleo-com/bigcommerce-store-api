@@ -1,106 +1,21 @@
 export type ClientOptions = {
-    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2' | (string & {});
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2' | (string & {});
 };
-export type BillingAddressFull = {
-    first_name?: string;
-    last_name?: string;
-    company?: string;
-    street_1?: string;
-    street_2?: string;
-    city?: string;
-    state?: string;
-    zip?: string;
-    country?: string;
-    country_iso2?: string;
-    phone?: string;
-    email?: string;
-    form_fields?: Array<{
-        name?: string;
-        value?: string;
-    }>;
+export type CustomerBaseAuthentication = {
+    force_reset?: boolean;
+    password?: string;
+    password_confirmation?: string;
 };
-export type CustomerFormFields = {
-    name?: string;
-    value?: string;
-};
-export type ShippingAddressFull = {
+export type CustomerBaseAddresses = {
     url?: string;
     resource?: string;
+};
+export type CustomerBaseFormFieldsItems = {
+    name?: string;
+    value?: string | null;
 };
 export type CustomerFull = {
-    readonly id?: number;
-    readonly date_created?: string;
-    readonly date_modified?: string;
-} & CustomerBase;
-export type CategoryAccessLevelFull = {
-    type?: 'all' | 'specific' | 'none';
-    categories?: Array<number>;
-};
-export type CountFull = {
-    count?: number;
-};
-export type CustomerAddressFull = {
-    readonly id?: number;
-    readonly country_iso2?: string;
-} & CustomerAddressBase;
-export type CustomerGroupFull = {
-    id?: number;
-    name?: string;
-    is_default?: boolean;
-    category_access?: CategoryAccessLevelFull;
-    discount_rules?: Array<{
-        type?: 'price_list' | 'all' | 'category' | 'product';
-        method?: 'percent' | 'fixed' | 'price';
-        amount?: string;
-        price_list_id?: number;
-    }>;
-    date_created?: string;
-    date_modified?: string;
-    is_group_for_guests?: boolean;
-};
-export type CountryFull = {
-    id?: number;
-    country?: string;
-    country_iso2?: string;
-    country_iso3?: string;
-    states?: {
-        url?: string;
-        resource?: string;
-    };
-};
-export type StatesResourceFull = {
-    url?: string;
-    resource?: string;
-};
-export type StateFull = {
-    id?: number;
-    state?: string;
-    state_abbreviation?: string;
-    country_id?: number;
-};
-export type CustomerGroupPost = {
-    name?: string;
-    is_default?: boolean;
-    category_access?: CategoryAccessLevelFull;
-    discount_rules?: Array<{
-        type?: 'price_list' | 'all' | 'category' | 'product';
-        method?: 'percent' | 'fixed' | 'price';
-        amount?: string;
-        price_list_id?: number;
-    }>;
-    date_created?: string;
-    date_modified?: string;
-    is_group_for_guests?: boolean;
-};
-export type ValidatePassword = {
-    success?: boolean;
-};
-export type CustomerBase = {
-    _authentication?: {
-        force_reset?: boolean;
-        password?: string;
-        password_confirmation?: string;
-    };
+    _authentication?: CustomerBaseAuthentication;
     company?: string;
     first_name: string;
     last_name: string;
@@ -111,54 +26,86 @@ export type CustomerBase = {
     customer_group_id?: number;
     notes?: string;
     tax_exempt_category?: string;
-    readonly accepts_marketing?: boolean;
-    addresses?: {
-        url?: string;
-        resource?: string;
-    };
-    readonly form_fields?: Array<{
-        name?: string;
-        value?: string | null;
-    }> | null;
+    accepts_marketing?: boolean;
+    addresses?: CustomerBaseAddresses;
+    form_fields?: Array<CustomerBaseFormFieldsItems> | null;
     reset_pass_on_login?: boolean;
+    id?: number;
+    date_created?: string;
+    date_modified?: string;
+};
+export type CustomersPostRequestBodyContentApplicationJsonSchemaAuthentication = {
+    [key: string]: unknown;
+};
+export type CustomerPutAuthentication = {
+    force_reset?: boolean;
+    password?: string;
+    password_confirmation?: string;
+};
+export type CustomerPutAddresses = {
+    url?: string;
+    resource?: string;
+};
+export type CustomerPutFormFieldsItems = {
+    name?: string;
+    value?: string;
 };
 export type CustomerPut = {
-    readonly id?: number;
-    _authentication?: {
-        force_reset?: boolean;
-        password?: string;
-        password_confirmation?: string;
-    };
+    id?: number;
+    _authentication?: CustomerPutAuthentication;
     company?: string;
     first_name?: string;
     last_name?: string;
     email?: string;
     phone?: string;
-    readonly date_created?: string;
-    readonly date_modified?: string;
+    date_created?: string;
+    date_modified?: string;
     store_credit?: string;
     registration_ip_address?: string;
     customer_group_id?: number;
     notes?: string;
     tax_exempt_category?: string;
-    readonly accepts_marketing?: boolean;
-    addresses?: {
-        url?: string;
-        resource?: string;
-    };
-    readonly form_fields?: Array<{
-        name?: string;
-        value?: string;
-    }>;
+    accepts_marketing?: boolean;
+    addresses?: CustomerPutAddresses;
+    form_fields?: Array<CustomerPutFormFieldsItems>;
     reset_pass_on_login?: boolean;
 };
-export type ErrorRequest = {
-    errors?: Array<ErrorBasic>;
+export type CustomerBase = {
+    _authentication?: CustomerBaseAuthentication;
+    company?: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone?: string;
+    store_credit?: string;
+    registration_ip_address?: string;
+    customer_group_id?: number;
+    notes?: string;
+    tax_exempt_category?: string;
+    accepts_marketing?: boolean;
+    addresses?: CustomerBaseAddresses;
+    form_fields?: Array<CustomerBaseFormFieldsItems> | null;
+    reset_pass_on_login?: boolean;
 };
-export type ErrorBasic = {
-    status?: number;
-    title?: string;
-    type?: string;
+export type CountFull = {
+    count?: number;
+};
+export type CustomerAddressBaseAddressType = 'residential' | 'commercial';
+export type CustomerAddressFull = {
+    customer_id?: number;
+    first_name: string;
+    last_name: string;
+    company?: string;
+    street_1: string;
+    street_2?: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+    phone: string;
+    address_type?: CustomerAddressBaseAddressType;
+    id?: number;
+    country_iso2?: string;
 };
 export type CustomerAddressBase = {
     customer_id?: number;
@@ -172,61 +119,127 @@ export type CustomerAddressBase = {
     zip: string;
     country: string;
     phone: string;
-    address_type?: 'residential' | 'commercial';
+    address_type?: CustomerAddressBaseAddressType;
 };
-export type CustomerFullWritable = CustomerBaseWritable;
-export type CustomerAddressFullWritable = CustomerAddressBase;
-export type CustomerBaseWritable = {
-    _authentication?: {
-        force_reset?: boolean;
-        password?: string;
-        password_confirmation?: string;
-    };
-    company?: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone?: string;
-    store_credit?: string;
-    registration_ip_address?: string;
-    customer_group_id?: number;
-    notes?: string;
-    tax_exempt_category?: string;
-    addresses?: {
-        url?: string;
-        resource?: string;
-    };
-    reset_pass_on_login?: boolean;
+export type CustomersCustomerIdAddressesCustomerAddressIdPutRequestBodyContentApplicationJsonSchemaAddressType = 'residential' | 'commercial';
+export type CategoryAccessLevelFullType = 'all' | 'specific' | 'none';
+export type CategoryAccessLevelFull = {
+    type?: CategoryAccessLevelFullType;
+    categories?: Array<number>;
 };
-export type CustomerPutWritable = {
-    _authentication?: {
-        force_reset?: boolean;
-        password?: string;
-        password_confirmation?: string;
-    };
-    company?: string;
-    first_name?: string;
-    last_name?: string;
-    email?: string;
-    phone?: string;
-    store_credit?: string;
-    registration_ip_address?: string;
-    customer_group_id?: number;
-    notes?: string;
-    tax_exempt_category?: string;
-    addresses?: {
-        url?: string;
-        resource?: string;
-    };
-    reset_pass_on_login?: boolean;
+export type CustomerGroupFullDiscountRulesOneOf0ItemsType = 'price_list' | 'all' | 'category' | 'product';
+export type CustomerGroupFullDiscountRulesOneOf0ItemsMethod = 'percent' | 'fixed' | 'price';
+export type CustomerGroupFullDiscountRulesOneOf0Items = {
+    type?: CustomerGroupFullDiscountRulesOneOf0ItemsType;
+    method?: CustomerGroupFullDiscountRulesOneOf0ItemsMethod;
+    amount?: string;
+    price_list_id?: number;
 };
-export type Accept = string;
-export type ContentType = string;
-export type CustomerId = number;
-export type CustomerGroupId = number;
-export type CustomerAddressId = number;
-export type IsGroupForGuests = boolean;
-export type DeleteAllCustomersData = {
+export type CustomerGroupFullDiscountRules0 = Array<CustomerGroupFullDiscountRulesOneOf0Items>;
+export type CustomerGroupFullDiscountRulesOneOf1ItemsType = 'price_list' | 'all' | 'category' | 'product';
+export type CustomerGroupFullDiscountRulesOneOf1ItemsMethod = 'percent' | 'fixed' | 'price';
+export type CustomerGroupFullDiscountRulesOneOf1Items = {
+    type?: CustomerGroupFullDiscountRulesOneOf1ItemsType;
+    method?: CustomerGroupFullDiscountRulesOneOf1ItemsMethod;
+    amount?: string;
+    category_id?: number;
+};
+export type CustomerGroupFullDiscountRules1 = Array<CustomerGroupFullDiscountRulesOneOf1Items>;
+export type CustomerGroupFullDiscountRulesOneOf2ItemsType = 'price_list' | 'all' | 'category' | 'product';
+export type CustomerGroupFullDiscountRulesOneOf2ItemsMethod = 'percent' | 'fixed' | 'price';
+export type CustomerGroupFullDiscountRulesOneOf2Items = {
+    type?: CustomerGroupFullDiscountRulesOneOf2ItemsType;
+    method?: CustomerGroupFullDiscountRulesOneOf2ItemsMethod;
+    amount?: string;
+    product_id?: number;
+};
+export type CustomerGroupFullDiscountRules2 = Array<CustomerGroupFullDiscountRulesOneOf2Items>;
+export type CustomerGroupFullDiscountRulesOneOf3ItemsType = 'price_list' | 'all' | 'category' | 'product';
+export type CustomerGroupFullDiscountRulesOneOf3ItemsMethod = 'percent' | 'fixed' | 'price';
+export type CustomerGroupFullDiscountRulesOneOf3Items = {
+    type?: CustomerGroupFullDiscountRulesOneOf3ItemsType;
+    method?: CustomerGroupFullDiscountRulesOneOf3ItemsMethod;
+    amount?: string;
+};
+export type CustomerGroupFullDiscountRules3 = Array<CustomerGroupFullDiscountRulesOneOf3Items>;
+export type CustomerGroupFullDiscountRulesOneOf4ItemsType = 'markup';
+export type CustomerGroupFullDiscountRulesOneOf4ItemsMethod = 'percent' | 'price';
+export type CustomerGroupFullDiscountRulesOneOf4Items = {
+    type?: CustomerGroupFullDiscountRulesOneOf4ItemsType;
+    method?: CustomerGroupFullDiscountRulesOneOf4ItemsMethod;
+    amount?: string;
+};
+export type CustomerGroupFullDiscountRules4 = Array<CustomerGroupFullDiscountRulesOneOf4Items>;
+export type CustomerGroupFullDiscountRules = CustomerGroupFullDiscountRules0 | CustomerGroupFullDiscountRules1 | CustomerGroupFullDiscountRules2 | CustomerGroupFullDiscountRules3 | CustomerGroupFullDiscountRules4;
+export type CustomerGroupFull = {
+    id?: number;
+    name?: string;
+    is_default?: boolean;
+    category_access?: CategoryAccessLevelFull;
+    discount_rules?: CustomerGroupFullDiscountRules;
+    date_created?: string;
+    date_modified?: string;
+    is_group_for_guests?: boolean;
+};
+export type CustomerGroupPostPutDiscountRulesOneOf0ItemsType = 'price_list';
+export type CustomerGroupPostPutDiscountRulesOneOf0Items = {
+    type: CustomerGroupPostPutDiscountRulesOneOf0ItemsType;
+    price_list_id?: number;
+};
+export type CustomerGroupPostPutDiscountRules0 = Array<CustomerGroupPostPutDiscountRulesOneOf0Items>;
+export type CustomerGroupPostPutDiscountRulesOneOf1ItemsOneOf0Type = 'category';
+export type CustomerGroupPostPutDiscountRulesOneOf1ItemsOneOf0Method = 'percent' | 'fixed' | 'price';
+export type CustomerGroupPostPutDiscountRulesOneOf1Items0 = {
+    type: CustomerGroupPostPutDiscountRulesOneOf1ItemsOneOf0Type;
+    method: CustomerGroupPostPutDiscountRulesOneOf1ItemsOneOf0Method;
+    amount: string;
+    category_id: number;
+};
+export type CustomerGroupPostPutDiscountRulesOneOf1ItemsOneOf1Type = 'product';
+export type CustomerGroupPostPutDiscountRulesOneOf1ItemsOneOf1Method = 'percent' | 'fixed' | 'price';
+export type CustomerGroupPostPutDiscountRulesOneOf1Items1 = {
+    type: CustomerGroupPostPutDiscountRulesOneOf1ItemsOneOf1Type;
+    method: CustomerGroupPostPutDiscountRulesOneOf1ItemsOneOf1Method;
+    amount: string;
+    product_id: number;
+};
+export type CustomerGroupPostPutDiscountRulesOneOf1ItemsOneOf2Type = 'all';
+export type CustomerGroupPostPutDiscountRulesOneOf1ItemsOneOf2Method = 'percent' | 'fixed' | 'price';
+export type CustomerGroupPostPutDiscountRulesOneOf1Items2 = {
+    type: CustomerGroupPostPutDiscountRulesOneOf1ItemsOneOf2Type;
+    method?: CustomerGroupPostPutDiscountRulesOneOf1ItemsOneOf2Method;
+    amount?: string;
+};
+export type CustomerGroupPostPutDiscountRulesOneOf1Items = CustomerGroupPostPutDiscountRulesOneOf1Items0 | CustomerGroupPostPutDiscountRulesOneOf1Items1 | CustomerGroupPostPutDiscountRulesOneOf1Items2;
+export type CustomerGroupPostPutDiscountRules1 = Array<CustomerGroupPostPutDiscountRulesOneOf1Items>;
+export type CustomerGroupPostPutDiscountRulesOneOf2ItemsType = 'markup';
+export type CustomerGroupPostPutDiscountRulesOneOf2ItemsMethod = 'percent' | 'price';
+export type CustomerGroupPostPutDiscountRulesOneOf2Items = {
+    type: CustomerGroupPostPutDiscountRulesOneOf2ItemsType;
+    method: CustomerGroupPostPutDiscountRulesOneOf2ItemsMethod;
+    amount: string;
+};
+export type CustomerGroupPostPutDiscountRules2 = Array<CustomerGroupPostPutDiscountRulesOneOf2Items>;
+export type CustomerGroupPostPutDiscountRules = CustomerGroupPostPutDiscountRules0 | CustomerGroupPostPutDiscountRules1 | CustomerGroupPostPutDiscountRules2;
+export type CustomerGroupPostPut = {
+    name?: string;
+    is_default?: boolean;
+    category_access?: CategoryAccessLevelFull;
+    discount_rules?: CustomerGroupPostPutDiscountRules;
+    is_group_for_guests?: boolean;
+};
+export type ErrorBasic = {
+    status?: number;
+    title?: string;
+    type?: string;
+};
+export type ErrorRequest = {
+    errors?: Array<ErrorBasic>;
+};
+export type ValidatePassword = {
+    success?: boolean;
+};
+export type DeleteCustomersData = {
     body?: never;
     headers: {
         Accept: string;
@@ -235,11 +248,13 @@ export type DeleteAllCustomersData = {
     query?: never;
     url: '/customers';
 };
-export type DeleteAllCustomersResponses = {
-    204: void;
+export type DeleteCustomersResponses = {
+    204: {
+        [key: string]: unknown;
+    };
 };
-export type DeleteAllCustomersResponse = DeleteAllCustomersResponses[keyof DeleteAllCustomersResponses];
-export type GetAllCustomersData = {
+export type DeleteCustomersResponse = DeleteCustomersResponses[keyof DeleteCustomersResponses];
+export type GetCustomersData = {
     body?: never;
     headers: {
         Accept: string;
@@ -263,15 +278,13 @@ export type GetAllCustomersData = {
     };
     url: '/customers';
 };
-export type GetAllCustomersResponses = {
+export type GetCustomersResponses = {
     200: Array<CustomerFull>;
 };
-export type GetAllCustomersResponse = GetAllCustomersResponses[keyof GetAllCustomersResponses];
-export type CreateANewCustomerData = {
-    body: {
-        _authentication?: {
-            [key: string]: unknown;
-        };
+export type GetCustomersResponse = GetCustomersResponses[keyof GetCustomersResponses];
+export type CreateCustomerData = {
+    body?: {
+        _authentication?: CustomersPostRequestBodyContentApplicationJsonSchemaAuthentication;
         company?: string;
         first_name?: string;
         last_name?: string;
@@ -285,17 +298,16 @@ export type CreateANewCustomerData = {
     };
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/customers';
 };
-export type CreateANewCustomerResponses = {
+export type CreateCustomerResponses = {
     200: CustomerFull;
 };
-export type CreateANewCustomerResponse = CreateANewCustomerResponses[keyof CreateANewCustomerResponses];
-export type DeleteACustomerData = {
+export type CreateCustomerResponse = CreateCustomerResponses[keyof CreateCustomerResponses];
+export type DeleteCustomerData = {
     body?: never;
     headers: {
         Accept: string;
@@ -306,11 +318,13 @@ export type DeleteACustomerData = {
     query?: never;
     url: '/customers/{customer_id}';
 };
-export type DeleteACustomerResponses = {
-    204: void;
+export type DeleteCustomerResponses = {
+    204: {
+        [key: string]: unknown;
+    };
 };
-export type DeleteACustomerResponse = DeleteACustomerResponses[keyof DeleteACustomerResponses];
-export type GetACustomerData = {
+export type DeleteCustomerResponse = DeleteCustomerResponses[keyof DeleteCustomerResponses];
+export type GetCustomerData = {
     body?: never;
     headers: {
         Accept: string;
@@ -321,15 +335,14 @@ export type GetACustomerData = {
     query?: never;
     url: '/customers/{customer_id}';
 };
-export type GetACustomerResponses = {
+export type GetCustomerResponses = {
     200: CustomerFull;
 };
-export type GetACustomerResponse = GetACustomerResponses[keyof GetACustomerResponses];
-export type UpdateACustomerData = {
-    body?: CustomerPutWritable;
+export type GetCustomerResponse = GetCustomerResponses[keyof GetCustomerResponses];
+export type UpdateCustomerData = {
+    body?: CustomerPut;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path: {
         customer_id: number;
@@ -337,11 +350,11 @@ export type UpdateACustomerData = {
     query?: never;
     url: '/customers/{customer_id}';
 };
-export type UpdateACustomerResponses = {
+export type UpdateCustomerResponses = {
     200: CustomerBase;
 };
-export type UpdateACustomerResponse = UpdateACustomerResponses[keyof UpdateACustomerResponses];
-export type GetACountOfCustomersData = {
+export type UpdateCustomerResponse = UpdateCustomerResponses[keyof UpdateCustomerResponses];
+export type GetCustomersCountData = {
     body?: never;
     headers: {
         Accept: string;
@@ -350,29 +363,11 @@ export type GetACountOfCustomersData = {
     query?: never;
     url: '/customers/count';
 };
-export type GetACountOfCustomersResponses = {
+export type GetCustomersCountResponses = {
     200: CountFull;
 };
-export type GetACountOfCustomersResponse = GetACountOfCustomersResponses[keyof GetACountOfCustomersResponses];
-export type ValidateCustomerPasswordData = {
-    body: {
-        password?: string;
-    };
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path: {
-        customer_id: number;
-    };
-    query?: never;
-    url: '/customers/{customer_id}/validate';
-};
-export type ValidateCustomerPasswordResponses = {
-    200: ValidatePassword;
-};
-export type ValidateCustomerPasswordResponse = ValidateCustomerPasswordResponses[keyof ValidateCustomerPasswordResponses];
-export type DeleteAllCustomerAddressesData = {
+export type GetCustomersCountResponse = GetCustomersCountResponses[keyof GetCustomersCountResponses];
+export type DeleteCustomerAddressesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -386,11 +381,13 @@ export type DeleteAllCustomerAddressesData = {
     };
     url: '/customers/{customer_id}/addresses';
 };
-export type DeleteAllCustomerAddressesResponses = {
-    204: void;
+export type DeleteCustomerAddressesResponses = {
+    204: {
+        [key: string]: unknown;
+    };
 };
-export type DeleteAllCustomerAddressesResponse = DeleteAllCustomerAddressesResponses[keyof DeleteAllCustomerAddressesResponses];
-export type GetAllCustomerAddressesData = {
+export type DeleteCustomerAddressesResponse = DeleteCustomerAddressesResponses[keyof DeleteCustomerAddressesResponses];
+export type GetCustomerAddressesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -404,15 +401,14 @@ export type GetAllCustomerAddressesData = {
     };
     url: '/customers/{customer_id}/addresses';
 };
-export type GetAllCustomerAddressesResponses = {
+export type GetCustomerAddressesResponses = {
     200: Array<CustomerAddressFull>;
 };
-export type GetAllCustomerAddressesResponse = GetAllCustomerAddressesResponses[keyof GetAllCustomerAddressesResponses];
-export type CreateACustomerAddressData = {
-    body: CustomerAddressBase;
+export type GetCustomerAddressesResponse = GetCustomerAddressesResponses[keyof GetCustomerAddressesResponses];
+export type CreateCustomerAddressData = {
+    body?: CustomerAddressBase;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path: {
         customer_id: number;
@@ -420,11 +416,11 @@ export type CreateACustomerAddressData = {
     query?: never;
     url: '/customers/{customer_id}/addresses';
 };
-export type CreateACustomerAddressResponses = {
+export type CreateCustomerAddressResponses = {
     200: CustomerAddressFull;
 };
-export type CreateACustomerAddressResponse = CreateACustomerAddressResponses[keyof CreateACustomerAddressResponses];
-export type DeletesACustomerAddressData = {
+export type CreateCustomerAddressResponse = CreateCustomerAddressResponses[keyof CreateCustomerAddressResponses];
+export type DeletesCustomerAddressData = {
     body?: never;
     headers: {
         Accept: string;
@@ -436,11 +432,13 @@ export type DeletesACustomerAddressData = {
     query?: never;
     url: '/customers/{customer_id}/addresses/{customer_address_id}';
 };
-export type DeletesACustomerAddressResponses = {
-    204: void;
+export type DeletesCustomerAddressResponses = {
+    204: {
+        [key: string]: unknown;
+    };
 };
-export type DeletesACustomerAddressResponse = DeletesACustomerAddressResponses[keyof DeletesACustomerAddressResponses];
-export type GetACustomerAddressData = {
+export type DeletesCustomerAddressResponse = DeletesCustomerAddressResponses[keyof DeletesCustomerAddressResponses];
+export type GetCustomerAddressData = {
     body?: never;
     headers: {
         Accept: string;
@@ -455,13 +453,13 @@ export type GetACustomerAddressData = {
     };
     url: '/customers/{customer_id}/addresses/{customer_address_id}';
 };
-export type GetACustomerAddressResponses = {
+export type GetCustomerAddressResponses = {
     200: CustomerAddressFull;
 };
-export type GetACustomerAddressResponse = GetACustomerAddressResponses[keyof GetACustomerAddressResponses];
-export type UpdateACustomerAddressData = {
-    body: {
-        readonly id?: number;
+export type GetCustomerAddressResponse = GetCustomerAddressResponses[keyof GetCustomerAddressResponses];
+export type UpdateCustomerAddressData = {
+    body?: {
+        id?: number;
         customer_id?: number;
         first_name: string;
         last_name: string;
@@ -472,13 +470,12 @@ export type UpdateACustomerAddressData = {
         state: string;
         zip: string;
         country: string;
-        readonly country_iso2?: string;
+        country_iso2?: string;
         phone: string;
-        address_type?: 'residential' | 'commercial';
+        address_type?: CustomersCustomerIdAddressesCustomerAddressIdPutRequestBodyContentApplicationJsonSchemaAddressType;
     };
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path: {
         customer_id: number;
@@ -487,11 +484,11 @@ export type UpdateACustomerAddressData = {
     query?: never;
     url: '/customers/{customer_id}/addresses/{customer_address_id}';
 };
-export type UpdateACustomerAddressResponses = {
+export type UpdateCustomerAddressResponses = {
     200: CustomerAddressFull;
 };
-export type UpdateACustomerAddressResponse = UpdateACustomerAddressResponses[keyof UpdateACustomerAddressResponses];
-export type GetACountofCustomerAddressesData = {
+export type UpdateCustomerAddressResponse = UpdateCustomerAddressResponses[keyof UpdateCustomerAddressResponses];
+export type GetCustomerAddressesCountData = {
     body?: never;
     headers: {
         Accept: string;
@@ -505,24 +502,11 @@ export type GetACountofCustomerAddressesData = {
     };
     url: '/customers/{customer_id}/addresses/count';
 };
-export type GetACountofCustomerAddressesResponses = {
+export type GetCustomerAddressesCountResponses = {
     200: CountFull;
 };
-export type GetACountofCustomerAddressesResponse = GetACountofCustomerAddressesResponses[keyof GetACountofCustomerAddressesResponses];
-export type DeleteAllCustomerGroupsData = {
-    body?: never;
-    headers: {
-        Accept: string;
-    };
-    path?: never;
-    query?: never;
-    url: '/customer_groups';
-};
-export type DeleteAllCustomerGroupsResponses = {
-    204: void;
-};
-export type DeleteAllCustomerGroupsResponse = DeleteAllCustomerGroupsResponses[keyof DeleteAllCustomerGroupsResponses];
-export type GetAllCustomerGroupsData = {
+export type GetCustomerAddressesCountResponse = GetCustomerAddressesCountResponses[keyof GetCustomerAddressesCountResponses];
+export type GetCustomerGroupsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -538,35 +522,30 @@ export type GetAllCustomerGroupsData = {
         'date_created:max'?: string;
         'date_created:min'?: string;
         date_modified?: string;
-        '`date_modified:min`'?: string;
-        '`date_modified:max`'?: string;
+        'date_modified:min'?: string;
+        'date_modified:max'?: string;
         is_group_for_guests?: boolean;
     };
     url: '/customer_groups';
 };
-export type GetAllCustomerGroupsResponses = {
+export type GetCustomerGroupsResponses = {
     200: Array<CustomerGroupFull>;
 };
-export type GetAllCustomerGroupsResponse = GetAllCustomerGroupsResponses[keyof GetAllCustomerGroupsResponses];
-export type CreateACustomerGroupData = {
-    body: CustomerGroupPost;
+export type GetCustomerGroupsResponse = GetCustomerGroupsResponses[keyof GetCustomerGroupsResponses];
+export type CreateCustomerGroupData = {
+    body?: CustomerGroupPostPut;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/customer_groups';
 };
-export type CreateACustomerGroupResponses = {
+export type CreateCustomerGroupResponses = {
     200: CustomerGroupFull;
-    207: {
-        status?: number;
-        message?: string;
-    };
 };
-export type CreateACustomerGroupResponse = CreateACustomerGroupResponses[keyof CreateACustomerGroupResponses];
-export type DeleteACustomerGroupData = {
+export type CreateCustomerGroupResponse = CreateCustomerGroupResponses[keyof CreateCustomerGroupResponses];
+export type DeleteCustomerGroupData = {
     body?: never;
     headers: {
         Accept: string;
@@ -577,15 +556,17 @@ export type DeleteACustomerGroupData = {
     query?: never;
     url: '/customer_groups/{customer_group_id}';
 };
-export type DeleteACustomerGroupErrors = {
+export type DeleteCustomerGroupErrors = {
     400: ErrorRequest;
 };
-export type DeleteACustomerGroupError = DeleteACustomerGroupErrors[keyof DeleteACustomerGroupErrors];
-export type DeleteACustomerGroupResponses = {
-    204: void;
+export type DeleteCustomerGroupError = DeleteCustomerGroupErrors[keyof DeleteCustomerGroupErrors];
+export type DeleteCustomerGroupResponses = {
+    204: {
+        [key: string]: unknown;
+    };
 };
-export type DeleteACustomerGroupResponse = DeleteACustomerGroupResponses[keyof DeleteACustomerGroupResponses];
-export type GetACustomerGroupData = {
+export type DeleteCustomerGroupResponse = DeleteCustomerGroupResponses[keyof DeleteCustomerGroupResponses];
+export type GetCustomerGroupData = {
     body?: never;
     headers: {
         Accept: string;
@@ -607,19 +588,18 @@ export type GetACustomerGroupData = {
     };
     url: '/customer_groups/{customer_group_id}';
 };
-export type GetACustomerGroupErrors = {
+export type GetCustomerGroupErrors = {
     400: ErrorRequest;
 };
-export type GetACustomerGroupError = GetACustomerGroupErrors[keyof GetACustomerGroupErrors];
-export type GetACustomerGroupResponses = {
+export type GetCustomerGroupError = GetCustomerGroupErrors[keyof GetCustomerGroupErrors];
+export type GetCustomerGroupResponses = {
     200: CustomerGroupFull;
 };
-export type GetACustomerGroupResponse = GetACustomerGroupResponses[keyof GetACustomerGroupResponses];
-export type UpdateACustomerGroupData = {
-    body?: CustomerGroupFull;
+export type GetCustomerGroupResponse = GetCustomerGroupResponses[keyof GetCustomerGroupResponses];
+export type UpdateCustomerGroupData = {
+    body?: CustomerGroupPostPut;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path: {
         customer_group_id: number;
@@ -627,15 +607,11 @@ export type UpdateACustomerGroupData = {
     query?: never;
     url: '/customer_groups/{customer_group_id}';
 };
-export type UpdateACustomerGroupResponses = {
+export type UpdateCustomerGroupResponses = {
     200: CustomerGroupFull;
-    207: {
-        status: number;
-        message: string;
-    };
 };
-export type UpdateACustomerGroupResponse = UpdateACustomerGroupResponses[keyof UpdateACustomerGroupResponses];
-export type GetACountOfCustomerGroupsData = {
+export type UpdateCustomerGroupResponse = UpdateCustomerGroupResponses[keyof UpdateCustomerGroupResponses];
+export type GetCustomerGroupsCountData = {
     body?: never;
     headers: {
         Accept: string;
@@ -644,7 +620,24 @@ export type GetACountOfCustomerGroupsData = {
     query?: never;
     url: '/customer_groups/count';
 };
-export type GetACountOfCustomerGroupsResponses = {
+export type GetCustomerGroupsCountResponses = {
     200: CountFull;
 };
-export type GetACountOfCustomerGroupsResponse = GetACountOfCustomerGroupsResponses[keyof GetACountOfCustomerGroupsResponses];
+export type GetCustomerGroupsCountResponse = GetCustomerGroupsCountResponses[keyof GetCustomerGroupsCountResponses];
+export type ValidateCustomerPasswordData = {
+    body?: {
+        password?: string;
+    };
+    headers: {
+        Accept: string;
+    };
+    path: {
+        customer_id: number;
+    };
+    query?: never;
+    url: '/customers/{customer_id}/validate';
+};
+export type ValidateCustomerPasswordResponses = {
+    200: ValidatePassword;
+};
+export type ValidateCustomerPasswordResponse = ValidateCustomerPasswordResponses[keyof ValidateCustomerPasswordResponses];

@@ -11,45 +11,29 @@ export class TaxClassesV2Api {
     }
 
     /**
-     * Get All Tax Classes
+     * List Tax Classes
      *
      * Returns a list of all *Tax Classes* in a store.
 
      Default sorting is by tax-class id, from lowest to highest.
      */
-    getAllTaxClasses(
-        query?: TaxClassesV2ApiSpecs.GetAllTaxClassesData['query'],
+    getTaxClasses(
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<TaxClassesV2ApiSpecs.GetAllTaxClassesResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<TaxClassesV2ApiSpecs.GetTaxClassesResponses[200]>>,RequestErrorResponse<400, void>>({
             path: 'v2/tax_classes',
-            query,
         });
     }
 
     /**
-     * @deprecated Use `getAllTaxClasses` instead.
-     */
-    getTaxClasses(...args: Parameters<TaxClassesV2Api['getAllTaxClasses']>) {
-        return this.getAllTaxClasses(...args);
-    }
-
-    /**
-     * Get a Tax Class
+     * Get Tax Class
      *
      * Returns a single *Tax Class*.
      */
-    getAtaxClass(
-        id: TaxClassesV2ApiSpecs.GetATaxClassData['path']['id'],
+    getTaxClass(
+        id: TaxClassesV2ApiSpecs.GetTaxClassData['path']['id'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<TaxClassesV2ApiSpecs.GetATaxClassResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.get<RequestSuccessResponse<200, Required<TaxClassesV2ApiSpecs.GetTaxClassResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v2/tax_classes/${id}`,
         });
-    }
-
-    /**
-     * @deprecated Use `getAtaxClass` instead.
-     */
-    getTaxClass(...args: Parameters<TaxClassesV2Api['getAtaxClass']>) {
-        return this.getAtaxClass(...args);
     }
 }

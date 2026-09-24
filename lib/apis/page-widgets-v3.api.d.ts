@@ -5,11 +5,8 @@ export * as PageWidgetsV3ApiSpecs from '../generated/page-widgets-v3';
 export declare class PageWidgetsV3Api {
     private readonly request;
     constructor(request: RequestService);
-    getPageWidgets(query?: PageWidgetsV3ApiSpecs.GetPageWidgetsData['query']): Promise<RequestSuccessResponse<200, Required<{
-        data?: {
-            regions?: Array<PageWidgetsV3ApiSpecs.Region>;
-        };
-        meta?: PageWidgetsV3ApiSpecs.MetaCollection;
-    }>> | RequestErrorResponse<422, Required<PageWidgetsV3ApiSpecs.ErrorResponse>>>;
-    createPageWidgets(requestBody: PageWidgetsV3ApiSpecs.CreatePageWidgetsData['body']): Promise<RequestSuccessResponse<204, void> | RequestErrorResponse<422, Required<PageWidgetsV3ApiSpecs.ErrorResponse>>>;
+    getPageWidgets(query?: PageWidgetsV3ApiSpecs.GetPageWidgetsData['query']): Promise<RequestSuccessResponse<200, Required<PageWidgetsV3ApiSpecs.PageWidgetsGetPageWidgetsResponse200>> | RequestErrorResponse<422, Required<PageWidgetsV3ApiSpecs.ErrorResponse>>>;
+    createPageWidgets(requestBody: PageWidgetsV3ApiSpecs.CreatePageWidgetsData['body']): Promise<RequestErrorResponse<422, Required<PageWidgetsV3ApiSpecs.ErrorResponse>> | RequestSuccessResponse<204, Required<{
+        [key: string]: unknown;
+    }>>>;
 }

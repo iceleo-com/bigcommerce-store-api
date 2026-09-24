@@ -13,13 +13,28 @@ export class ProcessApi {
     /**
      * Process Payments
      *
-     * Process payments for an order. See [Payment Processing](/docs/store-operations/payments) for more information.
+     * Process payments for an order. See [Payment Processing](/developer/docs/admin/checkout-and-cart/payments) for more information.
      */
     paymentsPost(
         requestBody: ProcessApiSpecs.PaymentsPostData['body'],
     ) {
         return this.request.post<RequestSuccessResponse<202, Required<ProcessApiSpecs.PaymentsPostResponses[202]>>,(RequestErrorResponse<400, Required<ProcessApiSpecs.PaymentsPostErrors[400]>> | RequestErrorResponse<401, Required<ProcessApiSpecs.PaymentsPostErrors[401]>> | RequestErrorResponse<422, Required<ProcessApiSpecs.PaymentsPostErrors[422]>>)>({
             path: 'https://payments.bigcommerce.com/stores/{store_hash}/payments',
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Attach Instrument to Customer
+     *
+     * Adds an instrument to customer.
+     */
+    createInstrument(
+        requestBody: ProcessApiSpecs.CreateInstrumentData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<201, Required<ProcessApiSpecs.CreateInstrumentResponses[201]>>,(RequestErrorResponse<401, Required<ProcessApiSpecs.CreateInstrumentErrors[401]>> | RequestErrorResponse<422, Required<ProcessApiSpecs.CreateInstrumentErrors[422]>>)>({
+            path: 'https://payments.bigcommerce.com/stores/{store_hash}/stored-instruments',
             contentType: 'application/json',
             body: requestBody,
         });

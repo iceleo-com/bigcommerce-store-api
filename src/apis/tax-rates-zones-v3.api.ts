@@ -11,7 +11,7 @@ export class TaxRatesZonesV3Api {
     }
 
     /**
-     * Get Tax Zones
+     * List Tax Zones
      *
      * Retrieve a selection of tax zones when you provide a list of tax zone IDs. Otherwise, retrieve all tax zones defined on the store.
      */
@@ -62,7 +62,6 @@ export class TaxRatesZonesV3Api {
      *
      * Delete one or more tax zones. Deleting a tax zone removes all associated tax rates.
 
-     > #### Note
      > You must specify which zone(s) to delete using the `id:in` query parameter.
      */
     deleteTaxZones(
@@ -75,7 +74,7 @@ export class TaxRatesZonesV3Api {
     }
 
     /**
-     * Get Tax Rates
+     * List Tax Rates
      *
      * Retrieve a list of tax rates.
      */
@@ -123,7 +122,6 @@ export class TaxRatesZonesV3Api {
      *
      * Delete one or more tax rates.
 
-     > #### Note
      > You must specify which rate(s) to delete using the `id:in` query parameter.
      */
     deleteTaxRates(

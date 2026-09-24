@@ -4,95 +4,9 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
 
-export type BasePickup = {
-    /**
-     * ID of pickup method.
-     */
-    pickup_method_id?: number;
-    /**
-     * ID of order.
-     */
-    order_id?: number;
-};
-
-export type Pickup = {
-    /**
-     * The ID of pickup.
-     */
-    id?: number;
-} & BasePickup & {
-    /**
-     * Datetime when pickup was ready for collection.
-     */
-    ready_at?: string;
-    /**
-     * Datetime when pickup was created.
-     */
-    created_at?: string;
-    /**
-     * Datetime when pickup was updated.
-     */
-    updated_at?: string;
-    pickup_items?: Array<PickupItem>;
-};
-
-export type BasePickupItem = {
-    /**
-     * The ID of the product.
-     */
-    order_product_id?: number;
-    /**
-     * The quantity of an item.
-     */
-    quantity?: number;
-};
-
-export type PickupItem = {
-    /**
-     * The ID of pickup.
-     */
-    id?: number;
-} & BasePickupItem & {
-    /**
-     * The status of the pickup.
-     */
-    status?: 'AWAITING_COLLECTION' | 'COLLECTED';
-    /**
-     * Date and time when the pickup was collected.
-     */
-    collected_at?: string | null;
-};
-
-export type PostRequestPickup = BasePickup & {
-    /**
-     * Can be provided as two inputs.
-     * Unix: Represents the time in seconds that has elapsed since Unix epoch (00:00:00 UTC on 1 January 1970)
-     * ISO-8601: Represents the time in ISO format.
-     *
-     */
-    ready_at: string;
-    /**
-     * Can be provided as two inputs.
-     * Unix: Represents the time in seconds that has elapsed since Unix epoch (00:00:00 UTC on 1 January 1970).
-     * ISO-8601: Represents the time in ISO format.
-     * If this value is not supplied, the pickup item collected_at property will be null.
-     *
-     */
-    collected_at?: string;
-    pickup_items: Array<PostRequestPickupItem>;
-};
-
-export type PostRequestPickupItem = {
-    /**
-     * The ID of the product.
-     */
-    order_product_id: number;
-    /**
-     * The quantity of an item.
-     */
-    quantity: number;
-};
-
+/**
+ * PutRequestPickup
+ */
 export type PutRequestPickup = {
     /**
      * @deprecated
@@ -119,6 +33,132 @@ export type PutRequestPickup = {
     collected_at?: string;
 };
 
+/**
+ * Pickup_put-pickup_Response_200
+ */
+export type PickupPutPickupResponse200 = {
+    data?: Array<Pickup>;
+    meta?: OrdersPickupsPutResponsesContentApplicationJsonSchemaMeta;
+};
+
+/**
+ * OrdersPickupsPutResponsesContentApplicationJsonSchemaMeta
+ */
+export type OrdersPickupsPutResponsesContentApplicationJsonSchemaMeta = {
+    [key: string]: unknown;
+};
+
+/**
+ * Pickup
+ */
+export type Pickup = {
+    /**
+     * The ID of pickup.
+     */
+    id?: number;
+    /**
+     * ID of pickup method.
+     */
+    pickup_method_id?: number;
+    /**
+     * ID of order.
+     */
+    order_id?: number;
+    /**
+     * Datetime when pickup was ready for collection.
+     */
+    ready_at?: string;
+    /**
+     * Datetime when pickup was created.
+     */
+    created_at?: string;
+    /**
+     * Datetime when pickup was updated.
+     */
+    updated_at?: string;
+    pickup_items?: Array<PickupItem>;
+};
+
+/**
+ * PickupItem
+ */
+export type PickupItem = {
+    /**
+     * The ID of pickup.
+     */
+    id?: number;
+    /**
+     * The ID of the product.
+     */
+    order_product_id?: number;
+    /**
+     * The quantity of an item.
+     */
+    quantity?: number;
+    /**
+     * The status of the pickup.
+     */
+    status?: PickupItemStatus;
+    /**
+     * Date and time when the pickup was collected.
+     */
+    collected_at?: string | null;
+};
+
+/**
+ * PickupItemStatus
+ *
+ * The status of the pickup.
+ */
+export type PickupItemStatus = 'AWAITING_COLLECTION' | 'COLLECTED';
+
+/**
+ * PostRequestPickup
+ */
+export type PostRequestPickup = {
+    /**
+     * ID of pickup method.
+     */
+    pickup_method_id: number;
+    /**
+     * ID of order.
+     */
+    order_id: number;
+    /**
+     * Can be provided as two inputs.
+     * Unix: Represents the time in seconds that has elapsed since Unix epoch (00:00:00 UTC on 1 January 1970)
+     * ISO-8601: Represents the time in ISO format.
+     *
+     */
+    ready_at: string;
+    /**
+     * Can be provided as two inputs.
+     * Unix: Represents the time in seconds that has elapsed since Unix epoch (00:00:00 UTC on 1 January 1970).
+     * ISO-8601: Represents the time in ISO format.
+     * If this value is not supplied, the pickup item collected_at property will be null.
+     *
+     */
+    collected_at?: string;
+    pickup_items: Array<PostRequestPickupItem>;
+};
+
+/**
+ * PostRequestPickupItem
+ */
+export type PostRequestPickupItem = {
+    /**
+     * The ID of the product.
+     */
+    order_product_id: number;
+    /**
+     * The quantity of an item.
+     */
+    quantity: number;
+};
+
+/**
+ * ErrorResponse
+ */
 export type ErrorResponse = {
     /**
      * The HTTP status code generated by the origin server for this occurrence of the problem.
@@ -136,20 +176,39 @@ export type ErrorResponse = {
     /**
      * Detailed summary describing the particular error.
      */
-    errors?: {
-        [key: string]: unknown;
-    };
+    errors?: ErrorResponseErrors;
 };
 
 /**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+ * ErrorResponseErrors
+ *
+ * Detailed summary describing the particular error.
  */
-export type Accept = string;
+export type ErrorResponseErrors = {
+    [key: string]: unknown;
+};
 
 /**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+ * Pickup_post-pickup_Response_200
  */
-export type ContentType = string;
+export type PickupPostPickupResponse200 = {
+    data?: Array<Pickup>;
+    meta?: OrdersPickupsPostResponsesContentApplicationJsonSchemaMeta;
+};
+
+/**
+ * OrdersPickupsPostResponsesContentApplicationJsonSchemaMeta
+ */
+export type OrdersPickupsPostResponsesContentApplicationJsonSchemaMeta = {
+    [key: string]: unknown;
+};
+
+/**
+ * Pickup_get-pickup_Response_200
+ */
+export type PickupGetPickupResponse200 = {
+    data?: Array<Pickup>;
+};
 
 export type DeletePickupData = {
     body?: never;
@@ -173,7 +232,9 @@ export type DeletePickupResponses = {
     /**
      * No Content
      */
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 
 export type DeletePickupResponse = DeletePickupResponses[keyof DeletePickupResponses];
@@ -204,24 +265,18 @@ export type GetPickupResponses = {
     /**
      * The request has been processed and a list of pickups has been returned successfully.
      */
-    200: {
-        data?: Array<Pickup>;
-    };
+    200: PickupGetPickupResponse200;
 };
 
 export type GetPickupResponse = GetPickupResponses[keyof GetPickupResponses];
 
 export type PostPickupData = {
-    body: Array<PostRequestPickup>;
+    body?: Array<PostRequestPickup>;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -242,27 +297,18 @@ export type PostPickupResponses = {
     /**
      * The request has been successfully processed.
      */
-    200: {
-        data?: Array<Pickup>;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: PickupPostPickupResponse200;
 };
 
 export type PostPickupResponse = PostPickupResponses[keyof PostPickupResponses];
 
 export type PutPickupData = {
-    body: Array<PutRequestPickup>;
+    body?: Array<PutRequestPickup>;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -283,12 +329,7 @@ export type PutPickupResponses = {
     /**
      * The request has been successfully processed.
      */
-    200: {
-        data?: Array<Pickup>;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: PickupPutPickupResponse200;
 };
 
 export type PutPickupResponse = PutPickupResponses[keyof PutPickupResponses];

@@ -1,36 +1,51 @@
 export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
-export type Publish = {
-    regions: Array<Region>;
-    template_file?: string;
-    entity_id?: string;
-    channel_id?: number;
+export type LayoutConfiguration = {
+    [key: string]: unknown;
 };
-export type Region = {
-    name?: string;
-    children?: Array<Layout | Widget>;
+export type DropzoneConfiguration = {
+    [key: string]: unknown;
 };
-export type Layout = {
-    readonly layout_template_uuid?: string;
-    name?: string;
-    dropzones?: Array<Dropzone>;
-    type?: 'layout';
+export type WidgetConfiguration = {
+    [key: string]: unknown;
 };
-export type Dropzone = {
-    widgets?: Array<Widget>;
+export type WidgetStorefrontApiQueryParams = {
+    [key: string]: unknown;
 };
+export type WidgetType = 'widget';
 export type Widget = {
-    readonly widget_template_uuid?: string;
-    storefront_api_query_params?: {
-        [key: string]: unknown;
-    };
+    widget_template_uuid?: string;
+    configuration?: WidgetConfiguration;
+    storefront_api_query_params?: WidgetStorefrontApiQueryParams;
     name?: string;
     description?: string;
-    type?: 'widget';
+    type?: WidgetType;
 };
-export type MetaCollection = {
-    pagination?: Pagination;
+export type Dropzone = {
+    configuration?: DropzoneConfiguration;
+    widgets?: Array<Widget>;
+};
+export type LayoutType = 'layout';
+export type Layout = {
+    layout_template_uuid?: string;
+    configuration?: LayoutConfiguration;
+    name?: string;
+    dropzones?: Array<Dropzone>;
+    type?: LayoutType;
+};
+export type RegionChildrenItems = Layout | Widget;
+export type Region = {
+    name?: string;
+    children?: Array<RegionChildrenItems>;
+};
+export type ContentPageWidgetsGetResponsesContentApplicationJsonSchemaData = {
+    regions?: Array<Region>;
+};
+export type PaginationLinks = {
+    previous?: string;
+    current?: string;
+    next?: string;
 };
 export type Pagination = {
     total?: number;
@@ -38,56 +53,35 @@ export type Pagination = {
     per_page?: number;
     current_page?: number;
     total_pages?: number;
-    links?: {
-        previous?: string;
-        current?: string;
-        next?: string;
-    };
+    links?: PaginationLinks;
 };
-export type ErrorResponse = BaseError & {
-    errors?: DetailedErrors;
+export type MetaCollection = {
+    pagination?: Pagination;
 };
-export type BaseError = {
-    status?: number;
-    title?: string;
-    type?: string;
-    instance?: string;
+export type PageWidgetsGetPageWidgetsResponse200 = {
+    data?: ContentPageWidgetsGetResponsesContentApplicationJsonSchemaData;
+    meta?: MetaCollection;
 };
 export type DetailedErrors = {
     [key: string]: unknown;
 };
-export type LayoutWritable = {
-    name?: string;
-    dropzones?: Array<DropzoneWritable>;
-    type?: 'layout';
+export type ErrorResponse = {
+    status?: number;
+    title?: string;
+    type?: string;
+    instance?: string;
+    errors?: DetailedErrors;
 };
-export type DropzoneWritable = {
-    widgets?: Array<WidgetWritable>;
+export type Publish = {
+    regions: Array<Region>;
+    template_file?: string;
+    entity_id?: string;
+    channel_id?: number;
 };
-export type WidgetWritable = {
-    storefront_api_query_params?: {
-        [key: string]: unknown;
-    };
-    name?: string;
-    description?: string;
-    type?: 'widget';
-};
-export type DetailedErrorsWritable = {
-    [key: string]: unknown;
-};
-export type Accept = string;
-export type ContentType = string;
-export type UserAgent = string;
-export type XCorrelationId = string;
-export type ChannelId = number;
-export type TemplateFile = string;
-export type EntityId = string;
-export type PublishOrOverwriteRequest = Publish;
 export type GetPageWidgetsData = {
     body?: never;
     headers: {
         Accept: string;
-        'User-Agent': string;
         'X-Correlation-Id'?: string;
     };
     path?: never;
@@ -103,21 +97,14 @@ export type GetPageWidgetsErrors = {
 };
 export type GetPageWidgetsError = GetPageWidgetsErrors[keyof GetPageWidgetsErrors];
 export type GetPageWidgetsResponses = {
-    200: {
-        data?: {
-            regions?: Array<Region>;
-        };
-        meta?: MetaCollection;
-    };
+    200: PageWidgetsGetPageWidgetsResponse200;
 };
 export type GetPageWidgetsResponse = GetPageWidgetsResponses[keyof GetPageWidgetsResponses];
 export type CreatePageWidgetsData = {
-    body?: PublishOrOverwriteRequest;
+    body?: Publish;
     headers: {
         Accept: string;
-        'User-Agent': string;
         'X-Correlation-Id'?: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -128,6 +115,8 @@ export type CreatePageWidgetsErrors = {
 };
 export type CreatePageWidgetsError = CreatePageWidgetsErrors[keyof CreatePageWidgetsErrors];
 export type CreatePageWidgetsResponses = {
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 export type CreatePageWidgetsResponse = CreatePageWidgetsResponses[keyof CreatePageWidgetsResponses];

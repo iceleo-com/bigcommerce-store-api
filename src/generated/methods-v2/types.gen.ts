@@ -22,11 +22,6 @@ export type PaymentBase = {
     test_mode?: boolean;
 };
 
-/**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
- */
-export type Accept = string;
-
 export type GetAllPaymentMethodsData = {
     body?: never;
     headers: {
@@ -38,11 +33,11 @@ export type GetAllPaymentMethodsData = {
     path?: never;
     query?: {
         /**
-         * Optional filter param `/api/v2/payments/methods?page={number}`
+         * Request a specific page of results. The value of the limit query parameter determines the number of responses per page.
          */
         page?: number;
         /**
-         * Optional filter param `/api/v2/payments/methods?limit={count}`
+         * Set the number of responses per page.
          */
         limit?: number;
     };
@@ -50,6 +45,9 @@ export type GetAllPaymentMethodsData = {
 };
 
 export type GetAllPaymentMethodsResponses = {
+    /**
+     * OK
+     */
     200: Array<PaymentBase>;
 };
 

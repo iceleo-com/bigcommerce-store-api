@@ -11,7 +11,7 @@ export class PickupV3Api {
     }
 
     /**
-     * Get Pickups
+     * List Pickups
      *
      * Retrieves a list of pickups.
 

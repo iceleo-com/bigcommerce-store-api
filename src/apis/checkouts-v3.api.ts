@@ -11,29 +11,28 @@ export class CheckoutsV3Api {
     }
 
     /**
-     * Get a Checkout
+     * Get Checkout
      *
      * Returns a *Checkout*.
 
+     By default, the response omits line item options, stock positions, available shipping options, and promotion banners. Use the `include` query parameter to add them. Pass a comma-separated list to request more than one:
+
+     ```http
+     GET /stores/{store_hash}/v3/checkouts/{checkoutId}?include=consignments.available_shipping_options,cart.line_items.physical_items.stock_position
+     ```
+
      **Notes**
 
-     The cart ID and checkout ID are the same.
+     * The checkout ID is the same as the cart ID. Get it from the `id` returned by [Create a cart](/developer/api-reference/rest/admin/management/carts/carts-single/create-cart) or [Get a cart](/developer/api-reference/rest/admin/management/carts/carts-single/get-cart), or from the storefront checkout: the REST Storefront [Get checkout](/developer/api-reference/rest/storefront/checkouts/get-checkout) response or the Checkout SDK's `checkout.id`.
      */
-    checkoutsByCheckoutIdGet(
-        checkoutId: CheckoutsV3ApiSpecs.CheckoutsByCheckoutIdGetData['path']['checkoutId'],
-        query?: CheckoutsV3ApiSpecs.CheckoutsByCheckoutIdGetData['query'],
+    getCheckout(
+        checkoutId: CheckoutsV3ApiSpecs.GetCheckoutData['path']['checkoutId'],
+        query?: CheckoutsV3ApiSpecs.GetCheckoutData['query'],
     ) {
-        return this.request.get<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsByCheckoutIdGetResponses[200]>>,RequestErrorResponse<404, Required<CheckoutsV3ApiSpecs.CheckoutsByCheckoutIdGetErrors[404]>>>({
+        return this.request.get<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.GetCheckoutResponses[200]>>,RequestErrorResponse<404, Required<CheckoutsV3ApiSpecs.GetCheckoutErrors[404]>>>({
             path: `v3/checkouts/${checkoutId}`,
             query,
         });
-    }
-
-    /**
-     * @deprecated Use `checkoutsByCheckoutIdGet` instead.
-     */
-    getCheckout(...args: Parameters<CheckoutsV3Api['checkoutsByCheckoutIdGet']>) {
-        return this.checkoutsByCheckoutIdGet(...args);
     }
 
     /**
@@ -44,52 +43,15 @@ export class CheckoutsV3Api {
      **Limits:**
      * 2000 characters for customer message
      */
-    checkoutsByCheckoutIdPut(
-        checkoutId: CheckoutsV3ApiSpecs.CheckoutsByCheckoutIdPutData['path']['checkoutId'],
-        requestBody: CheckoutsV3ApiSpecs.CheckoutsByCheckoutIdPutData['body'],
+    updateCheckout(
+        checkoutId: CheckoutsV3ApiSpecs.UpdateCheckoutData['path']['checkoutId'],
+        requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsByCheckoutIdPutResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.UpdateCheckoutResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.UpdateCheckoutErrors[409]>>>({
             path: `v3/checkouts/${checkoutId}`,
             contentType: 'application/json',
             body: requestBody,
         });
-    }
-
-    /**
-     * @deprecated Use `checkoutsByCheckoutIdPut` instead.
-     */
-    updateCheckout(...args: Parameters<CheckoutsV3Api['checkoutsByCheckoutIdPut']>) {
-        return this.checkoutsByCheckoutIdPut(...args);
-    }
-
-    /**
-     * Add Discount to Checkout
-     *
-     * Adds a discount to an existing *checkout*.
-
-     This discount only applies to `line_items`. When you call this API, you clear out all existing discounts applied to line items, including product and order-based discounts.
-
-     This endpoint splits the discount between line items based on the item value.
-
-     Required Fields
-     * discounted_amount
-     */
-    postStoreHashV3CheckoutsCheckoutIdDiscounts(
-        checkoutId: CheckoutsV3ApiSpecs.PostStoreHashV3CheckoutsCheckoutIdDiscountsData['path']['checkoutId'],
-        requestBody: CheckoutsV3ApiSpecs.PostStoreHashV3CheckoutsCheckoutIdDiscountsData['body'],
-    ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.PostStoreHashV3CheckoutsCheckoutIdDiscountsResponses[200]>>,RequestErrorResponse<400, void>>({
-            path: `v3/checkouts/${checkoutId}/discounts`,
-            contentType: 'application/json',
-            body: requestBody,
-        });
-    }
-
-    /**
-     * @deprecated Use `postStoreHashV3CheckoutsCheckoutIdDiscounts` instead.
-     */
-    addCheckoutDiscount(...args: Parameters<CheckoutsV3Api['postStoreHashV3CheckoutsCheckoutIdDiscounts']>) {
-        return this.postStoreHashV3CheckoutsCheckoutIdDiscounts(...args);
     }
 
     /**
@@ -100,12 +62,14 @@ export class CheckoutsV3Api {
      **Required Fields**
      * email
      * country_code
+
+     To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
      */
-    checkoutsBillingAddressByCheckoutIdPost(
-        checkoutId: CheckoutsV3ApiSpecs.CheckoutsBillingAddressByCheckoutIdPostData['path']['checkoutId'],
-        requestBody: CheckoutsV3ApiSpecs.CheckoutsBillingAddressByCheckoutIdPostData['body'],
+    addCheckoutBillingAddress(
+        checkoutId: CheckoutsV3ApiSpecs.AddCheckoutBillingAddressData['path']['checkoutId'],
+        requestBody: CheckoutsV3ApiSpecs.AddCheckoutBillingAddressData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsBillingAddressByCheckoutIdPostResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.AddCheckoutBillingAddressResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.AddCheckoutBillingAddressErrors[409]>>>({
             path: `v3/checkouts/${checkoutId}/billing-address`,
             contentType: 'application/json',
             body: requestBody,
@@ -113,23 +77,18 @@ export class CheckoutsV3Api {
     }
 
     /**
-     * @deprecated Use `checkoutsBillingAddressByCheckoutIdPost` instead.
-     */
-    addCheckoutBillingAddress(...args: Parameters<CheckoutsV3Api['checkoutsBillingAddressByCheckoutIdPost']>) {
-        return this.checkoutsBillingAddressByCheckoutIdPost(...args);
-    }
-
-    /**
      * Update Checkout Billing Address
      *
      * Updates an existing billing address on a checkout.
+
+     To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
      */
-    checkoutsBillingAddressByCheckoutIdAndAddressIdPut(
-        checkoutId: CheckoutsV3ApiSpecs.CheckoutsBillingAddressByCheckoutIdAndAddressIdPutData['path']['checkoutId'],
-        addressId: CheckoutsV3ApiSpecs.CheckoutsBillingAddressByCheckoutIdAndAddressIdPutData['path']['addressId'],
-        requestBody: CheckoutsV3ApiSpecs.CheckoutsBillingAddressByCheckoutIdAndAddressIdPutData['body'],
+    updateCheckoutBillingAddress(
+        checkoutId: CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressData['path']['checkoutId'],
+        addressId: CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressData['path']['addressId'],
+        requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressData['body'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsBillingAddressByCheckoutIdAndAddressIdPutResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.UpdateCheckoutBillingAddressErrors[409]>>>({
             path: `v3/checkouts/${checkoutId}/billing-address/${addressId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -137,22 +96,15 @@ export class CheckoutsV3Api {
     }
 
     /**
-     * @deprecated Use `checkoutsBillingAddressByCheckoutIdAndAddressIdPut` instead.
-     */
-    updateCheckoutBillingAddress(...args: Parameters<CheckoutsV3Api['checkoutsBillingAddressByCheckoutIdAndAddressIdPut']>) {
-        return this.checkoutsBillingAddressByCheckoutIdAndAddressIdPut(...args);
-    }
-
-    /**
      * Add Consignment to Checkout
      *
      * Adds a new consignment to a checkout.
 
-     Please note that this API endpoint is not concurrent safe, meaning multiple simultaneous requests could result in unexpected and inconsistent results.
+     To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
 
-     For more information about working with consignments, see [Checkout consignment](/docs/storefront/cart-checkout/guide/consignments).  
+     For more information about working with consignments, see [Checkout consignment](/developer/docs/admin/checkout-and-cart/custom-checkouts/consignments).  
 
-     Though the only required `address` properties to create a consignment are `email` and `country_code`, to successfully [create an order](/docs/rest-management/checkouts/checkout-orders#create-an-order) the `address` requires the following properties:
+     Though the only required `address` properties to create a consignment are `email` and `country_code`, to successfully [create an order](/developer/api-reference/rest/admin/management/checkouts/orders/create-order) the `address` requires the following properties:
      * `first_name`
      * `last_name`
      * `address1`
@@ -166,24 +118,17 @@ export class CheckoutsV3Api {
      * `postal_code`
      * `state_or_province`
      */
-    checkoutsConsignmentsByCheckoutIdPost(
-        checkoutId: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdPostData['path']['checkoutId'],
-        requestBody: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdPostData['body'],
-        query?: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdPostData['query'],
+    addCheckoutConsignment(
+        checkoutId: CheckoutsV3ApiSpecs.AddCheckoutConsignmentData['path']['checkoutId'],
+        requestBody: CheckoutsV3ApiSpecs.AddCheckoutConsignmentData['body'],
+        query?: CheckoutsV3ApiSpecs.AddCheckoutConsignmentData['query'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdPostResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.AddCheckoutConsignmentResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.AddCheckoutConsignmentErrors[409]>>>({
             path: `v3/checkouts/${checkoutId}/consignments`,
             contentType: 'application/json',
             body: requestBody,
             query,
         });
-    }
-
-    /**
-     * @deprecated Use `checkoutsConsignmentsByCheckoutIdPost` instead.
-     */
-    addCheckoutConsignment(...args: Parameters<CheckoutsV3Api['checkoutsConsignmentsByCheckoutIdPost']>) {
-        return this.checkoutsConsignmentsByCheckoutIdPost(...args);
     }
 
     /**
@@ -194,20 +139,22 @@ export class CheckoutsV3Api {
      Use a separate `PUT` request to update the shipping option IDs if you also want to update the address and line item IDs.  
 
      To add new shipping options, complete the following steps: 
-     * Use the [Add Consignment to Checkout](/docs/rest-management/checkouts/checkout-consignments#add-consignment-to-checkout) endpoint to add a new [consignment] to a checkout. 
-     * Assign a shipping option to the new consignment by sending a `PUT` request to update the consignment's `shipping_option_id` with a returned value from `data.consignments[N].available_shipping_option[N].id` obtained in the [Add Consignment to Checkout](/docs/rest-management/checkouts/checkout-consignments#add-consignment-to-checkout) endpoint. 
+     * Use the [Add Consignment to Checkout](/developer/api-reference/rest/admin/management/checkouts/consignments/add-checkout-consignment) endpoint to add a new [consignment] to a checkout. 
+     * Assign a shipping option to the new consignment by sending a `PUT` request to update the consignment's `shipping_option_id` with a returned value from `data.consignments[N].available_shipping_option[N].id` obtained in the [Add Consignment to Checkout](/developer/api-reference/rest/admin/management/checkouts/consignments/add-checkout-consignment) endpoint. 
 
      To update an existing address and line item IDs, assign a new address and line item IDs by sending a `PUT` request.
 
-     Please note that this API endpoint is not concurrent safe, meaning multiple simultaneous requests could result in unexpected and inconsistent results.
+     To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
+
+     2. Assign a shipping option to the new consignment by sending a `PUT` request to update the consignment's `shipping_option_id` with a returned value from `data.consignments[N].available_shipping_option[N].id` obtained in Step One. 
      */
-    checkoutsConsignmentsByCheckoutIdAndConsignmentIdPut(
-        checkoutId: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutData['path']['checkoutId'],
-        consignmentId: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutData['path']['consignmentId'],
-        requestBody: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutData['body'],
-        query?: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutData['query'],
+    updateCheckoutConsignment(
+        checkoutId: CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentData['path']['checkoutId'],
+        consignmentId: CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentData['path']['consignmentId'],
+        requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentData['body'],
+        query?: CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentData['query'],
     ) {
-        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdPutResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.UpdateCheckoutConsignmentErrors[409]>>>({
             path: `v3/checkouts/${checkoutId}/consignments/${consignmentId}`,
             contentType: 'application/json',
             body: requestBody,
@@ -216,51 +163,46 @@ export class CheckoutsV3Api {
     }
 
     /**
-     * @deprecated Use `checkoutsConsignmentsByCheckoutIdAndConsignmentIdPut` instead.
-     */
-    updateCheckoutConsignment(...args: Parameters<CheckoutsV3Api['checkoutsConsignmentsByCheckoutIdAndConsignmentIdPut']>) {
-        return this.checkoutsConsignmentsByCheckoutIdAndConsignmentIdPut(...args);
-    }
-
-    /**
      * Delete Checkout Consignment
      *
      * Removes an existing consignment from a checkout.
 
-     Removing the last consignment will remove the cart from the customer it is assigned to. Create a new redirect URL for the customer so they can access the cart again.
+     To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
      */
-    checkoutsConsignmentsByCheckoutIdAndConsignmentIdDelete(
-        checkoutId: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteData['path']['checkoutId'],
-        consignmentId: CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteData['path']['consignmentId'],
+    deleteCheckoutConsignment(
+        checkoutId: CheckoutsV3ApiSpecs.DeleteCheckoutConsignmentData['path']['checkoutId'],
+        consignmentId: CheckoutsV3ApiSpecs.DeleteCheckoutConsignmentData['path']['consignmentId'],
+        requestBody: CheckoutsV3ApiSpecs.DeleteCheckoutConsignmentData['body'],
     ) {
-        return this.request.delete<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsConsignmentsByCheckoutIdAndConsignmentIdDeleteResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.DeleteCheckoutConsignmentResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/checkouts/${checkoutId}/consignments/${consignmentId}`,
+            contentType: 'application/json',
+            body: requestBody,
         });
-    }
-
-    /**
-     * @deprecated Use `checkoutsConsignmentsByCheckoutIdAndConsignmentIdDelete` instead.
-     */
-    deleteCheckoutConsignment(...args: Parameters<CheckoutsV3Api['checkoutsConsignmentsByCheckoutIdAndConsignmentIdDelete']>) {
-        return this.checkoutsConsignmentsByCheckoutIdAndConsignmentIdDelete(...args);
     }
 
     /**
      * Add Coupon to Checkout
      *
-     * Adds a coupon code to a checkout.
+     * Adds a coupon code to a checkout. 
+
+     You can use multiple coupons by using this endpoint to apply one coupon at a time on your storefront. Ensure you enable the [Promotion Settings](https://support.bigcommerce.com/s/article/Store-Settings?language=en_US#promotion) in your control panel to allow for multiple coupons per order.
+
+     You cannot add a coupon when an item-level manual discount is already applied. The API returns a `422` response with the message "Coupon `{coupon_code}` cannot be applied in combination with item level manual discount."
 
      **Required Fields**
      * coupon_code
 
      **Limits**
-     * Coupon codes have a 50-character limit. 
+     * Coupon codes have a 50-character limit.
+
+     To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
      */
-    checkoutsCouponsByCheckoutIdPost(
-        checkoutId: CheckoutsV3ApiSpecs.CheckoutsCouponsByCheckoutIdPostData['path']['checkoutId'],
-        requestBody: CheckoutsV3ApiSpecs.CheckoutsCouponsByCheckoutIdPostData['body'],
+    addCheckoutCoupon(
+        checkoutId: CheckoutsV3ApiSpecs.AddCheckoutCouponData['path']['checkoutId'],
+        requestBody: CheckoutsV3ApiSpecs.AddCheckoutCouponData['body'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsCouponsByCheckoutIdPostResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.AddCheckoutCouponResponses[200]>>,(RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.AddCheckoutCouponErrors[409]>> | RequestErrorResponse<422, Required<CheckoutsV3ApiSpecs.AddCheckoutCouponErrors[422]>>)>({
             path: `v3/checkouts/${checkoutId}/coupons`,
             contentType: 'application/json',
             body: requestBody,
@@ -268,35 +210,118 @@ export class CheckoutsV3Api {
     }
 
     /**
-     * @deprecated Use `checkoutsCouponsByCheckoutIdPost` instead.
-     */
-    addCheckoutCoupon(...args: Parameters<CheckoutsV3Api['checkoutsCouponsByCheckoutIdPost']>) {
-        return this.checkoutsCouponsByCheckoutIdPost(...args);
-    }
-
-    /**
      * Delete Checkout Coupon
      *
      * Deletes a coupon code from a checkout.
+
+     To prevent lost updates due to concurrent requests overriding changes made by others, it is recommended to enable optimistic concurrency control by including the `version` field in the request payload. If the provided version does not match the version on the server, a conflict error will be returned, which the client can handle accordingly.
      */
-    checkoutsCouponsByCheckoutIdAndCouponCodeDelete(
-        checkoutId: CheckoutsV3ApiSpecs.CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteData['path']['checkoutId'],
-        couponCode: CheckoutsV3ApiSpecs.CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteData['path']['couponCode'],
+    deleteCheckoutCoupon(
+        checkoutId: CheckoutsV3ApiSpecs.DeleteCheckoutCouponData['path']['checkoutId'],
+        couponCode: CheckoutsV3ApiSpecs.DeleteCheckoutCouponData['path']['couponCode'],
+        requestBody: CheckoutsV3ApiSpecs.DeleteCheckoutCouponData['body'],
     ) {
-        return this.request.delete<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsCouponsByCheckoutIdAndCouponCodeDeleteResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.delete<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.DeleteCheckoutCouponResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.DeleteCheckoutCouponErrors[409]>>>({
             path: `v3/checkouts/${checkoutId}/coupons/${couponCode}`,
+            contentType: 'application/json',
+            body: requestBody,
         });
     }
 
     /**
-     * @deprecated Use `checkoutsCouponsByCheckoutIdAndCouponCodeDelete` instead.
+     * Add Discount to Checkout
+     *
+     * Adds or replaces manual discounts on an existing checkout.
+
+     Each request sets the checkout's complete manual-discount state. The request is not additive: manual discounts from an earlier request that you omit from the new payload are removed. This endpoint does not remove coupons or automatic promotions.
+
+     Use the request body to apply:
+     * An order-level manual discount with `cart.discounts[].discounted_amount`. BigCommerce distributes the discount across line items based on each item's value.
+     * An item-level manual discount with `cart.line_items[].id` and `cart.line_items[].discounted_amount`.
+     * Order-level and item-level manual discounts together by including both arrays in the same request.
+
+     Manual discounts interact with coupons and automatic promotions as follows:
+
+     | Manual discount level | Coupon or automatic promotion level | Behavior |
+     | --- | --- | --- |
+     | Order | Order or item | The discounts stack. The result is fully additive and does not depend on which discount is applied first. |
+     | Item | Order or item | The discounts are mutually exclusive, and the first-applied discount remains. A conflicting manual-discount request is rejected, a coupon request returns a `422` response, and an automatic promotion does not apply. |
+
+     If an item-level manual discount is already applied, adding a coupon returns a `422` response with the message "Coupon `{coupon_code}` cannot be applied in combination with item level manual discount." An eligible automatic promotion does not apply while an item-level manual discount exists.
+
+     The required field is `discounted_amount` at the order level, item level, or both.
+
+     To prevent lost updates from concurrent requests, include the optional `version` field in the request payload. If the provided version does not match the server's cart version, the API returns a conflict error.
      */
-    deleteCheckoutCoupon(...args: Parameters<CheckoutsV3Api['checkoutsCouponsByCheckoutIdAndCouponCodeDelete']>) {
-        return this.checkoutsCouponsByCheckoutIdAndCouponCodeDelete(...args);
+    addCheckoutDiscount(
+        checkoutId: CheckoutsV3ApiSpecs.AddCheckoutDiscountData['path']['checkoutId'],
+        requestBody: CheckoutsV3ApiSpecs.AddCheckoutDiscountData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.AddCheckoutDiscountResponses[200]>>,RequestErrorResponse<409, Required<CheckoutsV3ApiSpecs.AddCheckoutDiscountErrors[409]>>>({
+            path: `v3/checkouts/${checkoutId}/discounts`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
     }
 
     /**
-     * Create an Order
+     * Add Order Level Fees to Checkout
+     *
+     * Adds order level fees to a checkout. 
+
+     Limits: 
+       - Maximum of 5 fees per checkout.
+     */
+    checkoutsFeesByCheckoutIdPost(
+        checkoutId: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPostData['path']['checkoutId'],
+        requestBody: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPostData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPostResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/checkouts/${checkoutId}/fees`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Update Order Level Fees in Checkout
+     *
+     * Updates order level fees in a checkout.
+     > We do not support partial updates, so please send the total entity values for each fee to be updated.
+     */
+    checkoutsFeesByCheckoutIdPut(
+        checkoutId: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPutData['path']['checkoutId'],
+        requestBody: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPutData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdPutResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/checkouts/${checkoutId}/fees`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Delete Order Level Fees from Checkout
+     *
+     * Delete fees from a checkout.
+
+     > #### Note 
+     > * The `Try It` feature is not currently supported for this endpoint.  
+
+     */
+    checkoutsFeesByCheckoutIdDelete(
+        checkoutId: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdDeleteData['path']['checkoutId'],
+        requestBody: CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdDeleteData['body'],
+    ) {
+        return this.request.delete<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutsFeesByCheckoutIdDeleteResponses[200]>>,RequestErrorResponse<400, void>>({
+            path: `v3/checkouts/${checkoutId}/fees`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
+    }
+
+    /**
+     * Create Order
      *
      * Creates an order.
 
@@ -307,25 +332,20 @@ export class CheckoutsV3Api {
      * Once the order is paid, the cart is deleted.
      * Cart deletion occurs if you are using BigCommerce to accept payments on orders.
      */
-    createAnOrder(
-        checkoutId: CheckoutsV3ApiSpecs.CreateAnOrderData['path']['checkoutId'],
+    createOrder(
+        checkoutId: CheckoutsV3ApiSpecs.CreateOrderData['path']['checkoutId'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CreateAnOrderResponses[200]>>,RequestErrorResponse<400, void>>({
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CreateOrderResponses[200]>>,RequestErrorResponse<400, void>>({
             path: `v3/checkouts/${checkoutId}/orders`,
         });
     }
 
     /**
-     * @deprecated Use `createAnOrder` instead.
-     */
-    createOrder(...args: Parameters<CheckoutsV3Api['createAnOrder']>) {
-        return this.createAnOrder(...args);
-    }
-
-    /**
      * Get Checkout Settings
      *
-     * Get checkout settings
+     * Returns the store-level checkout settings, including checkout type, guest checkout rules, privacy policy consent, order terms and conditions, and custom checkout script and style overrides.
+
+     A channel can override most of these settings. See [Get Channel-Specific Checkout Settings](/developer/api-reference/rest/admin/management/checkouts/settings/get-channel-checkout-settings).
      */
     getCheckoutSettings(
     ) {
@@ -337,7 +357,11 @@ export class CheckoutsV3Api {
     /**
      * Update Checkout Settings
      *
-     * Update checkout settings
+     * Updates the store-level checkout settings. Settings you omit remain unchanged.
+
+     To install a custom checkout, send `checkout_type: custom` with a non-empty `custom_checkout_script_url`. To return to Optimized One-Page Checkout, send an empty string for `custom_checkout_script_url` and `custom_order_confirmation_script_url`. Sending a non-empty script URL while `checkout_type` is `optimized` returns a 422.
+
+     When `is_order_terms_and_conditions_enabled` is `true`, include `order_terms_and_conditions_type` and the matching `order_terms_and_conditions_link` or `order_terms_and_conditions_textarea`.
      */
     updateCheckoutSettings(
         requestBody: CheckoutsV3ApiSpecs.UpdateCheckoutSettingsData['body'],
@@ -350,26 +374,52 @@ export class CheckoutsV3Api {
     }
 
     /**
-     * Create Checkout Token
+     * Get Channel-Specific Checkout Settings
      *
-     * Use the checkout token to display a confirmation page for a guest shopper.
-     **Usage Notes** * The response from performing this POST request is a checkout token. * The checkout token is a single-use token that is not order-dependent. You cannot create this token after finalizing an order. * After completing the order, you can redirect the shopper to /order-confirmation/{orderId}?t={checkoutToken}. * After token validation, the /order-confirmation/{orderId} page displays. * The `ORDER_TOKEN` should match the order or the logged-in customer can access the order.
+     * Returns the checkout settings for a given channel (storefront) by channelId.
+
+     Each field is `null` when the channel has no override for it. In that case, the store-level value from [Get Checkout Settings](/developer/api-reference/rest/admin/management/checkouts/settings/get-checkout-settings) applies.
      */
-    checkoutToken(
-        checkoutId: CheckoutsV3ApiSpecs.CheckoutTokenData['path']['checkoutId'],
-        requestBody: CheckoutsV3ApiSpecs.CheckoutTokenData['body'],
+    getChannelCheckoutSettings(
+        channelId: CheckoutsV3ApiSpecs.GetChannelCheckoutSettingsData['path']['channelId'],
     ) {
-        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CheckoutTokenResponses[200]>>,(RequestErrorResponse<401, Required<CheckoutsV3ApiSpecs.CheckoutTokenErrors[401]>> | RequestErrorResponse<422, Required<CheckoutsV3ApiSpecs.CheckoutTokenErrors[422]>>)>({
-            path: `v3/checkouts/${checkoutId}/token`,
+        return this.request.get<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.GetChannelCheckoutSettingsResponses[200]>>,RequestErrorResponse<422, Required<CheckoutsV3ApiSpecs.GetChannelCheckoutSettingsErrors[422]>>>({
+            path: `v3/checkouts/settings/channels/${channelId}`,
+        });
+    }
+
+    /**
+     * Update Channel-Specific Checkout Settings
+     *
+     * Updates the checkout settings for a given channel (storefront) by channelId.
+
+     This endpoint updates every setting included in the request body. Settings you omit remain unchanged. Send `null` for a setting to remove the channel override so the channel uses the store-level value again.
+     */
+    putChannelCheckoutSettings(
+        channelId: CheckoutsV3ApiSpecs.PutChannelCheckoutSettingsData['path']['channelId'],
+        requestBody: CheckoutsV3ApiSpecs.PutChannelCheckoutSettingsData['body'],
+    ) {
+        return this.request.put<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.PutChannelCheckoutSettingsResponses[200]>>,RequestErrorResponse<422, Required<CheckoutsV3ApiSpecs.PutChannelCheckoutSettingsErrors[422]>>>({
+            path: `v3/checkouts/settings/channels/${channelId}`,
             contentType: 'application/json',
             body: requestBody,
         });
     }
 
     /**
-     * @deprecated Use `checkoutToken` instead.
+     * Create Checkout Token
+     *
+     * Use the checkout token to display a confirmation page for a guest shopper.
+     **Usage Notes** * The response from performing this POST request is a checkout token. * The checkout token is a single-use token that is not order-dependent. You cannot create this token after finalizing an order. * After completing the order, you can redirect the shopper to /order-confirmation/{orderId}?t={checkoutToken}. * After token validation, the /order-confirmation/{orderId} page displays. * The `ORDER_TOKEN` should match the order or the logged-in customer can access the order.
      */
-    createCheckoutToken(...args: Parameters<CheckoutsV3Api['checkoutToken']>) {
-        return this.checkoutToken(...args);
+    createCheckoutToken(
+        checkoutId: CheckoutsV3ApiSpecs.CreateCheckoutTokenData['path']['checkoutId'],
+        requestBody: CheckoutsV3ApiSpecs.CreateCheckoutTokenData['body'],
+    ) {
+        return this.request.post<RequestSuccessResponse<200, Required<CheckoutsV3ApiSpecs.CreateCheckoutTokenResponses[200]>>,(RequestErrorResponse<401, Required<CheckoutsV3ApiSpecs.CreateCheckoutTokenErrors[401]>> | RequestErrorResponse<422, Required<CheckoutsV3ApiSpecs.CreateCheckoutTokenErrors[422]>>)>({
+            path: `v3/checkouts/${checkoutId}/token`,
+            contentType: 'application/json',
+            body: requestBody,
+        });
     }
 }

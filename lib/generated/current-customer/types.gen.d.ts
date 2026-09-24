@@ -3,6 +3,9 @@ export type ClientOptions = {
 };
 export type GetCurrentCustomerData = {
     body?: never;
+    headers: {
+        Accept: string;
+    };
     path?: never;
     query: {
         app_client_id: string;
@@ -10,21 +13,6 @@ export type GetCurrentCustomerData = {
     url: '/customer/current.jwt';
 };
 export type GetCurrentCustomerResponses = {
-    default: {
-        customer?: {
-            id?: number;
-            email?: string;
-            group_id?: string;
-        };
-        iss?: string;
-        sub?: string;
-        iat?: number;
-        exp?: number;
-        version?: number;
-        aud?: string;
-        application_id?: string;
-        store_hash?: string;
-        operation?: string;
-    };
+    200: string;
 };
 export type GetCurrentCustomerResponse = GetCurrentCustomerResponses[keyof GetCurrentCustomerResponses];

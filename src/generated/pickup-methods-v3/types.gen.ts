@@ -4,6 +4,96 @@ export type ClientOptions = {
     baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v3' | (string & {});
 };
 
+/**
+ * PickupMethodsPutRequestBodyContentApplicationJsonSchemaItems
+ */
+export type PickupMethodsPutRequestBodyContentApplicationJsonSchemaItems = {
+    /**
+     * The ID of the pickup method.
+     */
+    id?: number;
+    /**
+     * The ID of the location.
+     */
+    location_id?: number;
+    /**
+     * Title of the pickup method.
+     */
+    display_name?: string;
+    /**
+     * Instructions for picking up items.
+     */
+    collection_instructions?: string;
+    /**
+     * The description of collection time.
+     */
+    collection_time_description?: string;
+    /**
+     * @deprecated
+     */
+    location_identity?: number;
+};
+
+/**
+ * Pickup Methods_put-pickup-methods_Response_200
+ */
+export type PickupMethodsPutPickupMethodsResponse200 = {
+    data?: Array<PickupMethodResponse>;
+    meta?: PickupMethodsPutResponsesContentApplicationJsonSchemaMeta;
+};
+
+/**
+ * PickupMethodsPutResponsesContentApplicationJsonSchemaMeta
+ */
+export type PickupMethodsPutResponsesContentApplicationJsonSchemaMeta = {
+    [key: string]: unknown;
+};
+
+/**
+ * PickupMethodResponse
+ */
+export type PickupMethodResponse = {
+    /**
+     * The ID of the pickup method.
+     */
+    id?: number;
+    /**
+     * The ID of the location.
+     */
+    location_id?: number;
+    /**
+     * Title of the pickup method.
+     */
+    display_name?: string;
+    /**
+     * Instructions for picking up items.
+     */
+    collection_instructions?: string;
+    /**
+     * The description of collection time.
+     */
+    collection_time_description?: string;
+    /**
+     * @deprecated
+     */
+    location_identity?: number;
+    /**
+     * Filter pickup methods by time created.
+     *
+     * Time is presented in ISO-8601 format.
+     */
+    date_created?: string;
+    /**
+     * Filter pickup methods by time modified.
+     *
+     * Time is presented in ISO-8601 format.
+     */
+    date_modified?: string;
+};
+
+/**
+ * BasePickupMethod
+ */
 export type BasePickupMethod = {
     /**
      * The ID of the location.
@@ -27,77 +117,90 @@ export type BasePickupMethod = {
     location_identity?: number;
 };
 
-export type PickupMethodResponse = {
-    /**
-     * The ID of the pickup method.
-     */
-    id?: number;
-} & BasePickupMethod & {
-    /**
-     * Filter pickup methods by time created.
-     *
-     * Time is presented in ISO-8601 format.
-     */
-    date_created?: string;
-    /**
-     * Filter pickup methods by time modified.
-     *
-     * Time is presented in ISO-8601 format.
-     */
-    date_modified?: string;
+/**
+ * Pickup Methods_post-pickup-methods_Response_200
+ */
+export type PickupMethodsPostPickupMethodsResponse200 = {
+    data?: Array<PickupMethodResponse>;
+    meta?: PickupMethodsPostResponsesContentApplicationJsonSchemaMeta;
 };
 
+/**
+ * PickupMethodsPostResponsesContentApplicationJsonSchemaMeta
+ */
+export type PickupMethodsPostResponsesContentApplicationJsonSchemaMeta = {
+    [key: string]: unknown;
+};
+
+/**
+ * Pickup Methods_get-pickup-methods_Response_200
+ */
+export type PickupMethodsGetPickupMethodsResponse200 = {
+    data?: Array<PickupMethodResponse>;
+    meta?: MetaCollection;
+};
+
+/**
+ * MetaCollection
+ */
 export type MetaCollection = {
-    pagination?: {
-        /**
-         * Total number of items in the result set.
-         */
-        total?: number;
-        /**
-         * The total number of items in the collection on the current page.
-         */
-        count?: number;
-        /**
-         * The amount of items returned in the collection per page, controlled by the limit parameter.
-         */
-        per_page?: number;
-        /**
-         * The page you are currently on within the collection.
-         */
-        current_page?: number;
-        /**
-         * The total number of pages in the collection.
-         */
-        total_pages?: number;
-        /**
-         * Pagination links for the previous and next parts of the whole collection.
-         */
-        links?: {
-            /**
-             * A link to the previous page is returned in the response.
-             */
-            previous?: string;
-            /**
-             * A link to the current page is returned in the response.
-             */
-            current?: string;
-            /**
-             * A link to the next page is returned in the response.
-             */
-            next?: string;
-        };
-    };
+    pagination?: MetaCollectionPagination;
 };
 
 /**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
+ * MetaCollectionPagination
  */
-export type Accept = string;
+export type MetaCollectionPagination = {
+    /**
+     * Total number of items in the result set.
+     */
+    total?: number;
+    /**
+     * The total number of items in the collection on the current page.
+     */
+    count?: number;
+    /**
+     * The amount of items returned in the collection per page, controlled by the limit parameter.
+     */
+    per_page?: number;
+    /**
+     * The page you are currently on within the collection.
+     */
+    current_page?: number;
+    /**
+     * The total number of pages in the collection.
+     */
+    total_pages?: number;
+    /**
+     * Pagination links for the previous and next parts of the whole collection.
+     */
+    links?: MetaCollectionPaginationLinks;
+};
 
 /**
- * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
+ * MetaCollectionPaginationLinks
+ *
+ * Pagination links for the previous and next parts of the whole collection.
  */
-export type ContentType = string;
+export type MetaCollectionPaginationLinks = {
+    /**
+     * A link to the previous page is returned in the response.
+     */
+    previous?: string;
+    /**
+     * A link to the current page is returned in the response.
+     */
+    current?: string;
+    /**
+     * A link to the next page is returned in the response.
+     */
+    next?: string;
+};
+
+/**
+ * PickupMethodsGetParametersSort
+ */
+export type PickupMethodsGetParametersSort = 'date_modified:asc' | 'date_modified:desc' | 'name:asc' | 'name:desc';
 
 export type DeletePickupMethodsData = {
     body?: never;
@@ -121,7 +224,9 @@ export type DeletePickupMethodsResponses = {
     /**
      * No Content
      */
-    204: void;
+    204: {
+        [key: string]: unknown;
+    };
 };
 
 export type DeletePickupMethodsResponse = DeletePickupMethodsResponses[keyof DeletePickupMethodsResponses];
@@ -192,7 +297,7 @@ export type GetPickupMethodsData = {
          * - `name:asc` - sort by name in ascending order
          * - `name:desc` - sort by name in descending order
          */
-        sort?: 'date_modified:asc' | 'date_modified:desc' | 'name:asc' | 'name:desc';
+        sort?: PickupMethodsGetParametersSort;
     };
     url: '/pickup/methods';
 };
@@ -201,25 +306,18 @@ export type GetPickupMethodsResponses = {
     /**
      * The request has been processed and a list of pickup methods has been returned successfully.
      */
-    200: {
-        data?: Array<PickupMethodResponse>;
-        meta?: MetaCollection;
-    };
+    200: PickupMethodsGetPickupMethodsResponse200;
 };
 
 export type GetPickupMethodsResponse = GetPickupMethodsResponses[keyof GetPickupMethodsResponses];
 
 export type PostPickupMethodsData = {
-    body: Array<BasePickupMethod>;
+    body?: Array<BasePickupMethod>;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -230,32 +328,18 @@ export type PostPickupMethodsResponses = {
     /**
      * The request has been successfully processed.
      */
-    200: {
-        data?: Array<PickupMethodResponse>;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: PickupMethodsPostPickupMethodsResponse200;
 };
 
 export type PostPickupMethodsResponse = PostPickupMethodsResponses[keyof PostPickupMethodsResponses];
 
 export type PutPickupMethodsData = {
-    body: Array<{
-        /**
-         * The ID of the pickup method.
-         */
-        id?: number;
-    } & BasePickupMethod>;
+    body?: Array<PickupMethodsPutRequestBodyContentApplicationJsonSchemaItems>;
     headers: {
         /**
          * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the response body.
          */
         Accept: string;
-        /**
-         * The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the request body.
-         */
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
@@ -266,12 +350,7 @@ export type PutPickupMethodsResponses = {
     /**
      * The request has been successfully processed.
      */
-    200: {
-        data?: Array<PickupMethodResponse>;
-        meta?: {
-            [key: string]: unknown;
-        };
-    };
+    200: PickupMethodsPutPickupMethodsResponse200;
 };
 
 export type PutPickupMethodsResponse = PutPickupMethodsResponses[keyof PutPickupMethodsResponses];

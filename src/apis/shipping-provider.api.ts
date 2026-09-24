@@ -11,13 +11,13 @@ export class ShippingProviderApi {
     }
 
     /**
-     * Request shipping rates
+     * Request Shipping Rates
      *
      * Request shipping rates. BigCommerce sends a request for shipping quotes to the shipping provider URL. The shipping provider responds with shipping quotes.
 
      > #### Note
      > * Substitute the host and path specific to the shipping provider for `your_app.example.com` and `rate`. 
-     > * The Send a Test Request feature is not currently supported for this endpoint.  
+     > * The Send a Test Request feature is not currently supported for this endpoint.
      */
     requestShippingRates(
         requestBody: ShippingProviderApiSpecs.RequestShippingRatesData['body'],
@@ -30,7 +30,7 @@ export class ShippingProviderApi {
     }
 
     /**
-     * Validate connection options
+     * Validate Connection Options
      *
      * Validate connection options. BigCommerce sends a request to the shipping provider URL to check a merchantʼs connection credentials. The shipping provider sends a response indicating whether a merchant has valid credentials. 
 

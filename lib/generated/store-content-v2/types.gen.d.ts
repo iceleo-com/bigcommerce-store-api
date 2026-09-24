@@ -1,77 +1,27 @@
 export type ClientOptions = {
-    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2' | (string & {});
+    baseUrl: 'https://api.bigcommerce.com/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2/stores/{store_hash}/v2' | (string & {});
+};
+export type PublishedDate = {
+    timezone_type?: number;
+    date?: string;
+    timezone?: string;
 };
 export type BlogPostFull = {
-    id?: number;
-} & BlogPostBaseRes;
-export type Addresses = {
+    title?: string;
     url?: string;
-    resource?: string;
-};
-export type FormField = {
-    name?: string;
-    value?: string;
-};
-export type PageFull = {
+    preview_url?: string;
+    body?: string;
+    tags?: Array<string>;
+    summary?: string;
+    is_published?: boolean;
+    published_date?: PublishedDate;
+    published_date_iso8601?: string;
+    meta_description?: string | null;
+    meta_keywords?: string | null;
+    author?: string | null;
+    thumbnail_path?: string | null;
     id?: number;
-} & PageBaseRes;
-export type Redirect = {
-    id?: number;
-    path: string;
-    forward: Forward;
-    url?: string;
 };
-export type Forward = {
-    type?: string;
-    ref?: number;
-};
-export type CustomerFull = {
-    id?: number;
-    _authentication?: {
-        force_reset?: string;
-        password?: string;
-        password_confirmation?: string;
-    };
-    company?: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone?: string;
-    date_created?: string;
-    date_modified?: string;
-    store_credit?: string;
-    registration_ip_address?: string;
-    customer_group_id?: number;
-    notes?: string;
-    tax_exempt_category?: string;
-    accepts_marketing?: boolean;
-    addresses?: Addresses;
-    form_fields?: Array<FormField>;
-    reset_pass_on_login?: boolean;
-};
-export type CategoryAccessLevel = {
-    type?: 'all' | 'specific' | 'none';
-    categories?: Array<string>;
-};
-export type TimeZone = {
-    name?: string;
-    raw_offset?: number;
-    dst_offset?: number;
-    dst_correction?: boolean;
-    date_format?: DateFormat;
-};
-export type CountResponse = {
-    count?: number;
-};
-export type DateFormat = {
-    display?: string;
-    export?: string;
-    extended_display?: string;
-};
-export type BlogTags = Array<{
-    tag?: string;
-    post_ids?: Array<number>;
-}>;
 export type BlogPostBasePost = {
     title: string;
     url?: string;
@@ -83,21 +33,6 @@ export type BlogPostBasePost = {
     author?: string;
     thumbnail_path?: string;
     published_date?: string;
-};
-export type BlogPostBase = {
-    title: string;
-    url?: string;
-    preview_url?: string;
-    body: string;
-    tags?: Array<string>;
-    summary?: string;
-    is_published?: boolean;
-    published_date?: PublishedDate;
-    published_date_iso8601?: string;
-    meta_description?: string;
-    meta_keywords?: string;
-    author?: string;
-    thumbnail_path?: string;
 };
 export type BlogPostBaseRes = {
     title?: string;
@@ -114,79 +49,80 @@ export type BlogPostBaseRes = {
     author?: string | null;
     thumbnail_path?: string | null;
 };
-export type PublishedDate = {
-    timezone_type?: number;
-    date?: string;
-    timezone?: string;
+export type CountResponse = {
+    count?: number;
 };
-export type Authentication = {
-    force_reset?: string;
-    password?: string;
-    password_confirmation?: string;
+export type BlogTagsItems = {
+    tag?: string;
+    post_ids?: Array<number>;
 };
-export type CustomerBase = {
-    [key: string]: unknown;
-};
-export type PageBase = {
-    parent_id?: number;
-    type: 'page' | 'rss_feed' | 'contact_form' | 'raw' | 'link';
-    contact_fields?: string;
-    email?: string;
-    name: string;
-    url?: string;
-    meta_description?: string;
-    body: string;
-    mobile_body?: string;
-    has_mobile_version?: boolean;
-    is_visible?: boolean;
-    is_homepage?: boolean;
-    meta_title?: string;
-    layout_file?: string;
-    sort_order?: number;
-    search_keywords?: string;
-    meta_keywords?: string;
-    feed?: string;
-    link?: string;
-    content_type?: 'application/json' | 'text/javascript' | 'text/html';
-};
-export type PageBaseRes = {
-    parent_id?: number;
-    type?: 'page' | 'rss_feed' | 'contact_form' | 'raw' | 'link';
-    contact_fields?: string;
-    email?: string;
+export type BlogTags = Array<BlogTagsItems>;
+export type PageBaseResType = 'page' | 'contact_form' | 'raw' | 'link';
+export type PageBaseResContentType = 'application/json' | 'text/javascript' | 'text/html';
+export type PageFull = {
+    channel_id?: number;
     name?: string;
-    url?: string;
-    meta_description?: string;
-    body?: string;
-    mobile_body?: string;
-    has_mobile_version?: boolean;
-    is_visible?: boolean;
-    is_homepage?: boolean;
     meta_title?: string;
-    layout_file?: string;
+    email?: string;
+    body?: string;
+    is_visible?: boolean;
+    parent_id?: number;
     sort_order?: number;
-    search_keywords?: string;
     meta_keywords?: string;
-    feed?: string;
+    type?: PageBaseResType;
+    contact_fields?: string;
+    meta_description?: string;
+    is_homepage?: boolean;
+    layout_file?: string;
+    is_customers_only?: boolean;
+    search_keywords?: string;
+    has_mobile_version?: boolean;
+    mobile_body?: string;
+    content_type?: PageBaseResContentType;
+    url?: string;
     link?: string;
-    content_type?: 'application/json' | 'text/javascript' | 'text/html';
+    id?: number;
 };
-export type Accept = string;
-export type ContentType = string;
-export type GetAllBlogTagsData = {
-    body?: never;
-    headers: {
-        Accept: string;
-    };
-    path?: never;
-    query?: never;
-    url: '/blog/tags';
+export type PageBaseType = 'page' | 'contact_form' | 'raw' | 'link';
+export type PageBaseContentType = 'application/json' | 'text/javascript' | 'text/html';
+export type PageBase = {
+    channel_id?: number;
+    name: string;
+    meta_title?: string;
+    body: string;
+    is_visible?: boolean;
+    parent_id?: number;
+    sort_order?: number;
+    meta_keywords?: string;
+    type: PageBaseType;
+    meta_description?: string;
+    is_homepage?: boolean;
+    is_customers_only?: boolean;
+    search_keywords?: string;
+    has_mobile_version?: boolean;
+    mobile_body?: string;
+    contact_fields?: string;
+    email?: string;
+    url?: string;
+    layout_file?: string;
+    link?: string;
+    content_type?: PageBaseContentType;
 };
-export type GetAllBlogTagsResponses = {
-    200: Array<BlogTags>;
+export type Forward = {
+    type?: string;
+    ref?: number;
 };
-export type GetAllBlogTagsResponse = GetAllBlogTagsResponses[keyof GetAllBlogTagsResponses];
-export type DeleteAllBlogPostsData = {
+export type Redirect = {
+    id?: number;
+    path: string;
+    forward: Forward;
+    url?: string;
+};
+export type RedirectsIdPutRequestBodyContentApplicationJsonSchemaForward = {
+    type?: string;
+    ref?: string;
+};
+export type DeleteBlogPostsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -198,18 +134,20 @@ export type DeleteAllBlogPostsData = {
     };
     url: '/blog/posts';
 };
-export type DeleteAllBlogPostsResponses = {
-    204: void;
+export type DeleteBlogPostsResponses = {
+    204: {
+        [key: string]: unknown;
+    };
 };
-export type DeleteAllBlogPostsResponse = DeleteAllBlogPostsResponses[keyof DeleteAllBlogPostsResponses];
-export type GetAllBlogPostsData = {
+export type DeleteBlogPostsResponse = DeleteBlogPostsResponses[keyof DeleteBlogPostsResponses];
+export type GetBlogPostsData = {
     body?: never;
     headers: {
         Accept: string;
     };
     path?: never;
     query?: {
-        is_published?: string;
+        is_published?: boolean;
         url?: string;
         tag?: string;
         published_date?: string;
@@ -218,28 +156,41 @@ export type GetAllBlogPostsData = {
     };
     url: '/blog/posts';
 };
-export type GetAllBlogPostsResponses = {
+export type GetBlogPostsResponses = {
     200: Array<BlogPostFull>;
 };
-export type GetAllBlogPostsResponse = GetAllBlogPostsResponses[keyof GetAllBlogPostsResponses];
-export type CreateABlogPostsData = {
-    body: BlogPostBasePost;
+export type GetBlogPostsResponse = GetBlogPostsResponses[keyof GetBlogPostsResponses];
+export type CreateBlogPostsData = {
+    body?: BlogPostBasePost;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/blog/posts';
 };
-export type CreateABlogPostsResponses = {
+export type CreateBlogPostsResponses = {
     200: BlogPostBaseRes;
-    207: {
+};
+export type CreateBlogPostsResponse = CreateBlogPostsResponses[keyof CreateBlogPostsResponses];
+export type DeleteBlogPostData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/blog/posts/{id}';
+};
+export type DeleteBlogPostResponses = {
+    204: {
         [key: string]: unknown;
     };
 };
-export type CreateABlogPostsResponse = CreateABlogPostsResponses[keyof CreateABlogPostsResponses];
-export type DeleteABlogPostData = {
+export type DeleteBlogPostResponse = DeleteBlogPostResponses[keyof DeleteBlogPostResponses];
+export type GetBlogPostData = {
     body?: never;
     headers: {
         Accept: string;
@@ -250,30 +201,14 @@ export type DeleteABlogPostData = {
     query?: never;
     url: '/blog/posts/{id}';
 };
-export type DeleteABlogPostResponses = {
-    204: void;
-};
-export type DeleteABlogPostResponse = DeleteABlogPostResponses[keyof DeleteABlogPostResponses];
-export type GetABlogPostData = {
-    body?: never;
-    headers: {
-        Accept: string;
-    };
-    path: {
-        id: number;
-    };
-    query?: never;
-    url: '/blog/posts/{id}';
-};
-export type GetABlogPostResponses = {
+export type GetBlogPostResponses = {
     200: BlogPostFull;
 };
-export type GetABlogPostResponse = GetABlogPostResponses[keyof GetABlogPostResponses];
-export type UpdateABlogPostData = {
-    body: BlogPostBasePost;
+export type GetBlogPostResponse = GetBlogPostResponses[keyof GetBlogPostResponses];
+export type UpdateBlogPostData = {
+    body?: BlogPostBasePost;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path: {
         id: number;
@@ -281,14 +216,11 @@ export type UpdateABlogPostData = {
     query?: never;
     url: '/blog/posts/{id}';
 };
-export type UpdateABlogPostResponses = {
+export type UpdateBlogPostResponses = {
     200: BlogPostBaseRes;
-    207: {
-        [key: string]: unknown;
-    };
 };
-export type UpdateABlogPostResponse = UpdateABlogPostResponses[keyof UpdateABlogPostResponses];
-export type GetACountOfAllBlogPostsData = {
+export type UpdateBlogPostResponse = UpdateBlogPostResponses[keyof UpdateBlogPostResponses];
+export type GetBlogPostsCountData = {
     body?: never;
     headers: {
         Accept: string;
@@ -297,11 +229,24 @@ export type GetACountOfAllBlogPostsData = {
     query?: never;
     url: '/blog/posts/count';
 };
-export type GetACountOfAllBlogPostsResponses = {
+export type GetBlogPostsCountResponses = {
     200: CountResponse;
 };
-export type GetACountOfAllBlogPostsResponse = GetACountOfAllBlogPostsResponses[keyof GetACountOfAllBlogPostsResponses];
-export type GetAllPagesData = {
+export type GetBlogPostsCountResponse = GetBlogPostsCountResponses[keyof GetBlogPostsCountResponses];
+export type GetBlogTagsData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/blog/tags';
+};
+export type GetBlogTagsResponses = {
+    200: Array<BlogTags>;
+};
+export type GetBlogTagsResponse = GetBlogTagsResponses[keyof GetBlogTagsResponses];
+export type GetPagesData = {
     body?: never;
     headers: {
         Accept: string;
@@ -313,62 +258,27 @@ export type GetAllPagesData = {
     };
     url: '/pages';
 };
-export type GetAllPagesResponses = {
+export type GetPagesResponses = {
     200: Array<PageFull>;
 };
-export type GetAllPagesResponse = GetAllPagesResponses[keyof GetAllPagesResponses];
-export type CreateAPageData = {
-    body: PageBase;
-    headers: {
-        Accept: string;
-        'Content-Type': string;
-    };
-    path?: never;
-    query?: never;
-    url: '/pages';
-};
-export type CreateAPageResponses = {
-    200: PageFull;
-    207: {
-        [key: string]: unknown;
-    };
-};
-export type CreateAPageResponse = CreateAPageResponses[keyof CreateAPageResponses];
-export type DeleteAPageData = {
-    body?: never;
-    headers: {
-        Accept: string;
-    };
-    path: {
-        id: number;
-    };
-    query?: never;
-    url: '/pages/{id}';
-};
-export type DeleteAPageResponses = {
-    204: void;
-};
-export type DeleteAPageResponse = DeleteAPageResponses[keyof DeleteAPageResponses];
-export type GetAPageData = {
-    body?: never;
-    headers: {
-        Accept: string;
-    };
-    path: {
-        id: number;
-    };
-    query?: never;
-    url: '/pages/{id}';
-};
-export type GetAPageResponses = {
-    200: PageFull;
-};
-export type GetAPageResponse = GetAPageResponses[keyof GetAPageResponses];
-export type UpdateAPageData = {
+export type GetPagesResponse = GetPagesResponses[keyof GetPagesResponses];
+export type CreatePageData = {
     body?: PageBase;
     headers: {
         Accept: string;
-        'Content-Type': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/pages';
+};
+export type CreatePageResponses = {
+    200: PageFull;
+};
+export type CreatePageResponse = CreatePageResponses[keyof CreatePageResponses];
+export type DeletePageData = {
+    body?: never;
+    headers: {
+        Accept: string;
     };
     path: {
         id: number;
@@ -376,14 +286,43 @@ export type UpdateAPageData = {
     query?: never;
     url: '/pages/{id}';
 };
-export type UpdateAPageResponses = {
-    200: PageBase;
-    207: {
+export type DeletePageResponses = {
+    204: {
         [key: string]: unknown;
     };
 };
-export type UpdateAPageResponse = UpdateAPageResponses[keyof UpdateAPageResponses];
-export type DeleteAllRedirectsData = {
+export type DeletePageResponse = DeletePageResponses[keyof DeletePageResponses];
+export type GetPageData = {
+    body?: never;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/pages/{id}';
+};
+export type GetPageResponses = {
+    200: PageFull;
+};
+export type GetPageResponse = GetPageResponses[keyof GetPageResponses];
+export type UpdatePageData = {
+    body?: PageFull;
+    headers: {
+        Accept: string;
+    };
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/pages/{id}';
+};
+export type UpdatePageResponses = {
+    200: PageFull;
+};
+export type UpdatePageResponse = UpdatePageResponses[keyof UpdatePageResponses];
+export type DeleteRedirectsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -392,11 +331,13 @@ export type DeleteAllRedirectsData = {
     query?: never;
     url: '/redirects';
 };
-export type DeleteAllRedirectsResponses = {
-    204: void;
+export type DeleteRedirectsResponses = {
+    204: {
+        [key: string]: unknown;
+    };
 };
-export type DeleteAllRedirectsResponse = DeleteAllRedirectsResponses[keyof DeleteAllRedirectsResponses];
-export type GetAListofRedirectsData = {
+export type DeleteRedirectsResponse = DeleteRedirectsResponses[keyof DeleteRedirectsResponses];
+export type GetRedirectsData = {
     body?: never;
     headers: {
         Accept: string;
@@ -408,25 +349,24 @@ export type GetAListofRedirectsData = {
     };
     url: '/redirects';
 };
-export type GetAListofRedirectsResponses = {
+export type GetRedirectsResponses = {
     200: Array<Redirect>;
 };
-export type GetAListofRedirectsResponse = GetAListofRedirectsResponses[keyof GetAListofRedirectsResponses];
-export type CreateARedirectData = {
-    body: Redirect;
+export type GetRedirectsResponse = GetRedirectsResponses[keyof GetRedirectsResponses];
+export type CreateRedirectData = {
+    body?: Redirect;
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path?: never;
     query?: never;
     url: '/redirects';
 };
-export type CreateARedirectResponses = {
+export type CreateRedirectResponses = {
     200: Redirect;
 };
-export type CreateARedirectResponse = CreateARedirectResponses[keyof CreateARedirectResponses];
-export type DeleteARedirectData = {
+export type CreateRedirectResponse = CreateRedirectResponses[keyof CreateRedirectResponses];
+export type DeleteRedirectData = {
     body?: never;
     headers: {
         Accept: string;
@@ -437,11 +377,13 @@ export type DeleteARedirectData = {
     query?: never;
     url: '/redirects/{id}';
 };
-export type DeleteARedirectResponses = {
-    204: void;
+export type DeleteRedirectResponses = {
+    204: {
+        [key: string]: unknown;
+    };
 };
-export type DeleteARedirectResponse = DeleteARedirectResponses[keyof DeleteARedirectResponses];
-export type GetARedirectUrlData = {
+export type DeleteRedirectResponse = DeleteRedirectResponses[keyof DeleteRedirectResponses];
+export type GetRedirectData = {
     body?: never;
     headers: {
         Accept: string;
@@ -452,23 +394,19 @@ export type GetARedirectUrlData = {
     query?: never;
     url: '/redirects/{id}';
 };
-export type GetARedirectUrlResponses = {
+export type GetRedirectResponses = {
     200: Redirect;
 };
-export type GetARedirectUrlResponse = GetARedirectUrlResponses[keyof GetARedirectUrlResponses];
-export type UpdateARedirectUrlData = {
-    body: {
+export type GetRedirectResponse = GetRedirectResponses[keyof GetRedirectResponses];
+export type UpdateRedirectData = {
+    body?: {
         id?: number;
         path: string;
-        forward: {
-            type?: string;
-            ref?: string;
-        };
+        forward: RedirectsIdPutRequestBodyContentApplicationJsonSchemaForward;
         url?: string;
     };
     headers: {
         Accept: string;
-        'Content-Type': string;
     };
     path: {
         id: number;
@@ -476,11 +414,11 @@ export type UpdateARedirectUrlData = {
     query?: never;
     url: '/redirects/{id}';
 };
-export type UpdateARedirectUrlResponses = {
+export type UpdateRedirectResponses = {
     200: Redirect;
 };
-export type UpdateARedirectUrlResponse = UpdateARedirectUrlResponses[keyof UpdateARedirectUrlResponses];
-export type GetACountOfRedirectsData = {
+export type UpdateRedirectResponse = UpdateRedirectResponses[keyof UpdateRedirectResponses];
+export type GetRedirectsCountData = {
     body?: never;
     headers: {
         Accept: string;
@@ -489,7 +427,7 @@ export type GetACountOfRedirectsData = {
     query?: never;
     url: '/redirects/count';
 };
-export type GetACountOfRedirectsResponses = {
+export type GetRedirectsCountResponses = {
     200: CountResponse;
 };
-export type GetACountOfRedirectsResponse = GetACountOfRedirectsResponses[keyof GetACountOfRedirectsResponses];
+export type GetRedirectsCountResponse = GetRedirectsCountResponses[keyof GetRedirectsCountResponses];
