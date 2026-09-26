@@ -1,7 +1,6 @@
-import { FormData } from 'undici';
 import { RequestBody, RequestContentType, RequestQuery } from './request-service.types';
 
-// matches both the global FormData and undici's FormData
+// matches FormData from any realm or polyfill, not just the global one
 export function isFormData(value: unknown): value is FormData {
     return typeof value === 'object'
         && value !== null
@@ -68,18 +67,8 @@ export function parseBody(body: RequestBody, contentType: RequestContentType): F
         return undefined;
     }
 
-    if (body instanceof FormData) {
-        return body;
-    }
-
-    // undici can't serialize the global FormData (a different undici copy), so copy it over
     if (isFormData(body)) {
-        const formData = new FormData();
-        for (const [key, value] of (body as any).entries()) {
-            formData.append(key, value);
-        }
-
-        return formData;
+        return body;
     }
 
     // already serialized by the caller

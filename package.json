@@ -1,6 +1,6 @@
 {
   "name": "bigcommerce-store-api",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "BigCommerce Store API Client",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -11,7 +11,8 @@
     "build": "rimraf lib && tsc",
     "pull:references": "node ./scripts/pull-references.js",
     "clean": "rimraf lib",
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:bun": "bun test --timeout 30000 --parallel"
   },
   "engines": {
     "node": ">=20.18.1"
@@ -40,16 +41,15 @@
   },
   "homepage": "https://github.com/iceleo-com/bigcommerce-store-api#readme",
   "devDependencies": {
-    "@jest/globals": "^29.7.0",
-    "@types/lodash": "^4.17.20",
+    "@jest/globals": "^30.5.2",
     "@types/node": "^22.10.2",
-    "jest": "^29.7.0",
+    "jest": "^30.5.2",
+    "msw": "^2.15.0",
     "rimraf": "^6.0.1",
     "typescript": "^5.7.2",
     "yaml": "^2.7.0"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
-    "undici": "^7.29.1"
+    "axios": "^1.20.0"
   }
 }

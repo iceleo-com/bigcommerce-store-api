@@ -11,6 +11,8 @@ if (!storeHash || !accessToken) {
 const apiClient = new BigCommerceStoreApi({
     storeHash,
     accessToken,
+    // so failed assertions below can show the API's raw error
+    includeResponseText: true,
 });
 
 function typeOf(value) {

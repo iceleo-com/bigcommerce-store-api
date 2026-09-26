@@ -9,4 +9,8 @@ export type BigCommerceStoreApiConfig = {
      * Your app's domain (e.g. `app.example.com`), used by the Shipping Provider and Tax Provider APIs.
      */
     appDomain?: string;
+    /**
+     * Include the raw response body as `response_text` in every response, for debugging. Defaults to `false`.
+     */
+    includeResponseText?: boolean;
 }

@@ -2,10 +2,12 @@ const {
     describe,
     test,
     expect,
-    beforeEach,
+    beforeAll,
     afterEach,
+    afterAll,
 } = require('@jest/globals');
-const { MockAgent, getGlobalDispatcher, setGlobalDispatcher } = require('undici');
+const { http, HttpResponse } = require('msw');
+const { setupServer } = require('msw/node');
 const RequestService = require('../lib/helpers/request/request-service').default;
 
 const config = {
@@ -15,29 +17,35 @@ const config = {
 };
 
 describe('RequestService', () => {
-    let originalDispatcher;
-    let agent;
+    // any request without a handler fails, so nothing reaches the network
+    const server = setupServer();
 
-    beforeEach(() => {
-        originalDispatcher = getGlobalDispatcher();
-        agent = new MockAgent();
-        agent.disableNetConnect();
-        setGlobalDispatcher(agent);
+    beforeAll(() => {
+        server.listen({ onUnhandledRequest: 'error' });
     });
 
-    afterEach(async () => {
-        setGlobalDispatcher(originalDispatcher);
-        await agent.close();
+    afterEach(() => {
+        server.resetHandlers();
+    });
+
+    afterAll(() => {
+        server.close();
     });
 
     // intercept one request and capture what was sent
     function intercept(origin, path, method, statusCode, data, headers = {}) {
         const captured = {};
+        const [pathname, query] = path.split('?');
 
-        agent.get(origin).intercept({ path, method }).reply((options) => {
-            Object.assign(captured, options);
-            return { statusCode, data, responseOptions: { headers } };
-        });
+        server.use(http[method.toLowerCase()](`${origin}${pathname}`, async ({ request }) => {
+            // msw ignores the query when matching, so check it here; a mismatch falls through as unhandled
+            if (new URL(request.url).search !== (query ? `?${query}` : '')) {
+                return undefined;
+            }
+
+            Object.assign(captured, { headers: Object.fromEntries(request.headers), body: await request.text() });
+            return new HttpResponse(data, { status: statusCode, headers });
+        }, { once: true }));
 
         return captured;
     }
@@ -57,14 +65,13 @@ describe('RequestService', () => {
             query: { 'id:in': [1, 2], page: 1, limit: undefined, name: null },
         });
 
-        expect(captured.headers['X-Auth-Token']).toBe('token');
+        expect(captured.headers['x-auth-token']).toBe('token');
         expect(response).toEqual({
             status: 'success',
             http_status: 200,
             data: [{ id: 1 }],
             meta: { pagination: {} },
             headers: { 'x-rate-limit-requests-left': '99' },
-            response_text: '{"data":[{"id":1}],"meta":{"pagination":{}}}',
         });
     });
 
@@ -86,7 +93,18 @@ describe('RequestService', () => {
         expect(response.status).toBe('error');
         expect(response.http_status).toBe(502);
         expect(response.errors).toEqual({ status: 502, title: '<html>Bad Gateway</html>', type: 'http_error' });
-        expect(response.response_text).toBe('<html>Bad Gateway</html>');
+    });
+
+    test('includes response_text only when enabled', async () => {
+        intercept('https://api.bigcommerce.com', '/stores/abc123/v3/a', 'GET', 200, '{"data":{"id":1}}');
+        intercept('https://api.bigcommerce.com', '/stores/abc123/v3/b', 'GET', 200, '{"data":{"id":1}}');
+        intercept('https://api.bigcommerce.com', '/stores/abc123/v3/c', 'GET', 404, '{"title":"Not Found"}');
+
+        const debugService = new RequestService({ ...config, includeResponseText: true });
+
+        expect(await new RequestService(config).get({ path: 'v3/a' })).not.toHaveProperty('response_text');
+        expect((await debugService.get({ path: 'v3/b' })).response_text).toBe('{"data":{"id":1}}');
+        expect((await debugService.get({ path: 'v3/c' })).response_text).toBe('{"title":"Not Found"}');
     });
 
     test('sends string bodies as they are', async () => {
@@ -95,7 +113,21 @@ describe('RequestService', () => {
         await new RequestService(config).post({ path: 'v3/x', contentType: 'application/json', body: '{"a":1}' });
 
         expect(captured.body).toBe('{"a":1}');
-        expect(captured.headers['Content-Type']).toBe('application/json');
+        expect(captured.headers['content-type']).toBe('application/json');
+    });
+
+    test('sends multipart bodies with files', async () => {
+        const captured = intercept('https://api.bigcommerce.com', '/stores/abc123/v3/x', 'POST', 200, '{}');
+
+        await new RequestService(config).post({
+            path: 'v3/x',
+            contentType: 'multipart/form-data',
+            body: { name: 'logo', file: new Blob(['file-content'], { type: 'image/png' }) },
+        });
+
+        expect(captured.headers['content-type']).toMatch(/^multipart\/form-data; boundary=/);
+        expect(captured.body).toContain('name="name"\r\n\r\nlogo');
+        expect(captured.body).toContain('Content-Type: image/png\r\n\r\nfile-content');
     });
 
     test('resolves absolute URLs from the config without sending the token', async () => {
@@ -110,8 +142,8 @@ describe('RequestService', () => {
         await service.post({ path: 'https://payments.bigcommerce.com/stores/{store_hash}/payments', body: {} });
 
         expect(response.data).toEqual({ token: 'jwt' });
-        expect(storefront.headers['X-Auth-Token']).toBeUndefined();
-        expect(payments.headers['X-Auth-Token']).toBeUndefined();
+        expect(storefront.headers['x-auth-token']).toBeUndefined();
+        expect(payments.headers['x-auth-token']).toBeUndefined();
     });
 
     test('fails without a request when a URL placeholder is not configured', async () => {
@@ -122,13 +154,13 @@ describe('RequestService', () => {
     });
 
     test('reports network errors', async () => {
-        agent.get('https://api.bigcommerce.com').intercept({ path: '/stores/abc123/v3/x', method: 'GET' }).replyWithError(new Error('socket hang up'));
+        server.use(http.get('https://api.bigcommerce.com/stores/abc123/v3/x', () => HttpResponse.error()));
 
         const response = await new RequestService(config).get({ path: 'v3/x' });
 
         expect(response.status).toBe('error');
-        expect(response.errors.errors.message).toBe('socket hang up');
+        expect(response.errors.errors.message).toBe('Network error');
         expect(response.headers).toEqual({});
-        expect(response.response_text).toBe('');
+        expect(response).not.toHaveProperty('response_text');
     });
 });

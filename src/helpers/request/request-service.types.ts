@@ -34,8 +34,8 @@ export type RequestSuccessResponse<T_Status extends number, T_Data> = {
     meta?: T_Data extends BigCommerceApiSuccessResponse ? T_Data['meta'] : any;
     /** response headers, for debugging */
     headers: ResponseHeaders;
-    /** raw response body, for debugging */
-    response_text: string;
+    /** raw response body, only included when the client is created with `includeResponseText: true` */
+    response_text?: string;
 };
 
 export type RequestErrorResponse<T_Status extends number, T_Errors> = {
@@ -44,6 +44,6 @@ export type RequestErrorResponse<T_Status extends number, T_Errors> = {
     errors: T_Errors;
     /** response headers, for debugging */
     headers: ResponseHeaders;
-    /** raw response body, for debugging */
-    response_text: string;
+    /** raw response body, only included when the client is created with `includeResponseText: true` */
+    response_text?: string;
 };

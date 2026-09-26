@@ -1,4 +1,4 @@
-import { request as httpRequest } from 'undici';
+import axios, { AxiosResponseHeaders } from 'axios';
 import { BigCommerceStoreApiConfig } from '../../index.types';
 import {
     RequestErrorResponse,
@@ -46,6 +46,11 @@ class RequestService {
         return url;
     }
 
+    // the raw body is opt-in, it can be large and is only useful for debugging
+    private responseText(responseText: string): { response_text?: string } {
+        return this.config.includeResponseText ? { response_text: responseText } : {};
+    }
+
     private async request<T_Success extends RequestSuccessResponse<number, any>, T_Error extends RequestErrorResponse<number, any>>(
         method: RequestMethod,
         options: RequestOptions,
@@ -77,21 +82,30 @@ class RequestService {
 
             const requestBody = parseBody(body, contentType || 'application/json');
 
-            // undici sets the multipart boundary itself
+            // axios sets the multipart boundary itself
             if (requestBody !== undefined && !isFormData(requestBody)) {
                 headers['Content-Type'] = contentType || 'application/json';
             }
 
             // make the request
-            const response = await httpRequest(url, {
+            const response = await axios.request<string>({
+                url,
                 method,
                 headers,
-                body: requestBody instanceof URLSearchParams ? requestBody.toString() : requestBody,
+                data: requestBody instanceof URLSearchParams ? requestBody.toString() : requestBody,
+                // keep the raw body, it's parsed below
+                responseType: 'text',
+                transformResponse: [(data) => data],
+                // error statuses are handled below, not thrown
+                validateStatus: () => true,
+                // don't forward the access token to wherever a redirect points
+                maxRedirects: 0,
             });
 
-            statusCode = response.statusCode;
-            responseHeaders = response.headers;
-            responseText = await response.body.text();
+            statusCode = response.status;
+            // always an AxiosHeaders instance at runtime, the union type is for the browser adapter
+            responseHeaders = (response.headers as AxiosResponseHeaders).toJSON() as ResponseHeaders;
+            responseText = typeof response.data === 'string' ? response.data : '';
         } catch (error) {
             // network errors, unresolved URLs, interrupted responses
             return {
@@ -106,7 +120,7 @@ class RequestService {
                     },
                 },
                 headers: responseHeaders,
-                response_text: responseText,
+                ...this.responseText(responseText),
             } as T_Error;
         }
 
@@ -136,7 +150,7 @@ class RequestService {
                     type: 'http_error',
                 },
                 headers: responseHeaders,
-                response_text: responseText,
+                ...this.responseText(responseText),
             } as T_Error;
         }
 
@@ -146,7 +160,7 @@ class RequestService {
             data: isObject && 'data' in result ? result.data : result,
             meta: isObject ? result.meta : undefined,
             headers: responseHeaders,
-            response_text: responseText,
+            ...this.responseText(responseText),
         } as T_Success;
     }
 

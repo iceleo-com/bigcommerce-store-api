@@ -3,4 +3,5 @@ export type BigCommerceStoreApiConfig = {
     accessToken: string;
     storeDomain?: string;
     appDomain?: string;
+    includeResponseText?: boolean;
 };

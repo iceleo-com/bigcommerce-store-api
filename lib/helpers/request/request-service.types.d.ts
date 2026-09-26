@@ -23,13 +23,13 @@ export type RequestSuccessResponse<T_Status extends number, T_Data> = {
     data: T_Data extends BigCommerceApiSuccessResponse ? RequiredFields<T_Data['data']> : RequiredFields<T_Data>;
     meta?: T_Data extends BigCommerceApiSuccessResponse ? T_Data['meta'] : any;
     headers: ResponseHeaders;
-    response_text: string;
+    response_text?: string;
 };
 export type RequestErrorResponse<T_Status extends number, T_Errors> = {
     status: 'error';
     http_status: T_Status;
     errors: T_Errors;
     headers: ResponseHeaders;
-    response_text: string;
+    response_text?: string;
 };
 export {};
